@@ -1,12 +1,12 @@
-/* =========================================
+/* ==================================================
    GHOPKHALI SPORTS ARENA
-   Main JavaScript
-========================================= */
+   Premium Website JavaScript
+================================================== */
 
 
-/* =========================================
+/* ==================================================
    MOBILE NAVIGATION
-========================================= */
+================================================== */
 
 const menuToggle =
   document.querySelector(".menu-toggle");
@@ -17,45 +17,48 @@ const navMenu =
 
 if (menuToggle && navMenu) {
 
-  menuToggle.addEventListener("click", () => {
+  menuToggle.addEventListener(
+    "click",
+    () => {
 
-    const isOpen =
-      navMenu.classList.toggle("open");
-
-    menuToggle.setAttribute(
-      "aria-expanded",
-      isOpen
-    );
-
-  });
-
-
-  /* Close menu after clicking a link */
-
-  const navLinks =
-    navMenu.querySelectorAll("a");
-
-  navLinks.forEach(link => {
-
-    link.addEventListener("click", () => {
-
-      navMenu.classList.remove("open");
+      const opened =
+        navMenu.classList.toggle("open");
 
       menuToggle.setAttribute(
         "aria-expanded",
-        "false"
+        opened
+      );
+
+    }
+  );
+
+
+  navMenu
+    .querySelectorAll("a")
+    .forEach(link => {
+
+      link.addEventListener(
+        "click",
+        () => {
+
+          navMenu.classList.remove("open");
+
+          menuToggle.setAttribute(
+            "aria-expanded",
+            "false"
+          );
+
+        }
       );
 
     });
 
-  });
-
 }
 
 
-/* =========================================
-   HEADER SCROLL EFFECT
-========================================= */
+/* ==================================================
+   HEADER SCROLL
+================================================== */
 
 const header =
   document.querySelector(".site-header");
@@ -70,7 +73,7 @@ window.addEventListener(
     if (window.scrollY > 20) {
 
       header.style.boxShadow =
-        "0 8px 30px rgba(0,0,0,.06)";
+        "0 8px 35px rgba(0,0,0,.07)";
 
     } else {
 
@@ -84,39 +87,52 @@ window.addEventListener(
 );
 
 
-/* =========================================
-   ACTIVE NAVIGATION
-========================================= */
+/* ==================================================
+   ACTIVE NAV
+================================================== */
 
 const sections =
-  document.querySelectorAll("section[id]");
+  document.querySelectorAll(
+    "section[id]"
+  );
 
-const links =
-  document.querySelectorAll(".nav-menu a");
+const navLinks =
+  document.querySelectorAll(
+    ".nav-menu a"
+  );
 
 
-const observer =
+const navObserver =
   new IntersectionObserver(
 
     entries => {
 
       entries.forEach(entry => {
 
-        if (!entry.isIntersecting) return;
+        if (!entry.isIntersecting)
+          return;
 
         const id =
-          entry.target.getAttribute("id");
+          entry.target.getAttribute(
+            "id"
+          );
 
-        links.forEach(link => {
 
-          link.classList.remove("active");
+        navLinks.forEach(link => {
+
+          link.classList.remove(
+            "active"
+          );
+
 
           if (
             link.getAttribute("href") ===
             `#${id}`
           ) {
 
-            link.classList.add("active");
+            link.classList.add(
+              "active"
+            );
 
           }
 
@@ -136,18 +152,18 @@ const observer =
 
 sections.forEach(section => {
 
-  observer.observe(section);
+  navObserver.observe(section);
 
 });
 
 
-/* =========================================
-   SIMPLE REVEAL ANIMATION
-========================================= */
+/* ==================================================
+   SCROLL REVEAL
+================================================== */
 
 const revealElements =
   document.querySelectorAll(
-    ".activity-card, .fixture-card, .coming-soon, .committee-person"
+    ".activity-card, .fixture-card, .coming-soon, .committee-person, .social-card"
   );
 
 
@@ -158,9 +174,14 @@ const revealObserver =
 
       entries.forEach(entry => {
 
-        if (!entry.isIntersecting) return;
+        if (!entry.isIntersecting)
+          return;
 
-        entry.target.classList.add("revealed");
+
+        entry.target.classList.add(
+          "revealed"
+        );
+
 
         revealObserver.unobserve(
           entry.target
@@ -179,24 +200,61 @@ const revealObserver =
 
 revealElements.forEach(element => {
 
-  element.classList.add("reveal");
+  element.classList.add(
+    "reveal"
+  );
 
-  revealObserver.observe(element);
+  revealObserver.observe(
+    element
+  );
 
 });
 
 
-/* =========================================
-   PREVENT EMPTY HASH JUMP
-========================================= */
+/* ==================================================
+   CLOSE MOBILE MENU WHEN CLICKING OUTSIDE
+================================================== */
 
-document
-  .querySelectorAll('a[href="#"]')
-  .forEach(link => {
+document.addEventListener(
+  "click",
+  event => {
 
-    link.addEventListener(
-      "click",
-      event => event.preventDefault()
-    );
+    if (!navMenu || !menuToggle)
+      return;
 
-  });
+
+    if (
+      navMenu.classList.contains("open") &&
+      !navMenu.contains(event.target) &&
+      !menuToggle.contains(event.target)
+    ) {
+
+      navMenu.classList.remove("open");
+
+      menuToggle.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+
+    }
+
+  }
+);
+
+
+/* ==================================================
+   CURRENT YEAR
+================================================== */
+
+const yearElements =
+  document.querySelectorAll(
+    "[data-current-year]"
+  );
+
+
+yearElements.forEach(element => {
+
+  element.textContent =
+    new Date().getFullYear();
+
+});
