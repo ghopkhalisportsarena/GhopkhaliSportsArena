@@ -1,7 +1,6 @@
 /* ==================================================
    GHOPKHALI SPORTS ARENA
    PREMIUM WEBSITE JAVASCRIPT
-   GSA Sports Club
 ================================================== */
 
 
@@ -10,498 +9,450 @@
 ================================================== */
 
 const menuToggle =
-  document.querySelector(".menu-toggle");
+document.querySelector(".menu-toggle");
 
 const navMenu =
-  document.querySelector(".nav-menu");
+document.querySelector(".nav-menu");
 
 
-if (menuToggle && navMenu) {
+if(menuToggle && navMenu){
 
-  menuToggle.addEventListener("click", () => {
+menuToggle.addEventListener("click",()=>{
 
-    const opened =
-      navMenu.classList.toggle("open");
+const opened =
+navMenu.classList.toggle("open");
 
-    menuToggle.setAttribute(
-      "aria-expanded",
-      opened ? "true" : "false"
-    );
+menuToggle.setAttribute(
+"aria-expanded",
+opened ? "true" : "false"
+);
 
-  });
+});
 
 
-  navMenu
-    .querySelectorAll("a")
-    .forEach(link => {
+navMenu
+.querySelectorAll("a")
+.forEach(link=>{
 
-      link.addEventListener("click", () => {
+link.addEventListener("click",()=>{
 
-        navMenu.classList.remove("open");
+navMenu.classList.remove("open");
 
-        menuToggle.setAttribute(
-          "aria-expanded",
-          "false"
-        );
+menuToggle.setAttribute(
+"aria-expanded",
+"false"
+);
 
-      });
+});
 
-    });
+});
 
 }
 
 
 /* ==================================================
-   HEADER SCROLL EFFECT
+   HEADER SCROLL
 ================================================== */
 
 const header =
-  document.querySelector(".site-header");
+document.querySelector(".site-header");
 
 
 window.addEventListener(
-  "scroll",
-  () => {
+"scroll",
+()=>{
 
-    if (!header) return;
+if(!header)return;
 
-    if (window.scrollY > 20) {
+header.style.boxShadow =
+window.scrollY > 20
+?
+"0 8px 35px rgba(0,0,0,.07)"
+:
+"none";
 
-      header.style.boxShadow =
-        "0 8px 35px rgba(0,0,0,.07)";
-
-    } else {
-
-      header.style.boxShadow =
-        "none";
-
-    }
-
-  },
-  { passive: true }
+},
+{passive:true}
 );
 
 
 /* ==================================================
-   ACTIVE NAVIGATION
+   ACTIVE NAV
 ================================================== */
 
 const sections =
-  document.querySelectorAll(
-    "section[id]"
-  );
+document.querySelectorAll(
+"section[id]"
+);
 
 const navLinks =
-  document.querySelectorAll(
-    ".nav-menu a"
-  );
+document.querySelectorAll(
+".nav-menu a"
+);
 
 
-if (sections.length && navLinks.length) {
+if(sections.length && navLinks.length){
 
-  const navObserver =
-    new IntersectionObserver(
+const navObserver =
+new IntersectionObserver(
 
-      entries => {
+entries=>{
 
-        entries.forEach(entry => {
+entries.forEach(entry=>{
 
-          if (!entry.isIntersecting)
-            return;
+if(!entry.isIntersecting)return;
 
-          const id =
-            entry.target.getAttribute("id");
+const id =
+entry.target.getAttribute("id");
 
+navLinks.forEach(link=>{
 
-          navLinks.forEach(link => {
+link.classList.remove("active");
 
-            link.classList.remove("active");
+if(
+link.getAttribute("href") ===
+`#${id}`
+){
 
+link.classList.add("active");
 
-            if (
-              link.getAttribute("href") ===
-              `#${id}`
-            ) {
+}
 
-              link.classList.add("active");
+});
 
-            }
+});
 
-          });
+},
 
-        });
+{
+rootMargin:"-35% 0px -55% 0px"
+}
 
-      },
-
-      {
-        rootMargin:
-          "-35% 0px -55% 0px"
-      }
-
-    );
+);
 
 
-  sections.forEach(section => {
-
-    navObserver.observe(section);
-
-  });
+sections.forEach(section=>{
+navObserver.observe(section);
+});
 
 }
 
 
 /* ==================================================
-   SCROLL REVEAL ANIMATION
+   SCROLL REVEAL
 ================================================== */
 
 const revealElements =
-  document.querySelectorAll(
-    `
-    .activity-card,
-    .fixture-card,
-    .coming-soon,
-    .committee-person,
-    .social-card,
-    .update-card,
-    .notice-card,
-    .gallery-item,
-    .tournament-card,
-    .rule-card,
-    .form-card,
-    .application-card
-    `
-  );
+document.querySelectorAll(
+`
+.activity-card,
+.fixture-card,
+.coming-soon,
+.committee-person,
+.social-card,
+.update-card,
+.tournament-card,
+.form-card,
+.gallery-item
+`
+);
 
 
-if (revealElements.length) {
+if(revealElements.length){
 
-  const revealObserver =
-    new IntersectionObserver(
+const revealObserver =
+new IntersectionObserver(
 
-      entries => {
+entries=>{
 
-        entries.forEach(entry => {
+entries.forEach(entry=>{
 
-          if (!entry.isIntersecting)
-            return;
+if(!entry.isIntersecting)return;
 
+entry.target.classList.add(
+"revealed"
+);
 
-          entry.target.classList.add(
-            "revealed"
-          );
+revealObserver.unobserve(
+entry.target
+);
 
+});
 
-          revealObserver.unobserve(
-            entry.target
-          );
+},
 
-        });
+{
+threshold:.12
+}
 
-      },
-
-      {
-        threshold: 0.12
-      }
-
-    );
+);
 
 
-  revealElements.forEach(element => {
+revealElements.forEach(element=>{
 
-    element.classList.add("reveal");
+element.classList.add("reveal");
 
-    revealObserver.observe(element);
+revealObserver.observe(element);
 
-  });
+});
 
 }
 
 
 /* ==================================================
    CLOSE MOBILE MENU
-   WHEN CLICKING OUTSIDE
 ================================================== */
 
 document.addEventListener(
-  "click",
-  event => {
+"click",
+event=>{
 
-    if (!navMenu || !menuToggle)
-      return;
+if(!navMenu || !menuToggle)return;
 
+if(
+navMenu.classList.contains("open") &&
+!navMenu.contains(event.target) &&
+!menuToggle.contains(event.target)
+){
 
-    if (
-      navMenu.classList.contains("open") &&
-      !navMenu.contains(event.target) &&
-      !menuToggle.contains(event.target)
-    ) {
+navMenu.classList.remove("open");
 
-      navMenu.classList.remove("open");
+menuToggle.setAttribute(
+"aria-expanded",
+"false"
+);
 
-      menuToggle.setAttribute(
-        "aria-expanded",
-        "false"
-      );
+}
 
-    }
-
-  }
+}
 );
 
 
 /* ==================================================
-   SMOOTH SCROLL
+   NOTICE TICKER
 ================================================== */
 
-document
-  .querySelectorAll('a[href^="#"]')
-  .forEach(link => {
-
-    link.addEventListener(
-      "click",
-      event => {
-
-        const targetId =
-          link.getAttribute("href");
-
-        if (
-          !targetId ||
-          targetId === "#"
-        ) return;
+const noticeTrack =
+document.querySelector(
+".notice-ticker-track"
+);
 
 
-        const target =
-          document.querySelector(targetId);
+if(noticeTrack){
 
+let position=0;
 
-        if (!target) return;
+const tickerMove=()=>{
 
+position-=.35;
 
-        event.preventDefault();
+const resetPoint =
+noticeTrack.scrollWidth/2;
 
+if(
+Math.abs(position)>=resetPoint
+){
 
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
+position=0;
 
-      }
-    );
+}
 
-  });
+noticeTrack.style.transform =
+`translateX(${position}px)`;
 
+requestAnimationFrame(tickerMove);
 
-/* ==================================================
-   NOTICE / UPDATE TICKER
-================================================== */
+};
 
-const noticeTicker =
-  document.querySelector(".notice-ticker-track");
-
-
-if (noticeTicker) {
-
-  let position = 0;
-
-  const moveTicker = () => {
-
-    position -= 0.45;
-
-    if (
-      Math.abs(position) >=
-      noticeTicker.scrollWidth / 2
-    ) {
-
-      position = 0;
-
-    }
-
-    noticeTicker.style.transform =
-      `translateX(${position}px)`;
-
-    requestAnimationFrame(moveTicker);
-
-  };
-
-
-  requestAnimationFrame(moveTicker);
+requestAnimationFrame(tickerMove);
 
 }
 
 
 /* ==================================================
-   IMAGE GALLERY AUTO SLIDER
+   GALLERY SLIDER
 ================================================== */
 
 const galleryTrack =
-  document.querySelector(".gallery-track");
+document.querySelector(
+".gallery-track"
+);
 
 const galleryItems =
-  document.querySelectorAll(".gallery-item");
+document.querySelectorAll(
+".gallery-item"
+);
 
 
-if (
-  galleryTrack &&
-  galleryItems.length > 1
-) {
+if(
+galleryTrack &&
+galleryItems.length>1
+){
 
-  let galleryIndex = 0;
-
-
-  const updateGallery = () => {
-
-    const itemWidth =
-      galleryItems[0].getBoundingClientRect().width;
+let galleryIndex=0;
 
 
-    const gap =
-      parseFloat(
-        getComputedStyle(galleryTrack).gap
-      ) || 0;
+const getStep=()=>{
+
+const width =
+galleryItems[0]
+.getBoundingClientRect()
+.width;
+
+const style =
+getComputedStyle(galleryTrack);
+
+const gap =
+parseFloat(style.gap)||0;
+
+return width+gap;
+
+};
 
 
-    galleryTrack.style.transform =
-      `translateX(-${galleryIndex * (itemWidth + gap)}px)`;
+const moveGallery=()=>{
 
-  };
+galleryTrack.style.transform =
+`translateX(-${
+galleryIndex*getStep()
+}px`;
 
-
-  setInterval(() => {
-
-    galleryIndex++;
-
-    if (
-      galleryIndex >=
-      galleryItems.length
-    ) {
-
-      galleryIndex = 0;
-
-    }
-
-    updateGallery();
-
-  }, 4500);
+};
 
 
-  window.addEventListener(
-    "resize",
-    updateGallery
-  );
+setInterval(()=>{
+
+galleryIndex++;
+
+if(
+galleryIndex>=galleryItems.length
+){
+
+galleryIndex=0;
+
+}
+
+moveGallery();
+
+},4500);
+
+
+window.addEventListener(
+"resize",
+moveGallery
+);
 
 }
 
 
 /* ==================================================
-   GALLERY IMAGE LIGHTBOX
+   GALLERY LIGHTBOX
 ================================================== */
 
 const galleryImages =
-  document.querySelectorAll(
-    ".gallery-item img"
-  );
-
+document.querySelectorAll(
+".gallery-item img"
+);
 
 const lightbox =
-  document.querySelector(".gallery-lightbox");
-
+document.querySelector(
+".gallery-lightbox"
+);
 
 const lightboxImage =
-  document.querySelector(
-    ".gallery-lightbox img"
-  );
-
+document.querySelector(
+".gallery-lightbox img"
+);
 
 const lightboxClose =
-  document.querySelector(
-    ".gallery-lightbox-close"
-  );
+document.querySelector(
+".gallery-lightbox-close"
+);
 
 
-if (
-  lightbox &&
-  lightboxImage &&
-  galleryImages.length
-) {
+if(
+galleryImages.length &&
+lightbox &&
+lightboxImage
+){
 
-  galleryImages.forEach(image => {
+galleryImages.forEach(image=>{
 
-    image.addEventListener(
-      "click",
-      () => {
+image.addEventListener(
+"click",
+()=>{
 
-        lightboxImage.src =
-          image.src;
+lightboxImage.src =
+image.src;
 
-        lightboxImage.alt =
-          image.alt || "GSA Gallery";
+lightboxImage.alt =
+image.alt || "GSA Gallery";
 
-        lightbox.classList.add(
-          "active"
-        );
+lightbox.classList.add(
+"active"
+);
 
-        document.body.style.overflow =
-          "hidden";
+document.body.style.overflow =
+"hidden";
 
-      }
-    );
+}
+);
 
-  });
-
-
-  const closeLightbox = () => {
-
-    lightbox.classList.remove(
-      "active"
-    );
-
-    document.body.style.overflow =
-      "";
-
-  };
+});
 
 
-  if (lightboxClose) {
+const closeLightbox=()=>{
 
-    lightboxClose.addEventListener(
-      "click",
-      closeLightbox
-    );
+lightbox.classList.remove(
+"active"
+);
 
-  }
+document.body.style.overflow="";
 
-
-  lightbox.addEventListener(
-    "click",
-    event => {
-
-      if (
-        event.target === lightbox
-      ) {
-
-        closeLightbox();
-
-      }
-
-    }
-  );
+};
 
 
-  document.addEventListener(
-    "keydown",
-    event => {
+if(lightboxClose){
 
-      if (
-        event.key === "Escape" &&
-        lightbox.classList.contains("active")
-      ) {
+lightboxClose.addEventListener(
+"click",
+closeLightbox
+);
 
-        closeLightbox();
+}
 
-      }
 
-    }
-  );
+lightbox.addEventListener(
+"click",
+event=>{
+
+if(
+event.target===lightbox
+){
+
+closeLightbox();
+
+}
+
+}
+);
+
+
+document.addEventListener(
+"keydown",
+event=>{
+
+if(
+event.key==="Escape" &&
+lightbox.classList.contains("active")
+){
+
+closeLightbox();
+
+}
+
+}
+);
 
 }
 
@@ -510,324 +461,335 @@ if (
    RULES MODAL
 ================================================== */
 
-const rulesButton =
-  document.querySelector(
-    "[data-open-rules]"
-  );
-
-
 const rulesModal =
-  document.querySelector(
-    "#rulesModal"
-  );
+document.querySelector(
+"#rulesModal"
+);
 
+const rulesButtons =
+document.querySelectorAll(
+"[data-open-rules]"
+);
 
 const rulesClose =
-  document.querySelector(
-    "[data-close-rules]"
-  );
+document.querySelector(
+"[data-close-rules]"
+);
 
 
-if (rulesButton && rulesModal) {
+const openRules=()=>{
 
-  rulesButton.addEventListener(
-    "click",
-    () => {
+if(!rulesModal)return;
 
-      rulesModal.classList.add(
-        "active"
-      );
+rulesModal.classList.add(
+"active"
+);
 
-      document.body.style.overflow =
-        "hidden";
+rulesModal.setAttribute(
+"aria-hidden",
+"false"
+);
 
-    }
-  );
+document.body.classList.add(
+"modal-open"
+);
 
-
-  const closeRules = () => {
-
-    rulesModal.classList.remove(
-      "active"
-    );
-
-    document.body.style.overflow =
-      "";
-
-  };
+};
 
 
-  if (rulesClose) {
+const closeRules=()=>{
 
-    rulesClose.addEventListener(
-      "click",
-      closeRules
-    );
+if(!rulesModal)return;
 
-  }
+rulesModal.classList.remove(
+"active"
+);
 
+rulesModal.setAttribute(
+"aria-hidden",
+"true"
+);
 
-  rulesModal.addEventListener(
-    "click",
-    event => {
+document.body.classList.remove(
+"modal-open"
+);
 
-      if (
-        event.target === rulesModal
-      ) {
-
-        closeRules();
-
-      }
-
-    }
-  );
+};
 
 
-  document.addEventListener(
-    "keydown",
-    event => {
+rulesButtons.forEach(button=>{
 
-      if (
-        event.key === "Escape" &&
-        rulesModal.classList.contains("active")
-      ) {
+button.addEventListener(
+"click",
+openRules
+);
 
-        closeRules();
+});
 
-      }
 
-    }
-  );
+if(rulesClose){
+
+rulesClose.addEventListener(
+"click",
+closeRules
+);
+
+}
+
+
+if(rulesModal){
+
+rulesModal.addEventListener(
+"click",
+event=>{
+
+if(
+event.target===rulesModal
+){
+
+closeRules();
+
+}
+
+}
+);
 
 }
 
 
 /* ==================================================
-   APPLICATION FORM MODAL
+   APPLICATION MODAL
 ================================================== */
-
-const applicationButtons =
-  document.querySelectorAll(
-    "[data-open-application]"
-  );
-
 
 const applicationModal =
-  document.querySelector(
-    "#applicationModal"
-  );
+document.querySelector(
+"#applicationModal"
+);
 
+const applicationButtons =
+document.querySelectorAll(
+"[data-open-application]"
+);
 
 const applicationClose =
-  document.querySelector(
-    "[data-close-application]"
-  );
+document.querySelector(
+"[data-close-application]"
+);
+
+const applicationType =
+document.querySelector(
+"[name='application_type']"
+);
 
 
-if (
-  applicationButtons.length &&
-  applicationModal
-) {
+const openApplication=type=>{
 
-  applicationButtons.forEach(button => {
+if(!applicationModal)return;
 
-    button.addEventListener(
-      "click",
-      () => {
+if(applicationType){
 
-        const applicationType =
-          button.getAttribute(
-            "data-open-application"
-          );
+applicationType.value =
+type || "";
 
+}
 
-        const typeInput =
-          applicationModal.querySelector(
-            "[name='application_type']"
-          );
+applicationModal.classList.add(
+"active"
+);
 
+applicationModal.setAttribute(
+"aria-hidden",
+"false"
+);
 
-        if (typeInput) {
+document.body.classList.add(
+"modal-open"
+);
 
-          typeInput.value =
-            applicationType || "";
-
-        }
+};
 
 
-        applicationModal.classList.add(
-          "active"
-        );
+const closeApplication=()=>{
 
-        document.body.style.overflow =
-          "hidden";
+if(!applicationModal)return;
 
-      }
-    );
+applicationModal.classList.remove(
+"active"
+);
 
-  });
+applicationModal.setAttribute(
+"aria-hidden",
+"true"
+);
 
+document.body.classList.remove(
+"modal-open"
+);
 
-  const closeApplication = () => {
-
-    applicationModal.classList.remove(
-      "active"
-    );
-
-    document.body.style.overflow =
-      "";
-
-  };
+};
 
 
-  if (applicationClose) {
+applicationButtons.forEach(button=>{
 
-    applicationClose.addEventListener(
-      "click",
-      closeApplication
-    );
+button.addEventListener(
+"click",
+()=>{
 
-  }
+const type =
+button.getAttribute(
+"data-open-application"
+);
 
+openApplication(type);
 
-  applicationModal.addEventListener(
-    "click",
-    event => {
+}
+);
 
-      if (
-        event.target === applicationModal
-      ) {
-
-        closeApplication();
-
-      }
-
-    }
-  );
+});
 
 
-  document.addEventListener(
-    "keydown",
-    event => {
+if(applicationClose){
 
-      if (
-        event.key === "Escape" &&
-        applicationModal.classList.contains("active")
-      ) {
+applicationClose.addEventListener(
+"click",
+closeApplication
+);
 
-        closeApplication();
+}
 
-      }
 
-    }
-  );
+if(applicationModal){
+
+applicationModal.addEventListener(
+"click",
+event=>{
+
+if(
+event.target===applicationModal
+){
+
+closeApplication();
+
+}
+
+}
+);
 
 }
 
 
 /* ==================================================
-   FORM VALIDATION
+   ESCAPE KEY
 ================================================== */
 
-const applicationForms =
-  document.querySelectorAll(
-    ".application-form"
-  );
+document.addEventListener(
+"keydown",
+event=>{
+
+if(event.key!=="Escape")
+return;
+
+closeRules();
+
+closeApplication();
+
+}
+);
 
 
-applicationForms.forEach(form => {
+/* ==================================================
+   APPLICATION FORM VALIDATION
+================================================== */
 
-  form.addEventListener(
-    "submit",
-    event => {
-
-      const requiredFields =
-        form.querySelectorAll(
-          "[required]"
-        );
+const forms =
+document.querySelectorAll(
+".application-form"
+);
 
 
-      let valid = true;
+forms.forEach(form=>{
+
+form.addEventListener(
+"submit",
+event=>{
+
+const requiredFields =
+form.querySelectorAll(
+"[required]"
+);
+
+let valid=true;
 
 
-      requiredFields.forEach(field => {
+requiredFields.forEach(field=>{
 
-        field.classList.remove(
-          "input-error"
-        );
+field.classList.remove(
+"input-error"
+);
 
+if(!field.value.trim()){
 
-        if (!field.value.trim()) {
+valid=false;
 
-          valid = false;
+field.classList.add(
+"input-error"
+);
 
-          field.classList.add(
-            "input-error"
-          );
+}
 
-        }
-
-      });
-
-
-      if (!valid) {
-
-        event.preventDefault();
+});
 
 
-        const firstError =
-          form.querySelector(
-            ".input-error"
-          );
+if(!valid){
 
+event.preventDefault();
 
-        if (firstError) {
+const firstError =
+form.querySelector(
+".input-error"
+);
 
-          firstError.focus();
+if(firstError){
 
-        }
+firstError.focus();
 
-        return;
+}
 
-      }
+}
 
-    }
-  );
+}
+);
 
 });
 
 
 /* ==================================================
-   DOWNLOAD BUTTON FEEDBACK
+   DOWNLOAD FEEDBACK
 ================================================== */
 
 const downloadButtons =
-  document.querySelectorAll(
-    "a[download]"
-  );
+document.querySelectorAll(
+"a[download]"
+);
 
 
-downloadButtons.forEach(button => {
+downloadButtons.forEach(button=>{
 
-  button.addEventListener(
-    "click",
-    () => {
+button.addEventListener(
+"click",
+()=>{
 
-      button.classList.add(
-        "download-started"
-      );
+button.style.transform=
+"scale(.97)";
 
+setTimeout(()=>{
 
-      setTimeout(() => {
+button.style.transform="";
 
-        button.classList.remove(
-          "download-started"
-        );
+},180);
 
-      }, 1200);
-
-    }
-  );
+}
+);
 
 });
 
@@ -837,98 +799,56 @@ downloadButtons.forEach(button => {
 ================================================== */
 
 const yearElements =
-  document.querySelectorAll(
-    "[data-current-year]"
-  );
+document.querySelectorAll(
+"[data-current-year]"
+);
 
 
-yearElements.forEach(element => {
+yearElements.forEach(element=>{
 
-  element.textContent =
-    new Date().getFullYear();
-
-});
-
-
-/* ==================================================
-   CURRENT DATE
-================================================== */
-
-const dateElements =
-  document.querySelectorAll(
-    "[data-current-date]"
-  );
-
-
-dateElements.forEach(element => {
-
-  const today =
-    new Date();
-
-
-  element.textContent =
-    today.toLocaleDateString(
-      "en-GB",
-      {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-      }
-    );
+element.textContent =
+new Date().getFullYear();
 
 });
 
 
 /* ==================================================
-   BACK TO TOP
+   SMOOTH SCROLL
 ================================================== */
 
-const backToTop =
-  document.querySelector(
-    ".back-to-top"
-  );
+document
+.querySelectorAll(
+'a[href^="#"]'
+)
+.forEach(link=>{
 
+link.addEventListener(
+"click",
+event=>{
 
-if (backToTop) {
+const id =
+link.getAttribute("href");
 
-  window.addEventListener(
-    "scroll",
-    () => {
+if(!id || id==="#")
+return;
 
-      if (
-        window.scrollY > 500
-      ) {
+const target =
+document.querySelector(id);
 
-        backToTop.classList.add(
-          "show"
-        );
+if(!target)
+return;
 
-      } else {
+event.preventDefault();
 
-        backToTop.classList.remove(
-          "show"
-        );
-
-      }
-
-    },
-    { passive: true }
-  );
-
-
-  backToTop.addEventListener(
-    "click",
-    () => {
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-    }
-  );
+target.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
 
 }
+);
+
+});
 
 
 /* ==================================================
@@ -936,12 +856,11 @@ if (backToTop) {
 ================================================== */
 
 window.addEventListener(
-  "load",
-  () => {
+"load",
+()=>{
 
-    document.body.classList.add(
-      "page-loaded"
-    );
-
-  }
+document.body.classList.add(
+"page-loaded"
 );
+
+});
