@@ -864,3 +864,50 @@ document.body.classList.add(
 );
 
 });
+
+/* ==================================================
+   LEADERSHIP SCROLL ANIMATION
+================================================== */
+
+const leaderCards =
+  document.querySelectorAll(".leader-card");
+
+
+if (leaderCards.length) {
+
+  const leaderObserver =
+    new IntersectionObserver(
+
+      entries => {
+
+        entries.forEach(entry => {
+
+          if (!entry.isIntersecting)
+            return;
+
+          entry.target.classList.add(
+            "revealed"
+          );
+
+          leaderObserver.unobserve(
+            entry.target
+          );
+
+        });
+
+      },
+
+      {
+        threshold: 0.15
+      }
+
+    );
+
+
+  leaderCards.forEach(card => {
+
+    leaderObserver.observe(card);
+
+  });
+
+}
