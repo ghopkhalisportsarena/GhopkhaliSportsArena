@@ -583,6 +583,11 @@ letter-spacing:.2em;
 
 }
 
+
+/* ==================================================
+PREMIUM GSA HERO LOGO FRAME
+================================================== */
+
 .hero-logo{
 
 position:absolute;
@@ -590,8 +595,8 @@ position:absolute;
 top:50%;
 left:50%;
 
-width:260px;
-height:260px;
+width:280px;
+height:280px;
 
 transform:
 translate(-50%,-54%);
@@ -602,28 +607,248 @@ place-items:center;
 
 border-radius:50%;
 
+border:
+1px solid rgba(255,255,255,.38);
+
 background:
-rgba(255,255,255,.05);
+radial-gradient(
+circle at 50% 42%,
+rgba(255,255,255,.14),
+rgba(255,255,255,.055) 48%,
+rgba(255,255,255,.015) 76%,
+transparent 100%
+);
 
 box-shadow:
-0 0 80px rgba(0,113,227,.22);
+0 0 0 1px rgba(255,255,255,.06),
+0 0 30px rgba(0,113,227,.18),
+0 0 75px rgba(0,113,227,.13),
+inset 0 0 35px rgba(255,255,255,.055);
+
+backdrop-filter:
+blur(14px);
+
+-webkit-backdrop-filter:
+blur(14px);
+
+animation:
+heroLogoFloat 5s ease-in-out infinite;
+
+isolation:isolate;
 
 }
 
+
+/* ==================================================
+ROTATING PREMIUM OUTER BORDER
+================================================== */
+
+.hero-logo::before{
+
+content:"";
+
+position:absolute;
+
+inset:-8px;
+
+border-radius:50%;
+
+background:
+conic-gradient(
+from 0deg,
+transparent 0deg,
+rgba(0,113,227,.95) 45deg,
+transparent 95deg,
+rgba(255,255,255,.75) 150deg,
+transparent 205deg,
+rgba(94,92,230,.9) 265deg,
+transparent 320deg,
+rgba(0,113,227,.9) 350deg,
+transparent 360deg
+);
+
+-webkit-mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
+
+-webkit-mask-composite:xor;
+
+mask-composite:exclude;
+
+padding:1.5px;
+
+animation:
+heroLogoRing 8s linear infinite;
+
+pointer-events:none;
+
+}
+
+
+/* ==================================================
+SECOND PREMIUM GLOW RING
+================================================== */
+
+.hero-logo::after{
+
+content:"";
+
+position:absolute;
+
+inset:-17px;
+
+border-radius:50%;
+
+border:
+1px solid rgba(255,255,255,.09);
+
+box-shadow:
+0 0 25px rgba(0,113,227,.10),
+0 0 55px rgba(94,92,230,.07);
+
+animation:
+heroLogoPulse 4s ease-in-out infinite;
+
+pointer-events:none;
+
+}
+
+
+/* ==================================================
+GSA LOGO
+================================================== */
+
 .hero-logo img{
 
-width:230px;
-height:230px;
+position:relative;
+
+z-index:3;
+
+width:238px;
+height:238px;
 
 object-fit:contain;
 
 filter:
 drop-shadow(
-0 20px 30px
-rgba(0,0,0,.3)
+0 18px 28px rgba(0,0,0,.38)
+)
+drop-shadow(
+0 0 20px rgba(0,113,227,.20)
+);
+
+animation:
+heroLogoImage 5s ease-in-out infinite;
+
+}
+
+
+/* ==================================================
+PREMIUM HERO LOGO ANIMATIONS
+================================================== */
+
+@keyframes heroLogoRing{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
+}
+
+
+@keyframes heroLogoPulse{
+
+0%,
+100%{
+
+transform:scale(.98);
+
+opacity:.45;
+
+}
+
+50%{
+
+transform:scale(1.04);
+
+opacity:.9;
+
+}
+
+}
+
+
+@keyframes heroLogoFloat{
+
+0%,
+100%{
+
+transform:
+translate(-50%,-54%)
+translateY(0);
+
+}
+
+50%{
+
+transform:
+translate(-50%,-54%)
+translateY(-7px);
+
+}
+
+}
+
+
+@keyframes heroLogoImage{
+
+0%,
+100%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.025);
+
+}
+
+}
+
+
+/* ==================================================
+PREMIUM HOVER
+================================================== */
+
+.hero-card:hover .hero-logo{
+
+box-shadow:
+0 0 0 1px rgba(255,255,255,.09),
+0 0 45px rgba(0,113,227,.34),
+0 0 110px rgba(0,113,227,.18),
+inset 0 0 50px rgba(255,255,255,.08);
+
+}
+
+
+.hero-card:hover .hero-logo img{
+
+filter:
+drop-shadow(
+0 20px 35px rgba(0,0,0,.42)
+)
+drop-shadow(
+0 0 30px rgba(0,113,227,.32)
 );
 
 }
+
 
 .hero-card-bottom{
 
@@ -2659,15 +2884,15 @@ border-radius:30px;
 
 .hero-logo{
 
-width:220px;
-height:220px;
+width:235px;
+height:235px;
 
 }
 
 .hero-logo img{
 
-width:195px;
-height:195px;
+width:200px;
+height:200px;
 
 }
 
@@ -2887,15 +3112,15 @@ height:380px;
 
 .hero-logo{
 
-width:190px;
-height:190px;
+width:205px;
+height:205px;
 
 }
 
 .hero-logo img{
 
-width:170px;
-height:170px;
+width:175px;
+height:175px;
 
 }
 
@@ -2951,8 +3176,9 @@ font-size:40px;
 
 }
 
+
 /* ==================================================
-   LEADERSHIP
+LEADERSHIP
 ================================================== */
 
 .leadership-section {
@@ -3311,7 +3537,7 @@ font-size:40px;
 
 
 /* ==================================================
-   LEADERSHIP RESPONSIVE
+LEADERSHIP RESPONSIVE
 ================================================== */
 
 @media (max-width: 850px) {
