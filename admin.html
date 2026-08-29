@@ -1,0 +1,1423 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8"><meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+«»
+
+<meta
+name="description"
+content="Ghopkhali Sports Arena — Administration Panel"
+
+«»
+
+  <title>GSA Admin Panel — Ghopkhali Sports Arena</title>  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  >  <link
+    rel="stylesheet"
+    href="admin.css"
+  >
+</head><body><!-- =========================================
+     LOGIN SCREEN
+========================================= --><div
+  class="login-screen"
+  id="loginScreen"
+>  <div class="login-background"></div>  <div class="login-card"><div class="login-logo">
+
+  <img
+    src="assets/gsa-logo.png"
+    alt="Ghopkhali Sports Arena Logo"
+    onerror="this.style.display='none'"
+  >
+
+  <span>GSA</span>
+
+</div>
+
+
+<div class="login-heading">
+
+  <span class="admin-label">
+    SECURE ADMINISTRATION
+  </span>
+
+  <h1>
+    Welcome to
+    <span>GSA Admin.</span>
+  </h1>
+
+  <p>
+    Sign in to manage Ghopkhali Sports Arena.
+  </p>
+
+</div>
+
+
+<form
+  id="loginForm"
+  class="login-form"
+>
+
+  <div class="input-group">
+
+    <label for="adminEmail">
+      EMAIL ADDRESS
+    </label>
+
+    <input
+      type="email"
+      id="adminEmail"
+      placeholder="admin@example.com"
+      required
+    >
+
+  </div>
+
+
+  <div class="input-group">
+
+    <label for="adminPassword">
+      PASSWORD
+    </label>
+
+    <input
+      type="password"
+      id="adminPassword"
+      placeholder="Enter your password"
+      required
+    >
+
+  </div>
+
+
+  <button
+    type="submit"
+    class="admin-button admin-button-dark login-submit"
+  >
+
+    Sign In
+
+    <span>→</span>
+
+  </button>
+
+
+  <p
+    class="login-error"
+    id="loginError"
+  ></p>
+
+</form>
+
+
+<div class="login-footer">
+
+  <span>
+    Ghopkhali Sports Arena
+  </span>
+
+  <small>
+    © <span data-current-year></span>
+  </small>
+
+</div>
+
+  </div></div><!-- =========================================
+     ADMIN APPLICATION
+========================================= --><div
+  class="admin-app"
+  id="adminApp"
+  style="display:none;"
+>  <!-- =========================================
+       SIDEBAR
+  ========================================= -->  <aside
+    class="admin-sidebar"
+    id="adminSidebar"
+  ><div class="sidebar-brand">
+
+  <div class="sidebar-logo">
+
+    <img
+      src="assets/gsa-logo.png"
+      alt="GSA Logo"
+      onerror="this.style.display='none'"
+    >
+
+    <span>GSA</span>
+
+  </div>
+
+
+  <div class="sidebar-brand-text">
+
+    <strong>
+      GHOPKHALI
+      <br>
+      SPORTS ARENA
+    </strong>
+
+    <span>
+      ADMINISTRATION
+    </span>
+
+  </div>
+
+</div>
+
+
+
+<!-- NAVIGATION -->
+
+<nav class="sidebar-nav">
+
+
+  <span class="nav-section-title">
+    OVERVIEW
+  </span>
+
+
+  <button
+    class="sidebar-link active"
+    data-page="dashboard"
+  >
+
+    <span class="nav-icon">⌂</span>
+
+    Dashboard
+
+  </button>
+
+
+
+  <span class="nav-section-title">
+    CONTENT MANAGEMENT
+  </span>
+
+
+  <button
+    class="sidebar-link"
+    data-page="notices"
+  >
+
+    <span class="nav-icon">◉</span>
+
+    Notices
+
+  </button>
+
+
+  <button
+    class="sidebar-link"
+    data-page="gallery"
+  >
+
+    <span class="nav-icon">▧</span>
+
+    Gallery
+
+  </button>
+
+
+  <button
+    class="sidebar-link"
+    data-page="tournaments"
+  >
+
+    <span class="nav-icon">🏆</span>
+
+    Tournaments
+
+  </button>
+
+
+  <button
+    class="sidebar-link"
+    data-page="fixtures"
+  >
+
+    <span class="nav-icon">⚽</span>
+
+    Matches & Fixtures
+
+  </button>
+
+
+
+  <span class="nav-section-title">
+    PEOPLE
+  </span>
+
+
+  <button
+    class="sidebar-link"
+    data-page="leadership"
+  >
+
+    <span class="nav-icon">★</span>
+
+    Leadership
+
+  </button>
+
+
+  <button
+    class="sidebar-link"
+    data-page="committee"
+  >
+
+    <span class="nav-icon">♙</span>
+
+    Committee
+
+  </button>
+
+
+
+  <span class="nav-section-title">
+    APPLICATIONS
+  </span>
+
+
+  <button
+    class="sidebar-link"
+    data-page="friendly-applications"
+  >
+
+    <span class="nav-icon">⚽</span>
+
+    Friendly Match
+
+    <span
+      class="nav-badge"
+      id="friendlyApplicationCount"
+    >
+      0
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-link"
+    data-page="membership-applications"
+  >
+
+    <span class="nav-icon">✦</span>
+
+    Membership
+
+    <span
+      class="nav-badge"
+      id="membershipApplicationCount"
+    >
+      0
+    </span>
+
+  </button>
+
+
+
+  <span class="nav-section-title">
+    SYSTEM
+  </span>
+
+
+  <a
+    href="index.html"
+    target="_blank"
+    class="sidebar-link"
+  >
+
+    <span class="nav-icon">↗</span>
+
+    View Website
+
+  </a>
+
+
+  <button
+    class="sidebar-link logout-link"
+    id="logoutButton"
+  >
+
+    <span class="nav-icon">←</span>
+
+    Sign Out
+
+  </button>
+
+
+</nav>
+
+
+
+<div class="sidebar-footer">
+
+  <span class="status-dot"></span>
+
+  System Online
+
+</div>
+
+  </aside>  <!-- =========================================
+       MAIN AREA
+  ========================================= -->  <main class="admin-main"><!-- =========================================
+     TOP BAR
+========================================= -->
+
+<header class="admin-topbar">
+
+
+  <div class="topbar-left">
+
+    <button
+      class="sidebar-toggle"
+      id="sidebarToggle"
+      aria-label="Toggle sidebar"
+    >
+
+      ☰
+
+    </button>
+
+
+    <div>
+
+      <p
+        class="page-kicker"
+        id="pageKicker"
+      >
+        ADMINISTRATION
+      </p>
+
+      <h1
+        id="pageTitle"
+      >
+        Dashboard
+      </h1>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="topbar-right">
+
+
+    <button
+      class="topbar-action"
+      id="refreshButton"
+      title="Refresh Data"
+    >
+
+      ↻
+
+    </button>
+
+
+    <button
+      class="topbar-action notification-button"
+      title="Notifications"
+    >
+
+      🔔
+
+      <span
+        class="notification-dot"
+        id="notificationDot"
+      ></span>
+
+    </button>
+
+
+
+    <div class="admin-profile">
+
+      <div
+        class="admin-avatar"
+        id="adminAvatar"
+      >
+        A
+      </div>
+
+
+      <div class="admin-profile-info">
+
+        <strong
+          id="adminName"
+        >
+          Administrator
+        </strong>
+
+        <span>
+          GSA Management
+        </span>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+</header>
+
+
+
+<!-- =========================================
+     CONTENT
+========================================= -->
+
+<div class="admin-content">
+
+
+
+  <!-- =========================================
+       DASHBOARD
+  ========================================= -->
+
+  <section
+    class="admin-page active"
+    id="dashboardPage"
+  >
+
+
+    <div class="dashboard-welcome">
+
+      <div>
+
+        <span class="page-label">
+          GHOPKHALI SPORTS ARENA
+        </span>
+
+        <h2>
+          Manage everything
+          <span>from one place.</span>
+        </h2>
+
+        <p>
+          Control your club's announcements,
+          tournaments, matches, leadership,
+          gallery and applications.
+        </p>
+
+      </div>
+
+
+      <div class="welcome-date">
+
+        <strong
+          id="currentDate"
+        >
+          --
+        </strong>
+
+        <span>
+          ADMIN PANEL
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- STATS -->
+
+    <div class="stats-grid">
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          ◉
+        </div>
+
+        <div>
+
+          <span>
+            TOTAL NOTICES
+          </span>
+
+          <strong
+            id="totalNotices"
+          >
+            0
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          🏆
+        </div>
+
+        <div>
+
+          <span>
+            TOURNAMENTS
+          </span>
+
+          <strong
+            id="totalTournaments"
+          >
+            0
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          ⚽
+        </div>
+
+        <div>
+
+          <span>
+            TOTAL MATCHES
+          </span>
+
+          <strong
+            id="totalFixtures"
+          >
+            0
+          </strong>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="stat-card highlight-stat">
+
+        <div class="stat-icon">
+          ✦
+        </div>
+
+        <div>
+
+          <span>
+            NEW APPLICATIONS
+          </span>
+
+          <strong
+            id="totalApplications"
+          >
+            0
+          </strong>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="dashboard-grid">
+
+
+      <div class="dashboard-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span>
+              QUICK ACTIONS
+            </span>
+
+            <h3>
+              Create something new
+            </h3>
+
+          </div>
+
+        </div>
+
+
+        <div class="quick-actions">
+
+
+          <button
+            class="quick-action"
+            data-action="add-notice"
+          >
+
+            <span class="quick-icon">
+              +
+            </span>
+
+            <strong>
+              New Notice
+            </strong>
+
+            <small>
+              Publish announcement
+            </small>
+
+          </button>
+
+
+
+          <button
+            class="quick-action"
+            data-action="add-fixture"
+          >
+
+            <span class="quick-icon">
+              ⚽
+            </span>
+
+            <strong>
+              Add Match
+            </strong>
+
+            <small>
+              Create fixture
+            </small>
+
+          </button>
+
+
+
+          <button
+            class="quick-action"
+            data-action="add-tournament"
+          >
+
+            <span class="quick-icon">
+              🏆
+            </span>
+
+            <strong>
+              Tournament
+            </strong>
+
+            <small>
+              Create tournament
+            </small>
+
+          </button>
+
+
+
+          <button
+            class="quick-action"
+            data-action="add-gallery"
+          >
+
+            <span class="quick-icon">
+              ▧
+            </span>
+
+            <strong>
+              Gallery
+            </strong>
+
+            <small>
+              Add photo
+            </small>
+
+          </button>
+
+
+        </div>
+
+      </div>
+
+
+
+      <div class="dashboard-panel recent-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span>
+              RECENT ACTIVITY
+            </span>
+
+            <h3>
+              Latest updates
+            </h3>
+
+          </div>
+
+          <button
+            class="text-button"
+            data-page-link="notices"
+          >
+            View All →
+          </button>
+
+        </div>
+
+
+        <div
+          class="recent-activity-list"
+          id="recentActivityList"
+        >
+
+          <div class="empty-state small-empty">
+
+            <span>◌</span>
+
+            <p>
+              No recent activity yet.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+
+    <!-- APPLICATION OVERVIEW -->
+
+    <div class="dashboard-panel applications-overview">
+
+      <div class="panel-header">
+
+        <div>
+
+          <span>
+            APPLICATION CENTER
+          </span>
+
+          <h3>
+            Latest applications
+          </h3>
+
+        </div>
+
+
+        <button
+          class="text-button"
+          data-page-link="friendly-applications"
+        >
+          Open Center →
+        </button>
+
+      </div>
+
+
+      <div
+        class="applications-preview"
+        id="applicationsPreview"
+      >
+
+        <div class="empty-state">
+
+          <span>✦</span>
+
+          <h4>
+            No applications yet
+          </h4>
+
+          <p>
+            New Friendly Match and Membership
+            applications will appear here.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </section>
+
+
+
+  <!-- =========================================
+       NOTICES
+  ========================================= -->
+
+  <section
+    class="admin-page"
+    id="noticesPage"
+  >
+
+    <div class="page-toolbar">
+
+      <div>
+
+        <span class="page-label">
+          CONTENT MANAGEMENT
+        </span>
+
+        <h2>
+          Notices &
+          <span>Announcements.</span>
+        </h2>
+
+      </div>
+
+
+      <button
+        class="admin-button admin-button-dark"
+        data-action="add-notice"
+      >
+        + Create Notice
+      </button>
+
+    </div>
+
+
+    <div
+      class="admin-list"
+      id="noticesList"
+    >
+
+      <div class="empty-state">
+
+        <span>◉</span>
+
+        <h4>
+          No notices available
+        </h4>
+
+        <p>
+          Create your first announcement.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================================
+       GALLERY
+  ========================================= -->
+
+  <section
+    class="admin-page"
+    id="galleryPage"
+  >
+
+    <div class="page-toolbar">
+
+      <div>
+
+        <span class="page-label">
+          MEDIA MANAGEMENT
+        </span>
+
+        <h2>
+          Photo
+          <span>Gallery.</span>
+        </h2>
+
+      </div>
+
+
+      <button
+        class="admin-button admin-button-dark"
+        data-action="add-gallery"
+      >
+        + Add Photo
+      </button>
+
+    </div>
+
+
+    <div
+      class="gallery-admin-grid"
+      id="galleryAdminGrid"
+    >
+
+      <div class="empty-state">
+
+        <span>▧</span>
+
+        <h4>
+          Gallery is empty
+        </h4>
+
+        <p>
+          Upload photos from club activities.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================================
+       TOURNAMENTS
+  ========================================= -->
+
+  <section
+    class="admin-page"
+    id="tournamentsPage"
+  >
+
+    <div class="page-toolbar">
+
+      <div>
+
+        <span class="page-label">
+          SPORTS MANAGEMENT
+        </span>
+
+        <h2>
+          Manage
+          <span>Tournaments.</span>
+        </h2>
+
+      </div>
+
+
+      <button
+        class="admin-button admin-button-dark"
+        data-action="add-tournament"
+      >
+        + Add Tournament
+      </button>
+
+    </div>
+
+
+    <div
+      class="admin-cards-grid"
+      id="tournamentsList"
+    >
+
+      <div class="empty-state">
+
+        <span>🏆</span>
+
+        <h4>
+          No tournaments
+        </h4>
+
+        <p>
+          Create your first tournament.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================================
+       FIXTURES
+  ========================================= -->
+
+  <section
+    class="admin-page"
+    id="fixturesPage"
+  >
+
+    <div class="page-toolbar">
+
+      <div>
+
+        <span class="page-label">
+          MATCH MANAGEMENT
+        </span>
+
+        <h2>
+          Matches &
+          <span>Fixtures.</span>
+        </h2>
+
+      </div>
+
+
+      <button
+        class="admin-button admin-button-dark"
+        data-action="add-fixture"
+      >
+        + Add Match
+      </button>
+
+    </div>
+
+
+    <div
+      class="admin-list"
+      id="fixturesList"
+    >
+
+      <div class="empty-state">
+
+        <span>⚽</span>
+
+        <h4>
+          No matches available
+        </h4>
+
+        <p>
+          Add an upcoming match or fixture.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================================
+       LEADERSHIP
+  ========================================= -->
+
+  <section
+    class="admin-page"
+    id="leadershipPage"
+  >
+
+    <div class="page-toolbar">
+
+      <div>
+
+        <span class="page-label">
+          CLUB LEADERSHIP
+        </span>
+
+        <h2>
+          Leadership
+          <span>Management.</span>
+        </h2>
+
+      </div>
+
+
+      <button
+        class="admin-button admin-button-dark"
+        data-action="add-leader"
+      >
+        + Add Leader
+      </button>
+
+    </div>
+
+
+    <div
+      class="leadership-admin-grid"
+      id="leadershipList"
+    >
+
+      <div class="empty-state">
+
+        <span>★</span>
+
+        <h4>
+          No leadership members
+        </h4>
+
+        <p>
+          Add club leadership information.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================================
+       COMMITTEE
+  ========================================= -->
+
+  <section
+    class="admin-page"
+    id="committeePage"
+  >
+
+    <div class="page-toolbar">
+
+      <div>
+
+        <span class="page-label">
+          CLUB MANAGEMENT
+        </span>
+
+        <h2>
+          Committee
+          <span>Members.</span>
+        </h2>
+
+      </div>
+
+
+      <button
+        class="admin-button admin-button-dark"
+        data-action="add-committee"
+      >
+        + Add Member
+      </button>
+
+    </div>
+
+
+    <div
+      class="admin-list"
+      id="committeeList"
+    >
+
+      <div class="empty-state">
+
+        <span>♙</span>
+
+        <h4>
+          Committee list is empty
+        </h4>
+
+        <p>
+          Add committee members and positions.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================================
+       FRIENDLY MATCH APPLICATIONS
+  ========================================= -->
+
+  <section
+    class="admin-page"
+    id="friendlyApplicationsPage"
+  >
+
+    <div class="page-toolbar">
+
+      <div>
+
+        <span class="page-label">
+          APPLICATION CENTER
+        </span>
+
+        <h2>
+          Friendly Match
+          <span>Applications.</span>
+        </h2>
+
+      </div>
+
+
+      <select
+        class="admin-filter"
+        id="friendlyStatusFilter"
+      >
+
+        <option value="all">
+          All Applications
+        </option>
+
+        <option value="pending">
+          Pending
+        </option>
+
+        <option value="approved">
+          Approved
+        </option>
+
+        <option value="rejected">
+          Rejected
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div
+      class="applications-list"
+      id="friendlyApplicationsList"
+    >
+
+      <div class="empty-state">
+
+        <span>⚽</span>
+
+        <h4>
+          No friendly match applications
+        </h4>
+
+        <p>
+          Submitted applications will appear here.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================================
+       MEMBERSHIP APPLICATIONS
+  ========================================= -->
+
+  <section
+    class="admin-page"
+    id="membershipApplicationsPage"
+  >
+
+    <div class="page-toolbar">
+
+      <div>
+
+        <span class="page-label">
+          APPLICATION CENTER
+        </span>
+
+        <h2>
+          Club Membership
+          <span>Applications.</span>
+        </h2>
+
+      </div>
+
+
+      <select
+        class="admin-filter"
+        id="membershipStatusFilter"
+      >
+
+        <option value="all">
+          All Applications
+        </option>
+
+        <option value="pending">
+          Pending
+        </option>
+
+        <option value="approved">
+          Approved
+        </option>
+
+        <option value="rejected">
+          Rejected
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div
+      class="applications-list"
+      id="membershipApplicationsList"
+    >
+
+      <div class="empty-state">
+
+        <span>✦</span>
+
+        <h4>
+          No membership applications
+        </h4>
+
+        <p>
+          New club membership applications
+          will appear here.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+</div>
+
+  </main></div><!-- =========================================
+     UNIVERSAL MODAL
+========================================= --><div
+  class="admin-modal"
+  id="adminModal"
+  aria-hidden="true"
+>  <div
+    class="admin-modal-box"
+    id="adminModalBox"
+  ><button
+  class="modal-close-button"
+  id="adminModalClose"
+  aria-label="Close"
+>
+  ×
+</button>
+
+
+<div
+  id="adminModalContent"
+></div>
+
+  </div></div><!-- =========================================
+     TOAST NOTIFICATION
+========================================= --><div
+  class="toast-container"
+  id="toastContainer"
+></div><!-- =========================================
+     LOADING SCREEN
+========================================= --><div
+  class="admin-loading"
+  id="adminLoading"
+>  <div class="loading-logo"><img
+  src="assets/gsa-logo.png"
+  alt="GSA"
+  onerror="this.style.display='none'"
+>
+
+<span>GSA</span>
+
+  </div>  <strong>
+    GHOPKHALI SPORTS ARENA
+  </strong>  <div class="loading-line"></div></div><!-- =========================================
+     JAVASCRIPT
+========================================= --><script src="admin.js"></script></body>
+</html>
