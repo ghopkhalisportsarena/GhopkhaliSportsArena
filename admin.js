@@ -1,22 +1,14 @@
-/* ==================================================
+/* =========================================================
    GHOPKHALI SPORTS ARENA
    ADMIN PANEL JAVASCRIPT
+   FULL REPLACE VERSION
    Supabase Powered
-================================================== */
+========================================================= */
 
 
-/* ==================================================
+/* =========================================================
    SUPABASE CONFIGURATION
-================================================== */
-
-/*
-   IMPORTANT:
-   এখানে আপনার Supabase URL এবং ANON/PUBLIC KEY বসান।
-
-   উদাহরণ:
-   const SUPABASE_URL = "https://xxxx.supabase.co";
-   const SUPABASE_ANON_KEY = "your-anon-key";
-*/
+========================================================= */
 
 const SUPABASE_URL =
   window.SUPABASE_URL ||
@@ -30,61 +22,61 @@ const SUPABASE_ANON_KEY =
 let supabaseClient = null;
 
 
-/* ==================================================
-   INITIALIZE SUPABASE
-================================================== */
+/* =========================================================
+   DATABASE TABLE CONFIGURATION
+========================================================= */
 
-function initSupabase() {
+const TABLES = {
 
-  if (
-    SUPABASE_URL === "YOUR_SUPABASE_URL" ||
-    SUPABASE_ANON_KEY === "YOUR_SUPABASE_ANON_KEY"
-  ) {
+  notices: "posts",
 
-    console.error(
-      "Supabase configuration is missing."
-    );
+  gallery: "gallery",
 
-    showToast(
-      "Supabase configuration is missing.",
-      "error"
-    );
+  tournaments: "tournaments",
 
-    return false;
-  }
+  fixtures: "fixtures",
 
+  leadership: "leadership",
 
-  if (
-    typeof window.supabase === "undefined"
-  ) {
+  committee: "committee",
 
-    console.error(
-      "Supabase library not loaded."
-    );
+  friendlyApplications: "friendly_applications",
 
-    showToast(
-      "Supabase library could not be loaded.",
-      "error"
-    );
+  membershipApplications: "membership_applications"
 
-    return false;
-  }
+};
 
 
-  supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+let currentUser = null;
+
+let currentPage = "dashboard";
+
+let editingItem = null;
+
+let postsCache = [];
+
+let galleryCache = [];
+
+let tournamentsCache = [];
+
+let fixturesCache = [];
+
+let leadershipCache = [];
+
+let committeeCache = [];
+
+let friendlyApplicationsCache = [];
+
+let membershipApplicationsCache = [];
 
 
-  return true;
-}
-
-
-/* ==================================================
+/* =========================================================
    DOM HELPERS
-================================================== */
+========================================================= */
 
 const $ = selector =>
   document.querySelector(selector);
@@ -94,58 +86,138 @@ const $$ = selector =>
   document.querySelectorAll(selector);
 
 
-/* ==================================================
-   GLOBAL STATE
-================================================== */
+/* =========================================================
+   SUPABASE INITIALIZATION
+========================================================= */
 
-let currentUser = null;
+function initSupabase() {
 
-let editingPostId = null;
+  if (
+    SUPABASE_URL === "YOUR_SUPABASE_URL" ||
+    SUPABASE_ANON_KEY === "YOUR_SUPABASE_ANON_KEY"
+  ) {
 
-let editingGalleryId = null;
+    console.error(
+      "Supabase URL / Anon Key is missing."
+    );
 
-let postsCache = [];
+    showToast(
+      "Supabase configuration is missing.",
+      "error"
+    );
 
-let galleryCache = [];
+    return false;
+
+  }
 
 
-/* ==================================================
+  if (
+    typeof window.supabase === "undefined"
+  ) {
+
+    console.error(
+      "Supabase JavaScript library is not loaded."
+    );
+
+    showToast(
+      "Supabase library is not loaded.",
+      "error"
+    );
+
+    return false;
+
+  }
+
+
+  try {
+
+    supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Supabase initialization error:",
+      error
+    );
+
+    showToast(
+      "Could not initialize Supabase.",
+      "error"
+    );
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
    TOAST
-================================================== */
+========================================================= */
 
 function showToast(
   message,
   type = "success"
 ) {
 
-  let toast =
-    document.querySelector(
-      ".admin-toast"
+  const container =
+    $("#toastContainer");
+
+
+  if (!container) {
+
+    console.log(
+      `[${type}]`,
+      message
     );
 
+    return;
 
-  if (!toast) {
-
-    toast =
-      document.createElement("div");
-
-    toast.className =
-      "admin-toast";
-
-    document.body.appendChild(toast);
   }
 
 
-  toast.textContent = message;
+  const toast =
+    document.createElement("div");
 
-  toast.classList.remove(
-    "success",
-    "error",
-    "warning",
-    "show"
-  );
 
-  toast.classList.add(type);
+  toast.className =
+    `admin-toast ${type}`;
+
+
+  toast.innerHTML = `
+    <span class="toast-icon">
+      ${
+        type === "success"
+          ? "✓"
+          : type === "error"
+          ? "!"
+          : "i"
+      }
+    </span>
+
+    <span class="toast-message">
+      ${escapeHTML(message)}
+    </span>
+
+    <button
+      type="button"
+      class="toast-close"
+      aria-label="Close"
+    >
+      ×
+    </button>
+  `;
+
+
+  container.appendChild(toast);
+
 
   requestAnimationFrame(() => {
 
@@ -154,31 +226,44 @@ function showToast(
   });
 
 
-  clearTimeout(
-    toast._timer
+  const close =
+    () => {
+
+      toast.classList.remove("show");
+
+      setTimeout(() => {
+
+        toast.remove();
+
+      }, 250);
+
+    };
+
+
+  toast
+    .querySelector(".toast-close")
+    ?.addEventListener(
+      "click",
+      close
+    );
+
+
+  setTimeout(
+    close,
+    3500
   );
-
-
-  toast._timer =
-    setTimeout(() => {
-
-      toast.classList.remove(
-        "show"
-      );
-
-    }, 3200);
 
 }
 
 
-/* ==================================================
+/* =========================================================
    LOADING
-================================================== */
+========================================================= */
 
 function setLoading(
   button,
   loading,
-  loadingText = "Processing..."
+  text = "Processing..."
 ) {
 
   if (!button)
@@ -187,24 +272,36 @@ function setLoading(
 
   if (loading) {
 
-    button.dataset.originalText =
-      button.innerHTML;
+    if (
+      !button.dataset.originalHTML
+    ) {
+
+      button.dataset.originalHTML =
+        button.innerHTML;
+
+    }
+
 
     button.disabled = true;
 
     button.innerHTML =
-      `<span class="admin-spinner"></span> ${loadingText}`;
+      `
+      <span class="admin-spinner"></span>
+      ${escapeHTML(text)}
+      `;
 
   } else {
 
     button.disabled = false;
 
     if (
-      button.dataset.originalText
+      button.dataset.originalHTML
     ) {
 
       button.innerHTML =
-        button.dataset.originalText;
+        button.dataset.originalHTML;
+
+      delete button.dataset.originalHTML;
 
     }
 
@@ -213,9 +310,9 @@ function setLoading(
 }
 
 
-/* ==================================================
-   AUTH CHECK
-================================================== */
+/* =========================================================
+   AUTH
+========================================================= */
 
 async function checkAuth() {
 
@@ -257,6 +354,7 @@ async function checkAuth() {
     );
 
     showToast(
+      error.message ||
       "Authentication check failed.",
       "error"
     );
@@ -266,9 +364,9 @@ async function checkAuth() {
 }
 
 
-/* ==================================================
-   AUTH STATE LISTENER
-================================================== */
+/* =========================================================
+   AUTH LISTENER
+========================================================= */
 
 function setupAuthListener() {
 
@@ -277,7 +375,7 @@ function setupAuthListener() {
 
 
   supabaseClient.auth.onAuthStateChange(
-    async (
+    (
       event,
       session
     ) => {
@@ -294,7 +392,10 @@ function setupAuthListener() {
         currentUser
       ) {
 
-        await loadDashboard();
+        setTimeout(
+          () => loadDashboard(),
+          0
+        );
 
       }
 
@@ -304,20 +405,26 @@ function setupAuthListener() {
 }
 
 
-/* ==================================================
+/* =========================================================
    AUTH UI
-================================================== */
+========================================================= */
 
 function updateAuthUI() {
 
   const loginScreen =
     $("#loginScreen");
 
+
   const adminApp =
     $("#adminApp");
 
-  const userEmail =
-    $("#userEmail");
+
+  const adminName =
+    $("#adminName");
+
+
+  const adminAvatar =
+    $("#adminAvatar");
 
 
   if (currentUser) {
@@ -329,15 +436,24 @@ function updateAuthUI() {
 
     if (adminApp)
       adminApp.style.display =
-        "block";
+        "flex";
 
 
-    if (userEmail) {
+    const email =
+      currentUser.email ||
+      "Administrator";
 
-      userEmail.textContent =
-        currentUser.email || "";
 
-    }
+    if (adminName)
+      adminName.textContent =
+        email.split("@")[0];
+
+
+    if (adminAvatar)
+      adminAvatar.textContent =
+        email
+          .charAt(0)
+          .toUpperCase();
 
   } else {
 
@@ -355,9 +471,9 @@ function updateAuthUI() {
 }
 
 
-/* ==================================================
+/* =========================================================
    LOGIN
-================================================== */
+========================================================= */
 
 async function loginAdmin(
   email,
@@ -367,6 +483,14 @@ async function loginAdmin(
 
   if (!supabaseClient)
     return;
+
+
+  email =
+    String(email || "").trim();
+
+
+  password =
+    String(password || "");
 
 
   if (!email || !password) {
@@ -409,16 +533,16 @@ async function loginAdmin(
       data?.user || null;
 
 
+    updateAuthUI();
+
+
     showToast(
       "Login successful.",
       "success"
     );
 
 
-    updateAuthUI();
-
     await loadDashboard();
-
 
   } catch (error) {
 
@@ -426,6 +550,20 @@ async function loginAdmin(
       "Login error:",
       error
     );
+
+
+    const loginError =
+      $("#loginError");
+
+
+    if (loginError) {
+
+      loginError.textContent =
+        error.message ||
+        "Login failed.";
+
+    }
+
 
     showToast(
       error.message ||
@@ -445,49 +583,9 @@ async function loginAdmin(
 }
 
 
-/* ==================================================
-   LOGOUT
-================================================== */
-
-async function logoutAdmin() {
-
-  if (!supabaseClient)
-    return;
-
-
-  try {
-
-    await supabaseClient.auth.signOut();
-
-    currentUser = null;
-
-    updateAuthUI();
-
-    showToast(
-      "Logged out successfully.",
-      "success"
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Logout error:",
-      error
-    );
-
-    showToast(
-      "Logout failed.",
-      "error"
-    );
-
-  }
-
-}
-
-
-/* ==================================================
+/* =========================================================
    LOGIN FORM
-================================================== */
+========================================================= */
 
 function setupLoginForm() {
 
@@ -507,15 +605,11 @@ function setupLoginForm() {
 
 
       const email =
-        form.querySelector(
-          "[name='email']"
-        )?.value.trim();
+        $("#adminEmail")?.value.trim();
 
 
       const password =
-        form.querySelector(
-          "[name='password']"
-        )?.value;
+        $("#adminPassword")?.value;
 
 
       const button =
@@ -536,33 +630,75 @@ function setupLoginForm() {
 }
 
 
-/* ==================================================
-   LOGOUT BUTTON
-================================================== */
+/* =========================================================
+   LOGOUT
+========================================================= */
 
-function setupLogout() {
+async function logoutAdmin() {
 
-  const buttons =
-    $$(
-      "[data-admin-logout], #logoutBtn, #logoutButton"
+  if (!supabaseClient)
+    return;
+
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient.auth.signOut();
+
+
+    if (error)
+      throw error;
+
+
+    currentUser = null;
+
+    updateAuthUI();
+
+
+    showToast(
+      "Signed out successfully.",
+      "success"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Logout error:",
+      error
     );
 
 
-  buttons.forEach(button => {
-
-    button.addEventListener(
-      "click",
-      logoutAdmin
+    showToast(
+      error.message ||
+      "Logout failed.",
+      "error"
     );
 
-  });
+  }
 
 }
 
 
-/* ==================================================
+/* =========================================================
+   LOGOUT BUTTON
+========================================================= */
+
+function setupLogout() {
+
+  $("#logoutButton")
+    ?.addEventListener(
+      "click",
+      logoutAdmin
+    );
+
+}
+
+
+/* =========================================================
    DASHBOARD
-================================================== */
+========================================================= */
 
 async function loadDashboard() {
 
@@ -570,449 +706,410 @@ async function loadDashboard() {
     return;
 
 
-  await Promise.all([
+  updateCurrentDate();
+
+
+  await Promise.allSettled([
+
     loadPosts(),
+
     loadGallery(),
-    loadDashboardStats()
+
+    loadTournaments(),
+
+    loadFixtures(),
+
+    loadLeadership(),
+
+    loadCommittee(),
+
+    loadFriendlyApplications(),
+
+    loadMembershipApplications()
+
   ]);
+
+
+  updateDashboardStats();
+
+  renderRecentActivity();
+
+  renderApplicationsPreview();
 
 }
 
 
-/* ==================================================
-   POSTS TABLE
-================================================== */
+/* =========================================================
+   CURRENT DATE
+========================================================= */
 
-async function loadPosts() {
+function updateCurrentDate() {
 
-  if (!supabaseClient)
+  const element =
+    $("#currentDate");
+
+
+  if (!element)
     return;
 
 
-  const tableBody =
-    $(
-      "#postsTableBody"
+  const date =
+    new Date();
+
+
+  element.textContent =
+    date.toLocaleDateString(
+      "en-BD",
+      {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }
+    );
+
+}
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+const PAGE_META = {
+
+  dashboard: {
+    title: "Dashboard",
+    kicker: "ADMINISTRATION"
+  },
+
+  notices: {
+    title: "Notices",
+    kicker: "CONTENT MANAGEMENT"
+  },
+
+  gallery: {
+    title: "Gallery",
+    kicker: "MEDIA MANAGEMENT"
+  },
+
+  tournaments: {
+    title: "Tournaments",
+    kicker: "SPORTS MANAGEMENT"
+  },
+
+  fixtures: {
+    title: "Matches & Fixtures",
+    kicker: "MATCH MANAGEMENT"
+  },
+
+  leadership: {
+    title: "Leadership",
+    kicker: "CLUB LEADERSHIP"
+  },
+
+  committee: {
+    title: "Committee",
+    kicker: "CLUB MANAGEMENT"
+  },
+
+  "friendly-applications": {
+    title: "Friendly Match Applications",
+    kicker: "APPLICATION CENTER"
+  },
+
+  "membership-applications": {
+    title: "Membership Applications",
+    kicker: "APPLICATION CENTER"
+  }
+
+};
+
+
+function navigateToPage(
+  page
+) {
+
+  if (!page)
+    return;
+
+
+  currentPage =
+    page;
+
+
+  $$(".sidebar-link")
+    .forEach(link => {
+
+      link.classList.toggle(
+        "active",
+        link.dataset.page === page
+      );
+
+    });
+
+
+  $$(".admin-page")
+    .forEach(section => {
+
+      const sectionId =
+        section.id;
+
+
+      const expected =
+        `${page}Page`;
+
+
+      section.classList.toggle(
+        "active",
+        sectionId === expected
+      );
+
+      section.style.display =
+        sectionId === expected
+          ? ""
+          : "none";
+
+    });
+
+
+  const meta =
+    PAGE_META[page];
+
+
+  if (meta) {
+
+    setText(
+      "#pageTitle",
+      meta.title
     );
 
 
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("posts")
-        .select("*")
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
-
-
-    if (error)
-      throw error;
-
-
-    postsCache =
-      data || [];
-
-
-    renderPosts(
-      postsCache
+    setText(
+      "#pageKicker",
+      meta.kicker
     );
 
+  }
 
-  } catch (error) {
 
-    console.error(
-      "Posts loading error:",
-      error
+  const sidebar =
+    $("#adminSidebar");
+
+
+  if (sidebar)
+    sidebar.classList.remove(
+      "open"
     );
 
+}
 
-    /*
-      Some projects use public_posts
-      instead of posts.
-    */
 
-    try {
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
-      const {
-        data,
-        error: secondError
-      } =
-        await supabaseClient
-          .from("public_posts")
-          .select("*")
-          .order(
-            "created_at",
-            {
-              ascending: false
-            }
+function setupSidebar() {
+
+  $$(".sidebar-link[data-page]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          navigateToPage(
+            button.dataset.page
           );
 
-
-      if (secondError)
-        throw secondError;
-
-
-      postsCache =
-        data || [];
-
-
-      renderPosts(
-        postsCache
+        }
       );
 
+    });
 
-    } catch (secondError) {
 
-      console.error(
-        secondError
+  $$("[data-page-link]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          navigateToPage(
+            button.dataset.pageLink
+          );
+
+        }
       );
 
+    });
 
-      if (tableBody) {
+}
 
-        tableBody.innerHTML =
-          `
-          <tr>
-            <td colspan="8">
-              Could not load posts.
-            </td>
-          </tr>
-          `;
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+function setupMobileSidebar() {
+
+  const toggle =
+    $("#sidebarToggle");
+
+
+  const sidebar =
+    $("#adminSidebar");
+
+
+  if (!toggle || !sidebar)
+    return;
+
+
+  toggle.addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      sidebar.classList.toggle(
+        "open"
+      );
+
+    }
+  );
+
+
+  document.addEventListener(
+    "click",
+    event => {
+
+      if (
+        window.innerWidth <= 900 &&
+        sidebar.classList.contains("open") &&
+        !sidebar.contains(event.target) &&
+        !toggle.contains(event.target)
+      ) {
+
+        sidebar.classList.remove(
+          "open"
+        );
 
       }
 
     }
-
-  }
-
-}
-
-
-/* ==================================================
-   RENDER POSTS
-================================================== */
-
-function renderPosts(
-  posts
-) {
-
-  const tableBody =
-    $(
-      "#postsTableBody"
-    );
-
-
-  if (!tableBody)
-    return;
-
-
-  if (!posts.length) {
-
-    tableBody.innerHTML =
-      `
-      <tr>
-        <td colspan="8">
-          No posts found.
-        </td>
-      </tr>
-      `;
-
-    return;
-
-  }
-
-
-  tableBody.innerHTML =
-    posts.map(
-      post => {
-
-        const id =
-          post.id ?? "";
-
-
-        const title =
-          escapeHTML(
-            post.title ||
-            "Untitled"
-          );
-
-
-        const category =
-          escapeHTML(
-            post.category ||
-            "General"
-          );
-
-
-        const status =
-          post.status ||
-          "draft";
-
-
-        const date =
-          formatDate(
-            post.created_at
-          );
-
-
-        return `
-          <tr>
-
-            <td>
-              ${title}
-            </td>
-
-            <td>
-              ${category}
-            </td>
-
-            <td>
-              <span class="status-badge ${status}">
-                ${escapeHTML(status)}
-              </span>
-            </td>
-
-            <td>
-              ${date}
-            </td>
-
-            <td>
-
-              <button
-                type="button"
-                class="admin-action edit"
-                data-edit-post="${escapeAttribute(id)}"
-              >
-                Edit
-              </button>
-
-              <button
-                type="button"
-                class="admin-action delete"
-                data-delete-post="${escapeAttribute(id)}"
-              >
-                Delete
-              </button>
-
-            </td>
-
-          </tr>
-        `;
-
-      }
-    )
-    .join("");
-
-
-  bindPostActions();
-
-}
-
-
-/* ==================================================
-   POST ACTIONS
-================================================== */
-
-function bindPostActions() {
-
-  $$(
-    "[data-edit-post]"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        const id =
-          button.getAttribute(
-            "data-edit-post"
-          );
-
-        editPost(id);
-
-      }
-    );
-
-  });
-
-
-  $$(
-    "[data-delete-post]"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        const id =
-          button.getAttribute(
-            "data-delete-post"
-          );
-
-        deletePost(id);
-
-      }
-    );
-
-  });
-
-}
-
-
-/* ==================================================
-   OPEN POST FORM
-================================================== */
-
-function openPostForm(
-  post = null
-) {
-
-  const modal =
-    $(
-      "#postModal, #postFormModal"
-    );
-
-
-  const form =
-    $(
-      "#postForm"
-    );
-
-
-  if (!form)
-    return;
-
-
-  editingPostId =
-    post?.id || null;
-
-
-  form.reset();
-
-
-  const title =
-    form.querySelector(
-      "[name='title']"
-    );
-
-  const category =
-    form.querySelector(
-      "[name='category']"
-    );
-
-  const content =
-    form.querySelector(
-      "[name='content']"
-    );
-
-  const excerpt =
-    form.querySelector(
-      "[name='excerpt']"
-    );
-
-  const status =
-    form.querySelector(
-      "[name='status']"
-    );
-
-
-  if (post) {
-
-    if (title)
-      title.value =
-        post.title || "";
-
-
-    if (category)
-      category.value =
-        post.category || "";
-
-
-    if (content)
-      content.value =
-        post.content || "";
-
-
-    if (excerpt)
-      excerpt.value =
-        post.excerpt || "";
-
-
-    if (status)
-      status.value =
-        post.status || "draft";
-
-  }
-
-
-  if (modal) {
-
-    modal.classList.add(
-      "active"
-    );
-
-    modal.setAttribute(
-      "aria-hidden",
-      "false"
-    );
-
-  }
-
-}
-
-
-/* ==================================================
-   EDIT POST
-================================================== */
-
-function editPost(id) {
-
-  const post =
-    postsCache.find(
-      item =>
-        String(item.id) ===
-        String(id)
-    );
-
-
-  if (!post) {
-
-    showToast(
-      "Post not found.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  openPostForm(
-    post
   );
 
 }
 
 
-/* ==================================================
-   CLOSE POST FORM
-================================================== */
+/* =========================================================
+   UNIVERSAL ACTION HANDLER
+========================================================= */
 
-function closePostForm() {
+function setupActions() {
+
+  document.addEventListener(
+    "click",
+    event => {
+
+      const button =
+        event.target.closest(
+          "[data-action]"
+        );
+
+
+      if (!button)
+        return;
+
+
+      const action =
+        button.dataset.action;
+
+
+      switch(action) {
+
+        case "add-notice":
+          openNoticeModal();
+          break;
+
+
+        case "add-gallery":
+          openGalleryModal();
+          break;
+
+
+        case "add-tournament":
+          openTournamentModal();
+          break;
+
+
+        case "add-fixture":
+          openFixtureModal();
+          break;
+
+
+        case "add-leader":
+          openLeadershipModal();
+          break;
+
+
+        case "add-committee":
+          openCommitteeModal();
+          break;
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal(
+  content
+) {
 
   const modal =
-    $(
-      "#postModal, #postFormModal"
-    );
+    $("#adminModal");
+
+
+  const modalContent =
+    $("#adminModalContent");
+
+
+  if (!modal || !modalContent)
+    return;
+
+
+  modalContent.innerHTML =
+    content;
+
+
+  modal.classList.add(
+    "active"
+  );
+
+
+  modal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  document.body.classList.add(
+    "modal-open"
+  );
+
+}
+
+
+function closeModal() {
+
+  const modal =
+    $("#adminModal");
 
 
   if (!modal)
@@ -1023,105 +1120,467 @@ function closePostForm() {
     "active"
   );
 
+
   modal.setAttribute(
     "aria-hidden",
     "true"
   );
 
 
-  editingPostId =
-    null;
+  document.body.classList.remove(
+    "modal-open"
+  );
+
+
+  editingItem = null;
 
 }
 
 
-/* ==================================================
-   SAVE POST
-================================================== */
+/* =========================================================
+   MODAL EVENTS
+========================================================= */
 
-async function savePost(
-  form
-) {
+function setupModal() {
+
+  $("#adminModalClose")
+    ?.addEventListener(
+      "click",
+      closeModal
+    );
+
+
+  $("#adminModal")
+    ?.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          event.currentTarget
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Escape"
+      ) {
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   NOTICES
+========================================================= */
+
+async function loadPosts() {
 
   if (!supabaseClient)
     return;
 
 
-  if (!currentUser) {
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from(TABLES.notices)
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
 
-    showToast(
-      "Please login first.",
-      "error"
+
+  if (error) {
+
+    console.error(
+      "Notice loading error:",
+      error
     );
+
+    renderNoticeList([]);
 
     return;
 
   }
 
 
-  const title =
-    form.querySelector(
-      "[name='title']"
-    )?.value.trim();
+  postsCache =
+    data || [];
 
 
-  const category =
-    form.querySelector(
-      "[name='category']"
-    )?.value.trim();
+  renderNoticeList(
+    postsCache
+  );
+
+}
 
 
-  const content =
-    form.querySelector(
-      "[name='content']"
-    )?.value.trim();
+function renderNoticeList(
+  posts
+) {
+
+  const container =
+    $("#noticesList");
 
 
-  const excerpt =
-    form.querySelector(
-      "[name='excerpt']"
-    )?.value.trim();
+  if (!container)
+    return;
 
 
-  const status =
-    form.querySelector(
-      "[name='status']"
-    )?.value ||
-    "draft";
+  if (!posts.length) {
 
+    container.innerHTML = `
+      <div class="empty-state">
 
-  if (!title) {
+        <span>◉</span>
 
-    showToast(
-      "Title is required.",
-      "error"
-    );
+        <h4>No notices available</h4>
+
+        <p>
+          Create your first announcement.
+        </p>
+
+      </div>
+    `;
 
     return;
 
   }
 
 
-  const payload = {
+  container.innerHTML =
+    posts.map(post => {
 
-    title,
+      const id =
+        escapeAttribute(
+          post.id
+        );
 
-    category:
-      category ||
-      "General",
 
-    content:
-      content || "",
+      const title =
+        escapeHTML(
+          post.title ||
+          "Untitled Notice"
+        );
 
-    excerpt:
-      excerpt || "",
 
-    status,
+      const category =
+        escapeHTML(
+          post.category ||
+          "General"
+        );
 
-    updated_at:
-      new Date().toISOString()
 
-  };
+      const status =
+        post.status ||
+        "draft";
+
+
+      return `
+        <article class="admin-list-item">
+
+          <div class="admin-list-main">
+
+            <span class="status-badge ${escapeAttribute(status)}">
+              ${escapeHTML(status)}
+            </span>
+
+            <h3>
+              ${title}
+            </h3>
+
+            <p>
+              ${category}
+              ·
+              ${formatDate(post.created_at)}
+            </p>
+
+          </div>
+
+
+          <div class="admin-list-actions">
+
+            <button
+              type="button"
+              class="admin-action edit"
+              data-edit-notice="${id}"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              class="admin-action delete"
+              data-delete-notice="${id}"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </article>
+      `;
+
+    }).join("");
+
+
+  $$("[data-edit-notice]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const post =
+            postsCache.find(
+              item =>
+                String(item.id) ===
+                String(
+                  button.dataset.editNotice
+                )
+            );
+
+
+          if (post)
+            openNoticeModal(post);
+
+        }
+      );
+
+    });
+
+
+  $$("[data-delete-notice]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          deleteNotice(
+            button.dataset.deleteNotice
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   NOTICE MODAL
+========================================================= */
+
+function openNoticeModal(
+  post = null
+) {
+
+  editingItem =
+    post;
+
+
+  openModal(`
+    <div class="modal-header">
+
+      <span class="page-label">
+        CONTENT MANAGEMENT
+      </span>
+
+      <h2>
+        ${
+          post
+            ? "Edit Notice"
+            : "Create Notice"
+        }
+      </h2>
+
+    </div>
+
+
+    <form
+      id="noticeForm"
+      class="admin-form"
+    >
+
+      <div class="form-group">
+
+        <label>
+          TITLE
+        </label>
+
+        <input
+          name="title"
+          type="text"
+          required
+          maxlength="180"
+          value="${escapeAttribute(post?.title || "")}"
+          placeholder="Notice title"
+        >
+
+      </div>
+
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>
+            CATEGORY
+          </label>
+
+          <input
+            name="category"
+            type="text"
+            value="${escapeAttribute(post?.category || "General")}"
+            placeholder="General"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            STATUS
+          </label>
+
+          <select name="status">
+
+            <option
+              value="draft"
+              ${post?.status === "draft" ? "selected" : ""}
+            >
+              Draft
+            </option>
+
+            <option
+              value="published"
+              ${post?.status === "published" ? "selected" : ""}
+            >
+              Published
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          SHORT DESCRIPTION
+        </label>
+
+        <textarea
+          name="excerpt"
+          rows="3"
+          maxlength="500"
+          placeholder="Short description"
+        >${escapeHTML(post?.excerpt || "")}</textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          CONTENT
+        </label>
+
+        <textarea
+          name="content"
+          rows="8"
+          placeholder="Write notice content..."
+        >${escapeHTML(post?.content || "")}</textarea>
+
+      </div>
+
+
+      <div class="modal-form-actions">
+
+        <button
+          type="button"
+          class="admin-button admin-button-light"
+          data-modal-close
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="admin-button admin-button-dark"
+        >
+          ${
+            post
+              ? "Update Notice"
+              : "Create Notice"
+          }
+        </button>
+
+      </div>
+
+    </form>
+  `);
+
+
+  $("#noticeForm")
+    ?.addEventListener(
+      "submit",
+      saveNotice
+    );
+
+
+  $$("[data-modal-close]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        closeModal
+      );
+
+    });
+
+}
+
+
+async function saveNotice(
+  event
+) {
+
+  event.preventDefault();
+
+
+  if (!currentUser)
+    return;
+
+
+  const form =
+    event.currentTarget;
 
 
   const button =
@@ -1130,12 +1589,61 @@ async function savePost(
     );
 
 
+  const formData =
+    new FormData(form);
+
+
+  const payload = {
+
+    title:
+      String(
+        formData.get("title") || ""
+      ).trim(),
+
+    category:
+      String(
+        formData.get("category") ||
+        "General"
+      ).trim(),
+
+    excerpt:
+      String(
+        formData.get("excerpt") || ""
+      ).trim(),
+
+    content:
+      String(
+        formData.get("content") || ""
+      ).trim(),
+
+    status:
+      formData.get("status") ||
+      "draft",
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+
+  if (!payload.title) {
+
+    showToast(
+      "Notice title is required.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
   setLoading(
     button,
     true,
-    editingPostId
+    editingItem
       ? "Updating..."
-      : "Publishing..."
+      : "Creating..."
   );
 
 
@@ -1144,17 +1652,16 @@ async function savePost(
     let result;
 
 
-    if (editingPostId) {
+    if (editingItem?.id) {
 
       result =
         await supabaseClient
-          .from("posts")
+          .from(TABLES.notices)
           .update(payload)
           .eq(
             "id",
-            editingPostId
-          )
-          .select();
+            editingItem.id
+          );
 
     } else {
 
@@ -1168,11 +1675,10 @@ async function savePost(
 
       result =
         await supabaseClient
-          .from("posts")
+          .from(TABLES.notices)
           .insert(
             payload
-          )
-          .select();
+          );
 
     }
 
@@ -1181,30 +1687,28 @@ async function savePost(
       throw result.error;
 
 
+    closeModal();
+
+
     showToast(
-      editingPostId
-        ? "Post updated successfully."
-        : "Post created successfully.",
+      editingItem
+        ? "Notice updated successfully."
+        : "Notice created successfully.",
       "success"
     );
 
 
-    closePostForm();
-
     await loadPosts();
 
+    updateDashboardStats();
 
   } catch (error) {
 
-    console.error(
-      "Save post error:",
-      error
-    );
-
+    console.error(error);
 
     showToast(
       error.message ||
-      "Could not save post.",
+      "Could not save notice.",
       "error"
     );
 
@@ -1220,21 +1724,13 @@ async function savePost(
 }
 
 
-/* ==================================================
-   DELETE POST
-================================================== */
-
-async function deletePost(
+async function deleteNotice(
   id
 ) {
 
-  if (!supabaseClient)
-    return;
-
-
   if (
     !confirm(
-      "Are you sure you want to delete this post?"
+      "Are you sure you want to delete this notice?"
     )
   )
     return;
@@ -1246,7 +1742,7 @@ async function deletePost(
       error
     } =
       await supabaseClient
-        .from("posts")
+        .from(TABLES.notices)
         .delete()
         .eq(
           "id",
@@ -1259,25 +1755,22 @@ async function deletePost(
 
 
     showToast(
-      "Post deleted.",
+      "Notice deleted.",
       "success"
     );
 
 
     await loadPosts();
 
+    updateDashboardStats();
 
   } catch (error) {
 
-    console.error(
-      "Delete post error:",
-      error
-    );
-
+    console.error(error);
 
     showToast(
       error.message ||
-      "Could not delete post.",
+      "Could not delete notice.",
       "error"
     );
 
@@ -1286,73 +1779,9 @@ async function deletePost(
 }
 
 
-/* ==================================================
-   PUBLISH / DRAFT TOGGLE
-================================================== */
-
-async function updatePostStatus(
-  id,
-  status
-) {
-
-  if (!supabaseClient)
-    return;
-
-
-  try {
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("posts")
-        .update({
-          status,
-          updated_at:
-            new Date().toISOString()
-        })
-        .eq(
-          "id",
-          id
-        );
-
-
-    if (error)
-      throw error;
-
-
-    showToast(
-      status === "published"
-        ? "Post published."
-        : "Post moved to draft.",
-      "success"
-    );
-
-
-    await loadPosts();
-
-
-  } catch (error) {
-
-    console.error(
-      error
-    );
-
-
-    showToast(
-      error.message ||
-      "Status update failed.",
-      "error"
-    );
-
-  }
-
-}
-
-
-/* ==================================================
+/* =========================================================
    GALLERY
-================================================== */
+========================================================= */
 
 async function loadGallery() {
 
@@ -1367,7 +1796,7 @@ async function loadGallery() {
       error
     } =
       await supabaseClient
-        .from("gallery")
+        .from(TABLES.gallery)
         .select("*")
         .order(
           "created_at",
@@ -1389,13 +1818,13 @@ async function loadGallery() {
       galleryCache
     );
 
-
   } catch (error) {
 
     console.error(
       "Gallery loading error:",
       error
     );
+
 
     renderGallery([]);
 
@@ -1404,18 +1833,12 @@ async function loadGallery() {
 }
 
 
-/* ==================================================
-   RENDER GALLERY
-================================================== */
-
 function renderGallery(
   gallery
 ) {
 
   const container =
-    $(
-      "#galleryAdminGrid, #galleryGrid"
-    );
+    $("#galleryAdminGrid");
 
 
   if (!container)
@@ -1424,12 +1847,19 @@ function renderGallery(
 
   if (!gallery.length) {
 
-    container.innerHTML =
-      `
+    container.innerHTML = `
       <div class="empty-state">
-        No gallery images found.
+
+        <span>▧</span>
+
+        <h4>Gallery is empty</h4>
+
+        <p>
+          Upload photos from club activities.
+        </p>
+
       </div>
-      `;
+    `;
 
     return;
 
@@ -1437,109 +1867,237 @@ function renderGallery(
 
 
   container.innerHTML =
-    gallery.map(
-      item => {
+    gallery.map(item => {
 
-        const id =
-          item.id || "";
-
-
-        const image =
-          item.image_url ||
-          item.url ||
-          item.image ||
-          "";
+      const image =
+        item.image_url ||
+        item.url ||
+        item.image ||
+        "";
 
 
-        const title =
-          escapeHTML(
-            item.title ||
-            "Gallery Image"
-          );
+      return `
+        <article class="admin-gallery-item">
 
-
-        return `
-          <div
-            class="admin-gallery-item"
+          <img
+            src="${escapeAttribute(image)}"
+            alt="${escapeAttribute(item.title || "GSA Gallery")}"
+            loading="lazy"
           >
 
-            <img
-              src="${escapeAttribute(image)}"
-              alt="${title}"
-              loading="lazy"
+
+          <div class="admin-gallery-overlay">
+
+            <strong>
+              ${escapeHTML(item.title || "Gallery Image")}
+            </strong>
+
+            <button
+              type="button"
+              data-delete-gallery="${escapeAttribute(item.id)}"
             >
-
-            <div
-              class="admin-gallery-overlay"
-            >
-
-              <strong>
-                ${title}
-              </strong>
-
-              <button
-                type="button"
-                data-delete-gallery="${escapeAttribute(id)}"
-              >
-                Delete
-              </button>
-
-            </div>
+              Delete
+            </button>
 
           </div>
-        `;
 
-      }
-    )
-    .join("");
+        </article>
+      `;
+
+    }).join("");
 
 
-  $$(
-    "[data-delete-gallery]"
-  )
-  .forEach(button => {
+  $$("[data-delete-gallery]")
+    .forEach(button => {
 
-    button.addEventListener(
-      "click",
-      () => {
+      button.addEventListener(
+        "click",
+        () => {
 
-        deleteGallery(
-          button.getAttribute(
-            "data-delete-gallery"
-          )
-        );
+          deleteGallery(
+            button.dataset.deleteGallery
+          );
 
-      }
-    );
+        }
+      );
 
-  });
+    });
 
 }
 
 
-/* ==================================================
-   UPLOAD GALLERY IMAGE
-================================================== */
+/* =========================================================
+   GALLERY MODAL
+========================================================= */
 
-async function uploadGalleryImage(
-  file,
-  title = ""
-) {
+function openGalleryModal() {
 
-  if (!supabaseClient)
-    return;
+  openModal(`
+
+    <div class="modal-header">
+
+      <span class="page-label">
+        MEDIA MANAGEMENT
+      </span>
+
+      <h2>
+        Add Gallery Photo
+      </h2>
+
+    </div>
 
 
-  if (!currentUser) {
+    <form
+      id="galleryForm"
+      class="admin-form"
+    >
 
-    showToast(
-      "Please login first.",
-      "error"
+      <div class="form-group">
+
+        <label>
+          PHOTO TITLE
+        </label>
+
+        <input
+          type="text"
+          name="title"
+          placeholder="Photo title"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          IMAGE
+        </label>
+
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          required
+        >
+
+      </div>
+
+
+      <div class="image-preview-box">
+
+        <img
+          id="galleryPreview"
+          alt="Preview"
+          style="display:none;"
+        >
+
+      </div>
+
+
+      <div class="modal-form-actions">
+
+        <button
+          type="button"
+          class="admin-button admin-button-light"
+          data-modal-close
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="admin-button admin-button-dark"
+        >
+          Upload Photo
+        </button>
+
+      </div>
+
+    </form>
+
+  `);
+
+
+  $("#galleryForm")
+    ?.addEventListener(
+      "submit",
+      saveGallery
     );
 
-    return;
 
-  }
+  $$("[data-modal-close]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        closeModal
+      );
+
+    });
+
+
+  const input =
+    $("#galleryForm input[type='file']");
+
+
+  input?.addEventListener(
+    "change",
+    () => {
+
+      const file =
+        input.files?.[0];
+
+
+      const preview =
+        $("#galleryPreview");
+
+
+      if (
+        file &&
+        preview
+      ) {
+
+        preview.src =
+          URL.createObjectURL(file);
+
+        preview.style.display =
+          "block";
+
+      }
+
+    }
+  );
+
+}
+
+
+async function saveGallery(
+  event
+) {
+
+  event.preventDefault();
+
+
+  const form =
+    event.currentTarget;
+
+
+  const file =
+    form.querySelector(
+      "input[type='file']"
+    )?.files?.[0];
+
+
+  const title =
+    form.querySelector(
+      "[name='title']"
+    )?.value.trim();
+
+
+  const button =
+    form.querySelector(
+      "button[type='submit']"
+    );
 
 
   if (!file) {
@@ -1555,9 +2113,7 @@ async function uploadGalleryImage(
 
 
   if (
-    !file.type.startsWith(
-      "image/"
-    )
+    !file.type.startsWith("image/")
   ) {
 
     showToast(
@@ -1570,12 +2126,9 @@ async function uploadGalleryImage(
   }
 
 
-  const maxSize =
-    10 * 1024 * 1024;
-
-
   if (
-    file.size > maxSize
+    file.size >
+    10 * 1024 * 1024
   ) {
 
     showToast(
@@ -1588,22 +2141,34 @@ async function uploadGalleryImage(
   }
 
 
-  const extension =
-    file.name
-      .split(".")
-      .pop()
-      .toLowerCase();
-
-
-  const filename =
-    `${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}.${extension}`;
-
-
-  const path =
-    `gallery/${filename}`;
+  setLoading(
+    button,
+    true,
+    "Uploading..."
+  );
 
 
   try {
+
+    const extension =
+      file.name
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+
+    const unique =
+      typeof crypto !== "undefined" &&
+      crypto.randomUUID
+        ? crypto.randomUUID()
+        : Math.random()
+            .toString(36)
+            .slice(2);
+
+
+    const path =
+      `gallery/${Date.now()}-${unique}.${extension}`;
+
 
     const {
       error: uploadError
@@ -1615,9 +2180,8 @@ async function uploadGalleryImage(
           path,
           file,
           {
-            cacheControl:
-              "3600",
-            upsert:false
+            cacheControl: "3600",
+            upsert: false
           }
         );
 
@@ -1627,8 +2191,7 @@ async function uploadGalleryImage(
 
 
     const {
-      data:
-        publicData
+      data
     } =
       supabaseClient
         .storage
@@ -1639,23 +2202,20 @@ async function uploadGalleryImage(
 
 
     const imageUrl =
-      publicData?.publicUrl;
+      data?.publicUrl;
 
 
-    if (!imageUrl) {
-
+    if (!imageUrl)
       throw new Error(
-        "Could not generate public image URL."
+        "Could not generate image URL."
       );
-
-    }
 
 
     const {
-      error: insertError
+      error: dbError
     } =
       await supabaseClient
-        .from("gallery")
+        .from(TABLES.gallery)
         .insert({
 
           title:
@@ -1677,31 +2237,38 @@ async function uploadGalleryImage(
         });
 
 
-    if (insertError)
-      throw insertError;
+    if (dbError)
+      throw dbError;
+
+
+    closeModal();
 
 
     showToast(
-      "Image uploaded successfully.",
+      "Photo uploaded successfully.",
       "success"
     );
 
 
     await loadGallery();
 
+    updateDashboardStats();
 
   } catch (error) {
 
-    console.error(
-      "Gallery upload error:",
-      error
-    );
-
+    console.error(error);
 
     showToast(
       error.message ||
-      "Image upload failed.",
+      "Photo upload failed.",
       "error"
+    );
+
+  } finally {
+
+    setLoading(
+      button,
+      false
     );
 
   }
@@ -1709,91 +2276,9 @@ async function uploadGalleryImage(
 }
 
 
-/* ==================================================
-   GALLERY FORM
-================================================== */
-
-function setupGalleryForm() {
-
-  const form =
-    $(
-      "#galleryForm"
-    );
-
-
-  if (!form)
-    return;
-
-
-  form.addEventListener(
-    "submit",
-    async event => {
-
-      event.preventDefault();
-
-
-      const file =
-        form.querySelector(
-          "[name='image'], input[type='file']"
-        )?.files?.[0];
-
-
-      const title =
-        form.querySelector(
-          "[name='title']"
-        )?.value.trim() ||
-        "";
-
-
-      const button =
-        form.querySelector(
-          "button[type='submit']"
-        );
-
-
-      setLoading(
-        button,
-        true,
-        "Uploading..."
-      );
-
-
-      try {
-
-        await uploadGalleryImage(
-          file,
-          title
-        );
-
-
-        form.reset();
-
-      } finally {
-
-        setLoading(
-          button,
-          false
-        );
-
-      }
-
-    }
-  );
-
-}
-
-
-/* ==================================================
-   DELETE GALLERY
-================================================== */
-
 async function deleteGallery(
   id
 ) {
-
-  if (!supabaseClient)
-    return;
-
 
   if (
     !confirm(
@@ -1805,24 +2290,32 @@ async function deleteGallery(
 
   const item =
     galleryCache.find(
-      gallery =>
-        String(gallery.id) ===
+      image =>
+        String(image.id) ===
         String(id)
     );
 
 
   try {
 
-    if (
-      item?.storage_path
-    ) {
+    if (item?.storage_path) {
 
-      await supabaseClient
-        .storage
-        .from("gallery")
-        .remove([
-          item.storage_path
-        ]);
+      const {
+        error
+      } =
+        await supabaseClient
+          .storage
+          .from("gallery")
+          .remove([
+            item.storage_path
+          ]);
+
+
+      if (error)
+        console.warn(
+          "Storage deletion warning:",
+          error
+        );
 
     }
 
@@ -1831,7 +2324,7 @@ async function deleteGallery(
       error
     } =
       await supabaseClient
-        .from("gallery")
+        .from(TABLES.gallery)
         .delete()
         .eq(
           "id",
@@ -1851,14 +2344,11 @@ async function deleteGallery(
 
     await loadGallery();
 
+    updateDashboardStats();
 
   } catch (error) {
 
-    console.error(
-      "Delete gallery error:",
-      error
-    );
-
+    console.error(error);
 
     showToast(
       error.message ||
@@ -1871,102 +2361,29 @@ async function deleteGallery(
 }
 
 
-/* ==================================================
-   PDF UPLOAD
-================================================== */
+/* =========================================================
+   TOURNAMENTS
+========================================================= */
 
-async function uploadPDF(
-  file
-) {
+async function loadTournaments() {
 
   if (!supabaseClient)
     return;
 
 
-  if (!currentUser) {
-
-    showToast(
-      "Please login first.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  if (!file) {
-
-    showToast(
-      "Please select a PDF.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  if (
-    file.type !==
-    "application/pdf"
-  ) {
-
-    showToast(
-      "Only PDF files are allowed.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const maxSize =
-    25 * 1024 * 1024;
-
-
-  if (
-    file.size > maxSize
-  ) {
-
-    showToast(
-      "PDF must be smaller than 25MB.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const safeName =
-    file.name
-      .replace(
-        /[^a-zA-Z0-9._-]/g,
-        "-"
-      );
-
-
-  const path =
-    `pdf/${Date.now()}-${safeName}`;
-
-
   try {
 
     const {
+      data,
       error
     } =
       await supabaseClient
-        .storage
-        .from("documents")
-        .upload(
-          path,
-          file,
+        .from(TABLES.tournaments)
+        .select("*")
+        .order(
+          "created_at",
           {
-            cacheControl:
-              "3600",
-            upsert:false
+            ascending: false
           }
         );
 
@@ -1975,55 +2392,517 @@ async function uploadPDF(
       throw error;
 
 
-    const {
-      data
-    } =
-      supabaseClient
-        .storage
-        .from("documents")
-        .getPublicUrl(
-          path
-        );
+    tournamentsCache =
+      data || [];
 
 
-    const url =
-      data?.publicUrl;
-
-
-    const urlInput =
-      $(
-        "#pdfUrl"
-      );
-
-
-    if (urlInput) {
-
-      urlInput.value =
-        url || "";
-
-    }
-
-
-    showToast(
-      "PDF uploaded successfully.",
-      "success"
+    renderTournaments(
+      tournamentsCache
     );
-
-
-    return url;
-
 
   } catch (error) {
 
     console.error(
-      "PDF upload error:",
+      "Tournament loading error:",
       error
     );
 
 
+    renderTournaments([]);
+
+  }
+
+}
+
+
+function renderTournaments(
+  tournaments
+) {
+
+  const container =
+    $("#tournamentsList");
+
+
+  if (!container)
+    return;
+
+
+  if (!tournaments.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <span>🏆</span>
+
+        <h4>No tournaments</h4>
+
+        <p>
+          Create your first tournament.
+        </p>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    tournaments.map(item => {
+
+      return `
+        <article class="admin-card">
+
+          <div class="admin-card-icon">
+            🏆
+          </div>
+
+          <div class="admin-card-content">
+
+            <h3>
+              ${escapeHTML(
+                item.name ||
+                item.title ||
+                "Tournament"
+              )}
+            </h3>
+
+            <p>
+              ${escapeHTML(
+                item.location ||
+                item.venue ||
+                ""
+              )}
+            </p>
+
+            <small>
+              ${formatDate(
+                item.date ||
+                item.start_date ||
+                item.created_at
+              )}
+            </small>
+
+          </div>
+
+          <div class="admin-card-actions">
+
+            <button
+              type="button"
+              data-edit-tournament="${escapeAttribute(item.id)}"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              data-delete-tournament="${escapeAttribute(item.id)}"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </article>
+      `;
+
+    }).join("");
+
+
+  $$("[data-edit-tournament]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const item =
+            tournamentsCache.find(
+              x =>
+                String(x.id) ===
+                String(
+                  button.dataset.editTournament
+                )
+            );
+
+
+          if (item)
+            openTournamentModal(item);
+
+        }
+      );
+
+    });
+
+
+  $$("[data-delete-tournament]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          deleteTournament(
+            button.dataset.deleteTournament
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+function openTournamentModal(
+  item = null
+) {
+
+  editingItem =
+    item;
+
+
+  openModal(`
+
+    <div class="modal-header">
+
+      <span class="page-label">
+        SPORTS MANAGEMENT
+      </span>
+
+      <h2>
+        ${
+          item
+            ? "Edit Tournament"
+            : "Add Tournament"
+        }
+      </h2>
+
+    </div>
+
+
+    <form
+      id="tournamentForm"
+      class="admin-form"
+    >
+
+      <div class="form-group">
+
+        <label>
+          TOURNAMENT NAME
+        </label>
+
+        <input
+          name="name"
+          required
+          value="${escapeAttribute(
+            item?.name ||
+            item?.title ||
+            ""
+          )}"
+          placeholder="Tournament name"
+        >
+
+      </div>
+
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>
+            DATE
+          </label>
+
+          <input
+            type="date"
+            name="date"
+            value="${escapeAttribute(
+              normalizeDateInput(
+                item?.date ||
+                item?.start_date
+              )
+            )}"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            VENUE
+          </label>
+
+          <input
+            name="venue"
+            value="${escapeAttribute(
+              item?.venue ||
+              item?.location ||
+              ""
+            )}"
+            placeholder="Venue"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          DESCRIPTION
+        </label>
+
+        <textarea
+          name="description"
+          rows="5"
+          placeholder="Tournament details"
+        >${escapeHTML(
+          item?.description ||
+          ""
+        )}</textarea>
+
+      </div>
+
+
+      <div class="modal-form-actions">
+
+        <button
+          type="button"
+          class="admin-button admin-button-light"
+          data-modal-close
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="admin-button admin-button-dark"
+        >
+          ${
+            item
+              ? "Update Tournament"
+              : "Create Tournament"
+          }
+        </button>
+
+      </div>
+
+    </form>
+
+  `);
+
+
+  $("#tournamentForm")
+    ?.addEventListener(
+      "submit",
+      saveTournament
+    );
+
+
+  $$("[data-modal-close]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        closeModal
+      );
+
+    });
+
+}
+
+
+async function saveTournament(
+  event
+) {
+
+  event.preventDefault();
+
+
+  const form =
+    event.currentTarget;
+
+
+  const button =
+    form.querySelector(
+      "button[type='submit']"
+    );
+
+
+  const formData =
+    new FormData(form);
+
+
+  const payload = {
+
+    name:
+      String(
+        formData.get("name") || ""
+      ).trim(),
+
+    date:
+      formData.get("date") ||
+      null,
+
+    venue:
+      String(
+        formData.get("venue") || ""
+      ).trim(),
+
+    description:
+      String(
+        formData.get("description") || ""
+      ).trim(),
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+
+  if (!payload.name) {
+
+    showToast(
+      "Tournament name is required.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  setLoading(
+    button,
+    true,
+    "Saving..."
+  );
+
+
+  try {
+
+    let result;
+
+
+    if (editingItem?.id) {
+
+      result =
+        await supabaseClient
+          .from(TABLES.tournaments)
+          .update(payload)
+          .eq(
+            "id",
+            editingItem.id
+          );
+
+    } else {
+
+      payload.created_at =
+        new Date().toISOString();
+
+
+      payload.created_by =
+        currentUser?.id || null;
+
+
+      result =
+        await supabaseClient
+          .from(TABLES.tournaments)
+          .insert(
+            payload
+          );
+
+    }
+
+
+    if (result.error)
+      throw result.error;
+
+
+    closeModal();
+
+
+    showToast(
+      "Tournament saved successfully.",
+      "success"
+    );
+
+
+    await loadTournaments();
+
+    updateDashboardStats();
+
+  } catch (error) {
+
+    console.error(error);
+
     showToast(
       error.message ||
-      "PDF upload failed.",
+      "Could not save tournament.",
+      "error"
+    );
+
+  } finally {
+
+    setLoading(
+      button,
+      false
+    );
+
+  }
+
+}
+
+
+async function deleteTournament(
+  id
+) {
+
+  if (
+    !confirm(
+      "Delete this tournament?"
+    )
+  )
+    return;
+
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(TABLES.tournaments)
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error)
+      throw error;
+
+
+    showToast(
+      "Tournament deleted.",
+      "success"
+    );
+
+
+    await loadTournaments();
+
+    updateDashboardStats();
+
+  } catch (error) {
+
+    showToast(
+      error.message ||
+      "Could not delete tournament.",
       "error"
     );
 
@@ -2032,49 +2911,11 @@ async function uploadPDF(
 }
 
 
-/* ==================================================
-   PDF INPUT
-================================================== */
+/* =========================================================
+   FIXTURES
+========================================================= */
 
-function setupPDFUpload() {
-
-  const input =
-    $(
-      "#pdfFile, input[name='pdf']"
-    );
-
-
-  if (!input)
-    return;
-
-
-  input.addEventListener(
-    "change",
-    async () => {
-
-      const file =
-        input.files?.[0];
-
-
-      if (file) {
-
-        await uploadPDF(
-          file
-        );
-
-      }
-
-    }
-  );
-
-}
-
-
-/* ==================================================
-   DASHBOARD STATISTICS
-================================================== */
-
-async function loadDashboardStats() {
+async function loadFixtures() {
 
   if (!supabaseClient)
     return;
@@ -2082,97 +2923,567 @@ async function loadDashboardStats() {
 
   try {
 
-    const postsResult =
+    const {
+      data,
+      error
+    } =
       await supabaseClient
-        .from("posts")
-        .select(
-          "id,status",
+        .from(TABLES.fixtures)
+        .select("*")
+        .order(
+          "created_at",
           {
-            count:"exact",
-            head:false
+            ascending: false
           }
         );
 
 
-    const galleryResult =
-      await supabaseClient
-        .from("gallery")
-        .select(
-          "id",
-          {
-            count:"exact",
-            head:true
-          }
-        );
+    if (error)
+      throw error;
 
 
-    const totalPosts =
-      postsResult.count || 0;
+    fixturesCache =
+      data || [];
 
 
-    const publishedPosts =
-      postsResult.data
-        ?.filter(
-          post =>
-            post.status ===
-            "published"
-        )
-        .length ||
-      postsCache.filter(
-        post =>
-          post.status ===
-          "published"
-      ).length;
-
-
-    const drafts =
-      postsResult.data
-        ?.filter(
-          post =>
-            post.status ===
-            "draft"
-        )
-        .length ||
-      postsCache.filter(
-        post =>
-          post.status ===
-          "draft"
-      ).length;
-
-
-    const totalGallery =
-      galleryResult.count || 0;
-
-
-    setText(
-      "#totalPosts",
-      totalPosts
+    renderFixtures(
+      fixturesCache
     );
-
-
-    setText(
-      "#publishedPosts",
-      publishedPosts
-    );
-
-
-    setText(
-      "#draftPosts",
-      drafts
-    );
-
-
-    setText(
-      "#totalGallery",
-      totalGallery
-    );
-
 
   } catch (error) {
 
     console.error(
-      "Stats error:",
+      "Fixtures loading error:",
       error
+    );
+
+
+    renderFixtures([]);
+
+  }
+
+}
+
+
+function renderFixtures(
+  fixtures
+) {
+
+  const container =
+    $("#fixturesList");
+
+
+  if (!container)
+    return;
+
+
+  if (!fixtures.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <span>⚽</span>
+
+        <h4>No matches available</h4>
+
+        <p>
+          Add an upcoming match or fixture.
+        </p>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    fixtures.map(item => {
+
+      const home =
+        item.home_team ||
+        item.home ||
+        item.team_a ||
+        "Team A";
+
+
+      const away =
+        item.away_team ||
+        item.away ||
+        item.team_b ||
+        "Team B";
+
+
+      return `
+        <article class="admin-list-item">
+
+          <div class="admin-list-main">
+
+            <span class="fixture-date">
+              ${formatDate(
+                item.date ||
+                item.match_date ||
+                item.created_at
+              )}
+            </span>
+
+            <h3>
+              ${escapeHTML(home)}
+              <span>vs</span>
+              ${escapeHTML(away)}
+            </h3>
+
+            <p>
+              ${escapeHTML(
+                item.venue ||
+                item.location ||
+                ""
+              )}
+            </p>
+
+          </div>
+
+
+          <div class="admin-list-actions">
+
+            <button
+              type="button"
+              data-edit-fixture="${escapeAttribute(item.id)}"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              data-delete-fixture="${escapeAttribute(item.id)}"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </article>
+      `;
+
+    }).join("");
+
+
+  $$("[data-edit-fixture]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const item =
+            fixturesCache.find(
+              x =>
+                String(x.id) ===
+                String(
+                  button.dataset.editFixture
+                )
+            );
+
+
+          if (item)
+            openFixtureModal(item);
+
+        }
+      );
+
+    });
+
+
+  $$("[data-delete-fixture]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          deleteFixture(
+            button.dataset.deleteFixture
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+function openFixtureModal(
+  item = null
+) {
+
+  editingItem =
+    item;
+
+
+  openModal(`
+
+    <div class="modal-header">
+
+      <span class="page-label">
+        MATCH MANAGEMENT
+      </span>
+
+      <h2>
+        ${
+          item
+            ? "Edit Match"
+            : "Add Match"
+        }
+      </h2>
+
+    </div>
+
+
+    <form
+      id="fixtureForm"
+      class="admin-form"
+    >
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>
+            HOME TEAM
+          </label>
+
+          <input
+            name="home_team"
+            required
+            value="${escapeAttribute(
+              item?.home_team ||
+              item?.home ||
+              item?.team_a ||
+              ""
+            )}"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            AWAY TEAM
+          </label>
+
+          <input
+            name="away_team"
+            required
+            value="${escapeAttribute(
+              item?.away_team ||
+              item?.away ||
+              item?.team_b ||
+              ""
+            )}"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>
+            MATCH DATE
+          </label>
+
+          <input
+            type="date"
+            name="date"
+            value="${escapeAttribute(
+              normalizeDateInput(
+                item?.date ||
+                item?.match_date
+              )
+            )}"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            VENUE
+          </label>
+
+          <input
+            name="venue"
+            value="${escapeAttribute(
+              item?.venue ||
+              item?.location ||
+              ""
+            )}"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>
+            STATUS
+          </label>
+
+          <select name="status">
+
+            <option value="upcoming"
+              ${item?.status === "upcoming" ? "selected" : ""}
+            >
+              Upcoming
+            </option>
+
+            <option value="live"
+              ${item?.status === "live" ? "selected" : ""}
+            >
+              Live
+            </option>
+
+            <option value="completed"
+              ${item?.status === "completed" ? "selected" : ""}
+            >
+              Completed
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            SCORE
+          </label>
+
+          <input
+            name="score"
+            value="${escapeAttribute(
+              item?.score ||
+              ""
+            )}"
+            placeholder="e.g. 2-1"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-form-actions">
+
+        <button
+          type="button"
+          class="admin-button admin-button-light"
+          data-modal-close
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="admin-button admin-button-dark"
+        >
+          ${
+            item
+              ? "Update Match"
+              : "Add Match"
+          }
+        </button>
+
+      </div>
+
+    </form>
+
+  `);
+
+
+  $("#fixtureForm")
+    ?.addEventListener(
+      "submit",
+      saveFixture
+    );
+
+
+  $$("[data-modal-close]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        closeModal
+      );
+
+    });
+
+}
+
+
+async function saveFixture(
+  event
+) {
+
+  event.preventDefault();
+
+
+  const form =
+    event.currentTarget;
+
+
+  const button =
+    form.querySelector(
+      "button[type='submit']"
+    );
+
+
+  const formData =
+    new FormData(form);
+
+
+  const payload = {
+
+    home_team:
+      String(
+        formData.get("home_team") ||
+        ""
+      ).trim(),
+
+    away_team:
+      String(
+        formData.get("away_team") ||
+        ""
+      ).trim(),
+
+    date:
+      formData.get("date") ||
+      null,
+
+    venue:
+      String(
+        formData.get("venue") ||
+        ""
+      ).trim(),
+
+    status:
+      formData.get("status") ||
+      "upcoming",
+
+    score:
+      String(
+        formData.get("score") ||
+        ""
+      ).trim(),
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+
+  if (
+    !payload.home_team ||
+    !payload.away_team
+  ) {
+
+    showToast(
+      "Both team names are required.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  setLoading(
+    button,
+    true,
+    "Saving..."
+  );
+
+
+  try {
+
+    let result;
+
+
+    if (editingItem?.id) {
+
+      result =
+        await supabaseClient
+          .from(TABLES.fixtures)
+          .update(payload)
+          .eq(
+            "id",
+            editingItem.id
+          );
+
+    } else {
+
+      payload.created_at =
+        new Date().toISOString();
+
+
+      payload.created_by =
+        currentUser?.id || null;
+
+
+      result =
+        await supabaseClient
+          .from(TABLES.fixtures)
+          .insert(
+            payload
+          );
+
+    }
+
+
+    if (result.error)
+      throw result.error;
+
+
+    closeModal();
+
+
+    showToast(
+      "Match saved successfully.",
+      "success"
+    );
+
+
+    await loadFixtures();
+
+    updateDashboardStats();
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      error.message ||
+      "Could not save match.",
+      "error"
+    );
+
+  } finally {
+
+    setLoading(
+      button,
+      false
     );
 
   }
@@ -2180,347 +3491,2053 @@ async function loadDashboardStats() {
 }
 
 
-/* ==================================================
-   SEARCH POSTS
-================================================== */
+async function deleteFixture(
+  id
+) {
 
-function setupPostSearch() {
-
-  const search =
-    $(
-      "#postSearch, #searchPosts"
-    );
-
-
-  if (!search)
+  if (
+    !confirm(
+      "Delete this match?"
+    )
+  )
     return;
 
 
-  search.addEventListener(
-    "input",
-    () => {
+  try {
 
-      const query =
-        search.value
-          .trim()
-          .toLowerCase();
-
-
-      if (!query) {
-
-        renderPosts(
-          postsCache
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(TABLES.fixtures)
+        .delete()
+        .eq(
+          "id",
+          id
         );
 
-        return;
 
-      }
-
-
-      const filtered =
-        postsCache.filter(
-          post => {
-
-            const title =
-              String(
-                post.title || ""
-              ).toLowerCase();
+    if (error)
+      throw error;
 
 
-            const category =
-              String(
-                post.category || ""
-              ).toLowerCase();
+    showToast(
+      "Match deleted.",
+      "success"
+    );
 
 
-            return (
-              title.includes(query) ||
-              category.includes(query)
+    await loadFixtures();
+
+    updateDashboardStats();
+
+  } catch (error) {
+
+    showToast(
+      error.message ||
+      "Could not delete match.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LEADERSHIP
+========================================================= */
+
+async function loadLeadership() {
+
+  if (!supabaseClient)
+    return;
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(TABLES.leadership)
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: true
+          }
+        );
+
+
+    if (error)
+      throw error;
+
+
+    leadershipCache =
+      data || [];
+
+
+    renderLeadership(
+      leadershipCache
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Leadership loading error:",
+      error
+    );
+
+
+    renderLeadership([]);
+
+  }
+
+}
+
+
+function renderLeadership(
+  leaders
+) {
+
+  const container =
+    $("#leadershipList");
+
+
+  if (!container)
+    return;
+
+
+  if (!leaders.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <span>★</span>
+
+        <h4>
+          No leadership members
+        </h4>
+
+        <p>
+          Add club leadership information.
+        </p>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    leaders.map(item => {
+
+      return `
+        <article class="admin-person-card">
+
+          ${
+            item.photo ||
+            item.image_url
+              ? `
+                <img
+                  src="${escapeAttribute(
+                    item.photo ||
+                    item.image_url
+                  )}"
+                  alt="${escapeAttribute(
+                    item.name ||
+                    "Leader"
+                  )}"
+                >
+              `
+              : `
+                <div class="person-placeholder">
+                  ${escapeHTML(
+                    (item.name || "L")
+                      .charAt(0)
+                      .toUpperCase()
+                  )}
+                </div>
+              `
+          }
+
+
+          <div>
+
+            <h3>
+              ${escapeHTML(
+                item.name ||
+                "Unnamed"
+              )}
+            </h3>
+
+            <p>
+              ${escapeHTML(
+                item.position ||
+                item.role ||
+                ""
+              )}
+            </p>
+
+          </div>
+
+
+          <div class="admin-card-actions">
+
+            <button
+              type="button"
+              data-edit-leader="${escapeAttribute(item.id)}"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              data-delete-leader="${escapeAttribute(item.id)}"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </article>
+      `;
+
+    }).join("");
+
+
+  $$("[data-edit-leader]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const item =
+            leadershipCache.find(
+              x =>
+                String(x.id) ===
+                String(
+                  button.dataset.editLeader
+                )
             );
 
-          }
-        );
 
+          if (item)
+            openLeadershipModal(item);
 
-      renderPosts(
-        filtered
+        }
       );
 
-    }
-  );
+    });
 
-}
 
+  $$("[data-delete-leader]")
+    .forEach(button => {
 
-/* ==================================================
-   FILTER POSTS
-================================================== */
+      button.addEventListener(
+        "click",
+        () => {
 
-function setupPostFilter() {
-
-  const filter =
-    $(
-      "#postStatusFilter, #statusFilter"
-    );
-
-
-  if (!filter)
-    return;
-
-
-  filter.addEventListener(
-    "change",
-    () => {
-
-      const value =
-        filter.value;
-
-
-      if (!value || value === "all") {
-
-        renderPosts(
-          postsCache
-        );
-
-        return;
-
-      }
-
-
-      renderPosts(
-        postsCache.filter(
-          post =>
-            post.status ===
-            value
-        )
-      );
-
-    }
-  );
-
-}
-
-
-/* ==================================================
-   MODAL HELPERS
-================================================== */
-
-function setupModals() {
-
-  $$(
-    "[data-open-post], #addPostBtn, #newPostBtn"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        openPostForm();
-
-      }
-    );
-
-  });
-
-
-  $$(
-    "[data-close-post], #closePostModal"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      closePostForm
-    );
-
-  });
-
-
-  $(
-    "#postModal, #postFormModal"
-  )?.addEventListener(
-    "click",
-    event => {
-
-      if (
-        event.target ===
-        event.currentTarget
-      ) {
-
-        closePostForm();
-
-      }
-
-    }
-  );
-
-
-  document.addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        event.key !==
-        "Escape"
-      )
-        return;
-
-
-      closePostForm();
-
-    }
-  );
-
-}
-
-
-/* ==================================================
-   POST FORM SUBMIT
-================================================== */
-
-function setupPostForm() {
-
-  const form =
-    $(
-      "#postForm"
-    );
-
-
-  if (!form)
-    return;
-
-
-  form.addEventListener(
-    "submit",
-    async event => {
-
-      event.preventDefault();
-
-      await savePost(
-        form
-      );
-
-    }
-  );
-
-}
-
-
-/* ==================================================
-   SIDEBAR NAVIGATION
-================================================== */
-
-function setupSidebar() {
-
-  const buttons =
-    $$(
-      "[data-admin-section]"
-    );
-
-
-  const sections =
-    $$(
-      "[data-section]"
-    );
-
-
-  buttons.forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        const target =
-          button.getAttribute(
-            "data-admin-section"
+          deleteLeadership(
+            button.dataset.deleteLeader
           );
 
+        }
+      );
 
-        buttons.forEach(
-          item =>
-            item.classList.remove(
-              "active"
-            )
+    });
+
+}
+
+
+function openLeadershipModal(
+  item = null
+) {
+
+  editingItem =
+    item;
+
+
+  openModal(`
+
+    <div class="modal-header">
+
+      <span class="page-label">
+        CLUB LEADERSHIP
+      </span>
+
+      <h2>
+        ${
+          item
+            ? "Edit Leader"
+            : "Add Leader"
+        }
+      </h2>
+
+    </div>
+
+
+    <form
+      id="leadershipForm"
+      class="admin-form"
+    >
+
+      <div class="form-group">
+
+        <label>
+          FULL NAME
+        </label>
+
+        <input
+          name="name"
+          required
+          value="${escapeAttribute(
+            item?.name || ""
+          )}"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          POSITION
+        </label>
+
+        <input
+          name="position"
+          required
+          value="${escapeAttribute(
+            item?.position ||
+            item?.role ||
+            ""
+          )}"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          PHOTO URL
+        </label>
+
+        <input
+          name="photo"
+          type="url"
+          value="${escapeAttribute(
+            item?.photo ||
+            item?.image_url ||
+            ""
+          )}"
+          placeholder="https://..."
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          BIO
+        </label>
+
+        <textarea
+          name="bio"
+          rows="4"
+        >${escapeHTML(
+          item?.bio ||
+          ""
+        )}</textarea>
+
+      </div>
+
+
+      <div class="modal-form-actions">
+
+        <button
+          type="button"
+          class="admin-button admin-button-light"
+          data-modal-close
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="admin-button admin-button-dark"
+        >
+          Save Leader
+        </button>
+
+      </div>
+
+    </form>
+
+  `);
+
+
+  $("#leadershipForm")
+    ?.addEventListener(
+      "submit",
+      saveLeadership
+    );
+
+
+  $$("[data-modal-close]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        closeModal
+      );
+
+    });
+
+}
+
+
+async function saveLeadership(
+  event
+) {
+
+  event.preventDefault();
+
+
+  const form =
+    event.currentTarget;
+
+
+  const button =
+    form.querySelector(
+      "button[type='submit']"
+    );
+
+
+  const formData =
+    new FormData(form);
+
+
+  const payload = {
+
+    name:
+      String(
+        formData.get("name") ||
+        ""
+      ).trim(),
+
+    position:
+      String(
+        formData.get("position") ||
+        ""
+      ).trim(),
+
+    photo:
+      String(
+        formData.get("photo") ||
+        ""
+      ).trim(),
+
+    bio:
+      String(
+        formData.get("bio") ||
+        ""
+      ).trim(),
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+
+  setLoading(
+    button,
+    true,
+    "Saving..."
+  );
+
+
+  try {
+
+    let result;
+
+
+    if (editingItem?.id) {
+
+      result =
+        await supabaseClient
+          .from(TABLES.leadership)
+          .update(payload)
+          .eq(
+            "id",
+            editingItem.id
+          );
+
+    } else {
+
+      payload.created_at =
+        new Date().toISOString();
+
+
+      result =
+        await supabaseClient
+          .from(TABLES.leadership)
+          .insert(
+            payload
+          );
+
+    }
+
+
+    if (result.error)
+      throw result.error;
+
+
+    closeModal();
+
+
+    showToast(
+      "Leadership member saved.",
+      "success"
+    );
+
+
+    await loadLeadership();
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      error.message ||
+      "Could not save leader.",
+      "error"
+    );
+
+  } finally {
+
+    setLoading(
+      button,
+      false
+    );
+
+  }
+
+}
+
+
+async function deleteLeadership(
+  id
+) {
+
+  if (
+    !confirm(
+      "Delete this leadership member?"
+    )
+  )
+    return;
+
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(TABLES.leadership)
+        .delete()
+        .eq(
+          "id",
+          id
         );
 
 
-        button.classList.add(
-          "active"
-        );
+    if (error)
+      throw error;
 
 
-        sections.forEach(
-          section => {
+    showToast(
+      "Leadership member deleted.",
+      "success"
+    );
 
-            section.style.display =
-              section.getAttribute(
-                "data-section"
-              ) === target
-                ? ""
-                : "none";
 
+    await loadLeadership();
+
+  } catch (error) {
+
+    showToast(
+      error.message ||
+      "Could not delete member.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   COMMITTEE
+========================================================= */
+
+async function loadCommittee() {
+
+  if (!supabaseClient)
+    return;
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(TABLES.committee)
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: true
           }
+        );
+
+
+    if (error)
+      throw error;
+
+
+    committeeCache =
+      data || [];
+
+
+    renderCommittee(
+      committeeCache
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Committee loading error:",
+      error
+    );
+
+
+    renderCommittee([]);
+
+  }
+
+}
+
+
+function renderCommittee(
+  members
+) {
+
+  const container =
+    $("#committeeList");
+
+
+  if (!container)
+    return;
+
+
+  if (!members.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <span>♙</span>
+
+        <h4>
+          Committee list is empty
+        </h4>
+
+        <p>
+          Add committee members and positions.
+        </p>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    members.map(item => {
+
+      return `
+        <article class="admin-list-item">
+
+          <div class="admin-list-main">
+
+            <h3>
+              ${escapeHTML(
+                item.name ||
+                "Unnamed Member"
+              )}
+            </h3>
+
+            <p>
+              ${escapeHTML(
+                item.position ||
+                item.role ||
+                ""
+              )}
+            </p>
+
+          </div>
+
+
+          <div class="admin-list-actions">
+
+            <button
+              type="button"
+              data-edit-committee="${escapeAttribute(item.id)}"
+            >
+              Edit
+            </button>
+
+            <button
+              type="button"
+              data-delete-committee="${escapeAttribute(item.id)}"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </article>
+      `;
+
+    }).join("");
+
+
+  $$("[data-edit-committee]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const item =
+            committeeCache.find(
+              x =>
+                String(x.id) ===
+                String(
+                  button.dataset.editCommittee
+                )
+            );
+
+
+          if (item)
+            openCommitteeModal(item);
+
+        }
+      );
+
+    });
+
+
+  $$("[data-delete-committee]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          deleteCommittee(
+            button.dataset.deleteCommittee
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+function openCommitteeModal(
+  item = null
+) {
+
+  editingItem =
+    item;
+
+
+  openModal(`
+
+    <div class="modal-header">
+
+      <span class="page-label">
+        CLUB MANAGEMENT
+      </span>
+
+      <h2>
+        ${
+          item
+            ? "Edit Committee Member"
+            : "Add Committee Member"
+        }
+      </h2>
+
+    </div>
+
+
+    <form
+      id="committeeForm"
+      class="admin-form"
+    >
+
+      <div class="form-group">
+
+        <label>
+          FULL NAME
+        </label>
+
+        <input
+          name="name"
+          required
+          value="${escapeAttribute(
+            item?.name || ""
+          )}"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          POSITION
+        </label>
+
+        <input
+          name="position"
+          required
+          value="${escapeAttribute(
+            item?.position ||
+            item?.role ||
+            ""
+          )}"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          PHONE / CONTACT
+        </label>
+
+        <input
+          name="phone"
+          value="${escapeAttribute(
+            item?.phone ||
+            ""
+          )}"
+        >
+
+      </div>
+
+
+      <div class="modal-form-actions">
+
+        <button
+          type="button"
+          class="admin-button admin-button-light"
+          data-modal-close
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="admin-button admin-button-dark"
+        >
+          Save Member
+        </button>
+
+      </div>
+
+    </form>
+
+  `);
+
+
+  $("#committeeForm")
+    ?.addEventListener(
+      "submit",
+      saveCommittee
+    );
+
+
+  $$("[data-modal-close]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        closeModal
+      );
+
+    });
+
+}
+
+
+async function saveCommittee(
+  event
+) {
+
+  event.preventDefault();
+
+
+  const form =
+    event.currentTarget;
+
+
+  const button =
+    form.querySelector(
+      "button[type='submit']"
+    );
+
+
+  const formData =
+    new FormData(form);
+
+
+  const payload = {
+
+    name:
+      String(
+        formData.get("name") ||
+        ""
+      ).trim(),
+
+    position:
+      String(
+        formData.get("position") ||
+        ""
+      ).trim(),
+
+    phone:
+      String(
+        formData.get("phone") ||
+        ""
+      ).trim(),
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+
+  setLoading(
+    button,
+    true,
+    "Saving..."
+  );
+
+
+  try {
+
+    let result;
+
+
+    if (editingItem?.id) {
+
+      result =
+        await supabaseClient
+          .from(TABLES.committee)
+          .update(payload)
+          .eq(
+            "id",
+            editingItem.id
+          );
+
+    } else {
+
+      payload.created_at =
+        new Date().toISOString();
+
+
+      result =
+        await supabaseClient
+          .from(TABLES.committee)
+          .insert(
+            payload
+          );
+
+    }
+
+
+    if (result.error)
+      throw result.error;
+
+
+    closeModal();
+
+
+    showToast(
+      "Committee member saved.",
+      "success"
+    );
+
+
+    await loadCommittee();
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      error.message ||
+      "Could not save member.",
+      "error"
+    );
+
+  } finally {
+
+    setLoading(
+      button,
+      false
+    );
+
+  }
+
+}
+
+
+async function deleteCommittee(
+  id
+) {
+
+  if (
+    !confirm(
+      "Delete this committee member?"
+    )
+  )
+    return;
+
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(TABLES.committee)
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error)
+      throw error;
+
+
+    showToast(
+      "Committee member deleted.",
+      "success"
+    );
+
+
+    await loadCommittee();
+
+  } catch (error) {
+
+    showToast(
+      error.message ||
+      "Could not delete member.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   FRIENDLY MATCH APPLICATIONS
+========================================================= */
+
+async function loadFriendlyApplications() {
+
+  if (!supabaseClient)
+    return;
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(
+          TABLES.friendlyApplications
+        )
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error)
+      throw error;
+
+
+    friendlyApplicationsCache =
+      data || [];
+
+
+    renderFriendlyApplications(
+      friendlyApplicationsCache
+    );
+
+
+    updateApplicationCount();
+
+  } catch (error) {
+
+    console.error(
+      "Friendly applications error:",
+      error
+    );
+
+
+    renderFriendlyApplications([]);
+
+  }
+
+}
+
+
+function renderFriendlyApplications(
+  applications
+) {
+
+  const container =
+    $("#friendlyApplicationsList");
+
+
+  if (!container)
+    return;
+
+
+  const filter =
+    $("#friendlyStatusFilter");
+
+
+  const status =
+    filter?.value ||
+    "all";
+
+
+  let list =
+    applications;
+
+
+  if (status !== "all") {
+
+    list =
+      applications.filter(
+        item =>
+          String(
+            item.status ||
+            "pending"
+          ).toLowerCase() ===
+          status
+      );
+
+  }
+
+
+  if (!list.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <span>⚽</span>
+
+        <h4>
+          No friendly match applications
+        </h4>
+
+        <p>
+          Submitted applications will appear here.
+        </p>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    list.map(item => {
+
+      return applicationCard(
+        item,
+        "friendly"
+      );
+
+    }).join("");
+
+
+  bindApplicationActions();
+
+}
+
+
+function applicationCard(
+  item,
+  type
+) {
+
+  const name =
+    item.team_name ||
+    item.name ||
+    item.club_name ||
+    "Unknown";
+
+
+  const status =
+    item.status ||
+    "pending";
+
+
+  return `
+    <article class="application-card">
+
+      <div class="application-card-header">
+
+        <div>
+
+          <span class="application-type">
+            ${
+              type === "friendly"
+                ? "FRIENDLY MATCH"
+                : "MEMBERSHIP"
+            }
+          </span>
+
+          <h3>
+            ${escapeHTML(name)}
+          </h3>
+
+        </div>
+
+
+        <span class="status-badge ${escapeAttribute(status)}">
+          ${escapeHTML(status)}
+        </span>
+
+      </div>
+
+
+      <div class="application-details">
+
+        ${
+          item.contact_name ||
+          item.applicant_name
+            ? `
+              <p>
+                <strong>Contact:</strong>
+                ${escapeHTML(
+                  item.contact_name ||
+                  item.applicant_name
+                )}
+              </p>
+            `
+            : ""
+        }
+
+
+        ${
+          item.phone
+            ? `
+              <p>
+                <strong>Phone:</strong>
+                ${escapeHTML(item.phone)}
+              </p>
+            `
+            : ""
+        }
+
+
+        ${
+          item.email
+            ? `
+              <p>
+                <strong>Email:</strong>
+                ${escapeHTML(item.email)}
+              </p>
+            `
+            : ""
+        }
+
+
+        ${
+          item.preferred_date ||
+          item.match_date
+            ? `
+              <p>
+                <strong>Date:</strong>
+                ${formatDate(
+                  item.preferred_date ||
+                  item.match_date
+                )}
+              </p>
+            `
+            : ""
+        }
+
+
+        ${
+          item.message
+            ? `
+              <p>
+                <strong>Message:</strong>
+                ${escapeHTML(item.message)}
+              </p>
+            `
+            : ""
+        }
+
+      </div>
+
+
+      <div class="application-actions">
+
+        <button
+          type="button"
+          data-application-status="approved"
+          data-application-type="${type}"
+          data-application-id="${escapeAttribute(item.id)}"
+        >
+          Approve
+        </button>
+
+
+        <button
+          type="button"
+          data-application-status="rejected"
+          data-application-type="${type}"
+          data-application-id="${escapeAttribute(item.id)}"
+        >
+          Reject
+        </button>
+
+
+        ${
+          status !== "pending"
+            ? `
+              <button
+                type="button"
+                data-application-status="pending"
+                data-application-type="${type}"
+                data-application-id="${escapeAttribute(item.id)}"
+              >
+                Pending
+              </button>
+            `
+            : ""
+        }
+
+      </div>
+
+
+      <small>
+        Submitted:
+        ${formatDate(item.created_at)}
+      </small>
+
+    </article>
+  `;
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP APPLICATIONS
+========================================================= */
+
+async function loadMembershipApplications() {
+
+  if (!supabaseClient)
+    return;
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(
+          TABLES.membershipApplications
+        )
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error)
+      throw error;
+
+
+    membershipApplicationsCache =
+      data || [];
+
+
+    renderMembershipApplications(
+      membershipApplicationsCache
+    );
+
+
+    updateApplicationCount();
+
+  } catch (error) {
+
+    console.error(
+      "Membership applications error:",
+      error
+    );
+
+
+    renderMembershipApplications([]);
+
+  }
+
+}
+
+
+function renderMembershipApplications(
+  applications
+) {
+
+  const container =
+    $("#membershipApplicationsList");
+
+
+  if (!container)
+    return;
+
+
+  const filter =
+    $("#membershipStatusFilter");
+
+
+  const status =
+    filter?.value ||
+    "all";
+
+
+  let list =
+    applications;
+
+
+  if (status !== "all") {
+
+    list =
+      applications.filter(
+        item =>
+          String(
+            item.status ||
+            "pending"
+          ).toLowerCase() ===
+          status
+      );
+
+  }
+
+
+  if (!list.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <span>✦</span>
+
+        <h4>
+          No membership applications
+        </h4>
+
+        <p>
+          New club membership applications
+          will appear here.
+        </p>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    list.map(item => {
+
+      return applicationCard(
+        item,
+        "membership"
+      );
+
+    }).join("");
+
+
+  bindApplicationActions();
+
+}
+
+
+/* =========================================================
+   APPLICATION STATUS
+========================================================= */
+
+function bindApplicationActions() {
+
+  $$("[data-application-status]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          updateApplicationStatus(
+            button.dataset.applicationType,
+            button.dataset.applicationId,
+            button.dataset.applicationStatus
+          );
+
+        }
+      );
+
+    });
+
+}
+
+
+async function updateApplicationStatus(
+  type,
+  id,
+  status
+) {
+
+  const table =
+    type === "friendly"
+      ? TABLES.friendlyApplications
+      : TABLES.membershipApplications;
+
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(table)
+        .update({
+
+          status,
+
+          updated_at:
+            new Date().toISOString()
+
+        })
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error)
+      throw error;
+
+
+    showToast(
+      `Application marked as ${status}.`,
+      "success"
+    );
+
+
+    if (type === "friendly") {
+
+      await loadFriendlyApplications();
+
+    } else {
+
+      await loadMembershipApplications();
+
+    }
+
+
+    updateApplicationCount();
+
+    renderApplicationsPreview();
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      error.message ||
+      "Could not update application.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   APPLICATION FILTERS
+========================================================= */
+
+function setupApplicationFilters() {
+
+  $("#friendlyStatusFilter")
+    ?.addEventListener(
+      "change",
+      () => {
+
+        renderFriendlyApplications(
+          friendlyApplicationsCache
         );
 
       }
     );
 
-  });
+
+  $("#membershipStatusFilter")
+    ?.addEventListener(
+      "change",
+      () => {
+
+        renderMembershipApplications(
+          membershipApplicationsCache
+        );
+
+      }
+    );
 
 }
 
 
-/* ==================================================
-   MOBILE SIDEBAR
-================================================== */
+/* =========================================================
+   APPLICATION COUNTS
+========================================================= */
 
-function setupMobileSidebar() {
+function updateApplicationCount() {
 
-  const toggle =
-    $(
-      "#sidebarToggle, .sidebar-toggle"
-    );
+  const friendlyPending =
+    friendlyApplicationsCache.filter(
+      item =>
+        String(
+          item.status ||
+          "pending"
+        ).toLowerCase() ===
+        "pending"
+    ).length;
 
 
-  const sidebar =
-    $(
-      ".admin-sidebar, #adminSidebar"
-    );
+  const membershipPending =
+    membershipApplicationsCache.filter(
+      item =>
+        String(
+          item.status ||
+          "pending"
+        ).toLowerCase() ===
+        "pending"
+    ).length;
 
 
-  if (!toggle || !sidebar)
+  const total =
+    friendlyPending +
+    membershipPending;
+
+
+  setText(
+    "#friendlyApplicationCount",
+    friendlyPending
+  );
+
+
+  setText(
+    "#membershipApplicationCount",
+    membershipPending
+  );
+
+
+  setText(
+    "#totalApplications",
+    total
+  );
+
+
+  const notificationDot =
+    $("#notificationDot");
+
+
+  if (notificationDot) {
+
+    notificationDot.style.display =
+      total > 0
+        ? "block"
+        : "none";
+
+  }
+
+}
+
+
+/* =========================================================
+   DASHBOARD STATISTICS
+========================================================= */
+
+function updateDashboardStats() {
+
+  setText(
+    "#totalNotices",
+    postsCache.length
+  );
+
+
+  setText(
+    "#totalTournaments",
+    tournamentsCache.length
+  );
+
+
+  setText(
+    "#totalFixtures",
+    fixturesCache.length
+  );
+
+
+  updateApplicationCount();
+
+}
+
+
+/* =========================================================
+   RECENT ACTIVITY
+========================================================= */
+
+function renderRecentActivity() {
+
+  const container =
+    $("#recentActivityList");
+
+
+  if (!container)
     return;
 
 
-  toggle.addEventListener(
-    "click",
-    () => {
+  const items = [];
 
-      sidebar.classList.toggle(
-        "open"
-      );
 
-    }
+  postsCache
+    .slice(0, 5)
+    .forEach(item => {
+
+      items.push({
+
+        type: "Notice",
+
+        title:
+          item.title ||
+          "New notice",
+
+        date:
+          item.created_at
+
+      });
+
+    });
+
+
+  tournamentsCache
+    .slice(0, 5)
+    .forEach(item => {
+
+      items.push({
+
+        type: "Tournament",
+
+        title:
+          item.name ||
+          item.title ||
+          "Tournament",
+
+        date:
+          item.created_at
+
+      });
+
+    });
+
+
+  fixturesCache
+    .slice(0, 5)
+    .forEach(item => {
+
+      items.push({
+
+        type: "Match",
+
+        title:
+          `${
+            item.home_team ||
+            item.home ||
+            "Team A"
+          } vs ${
+            item.away_team ||
+            item.away ||
+            "Team B"
+          }`,
+
+        date:
+          item.created_at
+
+      });
+
+    });
+
+
+  items.sort(
+    (a,b) =>
+      new Date(
+        b.date || 0
+      ) -
+      new Date(
+        a.date || 0
+      )
   );
+
+
+  const latest =
+    items.slice(0, 6);
+
+
+  if (!latest.length) {
+
+    container.innerHTML = `
+      <div class="empty-state small-empty">
+
+        <span>◌</span>
+
+        <p>
+          No recent activity yet.
+        </p>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    latest.map(item => {
+
+      return `
+        <div class="recent-activity-item">
+
+          <div class="recent-activity-icon">
+            ${
+              item.type === "Notice"
+                ? "◉"
+                : item.type === "Tournament"
+                ? "🏆"
+                : "⚽"
+            }
+          </div>
+
+          <div>
+
+            <strong>
+              ${escapeHTML(item.title)}
+            </strong>
+
+            <span>
+              ${escapeHTML(item.type)}
+              ·
+              ${formatDate(item.date)}
+            </span>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
 
 }
 
 
-/* ==================================================
-   REFRESH BUTTON
-================================================== */
+/* =========================================================
+   APPLICATION PREVIEW
+========================================================= */
+
+function renderApplicationsPreview() {
+
+  const container =
+    $("#applicationsPreview");
+
+
+  if (!container)
+    return;
+
+
+  const applications = [
+
+    ...friendlyApplicationsCache
+      .map(item => ({
+        ...item,
+        applicationType:
+          "Friendly Match"
+      })),
+
+    ...membershipApplicationsCache
+      .map(item => ({
+        ...item,
+        applicationType:
+          "Membership"
+      }))
+
+  ];
+
+
+  applications.sort(
+    (a,b) =>
+      new Date(
+        b.created_at || 0
+      ) -
+      new Date(
+        a.created_at || 0
+      )
+  );
+
+
+  const latest =
+    applications.slice(0, 5);
+
+
+  if (!latest.length) {
+
+    container.innerHTML = `
+      <div class="empty-state">
+
+        <span>✦</span>
+
+        <h4>
+          No applications yet
+        </h4>
+
+        <p>
+          New Friendly Match and Membership
+          applications will appear here.
+        </p>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    latest.map(item => {
+
+      const name =
+        item.team_name ||
+        item.name ||
+        item.club_name ||
+        "Application";
+
+
+      return `
+        <div class="application-preview-item">
+
+          <div>
+
+            <span>
+              ${escapeHTML(
+                item.applicationType
+              )}
+            </span>
+
+            <strong>
+              ${escapeHTML(name)}
+            </strong>
+
+          </div>
+
+
+          <span class="status-badge ${
+            escapeAttribute(
+              item.status ||
+              "pending"
+            )
+          }">
+            ${escapeHTML(
+              item.status ||
+              "pending"
+            )}
+          </span>
+
+        </div>
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
 
 function setupRefresh() {
 
-  $$(
-    "[data-refresh], #refreshBtn"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
+  $("#refreshButton")
+    ?.addEventListener(
       "click",
-      async () => {
+      async event => {
+
+        const button =
+          event.currentTarget;
+
 
         setLoading(
           button,
@@ -2532,6 +5549,7 @@ function setupRefresh() {
         try {
 
           await loadDashboard();
+
 
           showToast(
             "Dashboard refreshed.",
@@ -2550,14 +5568,58 @@ function setupRefresh() {
       }
     );
 
-  });
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
-/* ==================================================
-   HELPER: TEXT
-================================================== */
+function escapeAttribute(
+  value
+) {
+
+  return escapeHTML(
+    value
+  );
+
+}
+
+
+/* =========================================================
+   TEXT HELPER
+========================================================= */
 
 function setText(
   selector,
@@ -2570,14 +5632,14 @@ function setText(
 
   if (element)
     element.textContent =
-      value;
+      value ?? "";
 
 }
 
 
-/* ==================================================
-   HELPER: DATE
-================================================== */
+/* =========================================================
+   DATE FORMAT
+========================================================= */
 
 function formatDate(
   value
@@ -2602,342 +5664,138 @@ function formatDate(
   return date.toLocaleDateString(
     "en-BD",
     {
-      year:"numeric",
-      month:"short",
-      day:"numeric"
+      year: "numeric",
+      month: "short",
+      day: "numeric"
     }
   );
 
 }
 
 
-/* ==================================================
-   HELPER: ESCAPE HTML
-================================================== */
-
-function escapeHTML(
+function normalizeDateInput(
   value
 ) {
 
-  return String(
-    value ?? ""
-  )
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /'/g,
-    "&#039;"
-  );
-
-}
+  if (!value)
+    return "";
 
 
-/* ==================================================
-   HELPER: ESCAPE ATTRIBUTE
-================================================== */
-
-function escapeAttribute(
-  value
-) {
-
-  return escapeHTML(
-    value
-  );
-
-}
+  const date =
+    new Date(value);
 
 
-/* ==================================================
-   AUTO SLUG
-================================================== */
-
-function setupSlug() {
-
-  const title =
-    $(
-      "[name='title']"
-    );
-
-
-  const slug =
-    $(
-      "[name='slug']"
-    );
-
-
-  if (!title || !slug)
-    return;
-
-
-  title.addEventListener(
-    "input",
-    () => {
-
-      if (
-        slug.dataset.manual ===
-        "true"
-      )
-        return;
-
-
-      slug.value =
-        createSlug(
-          title.value
-        );
-
-    }
-  );
-
-
-  slug.addEventListener(
-    "input",
-    () => {
-
-      slug.dataset.manual =
-        "true";
-
-    }
-  );
-
-}
-
-
-/* ==================================================
-   CREATE SLUG
-================================================== */
-
-function createSlug(
-  text
-) {
-
-  return String(text)
-    .toLowerCase()
-    .trim()
-    .replace(
-      /[^\w\s-]/g,
-      ""
+  if (
+    Number.isNaN(
+      date.getTime()
     )
-    .replace(
-      /\s+/g,
-      "-"
-    )
-    .replace(
-      /-+/g,
-      "-"
+  )
+    return "";
+
+
+  const year =
+    date.getFullYear();
+
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
     );
+
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  return `${year}-${month}-${day}`;
 
 }
 
 
-/* ==================================================
-   CHARACTER COUNTER
-================================================== */
+/* =========================================================
+   YEAR
+========================================================= */
 
-function setupCharacterCounters() {
+function updateYear() {
 
-  $$(
-    "[maxlength]"
-  )
-  .forEach(input => {
+  $$("[data-current-year]")
+    .forEach(element => {
 
-    const counter =
-      document.querySelector(
-        `[data-counter-for="${input.name}"]`
+      element.textContent =
+        new Date()
+          .getFullYear();
+
+    });
+
+}
+
+
+/* =========================================================
+   BODY MODAL CLICK
+========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const closeButton =
+      event.target.closest(
+        "[data-modal-close]"
       );
 
 
-    if (!counter)
+    if (closeButton)
+      closeModal();
+
+  }
+);
+
+
+/* =========================================================
+   GLOBAL ESCAPE
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key !==
+      "Escape"
+    )
       return;
 
 
-    const update =
-      () => {
+    closeModal();
 
-        counter.textContent =
-          `${input.value.length}/${input.maxLength}`;
-
-      };
+  }
+);
 
 
-    input.addEventListener(
-      "input",
-      update
-    );
-
-
-    update();
-
-  });
-
-}
-
-
-/* ==================================================
-   PREVIEW IMAGE
-================================================== */
-
-function setupImagePreview() {
-
-  $$(
-    "input[type='file']"
-  )
-  .forEach(input => {
-
-    input.addEventListener(
-      "change",
-      () => {
-
-        const file =
-          input.files?.[0];
-
-
-        if (
-          !file ||
-          !file.type.startsWith(
-            "image/"
-          )
-        )
-          return;
-
-
-        const preview =
-          document.querySelector(
-            `[data-preview-for="${input.name}"]`
-          );
-
-
-        if (!preview)
-          return;
-
-
-        preview.src =
-          URL.createObjectURL(
-            file
-          );
-
-
-        preview.style.display =
-          "block";
-
-      }
-    );
-
-  });
-
-}
-
-
-/* ==================================================
-   CONFIRM DELETE LINKS
-================================================== */
-
-function setupDeleteConfirmations() {
-
-  $$(
-    "[data-confirm-delete]"
-  )
-  .forEach(element => {
-
-    element.addEventListener(
-      "click",
-      event => {
-
-        const message =
-          element.getAttribute(
-            "data-confirm-delete"
-          ) ||
-          "Are you sure you want to delete this item?";
-
-
-        if (
-          !confirm(message)
-        ) {
-
-          event.preventDefault();
-
-        }
-
-      }
-    );
-
-  });
-
-}
-
-
-/* ==================================================
-   PREVENT DOUBLE SUBMIT
-================================================== */
-
-function preventDoubleSubmit() {
-
-  $$(
-    "form"
-  )
-  .forEach(form => {
-
-    form.addEventListener(
-      "submit",
-      event => {
-
-        if (
-          form.dataset.submitting ===
-          "true"
-        ) {
-
-          event.preventDefault();
-
-          return;
-
-        }
-
-
-        form.dataset.submitting =
-          "true";
-
-
-        setTimeout(
-          () => {
-
-            form.dataset.submitting =
-              "false";
-
-          },
-          5000
-        );
-
-      }
-    );
-
-  });
-
-}
-
-
-/* ==================================================
+/* =========================================================
    INITIALIZE
-================================================== */
+========================================================= */
 
 async function initializeAdmin() {
 
-  initSupabase();
+  updateYear();
+
+  updateCurrentDate();
 
 
-  if (!supabaseClient)
+  const configured =
+    initSupabase();
+
+
+  if (!configured)
     return;
 
 
@@ -2947,33 +5805,22 @@ async function initializeAdmin() {
 
   setupAuthListener();
 
-  setupGalleryForm();
-
-  setupPDFUpload();
-
-  setupPostForm();
-
-  setupModals();
-
   setupSidebar();
 
   setupMobileSidebar();
 
+  setupActions();
+
+  setupModal();
+
   setupRefresh();
 
-  setupPostSearch();
+  setupApplicationFilters();
 
-  setupPostFilter();
 
-  setupSlug();
-
-  setupCharacterCounters();
-
-  setupImagePreview();
-
-  setupDeleteConfirmations();
-
-  preventDoubleSubmit();
+  navigateToPage(
+    "dashboard"
+  );
 
 
   await checkAuth();
@@ -2981,9 +5828,9 @@ async function initializeAdmin() {
 }
 
 
-/* ==================================================
+/* =========================================================
    DOM READY
-================================================== */
+========================================================= */
 
 if (
   document.readyState ===
@@ -3002,9 +5849,9 @@ if (
 }
 
 
-/* ==================================================
-   GLOBAL EXPORTS
-================================================== */
+/* =========================================================
+   GLOBAL API
+========================================================= */
 
 window.GSAAdmin = {
 
@@ -3013,6 +5860,9 @@ window.GSAAdmin = {
 
   logout:
     logoutAdmin,
+
+  refresh:
+    loadDashboard,
 
   loadDashboard:
     loadDashboard,
@@ -3023,33 +5873,45 @@ window.GSAAdmin = {
   loadGallery:
     loadGallery,
 
-  openPostForm:
-    openPostForm,
+  loadTournaments:
+    loadTournaments,
 
-  closePostForm:
-    closePostForm,
+  loadFixtures:
+    loadFixtures,
 
-  editPost:
-    editPost,
+  loadLeadership:
+    loadLeadership,
 
-  deletePost:
-    deletePost,
+  loadCommittee:
+    loadCommittee,
 
-  deleteGallery:
-    deleteGallery,
+  loadFriendlyApplications:
+    loadFriendlyApplications,
 
-  uploadPDF:
-    uploadPDF,
+  loadMembershipApplications:
+    loadMembershipApplications,
 
-  uploadGalleryImage:
-    uploadGalleryImage,
+  openNotice:
+    openNoticeModal,
 
-  updatePostStatus:
-    updatePostStatus
+  openGallery:
+    openGalleryModal,
+
+  openTournament:
+    openTournamentModal,
+
+  openFixture:
+    openFixtureModal,
+
+  openLeadership:
+    openLeadershipModal,
+
+  openCommittee:
+    openCommitteeModal
 
 };
 
 
-/* ==================================================
-   END
-================================================== */
+/* =========================================================
+   END OF GSA ADMIN PANEL
+========================================================= */
