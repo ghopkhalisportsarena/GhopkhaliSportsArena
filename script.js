@@ -240,7 +240,20 @@ document.querySelector(
 );
 
 
-if(noticeTrack){
+/*
+   Supabase notices will replace
+   the default ticker content later.
+*/
+
+let noticeAnimationStarted = false;
+
+
+function startNoticeTicker(){
+
+if(!noticeTrack || noticeAnimationStarted)
+return;
+
+noticeAnimationStarted = true;
 
 let position = 0;
 
@@ -252,6 +265,7 @@ const resetPoint =
 noticeTrack.scrollWidth / 2;
 
 if(
+resetPoint > 0 &&
 Math.abs(position) >= resetPoint
 ){
 
@@ -262,11 +276,15 @@ position = 0;
 noticeTrack.style.transform =
 `translateX(${position}px)`;
 
-requestAnimationFrame(tickerMove);
+requestAnimationFrame(
+tickerMove
+);
 
 };
 
-requestAnimationFrame(tickerMove);
+requestAnimationFrame(
+tickerMove
+);
 
 }
 
@@ -393,6 +411,11 @@ lightbox.classList.add(
 "active"
 );
 
+lightbox.setAttribute(
+"aria-hidden",
+"false"
+);
+
 document.body.classList.add(
 "modal-open"
 );
@@ -407,6 +430,11 @@ const closeLightbox = ()=>{
 
 lightbox.classList.remove(
 "active"
+);
+
+lightbox.setAttribute(
+"aria-hidden",
+"true"
 );
 
 document.body.classList.remove(
@@ -441,6 +469,8 @@ closeLightbox();
 }
 );
 
+
+/* ESC */
 
 document.addEventListener(
 "keydown",
@@ -562,814 +592,34 @@ closeRules();
 
 
 /* ==================================================
-   APPLICATION MODAL
+   FRIENDLY MATCH MODAL
 ================================================== */
 
-const applicationModal =
+const friendlyModal =
 document.querySelector(
-"#applicationModal"
+"#friendlyModal"
 );
 
-const applicationButtons =
+const friendlyButtons =
 document.querySelectorAll(
-"[data-open-application]"
+"[data-open-friendly]"
 );
 
-const applicationClose =
+const friendlyClose =
 document.querySelector(
-"[data-close-application]"
-);
-
-const applicationType =
-document.querySelector(
-"[name='application_type']"
-);
-
-const applicationForm =
-document.querySelector(
-".application-form"
-);
-
-const applicationTitle =
-document.querySelector(
-"#applicationModal h2"
-);
-
-const applicationKicker =
-document.querySelector(
-"#applicationModal .section-kicker"
-);
-
-const formGrid =
-document.querySelector(
-"#applicationModal .form-grid"
-);
-
-const formNote =
-document.querySelector(
-"#applicationModal .form-note"
+"[data-close-friendly]"
 );
 
 
-/* ==================================================
-   FRIENDLY MATCH FORM
-================================================== */
+const openFriendly = ()=>{
 
-const friendlyMatchFields = `
+if(!friendlyModal)return;
 
-<div class="input-group">
-
-<label>
-Full Name / Team Representative
-</label>
-
-<input
-type="text"
-name="representative_name"
-placeholder="Enter representative name"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-Phone Number
-</label>
-
-<input
-type="tel"
-name="phone"
-placeholder="01XXXXXXXXX"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-Email Address
-</label>
-
-<input
-type="email"
-name="email"
-placeholder="your@email.com"
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-Team / Club Name
-</label>
-
-<input
-type="text"
-name="team_name"
-placeholder="Enter team or club name"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-Preferred Date
-</label>
-
-<input
-type="date"
-name="preferred_date"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-Preferred Time
-</label>
-
-<input
-type="time"
-name="preferred_time"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-Sport
-</label>
-
-<select
-name="sport"
-required
->
-
-<option value="">
-Select Sport
-</option>
-
-<option value="Football">
-Football
-</option>
-
-<option value="Mini Football">
-Mini Football
-</option>
-
-<option value="Cricket">
-Cricket
-</option>
-
-<option value="Other">
-Other
-</option>
-
-</select>
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-Number of Players
-</label>
-
-<input
-type="number"
-name="players"
-min="1"
-placeholder="Number of players"
-required
->
-
-</div>
-
-
-<div class="input-group full-input">
-
-<label>
-Additional Message
-</label>
-
-<textarea
-name="message"
-rows="5"
-placeholder="Tell us about your match request..."
-></textarea>
-
-</div>
-
-`;
-
-
-/* ==================================================
-   CLUB MEMBERSHIP FORM
-================================================== */
-
-const membershipFields = `
-
-<div class="membership-form-heading full-input">
-
-<strong>
-সদস্যপদ আবেদন ফরম
-</strong>
-
-<span>
-(পাসপোর্ট সাইজের ছবি আঠার সাহায্যে যুক্ত করুন)
-</span>
-
-</div>
-
-
-<div class="form-section-title full-input">
-১. ব্যক্তিগত তথ্য
-</div>
-
-
-<div class="input-group">
-
-<label>
-আবেদনকারীর পূর্ণ নাম (বাংলায়)
-</label>
-
-<input
-type="text"
-name="name_bangla"
-placeholder="আপনার বাংলা নাম লিখুন"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-আবেদনকারীর পূর্ণ নাম (ইংরেজিতে)
-</label>
-
-<input
-type="text"
-name="name_english"
-placeholder="Enter full name in English"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-পিতার নাম
-</label>
-
-<input
-type="text"
-name="father_name"
-placeholder="পিতার নাম লিখুন"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-মাতার নাম
-</label>
-
-<input
-type="text"
-name="mother_name"
-placeholder="মাতার নাম লিখুন"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-জন্ম তারিখ
-</label>
-
-<input
-type="date"
-name="date_of_birth"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-রক্তের গ্রুপ
-</label>
-
-<select
-name="blood_group"
-required
->
-
-<option value="">
-নির্বাচন করুন
-</option>
-
-<option>A+</option>
-<option>A-</option>
-<option>B+</option>
-<option>B-</option>
-<option>AB+</option>
-<option>AB-</option>
-<option>O+</option>
-<option>O-</option>
-
-</select>
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-পেশা
-</label>
-
-<input
-type="text"
-name="occupation"
-placeholder="আপনার পেশা লিখুন"
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-জাতীয় পরিচয়পত্র / জন্ম নিবন্ধন নম্বর
-</label>
-
-<input
-type="text"
-name="nid_birth_registration"
-placeholder="NID / জন্ম নিবন্ধন নম্বর"
-required
->
-
-</div>
-
-
-<div class="form-section-title full-input">
-২. যোগাযোগের তথ্য
-</div>
-
-
-<div class="input-group full-input">
-
-<label>
-বর্তমান ঠিকানা
-</label>
-
-<textarea
-name="present_address"
-rows="3"
-placeholder="বর্তমান ঠিকানা লিখুন"
-required
-></textarea>
-
-</div>
-
-
-<div class="input-group full-input">
-
-<label>
-স্থায়ী ঠিকানা
-</label>
-
-<textarea
-name="permanent_address"
-rows="3"
-placeholder="স্থায়ী ঠিকানা লিখুন"
-required
-></textarea>
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-মোবাইল নম্বর
-</label>
-
-<input
-type="tel"
-name="mobile"
-placeholder="01XXXXXXXXX"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-বিকল্প মোবাইল নম্বর
-</label>
-
-<input
-type="tel"
-name="alternative_mobile"
-placeholder="যদি থাকে"
->
-
-</div>
-
-
-<div class="form-section-title full-input">
-৩. ক্রীড়া সংক্রান্ত তথ্য
-</div>
-
-
-<div class="input-group full-input">
-
-<label>
-আপনি কোন কোন খেলায় অংশগ্রহণ করতে ইচ্ছুক?
-</label>
-
-<div class="sports-checkboxes">
-
-<label>
-<input
-type="checkbox"
-name="sports[]"
-value="ক্রিকেট"
->
-ক্রিকেট
-</label>
-
-<label>
-<input
-type="checkbox"
-name="sports[]"
-value="ফুটবল"
->
-ফুটবল
-</label>
-
-<label>
-<input
-type="checkbox"
-name="sports[]"
-value="ব্যাডমিন্টন"
->
-ব্যাডমিন্টন
-</label>
-
-<label>
-<input
-type="checkbox"
-name="sports[]"
-value="ভলিবল"
->
-ভলিবল
-</label>
-
-<label>
-<input
-type="checkbox"
-name="sports[]"
-value="অ্যাথলেটিক্স"
->
-অ্যাথলেটিক্স
-</label>
-
-<label>
-<input
-type="checkbox"
-name="sports[]"
-value="ইনডোর গেমস"
->
-ইনডোর গেমস
-</label>
-
-</div>
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-অন্যান্য খেলা
-</label>
-
-<input
-type="text"
-name="other_sport"
-placeholder="অন্যান্য খেলার নাম"
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-খেলার প্রধান দক্ষতা
-</label>
-
-<input
-type="text"
-name="sports_skill"
-placeholder="যেমন: স্ট্রাইকার, অলরাউন্ডার"
->
-
-</div>
-
-
-<div class="input-group full-input">
-
-<label>
-পূর্বে অন্য কোনো ক্লাবে খেলার অভিজ্ঞতা
-</label>
-
-<textarea
-name="previous_club_experience"
-rows="3"
-placeholder="যদি থাকে লিখুন"
-></textarea>
-
-</div>
-
-
-<div class="form-section-title full-input">
-৪. জরুরি প্রয়োজনে যোগাযোগের তথ্য
-</div>
-
-
-<div class="input-group">
-
-<label>
-নাম
-</label>
-
-<input
-type="text"
-name="emergency_name"
-placeholder="জরুরি যোগাযোগের ব্যক্তির নাম"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-সম্পর্ক
-</label>
-
-<input
-type="text"
-name="emergency_relation"
-placeholder="আপনার সাথে সম্পর্ক"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-মোবাইল নম্বর
-</label>
-
-<input
-type="tel"
-name="emergency_phone"
-placeholder="01XXXXXXXXX"
-required
->
-
-</div>
-
-
-<div class="input-group">
-
-<label>
-সদস্যপদের ধরন
-</label>
-
-<select
-name="membership_type"
-required
->
-
-<option value="">
-নির্বাচন করুন
-</option>
-
-<option>সাধারণ সদস্য</option>
-
-<option>ক্রীড়া সদস্য</option>
-
-<option>সক্রিয় সদস্য</option>
-
-</select>
-
-</div>
-
-
-<div class="membership-agreement full-input">
-
-<strong>
-অঙ্গীকারনামা
-</strong>
-
-<p>
-
-আমি সজ্ঞানে ঘোষণা করছি যে, এই ফরমে প্রদত্ত
-আমার সকল তথ্য সম্পূর্ণ সত্য ও নির্ভুল।
-
-আমি 'ঘোপখালী স্পোর্টস অ্যারিনা ক্লাব'-এর একজন
-গর্বিত সদস্য হিসেবে ক্লাবের সকল নিয়ম-কানুন ও
-গঠনতন্ত্র যথাযথভাবে মেনে চলব।
-
-ক্লাবের আয়োজিত ইনডোর বা আউটডোর যেকোনো
-ক্রীড়া কার্যক্রমে আমি স্বতঃস্ফূর্তভাবে অংশগ্রহণ
-করতে আগ্রহী এবং এমন কোনো কার্যকলাপে জড়িত
-হব না যা ক্লাবের সম্মান ক্ষুণ্ন করে।
-
-</p>
-
-<label class="agreement-check">
-
-<input
-type="checkbox"
-name="agreement"
-value="Agreed"
-required
->
-
-আমি উপরোক্ত অঙ্গীকারনামা পড়েছি এবং সম্মত।
-
-</label>
-
-</div>
-
-`;
-
-
-/* ==================================================
-   OPEN APPLICATION
-================================================== */
-
-const openApplication = type=>{
-
-if(!applicationModal)return;
-
-
-/* SET APPLICATION TYPE */
-
-if(applicationType){
-
-applicationType.value =
-type || "";
-
-}
-
-
-/* RESET FORM */
-
-if(applicationForm){
-
-applicationForm.reset();
-
-}
-
-
-/* ==================================================
-   FRIENDLY MATCH MODE
-================================================== */
-
-if(type === "Friendly Match"){
-
-if(applicationKicker){
-
-applicationKicker.textContent =
-"GHOPKHALI SPORTS ARENA";
-
-}
-
-
-if(applicationTitle){
-
-applicationTitle.innerHTML =
-`
-Friendly Match
-<span>Application.</span>
-`;
-
-}
-
-
-if(formGrid){
-
-formGrid.innerHTML =
-friendlyMatchFields;
-
-}
-
-
-if(formNote){
-
-formNote.textContent =
-"Your friendly match application will be sent to the official Ghopkhali Sports Arena email.";
-
-}
-
-}
-
-
-/* ==================================================
-   CLUB MEMBERSHIP MODE
-================================================== */
-
-else if(type === "Club Membership"){
-
-if(applicationKicker){
-
-applicationKicker.textContent =
-"GHOPKHALI SPORTS ARENA • MEMBERSHIP";
-
-}
-
-
-if(applicationTitle){
-
-applicationTitle.innerHTML =
-`
-Club Membership
-<span>Application.</span>
-`;
-
-}
-
-
-if(formGrid){
-
-formGrid.innerHTML =
-membershipFields;
-
-}
-
-
-if(formNote){
-
-formNote.textContent =
-"আপনার সদস্যপদ আবেদনটি Ghopkhali Sports Arena কর্তৃপক্ষের কাছে পাঠানো হবে।";
-
-}
-
-}
-
-
-/* ==================================================
-   SHOW MODAL
-================================================== */
-
-applicationModal.classList.add(
+friendlyModal.classList.add(
 "active"
 );
 
-applicationModal.setAttribute(
+friendlyModal.setAttribute(
 "aria-hidden",
 "false"
 );
@@ -1381,19 +631,15 @@ document.body.classList.add(
 };
 
 
-/* ==================================================
-   CLOSE APPLICATION
-================================================== */
+const closeFriendly = ()=>{
 
-const closeApplication = ()=>{
+if(!friendlyModal)return;
 
-if(!applicationModal)return;
-
-applicationModal.classList.remove(
+friendlyModal.classList.remove(
 "active"
 );
 
-applicationModal.setAttribute(
+friendlyModal.setAttribute(
 "aria-hidden",
 "true"
 );
@@ -1405,58 +651,37 @@ document.body.classList.remove(
 };
 
 
-/* ==================================================
-   APPLICATION BUTTONS
-================================================== */
-
-applicationButtons.forEach(button=>{
+friendlyButtons.forEach(button=>{
 
 button.addEventListener(
 "click",
-()=>{
-
-const type =
-button.getAttribute(
-"data-open-application"
-);
-
-openApplication(type);
-
-}
+openFriendly
 );
 
 });
 
 
-/* ==================================================
-   CLOSE BUTTON
-================================================== */
+if(friendlyClose){
 
-if(applicationClose){
-
-applicationClose.addEventListener(
+friendlyClose.addEventListener(
 "click",
-closeApplication
+closeFriendly
 );
 
 }
 
 
-/* ==================================================
-   OUTSIDE CLICK
-================================================== */
+if(friendlyModal){
 
-if(applicationModal){
-
-applicationModal.addEventListener(
+friendlyModal.addEventListener(
 "click",
 event=>{
 
 if(
-event.target === applicationModal
+event.target === friendlyModal
 ){
 
-closeApplication();
+closeFriendly();
 
 }
 
@@ -1467,7 +692,107 @@ closeApplication();
 
 
 /* ==================================================
-   ESCAPE KEY
+   MEMBERSHIP MODAL
+================================================== */
+
+const membershipModal =
+document.querySelector(
+"#membershipModal"
+);
+
+const membershipButtons =
+document.querySelectorAll(
+"[data-open-membership]"
+);
+
+const membershipClose =
+document.querySelector(
+"[data-close-membership]"
+);
+
+
+const openMembership = ()=>{
+
+if(!membershipModal)return;
+
+membershipModal.classList.add(
+"active"
+);
+
+membershipModal.setAttribute(
+"aria-hidden",
+"false"
+);
+
+document.body.classList.add(
+"modal-open"
+);
+
+};
+
+
+const closeMembership = ()=>{
+
+if(!membershipModal)return;
+
+membershipModal.classList.remove(
+"active"
+);
+
+membershipModal.setAttribute(
+"aria-hidden",
+"true"
+);
+
+document.body.classList.remove(
+"modal-open"
+);
+
+};
+
+
+membershipButtons.forEach(button=>{
+
+button.addEventListener(
+"click",
+openMembership
+);
+
+});
+
+
+if(membershipClose){
+
+membershipClose.addEventListener(
+"click",
+closeMembership
+);
+
+}
+
+
+if(membershipModal){
+
+membershipModal.addEventListener(
+"click",
+event=>{
+
+if(
+event.target === membershipModal
+){
+
+closeMembership();
+
+}
+
+}
+);
+
+}
+
+
+/* ==================================================
+   ESCAPE KEY — CLOSE ALL MODALS
 ================================================== */
 
 document.addEventListener(
@@ -1478,8 +803,26 @@ if(event.key !== "Escape")
 return;
 
 closeRules();
+closeFriendly();
+closeMembership();
 
-closeApplication();
+if(
+lightbox &&
+lightbox.classList.contains("active")
+){
+
+lightbox.classList.remove("active");
+
+lightbox.setAttribute(
+"aria-hidden",
+"true"
+);
+
+}
+
+document.body.classList.remove(
+"modal-open"
+);
 
 }
 );
@@ -1495,6 +838,7 @@ event=>{
 
 const form =
 event.target;
+
 
 if(
 !form.classList.contains(
@@ -1545,7 +889,10 @@ firstError = field;
 
 /* CHECK OTHER FIELDS */
 
-else if(!field.value.trim()){
+else if(
+!field.value ||
+!field.value.trim()
+){
 
 valid = false;
 
@@ -1736,6 +1083,7 @@ leaderObserver.observe(card);
 
 }
 
+
 /* ==================================================
    SUPABASE — PUBLIC NOTICES
 ================================================== */
@@ -1747,13 +1095,26 @@ const SUPABASE_ANON_KEY =
 "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
 
-/* Create Supabase client */
+/* ==================================================
+   CREATE SUPABASE CLIENT SAFELY
+================================================== */
 
-const homeSupabase =
+let homeSupabase = null;
+
+
+if(
+window.supabase &&
+typeof window.supabase.createClient ===
+"function"
+){
+
+homeSupabase =
 window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
+SUPABASE_URL,
+SUPABASE_ANON_KEY
 );
+
+}
 
 
 /* ==================================================
@@ -1762,126 +1123,138 @@ window.supabase.createClient(
 
 async function loadHomeNotices(){
 
-  const track =
-    document.querySelector(
-      ".notice-ticker-track"
-    );
+const track =
+document.querySelector(
+".notice-ticker-track"
+);
 
-  if(!track) return;
-
-
-  const {
-    data,
-    error
-  } =
-    await homeSupabase
-      .from("notices")
-      .select("id,title,content,created_at")
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      )
-      .limit(10);
+if(!track)
+return;
 
 
-  if(error){
+/* If Supabase library is unavailable */
 
-    console.error(
-      "Supabase Notices Error:",
-      error
-    );
+if(!homeSupabase){
 
-    return;
-  }
+console.warn(
+"Supabase library not loaded."
+);
 
+startNoticeTicker();
 
-  if(!data || data.length === 0){
+return;
 
-    track.innerHTML = `
-      <span class="notice-ticker-item">
-        No latest notices available.
-      </span>
-    `;
-
-    return;
-  }
+}
 
 
-  /* Escape HTML */
+try{
 
-  const escapeHTML = value => {
-
-    return String(value || "")
-      .replace(/&/g,"&amp;")
-      .replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;")
-      .replace(/'/g,"&#039;");
-
-  };
-
-
-  /* Create ticker */
-
-  const noticesHTML =
-    data.map(notice => {
-
-      return `
-        <span class="notice-ticker-item">
-          <strong>NOTICE</strong>
-          ${escapeHTML(notice.title)}
-        </span>
-      `;
-
-    }).join("");
+const {
+data,
+error
+} =
+await homeSupabase
+.from("notices")
+.select(
+"id,title,content,created_at"
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+)
+.limit(10);
 
 
-  /*
-    Duplicate content so ticker
-    can continuously move.
-  */
+if(error){
 
-  track.innerHTML =
-    noticesHTML +
-    noticesHTML;
+console.error(
+"Supabase Notices Error:",
+error
+);
 
+startNoticeTicker();
 
-  /* ==================================================
-     START TICKER
-  ================================================== */
+return;
 
-  let position = 0;
-
-  const moveTicker = () => {
-
-    position -= 0.35;
-
-    const resetPoint =
-      track.scrollWidth / 2;
-
-    if(
-      Math.abs(position) >= resetPoint
-    ){
-
-      position = 0;
-
-    }
-
-    track.style.transform =
-      `translateX(${position}px)`;
-
-    requestAnimationFrame(
-      moveTicker
-    );
-
-  };
+}
 
 
-  requestAnimationFrame(
-    moveTicker
-  );
+if(!data || data.length === 0){
+
+track.innerHTML = `
+<span class="notice-ticker-item">
+No latest notices available.
+</span>
+`;
+
+startNoticeTicker();
+
+return;
+
+}
+
+
+/* ==================================================
+   ESCAPE HTML
+================================================== */
+
+const escapeHTML = value=>{
+
+return String(value || "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+};
+
+
+/* ==================================================
+   CREATE TICKER
+================================================== */
+
+const noticesHTML =
+data.map(notice=>{
+
+return `
+<span class="notice-ticker-item">
+<strong>NOTICE</strong>
+${escapeHTML(notice.title)}
+</span>
+`;
+
+}).join("");
+
+
+/*
+   Duplicate notices for continuous
+   scrolling animation.
+*/
+
+track.innerHTML =
+noticesHTML +
+noticesHTML;
+
+
+/* ==================================================
+   START SUPABASE TICKER
+================================================== */
+
+startNoticeTicker();
+
+}catch(error){
+
+console.error(
+"Notice loading failed:",
+error
+);
+
+startNoticeTicker();
+
+}
 
 }
 
@@ -1891,10 +1264,10 @@ async function loadHomeNotices(){
 ================================================== */
 
 document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+"DOMContentLoaded",
+()=>{
 
-    loadHomeNotices();
+loadHomeNotices();
 
-  }
+}
 );
