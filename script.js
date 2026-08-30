@@ -14,7 +14,6 @@ document.querySelector(".menu-toggle");
 const navMenu =
 document.querySelector(".nav-menu");
 
-
 if(menuToggle && navMenu){
 
 menuToggle.addEventListener("click",()=>{
@@ -28,7 +27,6 @@ opened ? "true" : "false"
 );
 
 });
-
 
 navMenu
 .querySelectorAll("a")
@@ -56,7 +54,6 @@ menuToggle.setAttribute(
 
 const header =
 document.querySelector(".site-header");
-
 
 window.addEventListener(
 "scroll",
@@ -89,7 +86,6 @@ const navLinks =
 document.querySelectorAll(
 ".nav-menu a"
 );
-
 
 if(sections.length && navLinks.length){
 
@@ -130,7 +126,6 @@ rootMargin:"-35% 0px -55% 0px"
 
 );
 
-
 sections.forEach(section=>{
 
 navObserver.observe(section);
@@ -158,7 +153,6 @@ document.querySelectorAll(
 .gallery-item
 `
 );
-
 
 if(revealElements.length){
 
@@ -188,7 +182,6 @@ threshold:.12
 }
 
 );
-
 
 revealElements.forEach(element=>{
 
@@ -236,21 +229,17 @@ menuToggle.setAttribute(
 
 const noticeTrack =
 document.querySelector(
-".notice-ticker-track"
+"#homeNoticeTicker"
 );
-
-
-/*
-   Supabase notices will replace
-   the default ticker content later.
-*/
 
 let noticeAnimationStarted = false;
 
-
 function startNoticeTicker(){
 
-if(!noticeTrack || noticeAnimationStarted)
+if(!noticeTrack)
+return;
+
+if(noticeAnimationStarted)
 return;
 
 noticeAnimationStarted = true;
@@ -259,7 +248,7 @@ let position = 0;
 
 const tickerMove = ()=>{
 
-position -= .35;
+position -= 0.35;
 
 const resetPoint =
 noticeTrack.scrollWidth / 2;
@@ -303,14 +292,12 @@ document.querySelectorAll(
 ".gallery-item"
 );
 
-
 if(
 galleryTrack &&
 galleryItems.length > 1
 ){
 
 let galleryIndex = 0;
-
 
 const getGalleryStep = ()=>{
 
@@ -320,7 +307,9 @@ galleryItems[0]
 .width;
 
 const style =
-getComputedStyle(galleryTrack);
+getComputedStyle(
+galleryTrack
+);
 
 const gap =
 parseFloat(style.gap) || 0;
@@ -329,14 +318,15 @@ return width + gap;
 
 };
 
-
 const moveGallery = ()=>{
 
 galleryTrack.style.transform =
-`translateX(-${galleryIndex * getGalleryStep()}px)`;
+`translateX(-${
+galleryIndex *
+getGalleryStep()
+}px`;
 
 };
-
 
 setInterval(()=>{
 
@@ -353,7 +343,6 @@ galleryIndex = 0;
 moveGallery();
 
 },4500);
-
 
 window.addEventListener(
 "resize",
@@ -386,7 +375,6 @@ const lightboxClose =
 document.querySelector(
 ".gallery-lightbox-close"
 );
-
 
 if(
 galleryImages.length &&
@@ -425,7 +413,6 @@ document.body.classList.add(
 
 });
 
-
 const closeLightbox = ()=>{
 
 lightbox.classList.remove(
@@ -443,7 +430,6 @@ document.body.classList.remove(
 
 };
 
-
 if(lightboxClose){
 
 lightboxClose.addEventListener(
@@ -453,32 +439,12 @@ closeLightbox
 
 }
 
-
 lightbox.addEventListener(
 "click",
 event=>{
 
 if(
 event.target === lightbox
-){
-
-closeLightbox();
-
-}
-
-}
-);
-
-
-/* ESC */
-
-document.addEventListener(
-"keydown",
-event=>{
-
-if(
-event.key === "Escape" &&
-lightbox.classList.contains("active")
 ){
 
 closeLightbox();
@@ -510,7 +476,6 @@ document.querySelector(
 "[data-close-rules]"
 );
 
-
 const openRules = ()=>{
 
 if(!rulesModal)return;
@@ -529,7 +494,6 @@ document.body.classList.add(
 );
 
 };
-
 
 const closeRules = ()=>{
 
@@ -550,7 +514,6 @@ document.body.classList.remove(
 
 };
 
-
 rulesButtons.forEach(button=>{
 
 button.addEventListener(
@@ -560,7 +523,6 @@ openRules
 
 });
 
-
 if(rulesClose){
 
 rulesClose.addEventListener(
@@ -569,7 +531,6 @@ closeRules
 );
 
 }
-
 
 if(rulesModal){
 
@@ -610,7 +571,6 @@ document.querySelector(
 "[data-close-friendly]"
 );
 
-
 const openFriendly = ()=>{
 
 if(!friendlyModal)return;
@@ -629,7 +589,6 @@ document.body.classList.add(
 );
 
 };
-
 
 const closeFriendly = ()=>{
 
@@ -650,7 +609,6 @@ document.body.classList.remove(
 
 };
 
-
 friendlyButtons.forEach(button=>{
 
 button.addEventListener(
@@ -660,7 +618,6 @@ openFriendly
 
 });
 
-
 if(friendlyClose){
 
 friendlyClose.addEventListener(
@@ -669,7 +626,6 @@ closeFriendly
 );
 
 }
-
 
 if(friendlyModal){
 
@@ -710,7 +666,6 @@ document.querySelector(
 "[data-close-membership]"
 );
 
-
 const openMembership = ()=>{
 
 if(!membershipModal)return;
@@ -729,7 +684,6 @@ document.body.classList.add(
 );
 
 };
-
 
 const closeMembership = ()=>{
 
@@ -750,7 +704,6 @@ document.body.classList.remove(
 
 };
 
-
 membershipButtons.forEach(button=>{
 
 button.addEventListener(
@@ -760,7 +713,6 @@ openMembership
 
 });
 
-
 if(membershipClose){
 
 membershipClose.addEventListener(
@@ -769,7 +721,6 @@ closeMembership
 );
 
 }
-
 
 if(membershipModal){
 
@@ -811,7 +762,9 @@ lightbox &&
 lightbox.classList.contains("active")
 ){
 
-lightbox.classList.remove("active");
+lightbox.classList.remove(
+"active"
+);
 
 lightbox.setAttribute(
 "aria-hidden",
@@ -839,13 +792,11 @@ event=>{
 const form =
 event.target;
 
-
 if(
 !form.classList.contains(
 "application-form"
 )
 )return;
-
 
 const requiredFields =
 form.querySelectorAll(
@@ -856,15 +807,11 @@ let valid = true;
 
 let firstError = null;
 
-
 requiredFields.forEach(field=>{
 
 field.classList.remove(
 "input-error"
 );
-
-
-/* CHECK CHECKBOX */
 
 if(field.type === "checkbox"){
 
@@ -885,10 +832,6 @@ firstError = field;
 }
 
 }
-
-
-/* CHECK OTHER FIELDS */
-
 else if(
 !field.value ||
 !field.value.trim()
@@ -909,7 +852,6 @@ firstError = field;
 }
 
 });
-
 
 if(!valid){
 
@@ -935,7 +877,6 @@ const downloadButtons =
 document.querySelectorAll(
 "a[download]"
 );
-
 
 downloadButtons.forEach(button=>{
 
@@ -967,7 +908,6 @@ const yearElements =
 document.querySelectorAll(
 "[data-current-year]"
 );
-
 
 yearElements.forEach(element=>{
 
@@ -1043,7 +983,6 @@ document.querySelectorAll(
 ".leader-card"
 );
 
-
 if(leaderCards.length){
 
 const leaderObserver =
@@ -1074,7 +1013,6 @@ threshold:.15
 
 );
 
-
 leaderCards.forEach(card=>{
 
 leaderObserver.observe(card);
@@ -1085,7 +1023,7 @@ leaderObserver.observe(card);
 
 
 /* ==================================================
-   SUPABASE — PUBLIC NOTICES
+   SUPABASE CONFIGURATION
 ================================================== */
 
 const SUPABASE_URL =
@@ -1096,11 +1034,10 @@ const SUPABASE_ANON_KEY =
 
 
 /* ==================================================
-   CREATE SUPABASE CLIENT SAFELY
+   CREATE SUPABASE CLIENT
 ================================================== */
 
 let homeSupabase = null;
-
 
 if(
 window.supabase &&
@@ -1115,32 +1052,66 @@ SUPABASE_ANON_KEY
 );
 
 }
+else{
+
+console.error(
+"Supabase JavaScript library was not loaded."
+);
+
+}
 
 
 /* ==================================================
-   LOAD NOTICES
+   ESCAPE HTML
+================================================== */
+
+function escapeHTML(value){
+
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* ==================================================
+   LOAD SUPABASE NOTICES
 ================================================== */
 
 async function loadHomeNotices(){
 
-const track =
+const noticeGrid =
 document.querySelector(
-".notice-ticker-track"
+"#home-notices"
 );
 
-if(!track)
+const noticeTicker =
+document.querySelector(
+"#homeNoticeTicker"
+);
+
+if(
+!noticeGrid &&
+!noticeTicker
+){
+
 return;
 
+}
 
-/* If Supabase library is unavailable */
+
+/* ==================================================
+   SUPABASE CHECK
+================================================== */
 
 if(!homeSupabase){
 
-console.warn(
-"Supabase library not loaded."
+console.error(
+"Supabase client is unavailable."
 );
-
-startNoticeTicker();
 
 return;
 
@@ -1156,7 +1127,11 @@ error
 await homeSupabase
 .from("notices")
 .select(
-"id,title,content,created_at"
+"id,title,content,category,image_url,published,created_at,updated_at"
+)
+.eq(
+"published",
+true
 )
 .order(
 "created_at",
@@ -1167,6 +1142,10 @@ ascending:false
 .limit(10);
 
 
+/* ==================================================
+   DATABASE ERROR
+================================================== */
+
 if(error){
 
 console.error(
@@ -1174,21 +1153,90 @@ console.error(
 error
 );
 
-startNoticeTicker();
+if(noticeGrid){
 
-return;
+noticeGrid.innerHTML = `
 
-}
+<article class="update-card">
 
+<div class="update-date">
+ERROR
+</div>
 
-if(!data || data.length === 0){
+<div class="update-tag">
+NOTICE
+</div>
 
-track.innerHTML = `
-<span class="notice-ticker-item">
-No latest notices available.
-</span>
+<h3>
+Unable to load notices.
+</h3>
+
+<p>
+Please try again later.
+</p>
+
+</article>
+
 `;
 
+}
+
+return;
+
+}
+
+
+/* ==================================================
+   NO NOTICE
+================================================== */
+
+if(
+!data ||
+data.length === 0
+){
+
+if(noticeGrid){
+
+noticeGrid.innerHTML = `
+
+<article class="update-card">
+
+<div class="update-date">
+NO NOTICE
+</div>
+
+<div class="update-tag">
+NOTICE
+</div>
+
+<h3>
+No latest notices available.
+</h3>
+
+<p>
+There are currently no published notices.
+</p>
+
+</article>
+
+`;
+
+}
+
+if(noticeTicker){
+
+noticeTicker.innerHTML = `
+
+<span class="notice-ticker-item">
+
+No latest notices available.
+
+</span>
+
+`;
+
+}
+
 startNoticeTicker();
 
 return;
@@ -1197,53 +1245,117 @@ return;
 
 
 /* ==================================================
-   ESCAPE HTML
+   UPDATE CARDS
 ================================================== */
 
-const escapeHTML = value=>{
+if(noticeGrid){
 
-return String(value || "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+noticeGrid.innerHTML =
+data.map(notice=>{
 
-};
+const date =
+new Date(
+notice.created_at
+).toLocaleDateString(
+"en-GB",
+{
+day:"2-digit",
+month:"short",
+year:"numeric"
+}
+);
+
+return `
+
+<article class="update-card">
+
+<div class="update-date">
+
+${escapeHTML(date)}
+
+</div>
+
+<div class="update-tag">
+
+${escapeHTML(
+notice.category ||
+"NOTICE"
+)}
+
+</div>
+
+<h3>
+
+${escapeHTML(
+notice.title ||
+"Untitled Notice"
+)}
+
+</h3>
+
+<p>
+
+${escapeHTML(
+notice.content ||
+""
+)}
+
+</p>
+
+</article>
+
+`;
+
+}).join("");
+
+}
 
 
 /* ==================================================
-   CREATE TICKER
+   NOTICE TICKER
 ================================================== */
+
+if(noticeTicker){
 
 const noticesHTML =
 data.map(notice=>{
 
 return `
+
 <span class="notice-ticker-item">
+
 <strong>NOTICE</strong>
-${escapeHTML(notice.title)}
+
+${escapeHTML(
+notice.title ||
+"Untitled Notice"
+)}
+
 </span>
+
 `;
 
 }).join("");
 
 
 /*
-   Duplicate notices for continuous
-   scrolling animation.
+Duplicate notices for continuous
+ticker animation.
 */
 
-track.innerHTML =
+noticeTicker.innerHTML =
 noticesHTML +
 noticesHTML;
 
+}
+
 
 /* ==================================================
-   START SUPABASE TICKER
+   START TICKER
 ================================================== */
 
 startNoticeTicker();
+
 
 }catch(error){
 
@@ -1252,7 +1364,33 @@ console.error(
 error
 );
 
-startNoticeTicker();
+if(noticeGrid){
+
+noticeGrid.innerHTML = `
+
+<article class="update-card">
+
+<div class="update-date">
+ERROR
+</div>
+
+<div class="update-tag">
+NOTICE
+</div>
+
+<h3>
+Unable to load notices.
+</h3>
+
+<p>
+Please try again later.
+</p>
+
+</article>
+
+`;
+
+}
 
 }
 
@@ -1260,7 +1398,7 @@ startNoticeTicker();
 
 
 /* ==================================================
-   INITIAL LOAD
+   INITIALIZE NOTICES
 ================================================== */
 
 document.addEventListener(
@@ -1269,5 +1407,4 @@ document.addEventListener(
 
 loadHomeNotices();
 
-}
-);
+});
