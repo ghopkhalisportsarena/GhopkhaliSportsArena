@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#f5f5f7"
+>
+
+<title>Admin Profile | Ghopkhali Sports Arena</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f5f7;
+  color: #111;
+  min-height: 100vh;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.topbar {
+  height: 72px;
+  background: #111;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.brand-text strong {
+  display: block;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.brand-text span {
+  display: block;
+  font-size: 10px;
+  color: #aaa;
+  margin-top: 3px;
+  letter-spacing: 1px;
+}
+
+.back-button {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  border: 1px solid #555;
+  padding: 10px 15px;
+  border-radius: 8px;
+}
+
+.back-button:hover {
+  background: #fff;
+  color: #111;
+}
+
+/* =========================================
+   PAGE
+========================================= */
+
+.page {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 45px 20px 60px;
+}
+
+.page-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 38px;
+  margin-bottom: 8px;
+}
+
+h1 span {
+  color: #d71920;
+}
+
+.page-description {
+  color: #777;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 35px;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 22px;
+  box-shadow: 0 10px 35px rgba(0,0,0,.05);
+}
+
+.card-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+}
+
+.card-header h2 {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.card-header p {
+  font-size: 13px;
+  color: #777;
+}
+
+/* =========================================
+   PROFILE
+========================================= */
+
+.profile-box {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profile-info h3 {
+  font-size: 21px;
+  margin-bottom: 6px;
+  word-break: break-word;
+}
+
+.profile-info p {
+  color: #777;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.admin-badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px 9px;
+  border-radius: 5px;
+  background: #111;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.input-group input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+  padding: 0 14px;
+  font-size: 14px;
+  outline: none;
+  background: #fafafa;
+}
+
+.input-group input:focus {
+  border-color: #111;
+  background: #fff;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 70px;
+}
+
+.show-password {
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  height: 38px;
+  border: 0;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #555;
+}
+
+.button {
+  border: 0;
+  background: #111;
+  color: #fff;
+  padding: 13px 20px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #222;
+}
+
+.button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.message {
+  display: none;
+  padding: 13px 15px;
+  border-radius: 9px;
+  font-size: 13px;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.message.error {
+  background: #fff0f0;
+  border: 1px solid #ffd0d0;
+  color: #c00;
+}
+
+.message.success {
+  background: #effff2;
+  border: 1px solid #ccefd2;
+  color: #16852b;
+}
+
+/* =========================================
+   DANGER
+========================================= */
+
+.danger-card {
+  border-color: #eee;
+}
+
+.logout-button {
+  background: #d71920;
+}
+
+.logout-button:hover {
+  background: #b9151b;
+}
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loading {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,.8);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader {
+  width: 38px;
+  height: 38px;
+  border: 4px solid #ddd;
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .topbar {
+    padding: 0 15px;
+  }
+
+  .brand-text {
+    display: none;
+  }
+
+  .page {
+    padding: 30px 15px 50px;
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+
+  .card {
+    padding: 21px;
+  }
+
+  .profile-box {
+    align-items: flex-start;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     LOADING
+========================================= -->
+
+<div
+  id="loading"
+  class="loading"
+>
+
+  <div class="loader"></div>
+
+</div>
+
+
+<!-- =========================================
+     TOPBAR
+========================================= -->
+
+<header class="topbar">
+
+  <div class="brand">
+
+    <img
+      src="gsa.png"
+      alt="Ghopkhali Sports Arena"
+    >
+
+    <div class="brand-text">
+
+      <strong>
+        GHOPKHALI SPORTS ARENA
+      </strong>
+
+      <span>
+        ADMINISTRATION PANEL
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <a
+    href="admin-dashboard.html"
+    class="back-button"
+  >
+    ← Dashboard
+  </a>
+
+</header>
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="page">
+
+  <div class="page-label">
+    ADMINISTRATION / PROFILE
+  </div>
+
+  <h1>
+    Admin <span>Profile.</span>
+  </h1>
+
+  <p class="page-description">
+    Manage your administrator account information
+    and security settings.
+  </p>
+
+
+  <!-- =======================================
+       PROFILE INFORMATION
+  ======================================== -->
+
+  <section class="card">
+
+    <div class="card-header">
+
+      <h2>
+        Profile Information
+      </h2>
+
+      <p>
+        Your current Supabase administrator account.
+      </p>
+
+    </div>
+
+
+    <div class="profile-box">
+
+      <div
+        class="avatar"
+        id="avatar"
+      >
+        A
+      </div>
+
+
+      <div class="profile-info">
+
+        <h3 id="adminName">
+          Administrator
+        </h3>
+
+        <p id="adminEmail">
+          Loading...
+        </p>
+
+        <span class="admin-badge">
+          ADMINISTRATOR
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================
+       CHANGE PASSWORD
+  ======================================== -->
+
+  <section class="card">
+
+    <div class="card-header">
+
+      <h2>
+        Change Password
+      </h2>
+
+      <p>
+        Update your Supabase account password.
+      </p>
+
+    </div>
+
+
+    <div
+      id="passwordMessage"
+      class="message"
+    ></div>
+
+
+    <form id="passwordForm">
+
+      <div class="input-group">
+
+        <label>
+          NEW PASSWORD
+        </label>
+
+        <div class="password-wrapper">
+
+          <input
+            type="password"
+            id="newPassword"
+            minlength="6"
+            placeholder="Enter new password"
+            autocomplete="new-password"
+            required
+          >
+
+          <button
+            type="button"
+            class="show-password"
+            data-target="newPassword"
+          >
+            SHOW
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label>
+          CONFIRM NEW PASSWORD
+        </label>
+
+        <div class="password-wrapper">
+
+          <input
+            type="password"
+            id="confirmPassword"
+            minlength="6"
+            placeholder="Confirm new password"
+            autocomplete="new-password"
+            required
+          >
+
+          <button
+            type="button"
+            class="show-password"
+            data-target="confirmPassword"
+          >
+            SHOW
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="submit"
+        class="button"
+        id="passwordButton"
+      >
+        Update Password
+      </button>
+
+    </form>
+
+  </section>
+
+
+  <!-- =======================================
+       ACCOUNT
+  ======================================== -->
+
+  <section class="card danger-card">
+
+    <div class="card-header">
+
+      <h2>
+        Account
+      </h2>
+
+      <p>
+        Sign out from the current administrator session.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="button logout-button"
+      id="logoutButton"
+    >
+      Sign Out
+    </button>
+
+  </section>
+
+</main>
+
+
+<!-- =========================================
+     SUPABASE
+========================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* =========================================
+   SUPABASE CONFIG
+========================================= */
+
+const SUPABASE_URL =
+  "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const loading =
+  document.getElementById("loading");
+
+const adminName =
+  document.getElementById("adminName");
+
+const adminEmail =
+  document.getElementById("adminEmail");
+
+const avatar =
+  document.getElementById("avatar");
+
+const passwordForm =
+  document.getElementById("passwordForm");
+
+const passwordButton =
+  document.getElementById("passwordButton");
+
+const passwordMessage =
+  document.getElementById("passwordMessage");
+
+const logoutButton =
+  document.getElementById("logoutButton");
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+function showLoading(show) {
+
+  loading.style.display =
+    show ? "flex" : "none";
+
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showMessage(
+  message,
+  type
+) {
+
+  passwordMessage.textContent =
+    message;
+
+  passwordMessage.className =
+    "message " + type;
+
+  passwordMessage.style.display =
+    "block";
+
+}
+
+
+/* =========================================
+   GET ADMIN
+========================================= */
+
+async function loadProfile() {
+
+  showLoading(true);
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    const user =
+      data?.user;
+
+
+    if (!user) {
+
+      window.location.replace(
+        "admin-login.html"
+      );
+
+      return;
+
+    }
+
+
+    const email =
+      user.email || "Administrator";
+
+
+    const name =
+      email.split("@")[0] ||
+      "Administrator";
+
+
+    adminName.textContent =
+      name;
+
+
+    adminEmail.textContent =
+      email;
+
+
+    avatar.textContent =
+      name.charAt(0).toUpperCase();
+
+
+  } catch (error) {
+
+    console.error(
+      "Profile error:",
+      error
+    );
+
+
+    window.location.replace(
+      "admin-login.html"
+    );
+
+  } finally {
+
+    showLoading(false);
+
+  }
+
+}
+
+
+loadProfile();
+
+
+/* =========================================
+   SHOW / HIDE PASSWORD
+========================================= */
+
+document
+  .querySelectorAll(".show-password")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const target =
+          document.getElementById(
+            button.dataset.target
+          );
+
+
+        if (
+          target.type === "password"
+        ) {
+
+          target.type = "text";
+
+          button.textContent =
+            "HIDE";
+
+        } else {
+
+          target.type = "password";
+
+          button.textContent =
+            "SHOW";
+
+        }
+
+      }
+    );
+
+  });
+
+
+/* =========================================
+   CHANGE PASSWORD
+========================================= */
+
+passwordForm.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+
+    const newPassword =
+      document.getElementById(
+        "newPassword"
+      ).value;
+
+
+    const confirmPassword =
+      document.getElementById(
+        "confirmPassword"
+      ).value;
+
+
+    passwordMessage.style.display =
+      "none";
+
+
+    if (
+      newPassword.length < 6
+    ) {
+
+      showMessage(
+        "Password must contain at least 6 characters.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      newPassword !== confirmPassword
+    ) {
+
+      showMessage(
+        "Passwords do not match.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    passwordButton.disabled =
+      true;
+
+    passwordButton.textContent =
+      "Updating...";
+
+
+    try {
+
+      const {
+        error
+      } =
+        await supabaseClient.auth
+          .updateUser({
+            password: newPassword
+          });
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      showMessage(
+        "Password updated successfully.",
+        "success"
+      );
+
+
+      passwordForm.reset();
+
+
+    } catch (error) {
+
+      console.error(
+        "Password update error:",
+        error
+      );
+
+
+      showMessage(
+        error.message ||
+        "Could not update password.",
+        "error"
+      );
+
+    } finally {
+
+      passwordButton.disabled =
+        false;
+
+      passwordButton.textContent =
+        "Update Password";
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+logoutButton.addEventListener(
+  "click",
+  async () => {
+
+    const confirmed =
+      confirm(
+        "Are you sure you want to sign out?"
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    showLoading(true);
+
+
+    try {
+
+      const {
+        error
+      } =
+        await supabaseClient.auth
+          .signOut();
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      window.location.replace(
+        "admin-login.html"
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Logout error:",
+        error
+      );
+
+      alert(
+        error.message ||
+        "Logout failed."
+      );
+
+      showLoading(false);
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   AUTH STATE
+========================================= */
+
+supabaseClient.auth.onAuthStateChange(
+  (event, session) => {
+
+    if (
+      event === "SIGNED_OUT"
+    ) {
+
+      window.location.replace(
+        "admin-login.html"
+      );
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
