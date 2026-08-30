@@ -1,7 +1,7 @@
 /* =========================================================
    GSA ADMIN PANEL
-   GHOPKHALI SPORTS ARENA
-   SUPABASE VERSION
+   Ghopkhali Sports Arena
+   Supabase — STABLE VERSION
 ========================================================= */
 
 
@@ -16,26 +16,7 @@ const SUPABASE_ANON_KEY =
   "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
 
-if (
-  typeof window.supabase === "undefined"
-) {
-
-  console.error(
-    "Supabase library is not loaded."
-  );
-
-  throw new Error(
-    "Supabase library is not loaded."
-  );
-
-}
-
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+let supabaseClient = null;
 
 
 /* =========================================================
@@ -43,48 +24,98 @@ const supabaseClient =
 ========================================================= */
 
 let currentUser = null;
-
 let notices = [];
 
-let friendlyApplications = [];
+let dashboardLoading = false;
 
-let membershipApplications = [];
 
+/* =========================================================
+   HELPERS
+========================================================= */
 
 const $ = selector =>
   document.querySelector(selector);
-
 
 const $$ = selector =>
   document.querySelectorAll(selector);
 
 
 /* =========================================================
-   DOM READY
+   INITIALIZE
 ========================================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-    setCurrentYear();
+  console.log("GSA Admin Panel starting...");
 
-    setCurrentDate();
+  setCurrentYear();
+  setCurrentDate();
 
-    setupNavigation();
+  setupNavigation();
+  setupButtons();
+  setupModal();
+  setupLogin();
+  setupSidebar();
 
-    setupButtons();
+  initializeSupabase();
 
-    setupModal();
+});
 
-    setupLogin();
 
-    setupSidebar();
+/* =========================================================
+   SUPABASE INITIALIZATION
+========================================================= */
+
+function initializeSupabase() {
+
+  try {
+
+    if (!window.supabase) {
+
+      console.error(
+        "Supabase library not found."
+      );
+
+      showLoginError(
+        "Supabase library could not be loaded. Please refresh the page."
+      );
+
+      return;
+
+    }
+
+
+    supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+
+    console.log(
+      "Supabase initialized successfully."
+    );
+
+
+    setupAuthListener();
 
     checkSession();
 
+
+  } catch (error) {
+
+    console.error(
+      "Supabase initialization error:",
+      error
+    );
+
+    showLoginError(
+      "Unable to connect to Supabase."
+    );
+
   }
-);
+
+}
 
 
 /* =========================================================
@@ -139,7 +170,15 @@ function setupLogin() {
   const form =
     $("#loginForm");
 
-  if (!form) return;
+  if (!form) {
+
+    console.warn(
+      "Login form not found."
+    );
+
+    return;
+
+  }
 
 
   form.addEventListener(
@@ -149,25 +188,26 @@ function setupLogin() {
       event.preventDefault();
 
 
-      const emailElement =
-        $("#adminEmail");
+      if (!supabaseClient) {
 
-      const passwordElement =
-        $("#adminPassword");
+        showLoginError(
+          "Supabase is not ready. Please refresh the page."
+        );
 
-      const errorBox =
-        $("#loginError");
+        return;
+
+      }
 
 
       const email =
-        emailElement
-          ? emailElement.value.trim()
-          : "";
+        $("#adminEmail")?.value.trim() || "";
 
       const password =
-        passwordElement
-          ? passwordElement.value
-          : "";
+        $("#adminPassword")?.value || "";
+
+
+      const errorBox =
+        $("#loginError");
 
 
       if (errorBox) {
@@ -177,12 +217,9 @@ function setupLogin() {
 
       if (!email || !password) {
 
-        if (errorBox) {
-
-          errorBox.textContent =
-            "Please enter email and password.";
-
-        }
+        showLoginError(
+          "Please enter email and password."
+        );
 
         return;
 
@@ -194,15 +231,19 @@ function setupLogin() {
 
       try {
 
+        console.log(
+          "Attempting admin login..."
+        );
+
+
         const {
           data,
           error
         } =
-          await supabaseClient.auth
-            .signInWithPassword({
-              email,
-              password
-            });
+          await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+          });
 
 
         if (error) {
@@ -210,11 +251,27 @@ function setupLogin() {
         }
 
 
+        if (!data?.user) {
+
+          throw new Error(
+            "Login succeeded but no user was returned."
+          );
+
+        }
+
+
         currentUser =
           data.user;
 
 
+        console.log(
+          "Login successful:",
+          currentUser.email
+        );
+
+
         showAdminPanel();
+
 
         await loadDashboard();
 
@@ -233,13 +290,9 @@ function setupLogin() {
         );
 
 
-        if (errorBox) {
-
-          errorBox.textContent =
-            error.message ||
-            "Login failed.";
-
-        }
+        showLoginError(
+          getSupabaseErrorMessage(error)
+        );
 
 
       } finally {
@@ -255,32 +308,113 @@ function setupLogin() {
 
 
 /* =========================================================
+   AUTH LISTENER
+========================================================= */
+
+function setupAuthListener() {
+
+  if (!supabaseClient) return;
+
+
+  supabaseClient.auth.onAuthStateChange(
+    (event, session) => {
+
+      console.log(
+        "Auth event:",
+        event
+      );
+
+
+      if (
+        event === "SIGNED_IN" &&
+        session?.user
+      ) {
+
+        currentUser =
+          session.user;
+
+      }
+
+
+      if (event === "SIGNED_OUT") {
+
+        currentUser =
+          null;
+
+        showLogin();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
    SESSION
 ========================================================= */
 
 async function checkSession() {
 
+  if (!supabaseClient) {
+
+    showLogin();
+
+    return;
+
+  }
+
+
   try {
 
+    console.log(
+      "Checking session..."
+    );
+
+
     const {
-      data: {
-        session
-      }
+      data,
+      error
     } =
-      await supabaseClient.auth
-        .getSession();
+      await supabaseClient.auth.getSession();
 
 
-    if (session?.user) {
+    if (error) {
+      throw error;
+    }
+
+
+    const session =
+      data?.session;
+
+
+    if (
+      session &&
+      session.user
+    ) {
 
       currentUser =
         session.user;
 
+
+      console.log(
+        "Existing session found."
+      );
+
+
       showAdminPanel();
+
 
       await loadDashboard();
 
+
     } else {
+
+      console.log(
+        "No active session."
+      );
+
 
       showLogin();
 
@@ -290,47 +424,16 @@ async function checkSession() {
   } catch (error) {
 
     console.error(
-      "Session error:",
+      "Session check error:",
       error
     );
+
 
     showLogin();
 
   }
 
 }
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-supabaseClient.auth.onAuthStateChange(
-  (event, session) => {
-
-    if (
-      event === "SIGNED_IN" &&
-      session?.user
-    ) {
-
-      currentUser =
-        session.user;
-
-    }
-
-
-    if (
-      event === "SIGNED_OUT"
-    ) {
-
-      currentUser = null;
-
-      showLogin();
-
-    }
-
-  }
-);
 
 
 /* =========================================================
@@ -365,7 +468,7 @@ function showLogin() {
 
 
 /* =========================================================
-   SHOW ADMIN PANEL
+   SHOW ADMIN
 ========================================================= */
 
 function showAdminPanel() {
@@ -450,6 +553,9 @@ function updateAdminProfile() {
 
 async function logout() {
 
+  if (!supabaseClient) return;
+
+
   showLoading(true);
 
 
@@ -458,13 +564,19 @@ async function logout() {
     const {
       error
     } =
-      await supabaseClient.auth
-        .signOut();
+      await supabaseClient.auth.signOut();
 
 
     if (error) {
       throw error;
     }
+
+
+    currentUser =
+      null;
+
+
+    showLogin();
 
 
     toast(
@@ -482,7 +594,7 @@ async function logout() {
 
 
     toast(
-      "Logout failed.",
+      getSupabaseErrorMessage(error),
       "error"
     );
 
@@ -501,6 +613,7 @@ async function logout() {
 ========================================================= */
 
 function setupNavigation() {
+
 
   $$(".sidebar-link[data-page]")
     .forEach(button => {
@@ -545,13 +658,13 @@ function setupNavigation() {
 
 async function openPage(page) {
 
-  if (!currentUser) {
+  if (!page) return;
 
-    showLogin();
 
-    return;
-
-  }
+  console.log(
+    "Opening page:",
+    page
+  );
 
 
   $$(".sidebar-link[data-page]")
@@ -576,16 +689,12 @@ async function openPage(page) {
 
 
   const pageId =
-    page.replace(
-      /-/g,
-      ""
-    ) + "Page";
+    page.replace(/-/g, "") +
+    "Page";
 
 
   const pageElement =
-    document.getElementById(
-      pageId
-    );
+    document.getElementById(pageId);
 
 
   if (pageElement) {
@@ -600,75 +709,60 @@ async function openPage(page) {
   updatePageTitle(page);
 
 
-  /* -------------------------------------------------------
-     PAGE DATA
-  ------------------------------------------------------- */
+  try {
 
-  if (page === "dashboard") {
+    switch (page) {
 
-    await loadDashboard();
+      case "dashboard":
+        await loadDashboard();
+        break;
 
-  }
+      case "notices":
+        await loadNotices();
+        break;
 
+      case "gallery":
+        await loadGallery();
+        break;
 
-  if (page === "notices") {
+      case "tournaments":
+        await loadTournaments();
+        break;
 
-    await loadNotices();
+      case "fixtures":
+        await loadFixtures();
+        break;
 
-  }
+      case "leadership":
+        await loadLeadership();
+        break;
 
+      case "committee":
+        await loadCommittee();
+        break;
 
-  if (page === "gallery") {
+      case "friendly-applications":
+        await loadFriendlyApplications();
+        break;
 
-    await loadGallery();
+      case "membership-applications":
+        await loadMembershipApplications();
+        break;
 
-  }
-
-
-  if (page === "tournaments") {
-
-    await loadTournaments();
-
-  }
-
-
-  if (page === "fixtures") {
-
-    await loadFixtures();
-
-  }
-
-
-  if (page === "leadership") {
-
-    await loadLeadership();
-
-  }
+    }
 
 
-  if (page === "committee") {
+  } catch (error) {
 
-    await loadCommittee();
+    console.error(
+      "Page loading error:",
+      error
+    );
 
-  }
-
-
-  if (
-    page ===
-    "friendly-applications"
-  ) {
-
-    await loadFriendlyApplications();
-
-  }
-
-
-  if (
-    page ===
-    "membership-applications"
-  ) {
-
-    await loadMembershipApplications();
+    toast(
+      "Could not load page data.",
+      "error"
+    );
 
   }
 
@@ -745,8 +839,7 @@ function setupSidebar() {
     $("#adminSidebar");
 
 
-  if (!toggle || !sidebar)
-    return;
+  if (!toggle || !sidebar) return;
 
 
   toggle.addEventListener(
@@ -795,8 +888,9 @@ function setupButtons() {
 
         await loadDashboard();
 
+
         toast(
-          "Dashboard refreshed.",
+          "Data refreshed.",
           "success"
         );
 
@@ -819,11 +913,9 @@ function setupButtons() {
       if (!button) return;
 
 
-      const action =
-        button.dataset.action;
-
-
-      handleAction(action);
+      handleAction(
+        button.dataset.action
+      );
 
     }
   );
@@ -837,89 +929,63 @@ function setupButtons() {
 
 function handleAction(action) {
 
-  if (
-    action ===
-    "add-notice"
-  ) {
+  switch (action) {
 
-    openNoticeModal();
+    case "add-notice":
 
-    return;
+      openNoticeModal();
 
-  }
+      break;
 
 
-  if (
-    action ===
-    "add-gallery"
-  ) {
+    case "add-gallery":
 
-    openSimpleModal(
-      "Add Gallery Photo",
-      "Gallery management will be connected next."
-    );
+      openSimpleModal(
+        "Add Gallery Photo",
+        "Gallery management will be connected next."
+      );
 
-    return;
-
-  }
+      break;
 
 
-  if (
-    action ===
-    "add-tournament"
-  ) {
+    case "add-tournament":
 
-    openSimpleModal(
-      "Add Tournament",
-      "Tournament management will be connected next."
-    );
+      openSimpleModal(
+        "Add Tournament",
+        "Tournament management will be connected next."
+      );
 
-    return;
-
-  }
+      break;
 
 
-  if (
-    action ===
-    "add-fixture"
-  ) {
+    case "add-fixture":
 
-    openSimpleModal(
-      "Add Match",
-      "Fixture management will be connected next."
-    );
+      openSimpleModal(
+        "Add Match",
+        "Fixture management will be connected next."
+      );
 
-    return;
-
-  }
+      break;
 
 
-  if (
-    action ===
-    "add-leader"
-  ) {
+    case "add-leader":
 
-    openSimpleModal(
-      "Add Leader",
-      "Leadership management will be connected next."
-    );
+      openSimpleModal(
+        "Add Leader",
+        "Leadership management will be connected next."
+      );
 
-    return;
-
-  }
+      break;
 
 
-  if (
-    action ===
-    "add-committee"
-  ) {
+    case "add-committee":
 
-    openSimpleModal(
-      "Add Committee Member",
-      "Committee management will be connected next."
-    );
+      openSimpleModal(
+        "Add Committee Member",
+        "Committee management will be connected next."
+      );
 
-    return;
+      break;
 
   }
 
@@ -932,18 +998,58 @@ function handleAction(action) {
 
 async function loadDashboard() {
 
-  if (!currentUser) return;
+  if (!supabaseClient) {
+
+    console.warn(
+      "Dashboard skipped: Supabase unavailable."
+    );
+
+    return;
+
+  }
 
 
-  await Promise.all([
+  if (dashboardLoading) {
+    return;
+  }
 
-    loadNoticeStats(),
 
-    loadApplicationStats(),
+  dashboardLoading =
+    true;
 
-    loadRecentActivity()
 
-  ]);
+  console.log(
+    "Loading dashboard..."
+  );
+
+
+  try {
+
+    await Promise.all([
+      loadNoticeStats(),
+      loadRecentActivity()
+    ]);
+
+
+    console.log(
+      "Dashboard loaded successfully."
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Dashboard error:",
+      error
+    );
+
+
+  } finally {
+
+    dashboardLoading =
+      false;
+
+  }
 
 }
 
@@ -954,6 +1060,17 @@ async function loadDashboard() {
 
 async function loadNoticeStats() {
 
+  const element =
+    $("#totalNotices");
+
+
+  if (!element) return;
+
+
+  element.textContent =
+    "…";
+
+
   try {
 
     const {
@@ -963,7 +1080,7 @@ async function loadNoticeStats() {
       await supabaseClient
         .from("notices")
         .select(
-          "*",
+          "id",
           {
             count: "exact",
             head: true
@@ -976,16 +1093,8 @@ async function loadNoticeStats() {
     }
 
 
-    const element =
-      $("#totalNotices");
-
-
-    if (element) {
-
-      element.textContent =
-        count || 0;
-
-    }
+    element.textContent =
+      count ?? 0;
 
 
   } catch (error) {
@@ -995,122 +1104,9 @@ async function loadNoticeStats() {
       error
     );
 
-  }
 
-}
-
-
-/* =========================================================
-   APPLICATION STATS
-========================================================= */
-
-async function loadApplicationStats() {
-
-  try {
-
-    const [
-      friendlyResult,
-      membershipResult
-    ] = await Promise.all([
-
-      supabaseClient
-        .from(
-          "friendly_applications"
-        )
-        .select(
-          "*",
-          {
-            count: "exact",
-            head: true
-          }
-        ),
-
-      supabaseClient
-        .from(
-          "membership_applications"
-        )
-        .select(
-          "*",
-          {
-            count: "exact",
-            head: true
-          }
-        )
-
-    ]);
-
-
-    if (friendlyResult.error) {
-
-      console.error(
-        "Friendly count error:",
-        friendlyResult.error
-      );
-
-    }
-
-
-    if (membershipResult.error) {
-
-      console.error(
-        "Membership count error:",
-        membershipResult.error
-      );
-
-    }
-
-
-    const friendlyCount =
-      friendlyResult.count || 0;
-
-
-    const membershipCount =
-      membershipResult.count || 0;
-
-
-    const friendlyElement =
-      $("#totalFriendlyApplications");
-
-
-    const membershipElement =
-      $("#totalMembershipApplications");
-
-
-    const totalApplicationsElement =
-      $("#totalApplications");
-
-
-    if (friendlyElement) {
-
-      friendlyElement.textContent =
-        friendlyCount;
-
-    }
-
-
-    if (membershipElement) {
-
-      membershipElement.textContent =
-        membershipCount;
-
-    }
-
-
-    if (totalApplicationsElement) {
-
-      totalApplicationsElement.textContent =
-        friendlyCount +
-        membershipCount;
-
-    }
-
-
-  } catch (error) {
-
-    console.error(
-      "Application stats error:",
-      error
-    );
+    element.textContent =
+      "0";
 
   }
 
@@ -1131,17 +1127,10 @@ async function loadRecentActivity() {
 
 
   container.innerHTML = `
-
     <div class="empty-state small-empty">
-
       <span>◌</span>
-
-      <p>
-        Loading recent activity...
-      </p>
-
+      <p>Loading...</p>
     </div>
-
   `;
 
 
@@ -1176,17 +1165,10 @@ async function loadRecentActivity() {
     ) {
 
       container.innerHTML = `
-
         <div class="empty-state small-empty">
-
           <span>◌</span>
-
-          <p>
-            No recent activity yet.
-          </p>
-
+          <p>No recent activity yet.</p>
         </div>
-
       `;
 
       return;
@@ -1213,17 +1195,16 @@ async function loadRecentActivity() {
               </strong>
 
               <span>
-
                 ${escapeHTML(
                   notice.category ||
                   "GENERAL"
                 )}
 
                 •
+
                 ${formatDate(
                   notice.created_at
                 )}
-
               </span>
 
             </div>
@@ -1243,17 +1224,14 @@ async function loadRecentActivity() {
 
 
     container.innerHTML = `
-
       <div class="empty-state small-empty">
-
         <span>⚠</span>
-
         <p>
-          Could not load recent activity.
+          ${escapeHTML(
+            getSupabaseErrorMessage(error)
+          )}
         </p>
-
       </div>
-
     `;
 
   }
@@ -1275,17 +1253,10 @@ async function loadNotices() {
 
 
   container.innerHTML = `
-
     <div class="empty-state">
-
       <span>◌</span>
-
-      <p>
-        Loading notices...
-      </p>
-
+      <p>Loading notices...</p>
     </div>
-
   `;
 
 
@@ -1320,21 +1291,11 @@ async function loadNotices() {
     if (!notices.length) {
 
       container.innerHTML = `
-
         <div class="empty-state">
-
           <span>◉</span>
-
-          <h4>
-            No notices found
-          </h4>
-
-          <p>
-            Create your first notice.
-          </p>
-
+          <h4>No notices found</h4>
+          <p>Create your first notice.</p>
         </div>
-
       `;
 
       return;
@@ -1357,9 +1318,7 @@ async function loadNotices() {
 
 
     container.innerHTML = `
-
       <div class="empty-state">
-
         <span>⚠</span>
 
         <h4>
@@ -1368,12 +1327,11 @@ async function loadNotices() {
 
         <p>
           ${escapeHTML(
-            error.message
+            getSupabaseErrorMessage(error)
           )}
         </p>
 
       </div>
-
     `;
 
   }
@@ -1396,49 +1354,42 @@ function renderNotice(notice) {
         <div class="notice-meta">
 
           <span class="notice-category">
-
             ${escapeHTML(
               notice.category ||
               "GENERAL"
             )}
-
           </span>
 
           <span>
-
             ${formatDate(
               notice.created_at
             )}
-
           </span>
 
         </div>
 
 
         <h3>
-
           ${escapeHTML(
             notice.title
           )}
-
         </h3>
 
 
         <p>
-
           ${escapeHTML(
-            notice.content ||
-            ""
+            notice.content || ""
           )}
-
         </p>
 
 
-        <span class="status-badge ${
-          notice.published
-            ? "published"
-            : "draft"
-        }">
+        <span
+          class="status-badge ${
+            notice.published
+              ? "published"
+              : "draft"
+          }"
+        >
 
           ${
             notice.published
@@ -1530,9 +1481,7 @@ function openNoticeModal() {
           CATEGORY
         </label>
 
-        <select
-          id="noticeCategory"
-        >
+        <select id="noticeCategory">
 
           <option value="GENERAL">
             General
@@ -1633,26 +1582,19 @@ async function createNotice(event) {
 
 
   const title =
-    $("#noticeTitle")
-      ?.value
-      .trim();
-
+    $("#noticeTitle")?.value.trim() ||
+    "";
 
   const content =
-    $("#noticeContent")
-      ?.value
-      .trim();
-
+    $("#noticeContent")?.value.trim() ||
+    "";
 
   const category =
-    $("#noticeCategory")
-      ?.value ||
+    $("#noticeCategory")?.value ||
     "GENERAL";
 
-
   const published =
-    $("#noticePublished")
-      ?.checked ||
+    $("#noticePublished")?.checked ||
     false;
 
 
@@ -1703,7 +1645,14 @@ async function createNotice(event) {
 
     await loadDashboard();
 
-    await loadNotices();
+
+    if (
+      $("#noticesList")
+    ) {
+
+      await loadNotices();
+
+    }
 
 
   } catch (error) {
@@ -1715,8 +1664,7 @@ async function createNotice(event) {
 
 
     toast(
-      error.message ||
-      "Failed to create notice.",
+      getSupabaseErrorMessage(error),
       "error"
     );
 
@@ -1802,9 +1750,7 @@ window.editNotice =
             CATEGORY
           </label>
 
-          <select
-            id="editNoticeCategory"
-          >
+          <select id="editNoticeCategory">
 
             ${getCategoryOptions(
               notice.category
@@ -1826,8 +1772,7 @@ window.editNotice =
             rows="7"
             required
           >${escapeHTML(
-            notice.content ||
-            ""
+            notice.content || ""
           )}</textarea>
 
         </div>
@@ -1897,8 +1842,7 @@ window.editNotice =
 
                 title:
                   $("#editNoticeTitle")
-                    .value
-                    .trim(),
+                    .value.trim(),
 
                 category:
                   $("#editNoticeCategory")
@@ -1906,16 +1850,14 @@ window.editNotice =
 
                 content:
                   $("#editNoticeContent")
-                    .value
-                    .trim(),
+                    .value.trim(),
 
                 published:
                   $("#editNoticePublished")
                     .checked,
 
                 updated_at:
-                  new Date()
-                    .toISOString()
+                  new Date().toISOString()
 
               })
               .eq(
@@ -1940,7 +1882,14 @@ window.editNotice =
 
           await loadDashboard();
 
-          await loadNotices();
+
+          if (
+            $("#noticesList")
+          ) {
+
+            await loadNotices();
+
+          }
 
 
         } catch (error) {
@@ -1952,8 +1901,7 @@ window.editNotice =
 
 
           toast(
-            error.message ||
-            "Failed to update notice.",
+            getSupabaseErrorMessage(error),
             "error"
           );
 
@@ -2027,7 +1975,14 @@ window.deleteNotice =
 
       await loadDashboard();
 
-      await loadNotices();
+
+      if (
+        $("#noticesList")
+      ) {
+
+        await loadNotices();
+
+      }
 
 
     } catch (error) {
@@ -2039,1163 +1994,7 @@ window.deleteNotice =
 
 
       toast(
-        error.message ||
-        "Failed to delete notice.",
-        "error"
-      );
-
-
-    } finally {
-
-      showLoading(false);
-
-    }
-
-  };
-
-
-/* =========================================================
-   FRIENDLY APPLICATIONS
-========================================================= */
-
-async function loadFriendlyApplications() {
-
-  const container =
-    $("#friendlyApplicationsList");
-
-
-  if (!container) return;
-
-
-  container.innerHTML = `
-
-    <div class="empty-state">
-
-      <span>◌</span>
-
-      <h4>
-        Loading applications...
-      </h4>
-
-      <p>
-        Please wait.
-      </p>
-
-    </div>
-
-  `;
-
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from(
-          "friendly_applications"
-        )
-        .select("*")
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
-
-
-    if (error) {
-      throw error;
-    }
-
-
-    friendlyApplications =
-      data || [];
-
-
-    if (
-      friendlyApplications.length ===
-      0
-    ) {
-
-      container.innerHTML = `
-
-        <div class="empty-state">
-
-          <span>⚽</span>
-
-          <h4>
-            No applications found
-          </h4>
-
-          <p>
-            Friendly Match applications
-            will appear here.
-          </p>
-
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    container.innerHTML =
-      friendlyApplications
-        .map(
-          renderFriendlyApplication
-        )
-        .join("");
-
-
-  } catch (error) {
-
-    console.error(
-      "Friendly applications error:",
-      error
-    );
-
-
-    container.innerHTML = `
-
-      <div class="empty-state">
-
-        <span>⚠</span>
-
-        <h4>
-          Could not load applications
-        </h4>
-
-        <p>
-          ${escapeHTML(
-            error.message
-          )}
-        </p>
-
-      </div>
-
-    `;
-
-  }
-
-}
-
-
-/* =========================================================
-   RENDER FRIENDLY APPLICATION
-========================================================= */
-
-function renderFriendlyApplication(
-  application
-) {
-
-  const status =
-    application.status ||
-    "pending";
-
-
-  return `
-
-    <article
-      class="admin-list-item application-item"
-    >
-
-      <div class="admin-list-content">
-
-        <div class="notice-meta">
-
-          <span class="notice-category">
-            FRIENDLY MATCH
-          </span>
-
-          <span>
-            ${formatDateTime(
-              application.created_at
-            )}
-          </span>
-
-        </div>
-
-
-        <h3>
-
-          ${escapeHTML(
-            application.team_name ||
-            "Unnamed Team"
-          )}
-
-        </h3>
-
-
-        <p>
-
-          <strong>
-            Representative:
-          </strong>
-
-          ${escapeHTML(
-            application.contact_person ||
-            "Not provided"
-          )}
-
-        </p>
-
-
-        <p>
-
-          <strong>
-            Phone:
-          </strong>
-
-          ${escapeHTML(
-            application.phone ||
-            "Not provided"
-          )}
-
-        </p>
-
-
-        ${
-          application.email
-            ? `
-              <p>
-
-                <strong>
-                  Email:
-                </strong>
-
-                ${escapeHTML(
-                  application.email
-                )}
-
-              </p>
-            `
-            : ""
-        }
-
-
-        <p>
-
-          <strong>
-            Preferred Date:
-          </strong>
-
-          ${escapeHTML(
-            application.preferred_date ||
-            "Not specified"
-          )}
-
-        </p>
-
-
-        <p>
-
-          <strong>
-            Preferred Time:
-          </strong>
-
-          ${escapeHTML(
-            application.preferred_time ||
-            "Not specified"
-          )}
-
-        </p>
-
-
-        ${
-          application.message
-            ? `
-              <div class="application-message">
-
-                <strong>
-                  Application Details
-                </strong>
-
-                <p>
-                  ${formatMultiline(
-                    application.message
-                  )}
-                </p>
-
-              </div>
-            `
-            : ""
-        }
-
-
-        <span class="status-badge ${getStatusClass(
-          status
-        )}">
-
-          ${escapeHTML(
-            String(status)
-              .toUpperCase()
-          )}
-
-        </span>
-
-      </div>
-
-
-      <div class="admin-list-actions">
-
-        <button
-          class="admin-small-button"
-          onclick="viewFriendlyApplication('${escapeAttribute(
-            application.id
-          )}')"
-        >
-          View
-        </button>
-
-
-        <button
-          class="admin-small-button danger"
-          onclick="deleteFriendlyApplication('${escapeAttribute(
-            application.id
-          )}')"
-        >
-          Delete
-        </button>
-
-      </div>
-
-    </article>
-
-  `;
-
-}
-
-
-/* =========================================================
-   VIEW FRIENDLY APPLICATION
-========================================================= */
-
-window.viewFriendlyApplication =
-  function(id) {
-
-    const application =
-      friendlyApplications.find(
-        item =>
-          String(item.id) ===
-          String(id)
-      );
-
-
-    if (!application) return;
-
-
-    openModal(`
-
-      <div class="modal-header">
-
-        <span class="page-label">
-          FRIENDLY MATCH APPLICATION
-        </span>
-
-        <h2>
-          ${escapeHTML(
-            application.team_name ||
-            "Application"
-          )}
-        </h2>
-
-      </div>
-
-
-      <div class="application-details">
-
-        <p>
-          <strong>
-            Representative
-          </strong>
-
-          ${escapeHTML(
-            application.contact_person ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Phone
-          </strong>
-
-          ${escapeHTML(
-            application.phone ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Email
-          </strong>
-
-          ${escapeHTML(
-            application.email ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Preferred Date
-          </strong>
-
-          ${escapeHTML(
-            application.preferred_date ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Preferred Time
-          </strong>
-
-          ${escapeHTML(
-            application.preferred_time ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Status
-          </strong>
-
-          ${escapeHTML(
-            application.status ||
-            "pending"
-          )}
-        </p>
-
-
-        ${
-          application.message
-            ? `
-              <div>
-
-                <strong>
-                  Details
-                </strong>
-
-                <p>
-                  ${formatMultiline(
-                    application.message
-                  )}
-                </p>
-
-              </div>
-            `
-            : ""
-        }
-
-      </div>
-
-    `);
-
-  };
-
-
-/* =========================================================
-   DELETE FRIENDLY APPLICATION
-========================================================= */
-
-window.deleteFriendlyApplication =
-  async function(id) {
-
-    const application =
-      friendlyApplications.find(
-        item =>
-          String(item.id) ===
-          String(id)
-      );
-
-
-    if (!application) return;
-
-
-    const confirmed =
-      window.confirm(
-        `Delete application from "${application.team_name}"?`
-      );
-
-
-    if (!confirmed) return;
-
-
-    showLoading(true);
-
-
-    try {
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from(
-            "friendly_applications"
-          )
-          .delete()
-          .eq(
-            "id",
-            id
-          );
-
-
-      if (error) {
-        throw error;
-      }
-
-
-      toast(
-        "Friendly application deleted.",
-        "success"
-      );
-
-
-      await loadFriendlyApplications();
-
-      await loadApplicationStats();
-
-
-    } catch (error) {
-
-      console.error(
-        "Delete friendly application error:",
-        error
-      );
-
-
-      toast(
-        error.message ||
-        "Failed to delete application.",
-        "error"
-      );
-
-
-    } finally {
-
-      showLoading(false);
-
-    }
-
-  };
-
-
-/* =========================================================
-   MEMBERSHIP APPLICATIONS
-========================================================= */
-
-async function loadMembershipApplications() {
-
-  const container =
-    $("#membershipApplicationsList");
-
-
-  if (!container) return;
-
-
-  container.innerHTML = `
-
-    <div class="empty-state">
-
-      <span>◌</span>
-
-      <h4>
-        Loading applications...
-      </h4>
-
-      <p>
-        Please wait.
-      </p>
-
-    </div>
-
-  `;
-
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from(
-          "membership_applications"
-        )
-        .select("*")
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
-
-
-    if (error) {
-      throw error;
-    }
-
-
-    membershipApplications =
-      data || [];
-
-
-    if (
-      membershipApplications.length ===
-      0
-    ) {
-
-      container.innerHTML = `
-
-        <div class="empty-state">
-
-          <span>✦</span>
-
-          <h4>
-            No applications found
-          </h4>
-
-          <p>
-            Membership applications
-            will appear here.
-          </p>
-
-        </div>
-
-      `;
-
-      return;
-
-    }
-
-
-    container.innerHTML =
-      membershipApplications
-        .map(
-          renderMembershipApplication
-        )
-        .join("");
-
-
-  } catch (error) {
-
-    console.error(
-      "Membership applications error:",
-      error
-    );
-
-
-    container.innerHTML = `
-
-      <div class="empty-state">
-
-        <span>⚠</span>
-
-        <h4>
-          Could not load applications
-        </h4>
-
-        <p>
-          ${escapeHTML(
-            error.message
-          )}
-        </p>
-
-      </div>
-
-    `;
-
-  }
-
-}
-
-
-/* =========================================================
-   RENDER MEMBERSHIP APPLICATION
-========================================================= */
-
-function renderMembershipApplication(
-  application
-) {
-
-  const status =
-    application.status ||
-    "pending";
-
-
-  return `
-
-    <article
-      class="admin-list-item application-item"
-    >
-
-      <div class="admin-list-content">
-
-        <div class="notice-meta">
-
-          <span class="notice-category">
-            MEMBERSHIP
-          </span>
-
-          <span>
-            ${formatDateTime(
-              application.created_at
-            )}
-          </span>
-
-        </div>
-
-
-        <h3>
-
-          ${escapeHTML(
-            application.full_name ||
-            "Unnamed Applicant"
-          )}
-
-        </h3>
-
-
-        <p>
-
-          <strong>
-            Phone:
-          </strong>
-
-          ${escapeHTML(
-            application.phone ||
-            "Not provided"
-          )}
-
-        </p>
-
-
-        <p>
-
-          <strong>
-            Date of Birth:
-          </strong>
-
-          ${escapeHTML(
-            application.date_of_birth ||
-            "Not provided"
-          )}
-
-        </p>
-
-
-        <p>
-
-          <strong>
-            Occupation:
-          </strong>
-
-          ${escapeHTML(
-            application.occupation ||
-            "Not provided"
-          )}
-
-        </p>
-
-
-        <p>
-
-          <strong>
-            Address:
-          </strong>
-
-          ${escapeHTML(
-            application.address ||
-            "Not provided"
-          )}
-
-        </p>
-
-
-        ${
-          application.preferred_position
-            ? `
-              <p>
-
-                <strong>
-                  Main Skill:
-                </strong>
-
-                ${escapeHTML(
-                  application.preferred_position
-                )}
-
-              </p>
-            `
-            : ""
-        }
-
-
-        ${
-          application.experience
-            ? `
-              <div class="application-message">
-
-                <strong>
-                  Sports / Experience
-                </strong>
-
-                <p>
-                  ${formatMultiline(
-                    application.experience
-                  )}
-                </p>
-
-              </div>
-            `
-            : ""
-        }
-
-
-        ${
-          application.message
-            ? `
-              <div class="application-message">
-
-                <strong>
-                  Additional Information
-                </strong>
-
-                <p>
-                  ${formatMultiline(
-                    application.message
-                  )}
-                </p>
-
-              </div>
-            `
-            : ""
-        }
-
-
-        <span class="status-badge ${getStatusClass(
-          status
-        )}">
-
-          ${escapeHTML(
-            String(status)
-              .toUpperCase()
-          )}
-
-        </span>
-
-      </div>
-
-
-      <div class="admin-list-actions">
-
-        <button
-          class="admin-small-button"
-          onclick="viewMembershipApplication('${escapeAttribute(
-            application.id
-          )}')"
-        >
-          View
-        </button>
-
-
-        <button
-          class="admin-small-button danger"
-          onclick="deleteMembershipApplication('${escapeAttribute(
-            application.id
-          )}')"
-        >
-          Delete
-        </button>
-
-      </div>
-
-    </article>
-
-  `;
-
-}
-
-
-/* =========================================================
-   VIEW MEMBERSHIP APPLICATION
-========================================================= */
-
-window.viewMembershipApplication =
-  function(id) {
-
-    const application =
-      membershipApplications.find(
-        item =>
-          String(item.id) ===
-          String(id)
-      );
-
-
-    if (!application) return;
-
-
-    openModal(`
-
-      <div class="modal-header">
-
-        <span class="page-label">
-          MEMBERSHIP APPLICATION
-        </span>
-
-        <h2>
-          ${escapeHTML(
-            application.full_name ||
-            "Application"
-          )}
-        </h2>
-
-      </div>
-
-
-      <div class="application-details">
-
-        <p>
-          <strong>
-            Full Name
-          </strong>
-
-          ${escapeHTML(
-            application.full_name ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Date of Birth
-          </strong>
-
-          ${escapeHTML(
-            application.date_of_birth ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Phone
-          </strong>
-
-          ${escapeHTML(
-            application.phone ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Address
-          </strong>
-
-          ${escapeHTML(
-            application.address ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Occupation
-          </strong>
-
-          ${escapeHTML(
-            application.occupation ||
-            "—"
-          )}
-        </p>
-
-
-        <p>
-          <strong>
-            Main Sports Skill
-          </strong>
-
-          ${escapeHTML(
-            application.preferred_position ||
-            "—"
-          )}
-        </p>
-
-
-        ${
-          application.experience
-            ? `
-              <div>
-
-                <strong>
-                  Sports & Experience
-                </strong>
-
-                <p>
-                  ${formatMultiline(
-                    application.experience
-                  )}
-                </p>
-
-              </div>
-            `
-            : ""
-        }
-
-
-        ${
-          application.message
-            ? `
-              <div>
-
-                <strong>
-                  Additional Information
-                </strong>
-
-                <p>
-                  ${formatMultiline(
-                    application.message
-                  )}
-                </p>
-
-              </div>
-            `
-            : ""
-        }
-
-
-        <p>
-
-          <strong>
-            Status
-          </strong>
-
-          ${escapeHTML(
-            application.status ||
-            "pending"
-          )}
-
-        </p>
-
-
-        ${
-          application.admin_note
-            ? `
-              <div>
-
-                <strong>
-                  Admin Note
-                </strong>
-
-                <p>
-                  ${formatMultiline(
-                    application.admin_note
-                  )}
-                </p>
-
-              </div>
-            `
-            : ""
-        }
-
-      </div>
-
-    `);
-
-  };
-
-
-/* =========================================================
-   DELETE MEMBERSHIP APPLICATION
-========================================================= */
-
-window.deleteMembershipApplication =
-  async function(id) {
-
-    const application =
-      membershipApplications.find(
-        item =>
-          String(item.id) ===
-          String(id)
-      );
-
-
-    if (!application) return;
-
-
-    const confirmed =
-      window.confirm(
-        `Delete membership application from "${application.full_name}"?`
-      );
-
-
-    if (!confirmed) return;
-
-
-    showLoading(true);
-
-
-    try {
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from(
-            "membership_applications"
-          )
-          .delete()
-          .eq(
-            "id",
-            id
-          );
-
-
-      if (error) {
-        throw error;
-      }
-
-
-      toast(
-        "Membership application deleted.",
-        "success"
-      );
-
-
-      await loadMembershipApplications();
-
-      await loadApplicationStats();
-
-
-    } catch (error) {
-
-      console.error(
-        "Delete membership application error:",
-        error
-      );
-
-
-      toast(
-        error.message ||
-        "Failed to delete application.",
+        getSupabaseErrorMessage(error),
         "error"
       );
 
@@ -3233,8 +2032,7 @@ async function loadGallery() {
       </h4>
 
       <p>
-        Gallery database connection
-        will be added next.
+        Gallery management will be connected next.
       </p>
 
     </div>
@@ -3268,8 +2066,7 @@ async function loadTournaments() {
       </h4>
 
       <p>
-        Tournament database connection
-        will be added next.
+        Tournament management will be connected next.
       </p>
 
     </div>
@@ -3303,8 +2100,7 @@ async function loadFixtures() {
       </h4>
 
       <p>
-        Fixture database connection
-        will be added next.
+        Fixture management will be connected next.
       </p>
 
     </div>
@@ -3338,8 +2134,7 @@ async function loadLeadership() {
       </h4>
 
       <p>
-        Leadership database connection
-        will be added next.
+        Leadership management will be connected next.
       </p>
 
     </div>
@@ -3373,8 +2168,77 @@ async function loadCommittee() {
       </h4>
 
       <p>
-        Committee database connection
-        will be added next.
+        Committee management will be connected next.
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   FRIENDLY APPLICATIONS
+========================================================= */
+
+async function loadFriendlyApplications() {
+
+  const container =
+    $("#friendlyApplicationsList");
+
+
+  if (!container) return;
+
+
+  container.innerHTML = `
+
+    <div class="empty-state">
+
+      <span>⚽</span>
+
+      <h4>
+        No applications loaded
+      </h4>
+
+      <p>
+        Friendly Match applications
+        will appear here.
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP APPLICATIONS
+========================================================= */
+
+async function loadMembershipApplications() {
+
+  const container =
+    $("#membershipApplicationsList");
+
+
+  if (!container) return;
+
+
+  container.innerHTML = `
+
+    <div class="empty-state">
+
+      <span>✦</span>
+
+      <h4>
+        No applications loaded
+      </h4>
+
+      <p>
+        Membership applications
+        will appear here.
       </p>
 
     </div>
@@ -3415,8 +2279,7 @@ function setupModal() {
       event => {
 
         if (
-          event.target ===
-          modal
+          event.target === modal
         ) {
 
           closeModal();
@@ -3427,23 +2290,6 @@ function setupModal() {
     );
 
   }
-
-
-  document.addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        event.key ===
-        "Escape"
-      ) {
-
-        closeModal();
-
-      }
-
-    }
-  );
 
 }
 
@@ -3457,7 +2303,6 @@ function openModal(content) {
   const modal =
     $("#adminModal");
 
-
   const modalContent =
     $("#adminModalContent");
 
@@ -3465,7 +2310,15 @@ function openModal(content) {
   if (
     !modal ||
     !modalContent
-  ) return;
+  ) {
+
+    console.error(
+      "Admin modal elements not found."
+    );
+
+    return;
+
+  }
 
 
   modalContent.innerHTML =
@@ -3480,11 +2333,6 @@ function openModal(content) {
   modal.setAttribute(
     "aria-hidden",
     "false"
-  );
-
-
-  document.body.classList.add(
-    "modal-open"
   );
 
 }
@@ -3513,11 +2361,6 @@ function closeModal() {
     "true"
   );
 
-
-  document.body.classList.remove(
-    "modal-open"
-  );
-
 }
 
 
@@ -3539,9 +2382,7 @@ function openSimpleModal(
       </span>
 
       <h2>
-        ${escapeHTML(
-          title
-        )}
+        ${escapeHTML(title)}
       </h2>
 
     </div>
@@ -3550,9 +2391,7 @@ function openSimpleModal(
     <div class="empty-state">
 
       <p>
-        ${escapeHTML(
-          message
-        )}
+        ${escapeHTML(message)}
       </p>
 
     </div>
@@ -3584,6 +2423,26 @@ function showLoading(show) {
 
 
 /* =========================================================
+   LOGIN ERROR
+========================================================= */
+
+function showLoginError(message) {
+
+  const errorBox =
+    $("#loginError");
+
+
+  if (errorBox) {
+
+    errorBox.textContent =
+      message;
+
+  }
+
+}
+
+
+/* =========================================================
    TOAST
 ========================================================= */
 
@@ -3599,6 +2458,7 @@ function toast(
   if (!container) {
 
     console.log(
+      `[${type}]`,
       message
     );
 
@@ -3675,122 +2535,6 @@ function formatDate(date) {
 
 
 /* =========================================================
-   FORMAT DATE + TIME
-========================================================= */
-
-function formatDateTime(date) {
-
-  if (!date) return "";
-
-
-  const parsed =
-    new Date(date);
-
-
-  if (
-    Number.isNaN(
-      parsed.getTime()
-    )
-  ) {
-
-    return "";
-
-  }
-
-
-  return parsed.toLocaleString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit"
-    }
-  );
-
-}
-
-
-/* =========================================================
-   MULTILINE TEXT
-========================================================= */
-
-function formatMultiline(value) {
-
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return "";
-
-  }
-
-
-  return escapeHTML(
-    value
-  ).replace(
-    /\n/g,
-    "<br>"
-  );
-
-}
-
-
-/* =========================================================
-   STATUS CLASS
-========================================================= */
-
-function getStatusClass(
-  status
-) {
-
-  const value =
-    String(
-      status ||
-      "pending"
-    )
-      .toLowerCase()
-      .trim();
-
-
-  if (
-    value ===
-    "approved"
-  ) {
-
-    return "published";
-
-  }
-
-
-  if (
-    value ===
-    "rejected"
-  ) {
-
-    return "draft";
-
-  }
-
-
-  if (
-    value ===
-    "pending"
-  ) {
-
-    return "pending";
-
-  }
-
-
-  return value;
-
-}
-
-
-/* =========================================================
    ESCAPE HTML
 ========================================================= */
 
@@ -3807,27 +2551,22 @@ function escapeHTML(value) {
 
 
   return String(value)
-
     .replace(
       /&/g,
       "&amp;"
     )
-
     .replace(
       /</g,
       "&lt;"
     )
-
     .replace(
       />/g,
       "&gt;"
     )
-
     .replace(
       /"/g,
       "&quot;"
     )
-
     .replace(
       /'/g,
       "&#039;"
@@ -3840,13 +2579,9 @@ function escapeHTML(value) {
    ESCAPE ATTRIBUTE
 ========================================================= */
 
-function escapeAttribute(
-  value
-) {
+function escapeAttribute(value) {
 
-  return escapeHTML(
-    value
-  );
+  return escapeHTML(value);
 
 }
 
@@ -3862,48 +2597,116 @@ function getCategoryOptions(
   const categories = [
 
     "GENERAL",
-
     "SPORTS",
-
     "MATCH",
-
     "TOURNAMENT",
-
     "ANNOUNCEMENT"
 
   ];
 
 
   return categories
-    .map(
-      category => `
+    .map(category => `
 
-        <option
-          value="${category}"
-          ${
-            String(
-              selected ||
-              ""
-            ).toUpperCase() ===
-            category
-              ? "selected"
-              : ""
-          }
-        >
-          ${category}
-        </option>
+      <option
+        value="${category}"
+        ${
+          String(selected)
+            .toUpperCase() ===
+          category
+            ? "selected"
+            : ""
+        }
+      >
+        ${category}
+      </option>
 
-      `
-    )
+    `)
     .join("");
 
 }
 
 
 /* =========================================================
-   INITIALIZED
+   SUPABASE ERROR
+========================================================= */
+
+function getSupabaseErrorMessage(
+  error
+) {
+
+  if (!error) {
+
+    return "Unknown error.";
+
+  }
+
+
+  if (
+    error.message
+  ) {
+
+    return error.message;
+
+  }
+
+
+  if (
+    error.error_description
+  ) {
+
+    return error.error_description;
+
+  }
+
+
+  return "Something went wrong.";
+
+}
+
+
+/* =========================================================
+   ESC KEY
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key === "Escape"
+    ) {
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   GLOBAL ERROR LOGGER
+========================================================= */
+
+window.addEventListener(
+  "error",
+  event => {
+
+    console.error(
+      "JavaScript error:",
+      event.error ||
+      event.message
+    );
+
+  }
+);
+
+
+/* =========================================================
+   FINAL
 ========================================================= */
 
 console.log(
-  "GSA Admin Panel initialized."
+  "GSA Admin JS loaded."
 );
