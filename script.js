@@ -1,51 +1,13 @@
-<script>
 /* =========================================================
    GHOPKHALI SPORTS ARENA
-   COMPLETE SUPABASE WEBSITE SCRIPT
-   ========================================================= */
-
-/* =========================================================
-   SUPABASE CONFIG
-   ========================================================= */
-
-const SUPABASE_URL =
-    "https://cmygmswzokyrmgdnuszq.supabase.co";
-
-const SUPABASE_ANON_KEY =
-    "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
-
-let gsaSupabase = null;
-
-if (
-    window.supabase &&
-    typeof window.supabase.createClient === "function"
-) {
-    gsaSupabase = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
-} else {
-    console.error("Supabase library was not loaded.");
-}
-
-
-/* =========================================================
-   HTML ESCAPE
-   ========================================================= */
-
-function escapeHTML(value) {
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
+   PREMIUM WEBSITE JAVASCRIPT
+   SUPABASE VERSION
+========================================================= */
 
 
 /* =========================================================
    MOBILE NAVIGATION
-   ========================================================= */
+========================================================= */
 
 const menuToggle = document.querySelector(".menu-toggle");
 const navMenu = document.querySelector(".nav-menu");
@@ -77,38 +39,13 @@ if (menuToggle && navMenu) {
         });
 
     });
+
 }
 
 
 /* =========================================================
-   CLOSE MOBILE MENU
-   ========================================================= */
-
-document.addEventListener("click", event => {
-
-    if (!navMenu || !menuToggle) return;
-
-    if (
-        navMenu.classList.contains("open") &&
-        !navMenu.contains(event.target) &&
-        !menuToggle.contains(event.target)
-    ) {
-
-        navMenu.classList.remove("open");
-
-        menuToggle.setAttribute(
-            "aria-expanded",
-            "false"
-        );
-
-    }
-
-});
-
-
-/* =========================================================
-   HEADER SCROLL
-   ========================================================= */
+   HEADER SCROLL EFFECT
+========================================================= */
 
 const header = document.querySelector(".site-header");
 
@@ -130,45 +67,45 @@ window.addEventListener(
 
 /* =========================================================
    ACTIVE NAVIGATION
-   ========================================================= */
+========================================================= */
 
 const sections = document.querySelectorAll("section[id]");
 const navLinks = document.querySelectorAll(".nav-menu a");
 
 if (sections.length && navLinks.length) {
 
-    const navObserver =
-        new IntersectionObserver(
-            entries => {
+    const navObserver = new IntersectionObserver(
+        entries => {
 
-                entries.forEach(entry => {
+            entries.forEach(entry => {
 
-                    if (!entry.isIntersecting) return;
+                if (!entry.isIntersecting) return;
 
-                    const id =
-                        entry.target.getAttribute("id");
+                const id =
+                    entry.target.getAttribute("id");
 
-                    navLinks.forEach(link => {
+                navLinks.forEach(link => {
 
-                        link.classList.remove("active");
+                    link.classList.remove("active");
 
-                        if (
-                            link.getAttribute("href") ===
-                            `#${id}`
-                        ) {
-                            link.classList.add("active");
-                        }
+                    if (
+                        link.getAttribute("href") ===
+                        `#${id}`
+                    ) {
 
-                    });
+                        link.classList.add("active");
+
+                    }
 
                 });
 
-            },
-            {
-                rootMargin:
-                    "-35% 0px -55% 0px"
-            }
-        );
+            });
+
+        },
+        {
+            rootMargin: "-35% 0px -55% 0px"
+        }
+    );
 
     sections.forEach(section => {
         navObserver.observe(section);
@@ -179,7 +116,7 @@ if (sections.length && navLinks.length) {
 
 /* =========================================================
    SCROLL REVEAL
-   ========================================================= */
+========================================================= */
 
 const revealElements = document.querySelectorAll(`
     .activity-card,
@@ -204,9 +141,7 @@ if (revealElements.length) {
 
                     if (!entry.isIntersecting) return;
 
-                    entry.target.classList.add(
-                        "revealed"
-                    );
+                    entry.target.classList.add("revealed");
 
                     revealObserver.unobserve(
                         entry.target
@@ -232,8 +167,87 @@ if (revealElements.length) {
 
 
 /* =========================================================
-   NOTICE DATE
-   ========================================================= */
+   CLOSE MOBILE MENU WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener("click", event => {
+
+    if (!navMenu || !menuToggle) return;
+
+    if (
+        navMenu.classList.contains("open") &&
+        !navMenu.contains(event.target) &&
+        !menuToggle.contains(event.target)
+    ) {
+
+        navMenu.classList.remove("open");
+
+        menuToggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+});
+
+
+/* =========================================================
+   SUPABASE CONFIGURATION
+========================================================= */
+
+const SUPABASE_URL =
+    "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+/* =========================================================
+   CREATE SUPABASE CLIENT
+========================================================= */
+
+let homeSupabase = null;
+
+if (
+    window.supabase &&
+    typeof window.supabase.createClient === "function"
+) {
+
+    homeSupabase =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+} else {
+
+    console.error(
+        "Supabase library was not loaded."
+    );
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
 
 function formatNoticeDate(dateValue) {
 
@@ -253,41 +267,35 @@ function formatNoticeDate(dateValue) {
             year: "numeric"
         }
     );
+
 }
 
 
 /* =========================================================
    NOTICE TICKER
-   ========================================================= */
+========================================================= */
 
 const noticeTrack =
     document.querySelector("#homeNoticeTicker");
 
+let noticeAnimationStarted = false;
 let noticeAnimationFrame = null;
-
-function stopNoticeTicker() {
-
-    if (noticeAnimationFrame) {
-
-        cancelAnimationFrame(
-            noticeAnimationFrame
-        );
-
-        noticeAnimationFrame = null;
-    }
-
-}
 
 
 function startNoticeTicker() {
 
-    if (!noticeTrack) return;
+    if (
+        !noticeTrack ||
+        noticeAnimationStarted
+    ) {
+        return;
+    }
 
-    stopNoticeTicker();
+    noticeAnimationStarted = true;
 
     let position = 0;
 
-    function animate() {
+    const tickerMove = () => {
 
         position -= 0.35;
 
@@ -298,17 +306,41 @@ function startNoticeTicker() {
             resetPoint > 0 &&
             Math.abs(position) >= resetPoint
         ) {
+
             position = 0;
+
         }
 
         noticeTrack.style.transform =
             `translateX(${position}px)`;
 
         noticeAnimationFrame =
-            requestAnimationFrame(animate);
+            requestAnimationFrame(
+                tickerMove
+            );
+
+    };
+
+    noticeAnimationFrame =
+        requestAnimationFrame(tickerMove);
+
+}
+
+
+function stopNoticeTicker() {
+
+    if (noticeAnimationFrame) {
+
+        cancelAnimationFrame(
+            noticeAnimationFrame
+        );
+
+        noticeAnimationFrame = null;
+
     }
 
-    animate();
+    noticeAnimationStarted = false;
+
 }
 
 
@@ -318,7 +350,10 @@ function renderNoticeTicker(notices) {
 
     stopNoticeTicker();
 
-    if (!notices || !notices.length) {
+    if (
+        !notices ||
+        notices.length === 0
+    ) {
 
         noticeTrack.innerHTML = `
             <span class="notice-ticker-item">
@@ -329,38 +364,52 @@ function renderNoticeTicker(notices) {
         return;
     }
 
-    const html = notices.map(notice => {
 
-        return `
-            <span class="notice-ticker-item">
-                <strong>NOTICE</strong>
-                ${escapeHTML(notice.title)}
-            </span>
-        `;
+    const noticesHTML =
+        notices.map(notice => {
 
-    }).join("");
+            return `
+                <span class="notice-ticker-item">
+                    <strong>NOTICE</strong>
+                    ${escapeHTML(notice.title)}
+                </span>
+            `;
+
+        }).join("");
+
+
+    /*
+       Duplicate content so the ticker
+       can continuously scroll.
+    */
 
     noticeTrack.innerHTML =
-        html + html;
+        noticesHTML + noticesHTML;
 
     startNoticeTicker();
+
 }
 
 
 /* =========================================================
    NOTICE CARDS
-   ========================================================= */
+========================================================= */
 
 function renderNoticeCards(notices) {
 
-    const container =
+    const noticesContainer =
         document.querySelector("#home-notices");
 
-    if (!container) return;
+    if (!noticesContainer) return;
 
-    if (!notices || !notices.length) {
 
-        container.innerHTML = `
+    if (
+        !notices ||
+        notices.length === 0
+    ) {
+
+        noticesContainer.innerHTML = `
+
             <article class="update-card revealed">
 
                 <div class="update-date">
@@ -381,12 +430,14 @@ function renderNoticeCards(notices) {
                 </p>
 
             </article>
+
         `;
 
         return;
     }
 
-    container.innerHTML =
+
+    noticesContainer.innerHTML =
         notices.map((notice, index) => {
 
             const title =
@@ -418,20 +469,25 @@ function renderNoticeCards(notices) {
                     )
                     : "";
 
+
             const imageHTML =
                 imageURL
                     ? `
                         <div class="update-image">
+
                             <img
                                 src="${imageURL}"
                                 alt="${title}"
                                 loading="lazy"
                             >
+
                         </div>
                     `
                     : "";
 
+
             return `
+
                 <article
                     class="update-card reveal revealed"
                     data-notice-id="${escapeHTML(
@@ -458,36 +514,66 @@ function renderNoticeCards(notices) {
                     </p>
 
                 </article>
+
             `;
 
         }).join("");
+
+
+    const cards =
+        noticesContainer.querySelectorAll(
+            ".update-card"
+        );
+
+
+    cards.forEach((card, index) => {
+
+        card.style.transitionDelay =
+            `${index * 80}ms`;
+
+    });
 
 }
 
 
 /* =========================================================
    LOAD NOTICES FROM SUPABASE
-   ========================================================= */
+========================================================= */
 
 async function loadHomeNotices() {
 
-    if (!gsaSupabase) return;
-
-    const container =
+    const noticesContainer =
         document.querySelector("#home-notices");
 
-    const ticker =
-        document.querySelector("#homeNoticeTicker");
 
-    if (!container && !ticker) return;
+    if (
+        !noticeTrack &&
+        !noticesContainer
+    ) {
+        return;
+    }
+
+
+    if (!homeSupabase) {
+
+        console.error(
+            "Supabase client is unavailable."
+        );
+
+        return;
+
+    }
+
 
     try {
 
         const {
             data,
             error
-        } = await gsaSupabase
+        } = await homeSupabase
+
             .from("notices")
+
             .select(`
                 id,
                 title,
@@ -498,14 +584,21 @@ async function loadHomeNotices() {
                 created_at,
                 updated_at
             `)
-            .eq("published", true)
+
+            .eq(
+                "published",
+                true
+            )
+
             .order(
                 "created_at",
                 {
                     ascending: false
                 }
             )
+
             .limit(10);
+
 
         if (error) {
 
@@ -514,16 +607,25 @@ async function loadHomeNotices() {
                 error
             );
 
+            renderNoticeTicker([]);
+
+            renderNoticeCards([]);
+
             return;
+
         }
+
 
         const notices =
             Array.isArray(data)
                 ? data
                 : [];
 
+
         renderNoticeTicker(notices);
+
         renderNoticeCards(notices);
+
 
     } catch (error) {
 
@@ -532,619 +634,27 @@ async function loadHomeNotices() {
             error
         );
 
-    }
+        renderNoticeTicker([]);
 
-}
-
-
-/* =========================================================
-   MODAL HELPERS
-   ========================================================= */
-
-function setupModal(
-    modalSelector,
-    openSelector,
-    closeSelector
-) {
-
-    const modal =
-        document.querySelector(modalSelector);
-
-    if (!modal) return null;
-
-    const openButtons =
-        document.querySelectorAll(
-            openSelector
-        );
-
-    const closeButton =
-        document.querySelector(
-            closeSelector
-        );
-
-    function open() {
-
-        modal.classList.add("active");
-
-        modal.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-
-        document.body.classList.add(
-            "modal-open"
-        );
-    }
-
-    function close() {
-
-        modal.classList.remove("active");
-
-        modal.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-
-        document.body.classList.remove(
-            "modal-open"
-        );
-    }
-
-    openButtons.forEach(button => {
-
-        button.addEventListener(
-            "click",
-            open
-        );
-
-    });
-
-    if (closeButton) {
-
-        closeButton.addEventListener(
-            "click",
-            close
-        );
+        renderNoticeCards([]);
 
     }
-
-    modal.addEventListener(
-        "click",
-        event => {
-
-            if (event.target === modal) {
-                close();
-            }
-
-        }
-    );
-
-    return {
-        modal,
-        open,
-        close
-    };
-}
-
-
-/* =========================================================
-   MODALS
-   ========================================================= */
-
-const rulesModal =
-    setupModal(
-        "#rulesModal",
-        "[data-open-rules]",
-        "[data-close-rules]"
-    );
-
-const friendlyModal =
-    setupModal(
-        "#friendlyModal",
-        "[data-open-friendly]",
-        "[data-close-friendly]"
-    );
-
-const membershipModal =
-    setupModal(
-        "#membershipModal",
-        "[data-open-membership]",
-        "[data-close-membership]"
-    );
-
-
-/* =========================================================
-   GET FORM DATA
-   ========================================================= */
-
-function getFormData(form) {
-
-    const data = {};
-
-    const fields =
-        form.querySelectorAll(
-            "input, select, textarea"
-        );
-
-    fields.forEach(field => {
-
-        let key =
-            field.name ||
-            field.id;
-
-        if (!key) return;
-
-        key = key
-            .trim()
-            .toLowerCase()
-            .replace(/\s+/g, "_")
-            .replace(/-/g, "_");
-
-        if (
-            field.type === "submit" ||
-            field.type === "button" ||
-            field.type === "reset"
-        ) {
-            return;
-        }
-
-        if (field.type === "checkbox") {
-
-            data[key] =
-                field.checked;
-
-            return;
-        }
-
-        if (field.type === "radio") {
-
-            if (field.checked) {
-
-                data[key] =
-                    field.value.trim();
-            }
-
-            return;
-        }
-
-        data[key] =
-            field.value.trim();
-
-    });
-
-    return data;
-}
-
-
-/* =========================================================
-   SHOW FORM MESSAGE
-   ========================================================= */
-
-function showFormMessage(
-    form,
-    type,
-    message
-) {
-
-    let box =
-        form.querySelector(
-            ".application-form-message"
-        );
-
-    if (!box) {
-
-        box =
-            document.createElement("div");
-
-        box.className =
-            "application-form-message";
-
-        form.prepend(box);
-    }
-
-    box.className =
-        `application-form-message ${type}`;
-
-    box.textContent =
-        message;
-
-    box.style.padding =
-        "12px 15px";
-
-    box.style.marginBottom =
-        "15px";
-
-    box.style.borderRadius =
-        "8px";
-
-}
-
-
-/* =========================================================
-   GENERIC SUPABASE APPLICATION INSERT
-   ========================================================= */
-
-async function submitApplication(
-    tableName,
-    form
-) {
-
-    if (!gsaSupabase) {
-
-        throw new Error(
-            "Supabase client unavailable."
-        );
-    }
-
-    const formData =
-        getFormData(form);
-
-    /*
-       IMPORTANT:
-       Remove common frontend-only fields.
-    */
-
-    delete formData.submit;
-    delete formData.button;
-
-    /*
-       Admin panel expects pending
-       if status exists.
-    */
-
-    if (
-        formData.status === undefined
-    ) {
-
-        formData.status =
-            "pending";
-    }
-
-    console.log(
-        "Submitting to:",
-        tableName
-    );
-
-    console.log(
-        "Application data:",
-        formData
-    );
-
-    const {
-        data,
-        error
-    } = await gsaSupabase
-        .from(tableName)
-        .insert([formData])
-        .select();
-
-    if (error) {
-
-        console.error(
-            "Supabase Insert Error:",
-            error
-        );
-
-        throw error;
-    }
-
-    return data;
-}
-
-
-/* =========================================================
-   VALIDATE FORM
-   ========================================================= */
-
-function validateForm(form) {
-
-    const requiredFields =
-        form.querySelectorAll(
-            "[required]"
-        );
-
-    let valid = true;
-    let firstError = null;
-
-    requiredFields.forEach(field => {
-
-        field.classList.remove(
-            "input-error"
-        );
-
-        let empty = false;
-
-        if (field.type === "checkbox") {
-
-            empty =
-                !field.checked;
-
-        } else {
-
-            empty =
-                !field.value ||
-                !field.value.trim();
-        }
-
-        if (empty) {
-
-            valid = false;
-
-            field.classList.add(
-                "input-error"
-            );
-
-            if (!firstError) {
-                firstError = field;
-            }
-        }
-
-    });
-
-    if (!valid && firstError) {
-        firstError.focus();
-    }
-
-    return valid;
-}
-
-
-/* =========================================================
-   SETUP APPLICATION FORM
-   ========================================================= */
-
-function setupApplicationForm(
-    form,
-    tableName,
-    successMessage
-) {
-
-    if (!form) return;
-
-    if (
-        form.dataset.supabaseReady ===
-        "true"
-    ) {
-        return;
-    }
-
-    form.dataset.supabaseReady =
-        "true";
-
-    form.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-            if (!validateForm(form)) {
-                return;
-            }
-
-            const submitButton =
-                form.querySelector(
-                    'button[type="submit"], input[type="submit"]'
-                );
-
-            let originalText = "";
-
-            if (submitButton) {
-
-                originalText =
-                    submitButton.tagName
-                        .toLowerCase() ===
-                    "input"
-                        ? submitButton.value
-                        : submitButton.innerHTML;
-
-                submitButton.disabled =
-                    true;
-
-                if (
-                    submitButton.tagName
-                        .toLowerCase() ===
-                    "input"
-                ) {
-
-                    submitButton.value =
-                        "Submitting...";
-
-                } else {
-
-                    submitButton.innerHTML =
-                        "Submitting...";
-
-                }
-
-            }
-
-            try {
-
-                await submitApplication(
-                    tableName,
-                    form
-                );
-
-                showFormMessage(
-                    form,
-                    "success",
-                    successMessage
-                );
-
-                form.reset();
-
-                setTimeout(() => {
-
-                    if (
-                        tableName ===
-                        "membership_applications" &&
-                        membershipModal
-                    ) {
-
-                        membershipModal.close();
-                    }
-
-                    if (
-                        tableName ===
-                        "friendly_applications" &&
-                        friendlyModal
-                    ) {
-
-                        friendlyModal.close();
-                    }
-
-                }, 1800);
-
-            } catch (error) {
-
-                console.error(
-                    "Application failed:",
-                    error
-                );
-
-                let message =
-                    "Could not submit your application. Please try again.";
-
-                if (
-                    error &&
-                    error.code === "42501"
-                ) {
-
-                    message =
-                        "Permission denied. Please check Supabase RLS policies.";
-
-                } else if (
-                    error &&
-                    error.code === "23505"
-                ) {
-
-                    message =
-                        "This application already exists.";
-
-                } else if (
-                    error &&
-                    (
-                        error.code ===
-                        "PGRST204" ||
-                        error.code ===
-                        "PGRST205"
-                    )
-                ) {
-
-                    message =
-                        "Your HTML form field does not match the Supabase table column.";
-
-                } else if (
-                    error &&
-                    error.message
-                ) {
-
-                    console.error(
-                        "Supabase message:",
-                        error.message
-                    );
-                }
-
-                showFormMessage(
-                    form,
-                    "error",
-                    message
-                );
-
-            } finally {
-
-                if (submitButton) {
-
-                    submitButton.disabled =
-                        false;
-
-                    if (
-                        submitButton.tagName
-                            .toLowerCase() ===
-                        "input"
-                    ) {
-
-                        submitButton.value =
-                            originalText;
-
-                    } else {
-
-                        submitButton.innerHTML =
-                            originalText;
-
-                    }
-
-                }
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   FIND MEMBERSHIP FORMS
-   ========================================================= */
-
-function initializeMembershipForms() {
-
-    const forms =
-        document.querySelectorAll(
-            "#membershipModal form"
-        );
-
-    forms.forEach(form => {
-
-        setupApplicationForm(
-            form,
-            "membership_applications",
-            "Membership application submitted successfully. We will contact you soon."
-        );
-
-    });
-
-}
-
-
-/* =========================================================
-   FIND FRIENDLY MATCH FORMS
-   ========================================================= */
-
-function initializeFriendlyForms() {
-
-    const forms =
-        document.querySelectorAll(
-            "#friendlyModal form"
-        );
-
-    forms.forEach(form => {
-
-        setupApplicationForm(
-            form,
-            "friendly_applications",
-            "Friendly Match application submitted successfully. We will contact you soon."
-        );
-
-    });
 
 }
 
 
 /* =========================================================
    GALLERY SLIDER
-   ========================================================= */
+========================================================= */
 
 const galleryTrack =
-    document.querySelector(
-        ".gallery-track"
-    );
+    document.querySelector(".gallery-track");
 
 const galleryItems =
     document.querySelectorAll(
         ".gallery-item"
     );
+
 
 if (
     galleryTrack &&
@@ -1153,7 +663,8 @@ if (
 
     let galleryIndex = 0;
 
-    function getGalleryStep() {
+
+    const getGalleryStep = () => {
 
         const width =
             galleryItems[0]
@@ -1169,16 +680,20 @@ if (
             parseFloat(style.gap) || 0;
 
         return width + gap;
-    }
 
-    function moveGallery() {
+    };
+
+
+    const moveGallery = () => {
 
         galleryTrack.style.transform =
             `translateX(-${
                 galleryIndex *
                 getGalleryStep()
             }px)`;
-    }
+
+    };
+
 
     setInterval(() => {
 
@@ -1190,22 +705,25 @@ if (
         ) {
 
             galleryIndex = 0;
+
         }
 
         moveGallery();
 
     }, 4500);
 
+
     window.addEventListener(
         "resize",
         moveGallery
     );
+
 }
 
 
 /* =========================================================
    GALLERY LIGHTBOX
-   ========================================================= */
+========================================================= */
 
 const galleryImages =
     document.querySelectorAll(
@@ -1226,6 +744,7 @@ const lightboxClose =
     document.querySelector(
         ".gallery-lightbox-close"
     );
+
 
 if (
     galleryImages.length &&
@@ -1264,7 +783,8 @@ if (
 
     });
 
-    function closeLightbox() {
+
+    const closeLightbox = () => {
 
         lightbox.classList.remove(
             "active"
@@ -1278,7 +798,9 @@ if (
         document.body.classList.remove(
             "modal-open"
         );
-    }
+
+    };
+
 
     if (lightboxClose) {
 
@@ -1286,17 +808,20 @@ if (
             "click",
             closeLightbox
         );
+
     }
+
 
     lightbox.addEventListener(
         "click",
         event => {
 
             if (
-                event.target ===
-                lightbox
+                event.target === lightbox
             ) {
+
                 closeLightbox();
+
             }
 
         }
@@ -1306,8 +831,938 @@ if (
 
 
 /* =========================================================
+   MODAL HELPER
+========================================================= */
+
+function openModal(modal) {
+
+    if (!modal) return;
+
+    modal.classList.add("active");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+}
+
+
+function closeModal(modal) {
+
+    if (!modal) return;
+
+    modal.classList.remove("active");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    /*
+       Only remove modal-open if no other
+       modal is currently open.
+    */
+
+    const activeModal =
+        document.querySelector(
+            ".modal.active"
+        );
+
+    if (!activeModal) {
+
+        document.body.classList.remove(
+            "modal-open"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RULES MODAL
+========================================================= */
+
+const rulesModal =
+    document.querySelector(
+        "#rulesModal"
+    );
+
+const rulesButtons =
+    document.querySelectorAll(
+        "[data-open-rules]"
+    );
+
+const rulesClose =
+    document.querySelector(
+        "[data-close-rules]"
+    );
+
+
+rulesButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => openModal(rulesModal)
+    );
+
+});
+
+
+if (rulesClose) {
+
+    rulesClose.addEventListener(
+        "click",
+        () => closeModal(rulesModal)
+    );
+
+}
+
+
+if (rulesModal) {
+
+    rulesModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target === rulesModal
+            ) {
+
+                closeModal(rulesModal);
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FRIENDLY MATCH MODAL
+========================================================= */
+
+const friendlyModal =
+    document.querySelector(
+        "#friendlyModal"
+    );
+
+const friendlyButtons =
+    document.querySelectorAll(
+        "[data-open-friendly]"
+    );
+
+const friendlyClose =
+    document.querySelector(
+        "[data-close-friendly]"
+    );
+
+
+friendlyButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => openModal(friendlyModal)
+    );
+
+});
+
+
+if (friendlyClose) {
+
+    friendlyClose.addEventListener(
+        "click",
+        () => closeModal(friendlyModal)
+    );
+
+}
+
+
+if (friendlyModal) {
+
+    friendlyModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target === friendlyModal
+            ) {
+
+                closeModal(friendlyModal);
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP MODAL
+========================================================= */
+
+const membershipModal =
+    document.querySelector(
+        "#membershipModal"
+    );
+
+const membershipButtons =
+    document.querySelectorAll(
+        "[data-open-membership]"
+    );
+
+const membershipClose =
+    document.querySelector(
+        "[data-close-membership]"
+    );
+
+
+membershipButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => openModal(membershipModal)
+    );
+
+});
+
+
+if (membershipClose) {
+
+    membershipClose.addEventListener(
+        "click",
+        () => closeModal(membershipModal)
+    );
+
+}
+
+
+if (membershipModal) {
+
+    membershipModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target === membershipModal
+            ) {
+
+                closeModal(membershipModal);
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FORM DATA HELPER
+========================================================= */
+
+function getFieldValue(form, selector) {
+
+    const field =
+        form.querySelector(selector);
+
+    if (!field) return "";
+
+    return field.value.trim();
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP DATA
+   IMPORTANT:
+   These column names must match the
+   Supabase membership_applications table.
+========================================================= */
+
+function collectMembershipData(form) {
+
+    const selectedSports = [];
+
+    form.querySelectorAll(
+        'input[name="Sports[]"]:checked'
+    ).forEach(checkbox => {
+
+        selectedSports.push(
+            checkbox.value
+        );
+
+    });
+
+
+    return {
+
+        full_name_bn:
+            getFieldValue(
+                form,
+                '[name="পূর্ণ নাম বাংলায়"]'
+            ),
+
+        full_name_en:
+            getFieldValue(
+                form,
+                '[name="Full Name English"]'
+            ),
+
+        father_name:
+            getFieldValue(
+                form,
+                '[name="Father Name"]'
+            ),
+
+        mother_name:
+            getFieldValue(
+                form,
+                '[name="Mother Name"]'
+            ),
+
+        date_of_birth:
+            getFieldValue(
+                form,
+                '[name="Date of Birth"]'
+            ) || null,
+
+        blood_group:
+            getFieldValue(
+                form,
+                '[name="Blood Group"]'
+            ),
+
+        profession:
+            getFieldValue(
+                form,
+                '[name="Profession"]'
+            ),
+
+        nid_or_birth_registration:
+            getFieldValue(
+                form,
+                '[name="NID or Birth Registration"]'
+            ),
+
+        current_address:
+            getFieldValue(
+                form,
+                '[name="Current Address"]'
+            ),
+
+        permanent_address:
+            getFieldValue(
+                form,
+                '[name="Permanent Address"]'
+            ),
+
+        mobile_number:
+            getFieldValue(
+                form,
+                '[name="Mobile Number"]'
+            ),
+
+        alternative_mobile:
+            getFieldValue(
+                form,
+                '[name="Alternative Mobile Number"]'
+            ),
+
+        sports:
+            selectedSports,
+
+        other_sports:
+            getFieldValue(
+                form,
+                '[name="Other Sports"]'
+            ),
+
+        main_sports_skill:
+            getFieldValue(
+                form,
+                '[name="Main Sports Skill"]'
+            ),
+
+        previous_club_experience:
+            getFieldValue(
+                form,
+                '[name="Previous Club Experience"]'
+            ),
+
+        emergency_contact_name:
+            getFieldValue(
+                form,
+                '[name="Emergency Contact Name"]'
+            ),
+
+        emergency_contact_relationship:
+            getFieldValue(
+                form,
+                '[name="Emergency Contact Relationship"]'
+            ),
+
+        emergency_contact_mobile:
+            getFieldValue(
+                form,
+                '[name="Emergency Contact Mobile"]'
+            ),
+
+        agreement:
+            Boolean(
+                form.querySelector(
+                    '[name="Agreement"]'
+                )?.checked
+            ),
+
+        status:
+            "pending"
+
+    };
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP FORM MESSAGE
+========================================================= */
+
+function showMembershipMessage(
+    form,
+    type,
+    message
+) {
+
+    let messageElement =
+        form.querySelector(
+            ".membership-form-message"
+        );
+
+
+    if (!messageElement) {
+
+        messageElement =
+            document.createElement(
+                "div"
+            );
+
+        messageElement.className =
+            "membership-form-message";
+
+        form.prepend(
+            messageElement
+        );
+
+    }
+
+
+    messageElement.className =
+        `membership-form-message ${type}`;
+
+    messageElement.textContent =
+        message;
+
+
+    messageElement.style.padding =
+        "12px 15px";
+
+    messageElement.style.marginBottom =
+        "15px";
+
+    messageElement.style.borderRadius =
+        "8px";
+
+}
+
+
+/* =========================================================
+   SUBMIT MEMBERSHIP TO SUPABASE
+========================================================= */
+
+async function submitMembershipApplication(form) {
+
+    if (!homeSupabase) {
+
+        throw new Error(
+            "Supabase client is unavailable."
+        );
+
+    }
+
+
+    const membershipData =
+        collectMembershipData(form);
+
+
+    console.log(
+        "GSA Membership Data:",
+        membershipData
+    );
+
+
+    const {
+        data,
+        error
+    } = await homeSupabase
+
+        .from(
+            "membership_applications"
+        )
+
+        .insert(
+            membershipData
+        )
+
+        .select();
+
+
+    if (error) {
+
+        console.error(
+            "Membership Supabase Error:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP FORM VALIDATION
+========================================================= */
+
+function validateMembershipForm(form) {
+
+    let valid = true;
+    let firstError = null;
+
+
+    form.querySelectorAll(
+        "[required]"
+    ).forEach(field => {
+
+        field.classList.remove(
+            "input-error"
+        );
+
+
+        if (field.type === "checkbox") {
+
+            if (!field.checked) {
+
+                valid = false;
+
+                field.classList.add(
+                    "input-error"
+                );
+
+                if (!firstError) {
+                    firstError = field;
+                }
+
+            }
+
+            return;
+
+        }
+
+
+        if (
+            !field.value ||
+            !field.value.trim()
+        ) {
+
+            valid = false;
+
+            field.classList.add(
+                "input-error"
+            );
+
+            if (!firstError) {
+                firstError = field;
+            }
+
+        }
+
+    });
+
+
+    if (
+        !valid &&
+        firstError
+    ) {
+
+        firstError.focus();
+
+    }
+
+
+    return valid;
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP FORM SETUP
+========================================================= */
+
+function setupMembershipForm() {
+
+    if (!membershipModal) return;
+
+
+    const form =
+        membershipModal.querySelector(
+            "form"
+        );
+
+
+    if (!form) {
+
+        console.warn(
+            "GSA Membership form not found."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        form.dataset.membershipReady ===
+        "true"
+    ) {
+
+        return;
+
+    }
+
+
+    form.dataset.membershipReady =
+        "true";
+
+
+    form.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            /* -------------------------
+               VALIDATION
+            ------------------------- */
+
+            if (
+                !validateMembershipForm(
+                    form
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            /* -------------------------
+               SUBMIT BUTTON
+            ------------------------- */
+
+            const submitButton =
+                form.querySelector(
+                    'button[type="submit"], input[type="submit"]'
+                );
+
+
+            const originalText =
+                submitButton
+                    ? (
+                        submitButton.tagName
+                            .toLowerCase() ===
+                        "input"
+                            ? submitButton.value
+                            : submitButton.innerHTML
+                    )
+                    : "";
+
+
+            if (submitButton) {
+
+                submitButton.disabled =
+                    true;
+
+
+                if (
+                    submitButton.tagName
+                        .toLowerCase() ===
+                    "input"
+                ) {
+
+                    submitButton.value =
+                        "Submitting...";
+
+                } else {
+
+                    submitButton.innerHTML =
+                        "Submitting...";
+
+                }
+
+            }
+
+
+            try {
+
+                await submitMembershipApplication(
+                    form
+                );
+
+
+                /* -------------------------
+                   SUCCESS
+                ------------------------- */
+
+                showMembershipMessage(
+                    form,
+                    "success",
+                    "সদস্যপদ আবেদন সফলভাবে জমা হয়েছে।"
+                );
+
+
+                form.reset();
+
+
+                setTimeout(
+                    () => {
+
+                        closeModal(
+                            membershipModal
+                        );
+
+                    },
+                    1800
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Membership submission failed:",
+                    error
+                );
+
+
+                let message =
+                    "আবেদন জমা দেওয়া যায়নি। আবার চেষ্টা করুন।";
+
+
+                if (
+                    error &&
+                    error.code ===
+                    "42501"
+                ) {
+
+                    message =
+                        "Permission denied. Supabase RLS policy check করুন.";
+
+                }
+
+
+                else if (
+                    error &&
+                    error.code ===
+                    "23505"
+                ) {
+
+                    message =
+                        "এই আবেদনটি আগে থেকেই জমা দেওয়া হয়েছে.";
+
+                }
+
+
+                else if (
+                    error &&
+                    error.code ===
+                    "PGRST204"
+                ) {
+
+                    message =
+                        "Supabase table-এর column name এবং form field-এর মধ্যে মিল নেই.";
+
+                }
+
+
+                else if (
+                    error &&
+                    error.code ===
+                    "42703"
+                ) {
+
+                    message =
+                        "Supabase table-এর কোনো column পাওয়া যাচ্ছে না.";
+
+                }
+
+
+                showMembershipMessage(
+                    form,
+                    "error",
+                    message
+                );
+
+
+            } finally {
+
+                if (submitButton) {
+
+                    submitButton.disabled =
+                        false;
+
+
+                    if (
+                        submitButton.tagName
+                            .toLowerCase() ===
+                        "input"
+                    ) {
+
+                        submitButton.value =
+                            originalText;
+
+                    } else {
+
+                        submitButton.innerHTML =
+                            originalText;
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   GENERAL APPLICATION FORM
+   FRIENDLY MATCH FORM
+========================================================= */
+
+document.addEventListener(
+    "submit",
+    event => {
+
+        const form =
+            event.target;
+
+
+        /*
+           Membership form is already
+           handled separately.
+        */
+
+        if (
+            membershipModal &&
+            membershipModal.contains(form)
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            !form.classList.contains(
+                "application-form"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+           Friendly Match form currently
+           uses FormSubmit, so allow it
+           to submit normally after validation.
+        */
+
+        const requiredFields =
+            form.querySelectorAll(
+                "[required]"
+            );
+
+
+        let valid = true;
+        let firstError = null;
+
+
+        requiredFields.forEach(field => {
+
+            field.classList.remove(
+                "input-error"
+            );
+
+
+            if (
+                !field.value ||
+                !field.value.trim()
+            ) {
+
+                valid = false;
+
+                field.classList.add(
+                    "input-error"
+                );
+
+
+                if (!firstError) {
+
+                    firstError = field;
+
+                }
+
+            }
+
+        });
+
+
+        if (!valid) {
+
+            event.preventDefault();
+
+
+            if (firstError) {
+
+                firstError.focus();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
    ESCAPE KEY
-   ========================================================= */
+========================================================= */
 
 document.addEventListener(
     "keydown",
@@ -1317,17 +1772,13 @@ document.addEventListener(
             return;
         }
 
-        if (rulesModal) {
-            rulesModal.close();
-        }
 
-        if (friendlyModal) {
-            friendlyModal.close();
-        }
+        closeModal(rulesModal);
 
-        if (membershipModal) {
-            membershipModal.close();
-        }
+        closeModal(friendlyModal);
+
+        closeModal(membershipModal);
+
 
         if (
             lightbox &&
@@ -1344,7 +1795,9 @@ document.addEventListener(
                 "aria-hidden",
                 "true"
             );
+
         }
+
 
         document.body.classList.remove(
             "modal-open"
@@ -1356,51 +1809,61 @@ document.addEventListener(
 
 /* =========================================================
    DOWNLOAD BUTTON FEEDBACK
-   ========================================================= */
+========================================================= */
 
-document
-    .querySelectorAll("a[download]")
-    .forEach(button => {
+const downloadButtons =
+    document.querySelectorAll(
+        "a[download]"
+    );
 
-        button.addEventListener(
-            "click",
-            () => {
 
-                button.style.transform =
-                    "scale(.97)";
+downloadButtons.forEach(button => {
 
-                setTimeout(() => {
+    button.addEventListener(
+        "click",
+        () => {
+
+            button.style.transform =
+                "scale(.97)";
+
+
+            setTimeout(
+                () => {
 
                     button.style.transform =
                         "";
 
-                }, 180);
+                },
+                180
+            );
 
-            }
-        );
+        }
+    );
 
-    });
+});
 
 
 /* =========================================================
    CURRENT YEAR
-   ========================================================= */
+========================================================= */
 
-document
-    .querySelectorAll(
+const yearElements =
+    document.querySelectorAll(
         "[data-current-year]"
-    )
-    .forEach(element => {
+    );
 
-        element.textContent =
-            new Date().getFullYear();
 
-    });
+yearElements.forEach(element => {
+
+    element.textContent =
+        new Date().getFullYear();
+
+});
 
 
 /* =========================================================
    SMOOTH SCROLL
-   ========================================================= */
+========================================================= */
 
 document
     .querySelectorAll(
@@ -1417,23 +1880,30 @@ document
                         "href"
                     );
 
+
                 if (
                     !id ||
                     id === "#"
                 ) {
+
                     return;
+
                 }
+
 
                 const target =
                     document.querySelector(
                         id
                     );
 
+
                 if (!target) {
                     return;
                 }
 
+
                 event.preventDefault();
+
 
                 target.scrollIntoView({
                     behavior: "smooth",
@@ -1447,26 +1917,8 @@ document
 
 
 /* =========================================================
-   INITIALIZATION
-   ========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        loadHomeNotices();
-
-        initializeMembershipForms();
-
-        initializeFriendlyForms();
-
-    }
-);
-
-
-/* =========================================================
    PAGE LOADED
-   ========================================================= */
+========================================================= */
 
 window.addEventListener(
     "load",
@@ -1479,4 +1931,23 @@ window.addEventListener(
     }
 );
 
-</script>
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadHomeNotices();
+
+        setupMembershipForm();
+
+    }
+);
+
+
+/* =========================================================
+   FINISHED
+========================================================= */
