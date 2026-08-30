@@ -1,30 +1,15 @@
 /* =========================================================
    GHOPKHALI SPORTS ARENA
-   ADMIN PANEL
-   Supabase + Admin Dashboard
-========================================================= */
-
-
-/* =========================================================
-   SUPABASE CONFIG
+   ADMIN PANEL - SUPABASE
 ========================================================= */
 
 const SUPABASE_URL = "https://cmygmswzokyrmgdnuszq.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-const { createClient } = supabase;
-
-const db = createClient(
+const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
-
-
-/* =========================================================
-   GLOBAL
-========================================================= */
-
-let currentUser = null;
 
 
 /* =========================================================
@@ -33,141 +18,135 @@ let currentUser = null;
 
 const loginScreen = document.getElementById("loginScreen");
 const adminApp = document.getElementById("adminApp");
-
 const loginForm = document.getElementById("loginForm");
 const loginError = document.getElementById("loginError");
 
-const logoutButton = document.getElementById("logoutButton");
-const refreshButton = document.getElementById("refreshButton");
+const adminEmail = document.getElementById("adminEmail");
+const adminPassword = document.getElementById("adminPassword");
 
+const logoutButton = document.getElementById("logoutButton");
+
+const noticesList = document.getElementById("noticesList");
+const totalNotices = document.getElementById("totalNotices");
+
+const adminModal = document.getElementById("adminModal");
+const adminModalContent = document.getElementById("adminModalContent");
+const adminModalClose = document.getElementById("adminModalClose");
+
+const toastContainer = document.getElementById("toastContainer");
+
+const currentDate = document.getElementById("currentDate");
 const adminName = document.getElementById("adminName");
 const adminAvatar = document.getElementById("adminAvatar");
 
-const currentDate = document.getElementById("currentDate");
-
 
 /* =========================================================
-   YEAR
+   INITIALIZATION
 ========================================================= */
 
-document.querySelectorAll("[data-current-year]").forEach(el => {
-  el.textContent = new Date().getFullYear();
+document.addEventListener("DOMContentLoaded", async () => {
+
+  setCurrentYear();
+  setCurrentDate();
+
+  setupNavigation();
+  setupModal();
+  setupQuickActions();
+
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    await showAdminPanel(session);
+  } else {
+    showLoginScreen();
+  }
+
 });
-
-
-/* =========================================================
-   DATE
-========================================================= */
-
-function updateDate() {
-
-  if (!currentDate) return;
-
-  const now = new Date();
-
-  currentDate.textContent =
-    now.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    });
-}
-
-updateDate();
 
 
 /* =========================================================
    LOGIN
 ========================================================= */
 
-loginForm?.addEventListener("submit", async (e) => {
+loginForm?.addEventListener("submit", async (event) => {
 
-  e.preventDefault();
+  event.preventDefault();
 
   loginError.textContent = "";
 
-  const email =
-    document.getElementById("adminEmail").value.trim();
-
-  const password =
-    document.getElementById("adminPassword").value;
+  const email = adminEmail.value.trim();
+  const password = adminPassword.value;
 
   if (!email || !password) {
-    loginError.textContent =
-      "Please enter your email and password.";
+    loginError.textContent = "Please enter email and password.";
     return;
   }
 
-  setLoading(true);
+  const submitButton =
+    loginForm.querySelector("button[type='submit']");
 
-  try {
+  if (submitButton) {
+    submitButton.disabled = true;
+  }
 
-    const { data, error } =
-      await db.auth.signInWithPassword({
-        email,
-        password
-      });
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
 
-    if (error) {
-      throw error;
-    }
+  if (submitButton) {
+    submitButton.disabled = false;
+  }
 
-    currentUser = data.user;
-
-    showAdmin();
-
-  } catch (error) {
+  if (error) {
 
     console.error(error);
 
     loginError.textContent =
       error.message || "Login failed.";
 
-  } finally {
-
-    setLoading(false);
-
+    return;
   }
+
+  await showAdminPanel(data.session);
 
 });
 
 
 /* =========================================================
-   CHECK SESSION
+   AUTH STATE
 ========================================================= */
 
-async function checkSession() {
+supabaseClient.auth.onAuthStateChange(
+  async (event, session) => {
 
-  try {
-
-    const {
-      data: {
-        session
-      }
-    } = await db.auth.getSession();
-
-    if (session?.user) {
-
-      currentUser = session.user;
-
-      showAdmin();
-
-    } else {
-
-      showLogin();
-
+    if (event === "SIGNED_IN" && session) {
+      await showAdminPanel(session);
     }
 
-  } catch (error) {
+    if (event === "SIGNED_OUT") {
+      showLoginScreen();
+    }
 
-    console.error(
-      "Session error:",
-      error
-    );
+  }
+);
 
-    showLogin();
 
+/* =========================================================
+   SHOW LOGIN
+========================================================= */
+
+function showLoginScreen() {
+
+  if (loginScreen) {
+    loginScreen.style.display = "flex";
+  }
+
+  if (adminApp) {
+    adminApp.style.display = "none";
   }
 
 }
@@ -177,56 +156,29 @@ async function checkSession() {
    SHOW ADMIN
 ========================================================= */
 
-function showAdmin() {
+async function showAdminPanel(session) {
 
-  loginScreen.style.display = "none";
+  if (loginScreen) {
+    loginScreen.style.display = "none";
+  }
 
-  adminApp.style.display = "flex";
-
-  updateAdminProfile();
-
-  loadDashboard();
-
-}
-
-
-/* =========================================================
-   SHOW LOGIN
-========================================================= */
-
-function showLogin() {
-
-  loginScreen.style.display = "flex";
-
-  adminApp.style.display = "none";
-
-}
-
-
-/* =========================================================
-   ADMIN PROFILE
-========================================================= */
-
-function updateAdminProfile() {
-
-  if (!currentUser) return;
+  if (adminApp) {
+    adminApp.style.display = "flex";
+  }
 
   const email =
-    currentUser.email || "Administrator";
+    session?.user?.email || "Administrator";
 
   if (adminName) {
-
-    adminName.textContent =
-      email;
-
+    adminName.textContent = email;
   }
 
   if (adminAvatar) {
-
     adminAvatar.textContent =
       email.charAt(0).toUpperCase();
-
   }
+
+  await loadDashboard();
 
 }
 
@@ -235,43 +187,20 @@ function updateAdminProfile() {
    LOGOUT
 ========================================================= */
 
-logoutButton?.addEventListener(
-  "click",
-  async () => {
+logoutButton?.addEventListener("click", async () => {
 
-    try {
+  const { error } =
+    await supabaseClient.auth.signOut();
 
-      await db.auth.signOut();
-
-      currentUser = null;
-
-      showLogin();
-
-    } catch (error) {
-
-      console.error(error);
-
-    }
-
+  if (error) {
+    console.error(error);
+    showToast("Unable to sign out.", "error");
+    return;
   }
-);
 
+  showLoginScreen();
 
-/* =========================================================
-   LOADING
-========================================================= */
-
-function setLoading(status) {
-
-  const loading =
-    document.getElementById("adminLoading");
-
-  if (!loading) return;
-
-  loading.style.display =
-    status ? "flex" : "none";
-
-}
+});
 
 
 /* =========================================================
@@ -280,242 +209,119 @@ function setLoading(status) {
 
 async function loadDashboard() {
 
-  await Promise.all([
-    loadNoticeStats(),
-    loadTournamentStats(),
-    loadFixtureStats(),
-    loadApplicationStats(),
-    loadRecentActivity(),
-    loadApplicationsPreview()
-  ]);
+  await loadNotices();
 
 }
 
 
 /* =========================================================
-   NOTICE COUNT
-========================================================= */
-
-async function loadNoticeStats() {
-
-  const { count, error } =
-    await db
-      .from("notices")
-      .select("*", {
-        count: "exact",
-        head: true
-      });
-
-  if (error) {
-
-    console.error(
-      "Notice count:",
-      error
-    );
-
-    return;
-
-  }
-
-  const el =
-    document.getElementById("totalNotices");
-
-  if (el) {
-    el.textContent = count || 0;
-  }
-
-}
-
-
-/* =========================================================
-   TOURNAMENT COUNT
-========================================================= */
-
-async function loadTournamentStats() {
-
-  const { count, error } =
-    await db
-      .from("tournaments")
-      .select("*", {
-        count: "exact",
-        head: true
-      });
-
-  if (error) {
-
-    console.error(
-      "Tournament count:",
-      error
-    );
-
-    return;
-
-  }
-
-  const el =
-    document.getElementById("totalTournaments");
-
-  if (el) {
-    el.textContent = count || 0;
-  }
-
-}
-
-
-/* =========================================================
-   FIXTURE COUNT
-========================================================= */
-
-async function loadFixtureStats() {
-
-  const { count, error } =
-    await db
-      .from("fixtures")
-      .select("*", {
-        count: "exact",
-        head: true
-      });
-
-  if (error) {
-
-    console.error(
-      "Fixture count:",
-      error
-    );
-
-    return;
-
-  }
-
-  const el =
-    document.getElementById("totalFixtures");
-
-  if (el) {
-    el.textContent = count || 0;
-  }
-
-}
-
-
-/* =========================================================
-   APPLICATION COUNT
-========================================================= */
-
-async function loadApplicationStats() {
-
-  let total = 0;
-
-  const friendly =
-    await db
-      .from("friendly_applications")
-      .select("*", {
-        count: "exact",
-        head: true
-      });
-
-  if (!friendly.error) {
-    total += friendly.count || 0;
-  }
-
-  const membership =
-    await db
-      .from("membership_applications")
-      .select("*", {
-        count: "exact",
-        head: true
-      });
-
-  if (!membership.error) {
-    total += membership.count || 0;
-  }
-
-  const el =
-    document.getElementById(
-      "totalApplications"
-    );
-
-  if (el) {
-    el.textContent = total;
-  }
-
-}
-
-
-/* =========================================================
-   NOTICES
+   LOAD NOTICES
 ========================================================= */
 
 async function loadNotices() {
 
-  const list =
-    document.getElementById(
-      "noticesList"
-    );
+  if (!noticesList) return;
 
-  if (!list) return;
-
-  list.innerHTML =
-    `<div class="empty-state">
+  noticesList.innerHTML = `
+    <div class="empty-state">
+      <span>◌</span>
       <p>Loading notices...</p>
-    </div>`;
+    </div>
+  `;
 
   const {
     data,
     error
-  } = await db
+  } = await supabaseClient
     .from("notices")
     .select("*")
-    .order(
-      "created_at",
-      { ascending: false }
-    );
+    .order("created_at", {
+      ascending: false
+    });
 
   if (error) {
 
-    console.error(error);
+    console.error("Notice loading error:", error);
 
-    list.innerHTML =
-      `<div class="empty-state">
-        <p>Unable to load notices.</p>
-      </div>`;
+    noticesList.innerHTML = `
+      <div class="empty-state">
+        <span>!</span>
+        <h4>Unable to load notices</h4>
+        <p>${escapeHTML(error.message)}</p>
+      </div>
+    `;
 
     return;
-
   }
 
-  if (!data?.length) {
+  if (totalNotices) {
+    totalNotices.textContent = data?.length || 0;
+  }
 
-    list.innerHTML =
-      `<div class="empty-state">
-        <span>◉</span>
+  renderNotices(data || []);
+
+}
+
+
+/* =========================================================
+   RENDER NOTICES
+========================================================= */
+
+function renderNotices(notices) {
+
+  if (!noticesList) return;
+
+  if (!notices.length) {
+
+    noticesList.innerHTML = `
+      <div class="empty-state">
+        <span>◌</span>
         <h4>No notices yet</h4>
-        <p>Create your first notice.</p>
-      </div>`;
+        <p>Create your first GSA announcement.</p>
+      </div>
+    `;
 
     return;
-
   }
 
-  list.innerHTML =
-    data.map(notice => {
+  noticesList.innerHTML =
+    notices.map(notice => {
 
       const date =
         formatDate(notice.created_at);
 
+      const status =
+        notice.published
+          ? "PUBLISHED"
+          : "DRAFT";
+
       return `
+
         <article class="admin-list-item">
 
-          <div>
+          <div class="admin-list-main">
 
-            <span class="page-label">
-              ${escapeHTML(
-                notice.category || "GENERAL"
-              )}
-            </span>
+            <div class="admin-list-meta">
+
+              <span>
+                ${escapeHTML(
+                  notice.category || "GENERAL"
+                )}
+              </span>
+
+              <span>
+                ${date}
+              </span>
+
+              <span>
+                ${status}
+              </span>
+
+            </div>
 
             <h3>
               ${escapeHTML(
-                notice.title || ""
+                notice.title || "Untitled Notice"
               )}
             </h3>
 
@@ -525,24 +331,21 @@ async function loadNotices() {
               )}
             </p>
 
-            <small>
-              ${date}
-            </small>
-
           </div>
 
-          <div class="admin-item-actions">
+
+          <div class="admin-list-actions">
 
             <button
-              class="admin-button"
-              onclick="editNotice('${notice.id}')"
+              class="admin-button admin-button-outline"
+              data-edit-notice="${notice.id}"
             >
               Edit
             </button>
 
             <button
-              class="admin-button"
-              onclick="deleteNotice('${notice.id}')"
+              class="admin-button admin-button-danger"
+              data-delete-notice="${notice.id}"
             >
               Delete
             </button>
@@ -550,9 +353,373 @@ async function loadNotices() {
           </div>
 
         </article>
+
       `;
 
     }).join("");
+
+
+  document
+    .querySelectorAll("[data-edit-notice]")
+    .forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        const id =
+          button.dataset.editNotice;
+
+        openNoticeModal(id);
+
+      });
+
+    });
+
+
+  document
+    .querySelectorAll("[data-delete-notice]")
+    .forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        const id =
+          button.dataset.deleteNotice;
+
+        deleteNotice(id);
+
+      });
+
+    });
+
+}
+
+
+/* =========================================================
+   CREATE NOTICE
+========================================================= */
+
+async function createNotice(form) {
+
+  const formData =
+    new FormData(form);
+
+  const title =
+    formData.get("title")?.trim();
+
+  const content =
+    formData.get("content")?.trim();
+
+  const category =
+    formData.get("category")?.trim() ||
+    "GENERAL";
+
+  const published =
+    formData.get("published") === "on";
+
+
+  if (!title || !content) {
+
+    showToast(
+      "Title and content are required.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const { error } =
+    await supabaseClient
+      .from("notices")
+      .insert({
+
+        title,
+        content,
+        category,
+        published,
+        image_url: null
+
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    showToast(
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  closeModal();
+
+  showToast(
+    "Notice created successfully.",
+    "success"
+  );
+
+  await loadNotices();
+
+}
+
+
+/* =========================================================
+   OPEN NOTICE MODAL
+========================================================= */
+
+async function openNoticeModal(id = null) {
+
+  let notice = null;
+
+
+  if (id) {
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("notices")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+
+    if (error) {
+
+      console.error(error);
+
+      showToast(
+        "Unable to load notice.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    notice = data;
+
+  }
+
+
+  adminModalContent.innerHTML = `
+
+    <div class="admin-form">
+
+      <span class="page-label">
+        ${id ? "EDIT NOTICE" : "NEW NOTICE"}
+      </span>
+
+      <h2>
+        ${id ? "Edit" : "Create"}
+        <span>Notice.</span>
+      </h2>
+
+
+      <form id="noticeForm">
+
+        <div class="input-group">
+
+          <label>
+            TITLE
+          </label>
+
+          <input
+            type="text"
+            name="title"
+            value="${escapeAttribute(
+              notice?.title || ""
+            )}"
+            placeholder="Notice title"
+            required
+          >
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>
+            CATEGORY
+          </label>
+
+          <select name="category">
+
+            <option value="GENERAL"
+              ${notice?.category === "GENERAL"
+                ? "selected"
+                : ""}>
+              General
+            </option>
+
+            <option value="NOTICE"
+              ${notice?.category === "NOTICE"
+                ? "selected"
+                : ""}>
+              Notice
+            </option>
+
+            <option value="ANNOUNCEMENT"
+              ${notice?.category === "ANNOUNCEMENT"
+                ? "selected"
+                : ""}>
+              Announcement
+            </option>
+
+            <option value="SPORTS"
+              ${notice?.category === "SPORTS"
+                ? "selected"
+                : ""}>
+              Sports
+            </option>
+
+            <option value="EVENT"
+              ${notice?.category === "EVENT"
+                ? "selected"
+                : ""}>
+              Event
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>
+            CONTENT
+          </label>
+
+          <textarea
+            name="content"
+            rows="8"
+            placeholder="Write your notice..."
+            required
+          >${escapeHTML(
+            notice?.content || ""
+          )}</textarea>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label class="checkbox-label">
+
+            <input
+              type="checkbox"
+              name="published"
+              ${notice?.published !== false
+                ? "checked"
+                : ""}
+            >
+
+            Publish this notice
+
+          </label>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="admin-button admin-button-dark"
+        >
+          ${id ? "Update Notice" : "Publish Notice"} ↗
+        </button>
+
+      </form>
+
+    </div>
+
+  `;
+
+
+  const form =
+    document.getElementById("noticeForm");
+
+
+  form.addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      if (!id) {
+
+        await createNotice(form);
+
+        return;
+
+      }
+
+
+      const formData =
+        new FormData(form);
+
+      const updates = {
+
+        title:
+          formData.get("title")?.trim(),
+
+        content:
+          formData.get("content")?.trim(),
+
+        category:
+          formData.get("category") ||
+          "GENERAL",
+
+        published:
+          formData.get("published") === "on",
+
+        updated_at:
+          new Date().toISOString()
+
+      };
+
+
+      const {
+        error
+      } = await supabaseClient
+        .from("notices")
+        .update(updates)
+        .eq("id", id);
+
+
+      if (error) {
+
+        console.error(error);
+
+        showToast(
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      closeModal();
+
+      showToast(
+        "Notice updated successfully.",
+        "success"
+      );
+
+      await loadNotices();
+
+    }
+  );
+
+
+  openModal();
 
 }
 
@@ -561,527 +728,143 @@ async function loadNotices() {
    DELETE NOTICE
 ========================================================= */
 
-window.deleteNotice = async function(id) {
+async function deleteNotice(id) {
 
-  if (!confirm(
-    "Delete this notice?"
-  )) return;
+  const confirmed =
+    confirm(
+      "Are you sure you want to delete this notice?"
+    );
+
+  if (!confirmed) return;
+
 
   const {
     error
-  } = await db
+  } = await supabaseClient
     .from("notices")
     .delete()
     .eq("id", id);
 
+
   if (error) {
 
-    alert(
-      "Delete failed: " +
-      error.message
+    console.error(error);
+
+    showToast(
+      error.message,
+      "error"
     );
 
     return;
 
   }
+
 
   showToast(
-    "Notice deleted successfully."
+    "Notice deleted successfully.",
+    "success"
   );
 
-  loadNotices();
-  loadDashboard();
+  await loadNotices();
 
-};
+}
 
 
 /* =========================================================
-   EDIT NOTICE
+   QUICK ACTIONS
 ========================================================= */
 
-window.editNotice = async function(id) {
-
-  const {
-    data,
-    error
-  } = await db
-    .from("notices")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) {
-
-    alert(error.message);
-
-    return;
-
-  }
-
-  openModal(`
-    
-    <h2>Edit <span>Notice.</span></h2>
-
-    <form
-      id="editNoticeForm"
-      class="application-form"
-    >
-
-      <div class="input-group">
-
-        <label>Title</label>
-
-        <input
-          id="editNoticeTitle"
-          value="${escapeAttribute(
-            data.title || ""
-          )}"
-          required
-        >
-
-      </div>
-
-      <div class="input-group">
-
-        <label>Category</label>
-
-        <input
-          id="editNoticeCategory"
-          value="${escapeAttribute(
-            data.category || "GENERAL"
-          )}"
-        >
-
-      </div>
-
-      <div class="input-group">
-
-        <label>Content</label>
-
-        <textarea
-          id="editNoticeContent"
-          rows="6"
-          required
-        >${escapeHTML(
-          data.content || ""
-        )}</textarea>
-
-      </div>
-
-      <button
-        class="admin-button admin-button-dark"
-        type="submit"
-      >
-        Save Changes
-      </button>
-
-    </form>
-  `);
+function setupQuickActions() {
 
   document
-    .getElementById("editNoticeForm")
-    ?.addEventListener(
-      "submit",
-      async (e) => {
+    .querySelectorAll("[data-action]")
+    .forEach(button => {
 
-        e.preventDefault();
+      button.addEventListener(
+        "click",
+        () => {
 
-        const {
-          error
-        } = await db
-          .from("notices")
-          .update({
-            title:
-              document.getElementById(
-                "editNoticeTitle"
-              ).value,
+          const action =
+            button.dataset.action;
 
-            category:
-              document.getElementById(
-                "editNoticeCategory"
-              ).value,
-
-            content:
-              document.getElementById(
-                "editNoticeContent"
-              ).value,
-
-            updated_at:
-              new Date().toISOString()
-          })
-          .eq("id", id);
-
-        if (error) {
-
-          alert(error.message);
-
-          return;
+          if (action === "add-notice") {
+            openNoticeModal();
+          }
 
         }
-
-        closeModal();
-
-        showToast(
-          "Notice updated successfully."
-        );
-
-        loadNotices();
-        loadDashboard();
-
-      }
-    );
-
-};
-
-
-/* =========================================================
-   CREATE NOTICE
-========================================================= */
-
-function openCreateNotice() {
-
-  openModal(`
-
-    <h2>
-      Create <span>Notice.</span>
-    </h2>
-
-    <form
-      id="createNoticeForm"
-      class="application-form"
-    >
-
-      <div class="input-group">
-
-        <label>Title</label>
-
-        <input
-          id="newNoticeTitle"
-          placeholder="Notice title"
-          required
-        >
-
-      </div>
-
-      <div class="input-group">
-
-        <label>Category</label>
-
-        <select id="newNoticeCategory">
-
-          <option value="GENERAL">
-            General
-          </option>
-
-          <option value="NOTICE">
-            Notice
-          </option>
-
-          <option value="ANNOUNCEMENT">
-            Announcement
-          </option>
-
-          <option value="MATCH">
-            Match
-          </option>
-
-          <option value="EVENT">
-            Event
-          </option>
-
-        </select>
-
-      </div>
-
-      <div class="input-group">
-
-        <label>Content</label>
-
-        <textarea
-          id="newNoticeContent"
-          rows="7"
-          placeholder="Write notice..."
-          required
-        ></textarea>
-
-      </div>
-
-      <div class="input-group">
-
-        <label>Image URL (optional)</label>
-
-        <input
-          id="newNoticeImage"
-          placeholder="https://..."
-        >
-
-      </div>
-
-      <button
-        type="submit"
-        class="admin-button admin-button-dark"
-      >
-        Publish Notice →
-      </button>
-
-    </form>
-
-  `);
-
-
-  document
-    .getElementById("createNoticeForm")
-    ?.addEventListener(
-      "submit",
-      async (e) => {
-
-        e.preventDefault();
-
-        const {
-          error
-        } = await db
-          .from("notices")
-          .insert({
-
-            title:
-              document.getElementById(
-                "newNoticeTitle"
-              ).value.trim(),
-
-            content:
-              document.getElementById(
-                "newNoticeContent"
-              ).value.trim(),
-
-            category:
-              document.getElementById(
-                "newNoticeCategory"
-              ).value,
-
-            image_url:
-              document.getElementById(
-                "newNoticeImage"
-              ).value.trim() || null,
-
-            published: true
-
-          });
-
-        if (error) {
-
-          alert(error.message);
-
-          return;
-
-        }
-
-        closeModal();
-
-        showToast(
-          "Notice published successfully."
-        );
-
-        loadNotices();
-        loadDashboard();
-
-      }
-    );
-
-}
-
-
-/* =========================================================
-   RECENT ACTIVITY
-========================================================= */
-
-async function loadRecentActivity() {
-
-  const list =
-    document.getElementById(
-      "recentActivityList"
-    );
-
-  if (!list) return;
-
-  const {
-    data,
-    error
-  } = await db
-    .from("notices")
-    .select(
-      "title,category,created_at"
-    )
-    .order(
-      "created_at",
-      { ascending: false }
-    )
-    .limit(5);
-
-  if (error || !data?.length) return;
-
-  list.innerHTML =
-    data.map(item => `
-      
-      <div class="recent-item">
-
-        <span class="recent-dot"></span>
-
-        <div>
-
-          <strong>
-            ${escapeHTML(
-              item.title
-            )}
-          </strong>
-
-          <small>
-            ${escapeHTML(
-              item.category || "GENERAL"
-            )}
-            •
-            ${formatDate(
-              item.created_at
-            )}
-          </small>
-
-        </div>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   APPLICATION PREVIEW
-========================================================= */
-
-async function loadApplicationsPreview() {
-
-  const container =
-    document.getElementById(
-      "applicationsPreview"
-    );
-
-  if (!container) return;
-
-  const {
-    data,
-    error
-  } = await db
-    .from("friendly_applications")
-    .select("*")
-    .order(
-      "created_at",
-      { ascending: false }
-    )
-    .limit(5);
-
-  if (error || !data?.length) return;
-
-  container.innerHTML =
-    data.map(app => `
-
-      <div class="application-preview-item">
-
-        <strong>
-          ${escapeHTML(
-            app.team_name ||
-            app.team_club_name ||
-            "Team Application"
-          )}
-        </strong>
-
-        <span>
-          ${escapeHTML(
-            app.status || "pending"
-          )}
-        </span>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   PAGE NAVIGATION
-========================================================= */
-
-document
-  .querySelectorAll(
-    ".sidebar-link[data-page]"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        const page =
-          button.dataset.page;
-
-        openPage(page);
-
-      }
-    );
-
-  });
-
-
-document
-  .querySelectorAll(
-    "[data-page-link]"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        openPage(
-          button.dataset.pageLink
-        );
-
-      }
-    );
-
-  });
-
-
-function openPage(page) {
-
-  document
-    .querySelectorAll(".admin-page")
-    .forEach(section => {
-
-      section.classList.remove(
-        "active"
       );
 
     });
 
 
-  const target =
-    document.getElementById(
-      page + "Page"
-    );
+  document
+    .querySelectorAll("[data-page-link]")
+    .forEach(button => {
 
-  if (target) {
+      button.addEventListener(
+        "click",
+        () => {
 
-    target.classList.add(
-      "active"
-    );
+          const page =
+            button.dataset.pageLink;
 
-  }
+          activatePage(page);
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function setupNavigation() {
+
+  document
+    .querySelectorAll(".sidebar-link[data-page]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          activatePage(
+            button.dataset.page
+          );
+
+        }
+      );
+
+    });
 
 
   document
-    .querySelectorAll(
-      ".sidebar-link[data-page]"
-    )
+    .getElementById("refreshButton")
+    ?.addEventListener(
+      "click",
+      async () => {
+
+        await loadDashboard();
+
+        showToast(
+          "Data refreshed.",
+          "success"
+        );
+
+      }
+    );
+
+}
+
+
+function activatePage(page) {
+
+  document
+    .querySelectorAll(".sidebar-link[data-page]")
     .forEach(link => {
 
       link.classList.toggle(
@@ -1092,40 +875,25 @@ function openPage(page) {
     });
 
 
-  const title =
+  document
+    .querySelectorAll(".admin-page")
+    .forEach(section => {
+
+      section.classList.remove("active");
+
+    });
+
+
+  const pageElement =
     document.getElementById(
-      "pageTitle"
+      `${page.replace(/-([a-z])/g, (_, c) =>
+        c.toUpperCase()
+      )}Page`
     );
 
-  if (title) {
 
-    const names = {
-
-      dashboard: "Dashboard",
-
-      notices: "Notices",
-
-      gallery: "Gallery",
-
-      tournaments: "Tournaments",
-
-      fixtures: "Matches & Fixtures",
-
-      leadership: "Leadership",
-
-      committee: "Committee",
-
-      "friendly-applications":
-        "Friendly Match Applications",
-
-      "membership-applications":
-        "Membership Applications"
-
-    };
-
-    title.textContent =
-      names[page] || "Dashboard";
-
+  if (pageElement) {
+    pageElement.classList.add("active");
   }
 
 
@@ -1133,96 +901,71 @@ function openPage(page) {
     loadNotices();
   }
 
-}
 
+  const title =
+    document.getElementById("pageTitle");
 
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
+  if (title) {
 
-document
-  .querySelectorAll(
-    "[data-action]"
-  )
-  .forEach(button => {
+    const titles = {
 
-    button.addEventListener(
-      "click",
-      () => {
+      dashboard: "Dashboard",
+      notices: "Notices",
+      gallery: "Gallery",
+      tournaments: "Tournaments",
+      fixtures: "Matches & Fixtures",
+      leadership: "Leadership",
+      committee: "Committee",
+      "friendly-applications":
+        "Friendly Match Applications",
+      "membership-applications":
+        "Membership Applications"
 
-        const action =
-          button.dataset.action;
+    };
 
-        if (
-          action === "add-notice"
-        ) {
-
-          openCreateNotice();
-
-        }
-
-      }
-    );
-
-  });
-
-
-/* =========================================================
-   REFRESH
-========================================================= */
-
-refreshButton?.addEventListener(
-  "click",
-  async () => {
-
-    setLoading(true);
-
-    await loadDashboard();
-
-    const active =
-      document.querySelector(
-        ".sidebar-link.active"
-      )?.dataset.page;
-
-    if (active === "notices") {
-      await loadNotices();
-    }
-
-    setLoading(false);
-
-    showToast(
-      "Data refreshed."
-    );
+    title.textContent =
+      titles[page] || "Dashboard";
 
   }
-);
+
+}
 
 
 /* =========================================================
    MODAL
 ========================================================= */
 
-function openModal(content) {
+function setupModal() {
 
-  const modal =
-    document.getElementById(
-      "adminModal"
-    );
+  adminModalClose?.addEventListener(
+    "click",
+    closeModal
+  );
 
-  const modalContent =
-    document.getElementById(
-      "adminModalContent"
-    );
 
-  if (!modal || !modalContent)
-    return;
+  adminModal?.addEventListener(
+    "click",
+    event => {
 
-  modalContent.innerHTML =
-    content;
+      if (
+        event.target === adminModal
+      ) {
+        closeModal();
+      }
 
-  modal.classList.add("active");
+    }
+  );
 
-  modal.setAttribute(
+}
+
+
+function openModal() {
+
+  if (!adminModal) return;
+
+  adminModal.classList.add("active");
+
+  adminModal.setAttribute(
     "aria-hidden",
     "false"
   );
@@ -1232,18 +975,11 @@ function openModal(content) {
 
 function closeModal() {
 
-  const modal =
-    document.getElementById(
-      "adminModal"
-    );
+  if (!adminModal) return;
 
-  if (!modal) return;
+  adminModal.classList.remove("active");
 
-  modal.classList.remove(
-    "active"
-  );
-
-  modal.setAttribute(
+  adminModal.setAttribute(
     "aria-hidden",
     "true"
   );
@@ -1251,84 +987,50 @@ function closeModal() {
 }
 
 
-document
-  .getElementById(
-    "adminModalClose"
-  )
-  ?.addEventListener(
-    "click",
-    closeModal
-  );
-
-
-document
-  .getElementById(
-    "adminModal"
-  )
-  ?.addEventListener(
-    "click",
-    e => {
-
-      if (
-        e.target.id ===
-        "adminModal"
-      ) {
-
-        closeModal();
-
-      }
-
-    }
-  );
-
-
 /* =========================================================
    TOAST
 ========================================================= */
 
-function showToast(message) {
+function showToast(
+  message,
+  type = "success"
+) {
 
-  const container =
-    document.getElementById(
-      "toastContainer"
-    );
-
-  if (!container) return;
+  if (!toastContainer) return;
 
   const toast =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
   toast.className =
-    "toast";
+    `toast ${type}`;
 
-  toast.textContent =
-    message;
+  toast.textContent = message;
 
-  container.appendChild(
-    toast
-  );
+  toastContainer.appendChild(toast);
+
 
   setTimeout(() => {
 
     toast.remove();
 
-  }, 3000);
+  }, 3500);
 
 }
 
 
 /* =========================================================
-   HELPERS
+   DATE
 ========================================================= */
 
-function formatDate(date) {
+function setCurrentDate() {
 
-  if (!date) return "";
+  if (!currentDate) return;
 
-  return new Date(date)
-    .toLocaleDateString(
+  const date =
+    new Date();
+
+  currentDate.textContent =
+    date.toLocaleDateString(
       "en-GB",
       {
         day: "2-digit",
@@ -1340,14 +1042,59 @@ function formatDate(date) {
 }
 
 
+function setCurrentYear() {
+
+  document
+    .querySelectorAll(
+      "[data-current-year]"
+    )
+    .forEach(element => {
+
+      element.textContent =
+        new Date().getFullYear();
+
+    });
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function formatDate(dateString) {
+
+  if (!dateString) {
+    return "";
+  }
+
+  return new Date(
+    dateString
+  ).toLocaleDateString(
+    "en-GB",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    }
+  );
+
+}
+
+
 function escapeHTML(value) {
 
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+  if (value === null ||
+      value === undefined) {
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 }
 
@@ -1357,65 +1104,3 @@ function escapeAttribute(value) {
   return escapeHTML(value);
 
 }
-
-
-/* =========================================================
-   SIDEBAR MOBILE
-========================================================= */
-
-const sidebarToggle =
-  document.getElementById(
-    "sidebarToggle"
-  );
-
-const sidebar =
-  document.getElementById(
-    "adminSidebar"
-  );
-
-
-sidebarToggle?.addEventListener(
-  "click",
-  () => {
-
-    sidebar?.classList.toggle(
-      "open"
-    );
-
-  }
-);
-
-
-/* =========================================================
-   SUPABASE AUTH STATE
-========================================================= */
-
-db.auth.onAuthStateChange(
-  (event, session) => {
-
-    if (session?.user) {
-
-      currentUser =
-        session.user;
-
-      showAdmin();
-
-    } else if (
-      event === "SIGNED_OUT"
-    ) {
-
-      currentUser = null;
-
-      showLogin();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   START
-========================================================= */
-
-checkSession();
