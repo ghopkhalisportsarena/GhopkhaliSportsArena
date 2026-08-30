@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#f5f5f7"
+>
+
+<meta
+  name="description"
+  content="Ghopkhali Sports Arena — Committee and club management team."
+>
+
+<meta
+  property="og:title"
+  content="Committee | Ghopkhali Sports Arena"
+>
+
+<meta
+  property="og:description"
+  content="Meet the committee members of Ghopkhali Sports Arena."
+>
+
+<meta
+  property="og:image"
+  content="gsa.png"
+>
+
+<title>
+Committee | Ghopkhali Sports Arena
+</title>
+
+<link
+  rel="stylesheet"
+  href="style.css"
+>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header class="site-header">
+
+<nav class="navbar">
+
+<a
+  href="index.html"
+  class="brand"
+>
+
+<div class="brand-logo">
+
+<img
+  src="gsa.png"
+  alt="Ghopkhali Sports Arena Logo"
+>
+
+</div>
+
+
+<div class="brand-name">
+
+<strong>
+GHOPKHALI
+</strong>
+
+<span>
+SPORTS ARENA
+</span>
+
+</div>
+
+</a>
+
+
+
+<button
+  class="menu-toggle"
+  aria-label="Open navigation"
+  aria-expanded="false"
+>
+
+<span></span>
+<span></span>
+<span></span>
+
+</button>
+
+
+
+<div class="nav-menu">
+
+<a href="index.html">
+Home
+</a>
+
+<a href="notices.html">
+Notices
+</a>
+
+<a href="gallery.html">
+Gallery
+</a>
+
+<a href="tournaments.html">
+Tournaments
+</a>
+
+<a href="fixtures.html">
+Fixtures
+</a>
+
+<a
+  href="committee.html"
+  class="active"
+>
+Committee
+</a>
+
+<a href="index.html#club-services">
+Services
+</a>
+
+<a
+  href="index.html#contact"
+  class="nav-button"
+>
+Contact
+</a>
+
+</div>
+
+</nav>
+
+</header>
+
+
+
+<!-- ==================================================
+     MAIN
+================================================== -->
+
+<main>
+
+
+<!-- ==================================================
+     COMMITTEE HERO
+================================================== -->
+
+<section class="section committee-section">
+
+<div class="section-label">
+05 / COMMITTEE
+</div>
+
+
+<div class="section-heading">
+
+<div>
+
+<p class="section-kicker">
+CLUB MANAGEMENT
+</p>
+
+<h1>
+
+People behind
+<span>the game.</span>
+
+</h1>
+
+</div>
+
+
+<p>
+
+Meet the people responsible for
+organising, managing and developing
+Ghopkhali Sports Arena.
+
+</p>
+
+</div>
+
+
+
+<!-- ==================================================
+     COMMITTEE LIST
+================================================== -->
+
+<div
+  id="committeeList"
+  class="committee-list"
+>
+
+
+<!-- Loading -->
+
+<div class="committee-person">
+
+<span>
+01
+</span>
+
+<div>
+
+<strong>
+Loading...
+</strong>
+
+<small>
+Loading committee information
+</small>
+
+</div>
+
+<i>
+→
+</i>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+     LEADERSHIP MESSAGE
+================================================== -->
+
+<section class="dark-section section">
+
+<div class="section-label">
+GSA LEADERSHIP
+</div>
+
+
+<div class="section-heading">
+
+<div>
+
+<p class="section-kicker">
+SHARED RESPONSIBILITY
+</p>
+
+<h2>
+
+Leading with
+<span>purpose.</span>
+
+</h2>
+
+</div>
+
+
+<p>
+
+Our committee works together to create
+an organised, respectful and active
+sporting environment for everyone.
+
+</p>
+
+</div>
+
+
+<div class="coming-soon">
+
+<span class="plus">
++
+</span>
+
+<div>
+
+<strong>
+Ghopkhali Sports Arena
+</strong>
+
+<p>
+Teamwork • Discipline • Sportsmanship • Community
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- ==================================================
+     FOOTER
+================================================== -->
+
+<footer>
+
+<div class="footer-left">
+
+<div class="footer-logo">
+
+<img
+  src="gsa.png"
+  alt="GSA"
+>
+
+</div>
+
+
+<div>
+
+<strong>
+GHOPKHALI SPORTS ARENA
+</strong>
+
+<span>
+SPORTS CLUB
+</span>
+
+</div>
+
+</div>
+
+
+
+<div class="footer-links">
+
+<a href="index.html">
+Home
+</a>
+
+<a href="notices.html">
+Notices
+</a>
+
+<a href="gallery.html">
+Gallery
+</a>
+
+<a href="tournaments.html">
+Tournaments
+</a>
+
+<a href="fixtures.html">
+Fixtures
+</a>
+
+<a href="committee.html">
+Committee
+</a>
+
+<a href="index.html#contact">
+Contact
+</a>
+
+</div>
+
+
+
+<p>
+
+©
+<span data-current-year>
+2026
+</span>
+
+Ghopkhali Sports Arena.
+All rights reserved.
+
+</p>
+
+</footer>
+
+
+
+<!-- ==================================================
+     SUPABASE
+================================================== -->
+
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+
+<!-- ==================================================
+     COMMITTEE SCRIPT
+================================================== -->
+
+<script>
+
+
+/* ==================================================
+   SUPABASE CONFIG
+================================================== */
+
+const SUPABASE_URL =
+"https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+
+
+/* ==================================================
+   CURRENT YEAR
+================================================== */
+
+document
+.querySelectorAll(
+  "[data-current-year]"
+)
+.forEach(
+  element => {
+
+    element.textContent =
+      new Date().getFullYear();
+
+  }
+);
+
+
+
+/* ==================================================
+   ESCAPE HTML
+================================================== */
+
+function escapeHTML(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+
+/* ==================================================
+   LOAD COMMITTEE
+================================================== */
+
+async function loadCommittee() {
+
+  const container =
+    document.getElementById(
+      "committeeList"
+    );
+
+
+  if (!container) return;
+
+
+  try {
+
+
+    const {
+
+      data,
+
+      error
+
+    } =
+
+      await supabaseClient
+
+        .from("committee")
+
+        .select("*")
+
+        .order(
+          "display_order",
+          {
+            ascending: true
+          }
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+
+    /* ==============================================
+       NO DATA
+    ============================================== */
+
+    if (
+      !data ||
+      data.length === 0
+    ) {
+
+      container.innerHTML = `
+
+        <div class="empty-state">
+
+          <span>
+            ✦
+          </span>
+
+          <h4>
+            Committee information
+            coming soon
+          </h4>
+
+          <p>
+            The official committee
+            information will be published
+            here soon.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+
+    /* ==============================================
+       RENDER
+    ============================================== */
+
+    container.innerHTML =
+
+      data
+      .map(
+        (member, index) => {
+
+
+          const number =
+            String(
+              index + 1
+            ).padStart(
+              2,
+              "0"
+            );
+
+
+          const position =
+            member.position ||
+            member.role ||
+            "Committee Member";
+
+
+          const name =
+            member.name ||
+            member.full_name ||
+            "GSA Committee";
+
+
+          const department =
+            member.department ||
+            member.description ||
+            "Ghopkhali Sports Arena";
+
+
+          return `
+
+            <div
+              class="committee-person"
+            >
+
+              <span>
+                ${number}
+              </span>
+
+
+              <div>
+
+                <strong>
+                  ${escapeHTML(
+                    position
+                  )}
+                </strong>
+
+                <small>
+                  ${escapeHTML(
+                    name
+                  )}
+                  ${
+                    department
+                      ? " • " +
+                        escapeHTML(
+                          department
+                        )
+                      : ""
+                  }
+                </small>
+
+              </div>
+
+
+              <i>
+                →
+              </i>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+
+  } catch (error) {
+
+
+    console.error(
+      "Committee loading error:",
+      error
+    );
+
+
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <span>
+          ⚠
+        </span>
+
+        <h4>
+          Unable to load committee
+        </h4>
+
+        <p>
+          Committee information
+          could not be loaded right now.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+
+/* ==================================================
+   MOBILE MENU
+================================================== */
+
+const menuToggle =
+document.querySelector(
+  ".menu-toggle"
+);
+
+
+const navMenu =
+document.querySelector(
+  ".nav-menu"
+);
+
+
+if (
+  menuToggle &&
+  navMenu
+) {
+
+  menuToggle.addEventListener(
+    "click",
+    () => {
+
+      const opened =
+        navMenu.classList.toggle(
+          "open"
+        );
+
+
+      menuToggle.setAttribute(
+        "aria-expanded",
+        opened
+      );
+
+    }
+  );
+
+}
+
+
+
+/* ==================================================
+   START
+================================================== */
+
+loadCommittee();
+
+</script>
+
+
+</body>
+
+</html>
