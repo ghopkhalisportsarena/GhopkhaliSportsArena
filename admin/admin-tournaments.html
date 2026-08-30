@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#f5f5f7"
+>
+
+<title>Tournaments | GSA Admin</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f5f7;
+  color: #111;
+}
+
+.admin-header {
+  background: #111;
+  color: #fff;
+  padding: 18px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.brand strong {
+  display: block;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.brand span {
+  display: block;
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 3px;
+}
+
+.back-button {
+  text-decoration: none;
+  color: #111;
+  background: #fff;
+  padding: 11px 17px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 35px 20px 60px;
+}
+
+.page-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: clamp(30px, 5vw, 52px);
+  line-height: 1;
+}
+
+h1 span {
+  color: #e21b23;
+}
+
+.description {
+  margin-top: 12px;
+  color: #666;
+  max-width: 650px;
+  line-height: 1.6;
+}
+
+.add-button {
+  border: 0;
+  background: #111;
+  color: #fff;
+  padding: 13px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.add-button:hover {
+  background: #e21b23;
+}
+
+
+/* =========================================
+   TOURNAMENT GRID
+========================================= */
+
+.tournament-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.tournament-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tournament-number {
+  font-size: 42px;
+  font-weight: 900;
+  color: #eee;
+  line-height: 1;
+  margin-bottom: 18px;
+}
+
+.tournament-status {
+  display: inline-block;
+  background: #111;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 6px 9px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.tournament-card h3 {
+  font-size: 23px;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.tournament-card p {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.tournament-meta {
+  border-top: 1px solid #eee;
+  padding-top: 14px;
+  color: #666;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.small-button {
+  flex: 1;
+  border: 0;
+  padding: 10px;
+  border-radius: 7px;
+  background: #eee;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.small-button.delete {
+  background: #ffe6e6;
+  color: #c40000;
+}
+
+.empty {
+  grid-column: 1 / -1;
+  background: #fff;
+  border: 1px dashed #ccc;
+  border-radius: 14px;
+  padding: 60px 20px;
+  text-align: center;
+  color: #777;
+}
+
+.empty strong {
+  display: block;
+  color: #111;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px;
+  color: #777;
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 999;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 580px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.modal-box h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: .5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #111;
+}
+
+.submit-button {
+  width: 100%;
+  border: 0;
+  background: #111;
+  color: #fff;
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.submit-button:hover {
+  background: #e21b23;
+}
+
+.message {
+  margin-top: 15px;
+  font-size: 13px;
+  text-align: center;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+  .tournament-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .admin-header {
+    padding: 14px 16px;
+  }
+
+  .brand img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .back-button {
+    padding: 9px 12px;
+  }
+
+  main {
+    padding: 25px 15px 50px;
+  }
+
+  .page-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .add-button {
+    width: 100%;
+  }
+
+  .tournament-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header class="admin-header">
+
+  <div class="brand">
+
+    <img
+      src="gsa.png"
+      alt="GSA"
+    >
+
+    <div>
+
+      <strong>
+        GSA ADMIN
+      </strong>
+
+      <span>
+        GHOPKHALI SPORTS ARENA
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <a
+    href="admin-dashboard.html"
+    class="back-button"
+  >
+    ← Dashboard
+  </a>
+
+</header>
+
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main>
+
+
+  <div class="page-top">
+
+    <div>
+
+      <div class="label">
+        GSA ADMINISTRATION / TOURNAMENTS
+      </div>
+
+      <h1>
+        Tournament <span>Calendar.</span>
+      </h1>
+
+      <p class="description">
+        Create and manage Ghopkhali Sports Arena
+        tournaments, competition schedules and
+        upcoming sporting events.
+      </p>
+
+    </div>
+
+
+    <button
+      class="add-button"
+      id="openAddButton"
+    >
+      + Add Tournament
+    </button>
+
+  </div>
+
+
+
+  <section
+    class="tournament-grid"
+    id="tournamentGrid"
+  >
+
+    <div class="loading">
+      Loading tournaments...
+    </div>
+
+  </section>
+
+
+</main>
+
+
+
+<!-- =========================================
+     ADD TOURNAMENT MODAL
+========================================= -->
+
+<div
+  class="modal"
+  id="tournamentModal"
+>
+
+  <div class="modal-box">
+
+    <button
+      class="close"
+      id="closeModal"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+
+    <div class="label">
+      CONTENT MANAGEMENT
+    </div>
+
+
+    <h2>
+      Add Tournament
+    </h2>
+
+
+    <form id="tournamentForm">
+
+
+      <div class="form-group">
+
+        <label>
+          TOURNAMENT NAME
+        </label>
+
+        <input
+          type="text"
+          id="tournamentName"
+          placeholder="e.g. GSA Mini Football Tournament"
+          required
+        >
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label>
+          SUBTITLE / SEASON
+        </label>
+
+        <input
+          type="text"
+          id="tournamentSubtitle"
+          placeholder="e.g. Season 2026"
+        >
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label>
+          STATUS
+        </label>
+
+        <select id="tournamentStatus">
+
+          <option value="UPCOMING">
+            UPCOMING
+          </option>
+
+          <option value="PLANNED">
+            PLANNED
+          </option>
+
+          <option value="ONGOING">
+            ONGOING
+          </option>
+
+          <option value="COMPLETED">
+            COMPLETED
+          </option>
+
+          <option value="CANCELLED">
+            CANCELLED
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label>
+          TOURNAMENT DATE
+        </label>
+
+        <input
+          type="date"
+          id="tournamentDate"
+        >
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label>
+          VENUE
+        </label>
+
+        <input
+          type="text"
+          id="tournamentVenue"
+          placeholder="Enter venue"
+        >
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label>
+          DESCRIPTION
+        </label>
+
+        <textarea
+          id="tournamentDescription"
+          rows="5"
+          placeholder="Enter tournament details..."
+        ></textarea>
+
+      </div>
+
+
+
+      <button
+        type="submit"
+        class="submit-button"
+      >
+        Add Tournament
+      </button>
+
+
+      <div
+        class="message"
+        id="formMessage"
+      ></div>
+
+
+    </form>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================================
+     SUPABASE
+========================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+/* =========================================
+   SUPABASE CONFIG
+========================================= */
+
+const SUPABASE_URL =
+  "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const tournamentGrid =
+  document.getElementById(
+    "tournamentGrid"
+  );
+
+
+const modal =
+  document.getElementById(
+    "tournamentModal"
+  );
+
+
+const openButton =
+  document.getElementById(
+    "openAddButton"
+  );
+
+
+const closeButton =
+  document.getElementById(
+    "closeModal"
+  );
+
+
+const form =
+  document.getElementById(
+    "tournamentForm"
+  );
+
+
+const message =
+  document.getElementById(
+    "formMessage"
+  );
+
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+openButton.addEventListener(
+  "click",
+  () => {
+
+    modal.classList.add(
+      "open"
+    );
+
+  }
+);
+
+
+closeButton.addEventListener(
+  "click",
+  () => {
+
+    modal.classList.remove(
+      "open"
+    );
+
+  }
+);
+
+
+modal.addEventListener(
+  "click",
+  (event) => {
+
+    if (
+      event.target === modal
+    ) {
+
+      modal.classList.remove(
+        "open"
+      );
+
+    }
+
+  }
+);
+
+
+
+/* =========================================
+   LOAD TOURNAMENTS
+========================================= */
+
+async function loadTournaments() {
+
+  tournamentGrid.innerHTML = `
+    <div class="loading">
+      Loading tournaments...
+    </div>
+  `;
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("tournaments")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    if (
+      !data ||
+      data.length === 0
+    ) {
+
+      tournamentGrid.innerHTML = `
+        <div class="empty">
+
+          <strong>
+            No tournaments yet
+          </strong>
+
+          <p>
+            Click "Add Tournament" to create
+            your first tournament.
+          </p>
+
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    tournamentGrid.innerHTML =
+      data
+        .map(
+          renderTournament
+        )
+        .join("");
+
+
+  } catch (error) {
+
+    console.error(
+      "Tournament loading error:",
+      error
+    );
+
+
+    tournamentGrid.innerHTML = `
+      <div class="empty">
+
+        <strong>
+          Could not load tournaments
+        </strong>
+
+        <p>
+          ${escapeHTML(
+            error.message
+          )}
+        </p>
+
+      </div>
+    `;
+
+  }
+
+}
+
+
+
+/* =========================================
+   RENDER TOURNAMENT
+========================================= */
+
+function renderTournament(
+  tournament,
+  index
+) {
+
+  const id =
+    escapeAttribute(
+      tournament.id
+    );
+
+
+  const name =
+    escapeHTML(
+      tournament.name ||
+      tournament.title ||
+      "Tournament"
+    );
+
+
+  const subtitle =
+    escapeHTML(
+      tournament.subtitle ||
+      tournament.season ||
+      ""
+    );
+
+
+  const status =
+    escapeHTML(
+      tournament.status ||
+      "UPCOMING"
+    );
+
+
+  const venue =
+    escapeHTML(
+      tournament.venue ||
+      "Venue to be announced"
+    );
+
+
+  const description =
+    escapeHTML(
+      tournament.description ||
+      ""
+    );
+
+
+  let dateText =
+    "Date to be announced";
+
+
+  if (
+    tournament.date ||
+    tournament.tournament_date ||
+    tournament.start_date
+  ) {
+
+    const rawDate =
+      tournament.date ||
+      tournament.tournament_date ||
+      tournament.start_date;
+
+
+    const date =
+      new Date(rawDate);
+
+
+    if (
+      !isNaN(
+        date.getTime()
+      )
+    ) {
+
+      dateText =
+        date.toLocaleDateString(
+          "en-US",
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+          }
+        );
+
+    }
+
+  }
+
+
+  const number =
+    String(
+      index + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  return `
+
+    <article
+      class="tournament-card"
+    >
+
+      <div class="tournament-number">
+        ${number}
+      </div>
+
+
+      <span class="tournament-status">
+        ${status}
+      </span>
+
+
+      <h3>
+        ${name}
+      </h3>
+
+
+      ${
+        subtitle
+          ? `<p>${subtitle}</p>`
+          : ""
+      }
+
+
+      <div class="tournament-meta">
+
+        <strong>
+          Date:
+        </strong>
+
+        ${dateText}
+
+        <br>
+
+        <strong>
+          Venue:
+        </strong>
+
+        ${venue}
+
+        ${
+          description
+            ? `<br><br>${description}`
+            : ""
+        }
+
+      </div>
+
+
+      <div class="card-actions">
+
+        <button
+          class="small-button delete"
+          onclick="deleteTournament('${id}')"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+
+/* =========================================
+   ADD TOURNAMENT
+========================================= */
+
+form.addEventListener(
+  "submit",
+  async (event) => {
+
+    event.preventDefault();
+
+
+    const name =
+      document
+        .getElementById(
+          "tournamentName"
+        )
+        .value
+        .trim();
+
+
+    const subtitle =
+      document
+        .getElementById(
+          "tournamentSubtitle"
+        )
+        .value
+        .trim();
+
+
+    const status =
+      document
+        .getElementById(
+          "tournamentStatus"
+        )
+        .value;
+
+
+    const date =
+      document
+        .getElementById(
+          "tournamentDate"
+        )
+        .value;
+
+
+    const venue =
+      document
+        .getElementById(
+          "tournamentVenue"
+        )
+        .value
+        .trim();
+
+
+    const description =
+      document
+        .getElementById(
+          "tournamentDescription"
+        )
+        .value
+        .trim();
+
+
+    if (!name) {
+
+      message.textContent =
+        "Tournament name is required.";
+
+      return;
+
+    }
+
+
+    message.textContent =
+      "Saving tournament...";
+
+
+    try {
+
+      const {
+        error
+      } = await supabaseClient
+        .from("tournaments")
+        .insert({
+
+          name,
+
+          subtitle,
+
+          status,
+
+          tournament_date:
+            date || null,
+
+          venue,
+
+          description
+
+        });
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      message.textContent =
+        "Tournament added successfully.";
+
+
+      form.reset();
+
+
+      await loadTournaments();
+
+
+      setTimeout(
+        () => {
+
+          modal.classList.remove(
+            "open"
+          );
+
+          message.textContent =
+            "";
+
+        },
+        800
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Add tournament error:",
+        error
+      );
+
+
+      message.textContent =
+        error.message ||
+        "Failed to add tournament.";
+
+    }
+
+  }
+);
+
+
+
+/* =========================================
+   DELETE TOURNAMENT
+========================================= */
+
+window.deleteTournament =
+  async function(id) {
+
+    const confirmed =
+      confirm(
+        "Are you sure you want to delete this tournament?"
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    try {
+
+      const {
+        error
+      } = await supabaseClient
+        .from("tournaments")
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      await loadTournaments();
+
+
+    } catch (error) {
+
+      console.error(
+        "Delete tournament error:",
+        error
+      );
+
+
+      alert(
+        error.message ||
+        "Failed to delete tournament."
+      );
+
+    }
+
+  };
+
+
+
+/* =========================================
+   SECURITY HELPERS
+========================================= */
+
+function escapeHTML(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+function escapeAttribute(value) {
+
+  return escapeHTML(
+    value
+  );
+
+}
+
+
+
+/* =========================================
+   START
+========================================= */
+
+loadTournaments();
+
+</script>
+
+
+</body>
+
+</html>
