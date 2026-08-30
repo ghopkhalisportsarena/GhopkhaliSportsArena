@@ -1,0 +1,2987 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#f5f5f7"
+>
+
+<meta
+  name="description"
+  content="Ghopkhali Sports Arena — Membership Applications Admin"
+>
+
+<title>Membership Applications | GSA Admin</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background: #f5f5f7;
+  color: #111;
+  min-height: 100vh;
+}
+
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.admin-header {
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  background: rgba(255,255,255,.94);
+
+  backdrop-filter: blur(12px);
+
+  border-bottom: 1px solid #ddd;
+
+  padding: 16px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+
+.brand {
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  text-decoration: none;
+  color: #111;
+}
+
+
+.brand img {
+
+  width: 48px;
+  height: 48px;
+
+  object-fit: contain;
+
+  border-radius: 50%;
+}
+
+
+.brand-text {
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+.brand-text strong {
+
+  font-size: 15px;
+  letter-spacing: .5px;
+}
+
+
+.brand-text span {
+
+  font-size: 11px;
+  color: #777;
+
+  letter-spacing: 1.5px;
+}
+
+
+.header-actions {
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.header-button {
+
+  border: 1px solid #ccc;
+
+  background: white;
+
+  color: #111;
+
+  padding: 10px 15px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: .2s;
+}
+
+
+.header-button:hover {
+
+  background: #111;
+  color: white;
+
+}
+
+
+.logout-button {
+
+  background: #111;
+  color: white;
+
+  border-color: #111;
+
+}
+
+
+.logout-button:hover {
+
+  background: #333;
+
+}
+
+
+/* ==================================================
+   MAIN
+================================================== */
+
+main {
+
+  width: 100%;
+
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 35px 24px 60px;
+}
+
+
+/* ==================================================
+   PAGE HEADER
+================================================== */
+
+.page-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-end;
+
+  gap: 20px;
+
+  margin-bottom: 30px;
+}
+
+
+.page-label {
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  color: #777;
+
+  margin-bottom: 8px;
+}
+
+
+.page-header h1 {
+
+  font-size: clamp(32px, 5vw, 52px);
+
+  line-height: 1;
+
+  letter-spacing: -2px;
+}
+
+
+.page-header h1 span {
+
+  color: #e00000;
+}
+
+
+.page-description {
+
+  max-width: 550px;
+
+  margin-top: 12px;
+
+  color: #666;
+
+  line-height: 1.6;
+
+  font-size: 14px;
+}
+
+
+/* ==================================================
+   ACTIONS
+================================================== */
+
+.page-actions {
+
+  display: flex;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+
+.action-button {
+
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 8px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  background: #111;
+
+  color: white;
+
+  transition: .2s;
+}
+
+
+.action-button:hover {
+
+  transform: translateY(-1px);
+
+  background: #333;
+
+}
+
+
+.action-button.light {
+
+  background: white;
+
+  color: #111;
+
+  border: 1px solid #ccc;
+
+}
+
+
+/* ==================================================
+   STATS
+================================================== */
+
+.stats-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 15px;
+
+  margin-bottom: 25px;
+}
+
+
+.stat-card {
+
+  background: white;
+
+  border: 1px solid #ddd;
+
+  border-radius: 14px;
+
+  padding: 22px;
+
+}
+
+
+.stat-card span {
+
+  display: block;
+
+  color: #777;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 8px;
+}
+
+
+.stat-card strong {
+
+  font-size: 32px;
+
+  line-height: 1;
+}
+
+
+/* ==================================================
+   SEARCH
+================================================== */
+
+.toolbar {
+
+  background: white;
+
+  border: 1px solid #ddd;
+
+  border-radius: 14px;
+
+  padding: 15px;
+
+  margin-bottom: 20px;
+
+  display: flex;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+
+.search-box {
+
+  flex: 1;
+
+  min-width: 220px;
+
+  position: relative;
+}
+
+
+.search-box input {
+
+  width: 100%;
+
+  border: 1px solid #ccc;
+
+  border-radius: 8px;
+
+  padding: 12px 14px;
+
+  outline: none;
+
+  font-size: 14px;
+}
+
+
+.search-box input:focus {
+
+  border-color: #111;
+
+}
+
+
+.filter-select {
+
+  border: 1px solid #ccc;
+
+  border-radius: 8px;
+
+  padding: 12px;
+
+  background: white;
+
+  min-width: 170px;
+
+  outline: none;
+}
+
+
+/* ==================================================
+   APPLICATION LIST
+================================================== */
+
+.applications-container {
+
+  display: grid;
+
+  gap: 15px;
+}
+
+
+.application-card {
+
+  background: white;
+
+  border: 1px solid #ddd;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+}
+
+
+.application-top {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 15px;
+
+  padding: 20px;
+
+  border-bottom: 1px solid #eee;
+}
+
+
+.application-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+}
+
+
+.application-number {
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 10px;
+
+  background: #111;
+
+  color: white;
+
+  display: grid;
+
+  place-items: center;
+
+  font-weight: 800;
+
+  font-size: 13px;
+}
+
+
+.application-title h3 {
+
+  font-size: 18px;
+
+  margin-bottom: 4px;
+}
+
+
+.application-title p {
+
+  font-size: 12px;
+
+  color: #777;
+}
+
+
+.status {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 6px 10px;
+
+  border-radius: 50px;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+
+  white-space: nowrap;
+}
+
+
+.status.pending {
+
+  background: #fff4d6;
+
+  color: #8a5a00;
+}
+
+
+.status.approved {
+
+  background: #e4f8e9;
+
+  color: #18723b;
+}
+
+
+.status.rejected {
+
+  background: #ffe5e5;
+
+  color: #a00000;
+}
+
+
+.application-body {
+
+  padding: 20px;
+}
+
+
+.application-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+
+.info-item {
+
+  min-width: 0;
+}
+
+
+.info-item.full {
+
+  grid-column: 1 / -1;
+}
+
+
+.info-label {
+
+  display: block;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+
+  color: #888;
+
+  margin-bottom: 5px;
+}
+
+
+.info-value {
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  word-break: break-word;
+}
+
+
+.application-footer {
+
+  padding: 15px 20px;
+
+  border-top: 1px solid #eee;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+
+.submitted-date {
+
+  color: #888;
+
+  font-size: 12px;
+}
+
+
+.application-actions {
+
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+}
+
+
+.small-button {
+
+  border: 1px solid #ccc;
+
+  background: white;
+
+  padding: 8px 12px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+.small-button:hover {
+
+  background: #111;
+
+  color: white;
+
+  border-color: #111;
+}
+
+
+.small-button.approve {
+
+  background: #111;
+
+  color: white;
+
+  border-color: #111;
+}
+
+
+.small-button.reject {
+
+  color: #a00000;
+
+}
+
+
+.small-button.delete {
+
+  color: #a00000;
+
+  border-color: #e5bcbc;
+}
+
+
+/* ==================================================
+   EMPTY / LOADING
+================================================== */
+
+.empty-state {
+
+  background: white;
+
+  border: 1px solid #ddd;
+
+  border-radius: 14px;
+
+  padding: 60px 20px;
+
+  text-align: center;
+
+  color: #777;
+}
+
+
+.empty-state-icon {
+
+  font-size: 35px;
+
+  margin-bottom: 12px;
+}
+
+
+.empty-state h3 {
+
+  color: #111;
+
+  margin-bottom: 7px;
+}
+
+
+.loading {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+}
+
+
+.spinner {
+
+  width: 20px;
+  height: 20px;
+
+  border: 3px solid #ddd;
+
+  border-top-color: #111;
+
+  border-radius: 50%;
+
+  animation: spin .7s linear infinite;
+}
+
+
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* ==================================================
+   MODAL
+================================================== */
+
+.modal {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 999;
+
+  background: rgba(0,0,0,.6);
+
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+}
+
+
+.modal.open {
+
+  display: flex;
+}
+
+
+.modal-box {
+
+  width: 100%;
+
+  max-width: 750px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: white;
+
+  border-radius: 16px;
+
+  padding: 25px;
+
+  position: relative;
+}
+
+
+.modal-close {
+
+  position: absolute;
+
+  top: 15px;
+
+  right: 15px;
+
+  width: 36px;
+  height: 36px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #eee;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+
+.modal-box h2 {
+
+  font-size: 30px;
+
+  margin-bottom: 25px;
+}
+
+
+.modal-box h2 span {
+
+  color: #e00000;
+}
+
+
+.detail-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
+
+  gap: 18px;
+
+  margin-bottom: 25px;
+}
+
+
+.detail-item {
+
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid #eee;
+}
+
+
+.detail-item.full {
+
+  grid-column: 1 / -1;
+}
+
+
+.detail-item label {
+
+  display: block;
+
+  font-size: 10px;
+
+  color: #888;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 5px;
+}
+
+
+.detail-item div {
+
+  line-height: 1.6;
+
+  font-size: 14px;
+
+  white-space: pre-wrap;
+
+  word-break: break-word;
+}
+
+
+.modal-actions {
+
+  display: flex;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #eee;
+}
+
+
+/* ==================================================
+   TOAST
+================================================== */
+
+.toast-container {
+
+  position: fixed;
+
+  right: 20px;
+
+  bottom: 20px;
+
+  z-index: 2000;
+
+  display: grid;
+
+  gap: 10px;
+}
+
+
+.toast {
+
+  background: #111;
+
+  color: white;
+
+  padding: 13px 17px;
+
+  border-radius: 9px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+
+  font-size: 13px;
+
+  animation: toastIn .25s ease;
+}
+
+
+.toast.error {
+
+  background: #a00000;
+}
+
+
+.toast.success {
+
+  background: #111;
+}
+
+
+@keyframes toastIn {
+
+  from {
+
+    opacity: 0;
+
+    transform: translateY(10px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+  }
+
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 850px) {
+
+  .page-header {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+  }
+
+  .stats-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .application-grid {
+
+    grid-template-columns: 1fr 1fr;
+
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .admin-header {
+
+    padding: 12px 15px;
+
+  }
+
+  .brand-text {
+
+    display: none;
+
+  }
+
+  main {
+
+    padding: 25px 15px 45px;
+
+  }
+
+  .page-header h1 {
+
+    font-size: 35px;
+
+  }
+
+  .application-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .detail-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .detail-item.full {
+
+    grid-column: auto;
+
+  }
+
+  .application-top {
+
+    flex-direction: column;
+
+  }
+
+}
+
+
+/* ==================================================
+   PRINT
+================================================== */
+
+@media print {
+
+  .admin-header,
+  .page-actions,
+  .toolbar,
+  .application-actions {
+
+    display: none !important;
+
+  }
+
+  body {
+
+    background: white;
+
+  }
+
+  main {
+
+    max-width: none;
+
+    padding: 0;
+
+  }
+
+  .application-card {
+
+    break-inside: avoid;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header class="admin-header">
+
+<a
+  href="admin-dashboard.html"
+  class="brand"
+>
+
+<img
+  src="gsa.png"
+  alt="Ghopkhali Sports Arena"
+>
+
+<div class="brand-text">
+
+<strong>
+GHOPKHALI SPORTS ARENA
+</strong>
+
+<span>
+ADMINISTRATION
+</span>
+
+</div>
+
+</a>
+
+
+<div class="header-actions">
+
+<a
+  href="admin-dashboard.html"
+  class="header-button"
+>
+Dashboard
+</a>
+
+<button
+  class="header-button logout-button"
+  id="logoutButton"
+>
+Logout
+</button>
+
+</div>
+
+</header>
+
+
+
+<!-- ==================================================
+     MAIN
+================================================== -->
+
+<main>
+
+
+<!-- ==================================================
+     PAGE HEADER
+================================================== -->
+
+<section class="page-header">
+
+<div>
+
+<div class="page-label">
+GSA ADMIN / APPLICATIONS
+</div>
+
+<h1>
+Membership
+<span>Applications.</span>
+</h1>
+
+<p class="page-description">
+
+Review, manage and process membership
+applications submitted through the official
+Ghopkhali Sports Arena website.
+
+</p>
+
+</div>
+
+
+<div class="page-actions">
+
+<button
+  class="action-button light"
+  id="refreshButton"
+>
+↻ Refresh
+</button>
+
+<button
+  class="action-button"
+  id="printButton"
+>
+Print
+</button>
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+     STATS
+================================================== -->
+
+<section class="stats-grid">
+
+<div class="stat-card">
+
+<span>
+TOTAL APPLICATIONS
+</span>
+
+<strong id="totalApplications">
+0
+</strong>
+
+</div>
+
+
+<div class="stat-card">
+
+<span>
+PENDING
+</span>
+
+<strong id="pendingApplications">
+0
+</strong>
+
+</div>
+
+
+<div class="stat-card">
+
+<span>
+APPROVED
+</span>
+
+<strong id="approvedApplications">
+0
+</strong>
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+     TOOLBAR
+================================================== -->
+
+<section class="toolbar">
+
+<div class="search-box">
+
+<input
+  type="search"
+  id="searchInput"
+  placeholder="Search by name, mobile, email..."
+>
+
+</div>
+
+
+<select
+  class="filter-select"
+  id="statusFilter"
+>
+
+<option value="all">
+All Applications
+</option>
+
+<option value="pending">
+Pending
+</option>
+
+<option value="approved">
+Approved
+</option>
+
+<option value="rejected">
+Rejected
+</option>
+
+</select>
+
+</section>
+
+
+
+<!-- ==================================================
+     APPLICATIONS
+================================================== -->
+
+<section
+  id="applicationsContainer"
+  class="applications-container"
+>
+
+<div class="empty-state">
+
+<div class="loading">
+
+<div class="spinner"></div>
+
+<span>
+Loading membership applications...
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+
+<!-- ==================================================
+     DETAILS MODAL
+================================================== -->
+
+<div
+  class="modal"
+  id="detailsModal"
+  aria-hidden="true"
+>
+
+<div class="modal-box">
+
+<button
+  class="modal-close"
+  id="modalClose"
+  aria-label="Close"
+>
+×
+</button>
+
+
+<div class="page-label">
+MEMBERSHIP APPLICATION
+</div>
+
+<h2>
+Application
+<span>Details.</span>
+</h2>
+
+
+<div
+  id="modalDetails"
+  class="detail-grid"
+>
+</div>
+
+
+<div
+  id="modalActions"
+  class="modal-actions"
+>
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ==================================================
+     TOAST
+================================================== -->
+
+<div
+  id="toastContainer"
+  class="toast-container"
+></div>
+
+
+
+<!-- ==================================================
+     SUPABASE
+================================================== -->
+
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE CONFIG
+========================================================= */
+
+const SUPABASE_URL =
+  "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+let applications = [];
+
+let currentApplication = null;
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const container =
+  document.getElementById(
+    "applicationsContainer"
+  );
+
+const searchInput =
+  document.getElementById(
+    "searchInput"
+  );
+
+const statusFilter =
+  document.getElementById(
+    "statusFilter"
+  );
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    setupEvents();
+
+    await checkSession();
+
+  }
+);
+
+
+/* =========================================================
+   SESSION
+========================================================= */
+
+async function checkSession() {
+
+  try {
+
+    const {
+      data: {
+        session
+      },
+      error
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    if (!session) {
+
+      showLoginMessage();
+
+      return;
+
+    }
+
+
+    await loadApplications();
+
+  } catch (error) {
+
+    console.error(
+      "Session error:",
+      error
+    );
+
+    showError(
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD APPLICATIONS
+========================================================= */
+
+async function loadApplications() {
+
+  showLoading();
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(
+          "membership_applications"
+        )
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    applications =
+      data || [];
+
+
+    updateStats();
+
+    renderApplications();
+
+
+  } catch (error) {
+
+    console.error(
+      "Load applications error:",
+      error
+    );
+
+
+    showError(
+      error.message ||
+      "Could not load membership applications."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderApplications() {
+
+  const search =
+    searchInput
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const status =
+    statusFilter.value;
+
+
+  const filtered =
+    applications.filter(
+      application => {
+
+        const searchable =
+          [
+
+            application.full_name_bangla,
+
+            application.full_name_english,
+
+            application.full_name,
+
+            application.mobile_number,
+
+            application.email,
+
+            application.phone_number,
+
+            application.profession
+
+          ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+
+        const matchesSearch =
+          !search ||
+          searchable.includes(search);
+
+
+        const applicationStatus =
+          String(
+            application.status ||
+            "pending"
+          ).toLowerCase();
+
+
+        const matchesStatus =
+          status === "all" ||
+          applicationStatus === status;
+
+
+        return (
+          matchesSearch &&
+          matchesStatus
+        );
+
+      }
+    );
+
+
+  if (!filtered.length) {
+
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <div class="empty-state-icon">
+          ✦
+        </div>
+
+        <h3>
+          No applications found
+        </h3>
+
+        <p>
+          There are no membership applications
+          matching your search.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    filtered
+      .map(
+        (
+          application,
+          index
+        ) =>
+          renderApplication(
+            application,
+            index
+          )
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   APPLICATION CARD
+========================================================= */
+
+function renderApplication(
+  application,
+  index
+) {
+
+  const name =
+    application.full_name_english ||
+    application.full_name ||
+    application.full_name_bangla ||
+    "Unnamed Applicant";
+
+
+  const mobile =
+    application.mobile_number ||
+    application.phone_number ||
+    "Not provided";
+
+
+  const email =
+    application.email ||
+    "Not provided";
+
+
+  const profession =
+    application.profession ||
+    "Not provided";
+
+
+  const sports =
+    application.sports ||
+    application.sports_interests ||
+    application.interested_sports ||
+    "Not provided";
+
+
+  const status =
+    String(
+      application.status ||
+      "pending"
+    ).toLowerCase();
+
+
+  return `
+
+    <article
+      class="application-card"
+    >
+
+      <div
+        class="application-top"
+      >
+
+        <div
+          class="application-title"
+        >
+
+          <div
+            class="application-number"
+          >
+            ${String(index + 1).padStart(2, "0")}
+          </div>
+
+          <div>
+
+            <h3>
+              ${escapeHTML(name)}
+            </h3>
+
+            <p>
+              ${escapeHTML(mobile)}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <span
+          class="status ${statusClass(status)}"
+        >
+          ${status.toUpperCase()}
+        </span>
+
+      </div>
+
+
+      <div
+        class="application-body"
+      >
+
+        <div
+          class="application-grid"
+        >
+
+          <div class="info-item">
+
+            <span class="info-label">
+              MOBILE
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(mobile)}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              EMAIL
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(email)}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              PROFESSION
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(profession)}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              DATE OF BIRTH
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                application.date_of_birth ||
+                application.dob ||
+                "Not provided"
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              SPORTS
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                formatValue(sports)
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              BLOOD GROUP
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                application.blood_group ||
+                "Not provided"
+              )}
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="application-footer"
+      >
+
+        <span
+          class="submitted-date"
+        >
+          Submitted:
+          ${formatDate(
+            application.created_at
+          )}
+        </span>
+
+
+        <div
+          class="application-actions"
+        >
+
+          <button
+            class="small-button"
+            onclick="viewApplication('${application.id}')"
+          >
+            View Details
+          </button>
+
+
+          ${
+            status !== "approved"
+              ? `
+                <button
+                  class="small-button approve"
+                  onclick="updateStatus('${application.id}', 'approved')"
+                >
+                  Approve
+                </button>
+              `
+              : ""
+          }
+
+
+          ${
+            status !== "rejected"
+              ? `
+                <button
+                  class="small-button reject"
+                  onclick="updateStatus('${application.id}', 'rejected')"
+                >
+                  Reject
+                </button>
+              `
+              : ""
+          }
+
+
+          <button
+            class="small-button delete"
+            onclick="deleteApplication('${application.id}')"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   VIEW APPLICATION
+========================================================= */
+
+window.viewApplication =
+  function(id) {
+
+    const application =
+      applications.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!application) {
+
+      toast(
+        "Application not found.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    currentApplication =
+      application;
+
+
+    const details =
+      document.getElementById(
+        "modalDetails"
+      );
+
+
+    details.innerHTML =
+      buildDetails(application);
+
+
+    const actions =
+      document.getElementById(
+        "modalActions"
+      );
+
+
+    const status =
+      String(
+        application.status ||
+        "pending"
+      ).toLowerCase();
+
+
+    actions.innerHTML = `
+
+      ${
+        status !== "approved"
+          ? `
+            <button
+              class="action-button"
+              onclick="updateStatus('${application.id}', 'approved'); closeModal();"
+            >
+              Approve Application
+            </button>
+          `
+          : ""
+      }
+
+
+      ${
+        status !== "rejected"
+          ? `
+            <button
+              class="action-button light"
+              onclick="updateStatus('${application.id}', 'rejected'); closeModal();"
+            >
+              Reject Application
+            </button>
+          `
+          : ""
+      }
+
+
+      <button
+        class="action-button light"
+        onclick="window.print()"
+      >
+        Print
+      </button>
+
+    `;
+
+
+    openModal();
+
+  };
+
+
+/* =========================================================
+   BUILD DETAILS
+========================================================= */
+
+function buildDetails(
+  application
+) {
+
+  const ignored = [
+    "id",
+    "created_at",
+    "updated_at",
+    "status"
+  ];
+
+
+  const labels = {
+
+    full_name_bangla:
+      "পূর্ণ নাম (বাংলায়)",
+
+    full_name_english:
+      "Full Name (English)",
+
+    full_name:
+      "Full Name",
+
+    father_name:
+      "পিতার নাম",
+
+    mother_name:
+      "মাতার নাম",
+
+    date_of_birth:
+      "জন্ম তারিখ",
+
+    dob:
+      "Date of Birth",
+
+    blood_group:
+      "রক্তের গ্রুপ",
+
+    profession:
+      "পেশা",
+
+    nid:
+      "NID",
+
+    nid_or_birth_registration:
+      "NID / Birth Registration",
+
+    mobile_number:
+      "মোবাইল নম্বর",
+
+    phone_number:
+      "Phone Number",
+
+    alternative_mobile_number:
+      "বিকল্প মোবাইল",
+
+    email:
+      "Email",
+
+    current_address:
+      "বর্তমান ঠিকানা",
+
+    permanent_address:
+      "স্থায়ী ঠিকানা",
+
+    sports:
+      "ক্রীড়া",
+
+    sports_interests:
+      "Sports Interests",
+
+    interested_sports:
+      "Interested Sports",
+
+    other_sports:
+      "অন্যান্য খেলা",
+
+    main_sports_skill:
+      "খেলার প্রধান দক্ষতা",
+
+    previous_club_experience:
+      "পূর্বের ক্লাব অভিজ্ঞতা",
+
+    emergency_contact_name:
+      "জরুরি যোগাযোগের নাম",
+
+    emergency_contact_relationship:
+      "সম্পর্ক",
+
+    emergency_contact_mobile:
+      "জরুরি মোবাইল নম্বর",
+
+    agreement:
+      "অঙ্গীকারনামা সম্মতি"
+
+  };
+
+
+  return Object.keys(application)
+
+    .filter(
+      key =>
+        !ignored.includes(key)
+    )
+
+    .map(
+      key => {
+
+        const value =
+          application[key];
+
+
+        if (
+          value === null ||
+          value === undefined ||
+          value === ""
+        ) {
+
+          return "";
+
+        }
+
+
+        const label =
+          labels[key] ||
+          prettifyLabel(key);
+
+
+        return `
+
+          <div
+            class="detail-item
+            ${
+              String(value).length > 120
+                ? "full"
+                : ""
+            }"
+          >
+
+            <label>
+              ${escapeHTML(label)}
+            </label>
+
+            <div>
+              ${escapeHTML(
+                formatValue(value)
+              )}
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    )
+    .join("");
+
+}
+
+
+/* =========================================================
+   UPDATE STATUS
+========================================================= */
+
+window.updateStatus =
+  async function(
+    id,
+    status
+  ) {
+
+    const application =
+      applications.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!application) return;
+
+
+    const statusText =
+      status === "approved"
+        ? "approve"
+        : "reject";
+
+
+    const confirmed =
+      confirm(
+        `Are you sure you want to ${statusText} this application?`
+      );
+
+
+    if (!confirmed) return;
+
+
+    try {
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(
+            "membership_applications"
+          )
+          .update({
+            status,
+            updated_at:
+              new Date().toISOString()
+          })
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      toast(
+        `Application ${statusText}d successfully.`,
+        "success"
+      );
+
+
+      await loadApplications();
+
+
+    } catch (error) {
+
+      console.error(
+        "Status update error:",
+        error
+      );
+
+
+      toast(
+        error.message ||
+        "Could not update application.",
+        "error"
+      );
+
+    }
+
+  };
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+window.deleteApplication =
+  async function(id) {
+
+    const application =
+      applications.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!application) return;
+
+
+    const name =
+      application.full_name_english ||
+      application.full_name ||
+      "this application";
+
+
+    const confirmed =
+      confirm(
+        `Delete ${name}'s membership application?`
+      );
+
+
+    if (!confirmed) return;
+
+
+    try {
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(
+            "membership_applications"
+          )
+          .delete()
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      toast(
+        "Application deleted successfully.",
+        "success"
+      );
+
+
+      await loadApplications();
+
+
+    } catch (error) {
+
+      console.error(
+        "Delete error:",
+        error
+      );
+
+
+      toast(
+        error.message ||
+        "Could not delete application.",
+        "error"
+      );
+
+    }
+
+  };
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats() {
+
+  const total =
+    applications.length;
+
+
+  const pending =
+    applications.filter(
+      item =>
+        String(
+          item.status ||
+          "pending"
+        ).toLowerCase() ===
+        "pending"
+    ).length;
+
+
+  const approved =
+    applications.filter(
+      item =>
+        String(
+          item.status ||
+          "pending"
+        ).toLowerCase() ===
+        "approved"
+    ).length;
+
+
+  document.getElementById(
+    "totalApplications"
+  ).textContent =
+    total;
+
+
+  document.getElementById(
+    "pendingApplications"
+  ).textContent =
+    pending;
+
+
+  document.getElementById(
+    "approvedApplications"
+  ).textContent =
+    approved;
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+function setupEvents() {
+
+  searchInput.addEventListener(
+    "input",
+    renderApplications
+  );
+
+
+  statusFilter.addEventListener(
+    "change",
+    renderApplications
+  );
+
+
+  document.getElementById(
+    "refreshButton"
+  ).addEventListener(
+    "click",
+    async () => {
+
+      await loadApplications();
+
+      toast(
+        "Applications refreshed.",
+        "success"
+      );
+
+    }
+  );
+
+
+  document.getElementById(
+    "printButton"
+  ).addEventListener(
+    "click",
+    () => {
+
+      window.print();
+
+    }
+  );
+
+
+  document.getElementById(
+    "logoutButton"
+  ).addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        await supabaseClient
+          .auth
+          .signOut();
+
+
+        window.location.href =
+          "admin.html";
+
+
+      } catch (error) {
+
+        toast(
+          error.message ||
+          "Logout failed.",
+          "error"
+        );
+
+      }
+
+    }
+  );
+
+
+  document.getElementById(
+    "modalClose"
+  ).addEventListener(
+    "click",
+    closeModal
+  );
+
+
+  document.getElementById(
+    "detailsModal"
+  ).addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target.id ===
+        "detailsModal"
+      ) {
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal() {
+
+  const modal =
+    document.getElementById(
+      "detailsModal"
+    );
+
+
+  modal.classList.add(
+    "open"
+  );
+
+
+  modal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+}
+
+
+function closeModal() {
+
+  const modal =
+    document.getElementById(
+      "detailsModal"
+    );
+
+
+  modal.classList.remove(
+    "open"
+  );
+
+
+  modal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+}
+
+
+/* =========================================================
+   LOGIN MESSAGE
+========================================================= */
+
+function showLoginMessage() {
+
+  container.innerHTML = `
+
+    <div class="empty-state">
+
+      <div class="empty-state-icon">
+        🔒
+      </div>
+
+      <h3>
+        Admin login required
+      </h3>
+
+      <p>
+        Please login to the GSA Admin Panel
+        before viewing membership applications.
+      </p>
+
+      <br>
+
+      <a
+        href="admin.html"
+        class="action-button"
+        style="display:inline-block"
+      >
+        Go to Admin Login
+      </a>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function showLoading() {
+
+  container.innerHTML = `
+
+    <div class="empty-state">
+
+      <div class="loading">
+
+        <div class="spinner"></div>
+
+        <span>
+          Loading membership applications...
+        </span>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(
+  message
+) {
+
+  container.innerHTML = `
+
+    <div class="empty-state">
+
+      <div class="empty-state-icon">
+        ⚠
+      </div>
+
+      <h3>
+        Could not load applications
+      </h3>
+
+      <p>
+        ${escapeHTML(
+          message ||
+          "Unknown error."
+        )}
+      </p>
+
+      <br>
+
+      <button
+        class="action-button"
+        onclick="loadApplications()"
+      >
+        Try Again
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function toast(
+  message,
+  type = "success"
+) {
+
+  const container =
+    document.getElementById(
+      "toastContainer"
+    );
+
+
+  const item =
+    document.createElement(
+      "div"
+    );
+
+
+  item.className =
+    `toast ${type}`;
+
+
+  item.textContent =
+    message;
+
+
+  container.appendChild(
+    item
+  );
+
+
+  setTimeout(
+    () => {
+
+      item.remove();
+
+    },
+    3500
+  );
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function statusClass(
+  status
+) {
+
+  if (
+    status === "approved"
+  ) {
+
+    return "approved";
+
+  }
+
+
+  if (
+    status === "rejected"
+  ) {
+
+    return "rejected";
+
+  }
+
+
+  return "pending";
+
+}
+
+
+function formatDate(
+  value
+) {
+
+  if (!value) {
+
+    return "Unknown";
+
+  }
+
+
+  const date =
+    new Date(value);
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return String(value);
+
+  }
+
+
+  return date.toLocaleString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit"
+    }
+  );
+
+}
+
+
+function formatValue(
+  value
+) {
+
+  if (
+    Array.isArray(value)
+  ) {
+
+    return value.join(", ");
+
+  }
+
+
+  if (
+    typeof value ===
+    "object"
+  ) {
+
+    try {
+
+      return JSON.stringify(
+        value
+      );
+
+    } catch {
+
+      return String(value);
+
+    }
+
+  }
+
+
+  return String(value);
+
+}
+
+
+function prettifyLabel(
+  value
+) {
+
+  return String(value)
+
+    .replace(
+      /_/g,
+      " "
+    )
+
+    .replace(
+      /\b\w/g,
+      char =>
+        char.toUpperCase()
+    );
+
+}
+
+
+function escapeHTML(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key === "Escape"
+    ) {
+
+      closeModal();
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+
+</html>
