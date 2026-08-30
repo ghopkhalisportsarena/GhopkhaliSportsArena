@@ -1,149 +1,146 @@
 /* =========================================================
    GSA ADMIN PANEL
-   Ghopkhali Sports Arena
-   Admin JavaScript
+   Supabase + Authentication
 ========================================================= */
-
-"use strict";
 
 
 /* =========================================================
-   CONFIGURATION
+   SUPABASE CONFIG
 ========================================================= */
 
-/*
-   Change these credentials before using the panel.
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-   IMPORTANT:
-   This is NOT secure server-side authentication.
-   Do not use a real sensitive password here.
-*/
-
-const ADMIN_EMAIL = "admin@example.com";
-const ADMIN_PASSWORD = "admin123";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
 
 
 /* =========================================================
-   STORAGE KEYS
+   ELEMENTS
 ========================================================= */
 
-const STORAGE = {
-  notices: "gsa_notices",
-  gallery: "gsa_gallery",
-  tournaments: "gsa_tournaments",
-  fixtures: "gsa_fixtures",
-  leadership: "gsa_leadership",
-  committee: "gsa_committee",
-  friendly: "gsa_friendly_applications",
-  membership: "gsa_membership_applications",
-  loggedIn: "gsa_admin_logged_in"
-};
+const loginScreen =
+  document.getElementById("loginScreen");
+
+const adminApp =
+  document.getElementById("adminApp");
+
+const loginForm =
+  document.getElementById("loginForm");
+
+const loginError =
+  document.getElementById("loginError");
+
+const logoutButton =
+  document.getElementById("logoutButton");
+
+const adminLoading =
+  document.getElementById("adminLoading");
+
+const sidebar =
+  document.getElementById("adminSidebar");
+
+const sidebarToggle =
+  document.getElementById("sidebarToggle");
+
+const adminModal =
+  document.getElementById("adminModal");
+
+const adminModalContent =
+  document.getElementById("adminModalContent");
+
+const adminModalClose =
+  document.getElementById("adminModalClose");
+
+const toastContainer =
+  document.getElementById("toastContainer");
 
 
 /* =========================================================
-   DOM HELPERS
+   YEAR
 ========================================================= */
 
-const $ = (selector) => document.querySelector(selector);
-
-const $$ = (selector) => document.querySelectorAll(selector);
-
-
-function getData(key) {
-  try {
-    return JSON.parse(localStorage.getItem(key)) || [];
-  } catch (error) {
-    console.error("Storage error:", error);
-    return [];
-  }
-}
-
-
-function saveData(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
-
-
-function generateId() {
-  return Date.now().toString(36) + Math.random()
-    .toString(36)
-    .substring(2, 8);
-}
-
-
-/* =========================================================
-   GLOBAL VARIABLES
-========================================================= */
-
-let currentPage = "dashboard";
-
-let editingId = null;
-let editingType = null;
-
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  setCurrentYear();
-
-  setCurrentDate();
-
-  setupLogin();
-
-  setupNavigation();
-
-  setupSidebar();
-
-  setupTopbar();
-
-  setupModal();
-
-  setupQuickActions();
-
-  setupFilters();
-
-  updateDashboard();
-
-  hideLoading();
-
-});
-
-
-/* =========================================================
-   CURRENT YEAR
-========================================================= */
-
-function setCurrentYear() {
-
-  $$("[data-current-year]").forEach(element => {
-    element.textContent = new Date().getFullYear();
+document.querySelectorAll("[data-current-year]")
+  .forEach(el => {
+    el.textContent = new Date().getFullYear();
   });
 
-}
-
 
 /* =========================================================
-   CURRENT DATE
+   DATE
 ========================================================= */
 
-function setCurrentDate() {
+function updateDate() {
 
-  const dateElement = $("#currentDate");
+  const dateElement =
+    document.getElementById("currentDate");
 
   if (!dateElement) return;
 
   const now = new Date();
 
-  dateElement.textContent = now.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  });
+  dateElement.textContent =
+    now.toLocaleDateString(
+      "en-US",
+      {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      }
+    );
+}
 
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function showLoading() {
+
+  if (adminLoading) {
+    adminLoading.style.display = "grid";
+  }
+}
+
+function hideLoading() {
+
+  if (adminLoading) {
+    adminLoading.style.display = "none";
+  }
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(
+  message,
+  type = "success"
+) {
+
+  const toast =
+    document.createElement("div");
+
+  toast.className =
+    `toast ${type}`;
+
+  toast.textContent = message;
+
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+
+    toast.style.opacity = "0";
+
+    setTimeout(() => {
+      toast.remove();
+    }, 250);
+
+  }, 3000);
 }
 
 
@@ -151,78 +148,194 @@ function setCurrentDate() {
    LOGIN
 ========================================================= */
 
-function setupLogin() {
+async function loginUser(email, password) {
 
-  const form = $("#loginForm");
+  loginError.textContent = "";
 
-  if (!form) return;
+  showLoading();
 
-  form.addEventListener("submit", event => {
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  hideLoading();
+
+  if (error) {
+
+    loginError.textContent =
+      error.message ||
+      "Invalid email or password.";
+
+    return false;
+  }
+
+  if (!data.session) {
+
+    loginError.textContent =
+      "Login session could not be created.";
+
+    return false;
+  }
+
+  return true;
+}
+
+
+/* =========================================================
+   LOGIN FORM
+========================================================= */
+
+loginForm.addEventListener(
+  "submit",
+  async event => {
 
     event.preventDefault();
 
-    const email = $("#adminEmail")?.value.trim();
-    const password = $("#adminPassword")?.value;
+    const email =
+      document.getElementById(
+        "adminEmail"
+      ).value.trim();
 
-    const errorElement = $("#loginError");
+    const password =
+      document.getElementById(
+        "adminPassword"
+      ).value;
 
-    if (
-      email === ADMIN_EMAIL &&
-      password === ADMIN_PASSWORD
-    ) {
+    const success =
+      await loginUser(
+        email,
+        password
+      );
 
-      localStorage.setItem(STORAGE.loggedIn, "true");
+    if (success) {
 
-      if (errorElement) {
-        errorElement.textContent = "";
-      }
-
-      showAdminApp();
-
-      showToast("Welcome to GSA Admin Panel.");
-
-    } else {
-
-      if (errorElement) {
-        errorElement.textContent =
-          "Invalid email address or password.";
-      }
+      await showAdminPanel();
 
     }
 
-  });
-
-
-  /*
-     Auto login if session exists.
-  */
-
-  if (localStorage.getItem(STORAGE.loggedIn) === "true") {
-    showAdminApp();
   }
+);
+
+
+/* =========================================================
+   CHECK SESSION
+========================================================= */
+
+async function checkSession() {
+
+  showLoading();
+
+  const {
+    data: {
+      session
+    }
+  } =
+    await supabaseClient.auth.getSession();
+
+  hideLoading();
+
+  if (session) {
+
+    await showAdminPanel();
+
+  } else {
+
+    showLoginScreen();
+
+  }
+}
+
+
+/* =========================================================
+   SHOW ADMIN
+========================================================= */
+
+async function showAdminPanel() {
+
+  loginScreen.style.display =
+    "none";
+
+  adminApp.style.display =
+    "flex";
+
+  updateDate();
+
+  await loadAdminProfile();
+
+  await loadDashboard();
 
 }
 
 
 /* =========================================================
-   SHOW ADMIN APP
+   SHOW LOGIN
 ========================================================= */
 
-function showAdminApp() {
+function showLoginScreen() {
 
-  const loginScreen = $("#loginScreen");
-  const adminApp = $("#adminApp");
+  loginScreen.style.display =
+    "flex";
 
-  if (loginScreen) {
-    loginScreen.style.display = "none";
+  adminApp.style.display =
+    "none";
+}
+
+
+/* =========================================================
+   ADMIN PROFILE
+========================================================= */
+
+async function loadAdminProfile() {
+
+  const {
+    data: {
+      user
+    }
+  } =
+    await supabaseClient.auth.getUser();
+
+  if (!user) return;
+
+  const email =
+    user.email || "Administrator";
+
+  const name =
+    email
+      .split("@")[0]
+      .replace(/[._-]/g, " ");
+
+  const formattedName =
+    name.replace(
+      /\b\w/g,
+      char => char.toUpperCase()
+    );
+
+  const adminName =
+    document.getElementById(
+      "adminName"
+    );
+
+  const adminAvatar =
+    document.getElementById(
+      "adminAvatar"
+    );
+
+  if (adminName) {
+    adminName.textContent =
+      formattedName;
   }
 
-  if (adminApp) {
-    adminApp.style.display = "flex";
+  if (adminAvatar) {
+    adminAvatar.textContent =
+      formattedName
+        .charAt(0)
+        .toUpperCase();
   }
-
-  updateDashboard();
-
 }
 
 
@@ -230,198 +343,179 @@ function showAdminApp() {
    LOGOUT
 ========================================================= */
 
-function logout() {
+logoutButton.addEventListener(
+  "click",
+  async () => {
 
-  localStorage.removeItem(STORAGE.loggedIn);
+    showLoading();
 
-  const loginScreen = $("#loginScreen");
-  const adminApp = $("#adminApp");
+    await supabaseClient.auth.signOut();
 
-  if (adminApp) {
-    adminApp.style.display = "none";
-  }
+    hideLoading();
 
-  if (loginScreen) {
-    loginScreen.style.display = "flex";
-  }
+    showLoginScreen();
 
-  const form = $("#loginForm");
-
-  if (form) {
-    form.reset();
-  }
-
-  showToast("Signed out successfully.");
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function setupNavigation() {
-
-  $$(".sidebar-link[data-page]").forEach(button => {
-
-    button.addEventListener("click", () => {
-
-      const page = button.dataset.page;
-
-      if (!page) return;
-
-      navigateTo(page);
-
-    });
-
-  });
-
-
-  $$("[data-page-link]").forEach(button => {
-
-    button.addEventListener("click", () => {
-
-      navigateTo(button.dataset.pageLink);
-
-    });
-
-  });
-
-}
-
-
-function navigateTo(page) {
-
-  currentPage = page;
-
-  $$(".sidebar-link").forEach(link => {
-    link.classList.remove("active");
-  });
-
-
-  const activeLink =
-    document.querySelector(
-      `.sidebar-link[data-page="${page}"]`
+    showToast(
+      "You have been signed out.",
+      "success"
     );
 
-  if (activeLink) {
-    activeLink.classList.add("active");
   }
-
-
-  $$(".admin-page").forEach(section => {
-    section.classList.remove("active");
-  });
-
-
-  const pageElement =
-    document.getElementById(page + "Page");
-
-  if (pageElement) {
-    pageElement.classList.add("active");
-  }
-
-
-  updatePageTitle(page);
-
-  renderCurrentPage();
-
-  closeSidebarMobile();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-
-}
-
-
-/* =========================================================
-   PAGE TITLES
-========================================================= */
-
-const PAGE_TITLES = {
-
-  dashboard: "Dashboard",
-
-  notices: "Notices",
-
-  gallery: "Gallery",
-
-  tournaments: "Tournaments",
-
-  fixtures: "Matches & Fixtures",
-
-  leadership: "Leadership",
-
-  committee: "Committee",
-
-  "friendly-applications":
-    "Friendly Match Applications",
-
-  "membership-applications":
-    "Membership Applications"
-
-};
-
-
-function updatePageTitle(page) {
-
-  const title = $("#pageTitle");
-
-  if (title) {
-    title.textContent =
-      PAGE_TITLES[page] || "Dashboard";
-  }
-
-
-  const kicker = $("#pageKicker");
-
-  if (kicker) {
-
-    if (page === "dashboard") {
-      kicker.textContent = "ADMINISTRATION";
-    } else {
-      kicker.textContent = "GSA MANAGEMENT";
-    }
-
-  }
-
-}
+);
 
 
 /* =========================================================
    SIDEBAR
 ========================================================= */
 
-function setupSidebar() {
+sidebarToggle.addEventListener(
+  "click",
+  () => {
 
-  const toggle = $("#sidebarToggle");
+    sidebar.classList.toggle(
+      "open"
+    );
 
-  if (!toggle) return;
-
-  toggle.addEventListener("click", () => {
-
-    const sidebar = $("#adminSidebar");
-
-    if (!sidebar) return;
-
-    sidebar.classList.toggle("open");
-
-  });
-
-}
+  }
+);
 
 
-function closeSidebarMobile() {
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
 
-  if (window.innerWidth <= 768) {
+const sidebarLinks =
+  document.querySelectorAll(
+    ".sidebar-link[data-page]"
+  );
 
-    const sidebar = $("#adminSidebar");
+sidebarLinks.forEach(link => {
 
-    if (sidebar) {
-      sidebar.classList.remove("open");
+  link.addEventListener(
+    "click",
+    () => {
+
+      const page =
+        link.dataset.page;
+
+      openPage(page);
+
+      sidebar.classList.remove(
+        "open"
+      );
+
     }
+  );
+
+});
+
+
+function openPage(pageName) {
+
+  document
+    .querySelectorAll(".admin-page")
+    .forEach(page => {
+      page.classList.remove("active");
+    });
+
+  document
+    .querySelectorAll(
+      ".sidebar-link[data-page]"
+    )
+    .forEach(link => {
+      link.classList.remove("active");
+    });
+
+
+  const page =
+    document.getElementById(
+      `${pageName.replace(
+        "friendly-applications",
+        "friendlyApplications"
+      ).replace(
+        "membership-applications",
+        "membershipApplications"
+      )}Page`
+    );
+
+
+  const activeLink =
+    document.querySelector(
+      `.sidebar-link[data-page="${pageName}"]`
+    );
+
+
+  if (page) {
+    page.classList.add("active");
+  }
+
+  if (activeLink) {
+    activeLink.classList.add("active");
+  }
+
+
+  const titles = {
+
+    dashboard: [
+      "ADMINISTRATION",
+      "Dashboard"
+    ],
+
+    notices: [
+      "CONTENT MANAGEMENT",
+      "Notices"
+    ],
+
+    gallery: [
+      "MEDIA MANAGEMENT",
+      "Gallery"
+    ],
+
+    tournaments: [
+      "SPORTS MANAGEMENT",
+      "Tournaments"
+    ],
+
+    fixtures: [
+      "MATCH MANAGEMENT",
+      "Matches & Fixtures"
+    ],
+
+    leadership: [
+      "CLUB LEADERSHIP",
+      "Leadership"
+    ],
+
+    committee: [
+      "CLUB MANAGEMENT",
+      "Committee"
+    ],
+
+    "friendly-applications": [
+      "APPLICATION CENTER",
+      "Friendly Match Applications"
+    ],
+
+    "membership-applications": [
+      "APPLICATION CENTER",
+      "Membership Applications"
+    ]
+
+  };
+
+
+  const title =
+    titles[pageName];
+
+  if (title) {
+
+    document.getElementById(
+      "pageKicker"
+    ).textContent = title[0];
+
+    document.getElementById(
+      "pageTitle"
+    ).textContent = title[1];
 
   }
 
@@ -429,1264 +523,549 @@ function closeSidebarMobile() {
 
 
 /* =========================================================
-   TOPBAR
+   PAGE LINKS
 ========================================================= */
 
-function setupTopbar() {
+document
+  .querySelectorAll(
+    "[data-page-link]"
+  )
+  .forEach(button => {
 
-  const refreshButton = $("#refreshButton");
+    button.addEventListener(
+      "click",
+      () => {
 
-  if (refreshButton) {
-
-    refreshButton.addEventListener("click", () => {
-
-      renderCurrentPage();
-
-      updateDashboard();
-
-      showToast("Data refreshed.");
-
-    });
-
-  }
-
-
-  const logoutButton = $("#logoutButton");
-
-  if (logoutButton) {
-
-    logoutButton.addEventListener("click", logout);
-
-  }
-
-
-  const notificationButton =
-    document.querySelector(".notification-button");
-
-  if (notificationButton) {
-
-    notificationButton.addEventListener("click", () => {
-
-      const friendly =
-        getData(STORAGE.friendly)
-          .filter(item => item.status === "pending")
-          .length;
-
-      const membership =
-        getData(STORAGE.membership)
-          .filter(item => item.status === "pending")
-          .length;
-
-      const total = friendly + membership;
-
-      if (total > 0) {
-
-        showToast(
-          `${total} pending application${total > 1 ? "s" : ""}.`
+        openPage(
+          button.dataset.pageLink
         );
 
-      } else {
-
-        showToast("No new notifications.");
-
       }
-
-    });
-
-  }
-
-}
-
-
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
-
-function setupQuickActions() {
-
-  $$("[data-action]").forEach(button => {
-
-    button.addEventListener("click", () => {
-
-      const action = button.dataset.action;
-
-      openCreateModal(action);
-
-    });
+    );
 
   });
-
-}
 
 
 /* =========================================================
    MODAL
 ========================================================= */
 
-function setupModal() {
-
-  const modal = $("#adminModal");
-  const closeButton = $("#adminModalClose");
-
-  if (closeButton) {
-
-    closeButton.addEventListener(
-      "click",
-      closeModal
-    );
-
-  }
-
-
-  if (modal) {
-
-    modal.addEventListener("click", event => {
-
-      if (event.target === modal) {
-        closeModal();
-      }
-
-    });
-
-  }
-
-
-  document.addEventListener("keydown", event => {
-
-    if (event.key === "Escape") {
-      closeModal();
-    }
-
-  });
-
-}
-
-
 function openModal(content) {
 
-  const modal = $("#adminModal");
-  const modalContent = $("#adminModalContent");
+  adminModalContent.innerHTML =
+    content;
 
-  if (!modal || !modalContent) return;
+  adminModal.classList.add(
+    "show"
+  );
 
-  modalContent.innerHTML = content;
-
-  modal.setAttribute("aria-hidden", "false");
-
-  setTimeout(() => {
-
-    const firstInput =
-      modalContent.querySelector(
-        "input, textarea, select"
-      );
-
-    if (firstInput) {
-      firstInput.focus();
-    }
-
-  }, 50);
+  adminModal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
 }
 
 
 function closeModal() {
 
-  const modal = $("#adminModal");
-  const modalContent = $("#adminModalContent");
+  adminModal.classList.remove(
+    "show"
+  );
 
-  if (!modal) return;
+  adminModal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
-  modal.setAttribute("aria-hidden", "true");
-
-  if (modalContent) {
-    modalContent.innerHTML = "";
-  }
-
-  editingId = null;
-  editingType = null;
+  adminModalContent.innerHTML =
+    "";
 
 }
 
 
-/* =========================================================
-   CREATE MODAL
-========================================================= */
+adminModalClose.addEventListener(
+  "click",
+  closeModal
+);
 
-function openCreateModal(action) {
 
-  editingId = null;
-  editingType = null;
+adminModal.addEventListener(
+  "click",
+  event => {
 
-  let content = "";
-
-  switch (action) {
-
-    case "add-notice":
-
-      content = noticeForm();
-
-      break;
-
-    case "add-gallery":
-
-      content = galleryForm();
-
-      break;
-
-    case "add-tournament":
-
-      content = tournamentForm();
-
-      break;
-
-    case "add-fixture":
-
-      content = fixtureForm();
-
-      break;
-
-    case "add-leader":
-
-      content = leaderForm();
-
-      break;
-
-    case "add-committee":
-
-      content = committeeForm();
-
-      break;
-
-    default:
-
-      return;
+    if (
+      event.target ===
+      adminModal
+    ) {
+      closeModal();
+    }
 
   }
-
-  openModal(content);
-
-}
+);
 
 
 /* =========================================================
-   NOTICE FORM
+   QUICK ACTIONS
 ========================================================= */
 
-function noticeForm(data = {}) {
+document
+  .querySelectorAll(
+    "[data-action]"
+  )
+  .forEach(button => {
 
-  return `
+    button.addEventListener(
+      "click",
+      () => {
 
-    <form id="noticeForm">
+        const action =
+          button.dataset.action;
+
+        switch (action) {
+
+          case "add-notice":
+            openNoticeModal();
+            break;
+
+          case "add-fixture":
+            openFixtureModal();
+            break;
+
+          case "add-tournament":
+            openTournamentModal();
+            break;
+
+          case "add-gallery":
+            openGalleryModal();
+            break;
+
+          case "add-leader":
+            openLeaderModal();
+            break;
+
+          case "add-committee":
+            openCommitteeModal();
+            break;
+
+        }
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   NOTICE MODAL
+========================================================= */
+
+function openNoticeModal() {
+
+  openModal(`
+
+    <form
+      class="modal-form"
+      id="noticeForm"
+    >
 
       <h2>
-        ${data.id ? "Edit Notice" : "Create Notice"}
+        Create New Notice
       </h2>
 
-      <div>
-        <label>NOTICE TITLE</label>
+      <div class="form-field">
+
+        <label>
+          TITLE
+        </label>
 
         <input
           type="text"
           id="noticeTitle"
-          value="${escapeAttribute(data.title || "")}"
-          placeholder="Enter notice title"
           required
         >
+
       </div>
 
-      <div>
-        <label>DESCRIPTION</label>
+      <div class="form-field">
+
+        <label>
+          CONTENT
+        </label>
 
         <textarea
-          id="noticeDescription"
-          placeholder="Write announcement..."
+          id="noticeContent"
           required
-        >${escapeHTML(data.description || "")}</textarea>
-      </div>
+        ></textarea>
 
-      <div>
-        <label>DATE</label>
-
-        <input
-          type="date"
-          id="noticeDate"
-          value="${data.date || today()}"
-          required
-        >
       </div>
 
       <button
-        class="admin-button admin-button-dark"
+        class="admin-button admin-button-dark form-submit"
         type="submit"
       >
-        ${data.id ? "Save Changes" : "Publish Notice"}
+        Publish Notice
       </button>
 
     </form>
 
-  `;
+  `);
+
+
+  document
+    .getElementById("noticeForm")
+    .addEventListener(
+      "submit",
+      saveNotice
+    );
 
 }
-
-
-/* =========================================================
-   GALLERY FORM
-========================================================= */
-
-function galleryForm(data = {}) {
-
-  return `
-
-    <form id="galleryForm">
-
-      <h2>
-        ${data.id ? "Edit Photo" : "Add Gallery Photo"}
-      </h2>
-
-      <div>
-        <label>PHOTO URL</label>
-
-        <input
-          type="url"
-          id="galleryImage"
-          value="${escapeAttribute(data.image || "")}"
-          placeholder="https://example.com/photo.jpg"
-          required
-        >
-      </div>
-
-      <div>
-        <label>TITLE</label>
-
-        <input
-          type="text"
-          id="galleryTitle"
-          value="${escapeAttribute(data.title || "")}"
-          placeholder="Photo title"
-          required
-        >
-      </div>
-
-      <div>
-        <label>DESCRIPTION</label>
-
-        <textarea
-          id="galleryDescription"
-          placeholder="Photo description..."
-        >${escapeHTML(data.description || "")}</textarea>
-      </div>
-
-      <button
-        class="admin-button admin-button-dark"
-        type="submit"
-      >
-        ${data.id ? "Save Changes" : "Add Photo"}
-      </button>
-
-    </form>
-
-  `;
-
-}
-
-
-/* =========================================================
-   TOURNAMENT FORM
-========================================================= */
-
-function tournamentForm(data = {}) {
-
-  return `
-
-    <form id="tournamentForm">
-
-      <h2>
-        ${data.id ? "Edit Tournament" : "Add Tournament"}
-      </h2>
-
-      <div>
-        <label>TOURNAMENT NAME</label>
-
-        <input
-          type="text"
-          id="tournamentName"
-          value="${escapeAttribute(data.name || "")}"
-          placeholder="Tournament name"
-          required
-        >
-      </div>
-
-      <div>
-        <label>LOCATION</label>
-
-        <input
-          type="text"
-          id="tournamentLocation"
-          value="${escapeAttribute(data.location || "")}"
-          placeholder="Venue"
-        >
-      </div>
-
-      <div>
-        <label>START DATE</label>
-
-        <input
-          type="date"
-          id="tournamentDate"
-          value="${data.date || today()}"
-          required
-        >
-      </div>
-
-      <div>
-        <label>DESCRIPTION</label>
-
-        <textarea
-          id="tournamentDescription"
-          placeholder="Tournament details..."
-        >${escapeHTML(data.description || "")}</textarea>
-      </div>
-
-      <button
-        class="admin-button admin-button-dark"
-        type="submit"
-      >
-        ${data.id ? "Save Changes" : "Create Tournament"}
-      </button>
-
-    </form>
-
-  `;
-
-}
-
-
-/* =========================================================
-   FIXTURE FORM
-========================================================= */
-
-function fixtureForm(data = {}) {
-
-  return `
-
-    <form id="fixtureForm">
-
-      <h2>
-        ${data.id ? "Edit Match" : "Add Match"}
-      </h2>
-
-      <div>
-        <label>HOME TEAM</label>
-
-        <input
-          type="text"
-          id="homeTeam"
-          value="${escapeAttribute(data.home || "")}"
-          placeholder="Home team"
-          required
-        >
-      </div>
-
-      <div>
-        <label>AWAY TEAM</label>
-
-        <input
-          type="text"
-          id="awayTeam"
-          value="${escapeAttribute(data.away || "")}"
-          placeholder="Away team"
-          required
-        >
-      </div>
-
-      <div>
-        <label>MATCH DATE</label>
-
-        <input
-          type="date"
-          id="fixtureDate"
-          value="${data.date || today()}"
-          required
-        >
-      </div>
-
-      <div>
-        <label>MATCH TIME</label>
-
-        <input
-          type="time"
-          id="fixtureTime"
-          value="${data.time || "18:00"}"
-        >
-      </div>
-
-      <div>
-        <label>VENUE</label>
-
-        <input
-          type="text"
-          id="fixtureVenue"
-          value="${escapeAttribute(data.venue || "")}"
-          placeholder="Match venue"
-        >
-      </div>
-
-      <button
-        class="admin-button admin-button-dark"
-        type="submit"
-      >
-        ${data.id ? "Save Changes" : "Add Match"}
-      </button>
-
-    </form>
-
-  `;
-
-}
-
-
-/* =========================================================
-   LEADERSHIP FORM
-========================================================= */
-
-function leaderForm(data = {}) {
-
-  return `
-
-    <form id="leaderForm">
-
-      <h2>
-        ${data.id ? "Edit Leader" : "Add Leader"}
-      </h2>
-
-      <div>
-        <label>NAME</label>
-
-        <input
-          type="text"
-          id="leaderName"
-          value="${escapeAttribute(data.name || "")}"
-          placeholder="Full name"
-          required
-        >
-      </div>
-
-      <div>
-        <label>POSITION</label>
-
-        <input
-          type="text"
-          id="leaderPosition"
-          value="${escapeAttribute(data.position || "")}"
-          placeholder="President / Secretary..."
-          required
-        >
-      </div>
-
-      <div>
-        <label>PHOTO URL</label>
-
-        <input
-          type="url"
-          id="leaderPhoto"
-          value="${escapeAttribute(data.photo || "")}"
-          placeholder="https://example.com/photo.jpg"
-        >
-      </div>
-
-      <button
-        class="admin-button admin-button-dark"
-        type="submit"
-      >
-        ${data.id ? "Save Changes" : "Add Leader"}
-      </button>
-
-    </form>
-
-  `;
-
-}
-
-
-/* =========================================================
-   COMMITTEE FORM
-========================================================= */
-
-function committeeForm(data = {}) {
-
-  return `
-
-    <form id="committeeForm">
-
-      <h2>
-        ${data.id ? "Edit Member" : "Add Committee Member"}
-      </h2>
-
-      <div>
-        <label>NAME</label>
-
-        <input
-          type="text"
-          id="committeeName"
-          value="${escapeAttribute(data.name || "")}"
-          placeholder="Full name"
-          required
-        >
-      </div>
-
-      <div>
-        <label>POSITION</label>
-
-        <input
-          type="text"
-          id="committeePosition"
-          value="${escapeAttribute(data.position || "")}"
-          placeholder="Committee position"
-          required
-        >
-      </div>
-
-      <button
-        class="admin-button admin-button-dark"
-        type="submit"
-      >
-        ${data.id ? "Save Changes" : "Add Member"}
-      </button>
-
-    </form>
-
-  `;
-
-}
-
-
-/* =========================================================
-   MODAL FORM SUBMISSION
-========================================================= */
-
-document.addEventListener("submit", event => {
-
-  const form = event.target;
-
-  if (!form) return;
-
-
-  if (form.id === "noticeForm") {
-
-    event.preventDefault();
-
-    saveNotice();
-
-  }
-
-
-  if (form.id === "galleryForm") {
-
-    event.preventDefault();
-
-    saveGallery();
-
-  }
-
-
-  if (form.id === "tournamentForm") {
-
-    event.preventDefault();
-
-    saveTournament();
-
-  }
-
-
-  if (form.id === "fixtureForm") {
-
-    event.preventDefault();
-
-    saveFixture();
-
-  }
-
-
-  if (form.id === "leaderForm") {
-
-    event.preventDefault();
-
-    saveLeader();
-
-  }
-
-
-  if (form.id === "committeeForm") {
-
-    event.preventDefault();
-
-    saveCommittee();
-
-  }
-
-});
 
 
 /* =========================================================
    SAVE NOTICE
 ========================================================= */
 
-function saveNotice() {
+async function saveNotice(event) {
 
-  const data = getData(STORAGE.notices);
+  event.preventDefault();
 
-  const item = {
+  const title =
+    document.getElementById(
+      "noticeTitle"
+    ).value.trim();
 
-    id: editingId || generateId(),
+  const content =
+    document.getElementById(
+      "noticeContent"
+    ).value.trim();
 
-    title: $("#noticeTitle").value.trim(),
 
-    description:
-      $("#noticeDescription").value.trim(),
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("notices")
+      .insert({
 
-    date: $("#noticeDate").value,
+        title,
+        content
 
-    createdAt:
-      editingId
-        ? findCreatedAt(data, editingId)
-        : new Date().toISOString()
+      });
 
-  };
 
+  if (error) {
 
-  if (editingId) {
+    console.error(error);
 
-    const index =
-      data.findIndex(x => x.id === editingId);
-
-    if (index !== -1) {
-      data[index] = item;
-    }
-
-  } else {
-
-    data.unshift(item);
-
-  }
-
-
-  saveData(STORAGE.notices, data);
-
-  closeModal();
-
-  renderNotices();
-
-  updateDashboard();
-
-  showToast(
-    editingId
-      ? "Notice updated."
-      : "Notice published."
-  );
-
-}
-
-
-/* =========================================================
-   SAVE GALLERY
-========================================================= */
-
-function saveGallery() {
-
-  const data = getData(STORAGE.gallery);
-
-  const item = {
-
-    id: editingId || generateId(),
-
-    image:
-      $("#galleryImage").value.trim(),
-
-    title:
-      $("#galleryTitle").value.trim(),
-
-    description:
-      $("#galleryDescription").value.trim(),
-
-    createdAt: new Date().toISOString()
-
-  };
-
-
-  if (editingId) {
-
-    const index =
-      data.findIndex(x => x.id === editingId);
-
-    if (index !== -1) {
-      data[index] = item;
-    }
-
-  } else {
-
-    data.unshift(item);
-
-  }
-
-
-  saveData(STORAGE.gallery, data);
-
-  closeModal();
-
-  renderGallery();
-
-  updateDashboard();
-
-  showToast(
-    editingId
-      ? "Photo updated."
-      : "Photo added."
-  );
-
-}
-
-
-/* =========================================================
-   SAVE TOURNAMENT
-========================================================= */
-
-function saveTournament() {
-
-  const data = getData(STORAGE.tournaments);
-
-  const item = {
-
-    id: editingId || generateId(),
-
-    name:
-      $("#tournamentName").value.trim(),
-
-    location:
-      $("#tournamentLocation").value.trim(),
-
-    date:
-      $("#tournamentDate").value,
-
-    description:
-      $("#tournamentDescription").value.trim(),
-
-    createdAt:
-      new Date().toISOString()
-
-  };
-
-
-  if (editingId) {
-
-    const index =
-      data.findIndex(x => x.id === editingId);
-
-    if (index !== -1) {
-      data[index] = item;
-    }
-
-  } else {
-
-    data.unshift(item);
-
-  }
-
-
-  saveData(STORAGE.tournaments, data);
-
-  closeModal();
-
-  renderTournaments();
-
-  updateDashboard();
-
-  showToast(
-    editingId
-      ? "Tournament updated."
-      : "Tournament created."
-  );
-
-}
-
-
-/* =========================================================
-   SAVE FIXTURE
-========================================================= */
-
-function saveFixture() {
-
-  const data = getData(STORAGE.fixtures);
-
-  const item = {
-
-    id: editingId || generateId(),
-
-    home:
-      $("#homeTeam").value.trim(),
-
-    away:
-      $("#awayTeam").value.trim(),
-
-    date:
-      $("#fixtureDate").value,
-
-    time:
-      $("#fixtureTime").value,
-
-    venue:
-      $("#fixtureVenue").value.trim(),
-
-    createdAt:
-      new Date().toISOString()
-
-  };
-
-
-  if (editingId) {
-
-    const index =
-      data.findIndex(x => x.id === editingId);
-
-    if (index !== -1) {
-      data[index] = item;
-    }
-
-  } else {
-
-    data.unshift(item);
-
-  }
-
-
-  saveData(STORAGE.fixtures, data);
-
-  closeModal();
-
-  renderFixtures();
-
-  updateDashboard();
-
-  showToast(
-    editingId
-      ? "Match updated."
-      : "Match added."
-  );
-
-}
-
-
-/* =========================================================
-   SAVE LEADER
-========================================================= */
-
-function saveLeader() {
-
-  const data = getData(STORAGE.leadership);
-
-  const item = {
-
-    id: editingId || generateId(),
-
-    name:
-      $("#leaderName").value.trim(),
-
-    position:
-      $("#leaderPosition").value.trim(),
-
-    photo:
-      $("#leaderPhoto").value.trim(),
-
-    createdAt:
-      new Date().toISOString()
-
-  };
-
-
-  if (editingId) {
-
-    const index =
-      data.findIndex(x => x.id === editingId);
-
-    if (index !== -1) {
-      data[index] = item;
-    }
-
-  } else {
-
-    data.unshift(item);
-
-  }
-
-
-  saveData(STORAGE.leadership, data);
-
-  closeModal();
-
-  renderLeadership();
-
-  updateDashboard();
-
-  showToast(
-    editingId
-      ? "Leader updated."
-      : "Leader added."
-  );
-
-}
-
-
-/* =========================================================
-   SAVE COMMITTEE
-========================================================= */
-
-function saveCommittee() {
-
-  const data = getData(STORAGE.committee);
-
-  const item = {
-
-    id: editingId || generateId(),
-
-    name:
-      $("#committeeName").value.trim(),
-
-    position:
-      $("#committeePosition").value.trim(),
-
-    createdAt:
-      new Date().toISOString()
-
-  };
-
-
-  if (editingId) {
-
-    const index =
-      data.findIndex(x => x.id === editingId);
-
-    if (index !== -1) {
-      data[index] = item;
-    }
-
-  } else {
-
-    data.unshift(item);
-
-  }
-
-
-  saveData(STORAGE.committee, data);
-
-  closeModal();
-
-  renderCommittee();
-
-  updateDashboard();
-
-  showToast(
-    editingId
-      ? "Member updated."
-      : "Member added."
-  );
-
-}
-
-
-/* =========================================================
-   RENDER CURRENT PAGE
-========================================================= */
-
-function renderCurrentPage() {
-
-  switch (currentPage) {
-
-    case "dashboard":
-      updateDashboard();
-      break;
-
-    case "notices":
-      renderNotices();
-      break;
-
-    case "gallery":
-      renderGallery();
-      break;
-
-    case "tournaments":
-      renderTournaments();
-      break;
-
-    case "fixtures":
-      renderFixtures();
-      break;
-
-    case "leadership":
-      renderLeadership();
-      break;
-
-    case "committee":
-      renderCommittee();
-      break;
-
-    case "friendly-applications":
-      renderFriendlyApplications();
-      break;
-
-    case "membership-applications":
-      renderMembershipApplications();
-      break;
-
-  }
-
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-function updateDashboard() {
-
-  const notices =
-    getData(STORAGE.notices);
-
-  const tournaments =
-    getData(STORAGE.tournaments);
-
-  const fixtures =
-    getData(STORAGE.fixtures);
-
-  const friendly =
-    getData(STORAGE.friendly)
-      .filter(x => x.status === "pending");
-
-  const membership =
-    getData(STORAGE.membership)
-      .filter(x => x.status === "pending");
-
-
-  setText(
-    "totalNotices",
-    notices.length
-  );
-
-  setText(
-    "totalTournaments",
-    tournaments.length
-  );
-
-  setText(
-    "totalFixtures",
-    fixtures.length
-  );
-
-  setText(
-    "totalApplications",
-    friendly.length + membership.length
-  );
-
-
-  setText(
-    "friendlyApplicationCount",
-    friendly.length
-  );
-
-  setText(
-    "membershipApplicationCount",
-    membership.length
-  );
-
-
-  const totalApplications =
-    friendly.length + membership.length;
-
-  const notificationDot =
-    $("#notificationDot");
-
-  if (notificationDot) {
-
-    notificationDot.style.display =
-      totalApplications > 0
-        ? "block"
-        : "none";
-
-  }
-
-
-  renderRecentActivity();
-
-  renderApplicationPreview();
-
-}
-
-
-/* =========================================================
-   NOTICES
-========================================================= */
-
-function renderNotices() {
-
-  const container = $("#noticesList");
-
-  if (!container) return;
-
-  const data = getData(STORAGE.notices);
-
-  if (!data.length) {
-
-    container.innerHTML = emptyState(
-      "◉",
-      "No notices available",
-      "Create your first announcement."
+    showToast(
+      "Could not save notice. Check your Supabase table.",
+      "error"
     );
 
     return;
-
   }
 
 
-  container.innerHTML =
-    data.map(item => `
+  closeModal();
 
-      <article class="data-card">
+  showToast(
+    "Notice published successfully."
+  );
 
-        <div class="data-card-content">
+  loadDashboard();
 
-          <span class="data-card-date">
-            ${formatDate(item.date)}
-          </span>
+  loadNotices();
 
-          <h3>
-            ${escapeHTML(item.title)}
-          </h3>
+}
 
-          <p>
-            ${escapeHTML(item.description)}
-          </p>
 
-        </div>
+/* =========================================================
+   TOURNAMENT MODAL
+========================================================= */
 
-        <div class="data-card-actions">
+function openTournamentModal() {
 
-          <button
-            class="edit-btn"
-            onclick="editItem('notice','${item.id}')"
-          >
-            Edit
-          </button>
+  openModal(`
 
-          <button
-            class="delete-btn"
-            onclick="deleteItem('notice','${item.id}')"
-          >
-            Delete
-          </button>
+    <form
+      class="modal-form"
+      id="tournamentForm"
+    >
 
-        </div>
+      <h2>
+        Add Tournament
+      </h2>
 
-      </article>
+      <div class="form-field">
 
-    `).join("");
+        <label>
+          TOURNAMENT NAME
+        </label>
+
+        <input
+          id="tournamentName"
+          required
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label>
+          DATE
+        </label>
+
+        <input
+          type="date"
+          id="tournamentDate"
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label>
+          LOCATION
+        </label>
+
+        <input
+          id="tournamentLocation"
+        >
+
+      </div>
+
+      <button
+        class="admin-button admin-button-dark"
+        type="submit"
+      >
+        Save Tournament
+      </button>
+
+    </form>
+
+  `);
+
+
+  document
+    .getElementById(
+      "tournamentForm"
+    )
+    .addEventListener(
+      "submit",
+      saveTournament
+    );
+
+}
+
+
+async function saveTournament(event) {
+
+  event.preventDefault();
+
+  const name =
+    document.getElementById(
+      "tournamentName"
+    ).value.trim();
+
+  const date =
+    document.getElementById(
+      "tournamentDate"
+    ).value || null;
+
+  const location =
+    document.getElementById(
+      "tournamentLocation"
+    ).value.trim();
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("tournaments")
+      .insert({
+        name,
+        date,
+        location
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    showToast(
+      "Could not save tournament.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  closeModal();
+
+  showToast(
+    "Tournament created successfully."
+  );
+
+  loadDashboard();
+
+}
+
+
+/* =========================================================
+   FIXTURE MODAL
+========================================================= */
+
+function openFixtureModal() {
+
+  openModal(`
+
+    <form
+      class="modal-form"
+      id="fixtureForm"
+    >
+
+      <h2>
+        Add Match
+      </h2>
+
+      <div class="form-field">
+
+        <label>
+          HOME TEAM
+        </label>
+
+        <input
+          id="homeTeam"
+          required
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label>
+          AWAY TEAM
+        </label>
+
+        <input
+          id="awayTeam"
+          required
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label>
+          MATCH DATE
+        </label>
+
+        <input
+          type="date"
+          id="fixtureDate"
+          required
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label>
+          VENUE
+        </label>
+
+        <input
+          id="fixtureVenue"
+        >
+
+      </div>
+
+      <button
+        class="admin-button admin-button-dark"
+        type="submit"
+      >
+        Save Match
+      </button>
+
+    </form>
+
+  `);
+
+
+  document
+    .getElementById(
+      "fixtureForm"
+    )
+    .addEventListener(
+      "submit",
+      saveFixture
+    );
+
+}
+
+
+async function saveFixture(event) {
+
+  event.preventDefault();
+
+  const home_team =
+    document.getElementById(
+      "homeTeam"
+    ).value.trim();
+
+  const away_team =
+    document.getElementById(
+      "awayTeam"
+    ).value.trim();
+
+  const match_date =
+    document.getElementById(
+      "fixtureDate"
+    ).value;
+
+  const venue =
+    document.getElementById(
+      "fixtureVenue"
+    ).value.trim();
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("fixtures")
+      .insert({
+        home_team,
+        away_team,
+        match_date,
+        venue
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    showToast(
+      "Could not save match.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  closeModal();
+
+  showToast(
+    "Match added successfully."
+  );
+
+  loadDashboard();
 
 }
 
@@ -1695,323 +1074,248 @@ function renderNotices() {
    GALLERY
 ========================================================= */
 
-function renderGallery() {
+function openGalleryModal() {
 
-  const container =
-    $("#galleryAdminGrid");
+  openModal(`
 
-  if (!container) return;
+    <form
+      class="modal-form"
+      id="galleryForm"
+    >
 
-  const data = getData(STORAGE.gallery);
+      <h2>
+        Add Gallery Photo
+      </h2>
 
-  if (!data.length) {
+      <div class="form-field">
 
-    container.innerHTML = emptyState(
-      "▧",
-      "Gallery is empty",
-      "Upload photos from club activities."
+        <label>
+          PHOTO URL
+        </label>
+
+        <input
+          type="url"
+          id="galleryUrl"
+          placeholder="https://..."
+          required
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label>
+          CAPTION
+        </label>
+
+        <input
+          id="galleryCaption"
+        >
+
+      </div>
+
+      <button
+        class="admin-button admin-button-dark"
+        type="submit"
+      >
+        Add Photo
+      </button>
+
+    </form>
+
+  `);
+
+
+  document
+    .getElementById(
+      "galleryForm"
+    )
+    .addEventListener(
+      "submit",
+      saveGallery
+    );
+
+}
+
+
+async function saveGallery(event) {
+
+  event.preventDefault();
+
+  const image_url =
+    document.getElementById(
+      "galleryUrl"
+    ).value.trim();
+
+  const caption =
+    document.getElementById(
+      "galleryCaption"
+    ).value.trim();
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("gallery")
+      .insert({
+        image_url,
+        caption
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    showToast(
+      "Could not add photo.",
+      "error"
     );
 
     return;
-
   }
 
 
-  container.innerHTML =
-    data.map(item => `
+  closeModal();
 
-      <article class="gallery-card">
-
-        <div class="gallery-image">
-
-          <img
-            src="${escapeAttribute(item.image)}"
-            alt="${escapeAttribute(item.title)}"
-            loading="lazy"
-            onerror="this.src=''; this.parentElement.classList.add('image-error')"
-          >
-
-        </div>
-
-        <div class="gallery-card-info">
-
-          <h3>
-            ${escapeHTML(item.title)}
-          </h3>
-
-          <p>
-            ${escapeHTML(item.description || "")}
-          </p>
-
-          <div class="data-card-actions">
-
-            <button
-              class="edit-btn"
-              onclick="editItem('gallery','${item.id}')"
-            >
-              Edit
-            </button>
-
-            <button
-              class="delete-btn"
-              onclick="deleteItem('gallery','${item.id}')"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        </div>
-
-      </article>
-
-    `).join("");
+  showToast(
+    "Photo added successfully."
+  );
 
 }
 
 
 /* =========================================================
-   TOURNAMENTS
+   LEADER
 ========================================================= */
 
-function renderTournaments() {
+function openLeaderModal() {
 
-  const container =
-    $("#tournamentsList");
+  openModal(`
 
-  if (!container) return;
+    <form
+      class="modal-form"
+      id="leaderForm"
+    >
 
-  const data =
-    getData(STORAGE.tournaments);
+      <h2>
+        Add Leader
+      </h2>
+
+      <div class="form-field">
+
+        <label>
+          NAME
+        </label>
+
+        <input
+          id="leaderName"
+          required
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label>
+          POSITION
+        </label>
+
+        <input
+          id="leaderPosition"
+          required
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label>
+          PHOTO URL
+        </label>
+
+        <input
+          type="url"
+          id="leaderPhoto"
+        >
+
+      </div>
+
+      <button
+        class="admin-button admin-button-dark"
+        type="submit"
+      >
+        Save Leader
+      </button>
+
+    </form>
+
+  `);
 
 
-  if (!data.length) {
-
-    container.innerHTML = emptyState(
-      "🏆",
-      "No tournaments",
-      "Create your first tournament."
+  document
+    .getElementById(
+      "leaderForm"
+    )
+    .addEventListener(
+      "submit",
+      saveLeader
     );
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    data.map(item => `
-
-      <article class="sport-card">
-
-        <span class="sport-card-label">
-          TOURNAMENT
-        </span>
-
-        <h3>
-          ${escapeHTML(item.name)}
-        </h3>
-
-        <p>
-          ${escapeHTML(item.location || "Venue not specified")}
-        </p>
-
-        <strong>
-          ${formatDate(item.date)}
-        </strong>
-
-        <div class="data-card-actions">
-
-          <button
-            class="edit-btn"
-            onclick="editItem('tournament','${item.id}')"
-          >
-            Edit
-          </button>
-
-          <button
-            class="delete-btn"
-            onclick="deleteItem('tournament','${item.id}')"
-          >
-            Delete
-          </button>
-
-        </div>
-
-      </article>
-
-    `).join("");
 
 }
 
 
-/* =========================================================
-   FIXTURES
-========================================================= */
+async function saveLeader(event) {
 
-function renderFixtures() {
+  event.preventDefault();
 
-  const container =
-    $("#fixturesList");
+  const name =
+    document.getElementById(
+      "leaderName"
+    ).value.trim();
 
-  if (!container) return;
+  const position =
+    document.getElementById(
+      "leaderPosition"
+    ).value.trim();
 
-  const data =
-    getData(STORAGE.fixtures);
+  const photo_url =
+    document.getElementById(
+      "leaderPhoto"
+    ).value.trim();
 
 
-  if (!data.length) {
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("leadership")
+      .insert({
+        name,
+        position,
+        photo_url
+      });
 
-    container.innerHTML = emptyState(
-      "⚽",
-      "No matches available",
-      "Add an upcoming match or fixture."
+
+  if (error) {
+
+    console.error(error);
+
+    showToast(
+      "Could not save leader.",
+      "error"
     );
 
     return;
-
   }
 
 
-  container.innerHTML =
-    data.map(item => `
+  closeModal();
 
-      <article class="fixture-card">
-
-        <div class="fixture-date">
-          ${formatDate(item.date)}
-        </div>
-
-        <div class="fixture-teams">
-
-          <strong>
-            ${escapeHTML(item.home)}
-          </strong>
-
-          <span>
-            VS
-          </span>
-
-          <strong>
-            ${escapeHTML(item.away)}
-          </strong>
-
-        </div>
-
-        <div class="fixture-meta">
-
-          ${item.time || ""}
-
-          ${item.venue
-            ? " • " + escapeHTML(item.venue)
-            : ""
-          }
-
-        </div>
-
-        <div class="data-card-actions">
-
-          <button
-            class="edit-btn"
-            onclick="editItem('fixture','${item.id}')"
-          >
-            Edit
-          </button>
-
-          <button
-            class="delete-btn"
-            onclick="deleteItem('fixture','${item.id}')"
-          >
-            Delete
-          </button>
-
-        </div>
-
-      </article>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   LEADERSHIP
-========================================================= */
-
-function renderLeadership() {
-
-  const container =
-    $("#leadershipList");
-
-  if (!container) return;
-
-  const data =
-    getData(STORAGE.leadership);
-
-
-  if (!data.length) {
-
-    container.innerHTML = emptyState(
-      "★",
-      "No leadership members",
-      "Add club leadership information."
-    );
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    data.map(item => `
-
-      <article class="person-card">
-
-        <div class="person-photo">
-
-          ${
-            item.photo
-              ? `<img
-                   src="${escapeAttribute(item.photo)}"
-                   alt="${escapeAttribute(item.name)}"
-                 >`
-              : `<span>★</span>`
-          }
-
-        </div>
-
-        <div class="person-info">
-
-          <h3>
-            ${escapeHTML(item.name)}
-          </h3>
-
-          <p>
-            ${escapeHTML(item.position)}
-          </p>
-
-        </div>
-
-        <div class="data-card-actions">
-
-          <button
-            class="edit-btn"
-            onclick="editItem('leader','${item.id}')"
-          >
-            Edit
-          </button>
-
-          <button
-            class="delete-btn"
-            onclick="deleteItem('leader','${item.id}')"
-          >
-            Delete
-          </button>
-
-        </div>
-
-      </article>
-
-    `).join("");
+  showToast(
+    "Leader added successfully."
+  );
 
 }
 
@@ -2020,66 +1324,324 @@ function renderLeadership() {
    COMMITTEE
 ========================================================= */
 
-function renderCommittee() {
+function openCommitteeModal() {
 
-  const container =
-    $("#committeeList");
+  openModal(`
 
-  if (!container) return;
+    <form
+      class="modal-form"
+      id="committeeForm"
+    >
 
-  const data =
-    getData(STORAGE.committee);
+      <h2>
+        Add Committee Member
+      </h2>
+
+      <div class="form-field">
+
+        <label>
+          NAME
+        </label>
+
+        <input
+          id="committeeName"
+          required
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label>
+          POSITION
+        </label>
+
+        <input
+          id="committeePosition"
+          required
+        >
+
+      </div>
+
+      <button
+        class="admin-button admin-button-dark"
+        type="submit"
+      >
+        Save Member
+      </button>
+
+    </form>
+
+  `);
 
 
-  if (!data.length) {
+  document
+    .getElementById(
+      "committeeForm"
+    )
+    .addEventListener(
+      "submit",
+      saveCommittee
+    );
 
-    container.innerHTML = emptyState(
-      "♙",
-      "Committee list is empty",
-      "Add committee members and positions."
+}
+
+
+async function saveCommittee(event) {
+
+  event.preventDefault();
+
+  const name =
+    document.getElementById(
+      "committeeName"
+    ).value.trim();
+
+  const position =
+    document.getElementById(
+      "committeePosition"
+    ).value.trim();
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("committee")
+      .insert({
+        name,
+        position
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    showToast(
+      "Could not save committee member.",
+      "error"
     );
 
     return;
+  }
 
+
+  closeModal();
+
+  showToast(
+    "Committee member added."
+  );
+
+}
+
+
+/* =========================================================
+   DASHBOARD DATA
+========================================================= */
+
+async function getCount(table) {
+
+  const {
+    count,
+    error
+  } =
+    await supabaseClient
+      .from(table)
+      .select("*", {
+        count: "exact",
+        head: true
+      });
+
+  if (error) {
+
+    console.warn(
+      `Table ${table} unavailable`,
+      error
+    );
+
+    return 0;
+  }
+
+  return count || 0;
+}
+
+
+async function loadDashboard() {
+
+  const [
+    notices,
+    tournaments,
+    fixtures,
+    friendly,
+    membership
+  ] =
+    await Promise.all([
+
+      getCount("notices"),
+
+      getCount("tournaments"),
+
+      getCount("fixtures"),
+
+      getCount(
+        "friendly_applications"
+      ),
+
+      getCount(
+        "membership_applications"
+      )
+
+    ]);
+
+
+  const totalNotices =
+    document.getElementById(
+      "totalNotices"
+    );
+
+  const totalTournaments =
+    document.getElementById(
+      "totalTournaments"
+    );
+
+  const totalFixtures =
+    document.getElementById(
+      "totalFixtures"
+    );
+
+  const totalApplications =
+    document.getElementById(
+      "totalApplications"
+    );
+
+
+  if (totalNotices)
+    totalNotices.textContent =
+      notices;
+
+  if (totalTournaments)
+    totalTournaments.textContent =
+      tournaments;
+
+  if (totalFixtures)
+    totalFixtures.textContent =
+      fixtures;
+
+  if (totalApplications)
+    totalApplications.textContent =
+      friendly + membership;
+
+
+  document.getElementById(
+    "friendlyApplicationCount"
+  ).textContent = friendly;
+
+  document.getElementById(
+    "membershipApplicationCount"
+  ).textContent = membership;
+
+
+  if (
+    friendly + membership > 0
+  ) {
+
+    document
+      .getElementById(
+        "notificationDot"
+      )
+      .classList.add("show");
+
+  }
+
+}
+
+
+/* =========================================================
+   NOTICES LIST
+========================================================= */
+
+async function loadNotices() {
+
+  const container =
+    document.getElementById(
+      "noticesList"
+    );
+
+  if (!container) return;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("notices")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+  if (error) {
+
+    container.innerHTML = emptyState(
+      "◉",
+      "No notices available",
+      "Create your first announcement."
+    );
+
+    return;
+  }
+
+
+  if (!data || data.length === 0) {
+
+    container.innerHTML = emptyState(
+      "◉",
+      "No notices available",
+      "Create your first announcement."
+    );
+
+    return;
   }
 
 
   container.innerHTML =
-    data.map(item => `
+    data.map(notice => `
 
-      <article class="committee-card">
+      <div class="admin-item">
 
         <div>
 
-          <h3>
-            ${escapeHTML(item.name)}
-          </h3>
+          <h4>
+            ${escapeHTML(
+              notice.title || "Untitled"
+            )}
+          </h4>
 
           <p>
-            ${escapeHTML(item.position)}
+            ${escapeHTML(
+              notice.content || ""
+            )}
           </p>
 
         </div>
 
-        <div class="data-card-actions">
+        <div class="item-actions">
 
           <button
-            class="edit-btn"
-            onclick="editItem('committee','${item.id}')"
-          >
-            Edit
-          </button>
-
-          <button
-            class="delete-btn"
-            onclick="deleteItem('committee','${item.id}')"
+            class="item-action item-delete"
+            onclick="deleteNotice('${notice.id}')"
           >
             Delete
           </button>
 
         </div>
 
-      </article>
+      </div>
 
     `).join("");
 
@@ -2087,721 +1649,97 @@ function renderCommittee() {
 
 
 /* =========================================================
-   FRIENDLY APPLICATIONS
+   DELETE NOTICE
 ========================================================= */
 
-function renderFriendlyApplications() {
+async function deleteNotice(id) {
 
-  const container =
-    $("#friendlyApplicationsList");
-
-  if (!container) return;
-
-  const data =
-    getData(STORAGE.friendly);
-
-  const filter =
-    $("#friendlyStatusFilter")?.value || "all";
+  if (
+    !confirm(
+      "Delete this notice?"
+    )
+  ) return;
 
 
-  const filtered =
-    filter === "all"
-      ? data
-      : data.filter(x => x.status === filter);
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("notices")
+      .delete()
+      .eq("id", id);
 
 
-  if (!filtered.length) {
+  if (error) {
 
-    container.innerHTML = emptyState(
-      "⚽",
-      "No friendly match applications",
-      "Submitted applications will appear here."
+    showToast(
+      "Could not delete notice.",
+      "error"
     );
 
     return;
-
   }
-
-
-  container.innerHTML =
-    filtered.map(applicationCard).join("");
-
-}
-
-
-/* =========================================================
-   MEMBERSHIP APPLICATIONS
-========================================================= */
-
-function renderMembershipApplications() {
-
-  const container =
-    $("#membershipApplicationsList");
-
-  if (!container) return;
-
-  const data =
-    getData(STORAGE.membership);
-
-  const filter =
-    $("#membershipStatusFilter")?.value || "all";
-
-
-  const filtered =
-    filter === "all"
-      ? data
-      : data.filter(x => x.status === filter);
-
-
-  if (!filtered.length) {
-
-    container.innerHTML = emptyState(
-      "✦",
-      "No membership applications",
-      "New club membership applications will appear here."
-    );
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    filtered.map(applicationCard).join("");
-
-}
-
-
-/* =========================================================
-   APPLICATION CARD
-========================================================= */
-
-function applicationCard(item) {
-
-  const status =
-    item.status || "pending";
-
-
-  return `
-
-    <article class="application-card">
-
-      <div class="application-card-header">
-
-        <div>
-
-          <span class="application-type">
-            ${escapeHTML(
-              item.type ||
-              "APPLICATION"
-            )}
-          </span>
-
-          <h3>
-            ${escapeHTML(
-              item.name ||
-              item.teamName ||
-              "Applicant"
-            )}
-          </h3>
-
-        </div>
-
-        <span class="status-badge ${status}">
-          ${escapeHTML(status)}
-        </span>
-
-      </div>
-
-      <div class="application-details">
-
-        ${
-          item.email
-            ? `<p><strong>Email:</strong> ${escapeHTML(item.email)}</p>`
-            : ""
-        }
-
-        ${
-          item.phone
-            ? `<p><strong>Phone:</strong> ${escapeHTML(item.phone)}</p>`
-            : ""
-        }
-
-        ${
-          item.date
-            ? `<p><strong>Date:</strong> ${formatDate(item.date)}</p>`
-            : ""
-        }
-
-        ${
-          item.message
-            ? `<p><strong>Message:</strong> ${escapeHTML(item.message)}</p>`
-            : ""
-        }
-
-      </div>
-
-      <div class="application-actions">
-
-        ${
-          status !== "approved"
-            ? `
-              <button
-                class="approve-btn"
-                onclick="updateApplicationStatus('${item.id}','approved')"
-              >
-                Approve
-              </button>
-            `
-            : ""
-        }
-
-        ${
-          status !== "rejected"
-            ? `
-              <button
-                class="reject-btn"
-                onclick="updateApplicationStatus('${item.id}','rejected')"
-              >
-                Reject
-              </button>
-            `
-            : ""
-        }
-
-        <button
-          class="delete-btn"
-          onclick="deleteApplication('${item.id}')"
-        >
-          Delete
-        </button>
-
-      </div>
-
-    </article>
-
-  `;
-
-}
-
-
-/* =========================================================
-   FILTERS
-========================================================= */
-
-function setupFilters() {
-
-  const friendly =
-    $("#friendlyStatusFilter");
-
-  const membership =
-    $("#membershipStatusFilter");
-
-
-  if (friendly) {
-
-    friendly.addEventListener(
-      "change",
-      renderFriendlyApplications
-    );
-
-  }
-
-
-  if (membership) {
-
-    membership.addEventListener(
-      "change",
-      renderMembershipApplications
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   UPDATE APPLICATION STATUS
-========================================================= */
-
-function updateApplicationStatus(id, status) {
-
-  let key = null;
-
-  let item = null;
-
-
-  const friendly =
-    getData(STORAGE.friendly);
-
-  const friendlyIndex =
-    friendly.findIndex(x => x.id === id);
-
-
-  if (friendlyIndex !== -1) {
-
-    key = STORAGE.friendly;
-
-    item = friendly[friendlyIndex];
-
-  } else {
-
-    const membership =
-      getData(STORAGE.membership);
-
-    const membershipIndex =
-      membership.findIndex(x => x.id === id);
-
-    if (membershipIndex !== -1) {
-
-      key = STORAGE.membership;
-
-      item = membership[membershipIndex];
-
-    }
-
-  }
-
-
-  if (!key || !item) return;
-
-
-  const data = getData(key);
-
-  const index =
-    data.findIndex(x => x.id === id);
-
-
-  data[index].status = status;
-
-  data[index].updatedAt =
-    new Date().toISOString();
-
-
-  saveData(key, data);
-
-
-  renderFriendlyApplications();
-
-  renderMembershipApplications();
-
-  updateDashboard();
 
 
   showToast(
-    `Application ${status}.`
+    "Notice deleted."
   );
+
+  loadNotices();
+
+  loadDashboard();
 
 }
 
 
 /* =========================================================
-   DELETE APPLICATION
+   REFRESH
 ========================================================= */
 
-function deleteApplication(id) {
-
-  let key = null;
-
-
-  const friendly =
-    getData(STORAGE.friendly);
-
-  if (friendly.some(x => x.id === id)) {
-    key = STORAGE.friendly;
-  }
-
-
-  const membership =
-    getData(STORAGE.membership);
-
-  if (membership.some(x => x.id === id)) {
-    key = STORAGE.membership;
-  }
-
-
-  if (!key) return;
-
-
-  if (!confirm("Delete this application?")) {
-    return;
-  }
-
-
-  const data =
-    getData(key)
-      .filter(x => x.id !== id);
-
-
-  saveData(key, data);
-
-
-  renderFriendlyApplications();
-
-  renderMembershipApplications();
-
-  updateDashboard();
-
-  showToast("Application deleted.");
-
-}
-
-
-/* =========================================================
-   EDIT ITEM
-========================================================= */
-
-function editItem(type, id) {
-
-  editingId = id;
-
-  editingType = type;
-
-
-  let key = null;
-
-  let form = null;
-
-
-  switch (type) {
-
-    case "notice":
-      key = STORAGE.notices;
-      form = noticeForm;
-      break;
-
-    case "gallery":
-      key = STORAGE.gallery;
-      form = galleryForm;
-      break;
-
-    case "tournament":
-      key = STORAGE.tournaments;
-      form = tournamentForm;
-      break;
-
-    case "fixture":
-      key = STORAGE.fixtures;
-      form = fixtureForm;
-      break;
-
-    case "leader":
-      key = STORAGE.leadership;
-      form = leaderForm;
-      break;
-
-    case "committee":
-      key = STORAGE.committee;
-      form = committeeForm;
-      break;
-
-    default:
-      return;
-
-  }
-
-
-  const data = getData(key);
-
-  const item =
-    data.find(x => x.id === id);
-
-
-  if (!item) return;
-
-
-  openModal(form(item));
-
-}
-
-
-/* =========================================================
-   DELETE ITEM
-========================================================= */
-
-function deleteItem(type, id) {
-
-  if (!confirm("Are you sure you want to delete this item?")) {
-    return;
-  }
-
-
-  let key = null;
-
-
-  switch (type) {
-
-    case "notice":
-      key = STORAGE.notices;
-      break;
-
-    case "gallery":
-      key = STORAGE.gallery;
-      break;
-
-    case "tournament":
-      key = STORAGE.tournaments;
-      break;
-
-    case "fixture":
-      key = STORAGE.fixtures;
-      break;
-
-    case "leader":
-      key = STORAGE.leadership;
-      break;
-
-    case "committee":
-      key = STORAGE.committee;
-      break;
-
-    default:
-      return;
-
-  }
-
-
-  const data =
-    getData(key)
-      .filter(item => item.id !== id);
-
-
-  saveData(key, data);
-
-
-  renderCurrentPage();
-
-  updateDashboard();
-
-  showToast("Item deleted.");
-
-}
-
-
-/* =========================================================
-   RECENT ACTIVITY
-========================================================= */
-
-function renderRecentActivity() {
-
-  const container =
-    $("#recentActivityList");
-
-  if (!container) return;
-
-
-  const all = [];
-
-
-  const addItems =
-    (data, type) => {
-
-      data.forEach(item => {
-
-        all.push({
-
-          ...item,
-
-          activityType: type,
-
-          activityDate:
-            item.createdAt ||
-            item.date ||
-            new Date().toISOString()
-
-        });
-
-      });
-
-    };
-
-
-  addItems(
-    getData(STORAGE.notices),
-    "Notice"
-  );
-
-  addItems(
-    getData(STORAGE.tournaments),
-    "Tournament"
-  );
-
-  addItems(
-    getData(STORAGE.fixtures),
-    "Match"
-  );
-
-  addItems(
-    getData(STORAGE.gallery),
-    "Gallery"
-  );
-
-
-  all.sort(
-    (a, b) =>
-      new Date(b.activityDate) -
-      new Date(a.activityDate)
-  );
-
-
-  const recent =
-    all.slice(0, 5);
-
-
-  if (!recent.length) {
-
-    container.innerHTML = `
-      <div class="empty-state small-empty">
-        <span>◌</span>
-        <p>No recent activity yet.</p>
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    recent.map(item => `
-
-      <div class="activity-item">
-
-        <span class="activity-dot"></span>
-
-        <div>
-
-          <strong>
-            ${escapeHTML(item.activityType)}
-          </strong>
-
-          <p>
-            ${escapeHTML(
-              item.title ||
-              item.name ||
-              `${item.home || ""} vs ${item.away || ""}`
-            )}
-          </p>
-
-        </div>
-
-        <small>
-          ${formatDate(
-            item.date ||
-            item.activityDate
-          )}
-        </small>
-
-      </div>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   APPLICATION PREVIEW
-========================================================= */
-
-function renderApplicationPreview() {
-
-  const container =
-    $("#applicationsPreview");
-
-  if (!container) return;
-
-
-  const friendly =
-    getData(STORAGE.friendly);
-
-  const membership =
-    getData(STORAGE.membership);
-
-
-  const applications = [
-
-    ...friendly.map(x => ({
-      ...x,
-      applicationType: "Friendly Match"
-    })),
-
-    ...membership.map(x => ({
-      ...x,
-      applicationType: "Membership"
-    }))
-
-  ]
-  .sort(
-    (a, b) =>
-      new Date(b.createdAt || 0) -
-      new Date(a.createdAt || 0)
+document
+  .getElementById(
+    "refreshButton"
   )
-  .slice(0, 5);
+  .addEventListener(
+    "click",
+    async () => {
 
+      const button =
+        document.getElementById(
+          "refreshButton"
+        );
 
-  if (!applications.length) {
+      button.style.transform =
+        "rotate(360deg)";
 
-    container.innerHTML = `
+      await loadDashboard();
 
-      <div class="empty-state">
+      await loadNotices();
 
-        <span>✦</span>
+      setTimeout(() => {
 
-        <h4>
-          No applications yet
-        </h4>
+        button.style.transform =
+          "";
 
-        <p>
-          New Friendly Match and Membership
-          applications will appear here.
-        </p>
+      }, 400);
 
-      </div>
+      showToast(
+        "Dashboard refreshed."
+      );
 
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    applications.map(item => `
-
-      <div class="preview-application">
-
-        <div>
-
-          <strong>
-            ${escapeHTML(
-              item.name ||
-              item.teamName ||
-              "Applicant"
-            )}
-          </strong>
-
-          <span>
-            ${item.applicationType}
-          </span>
-
-        </div>
-
-        <span class="status-badge ${item.status || "pending"}">
-          ${item.status || "pending"}
-        </span>
-
-      </div>
-
-    `).join("");
-
-}
+    }
+  );
 
 
 /* =========================================================
    EMPTY STATE
 ========================================================= */
 
-function emptyState(icon, title, text) {
+function emptyState(
+  icon,
+  title,
+  text
+) {
 
   return `
 
@@ -2810,11 +1748,11 @@ function emptyState(icon, title, text) {
       <span>${icon}</span>
 
       <h4>
-        ${escapeHTML(title)}
+        ${title}
       </h4>
 
       <p>
-        ${escapeHTML(text)}
+        ${text}
       </p>
 
     </div>
@@ -2825,188 +1763,79 @@ function emptyState(icon, title, text) {
 
 
 /* =========================================================
-   TOAST
-========================================================= */
-
-function showToast(message) {
-
-  const container =
-    $("#toastContainer");
-
-  if (!container) return;
-
-
-  const toast =
-    document.createElement("div");
-
-  toast.className = "toast";
-
-  toast.textContent = message;
-
-
-  container.appendChild(toast);
-
-
-  setTimeout(() => {
-
-    toast.style.opacity = "0";
-    toast.style.transform = "translateX(15px)";
-
-    setTimeout(() => {
-      toast.remove();
-    }, 250);
-
-  }, 2800);
-
-}
-
-
-/* =========================================================
-   LOADING SCREEN
-========================================================= */
-
-function hideLoading() {
-
-  const loading =
-    $("#adminLoading");
-
-  if (!loading) return;
-
-
-  setTimeout(() => {
-
-    loading.style.opacity = "0";
-    loading.style.pointerEvents = "none";
-
-    setTimeout(() => {
-      loading.style.display = "none";
-    }, 300);
-
-  }, 500);
-
-}
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function setText(id, value) {
-
-  const element = document.getElementById(id);
-
-  if (element) {
-    element.textContent = value;
-  }
-
-}
-
-
-function today() {
-
-  const now = new Date();
-
-  const year =
-    now.getFullYear();
-
-  const month =
-    String(now.getMonth() + 1)
-      .padStart(2, "0");
-
-  const day =
-    String(now.getDate())
-      .padStart(2, "0");
-
-
-  return `${year}-${month}-${day}`;
-
-}
-
-
-function formatDate(date) {
-
-  if (!date) return "Date not set";
-
-
-  const parsed =
-    new Date(date);
-
-
-  if (Number.isNaN(parsed.getTime())) {
-    return date;
-  }
-
-
-  return parsed.toLocaleDateString(
-    "en-US",
-    {
-      day: "numeric",
-      month: "short",
-      year: "numeric"
-    }
-  );
-
-}
-
-
-function findCreatedAt(data, id) {
-
-  const item =
-    data.find(x => x.id === id);
-
-  return item?.createdAt ||
-    new Date().toISOString();
-
-}
-
-
-/* =========================================================
-   SECURITY HELPERS
+   HTML ESCAPE
 ========================================================= */
 
 function escapeHTML(value) {
 
-  if (value === null || value === undefined) {
-    return "";
-  }
-
-
   return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
-function escapeAttribute(value) {
-  return escapeHTML(value);
-}
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+supabaseClient.auth.onAuthStateChange(
+  async (event, session) => {
+
+    if (
+      event === "SIGNED_OUT"
+    ) {
+
+      showLoginScreen();
+
+    }
+
+  }
+);
 
 
 /* =========================================================
-   DEMO APPLICATION DATA
+   INITIALIZE
 ========================================================= */
 
-/*
-   These functions are intentionally empty.
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
 
-   Your public website can later save real
-   Friendly Match and Membership applications
-   into these LocalStorage keys.
+    updateDate();
 
-   Example:
+    await checkSession();
 
-   localStorage.setItem(
-      "gsa_friendly_applications",
-      JSON.stringify([...])
-   );
+    if (
+      document
+        .getElementById(
+          "noticesPage"
+        )
+        .classList
+        .contains("active")
+    ) {
 
-*/
+      await loadNotices();
 
+    }
 
-/* =========================================================
-   END
-========================================================= */
+  }
+);
