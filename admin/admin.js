@@ -1,16 +1,41 @@
 /* =========================================================
    GSA ADMIN PANEL
-   Ghopkhali Sports Arena
-   Supabase Version
+   GHOPKHALI SPORTS ARENA
+   SUPABASE VERSION
 ========================================================= */
 
-const SUPABASE_URL = "https://cmygmswzokyrmgdnuszq.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+  "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+if (
+  typeof window.supabase === "undefined"
+) {
+
+  console.error(
+    "Supabase library is not loaded."
+  );
+
+  throw new Error(
+    "Supabase library is not loaded."
+  );
+
+}
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
 
 /* =========================================================
@@ -18,29 +43,48 @@ const supabaseClient = window.supabase.createClient(
 ========================================================= */
 
 let currentUser = null;
+
 let notices = [];
 
-const $ = (selector) => document.querySelector(selector);
-const $$ = (selector) => document.querySelectorAll(selector);
+let friendlyApplications = [];
+
+let membershipApplications = [];
+
+
+const $ = selector =>
+  document.querySelector(selector);
+
+
+const $$ = selector =>
+  document.querySelectorAll(selector);
 
 
 /* =========================================================
    DOM READY
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
-  setCurrentYear();
-  setCurrentDate();
-  setupNavigation();
-  setupButtons();
-  setupModal();
-  setupLogin();
-  setupSidebar();
+    setCurrentYear();
 
-  checkSession();
+    setCurrentDate();
 
-});
+    setupNavigation();
+
+    setupButtons();
+
+    setupModal();
+
+    setupLogin();
+
+    setupSidebar();
+
+    checkSession();
+
+  }
+);
 
 
 /* =========================================================
@@ -49,9 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function setCurrentYear() {
 
-  $$("[data-current-year]").forEach(el => {
-    el.textContent = new Date().getFullYear();
-  });
+  $$("[data-current-year]").forEach(
+    element => {
+
+      element.textContent =
+        new Date().getFullYear();
+
+    }
+  );
 
 }
 
@@ -62,19 +111,21 @@ function setCurrentYear() {
 
 function setCurrentDate() {
 
-  const el = $("#currentDate");
+  const element =
+    $("#currentDate");
 
-  if (!el) return;
+  if (!element) return;
 
-  el.textContent = new Date().toLocaleDateString(
-    "en-US",
-    {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    }
-  );
+  element.textContent =
+    new Date().toLocaleDateString(
+      "en-US",
+      {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }
+    );
 
 }
 
@@ -85,66 +136,126 @@ function setCurrentDate() {
 
 function setupLogin() {
 
-  const form = $("#loginForm");
+  const form =
+    $("#loginForm");
 
   if (!form) return;
 
-  form.addEventListener("submit", async (e) => {
 
-    e.preventDefault();
+  form.addEventListener(
+    "submit",
+    async event => {
 
-    const email = $("#adminEmail").value.trim();
-    const password = $("#adminPassword").value;
+      event.preventDefault();
 
-    const errorBox = $("#loginError");
 
-    errorBox.textContent = "";
+      const emailElement =
+        $("#adminEmail");
 
-    showLoading(true);
+      const passwordElement =
+        $("#adminPassword");
 
-    try {
+      const errorBox =
+        $("#loginError");
 
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-          email,
-          password
-        });
 
-      if (error) {
-        throw error;
+      const email =
+        emailElement
+          ? emailElement.value.trim()
+          : "";
+
+      const password =
+        passwordElement
+          ? passwordElement.value
+          : "";
+
+
+      if (errorBox) {
+        errorBox.textContent = "";
       }
 
-      currentUser = data.user;
 
-      showAdminPanel();
+      if (!email || !password) {
 
-      await loadDashboard();
+        if (errorBox) {
 
-      toast(
-        "Welcome back!",
-        "success"
-      );
+          errorBox.textContent =
+            "Please enter email and password.";
 
-    } catch (error) {
+        }
 
-      console.error("Login error:", error);
+        return;
 
-      errorBox.textContent =
-        error.message || "Login failed.";
+      }
 
-    } finally {
 
-      showLoading(false);
+      showLoading(true);
+
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth
+            .signInWithPassword({
+              email,
+              password
+            });
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        currentUser =
+          data.user;
+
+
+        showAdminPanel();
+
+        await loadDashboard();
+
+
+        toast(
+          "Welcome back!",
+          "success"
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Login error:",
+          error
+        );
+
+
+        if (errorBox) {
+
+          errorBox.textContent =
+            error.message ||
+            "Login failed.";
+
+        }
+
+
+      } finally {
+
+        showLoading(false);
+
+      }
 
     }
-
-  });
+  );
 
 }
 
 
 /* =========================================================
-   SESSION CHECK
+   SESSION
 ========================================================= */
 
 async function checkSession() {
@@ -152,12 +263,18 @@ async function checkSession() {
   try {
 
     const {
-      data: { session }
-    } = await supabaseClient.auth.getSession();
+      data: {
+        session
+      }
+    } =
+      await supabaseClient.auth
+        .getSession();
+
 
     if (session?.user) {
 
-      currentUser = session.user;
+      currentUser =
+        session.user;
 
       showAdminPanel();
 
@@ -168,6 +285,7 @@ async function checkSession() {
       showLogin();
 
     }
+
 
   } catch (error) {
 
@@ -188,15 +306,22 @@ async function checkSession() {
 ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-  async (event, session) => {
+  (event, session) => {
 
-    if (event === "SIGNED_IN" && session?.user) {
+    if (
+      event === "SIGNED_IN" &&
+      session?.user
+    ) {
 
-      currentUser = session.user;
+      currentUser =
+        session.user;
 
     }
 
-    if (event === "SIGNED_OUT") {
+
+    if (
+      event === "SIGNED_OUT"
+    ) {
 
       currentUser = null;
 
@@ -214,36 +339,59 @@ supabaseClient.auth.onAuthStateChange(
 
 function showLogin() {
 
-  const loginScreen = $("#loginScreen");
-  const adminApp = $("#adminApp");
+  const loginScreen =
+    $("#loginScreen");
+
+  const adminApp =
+    $("#adminApp");
+
 
   if (loginScreen) {
-    loginScreen.style.display = "flex";
+
+    loginScreen.style.display =
+      "flex";
+
   }
 
+
   if (adminApp) {
-    adminApp.style.display = "none";
+
+    adminApp.style.display =
+      "none";
+
   }
 
 }
 
 
 /* =========================================================
-   SHOW ADMIN
+   SHOW ADMIN PANEL
 ========================================================= */
 
 function showAdminPanel() {
 
-  const loginScreen = $("#loginScreen");
-  const adminApp = $("#adminApp");
+  const loginScreen =
+    $("#loginScreen");
+
+  const adminApp =
+    $("#adminApp");
+
 
   if (loginScreen) {
-    loginScreen.style.display = "none";
+
+    loginScreen.style.display =
+      "none";
+
   }
 
+
   if (adminApp) {
-    adminApp.style.display = "flex";
+
+    adminApp.style.display =
+      "flex";
+
   }
+
 
   updateAdminProfile();
 
@@ -258,22 +406,39 @@ function updateAdminProfile() {
 
   if (!currentUser) return;
 
+
   const email =
-    currentUser.email || "Administrator";
+    currentUser.email ||
+    "Administrator";
+
 
   const name =
-    email.split("@")[0] || "Administrator";
+    email.split("@")[0] ||
+    "Administrator";
 
-  const nameEl = $("#adminName");
-  const avatarEl = $("#adminAvatar");
 
-  if (nameEl) {
-    nameEl.textContent = name;
+  const nameElement =
+    $("#adminName");
+
+  const avatarElement =
+    $("#adminAvatar");
+
+
+  if (nameElement) {
+
+    nameElement.textContent =
+      name;
+
   }
 
-  if (avatarEl) {
-    avatarEl.textContent =
-      name.charAt(0).toUpperCase();
+
+  if (avatarElement) {
+
+    avatarElement.textContent =
+      name
+        .charAt(0)
+        .toUpperCase();
+
   }
 
 }
@@ -287,14 +452,26 @@ async function logout() {
 
   showLoading(true);
 
+
   try {
 
-    await supabaseClient.auth.signOut();
+    const {
+      error
+    } =
+      await supabaseClient.auth
+        .signOut();
+
+
+    if (error) {
+      throw error;
+    }
+
 
     toast(
       "Signed out successfully.",
       "success"
     );
+
 
   } catch (error) {
 
@@ -303,10 +480,12 @@ async function logout() {
       error
     );
 
+
     toast(
       "Logout failed.",
       "error"
     );
+
 
   } finally {
 
@@ -323,64 +502,97 @@ async function logout() {
 
 function setupNavigation() {
 
-  $$(".sidebar-link[data-page]").forEach(button => {
+  $$(".sidebar-link[data-page]")
+    .forEach(button => {
 
-    button.addEventListener("click", () => {
+      button.addEventListener(
+        "click",
+        () => {
 
-      const page =
-        button.dataset.page;
+          const page =
+            button.dataset.page;
 
-      openPage(page);
+          openPage(page);
 
-    });
-
-  });
-
-
-  $$("[data-page-link]").forEach(button => {
-
-    button.addEventListener("click", () => {
-
-      openPage(
-        button.dataset.pageLink
+        }
       );
 
     });
 
-  });
+
+  $$("[data-page-link]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          openPage(
+            button.dataset.pageLink
+          );
+
+        }
+      );
+
+    });
 
 }
 
 
+/* =========================================================
+   OPEN PAGE
+========================================================= */
+
 async function openPage(page) {
 
-  $$(".sidebar-link[data-page]").forEach(link => {
+  if (!currentUser) {
 
-    link.classList.toggle(
-      "active",
-      link.dataset.page === page
-    );
+    showLogin();
 
-  });
+    return;
+
+  }
 
 
-  $$(".admin-page").forEach(section => {
+  $$(".sidebar-link[data-page]")
+    .forEach(link => {
 
-    section.classList.remove("active");
+      link.classList.toggle(
+        "active",
+        link.dataset.page === page
+      );
 
-  });
+    });
+
+
+  $$(".admin-page")
+    .forEach(section => {
+
+      section.classList.remove(
+        "active"
+      );
+
+    });
 
 
   const pageId =
-    page.replace(/-/g, "") + "Page";
+    page.replace(
+      /-/g,
+      ""
+    ) + "Page";
+
 
   const pageElement =
-    document.getElementById(pageId);
+    document.getElementById(
+      pageId
+    );
 
 
   if (pageElement) {
 
-    pageElement.classList.add("active");
+    pageElement.classList.add(
+      "active"
+    );
 
   }
 
@@ -388,73 +600,133 @@ async function openPage(page) {
   updatePageTitle(page);
 
 
-  /* Load page data */
+  /* -------------------------------------------------------
+     PAGE DATA
+  ------------------------------------------------------- */
 
   if (page === "dashboard") {
+
     await loadDashboard();
+
   }
+
 
   if (page === "notices") {
+
     await loadNotices();
+
   }
+
 
   if (page === "gallery") {
+
     await loadGallery();
+
   }
+
 
   if (page === "tournaments") {
+
     await loadTournaments();
+
   }
+
 
   if (page === "fixtures") {
+
     await loadFixtures();
+
   }
+
 
   if (page === "leadership") {
+
     await loadLeadership();
+
   }
+
 
   if (page === "committee") {
+
     await loadCommittee();
+
   }
 
-  if (page === "friendly-applications") {
+
+  if (
+    page ===
+    "friendly-applications"
+  ) {
+
     await loadFriendlyApplications();
+
   }
 
-  if (page === "membership-applications") {
+
+  if (
+    page ===
+    "membership-applications"
+  ) {
+
     await loadMembershipApplications();
+
   }
 
 }
 
 
+/* =========================================================
+   PAGE TITLE
+========================================================= */
+
 function updatePageTitle(page) {
 
   const titles = {
 
-    dashboard: "Dashboard",
-    notices: "Notices",
-    gallery: "Gallery",
-    tournaments: "Tournaments",
-    fixtures: "Matches & Fixtures",
-    leadership: "Leadership",
-    committee: "Committee",
+    dashboard:
+      "Dashboard",
+
+    notices:
+      "Notices",
+
+    gallery:
+      "Gallery",
+
+    tournaments:
+      "Tournaments",
+
+    fixtures:
+      "Matches & Fixtures",
+
+    leadership:
+      "Leadership",
+
+    committee:
+      "Committee",
+
     "friendly-applications":
       "Friendly Match Applications",
+
     "membership-applications":
       "Membership Applications"
 
   };
 
-  const title =
-    titles[page] || "Dashboard";
 
-  const titleElement =
+  const title =
+    titles[page] ||
+    "Dashboard";
+
+
+  const element =
     $("#pageTitle");
 
-  if (titleElement) {
-    titleElement.textContent = title;
+
+  if (element) {
+
+    element.textContent =
+      title;
+
   }
 
 }
@@ -472,7 +744,10 @@ function setupSidebar() {
   const sidebar =
     $("#adminSidebar");
 
-  if (!toggle || !sidebar) return;
+
+  if (!toggle || !sidebar)
+    return;
+
 
   toggle.addEventListener(
     "click",
@@ -497,6 +772,7 @@ function setupButtons() {
   const logoutButton =
     $("#logoutButton");
 
+
   if (logoutButton) {
 
     logoutButton.addEventListener(
@@ -510,6 +786,7 @@ function setupButtons() {
   const refreshButton =
     $("#refreshButton");
 
+
   if (refreshButton) {
 
     refreshButton.addEventListener(
@@ -519,7 +796,7 @@ function setupButtons() {
         await loadDashboard();
 
         toast(
-          "Data refreshed.",
+          "Dashboard refreshed.",
           "success"
         );
 
@@ -531,17 +808,20 @@ function setupButtons() {
 
   document.addEventListener(
     "click",
-    (e) => {
+    event => {
 
       const button =
-        e.target.closest(
+        event.target.closest(
           "[data-action]"
         );
 
+
       if (!button) return;
+
 
       const action =
         button.dataset.action;
+
 
       handleAction(action);
 
@@ -557,49 +837,90 @@ function setupButtons() {
 
 function handleAction(action) {
 
-  if (action === "add-notice") {
+  if (
+    action ===
+    "add-notice"
+  ) {
+
     openNoticeModal();
+
     return;
+
   }
 
-  if (action === "add-gallery") {
+
+  if (
+    action ===
+    "add-gallery"
+  ) {
+
     openSimpleModal(
       "Add Gallery Photo",
       "Gallery management will be connected next."
     );
+
     return;
+
   }
 
-  if (action === "add-tournament") {
+
+  if (
+    action ===
+    "add-tournament"
+  ) {
+
     openSimpleModal(
       "Add Tournament",
       "Tournament management will be connected next."
     );
+
     return;
+
   }
 
-  if (action === "add-fixture") {
+
+  if (
+    action ===
+    "add-fixture"
+  ) {
+
     openSimpleModal(
       "Add Match",
       "Fixture management will be connected next."
     );
+
     return;
+
   }
 
-  if (action === "add-leader") {
+
+  if (
+    action ===
+    "add-leader"
+  ) {
+
     openSimpleModal(
       "Add Leader",
       "Leadership management will be connected next."
     );
+
     return;
+
   }
 
-  if (action === "add-committee") {
+
+  if (
+    action ===
+    "add-committee"
+  ) {
+
     openSimpleModal(
       "Add Committee Member",
       "Committee management will be connected next."
     );
+
     return;
+
   }
 
 }
@@ -611,11 +932,25 @@ function handleAction(action) {
 
 async function loadDashboard() {
 
-  await loadNoticeStats();
-  await loadRecentActivity();
+  if (!currentUser) return;
+
+
+  await Promise.all([
+
+    loadNoticeStats(),
+
+    loadApplicationStats(),
+
+    loadRecentActivity()
+
+  ]);
 
 }
 
+
+/* =========================================================
+   NOTICE STATS
+========================================================= */
 
 async function loadNoticeStats() {
 
@@ -624,29 +959,156 @@ async function loadNoticeStats() {
     const {
       count,
       error
-    } = await supabaseClient
-      .from("notices")
-      .select("*", {
-        count: "exact",
-        head: true
-      });
+    } =
+      await supabaseClient
+        .from("notices")
+        .select(
+          "*",
+          {
+            count: "exact",
+            head: true
+          }
+        );
 
-    if (error) throw error;
 
-    const total =
-      document.getElementById(
-        "totalNotices"
-      );
-
-    if (total) {
-      total.textContent =
-        count || 0;
+    if (error) {
+      throw error;
     }
+
+
+    const element =
+      $("#totalNotices");
+
+
+    if (element) {
+
+      element.textContent =
+        count || 0;
+
+    }
+
 
   } catch (error) {
 
     console.error(
       "Notice stats error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   APPLICATION STATS
+========================================================= */
+
+async function loadApplicationStats() {
+
+  try {
+
+    const [
+      friendlyResult,
+      membershipResult
+    ] = await Promise.all([
+
+      supabaseClient
+        .from(
+          "friendly_applications"
+        )
+        .select(
+          "*",
+          {
+            count: "exact",
+            head: true
+          }
+        ),
+
+      supabaseClient
+        .from(
+          "membership_applications"
+        )
+        .select(
+          "*",
+          {
+            count: "exact",
+            head: true
+          }
+        )
+
+    ]);
+
+
+    if (friendlyResult.error) {
+
+      console.error(
+        "Friendly count error:",
+        friendlyResult.error
+      );
+
+    }
+
+
+    if (membershipResult.error) {
+
+      console.error(
+        "Membership count error:",
+        membershipResult.error
+      );
+
+    }
+
+
+    const friendlyCount =
+      friendlyResult.count || 0;
+
+
+    const membershipCount =
+      membershipResult.count || 0;
+
+
+    const friendlyElement =
+      $("#totalFriendlyApplications");
+
+
+    const membershipElement =
+      $("#totalMembershipApplications");
+
+
+    const totalApplicationsElement =
+      $("#totalApplications");
+
+
+    if (friendlyElement) {
+
+      friendlyElement.textContent =
+        friendlyCount;
+
+    }
+
+
+    if (membershipElement) {
+
+      membershipElement.textContent =
+        membershipCount;
+
+    }
+
+
+    if (totalApplicationsElement) {
+
+      totalApplicationsElement.textContent =
+        friendlyCount +
+        membershipCount;
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "Application stats error:",
       error
     );
 
@@ -664,35 +1126,67 @@ async function loadRecentActivity() {
   const container =
     $("#recentActivityList");
 
+
   if (!container) return;
+
+
+  container.innerHTML = `
+
+    <div class="empty-state small-empty">
+
+      <span>◌</span>
+
+      <p>
+        Loading recent activity...
+      </p>
+
+    </div>
+
+  `;
+
 
   try {
 
     const {
       data,
       error
-    } = await supabaseClient
-      .from("notices")
-      .select(
-        "id,title,category,published,created_at"
-      )
-      .order(
-        "created_at",
-        {
-          ascending: false
-        }
-      )
-      .limit(5);
+    } =
+      await supabaseClient
+        .from("notices")
+        .select(
+          "id,title,category,published,created_at"
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        )
+        .limit(5);
 
-    if (error) throw error;
 
-    if (!data || data.length === 0) {
+    if (error) {
+      throw error;
+    }
+
+
+    if (
+      !data ||
+      data.length === 0
+    ) {
 
       container.innerHTML = `
+
         <div class="empty-state small-empty">
+
           <span>◌</span>
-          <p>No recent activity yet.</p>
+
+          <p>
+            No recent activity yet.
+          </p>
+
         </div>
+
       `;
 
       return;
@@ -701,9 +1195,9 @@ async function loadRecentActivity() {
 
 
     container.innerHTML =
-      data.map(notice => {
+      data
+        .map(notice => `
 
-        return `
           <div class="recent-item">
 
             <div class="recent-item-icon">
@@ -713,25 +1207,32 @@ async function loadRecentActivity() {
             <div class="recent-item-content">
 
               <strong>
-                ${escapeHTML(notice.title)}
+                ${escapeHTML(
+                  notice.title
+                )}
               </strong>
 
               <span>
+
                 ${escapeHTML(
-                  notice.category || "GENERAL"
+                  notice.category ||
+                  "GENERAL"
                 )}
+
                 •
                 ${formatDate(
                   notice.created_at
                 )}
+
               </span>
 
             </div>
 
           </div>
-        `;
 
-      }).join("");
+        `)
+        .join("");
+
 
   } catch (error) {
 
@@ -739,6 +1240,21 @@ async function loadRecentActivity() {
       "Recent activity error:",
       error
     );
+
+
+    container.innerHTML = `
+
+      <div class="empty-state small-empty">
+
+        <span>⚠</span>
+
+        <p>
+          Could not load recent activity.
+        </p>
+
+      </div>
+
+    `;
 
   }
 
@@ -754,13 +1270,22 @@ async function loadNotices() {
   const container =
     $("#noticesList");
 
+
   if (!container) return;
 
+
   container.innerHTML = `
+
     <div class="empty-state">
+
       <span>◌</span>
-      <p>Loading notices...</p>
+
+      <p>
+        Loading notices...
+      </p>
+
     </div>
+
   `;
 
 
@@ -769,30 +1294,47 @@ async function loadNotices() {
     const {
       data,
       error
-    } = await supabaseClient
-      .from("notices")
-      .select(
-        "id,title,content,category,image_url,published,created_at,updated_at"
-      )
-      .order(
-        "created_at",
-        {
-          ascending: false
-        }
-      );
+    } =
+      await supabaseClient
+        .from("notices")
+        .select(
+          "id,title,content,category,image_url,published,created_at,updated_at"
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
 
-    if (error) throw error;
 
-    notices = data || [];
+    if (error) {
+      throw error;
+    }
+
+
+    notices =
+      data || [];
+
 
     if (!notices.length) {
 
       container.innerHTML = `
+
         <div class="empty-state">
+
           <span>◉</span>
-          <h4>No notices found</h4>
-          <p>Create your first notice.</p>
+
+          <h4>
+            No notices found
+          </h4>
+
+          <p>
+            Create your first notice.
+          </p>
+
         </div>
+
       `;
 
       return;
@@ -801,7 +1343,10 @@ async function loadNotices() {
 
 
     container.innerHTML =
-      notices.map(renderNotice).join("");
+      notices
+        .map(renderNotice)
+        .join("");
+
 
   } catch (error) {
 
@@ -810,14 +1355,25 @@ async function loadNotices() {
       error
     );
 
+
     container.innerHTML = `
+
       <div class="empty-state">
+
         <span>⚠</span>
-        <h4>Could not load notices</h4>
-        <p>${escapeHTML(
-          error.message
-        )}</p>
+
+        <h4>
+          Could not load notices
+        </h4>
+
+        <p>
+          ${escapeHTML(
+            error.message
+          )}
+        </p>
+
       </div>
+
     `;
 
   }
@@ -825,9 +1381,14 @@ async function loadNotices() {
 }
 
 
+/* =========================================================
+   RENDER NOTICE
+========================================================= */
+
 function renderNotice(notice) {
 
   return `
+
     <article class="admin-list-item">
 
       <div class="admin-list-content">
@@ -835,57 +1396,78 @@ function renderNotice(notice) {
         <div class="notice-meta">
 
           <span class="notice-category">
+
             ${escapeHTML(
-              notice.category || "GENERAL"
+              notice.category ||
+              "GENERAL"
             )}
+
           </span>
 
           <span>
+
             ${formatDate(
               notice.created_at
             )}
+
           </span>
 
         </div>
 
+
         <h3>
+
           ${escapeHTML(
             notice.title
           )}
+
         </h3>
 
+
         <p>
+
           ${escapeHTML(
-            notice.content || ""
+            notice.content ||
+            ""
           )}
+
         </p>
+
 
         <span class="status-badge ${
           notice.published
             ? "published"
             : "draft"
         }">
+
           ${
             notice.published
               ? "Published"
               : "Draft"
           }
+
         </span>
 
       </div>
+
 
       <div class="admin-list-actions">
 
         <button
           class="admin-small-button"
-          onclick="editNotice('${notice.id}')"
+          onclick="editNotice('${escapeAttribute(
+            notice.id
+          )}')"
         >
           Edit
         </button>
 
+
         <button
           class="admin-small-button danger"
-          onclick="deleteNotice('${notice.id}')"
+          onclick="deleteNotice('${escapeAttribute(
+            notice.id
+          )}')"
         >
           Delete
         </button>
@@ -893,13 +1475,14 @@ function renderNotice(notice) {
       </div>
 
     </article>
+
   `;
 
 }
 
 
 /* =========================================================
-   CREATE NOTICE
+   CREATE NOTICE MODAL
 ========================================================= */
 
 function openNoticeModal() {
@@ -919,11 +1502,17 @@ function openNoticeModal() {
 
     </div>
 
-    <form id="noticeForm" class="admin-form">
+
+    <form
+      id="noticeForm"
+      class="admin-form"
+    >
 
       <div class="input-group">
 
-        <label>NOTICE TITLE</label>
+        <label>
+          NOTICE TITLE
+        </label>
 
         <input
           type="text"
@@ -934,11 +1523,16 @@ function openNoticeModal() {
 
       </div>
 
+
       <div class="input-group">
 
-        <label>CATEGORY</label>
+        <label>
+          CATEGORY
+        </label>
 
-        <select id="noticeCategory">
+        <select
+          id="noticeCategory"
+        >
 
           <option value="GENERAL">
             General
@@ -964,9 +1558,12 @@ function openNoticeModal() {
 
       </div>
 
+
       <div class="input-group">
 
-        <label>CONTENT</label>
+        <label>
+          CONTENT
+        </label>
 
         <textarea
           id="noticeContent"
@@ -977,9 +1574,11 @@ function openNoticeModal() {
 
       </div>
 
+
       <div class="input-group">
 
         <label>
+
           <input
             type="checkbox"
             id="noticePublished"
@@ -992,6 +1591,7 @@ function openNoticeModal() {
 
       </div>
 
+
       <button
         type="submit"
         class="admin-button admin-button-dark"
@@ -1000,7 +1600,9 @@ function openNoticeModal() {
       </button>
 
     </form>
+
   `;
+
 
   openModal(content);
 
@@ -1008,33 +1610,50 @@ function openNoticeModal() {
   const form =
     $("#noticeForm");
 
-  form.addEventListener(
-    "submit",
-    createNotice
-  );
+
+  if (form) {
+
+    form.addEventListener(
+      "submit",
+      createNotice
+    );
+
+  }
 
 }
 
 
 /* =========================================================
-   CREATE NOTICE DATABASE
+   CREATE NOTICE
 ========================================================= */
 
-async function createNotice(e) {
+async function createNotice(event) {
 
-  e.preventDefault();
+  event.preventDefault();
+
 
   const title =
-    $("#noticeTitle").value.trim();
+    $("#noticeTitle")
+      ?.value
+      .trim();
+
 
   const content =
-    $("#noticeContent").value.trim();
+    $("#noticeContent")
+      ?.value
+      .trim();
+
 
   const category =
-    $("#noticeCategory").value;
+    $("#noticeCategory")
+      ?.value ||
+    "GENERAL";
+
 
   const published =
-    $("#noticePublished").checked;
+    $("#noticePublished")
+      ?.checked ||
+    false;
 
 
   if (!title || !content) {
@@ -1051,33 +1670,41 @@ async function createNotice(e) {
 
   showLoading(true);
 
+
   try {
 
     const {
       error
-    } = await supabaseClient
-      .from("notices")
-      .insert({
-        title,
-        content,
-        category,
-        image_url: null,
-        published
-      });
+    } =
+      await supabaseClient
+        .from("notices")
+        .insert({
+          title,
+          content,
+          category,
+          image_url: null,
+          published
+        });
 
-    if (error) throw error;
+
+    if (error) {
+      throw error;
+    }
 
 
     closeModal();
+
 
     toast(
       "Notice created successfully!",
       "success"
     );
 
+
     await loadDashboard();
 
     await loadNotices();
+
 
   } catch (error) {
 
@@ -1086,11 +1713,13 @@ async function createNotice(e) {
       error
     );
 
+
     toast(
       error.message ||
       "Failed to create notice.",
       "error"
     );
+
 
   } finally {
 
@@ -1105,249 +1734,1479 @@ async function createNotice(e) {
    EDIT NOTICE
 ========================================================= */
 
-window.editNotice = async function(id) {
+window.editNotice =
+  async function(id) {
 
-  const notice =
-    notices.find(
-      item => item.id === id
-    );
-
-  if (!notice) return;
-
-
-  const content = `
-
-    <div class="modal-header">
-
-      <span class="page-label">
-        CONTENT MANAGEMENT
-      </span>
-
-      <h2>
-        Edit
-        <span>Notice.</span>
-      </h2>
-
-    </div>
-
-    <form id="editNoticeForm" class="admin-form">
-
-      <div class="input-group">
-
-        <label>NOTICE TITLE</label>
-
-        <input
-          type="text"
-          id="editNoticeTitle"
-          value="${escapeAttribute(
-            notice.title
-          )}"
-          required
-        >
-
-      </div>
-
-      <div class="input-group">
-
-        <label>CATEGORY</label>
-
-        <select id="editNoticeCategory">
-
-          ${getCategoryOptions(
-            notice.category
-          )}
-
-        </select>
-
-      </div>
-
-      <div class="input-group">
-
-        <label>CONTENT</label>
-
-        <textarea
-          id="editNoticeContent"
-          rows="7"
-          required
-        >${escapeHTML(
-          notice.content || ""
-        )}</textarea>
-
-      </div>
-
-      <div class="input-group">
-
-        <label>
-
-          <input
-            type="checkbox"
-            id="editNoticePublished"
-            ${
-              notice.published
-                ? "checked"
-                : ""
-            }
-          >
-
-          Published
-
-        </label>
-
-      </div>
-
-      <button
-        type="submit"
-        class="admin-button admin-button-dark"
-      >
-        Save Changes
-      </button>
-
-    </form>
-  `;
+    const notice =
+      notices.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
 
 
-  openModal(content);
+    if (!notice) {
 
+      toast(
+        "Notice not found.",
+        "error"
+      );
 
-  $("#editNoticeForm").addEventListener(
-    "submit",
-    async (e) => {
-
-      e.preventDefault();
-
-      showLoading(true);
-
-      try {
-
-        const {
-          error
-        } = await supabaseClient
-          .from("notices")
-          .update({
-            title:
-              $("#editNoticeTitle")
-                .value.trim(),
-
-            category:
-              $("#editNoticeCategory")
-                .value,
-
-            content:
-              $("#editNoticeContent")
-                .value.trim(),
-
-            published:
-              $("#editNoticePublished")
-                .checked,
-
-            updated_at:
-              new Date().toISOString()
-
-          })
-          .eq("id", id);
-
-        if (error) throw error;
-
-
-        closeModal();
-
-        toast(
-          "Notice updated successfully!",
-          "success"
-        );
-
-        await loadDashboard();
-        await loadNotices();
-
-      } catch (error) {
-
-        console.error(
-          "Update notice error:",
-          error
-        );
-
-        toast(
-          error.message ||
-          "Failed to update notice.",
-          "error"
-        );
-
-      } finally {
-
-        showLoading(false);
-
-      }
+      return;
 
     }
-  );
 
-};
+
+    const content = `
+
+      <div class="modal-header">
+
+        <span class="page-label">
+          CONTENT MANAGEMENT
+        </span>
+
+        <h2>
+          Edit
+          <span>Notice.</span>
+        </h2>
+
+      </div>
+
+
+      <form
+        id="editNoticeForm"
+        class="admin-form"
+      >
+
+        <div class="input-group">
+
+          <label>
+            NOTICE TITLE
+          </label>
+
+          <input
+            type="text"
+            id="editNoticeTitle"
+            value="${escapeAttribute(
+              notice.title
+            )}"
+            required
+          >
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>
+            CATEGORY
+          </label>
+
+          <select
+            id="editNoticeCategory"
+          >
+
+            ${getCategoryOptions(
+              notice.category
+            )}
+
+          </select>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>
+            CONTENT
+          </label>
+
+          <textarea
+            id="editNoticeContent"
+            rows="7"
+            required
+          >${escapeHTML(
+            notice.content ||
+            ""
+          )}</textarea>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>
+
+            <input
+              type="checkbox"
+              id="editNoticePublished"
+              ${
+                notice.published
+                  ? "checked"
+                  : ""
+              }
+            >
+
+            Published
+
+          </label>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="admin-button admin-button-dark"
+        >
+          Save Changes
+        </button>
+
+      </form>
+
+    `;
+
+
+    openModal(content);
+
+
+    const form =
+      $("#editNoticeForm");
+
+
+    if (!form) return;
+
+
+    form.addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+
+        showLoading(true);
+
+
+        try {
+
+          const {
+            error
+          } =
+            await supabaseClient
+              .from("notices")
+              .update({
+
+                title:
+                  $("#editNoticeTitle")
+                    .value
+                    .trim(),
+
+                category:
+                  $("#editNoticeCategory")
+                    .value,
+
+                content:
+                  $("#editNoticeContent")
+                    .value
+                    .trim(),
+
+                published:
+                  $("#editNoticePublished")
+                    .checked,
+
+                updated_at:
+                  new Date()
+                    .toISOString()
+
+              })
+              .eq(
+                "id",
+                id
+              );
+
+
+          if (error) {
+            throw error;
+          }
+
+
+          closeModal();
+
+
+          toast(
+            "Notice updated successfully!",
+            "success"
+          );
+
+
+          await loadDashboard();
+
+          await loadNotices();
+
+
+        } catch (error) {
+
+          console.error(
+            "Update notice error:",
+            error
+          );
+
+
+          toast(
+            error.message ||
+            "Failed to update notice.",
+            "error"
+          );
+
+
+        } finally {
+
+          showLoading(false);
+
+        }
+
+      }
+    );
+
+  };
 
 
 /* =========================================================
    DELETE NOTICE
 ========================================================= */
 
-window.deleteNotice = async function(id) {
+window.deleteNotice =
+  async function(id) {
 
-  const notice =
-    notices.find(
-      item => item.id === id
-    );
-
-  if (!notice) return;
-
-
-  const confirmed =
-    confirm(
-      `Delete "${notice.title}"?`
-    );
-
-  if (!confirmed) return;
+    const notice =
+      notices.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
 
 
-  showLoading(true);
+    if (!notice) return;
+
+
+    const confirmed =
+      window.confirm(
+        `Delete "${notice.title}"?`
+      );
+
+
+    if (!confirmed) return;
+
+
+    showLoading(true);
+
+
+    try {
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("notices")
+          .delete()
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      toast(
+        "Notice deleted successfully.",
+        "success"
+      );
+
+
+      await loadDashboard();
+
+      await loadNotices();
+
+
+    } catch (error) {
+
+      console.error(
+        "Delete notice error:",
+        error
+      );
+
+
+      toast(
+        error.message ||
+        "Failed to delete notice.",
+        "error"
+      );
+
+
+    } finally {
+
+      showLoading(false);
+
+    }
+
+  };
+
+
+/* =========================================================
+   FRIENDLY APPLICATIONS
+========================================================= */
+
+async function loadFriendlyApplications() {
+
+  const container =
+    $("#friendlyApplicationsList");
+
+
+  if (!container) return;
+
+
+  container.innerHTML = `
+
+    <div class="empty-state">
+
+      <span>◌</span>
+
+      <h4>
+        Loading applications...
+      </h4>
+
+      <p>
+        Please wait.
+      </p>
+
+    </div>
+
+  `;
+
 
   try {
 
     const {
+      data,
       error
-    } = await supabaseClient
-      .from("notices")
-      .delete()
-      .eq("id", id);
+    } =
+      await supabaseClient
+        .from(
+          "friendly_applications"
+        )
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
 
-    if (error) throw error;
+
+    if (error) {
+      throw error;
+    }
 
 
-    toast(
-      "Notice deleted successfully.",
-      "success"
-    );
+    friendlyApplications =
+      data || [];
 
-    await loadDashboard();
-    await loadNotices();
+
+    if (
+      friendlyApplications.length ===
+      0
+    ) {
+
+      container.innerHTML = `
+
+        <div class="empty-state">
+
+          <span>⚽</span>
+
+          <h4>
+            No applications found
+          </h4>
+
+          <p>
+            Friendly Match applications
+            will appear here.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      friendlyApplications
+        .map(
+          renderFriendlyApplication
+        )
+        .join("");
+
 
   } catch (error) {
 
     console.error(
-      "Delete notice error:",
+      "Friendly applications error:",
       error
     );
 
-    toast(
-      error.message ||
-      "Failed to delete notice.",
-      "error"
-    );
 
-  } finally {
+    container.innerHTML = `
 
-    showLoading(false);
+      <div class="empty-state">
+
+        <span>⚠</span>
+
+        <h4>
+          Could not load applications
+        </h4>
+
+        <p>
+          ${escapeHTML(
+            error.message
+          )}
+        </p>
+
+      </div>
+
+    `;
 
   }
 
-};
+}
+
+
+/* =========================================================
+   RENDER FRIENDLY APPLICATION
+========================================================= */
+
+function renderFriendlyApplication(
+  application
+) {
+
+  const status =
+    application.status ||
+    "pending";
+
+
+  return `
+
+    <article
+      class="admin-list-item application-item"
+    >
+
+      <div class="admin-list-content">
+
+        <div class="notice-meta">
+
+          <span class="notice-category">
+            FRIENDLY MATCH
+          </span>
+
+          <span>
+            ${formatDateTime(
+              application.created_at
+            )}
+          </span>
+
+        </div>
+
+
+        <h3>
+
+          ${escapeHTML(
+            application.team_name ||
+            "Unnamed Team"
+          )}
+
+        </h3>
+
+
+        <p>
+
+          <strong>
+            Representative:
+          </strong>
+
+          ${escapeHTML(
+            application.contact_person ||
+            "Not provided"
+          )}
+
+        </p>
+
+
+        <p>
+
+          <strong>
+            Phone:
+          </strong>
+
+          ${escapeHTML(
+            application.phone ||
+            "Not provided"
+          )}
+
+        </p>
+
+
+        ${
+          application.email
+            ? `
+              <p>
+
+                <strong>
+                  Email:
+                </strong>
+
+                ${escapeHTML(
+                  application.email
+                )}
+
+              </p>
+            `
+            : ""
+        }
+
+
+        <p>
+
+          <strong>
+            Preferred Date:
+          </strong>
+
+          ${escapeHTML(
+            application.preferred_date ||
+            "Not specified"
+          )}
+
+        </p>
+
+
+        <p>
+
+          <strong>
+            Preferred Time:
+          </strong>
+
+          ${escapeHTML(
+            application.preferred_time ||
+            "Not specified"
+          )}
+
+        </p>
+
+
+        ${
+          application.message
+            ? `
+              <div class="application-message">
+
+                <strong>
+                  Application Details
+                </strong>
+
+                <p>
+                  ${formatMultiline(
+                    application.message
+                  )}
+                </p>
+
+              </div>
+            `
+            : ""
+        }
+
+
+        <span class="status-badge ${getStatusClass(
+          status
+        )}">
+
+          ${escapeHTML(
+            String(status)
+              .toUpperCase()
+          )}
+
+        </span>
+
+      </div>
+
+
+      <div class="admin-list-actions">
+
+        <button
+          class="admin-small-button"
+          onclick="viewFriendlyApplication('${escapeAttribute(
+            application.id
+          )}')"
+        >
+          View
+        </button>
+
+
+        <button
+          class="admin-small-button danger"
+          onclick="deleteFriendlyApplication('${escapeAttribute(
+            application.id
+          )}')"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   VIEW FRIENDLY APPLICATION
+========================================================= */
+
+window.viewFriendlyApplication =
+  function(id) {
+
+    const application =
+      friendlyApplications.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!application) return;
+
+
+    openModal(`
+
+      <div class="modal-header">
+
+        <span class="page-label">
+          FRIENDLY MATCH APPLICATION
+        </span>
+
+        <h2>
+          ${escapeHTML(
+            application.team_name ||
+            "Application"
+          )}
+        </h2>
+
+      </div>
+
+
+      <div class="application-details">
+
+        <p>
+          <strong>
+            Representative
+          </strong>
+
+          ${escapeHTML(
+            application.contact_person ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Phone
+          </strong>
+
+          ${escapeHTML(
+            application.phone ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Email
+          </strong>
+
+          ${escapeHTML(
+            application.email ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Preferred Date
+          </strong>
+
+          ${escapeHTML(
+            application.preferred_date ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Preferred Time
+          </strong>
+
+          ${escapeHTML(
+            application.preferred_time ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Status
+          </strong>
+
+          ${escapeHTML(
+            application.status ||
+            "pending"
+          )}
+        </p>
+
+
+        ${
+          application.message
+            ? `
+              <div>
+
+                <strong>
+                  Details
+                </strong>
+
+                <p>
+                  ${formatMultiline(
+                    application.message
+                  )}
+                </p>
+
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+
+    `);
+
+  };
+
+
+/* =========================================================
+   DELETE FRIENDLY APPLICATION
+========================================================= */
+
+window.deleteFriendlyApplication =
+  async function(id) {
+
+    const application =
+      friendlyApplications.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!application) return;
+
+
+    const confirmed =
+      window.confirm(
+        `Delete application from "${application.team_name}"?`
+      );
+
+
+    if (!confirmed) return;
+
+
+    showLoading(true);
+
+
+    try {
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(
+            "friendly_applications"
+          )
+          .delete()
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      toast(
+        "Friendly application deleted.",
+        "success"
+      );
+
+
+      await loadFriendlyApplications();
+
+      await loadApplicationStats();
+
+
+    } catch (error) {
+
+      console.error(
+        "Delete friendly application error:",
+        error
+      );
+
+
+      toast(
+        error.message ||
+        "Failed to delete application.",
+        "error"
+      );
+
+
+    } finally {
+
+      showLoading(false);
+
+    }
+
+  };
+
+
+/* =========================================================
+   MEMBERSHIP APPLICATIONS
+========================================================= */
+
+async function loadMembershipApplications() {
+
+  const container =
+    $("#membershipApplicationsList");
+
+
+  if (!container) return;
+
+
+  container.innerHTML = `
+
+    <div class="empty-state">
+
+      <span>◌</span>
+
+      <h4>
+        Loading applications...
+      </h4>
+
+      <p>
+        Please wait.
+      </p>
+
+    </div>
+
+  `;
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(
+          "membership_applications"
+        )
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    membershipApplications =
+      data || [];
+
+
+    if (
+      membershipApplications.length ===
+      0
+    ) {
+
+      container.innerHTML = `
+
+        <div class="empty-state">
+
+          <span>✦</span>
+
+          <h4>
+            No applications found
+          </h4>
+
+          <p>
+            Membership applications
+            will appear here.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      membershipApplications
+        .map(
+          renderMembershipApplication
+        )
+        .join("");
+
+
+  } catch (error) {
+
+    console.error(
+      "Membership applications error:",
+      error
+    );
+
+
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <span>⚠</span>
+
+        <h4>
+          Could not load applications
+        </h4>
+
+        <p>
+          ${escapeHTML(
+            error.message
+          )}
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER MEMBERSHIP APPLICATION
+========================================================= */
+
+function renderMembershipApplication(
+  application
+) {
+
+  const status =
+    application.status ||
+    "pending";
+
+
+  return `
+
+    <article
+      class="admin-list-item application-item"
+    >
+
+      <div class="admin-list-content">
+
+        <div class="notice-meta">
+
+          <span class="notice-category">
+            MEMBERSHIP
+          </span>
+
+          <span>
+            ${formatDateTime(
+              application.created_at
+            )}
+          </span>
+
+        </div>
+
+
+        <h3>
+
+          ${escapeHTML(
+            application.full_name ||
+            "Unnamed Applicant"
+          )}
+
+        </h3>
+
+
+        <p>
+
+          <strong>
+            Phone:
+          </strong>
+
+          ${escapeHTML(
+            application.phone ||
+            "Not provided"
+          )}
+
+        </p>
+
+
+        <p>
+
+          <strong>
+            Date of Birth:
+          </strong>
+
+          ${escapeHTML(
+            application.date_of_birth ||
+            "Not provided"
+          )}
+
+        </p>
+
+
+        <p>
+
+          <strong>
+            Occupation:
+          </strong>
+
+          ${escapeHTML(
+            application.occupation ||
+            "Not provided"
+          )}
+
+        </p>
+
+
+        <p>
+
+          <strong>
+            Address:
+          </strong>
+
+          ${escapeHTML(
+            application.address ||
+            "Not provided"
+          )}
+
+        </p>
+
+
+        ${
+          application.preferred_position
+            ? `
+              <p>
+
+                <strong>
+                  Main Skill:
+                </strong>
+
+                ${escapeHTML(
+                  application.preferred_position
+                )}
+
+              </p>
+            `
+            : ""
+        }
+
+
+        ${
+          application.experience
+            ? `
+              <div class="application-message">
+
+                <strong>
+                  Sports / Experience
+                </strong>
+
+                <p>
+                  ${formatMultiline(
+                    application.experience
+                  )}
+                </p>
+
+              </div>
+            `
+            : ""
+        }
+
+
+        ${
+          application.message
+            ? `
+              <div class="application-message">
+
+                <strong>
+                  Additional Information
+                </strong>
+
+                <p>
+                  ${formatMultiline(
+                    application.message
+                  )}
+                </p>
+
+              </div>
+            `
+            : ""
+        }
+
+
+        <span class="status-badge ${getStatusClass(
+          status
+        )}">
+
+          ${escapeHTML(
+            String(status)
+              .toUpperCase()
+          )}
+
+        </span>
+
+      </div>
+
+
+      <div class="admin-list-actions">
+
+        <button
+          class="admin-small-button"
+          onclick="viewMembershipApplication('${escapeAttribute(
+            application.id
+          )}')"
+        >
+          View
+        </button>
+
+
+        <button
+          class="admin-small-button danger"
+          onclick="deleteMembershipApplication('${escapeAttribute(
+            application.id
+          )}')"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   VIEW MEMBERSHIP APPLICATION
+========================================================= */
+
+window.viewMembershipApplication =
+  function(id) {
+
+    const application =
+      membershipApplications.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!application) return;
+
+
+    openModal(`
+
+      <div class="modal-header">
+
+        <span class="page-label">
+          MEMBERSHIP APPLICATION
+        </span>
+
+        <h2>
+          ${escapeHTML(
+            application.full_name ||
+            "Application"
+          )}
+        </h2>
+
+      </div>
+
+
+      <div class="application-details">
+
+        <p>
+          <strong>
+            Full Name
+          </strong>
+
+          ${escapeHTML(
+            application.full_name ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Date of Birth
+          </strong>
+
+          ${escapeHTML(
+            application.date_of_birth ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Phone
+          </strong>
+
+          ${escapeHTML(
+            application.phone ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Address
+          </strong>
+
+          ${escapeHTML(
+            application.address ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Occupation
+          </strong>
+
+          ${escapeHTML(
+            application.occupation ||
+            "—"
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Main Sports Skill
+          </strong>
+
+          ${escapeHTML(
+            application.preferred_position ||
+            "—"
+          )}
+        </p>
+
+
+        ${
+          application.experience
+            ? `
+              <div>
+
+                <strong>
+                  Sports & Experience
+                </strong>
+
+                <p>
+                  ${formatMultiline(
+                    application.experience
+                  )}
+                </p>
+
+              </div>
+            `
+            : ""
+        }
+
+
+        ${
+          application.message
+            ? `
+              <div>
+
+                <strong>
+                  Additional Information
+                </strong>
+
+                <p>
+                  ${formatMultiline(
+                    application.message
+                  )}
+                </p>
+
+              </div>
+            `
+            : ""
+        }
+
+
+        <p>
+
+          <strong>
+            Status
+          </strong>
+
+          ${escapeHTML(
+            application.status ||
+            "pending"
+          )}
+
+        </p>
+
+
+        ${
+          application.admin_note
+            ? `
+              <div>
+
+                <strong>
+                  Admin Note
+                </strong>
+
+                <p>
+                  ${formatMultiline(
+                    application.admin_note
+                  )}
+                </p>
+
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+
+    `);
+
+  };
+
+
+/* =========================================================
+   DELETE MEMBERSHIP APPLICATION
+========================================================= */
+
+window.deleteMembershipApplication =
+  async function(id) {
+
+    const application =
+      membershipApplications.find(
+        item =>
+          String(item.id) ===
+          String(id)
+      );
+
+
+    if (!application) return;
+
+
+    const confirmed =
+      window.confirm(
+        `Delete membership application from "${application.full_name}"?`
+      );
+
+
+    if (!confirmed) return;
+
+
+    showLoading(true);
+
+
+    try {
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(
+            "membership_applications"
+          )
+          .delete()
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      toast(
+        "Membership application deleted.",
+        "success"
+      );
+
+
+      await loadMembershipApplications();
+
+      await loadApplicationStats();
+
+
+    } catch (error) {
+
+      console.error(
+        "Delete membership application error:",
+        error
+      );
+
+
+      toast(
+        error.message ||
+        "Failed to delete application.",
+        "error"
+      );
+
+
+    } finally {
+
+      showLoading(false);
+
+    }
+
+  };
 
 
 /* =========================================================
@@ -1359,14 +3218,27 @@ async function loadGallery() {
   const container =
     $("#galleryAdminGrid");
 
+
   if (!container) return;
 
+
   container.innerHTML = `
+
     <div class="empty-state">
+
       <span>▧</span>
-      <h4>Gallery</h4>
-      <p>Gallery database connection will be added next.</p>
+
+      <h4>
+        Gallery
+      </h4>
+
+      <p>
+        Gallery database connection
+        will be added next.
+      </p>
+
     </div>
+
   `;
 
 }
@@ -1381,14 +3253,27 @@ async function loadTournaments() {
   const container =
     $("#tournamentsList");
 
+
   if (!container) return;
 
+
   container.innerHTML = `
+
     <div class="empty-state">
+
       <span>🏆</span>
-      <h4>Tournaments</h4>
-      <p>Tournament database connection will be added next.</p>
+
+      <h4>
+        Tournaments
+      </h4>
+
+      <p>
+        Tournament database connection
+        will be added next.
+      </p>
+
     </div>
+
   `;
 
 }
@@ -1403,14 +3288,27 @@ async function loadFixtures() {
   const container =
     $("#fixturesList");
 
+
   if (!container) return;
 
+
   container.innerHTML = `
+
     <div class="empty-state">
+
       <span>⚽</span>
-      <h4>Matches & Fixtures</h4>
-      <p>Fixture database connection will be added next.</p>
+
+      <h4>
+        Matches & Fixtures
+      </h4>
+
+      <p>
+        Fixture database connection
+        will be added next.
+      </p>
+
     </div>
+
   `;
 
 }
@@ -1425,14 +3323,27 @@ async function loadLeadership() {
   const container =
     $("#leadershipList");
 
+
   if (!container) return;
 
+
   container.innerHTML = `
+
     <div class="empty-state">
+
       <span>★</span>
-      <h4>Leadership</h4>
-      <p>Leadership database connection will be added next.</p>
+
+      <h4>
+        Leadership
+      </h4>
+
+      <p>
+        Leadership database connection
+        will be added next.
+      </p>
+
     </div>
+
   `;
 
 }
@@ -1447,58 +3358,27 @@ async function loadCommittee() {
   const container =
     $("#committeeList");
 
+
   if (!container) return;
 
+
   container.innerHTML = `
+
     <div class="empty-state">
+
       <span>♙</span>
-      <h4>Committee</h4>
-      <p>Committee database connection will be added next.</p>
+
+      <h4>
+        Committee
+      </h4>
+
+      <p>
+        Committee database connection
+        will be added next.
+      </p>
+
     </div>
-  `;
 
-}
-
-
-/* =========================================================
-   FRIENDLY APPLICATIONS
-========================================================= */
-
-async function loadFriendlyApplications() {
-
-  const container =
-    $("#friendlyApplicationsList");
-
-  if (!container) return;
-
-  container.innerHTML = `
-    <div class="empty-state">
-      <span>⚽</span>
-      <h4>No applications loaded</h4>
-      <p>Friendly Match applications will appear here.</p>
-    </div>
-  `;
-
-}
-
-
-/* =========================================================
-   MEMBERSHIP APPLICATIONS
-========================================================= */
-
-async function loadMembershipApplications() {
-
-  const container =
-    $("#membershipApplicationsList");
-
-  if (!container) return;
-
-  container.innerHTML = `
-    <div class="empty-state">
-      <span>✦</span>
-      <h4>No applications loaded</h4>
-      <p>Membership applications will appear here.</p>
-    </div>
   `;
 
 }
@@ -1513,6 +3393,7 @@ function setupModal() {
   const closeButton =
     $("#adminModalClose");
 
+
   if (closeButton) {
 
     closeButton.addEventListener(
@@ -1526,16 +3407,20 @@ function setupModal() {
   const modal =
     $("#adminModal");
 
+
   if (modal) {
 
     modal.addEventListener(
       "click",
-      (e) => {
+      event => {
 
         if (
-          e.target === modal
+          event.target ===
+          modal
         ) {
+
           closeModal();
+
         }
 
       }
@@ -1543,49 +3428,102 @@ function setupModal() {
 
   }
 
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key ===
+        "Escape"
+      ) {
+
+        closeModal();
+
+      }
+
+    }
+  );
+
 }
 
+
+/* =========================================================
+   OPEN MODAL
+========================================================= */
 
 function openModal(content) {
 
   const modal =
     $("#adminModal");
 
+
   const modalContent =
     $("#adminModalContent");
 
-  if (!modal || !modalContent)
-    return;
+
+  if (
+    !modal ||
+    !modalContent
+  ) return;
+
 
   modalContent.innerHTML =
     content;
 
-  modal.classList.add("open");
+
+  modal.classList.add(
+    "open"
+  );
+
 
   modal.setAttribute(
     "aria-hidden",
     "false"
   );
 
+
+  document.body.classList.add(
+    "modal-open"
+  );
+
 }
 
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
 
 function closeModal() {
 
   const modal =
     $("#adminModal");
 
+
   if (!modal) return;
 
-  modal.classList.remove("open");
+
+  modal.classList.remove(
+    "open"
+  );
+
 
   modal.setAttribute(
     "aria-hidden",
     "true"
   );
 
+
+  document.body.classList.remove(
+    "modal-open"
+  );
+
 }
 
+
+/* =========================================================
+   SIMPLE MODAL
+========================================================= */
 
 function openSimpleModal(
   title,
@@ -1601,15 +3539,22 @@ function openSimpleModal(
       </span>
 
       <h2>
-        ${escapeHTML(title)}
+        ${escapeHTML(
+          title
+        )}
       </h2>
 
     </div>
 
+
     <div class="empty-state">
+
       <p>
-        ${escapeHTML(message)}
+        ${escapeHTML(
+          message
+        )}
       </p>
+
     </div>
 
   `);
@@ -1626,10 +3571,14 @@ function showLoading(show) {
   const loading =
     $("#adminLoading");
 
+
   if (!loading) return;
 
+
   loading.style.display =
-    show ? "flex" : "none";
+    show
+      ? "flex"
+      : "none";
 
 }
 
@@ -1646,94 +3595,296 @@ function toast(
   const container =
     $("#toastContainer");
 
-  if (!container) return;
+
+  if (!container) {
+
+    console.log(
+      message
+    );
+
+    return;
+
+  }
 
 
   const item =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   item.className =
     `toast toast-${type}`;
+
 
   item.textContent =
     message;
 
 
-  container.appendChild(item);
+  container.appendChild(
+    item
+  );
 
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    item.remove();
+      item.remove();
 
-  }, 3500);
+    },
+    3500
+  );
 
 }
 
 
 /* =========================================================
-   HELPERS
+   FORMAT DATE
 ========================================================= */
 
 function formatDate(date) {
 
   if (!date) return "";
 
-  return new Date(date)
-    .toLocaleDateString(
-      "en-US",
-      {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      }
+
+  const parsed =
+    new Date(date);
+
+
+  if (
+    Number.isNaN(
+      parsed.getTime()
+    )
+  ) {
+
+    return "";
+
+  }
+
+
+  return parsed.toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   FORMAT DATE + TIME
+========================================================= */
+
+function formatDateTime(date) {
+
+  if (!date) return "";
+
+
+  const parsed =
+    new Date(date);
+
+
+  if (
+    Number.isNaN(
+      parsed.getTime()
+    )
+  ) {
+
+    return "";
+
+  }
+
+
+  return parsed.toLocaleString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MULTILINE TEXT
+========================================================= */
+
+function formatMultiline(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return escapeHTML(
+    value
+  ).replace(
+    /\n/g,
+    "<br>"
+  );
+
+}
+
+
+/* =========================================================
+   STATUS CLASS
+========================================================= */
+
+function getStatusClass(
+  status
+) {
+
+  const value =
+    String(
+      status ||
+      "pending"
+    )
+      .toLowerCase()
+      .trim();
+
+
+  if (
+    value ===
+    "approved"
+  ) {
+
+    return "published";
+
+  }
+
+
+  if (
+    value ===
+    "rejected"
+  ) {
+
+    return "draft";
+
+  }
+
+
+  if (
+    value ===
+    "pending"
+  ) {
+
+    return "pending";
+
+  }
+
+
+  return value;
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
     );
 
 }
 
 
-function escapeHTML(value) {
+/* =========================================================
+   ESCAPE ATTRIBUTE
+========================================================= */
 
-  if (value === null ||
-      value === undefined) {
-    return "";
-  }
+function escapeAttribute(
+  value
+) {
 
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return escapeHTML(
+    value
+  );
 
 }
 
 
-function escapeAttribute(value) {
+/* =========================================================
+   CATEGORY OPTIONS
+========================================================= */
 
-  return escapeHTML(value);
-
-}
-
-
-function getCategoryOptions(selected) {
+function getCategoryOptions(
+  selected
+) {
 
   const categories = [
+
     "GENERAL",
+
     "SPORTS",
+
     "MATCH",
+
     "TOURNAMENT",
+
     "ANNOUNCEMENT"
+
   ];
 
-  return categories
-    .map(category => {
 
-      return `
+  return categories
+    .map(
+      category => `
+
         <option
           value="${category}"
           ${
-            String(selected).toUpperCase() ===
+            String(
+              selected ||
+              ""
+            ).toUpperCase() ===
             category
               ? "selected"
               : ""
@@ -1741,9 +3892,18 @@ function getCategoryOptions(selected) {
         >
           ${category}
         </option>
-      `;
 
-    })
+      `
+    )
     .join("");
 
 }
+
+
+/* =========================================================
+   INITIALIZED
+========================================================= */
+
+console.log(
+  "GSA Admin Panel initialized."
+);
