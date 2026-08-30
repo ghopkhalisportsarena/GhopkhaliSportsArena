@@ -1829,3 +1829,23 @@ a {
   }
 
 }
+
+#logoutButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 13px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #aaa;
+  font-size: 13px;
+  text-align: left;
+  transition: background .25s ease, color .25s ease;
+}
+
+#logoutButton:hover {
+  background: rgba(255,255,255,.07);
+  color: #fff;
+}
