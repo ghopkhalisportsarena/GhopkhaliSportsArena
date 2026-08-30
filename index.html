@@ -366,7 +366,6 @@ announcements and upcoming activities.
 </div>
 
 
-
 <!-- ==================================================
      IMPORTANT NOTICE TICKER
 ================================================== -->
@@ -379,24 +378,10 @@ IMPORTANT NOTICE
 
 <div class="notice-ticker-window">
 
-<div
-class="notice-ticker-track"
-id="noticeTickerTrack"
->
+<div class="notice-ticker-track" id="homeNoticeTicker">
 
-<span>
-Welcome to Ghopkhali Sports Arena Sports Club.
-Follow the official page for regular updates.
-</span>
-
-<span>
-✦ Friendly matches, tournaments and club
-activities will be announced here.
-</span>
-
-<span>
-✦ Club members are requested to follow
-all official rules and regulations.
+<span class="notice-ticker-item">
+Loading latest notices...
 </span>
 
 </div>
@@ -408,23 +393,15 @@ all official rules and regulations.
 
 
 <!-- ==================================================
-     DYNAMIC NOTICE CONTAINER
+     DYNAMIC SUPABASE NOTICES
 ================================================== -->
 
 <div
 class="updates-grid"
-id="notice-container"
+id="home-notices"
 >
 
-<!--
-  NOTICE CARDS WILL BE LOADED HERE
-  FROM THE NOTICE DATABASE.
-
-  JavaScript will replace this
-  loading card with real notices.
--->
-
-<article class="update-card notice-loading-card">
+<article class="update-card">
 
 <div class="update-date">
 LOADING
@@ -440,7 +417,7 @@ Loading latest notices...
 
 <p>
 Please wait while the latest Ghopkhali
-Sports Arena notices are being loaded.
+Sports Arena notices are loaded.
 </p>
 
 </article>
@@ -612,10 +589,7 @@ Matchday
 
 </div>
 
-<a
-href="#friendly-application"
-class="text-link"
->
+<a href="#friendly-application" class="text-link">
 Apply for Friendly Match +
 </a>
 
@@ -2389,10 +2363,20 @@ All rights reserved.
 
 
 <!-- ==================================================
+     SUPABASE JS LIBRARY
+================================================== -->
+
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+<!-- ==================================================
      MAIN JAVASCRIPT
 ================================================== -->
 
 <script src="script.js"></script>
+
 
 </body>
 
