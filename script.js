@@ -1,6 +1,7 @@
 /* ==================================================
    GHOPKHALI SPORTS ARENA
    PREMIUM WEBSITE JAVASCRIPT
+   FINAL SUPABASE VERSION
 ================================================== */
 
 
@@ -8,42 +9,36 @@
    MOBILE NAVIGATION
 ================================================== */
 
-const menuToggle =
-document.querySelector(".menu-toggle");
+const menuToggle = document.querySelector(".menu-toggle");
+const navMenu = document.querySelector(".nav-menu");
 
-const navMenu =
-document.querySelector(".nav-menu");
+if (menuToggle && navMenu) {
 
-if(menuToggle && navMenu){
+    menuToggle.addEventListener("click", () => {
 
-menuToggle.addEventListener("click",()=>{
+        const opened = navMenu.classList.toggle("open");
 
-const opened =
-navMenu.classList.toggle("open");
+        menuToggle.setAttribute(
+            "aria-expanded",
+            opened ? "true" : "false"
+        );
 
-menuToggle.setAttribute(
-"aria-expanded",
-opened ? "true" : "false"
-);
+    });
 
-});
+    navMenu.querySelectorAll("a").forEach(link => {
 
-navMenu
-.querySelectorAll("a")
-.forEach(link=>{
+        link.addEventListener("click", () => {
 
-link.addEventListener("click",()=>{
+            navMenu.classList.remove("open");
 
-navMenu.classList.remove("open");
+            menuToggle.setAttribute(
+                "aria-expanded",
+                "false"
+            );
 
-menuToggle.setAttribute(
-"aria-expanded",
-"false"
-);
+        });
 
-});
-
-});
+    });
 
 }
 
@@ -52,24 +47,21 @@ menuToggle.setAttribute(
    HEADER SCROLL
 ================================================== */
 
-const header =
-document.querySelector(".site-header");
+const header = document.querySelector(".site-header");
 
 window.addEventListener(
-"scroll",
-()=>{
+    "scroll",
+    () => {
 
-if(!header)return;
+        if (!header) return;
 
-header.style.boxShadow =
-window.scrollY > 20
-?
-"0 8px 35px rgba(0,0,0,.07)"
-:
-"none";
+        header.style.boxShadow =
+            window.scrollY > 20
+                ? "0 8px 35px rgba(0,0,0,.07)"
+                : "none";
 
-},
-{passive:true}
+    },
+    { passive: true }
 );
 
 
@@ -77,60 +69,52 @@ window.scrollY > 20
    ACTIVE NAVIGATION
 ================================================== */
 
-const sections =
-document.querySelectorAll(
-"section[id]"
-);
+const sections = document.querySelectorAll("section[id]");
+const navLinks = document.querySelectorAll(".nav-menu a");
 
-const navLinks =
-document.querySelectorAll(
-".nav-menu a"
-);
+if (sections.length && navLinks.length) {
 
-if(sections.length && navLinks.length){
+    const navObserver = new IntersectionObserver(
 
-const navObserver =
-new IntersectionObserver(
+        entries => {
 
-entries=>{
+            entries.forEach(entry => {
 
-entries.forEach(entry=>{
+                if (!entry.isIntersecting) return;
 
-if(!entry.isIntersecting)return;
+                const id =
+                    entry.target.getAttribute("id");
 
-const id =
-entry.target.getAttribute("id");
+                navLinks.forEach(link => {
 
-navLinks.forEach(link=>{
+                    link.classList.remove("active");
 
-link.classList.remove("active");
+                    if (
+                        link.getAttribute("href") ===
+                        `#${id}`
+                    ) {
 
-if(
-link.getAttribute("href") ===
-`#${id}`
-){
+                        link.classList.add("active");
 
-link.classList.add("active");
+                    }
 
-}
+                });
 
-});
+            });
 
-});
+        },
 
-},
+        {
+            rootMargin: "-35% 0px -55% 0px"
+        }
 
-{
-rootMargin:"-35% 0px -55% 0px"
-}
+    );
 
-);
+    sections.forEach(section => {
 
-sections.forEach(section=>{
+        navObserver.observe(section);
 
-navObserver.observe(section);
-
-});
+    });
 
 }
 
@@ -139,57 +123,50 @@ navObserver.observe(section);
    SCROLL REVEAL
 ================================================== */
 
-const revealElements =
-document.querySelectorAll(
-`
-.activity-card,
-.fixture-card,
-.coming-soon,
-.committee-person,
-.social-card,
-.update-card,
-.tournament-card,
-.form-card,
-.gallery-item
-`
-);
+const revealElements = document.querySelectorAll(`
+    .activity-card,
+    .fixture-card,
+    .coming-soon,
+    .committee-person,
+    .social-card,
+    .update-card,
+    .tournament-card,
+    .form-card,
+    .gallery-item,
+    .leader-card
+`);
 
-if(revealElements.length){
+if (revealElements.length) {
 
-const revealObserver =
-new IntersectionObserver(
+    const revealObserver = new IntersectionObserver(
 
-entries=>{
+        entries => {
 
-entries.forEach(entry=>{
+            entries.forEach(entry => {
 
-if(!entry.isIntersecting)return;
+                if (!entry.isIntersecting) return;
 
-entry.target.classList.add(
-"revealed"
-);
+                entry.target.classList.add("revealed");
 
-revealObserver.unobserve(
-entry.target
-);
+                revealObserver.unobserve(entry.target);
 
-});
+            });
 
-},
+        },
 
-{
-threshold:.12
-}
+        {
+            threshold: 0.12
+        }
 
-);
+    );
 
-revealElements.forEach(element=>{
+    revealElements.forEach(element => {
 
-element.classList.add("reveal");
+        element.classList.add("reveal");
 
-revealObserver.observe(element);
+        revealObserver.observe(element);
 
-});
+    });
 
 }
 
@@ -198,29 +175,107 @@ revealObserver.observe(element);
    CLOSE MOBILE MENU
 ================================================== */
 
-document.addEventListener(
-"click",
-event=>{
+document.addEventListener("click", event => {
 
-if(!navMenu || !menuToggle)return;
+    if (!navMenu || !menuToggle) return;
 
-if(
-navMenu.classList.contains("open") &&
-!navMenu.contains(event.target) &&
-!menuToggle.contains(event.target)
-){
+    if (
+        navMenu.classList.contains("open") &&
+        !navMenu.contains(event.target) &&
+        !menuToggle.contains(event.target)
+    ) {
 
-navMenu.classList.remove("open");
+        navMenu.classList.remove("open");
 
-menuToggle.setAttribute(
-"aria-expanded",
-"false"
-);
+        menuToggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+});
+
+
+/* ==================================================
+   SUPABASE CONFIGURATION
+================================================== */
+
+const SUPABASE_URL =
+    "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+/* ==================================================
+   CREATE SUPABASE CLIENT
+================================================== */
+
+let homeSupabase = null;
+
+if (
+    window.supabase &&
+    typeof window.supabase.createClient === "function"
+) {
+
+    homeSupabase =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+} else {
+
+    console.error(
+        "Supabase library was not loaded."
+    );
 
 }
 
+
+/* ==================================================
+   HTML ESCAPE
+================================================== */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
 }
-);
+
+
+/* ==================================================
+   FORMAT NOTICE DATE
+================================================== */
+
+function formatNoticeDate(dateValue) {
+
+    if (!dateValue) {
+        return "";
+    }
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) {
+        return "";
+    }
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
 
 
 /* ==================================================
@@ -228,52 +283,462 @@ menuToggle.setAttribute(
 ================================================== */
 
 const noticeTrack =
-document.querySelector(
-"#homeNoticeTicker"
-);
+    document.querySelector(
+        "#homeNoticeTicker"
+    );
 
 let noticeAnimationStarted = false;
+let noticeAnimationFrame = null;
 
-function startNoticeTicker(){
 
-if(!noticeTrack)
-return;
+function startNoticeTicker() {
 
-if(noticeAnimationStarted)
-return;
+    if (
+        !noticeTrack ||
+        noticeAnimationStarted
+    ) {
+        return;
+    }
 
-noticeAnimationStarted = true;
+    noticeAnimationStarted = true;
 
-let position = 0;
+    let position = 0;
 
-const tickerMove = ()=>{
+    const tickerMove = () => {
 
-position -= 0.35;
+        position -= 0.35;
 
-const resetPoint =
-noticeTrack.scrollWidth / 2;
+        const resetPoint =
+            noticeTrack.scrollWidth / 2;
 
-if(
-resetPoint > 0 &&
-Math.abs(position) >= resetPoint
-){
+        if (
+            resetPoint > 0 &&
+            Math.abs(position) >= resetPoint
+        ) {
 
-position = 0;
+            position = 0;
+
+        }
+
+        noticeTrack.style.transform =
+            `translateX(${position}px)`;
+
+        noticeAnimationFrame =
+            requestAnimationFrame(
+                tickerMove
+            );
+
+    };
+
+    noticeAnimationFrame =
+        requestAnimationFrame(
+            tickerMove
+        );
 
 }
 
-noticeTrack.style.transform =
-`translateX(${position}px)`;
 
-requestAnimationFrame(
-tickerMove
-);
+/* ==================================================
+   STOP NOTICE TICKER
+================================================== */
 
-};
+function stopNoticeTicker() {
 
-requestAnimationFrame(
-tickerMove
-);
+    if (noticeAnimationFrame) {
+
+        cancelAnimationFrame(
+            noticeAnimationFrame
+        );
+
+        noticeAnimationFrame = null;
+
+    }
+
+    noticeAnimationStarted = false;
+
+}
+
+
+/* ==================================================
+   RENDER NOTICE TICKER
+================================================== */
+
+function renderNoticeTicker(notices) {
+
+    if (!noticeTrack) {
+        return;
+    }
+
+    stopNoticeTicker();
+
+
+    if (!notices || notices.length === 0) {
+
+        noticeTrack.innerHTML = `
+            <span class="notice-ticker-item">
+                No latest notices available.
+            </span>
+        `;
+
+        return;
+
+    }
+
+
+    const noticesHTML =
+        notices.map(notice => {
+
+            return `
+                <span class="notice-ticker-item">
+                    <strong>NOTICE</strong>
+                    ${escapeHTML(notice.title)}
+                </span>
+            `;
+
+        }).join("");
+
+
+    /*
+       Duplicate content so the ticker
+       can move continuously.
+    */
+
+    noticeTrack.innerHTML =
+        noticesHTML +
+        noticesHTML;
+
+
+    startNoticeTicker();
+
+}
+
+
+/* ==================================================
+   RENDER NOTICE CARDS
+================================================== */
+
+function renderNoticeCards(notices) {
+
+    const noticesContainer =
+        document.querySelector(
+            "#home-notices"
+        );
+
+    if (!noticesContainer) {
+        return;
+    }
+
+
+    /* No notices */
+
+    if (
+        !notices ||
+        notices.length === 0
+    ) {
+
+        noticesContainer.innerHTML = `
+            <article class="update-card revealed">
+
+                <div class="update-date">
+                    —
+                </div>
+
+                <div class="update-tag">
+                    NOTICE
+                </div>
+
+                <h3>
+                    No latest notices
+                </h3>
+
+                <p>
+                    There are currently no published
+                    notices from Ghopkhali Sports Arena.
+                </p>
+
+            </article>
+        `;
+
+        return;
+
+    }
+
+
+    /* Create cards */
+
+    noticesContainer.innerHTML =
+        notices.map((notice, index) => {
+
+            const title =
+                escapeHTML(
+                    notice.title ||
+                    "Untitled Notice"
+                );
+
+            const content =
+                escapeHTML(
+                    notice.content ||
+                    ""
+                );
+
+            const category =
+                escapeHTML(
+                    notice.category ||
+                    "GENERAL"
+                );
+
+            const date =
+                formatNoticeDate(
+                    notice.created_at
+                );
+
+
+            const imageURL =
+                notice.image_url
+                    ? escapeHTML(
+                        notice.image_url
+                    )
+                    : "";
+
+
+            const imageHTML =
+                imageURL
+                    ? `
+                        <div class="update-image">
+                            <img
+                                src="${imageURL}"
+                                alt="${title}"
+                                loading="lazy"
+                            >
+                        </div>
+                    `
+                    : "";
+
+
+            return `
+                <article
+                    class="update-card reveal revealed"
+                    data-notice-id="${escapeHTML(
+                        notice.id
+                    )}"
+                >
+
+                    ${imageHTML}
+
+                    <div class="update-date">
+                        ${date}
+                    </div>
+
+                    <div class="update-tag">
+                        ${category}
+                    </div>
+
+                    <h3>
+                        ${title}
+                    </h3>
+
+                    <p>
+                        ${content}
+                    </p>
+
+                </article>
+            `;
+
+        }).join("");
+
+
+    /*
+       Add staggered reveal animation.
+    */
+
+    const cards =
+        noticesContainer.querySelectorAll(
+            ".update-card"
+        );
+
+
+    cards.forEach(
+        (card, index) => {
+
+            card.style.transitionDelay =
+                `${index * 80}ms`;
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   LOAD NOTICES FROM SUPABASE
+================================================== */
+
+async function loadHomeNotices() {
+
+    const noticesContainer =
+        document.querySelector(
+            "#home-notices"
+        );
+
+
+    if (
+        !noticeTrack &&
+        !noticesContainer
+    ) {
+
+        return;
+
+    }
+
+
+    /* Supabase unavailable */
+
+    if (!homeSupabase) {
+
+        console.error(
+            "Supabase client is unavailable."
+        );
+
+
+        if (noticeTrack) {
+
+            noticeTrack.innerHTML = `
+                <span class="notice-ticker-item">
+                    Unable to load notices.
+                </span>
+            `;
+
+        }
+
+
+        if (noticesContainer) {
+
+            noticesContainer.innerHTML = `
+                <article class="update-card revealed">
+
+                    <div class="update-date">
+                        ERROR
+                    </div>
+
+                    <div class="update-tag">
+                        NOTICE
+                    </div>
+
+                    <h3>
+                        Unable to load notices
+                    </h3>
+
+                    <p>
+                        Please try again later.
+                    </p>
+
+                </article>
+            `;
+
+        }
+
+        return;
+
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await homeSupabase
+                .from("notices")
+                .select(`
+                    id,
+                    title,
+                    content,
+                    category,
+                    image_url,
+                    published,
+                    created_at,
+                    updated_at
+                `)
+                .eq(
+                    "published",
+                    true
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(10);
+
+
+        /* Supabase error */
+
+        if (error) {
+
+            console.error(
+                "Supabase Notices Error:",
+                error
+            );
+
+
+            if (noticeTrack) {
+
+                noticeTrack.innerHTML = `
+                    <span class="notice-ticker-item">
+                        Unable to load latest notices.
+                    </span>
+                `;
+
+            }
+
+            return;
+
+        }
+
+
+        const notices =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        /* Render everything */
+
+        renderNoticeTicker(
+            notices
+        );
+
+        renderNoticeCards(
+            notices
+        );
+
+
+        console.log(
+            `GSA: ${notices.length} published notice(s) loaded.`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Notice loading failed:",
+            error
+        );
+
+
+        if (noticeTrack) {
+
+            noticeTrack.innerHTML = `
+                <span class="notice-ticker-item">
+                    Unable to load latest notices.
+                </span>
+            `;
+
+        }
+
+    }
 
 }
 
@@ -283,71 +748,77 @@ tickerMove
 ================================================== */
 
 const galleryTrack =
-document.querySelector(
-".gallery-track"
-);
+    document.querySelector(
+        ".gallery-track"
+    );
 
 const galleryItems =
-document.querySelectorAll(
-".gallery-item"
-);
+    document.querySelectorAll(
+        ".gallery-item"
+    );
 
-if(
-galleryTrack &&
-galleryItems.length > 1
-){
 
-let galleryIndex = 0;
+if (
+    galleryTrack &&
+    galleryItems.length > 1
+) {
 
-const getGalleryStep = ()=>{
+    let galleryIndex = 0;
 
-const width =
-galleryItems[0]
-.getBoundingClientRect()
-.width;
 
-const style =
-getComputedStyle(
-galleryTrack
-);
+    const getGalleryStep = () => {
 
-const gap =
-parseFloat(style.gap) || 0;
+        const width =
+            galleryItems[0]
+                .getBoundingClientRect()
+                .width;
 
-return width + gap;
+        const style =
+            getComputedStyle(
+                galleryTrack
+            );
 
-};
+        const gap =
+            parseFloat(style.gap) || 0;
 
-const moveGallery = ()=>{
+        return width + gap;
 
-galleryTrack.style.transform =
-`translateX(-${
-galleryIndex *
-getGalleryStep()
-}px`;
+    };
 
-};
 
-setInterval(()=>{
+    const moveGallery = () => {
 
-galleryIndex++;
+        galleryTrack.style.transform =
+            `translateX(-${
+                galleryIndex *
+                getGalleryStep()
+            }px)`;
 
-if(
-galleryIndex >= galleryItems.length
-){
+    };
 
-galleryIndex = 0;
 
-}
+    setInterval(() => {
 
-moveGallery();
+        galleryIndex++;
 
-},4500);
+        if (
+            galleryIndex >=
+            galleryItems.length
+        ) {
 
-window.addEventListener(
-"resize",
-moveGallery
-);
+            galleryIndex = 0;
+
+        }
+
+        moveGallery();
+
+    }, 4500);
+
+
+    window.addEventListener(
+        "resize",
+        moveGallery
+    );
 
 }
 
@@ -357,102 +828,107 @@ moveGallery
 ================================================== */
 
 const galleryImages =
-document.querySelectorAll(
-".gallery-item img"
-);
+    document.querySelectorAll(
+        ".gallery-item img"
+    );
 
 const lightbox =
-document.querySelector(
-".gallery-lightbox"
-);
+    document.querySelector(
+        ".gallery-lightbox"
+    );
 
 const lightboxImage =
-document.querySelector(
-".gallery-lightbox img"
-);
+    document.querySelector(
+        ".gallery-lightbox img"
+    );
 
 const lightboxClose =
-document.querySelector(
-".gallery-lightbox-close"
-);
+    document.querySelector(
+        ".gallery-lightbox-close"
+    );
 
-if(
-galleryImages.length &&
-lightbox &&
-lightboxImage
-){
 
-galleryImages.forEach(image=>{
+if (
+    galleryImages.length &&
+    lightbox &&
+    lightboxImage
+) {
 
-image.addEventListener(
-"click",
-()=>{
+    galleryImages.forEach(image => {
 
-lightboxImage.src =
-image.src;
+        image.addEventListener(
+            "click",
+            () => {
 
-lightboxImage.alt =
-image.alt ||
-"GSA Gallery";
+                lightboxImage.src =
+                    image.src;
 
-lightbox.classList.add(
-"active"
-);
+                lightboxImage.alt =
+                    image.alt ||
+                    "GSA Gallery";
 
-lightbox.setAttribute(
-"aria-hidden",
-"false"
-);
+                lightbox.classList.add(
+                    "active"
+                );
 
-document.body.classList.add(
-"modal-open"
-);
+                lightbox.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
 
-}
-);
+                document.body.classList.add(
+                    "modal-open"
+                );
 
-});
+            }
+        );
 
-const closeLightbox = ()=>{
+    });
 
-lightbox.classList.remove(
-"active"
-);
 
-lightbox.setAttribute(
-"aria-hidden",
-"true"
-);
+    const closeLightbox = () => {
 
-document.body.classList.remove(
-"modal-open"
-);
+        lightbox.classList.remove(
+            "active"
+        );
 
-};
+        lightbox.setAttribute(
+            "aria-hidden",
+            "true"
+        );
 
-if(lightboxClose){
+        document.body.classList.remove(
+            "modal-open"
+        );
 
-lightboxClose.addEventListener(
-"click",
-closeLightbox
-);
+    };
 
-}
 
-lightbox.addEventListener(
-"click",
-event=>{
+    if (lightboxClose) {
 
-if(
-event.target === lightbox
-){
+        lightboxClose.addEventListener(
+            "click",
+            closeLightbox
+        );
 
-closeLightbox();
+    }
 
-}
 
-}
-);
+    lightbox.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                lightbox
+            ) {
+
+                closeLightbox();
+
+            }
+
+        }
+    );
 
 }
 
@@ -462,92 +938,98 @@ closeLightbox();
 ================================================== */
 
 const rulesModal =
-document.querySelector(
-"#rulesModal"
-);
+    document.querySelector(
+        "#rulesModal"
+    );
 
 const rulesButtons =
-document.querySelectorAll(
-"[data-open-rules]"
-);
+    document.querySelectorAll(
+        "[data-open-rules]"
+    );
 
 const rulesClose =
-document.querySelector(
-"[data-close-rules]"
-);
+    document.querySelector(
+        "[data-close-rules]"
+    );
 
-const openRules = ()=>{
 
-if(!rulesModal)return;
+const openRules = () => {
 
-rulesModal.classList.add(
-"active"
-);
+    if (!rulesModal) return;
 
-rulesModal.setAttribute(
-"aria-hidden",
-"false"
-);
+    rulesModal.classList.add(
+        "active"
+    );
 
-document.body.classList.add(
-"modal-open"
-);
+    rulesModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
 
-};
-
-const closeRules = ()=>{
-
-if(!rulesModal)return;
-
-rulesModal.classList.remove(
-"active"
-);
-
-rulesModal.setAttribute(
-"aria-hidden",
-"true"
-);
-
-document.body.classList.remove(
-"modal-open"
-);
+    document.body.classList.add(
+        "modal-open"
+    );
 
 };
 
-rulesButtons.forEach(button=>{
 
-button.addEventListener(
-"click",
-openRules
-);
+const closeRules = () => {
+
+    if (!rulesModal) return;
+
+    rulesModal.classList.remove(
+        "active"
+    );
+
+    rulesModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+};
+
+
+rulesButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        openRules
+    );
 
 });
 
-if(rulesClose){
 
-rulesClose.addEventListener(
-"click",
-closeRules
-);
+if (rulesClose) {
 
-}
-
-if(rulesModal){
-
-rulesModal.addEventListener(
-"click",
-event=>{
-
-if(
-event.target === rulesModal
-){
-
-closeRules();
+    rulesClose.addEventListener(
+        "click",
+        closeRules
+    );
 
 }
 
-}
-);
+
+if (rulesModal) {
+
+    rulesModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                rulesModal
+            ) {
+
+                closeRules();
+
+            }
+
+        }
+    );
 
 }
 
@@ -557,92 +1039,98 @@ closeRules();
 ================================================== */
 
 const friendlyModal =
-document.querySelector(
-"#friendlyModal"
-);
+    document.querySelector(
+        "#friendlyModal"
+    );
 
 const friendlyButtons =
-document.querySelectorAll(
-"[data-open-friendly]"
-);
+    document.querySelectorAll(
+        "[data-open-friendly]"
+    );
 
 const friendlyClose =
-document.querySelector(
-"[data-close-friendly]"
-);
+    document.querySelector(
+        "[data-close-friendly]"
+    );
 
-const openFriendly = ()=>{
 
-if(!friendlyModal)return;
+const openFriendly = () => {
 
-friendlyModal.classList.add(
-"active"
-);
+    if (!friendlyModal) return;
 
-friendlyModal.setAttribute(
-"aria-hidden",
-"false"
-);
+    friendlyModal.classList.add(
+        "active"
+    );
 
-document.body.classList.add(
-"modal-open"
-);
+    friendlyModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
 
-};
-
-const closeFriendly = ()=>{
-
-if(!friendlyModal)return;
-
-friendlyModal.classList.remove(
-"active"
-);
-
-friendlyModal.setAttribute(
-"aria-hidden",
-"true"
-);
-
-document.body.classList.remove(
-"modal-open"
-);
+    document.body.classList.add(
+        "modal-open"
+    );
 
 };
 
-friendlyButtons.forEach(button=>{
 
-button.addEventListener(
-"click",
-openFriendly
-);
+const closeFriendly = () => {
+
+    if (!friendlyModal) return;
+
+    friendlyModal.classList.remove(
+        "active"
+    );
+
+    friendlyModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+};
+
+
+friendlyButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        openFriendly
+    );
 
 });
 
-if(friendlyClose){
 
-friendlyClose.addEventListener(
-"click",
-closeFriendly
-);
+if (friendlyClose) {
 
-}
-
-if(friendlyModal){
-
-friendlyModal.addEventListener(
-"click",
-event=>{
-
-if(
-event.target === friendlyModal
-){
-
-closeFriendly();
+    friendlyClose.addEventListener(
+        "click",
+        closeFriendly
+    );
 
 }
 
-}
-);
+
+if (friendlyModal) {
+
+    friendlyModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                friendlyModal
+            ) {
+
+                closeFriendly();
+
+            }
+
+        }
+    );
 
 }
 
@@ -652,132 +1140,143 @@ closeFriendly();
 ================================================== */
 
 const membershipModal =
-document.querySelector(
-"#membershipModal"
-);
+    document.querySelector(
+        "#membershipModal"
+    );
 
 const membershipButtons =
-document.querySelectorAll(
-"[data-open-membership]"
-);
+    document.querySelectorAll(
+        "[data-open-membership]"
+    );
 
 const membershipClose =
-document.querySelector(
-"[data-close-membership]"
-);
+    document.querySelector(
+        "[data-close-membership]"
+    );
 
-const openMembership = ()=>{
 
-if(!membershipModal)return;
+const openMembership = () => {
 
-membershipModal.classList.add(
-"active"
-);
+    if (!membershipModal) return;
 
-membershipModal.setAttribute(
-"aria-hidden",
-"false"
-);
+    membershipModal.classList.add(
+        "active"
+    );
 
-document.body.classList.add(
-"modal-open"
-);
+    membershipModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
 
-};
-
-const closeMembership = ()=>{
-
-if(!membershipModal)return;
-
-membershipModal.classList.remove(
-"active"
-);
-
-membershipModal.setAttribute(
-"aria-hidden",
-"true"
-);
-
-document.body.classList.remove(
-"modal-open"
-);
+    document.body.classList.add(
+        "modal-open"
+    );
 
 };
 
-membershipButtons.forEach(button=>{
 
-button.addEventListener(
-"click",
-openMembership
-);
+const closeMembership = () => {
+
+    if (!membershipModal) return;
+
+    membershipModal.classList.remove(
+        "active"
+    );
+
+    membershipModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+};
+
+
+membershipButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        openMembership
+    );
 
 });
 
-if(membershipClose){
 
-membershipClose.addEventListener(
-"click",
-closeMembership
-);
+if (membershipClose) {
 
-}
-
-if(membershipModal){
-
-membershipModal.addEventListener(
-"click",
-event=>{
-
-if(
-event.target === membershipModal
-){
-
-closeMembership();
+    membershipClose.addEventListener(
+        "click",
+        closeMembership
+    );
 
 }
 
-}
-);
+
+if (membershipModal) {
+
+    membershipModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                membershipModal
+            ) {
+
+                closeMembership();
+
+            }
+
+        }
+    );
 
 }
 
 
 /* ==================================================
-   ESCAPE KEY — CLOSE ALL MODALS
+   ESCAPE KEY
 ================================================== */
 
 document.addEventListener(
-"keydown",
-event=>{
+    "keydown",
+    event => {
 
-if(event.key !== "Escape")
-return;
+        if (event.key !== "Escape") {
+            return;
+        }
 
-closeRules();
-closeFriendly();
-closeMembership();
+        closeRules();
+        closeFriendly();
+        closeMembership();
 
-if(
-lightbox &&
-lightbox.classList.contains("active")
-){
 
-lightbox.classList.remove(
-"active"
-);
+        if (
+            lightbox &&
+            lightbox.classList.contains(
+                "active"
+            )
+        ) {
 
-lightbox.setAttribute(
-"aria-hidden",
-"true"
-);
+            lightbox.classList.remove(
+                "active"
+            );
 
-}
+            lightbox.setAttribute(
+                "aria-hidden",
+                "true"
+            );
 
-document.body.classList.remove(
-"modal-open"
-);
+        }
 
-}
+
+        document.body.classList.remove(
+            "modal-open"
+        );
+
+    }
 );
 
 
@@ -786,86 +1285,95 @@ document.body.classList.remove(
 ================================================== */
 
 document.addEventListener(
-"submit",
-event=>{
+    "submit",
+    event => {
 
-const form =
-event.target;
+        const form =
+            event.target;
 
-if(
-!form.classList.contains(
-"application-form"
-)
-)return;
 
-const requiredFields =
-form.querySelectorAll(
-"[required]"
-);
+        if (
+            !form.classList.contains(
+                "application-form"
+            )
+        ) {
 
-let valid = true;
+            return;
 
-let firstError = null;
+        }
 
-requiredFields.forEach(field=>{
 
-field.classList.remove(
-"input-error"
-);
+        const requiredFields =
+            form.querySelectorAll(
+                "[required]"
+            );
 
-if(field.type === "checkbox"){
 
-if(!field.checked){
+        let valid = true;
+        let firstError = null;
 
-valid = false;
 
-field.classList.add(
-"input-error"
-);
+        requiredFields.forEach(
+            field => {
 
-if(!firstError){
+                field.classList.remove(
+                    "input-error"
+                );
 
-firstError = field;
 
-}
+                if (
+                    field.type ===
+                    "checkbox"
+                ) {
 
-}
+                    if (!field.checked) {
 
-}
-else if(
-!field.value ||
-!field.value.trim()
-){
+                        valid = false;
 
-valid = false;
+                        field.classList.add(
+                            "input-error"
+                        );
 
-field.classList.add(
-"input-error"
-);
+                        if (!firstError) {
+                            firstError = field;
+                        }
 
-if(!firstError){
+                    }
 
-firstError = field;
+                } else if (
+                    !field.value ||
+                    !field.value.trim()
+                ) {
 
-}
+                    valid = false;
 
-}
+                    field.classList.add(
+                        "input-error"
+                    );
 
-});
+                    if (!firstError) {
+                        firstError = field;
+                    }
 
-if(!valid){
+                }
 
-event.preventDefault();
+            }
+        );
 
-if(firstError){
 
-firstError.focus();
+        if (!valid) {
 
-}
+            event.preventDefault();
 
-}
+            if (firstError) {
 
-}
+                firstError.focus();
+
+            }
+
+        }
+
+    }
 );
 
 
@@ -874,30 +1382,37 @@ firstError.focus();
 ================================================== */
 
 const downloadButtons =
-document.querySelectorAll(
-"a[download]"
+    document.querySelectorAll(
+        "a[download]"
+    );
+
+
+downloadButtons.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                button.style.transform =
+                    "scale(.97)";
+
+
+                setTimeout(
+                    () => {
+
+                        button.style.transform =
+                            "";
+
+                    },
+                    180
+                );
+
+            }
+        );
+
+    }
 );
-
-downloadButtons.forEach(button=>{
-
-button.addEventListener(
-"click",
-()=>{
-
-button.style.transform =
-"scale(.97)";
-
-setTimeout(()=>{
-
-button.style.transform =
-"";
-
-},180);
-
-}
-);
-
-});
 
 
 /* ==================================================
@@ -905,16 +1420,19 @@ button.style.transform =
 ================================================== */
 
 const yearElements =
-document.querySelectorAll(
-"[data-current-year]"
+    document.querySelectorAll(
+        "[data-current-year]"
+    );
+
+
+yearElements.forEach(
+    element => {
+
+        element.textContent =
+            new Date().getFullYear();
+
+    }
 );
-
-yearElements.forEach(element=>{
-
-element.textContent =
-new Date().getFullYear();
-
-});
 
 
 /* ==================================================
@@ -922,41 +1440,56 @@ new Date().getFullYear();
 ================================================== */
 
 document
-.querySelectorAll(
-'a[href^="#"]'
-)
-.forEach(link=>{
+    .querySelectorAll(
+        'a[href^="#"]'
+    )
+    .forEach(
+        link => {
 
-link.addEventListener(
-"click",
-event=>{
+            link.addEventListener(
+                "click",
+                event => {
 
-const id =
-link.getAttribute("href");
+                    const id =
+                        link.getAttribute(
+                            "href"
+                        );
 
-if(!id || id === "#")
-return;
 
-const target =
-document.querySelector(id);
+                    if (
+                        !id ||
+                        id === "#"
+                    ) {
 
-if(!target)
-return;
+                        return;
 
-event.preventDefault();
+                    }
 
-target.scrollIntoView({
 
-behavior:"smooth",
+                    const target =
+                        document.querySelector(
+                            id
+                        );
 
-block:"start"
 
-});
+                    if (!target) {
+                        return;
+                    }
 
-}
-);
 
-});
+                    event.preventDefault();
+
+
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                }
+            );
+
+        }
+    );
 
 
 /* ==================================================
@@ -964,447 +1497,31 @@ block:"start"
 ================================================== */
 
 window.addEventListener(
-"load",
-()=>{
+    "load",
+    () => {
 
-document.body.classList.add(
-"page-loaded"
+        document.body.classList.add(
+            "page-loaded"
+        );
+
+    }
 );
-
-});
 
 
 /* ==================================================
-   LEADERSHIP SCROLL ANIMATION
-================================================== */
-
-const leaderCards =
-document.querySelectorAll(
-".leader-card"
-);
-
-if(leaderCards.length){
-
-const leaderObserver =
-new IntersectionObserver(
-
-entries=>{
-
-entries.forEach(entry=>{
-
-if(!entry.isIntersecting)
-return;
-
-entry.target.classList.add(
-"revealed"
-);
-
-leaderObserver.unobserve(
-entry.target
-);
-
-});
-
-},
-
-{
-threshold:.15
-}
-
-);
-
-leaderCards.forEach(card=>{
-
-leaderObserver.observe(card);
-
-});
-
-}
-
-
-/* ==================================================
-   SUPABASE CONFIGURATION
-================================================== */
-
-const SUPABASE_URL =
-"https://cmygmswzokyrmgdnuszq.supabase.co";
-
-const SUPABASE_ANON_KEY =
-"sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
-
-
-/* ==================================================
-   CREATE SUPABASE CLIENT
-================================================== */
-
-let homeSupabase = null;
-
-if(
-window.supabase &&
-typeof window.supabase.createClient ===
-"function"
-){
-
-homeSupabase =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_ANON_KEY
-);
-
-}
-else{
-
-console.error(
-"Supabase JavaScript library was not loaded."
-);
-
-}
-
-
-/* ==================================================
-   ESCAPE HTML
-================================================== */
-
-function escapeHTML(value){
-
-return String(value ?? "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-
-/* ==================================================
-   LOAD SUPABASE NOTICES
-================================================== */
-
-async function loadHomeNotices(){
-
-const noticeGrid =
-document.querySelector(
-"#home-notices"
-);
-
-const noticeTicker =
-document.querySelector(
-"#homeNoticeTicker"
-);
-
-if(
-!noticeGrid &&
-!noticeTicker
-){
-
-return;
-
-}
-
-
-/* ==================================================
-   SUPABASE CHECK
-================================================== */
-
-if(!homeSupabase){
-
-console.error(
-"Supabase client is unavailable."
-);
-
-return;
-
-}
-
-
-try{
-
-const {
-data,
-error
-} =
-await homeSupabase
-.from("notices")
-.select(
-"id,title,content,category,image_url,published,created_at,updated_at"
-)
-.eq(
-"published",
-true
-)
-.order(
-"created_at",
-{
-ascending:false
-}
-)
-.limit(10);
-
-
-/* ==================================================
-   DATABASE ERROR
-================================================== */
-
-if(error){
-
-console.error(
-"Supabase Notices Error:",
-error
-);
-
-if(noticeGrid){
-
-noticeGrid.innerHTML = `
-
-<article class="update-card">
-
-<div class="update-date">
-ERROR
-</div>
-
-<div class="update-tag">
-NOTICE
-</div>
-
-<h3>
-Unable to load notices.
-</h3>
-
-<p>
-Please try again later.
-</p>
-
-</article>
-
-`;
-
-}
-
-return;
-
-}
-
-
-/* ==================================================
-   NO NOTICE
-================================================== */
-
-if(
-!data ||
-data.length === 0
-){
-
-if(noticeGrid){
-
-noticeGrid.innerHTML = `
-
-<article class="update-card">
-
-<div class="update-date">
-NO NOTICE
-</div>
-
-<div class="update-tag">
-NOTICE
-</div>
-
-<h3>
-No latest notices available.
-</h3>
-
-<p>
-There are currently no published notices.
-</p>
-
-</article>
-
-`;
-
-}
-
-if(noticeTicker){
-
-noticeTicker.innerHTML = `
-
-<span class="notice-ticker-item">
-
-No latest notices available.
-
-</span>
-
-`;
-
-}
-
-startNoticeTicker();
-
-return;
-
-}
-
-
-/* ==================================================
-   UPDATE CARDS
-================================================== */
-
-if(noticeGrid){
-
-noticeGrid.innerHTML =
-data.map(notice=>{
-
-const date =
-new Date(
-notice.created_at
-).toLocaleDateString(
-"en-GB",
-{
-day:"2-digit",
-month:"short",
-year:"numeric"
-}
-);
-
-return `
-
-<article class="update-card">
-
-<div class="update-date">
-
-${escapeHTML(date)}
-
-</div>
-
-<div class="update-tag">
-
-${escapeHTML(
-notice.category ||
-"NOTICE"
-)}
-
-</div>
-
-<h3>
-
-${escapeHTML(
-notice.title ||
-"Untitled Notice"
-)}
-
-</h3>
-
-<p>
-
-${escapeHTML(
-notice.content ||
-""
-)}
-
-</p>
-
-</article>
-
-`;
-
-}).join("");
-
-}
-
-
-/* ==================================================
-   NOTICE TICKER
-================================================== */
-
-if(noticeTicker){
-
-const noticesHTML =
-data.map(notice=>{
-
-return `
-
-<span class="notice-ticker-item">
-
-<strong>NOTICE</strong>
-
-${escapeHTML(
-notice.title ||
-"Untitled Notice"
-)}
-
-</span>
-
-`;
-
-}).join("");
-
-
-/*
-Duplicate notices for continuous
-ticker animation.
-*/
-
-noticeTicker.innerHTML =
-noticesHTML +
-noticesHTML;
-
-}
-
-
-/* ==================================================
-   START TICKER
-================================================== */
-
-startNoticeTicker();
-
-
-}catch(error){
-
-console.error(
-"Notice loading failed:",
-error
-);
-
-if(noticeGrid){
-
-noticeGrid.innerHTML = `
-
-<article class="update-card">
-
-<div class="update-date">
-ERROR
-</div>
-
-<div class="update-tag">
-NOTICE
-</div>
-
-<h3>
-Unable to load notices.
-</h3>
-
-<p>
-Please try again later.
-</p>
-
-</article>
-
-`;
-
-}
-
-}
-
-}
-
-
-/* ==================================================
-   INITIALIZE NOTICES
+   INITIALIZE SUPABASE NOTICES
 ================================================== */
 
 document.addEventListener(
-"DOMContentLoaded",
-()=>{
+    "DOMContentLoaded",
+    () => {
 
-loadHomeNotices();
+        loadHomeNotices();
 
-});
+    }
+);
+
+
+/* ==================================================
+   FINISHED
+================================================== */
