@@ -1735,3 +1735,166 @@ leaderObserver.observe(card);
 });
 
 }
+
+/* ==================================================
+   SUPABASE — PUBLIC NOTICES
+================================================== */
+
+const SUPABASE_URL =
+"https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+/* Create Supabase client */
+
+const homeSupabase =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+
+/* ==================================================
+   LOAD NOTICES
+================================================== */
+
+async function loadHomeNotices(){
+
+  const track =
+    document.querySelector(
+      ".notice-ticker-track"
+    );
+
+  if(!track) return;
+
+
+  const {
+    data,
+    error
+  } =
+    await homeSupabase
+      .from("notices")
+      .select("id,title,content,created_at")
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      )
+      .limit(10);
+
+
+  if(error){
+
+    console.error(
+      "Supabase Notices Error:",
+      error
+    );
+
+    return;
+  }
+
+
+  if(!data || data.length === 0){
+
+    track.innerHTML = `
+      <span class="notice-ticker-item">
+        No latest notices available.
+      </span>
+    `;
+
+    return;
+  }
+
+
+  /* Escape HTML */
+
+  const escapeHTML = value => {
+
+    return String(value || "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+
+  };
+
+
+  /* Create ticker */
+
+  const noticesHTML =
+    data.map(notice => {
+
+      return `
+        <span class="notice-ticker-item">
+          <strong>NOTICE</strong>
+          ${escapeHTML(notice.title)}
+        </span>
+      `;
+
+    }).join("");
+
+
+  /*
+    Duplicate content so ticker
+    can continuously move.
+  */
+
+  track.innerHTML =
+    noticesHTML +
+    noticesHTML;
+
+
+  /* ==================================================
+     START TICKER
+  ================================================== */
+
+  let position = 0;
+
+  const moveTicker = () => {
+
+    position -= 0.35;
+
+    const resetPoint =
+      track.scrollWidth / 2;
+
+    if(
+      Math.abs(position) >= resetPoint
+    ){
+
+      position = 0;
+
+    }
+
+    track.style.transform =
+      `translateX(${position}px)`;
+
+    requestAnimationFrame(
+      moveTicker
+    );
+
+  };
+
+
+  requestAnimationFrame(
+    moveTicker
+  );
+
+}
+
+
+/* ==================================================
+   INITIAL LOAD
+================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    loadHomeNotices();
+
+  }
+);
