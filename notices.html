@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#f5f5f7"
+  >
+
+  <title>Notices | Ghopkhali Sports Arena</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background: #f5f5f7;
+      color: #111;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px 20px 70px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 45px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #777;
+      margin-bottom: 4px;
+    }
+
+    .brand strong {
+      font-size: 17px;
+      letter-spacing: 1px;
+    }
+
+    .back-button {
+      text-decoration: none;
+      color: #fff;
+      background: #111;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .page-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #777;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: clamp(38px, 7vw, 70px);
+      line-height: .95;
+      letter-spacing: -3px;
+      margin-bottom: 15px;
+    }
+
+    h1 span {
+      color: #d71920;
+    }
+
+    .description {
+      color: #666;
+      max-width: 650px;
+      line-height: 1.7;
+      margin-bottom: 35px;
+    }
+
+    .notice-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .notice {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 18px;
+      padding: 25px;
+      transition: .2s ease;
+    }
+
+    .notice:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.06);
+    }
+
+    .notice-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .category {
+      display: inline-block;
+      background: #111;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+    }
+
+    .date {
+      color: #888;
+      font-size: 13px;
+    }
+
+    .notice h2 {
+      font-size: 24px;
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .notice p {
+      color: #666;
+      line-height: 1.75;
+      white-space: pre-line;
+    }
+
+    .empty {
+      background: #fff;
+      border: 1px dashed #ccc;
+      border-radius: 18px;
+      padding: 60px 20px;
+      text-align: center;
+      color: #777;
+    }
+
+    .empty strong {
+      display: block;
+      color: #111;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: #777;
+    }
+
+    .error {
+      background: #fff0f0;
+      color: #b00020;
+      border: 1px solid #ffd0d0;
+      border-radius: 12px;
+      padding: 18px;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      color: #888;
+      font-size: 13px;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 600px) {
+
+      .page {
+        padding: 25px 15px 50px;
+      }
+
+      .header {
+        align-items: flex-start;
+      }
+
+      .brand strong {
+        font-size: 14px;
+      }
+
+      .brand img {
+        width: 45px;
+        height: 45px;
+      }
+
+      .back-button {
+        padding: 10px 13px;
+        font-size: 12px;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
+
+      .notice {
+        padding: 20px;
+      }
+
+      .notice-top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <div class="page">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+      <div class="brand">
+
+        <img
+          src="gsa.png"
+          alt="Ghopkhali Sports Arena"
+        >
+
+        <div>
+          <small>GHOPKHALI</small>
+          <strong>SPORTS ARENA</strong>
+        </div>
+
+      </div>
+
+      <a
+        href="index.html"
+        class="back-button"
+      >
+        ← Home
+      </a>
+
+    </header>
+
+
+    <!-- TITLE -->
+
+    <main>
+
+      <div class="page-label">
+        GHOPKHALI SPORTS ARENA / NOTICE BOARD
+      </div>
+
+      <h1>
+        Latest <span>Notices.</span>
+      </h1>
+
+      <p class="description">
+        Official announcements, club updates,
+        match information and important notices
+        from Ghopkhali Sports Arena.
+      </p>
+
+
+      <!-- NOTICE LIST -->
+
+      <section
+        id="noticeList"
+        class="notice-list"
+      >
+
+        <div class="loading">
+          Loading latest notices...
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <footer>
+      © <span id="year"></span>
+      Ghopkhali Sports Arena.
+      All rights reserved.
+    </footer>
+
+  </div>
+
+
+  <script>
+
+    /* =====================================================
+       SUPABASE
+    ===================================================== */
+
+    const SUPABASE_URL =
+      "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    function escapeHTML(value) {
+
+      if (
+        value === null ||
+        value === undefined
+      ) {
+        return "";
+      }
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    function formatDate(date) {
+
+      if (!date) return "";
+
+      return new Date(date)
+        .toLocaleDateString(
+          "en-US",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+          }
+        );
+
+    }
+
+
+    /* =====================================================
+       LOAD NOTICES
+    ===================================================== */
+
+    async function loadNotices() {
+
+      const container =
+        document.getElementById("noticeList");
+
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient
+
+          .from("notices")
+
+          .select(
+            "id,title,content,category,published,created_at"
+          )
+
+          .eq(
+            "published",
+            true
+          )
+
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        if (!data || data.length === 0) {
+
+          container.innerHTML = `
+
+            <div class="empty">
+
+              <strong>
+                No notices available
+              </strong>
+
+              <p>
+                There are currently no published
+                notices from Ghopkhali Sports Arena.
+              </p>
+
+            </div>
+
+          `;
+
+          return;
+
+        }
+
+
+        container.innerHTML =
+          data.map(notice => `
+
+            <article class="notice">
+
+              <div class="notice-top">
+
+                <span class="category">
+                  ${escapeHTML(
+                    notice.category || "GENERAL"
+                  )}
+                </span>
+
+                <span class="date">
+                  ${formatDate(
+                    notice.created_at
+                  )}
+                </span>
+
+              </div>
+
+
+              <h2>
+                ${escapeHTML(
+                  notice.title
+                )}
+              </h2>
+
+
+              <p>
+                ${escapeHTML(
+                  notice.content || ""
+                )}
+              </p>
+
+            </article>
+
+          `).join("");
+
+
+      } catch (error) {
+
+        console.error(
+          "Notice loading error:",
+          error
+        );
+
+
+        container.innerHTML = `
+
+          <div class="error">
+
+            <strong>
+              Unable to load notices.
+            </strong>
+
+            <br>
+
+            ${escapeHTML(
+              error.message ||
+              "Please try again later."
+            )}
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       INIT
+    ===================================================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        document.getElementById(
+          "year"
+        ).textContent =
+          new Date().getFullYear();
+
+
+        loadNotices();
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>
