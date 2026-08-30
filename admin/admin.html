@@ -1,1146 +1,707 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta charset="UTF-8">
 
-  <meta
-    name="description"
-    content="Ghopkhali Sports Arena — Administration Panel"
-  >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-  <title>GSA Admin Panel — Ghopkhali Sports Arena</title>
+<meta
+  name="theme-color"
+  content="#f5f5f7"
+>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta
+  name="description"
+  content="Ghopkhali Sports Arena Administration"
+>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+<title>GSA Admin | Ghopkhali Sports Arena</title>
 
-  <link rel="stylesheet" href="admin.css">
+<link
+  rel="stylesheet"
+  href="style.css"
+>
+
+<style>
+
+/* ==================================================
+   GSA ADMIN LOGIN
+================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f5f5f7;
+}
+
+.gsa-admin-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.gsa-admin-login {
+  width: 100%;
+  max-width: 460px;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  padding: 42px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+.gsa-admin-brand {
+  text-align: center;
+  margin-bottom: 34px;
+}
+
+.gsa-admin-logo {
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gsa-admin-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gsa-admin-brand small {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.gsa-admin-brand h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.gsa-admin-brand p {
+  margin: 10px 0 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.gsa-admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.gsa-admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gsa-admin-field label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.gsa-admin-field input {
+  width: 100%;
+  padding: 15px 16px;
+  border: 1px solid #d9d9d9;
+  background: #fafafa;
+  outline: none;
+  font: inherit;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.gsa-admin-field input:focus {
+  border-color: #111;
+  background: #fff;
+}
+
+.gsa-admin-login-button {
+  width: 100%;
+  border: 0;
+  background: #111;
+  color: #fff;
+  padding: 16px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.gsa-admin-login-button:hover {
+  opacity: 0.88;
+}
+
+.gsa-admin-login-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gsa-admin-error {
+  min-height: 20px;
+  color: #c40000;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.gsa-admin-footer {
+  text-align: center;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #eeeeee;
+}
+
+.gsa-admin-footer a {
+  color: #111;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.gsa-admin-footer a:hover {
+  text-decoration: underline;
+}
+
+
+/* ==================================================
+   LOADING
+================================================== */
+
+.gsa-admin-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 245, 247, 0.94);
+}
+
+.gsa-admin-loading-box {
+  text-align: center;
+}
+
+.gsa-admin-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid #ddd;
+  border-top-color: #111;
+  border-radius: 50%;
+  animation: gsaSpin 0.8s linear infinite;
+  margin: 0 auto 15px;
+}
+
+.gsa-admin-loading-box p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@keyframes gsaSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 600px) {
+
+  .gsa-admin-page {
+    padding: 16px;
+  }
+
+  .gsa-admin-login {
+    padding: 30px 22px;
+  }
+
+  .gsa-admin-brand h1 {
+    font-size: 25px;
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<!-- ==============================
-     LOGIN
-============================== -->
 
-<div class="login-screen" id="loginScreen">
+<!-- ==================================================
+     LOGIN PAGE
+================================================== -->
 
-  <div class="login-background"></div>
-
-  <div class="login-card">
-
-    <div class="login-logo">
-
-      <img
-        src="assets/gsa-logo.png"
-        alt="GSA"
-        onerror="this.style.display='none'"
-      >
-
-      <span>GSA</span>
-
-    </div>
-
-    <div class="login-heading">
-
-      <span class="admin-label">
-        SECURE ADMINISTRATION
-      </span>
-
-      <h1>
-        Welcome to
-        <span>GSA Admin.</span>
-      </h1>
-
-      <p>
-        Sign in to manage Ghopkhali Sports Arena.
-      </p>
-
-    </div>
-
-    <form id="loginForm" class="login-form">
-
-      <div class="input-group">
-
-        <label for="adminEmail">
-          EMAIL ADDRESS
-        </label>
-
-        <input
-          type="email"
-          id="adminEmail"
-          placeholder="admin@example.com"
-          autocomplete="email"
-          required
-        >
-
-      </div>
-
-      <div class="input-group">
-
-        <label for="adminPassword">
-          PASSWORD
-        </label>
-
-        <input
-          type="password"
-          id="adminPassword"
-          placeholder="Enter your password"
-          autocomplete="current-password"
-          required
-        >
-
-      </div>
-
-      <button
-        type="submit"
-        class="admin-button admin-button-dark login-submit"
-      >
-
-        <span>Sign In</span>
-        <span>→</span>
-
-      </button>
-
-      <p class="login-error" id="loginError"></p>
-
-    </form>
-
-    <div class="login-footer">
-
-      <span>
-        Ghopkhali Sports Arena
-      </span>
-
-      <small>
-        © <span data-current-year></span>
-      </small>
-
-    </div>
-
-  </div>
-
-</div>
+<main class="gsa-admin-page">
 
 
-<!-- ==============================
-     ADMIN APPLICATION
-============================== -->
+<div class="gsa-admin-login">
 
-<div
-  class="admin-app"
-  id="adminApp"
-  style="display:none;"
+
+<!-- BRAND -->
+
+<div class="gsa-admin-brand">
+
+<div class="gsa-admin-logo">
+
+<img
+  src="gsa.png"
+  alt="Ghopkhali Sports Arena"
 >
 
-  <!-- SIDEBAR -->
+</div>
 
-  <aside
-    class="admin-sidebar"
-    id="adminSidebar"
-  >
 
-    <div class="sidebar-brand">
+<small>
+GSA ADMINISTRATION
+</small>
 
-      <div class="sidebar-logo">
 
-        <img
-          src="assets/gsa-logo.png"
-          alt="GSA"
-          onerror="this.style.display='none'"
-        >
+<h1>
+GHOPKHALI
+</h1>
 
-        <span>GSA</span>
 
-      </div>
-
-      <div class="sidebar-brand-text">
-
-        <strong>
-          GHOPKHALI<br>
-          SPORTS ARENA
-        </strong>
-
-        <span>
-          ADMINISTRATION
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <nav class="sidebar-nav">
-
-      <span class="nav-section-title">
-        OVERVIEW
-      </span>
-
-      <button
-        class="sidebar-link active"
-        data-page="dashboard"
-      >
-        <span class="nav-icon">⌂</span>
-        <span>Dashboard</span>
-      </button>
-
-
-      <span class="nav-section-title">
-        CONTENT MANAGEMENT
-      </span>
-
-      <button
-        class="sidebar-link"
-        data-page="notices"
-      >
-        <span class="nav-icon">◉</span>
-        <span>Notices</span>
-      </button>
-
-      <button
-        class="sidebar-link"
-        data-page="gallery"
-      >
-        <span class="nav-icon">▧</span>
-        <span>Gallery</span>
-      </button>
-
-      <button
-        class="sidebar-link"
-        data-page="tournaments"
-      >
-        <span class="nav-icon">🏆</span>
-        <span>Tournaments</span>
-      </button>
-
-      <button
-        class="sidebar-link"
-        data-page="fixtures"
-      >
-        <span class="nav-icon">⚽</span>
-        <span>Matches & Fixtures</span>
-      </button>
-
-
-      <span class="nav-section-title">
-        PEOPLE
-      </span>
-
-      <button
-        class="sidebar-link"
-        data-page="leadership"
-      >
-        <span class="nav-icon">★</span>
-        <span>Leadership</span>
-      </button>
-
-      <button
-        class="sidebar-link"
-        data-page="committee"
-      >
-        <span class="nav-icon">♙</span>
-        <span>Committee</span>
-      </button>
-
-
-      <span class="nav-section-title">
-        APPLICATIONS
-      </span>
-
-      <button
-        class="sidebar-link"
-        data-page="friendly-applications"
-      >
-        <span class="nav-icon">⚽</span>
-        <span>Friendly Match</span>
-
-        <span
-          class="nav-badge"
-          id="friendlyApplicationCount"
-        >
-          0
-        </span>
-      </button>
-
-      <button
-        class="sidebar-link"
-        data-page="membership-applications"
-      >
-        <span class="nav-icon">✦</span>
-        <span>Membership</span>
-
-        <span
-          class="nav-badge"
-          id="membershipApplicationCount"
-        >
-          0
-        </span>
-      </button>
-
-
-      <span class="nav-section-title">
-        SYSTEM
-      </span>
-
-      <a
-        href="index.html"
-        target="_blank"
-        class="sidebar-link"
-      >
-        <span class="nav-icon">↗</span>
-        <span>View Website</span>
-      </a>
-
-      <button
-        class="sidebar-link logout-link"
-        id="logoutButton"
-      >
-        <span class="nav-icon">←</span>
-        <span>Sign Out</span>
-      </button>
-
-    </nav>
-
-
-    <div class="sidebar-footer">
-
-      <span class="status-dot"></span>
-
-      <span>System Online</span>
-
-    </div>
-
-  </aside>
-
-
-  <!-- MAIN -->
-
-  <main class="admin-main">
-
-    <header class="admin-topbar">
-
-      <div class="topbar-left">
-
-        <button
-          class="sidebar-toggle"
-          id="sidebarToggle"
-          aria-label="Toggle sidebar"
-        >
-          ☰
-        </button>
-
-        <div>
-
-          <p
-            class="page-kicker"
-            id="pageKicker"
-          >
-            ADMINISTRATION
-          </p>
-
-          <h1 id="pageTitle">
-            Dashboard
-          </h1>
-
-        </div>
-
-      </div>
-
-
-      <div class="topbar-right">
-
-        <button
-          class="topbar-action"
-          id="refreshButton"
-          title="Refresh Data"
-        >
-          ↻
-        </button>
-
-        <button
-          class="topbar-action notification-button"
-          title="Notifications"
-        >
-          🔔
-
-          <span
-            class="notification-dot"
-            id="notificationDot"
-          ></span>
-
-        </button>
-
-
-        <div class="admin-profile">
-
-          <div
-            class="admin-avatar"
-            id="adminAvatar"
-          >
-            A
-          </div>
-
-          <div class="admin-profile-info">
-
-            <strong id="adminName">
-              Administrator
-            </strong>
-
-            <span>
-              GSA Management
-            </span>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </header>
-
-
-    <div class="admin-content">
-
-
-      <!-- DASHBOARD -->
-
-      <section
-        class="admin-page active"
-        id="dashboardPage"
-      >
-
-        <div class="dashboard-welcome">
-
-          <div>
-
-            <span class="page-label">
-              GHOPKHALI SPORTS ARENA
-            </span>
-
-            <h2>
-              Manage everything
-              <span>from one place.</span>
-            </h2>
-
-            <p>
-              Control your club's announcements,
-              tournaments, matches, leadership,
-              gallery and applications.
-            </p>
-
-          </div>
-
-          <div class="welcome-date">
-
-            <strong id="currentDate">
-              --
-            </strong>
-
-            <span>
-              ADMIN PANEL
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div class="stats-grid">
-
-          <div class="stat-card">
-
-            <div class="stat-icon">
-              ◉
-            </div>
-
-            <div>
-              <span>TOTAL NOTICES</span>
-
-              <strong id="totalNotices">
-                0
-              </strong>
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div class="stat-icon">
-              🏆
-            </div>
-
-            <div>
-              <span>TOURNAMENTS</span>
-
-              <strong id="totalTournaments">
-                0
-              </strong>
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div class="stat-icon">
-              ⚽
-            </div>
-
-            <div>
-              <span>TOTAL MATCHES</span>
-
-              <strong id="totalFixtures">
-                0
-              </strong>
-            </div>
-
-          </div>
-
-
-          <div class="stat-card highlight-stat">
-
-            <div class="stat-icon">
-              ✦
-            </div>
-
-            <div>
-              <span>NEW APPLICATIONS</span>
-
-              <strong id="totalApplications">
-                0
-              </strong>
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="dashboard-grid">
-
-          <div class="dashboard-panel">
-
-            <div class="panel-header">
-
-              <div>
-
-                <span>QUICK ACTIONS</span>
-
-                <h3>
-                  Create something new
-                </h3>
-
-              </div>
-
-            </div>
-
-
-            <div class="quick-actions">
-
-              <button
-                class="quick-action"
-                data-action="add-notice"
-              >
-                <span class="quick-icon">+</span>
-
-                <strong>
-                  New Notice
-                </strong>
-
-                <small>
-                  Publish announcement
-                </small>
-              </button>
-
-
-              <button
-                class="quick-action"
-                data-action="add-fixture"
-              >
-                <span class="quick-icon">⚽</span>
-
-                <strong>
-                  Add Match
-                </strong>
-
-                <small>
-                  Create fixture
-                </small>
-              </button>
-
-
-              <button
-                class="quick-action"
-                data-action="add-tournament"
-              >
-                <span class="quick-icon">🏆</span>
-
-                <strong>
-                  Tournament
-                </strong>
-
-                <small>
-                  Create tournament
-                </small>
-              </button>
-
-
-              <button
-                class="quick-action"
-                data-action="add-gallery"
-              >
-                <span class="quick-icon">▧</span>
-
-                <strong>
-                  Gallery
-                </strong>
-
-                <small>
-                  Add photo
-                </small>
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <div class="dashboard-panel recent-panel">
-
-            <div class="panel-header">
-
-              <div>
-
-                <span>
-                  RECENT ACTIVITY
-                </span>
-
-                <h3>
-                  Latest updates
-                </h3>
-
-              </div>
-
-              <button
-                class="text-button"
-                data-page-link="notices"
-              >
-                View All →
-              </button>
-
-            </div>
-
-
-            <div
-              class="recent-activity-list"
-              id="recentActivityList"
-            >
-
-              <div class="empty-state small-empty">
-
-                <span>◌</span>
-
-                <p>
-                  No recent activity yet.
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="dashboard-panel applications-overview">
-
-          <div class="panel-header">
-
-            <div>
-
-              <span>
-                APPLICATION CENTER
-              </span>
-
-              <h3>
-                Latest applications
-              </h3>
-
-            </div>
-
-            <button
-              class="text-button"
-              data-page-link="friendly-applications"
-            >
-              Open Center →
-            </button>
-
-          </div>
-
-
-          <div
-            class="applications-preview"
-            id="applicationsPreview"
-          >
-
-            <div class="empty-state">
-
-              <span>✦</span>
-
-              <h4>
-                No applications yet
-              </h4>
-
-              <p>
-                New Friendly Match and Membership
-                applications will appear here.
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- NOTICES -->
-
-      <section
-        class="admin-page"
-        id="noticesPage"
-      >
-
-        <div class="page-toolbar">
-
-          <div>
-
-            <span class="page-label">
-              CONTENT MANAGEMENT
-            </span>
-
-            <h2>
-              Notices &
-              <span>Announcements.</span>
-            </h2>
-
-          </div>
-
-          <button
-            class="admin-button admin-button-dark"
-            data-action="add-notice"
-          >
-            + Create Notice
-          </button>
-
-        </div>
-
-
-        <div
-          class="admin-list"
-          id="noticesList"
-        ></div>
-
-      </section>
-
-
-      <!-- GALLERY -->
-
-      <section
-        class="admin-page"
-        id="galleryPage"
-      >
-
-        <div class="page-toolbar">
-
-          <div>
-
-            <span class="page-label">
-              MEDIA MANAGEMENT
-            </span>
-
-            <h2>
-              Photo
-              <span>Gallery.</span>
-            </h2>
-
-          </div>
-
-          <button
-            class="admin-button admin-button-dark"
-            data-action="add-gallery"
-          >
-            + Add Photo
-          </button>
-
-        </div>
-
-
-        <div
-          class="gallery-admin-grid"
-          id="galleryAdminGrid"
-        ></div>
-
-      </section>
-
-
-      <!-- TOURNAMENTS -->
-
-      <section
-        class="admin-page"
-        id="tournamentsPage"
-      >
-
-        <div class="page-toolbar">
-
-          <div>
-
-            <span class="page-label">
-              SPORTS MANAGEMENT
-            </span>
-
-            <h2>
-              Manage
-              <span>Tournaments.</span>
-            </h2>
-
-          </div>
-
-          <button
-            class="admin-button admin-button-dark"
-            data-action="add-tournament"
-          >
-            + Add Tournament
-          </button>
-
-        </div>
-
-
-        <div
-          class="admin-cards-grid"
-          id="tournamentsList"
-        ></div>
-
-      </section>
-
-
-      <!-- FIXTURES -->
-
-      <section
-        class="admin-page"
-        id="fixturesPage"
-      >
-
-        <div class="page-toolbar">
-
-          <div>
-
-            <span class="page-label">
-              MATCH MANAGEMENT
-            </span>
-
-            <h2>
-              Matches &
-              <span>Fixtures.</span>
-            </h2>
-
-          </div>
-
-          <button
-            class="admin-button admin-button-dark"
-            data-action="add-fixture"
-          >
-            + Add Match
-          </button>
-
-        </div>
-
-
-        <div
-          class="admin-list"
-          id="fixturesList"
-        ></div>
-
-      </section>
-
-
-      <!-- LEADERSHIP -->
-
-      <section
-        class="admin-page"
-        id="leadershipPage"
-      >
-
-        <div class="page-toolbar">
-
-          <div>
-
-            <span class="page-label">
-              CLUB LEADERSHIP
-            </span>
-
-            <h2>
-              Leadership
-              <span>Management.</span>
-            </h2>
-
-          </div>
-
-          <button
-            class="admin-button admin-button-dark"
-            data-action="add-leader"
-          >
-            + Add Leader
-          </button>
-
-        </div>
-
-
-        <div
-          class="leadership-admin-grid"
-          id="leadershipList"
-        ></div>
-
-      </section>
-
-
-      <!-- COMMITTEE -->
-
-      <section
-        class="admin-page"
-        id="committeePage"
-      >
-
-        <div class="page-toolbar">
-
-          <div>
-
-            <span class="page-label">
-              CLUB MANAGEMENT
-            </span>
-
-            <h2>
-              Committee
-              <span>Members.</span>
-            </h2>
-
-          </div>
-
-          <button
-            class="admin-button admin-button-dark"
-            data-action="add-committee"
-          >
-            + Add Member
-          </button>
-
-        </div>
-
-
-        <div
-          class="admin-list"
-          id="committeeList"
-        ></div>
-
-      </section>
-
-
-      <!-- FRIENDLY APPLICATIONS -->
-
-      <section
-        class="admin-page"
-        id="friendlyApplicationsPage"
-      >
-
-        <div class="page-toolbar">
-
-          <div>
-
-            <span class="page-label">
-              APPLICATION CENTER
-            </span>
-
-            <h2>
-              Friendly Match
-              <span>Applications.</span>
-            </h2>
-
-          </div>
-
-          <select
-            class="admin-filter"
-            id="friendlyStatusFilter"
-          >
-            <option value="all">
-              All Applications
-            </option>
-
-            <option value="pending">
-              Pending
-            </option>
-
-            <option value="approved">
-              Approved
-            </option>
-
-            <option value="rejected">
-              Rejected
-            </option>
-          </select>
-
-        </div>
-
-
-        <div
-          class="applications-list"
-          id="friendlyApplicationsList"
-        ></div>
-
-      </section>
-
-
-      <!-- MEMBERSHIP APPLICATIONS -->
-
-      <section
-        class="admin-page"
-        id="membershipApplicationsPage"
-      >
-
-        <div class="page-toolbar">
-
-          <div>
-
-            <span class="page-label">
-              APPLICATION CENTER
-            </span>
-
-            <h2>
-              Club Membership
-              <span>Applications.</span>
-            </h2>
-
-          </div>
-
-          <select
-            class="admin-filter"
-            id="membershipStatusFilter"
-          >
-
-            <option value="all">
-              All Applications
-            </option>
-
-            <option value="pending">
-              Pending
-            </option>
-
-            <option value="approved">
-              Approved
-            </option>
-
-            <option value="rejected">
-              Rejected
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div
-          class="applications-list"
-          id="membershipApplicationsList"
-        ></div>
-
-      </section>
-
-    </div>
-
-  </main>
+<p>
+SPORTS ARENA • ADMIN PANEL
+</p>
 
 </div>
 
 
-<!-- MODAL -->
 
-<div
-  class="admin-modal"
-  id="adminModal"
-  aria-hidden="true"
+<!-- ==================================================
+     LOGIN FORM
+================================================== -->
+
+<form
+  id="gsaAdminLoginForm"
+  class="gsa-admin-form"
 >
 
-  <div
-    class="admin-modal-box"
-    id="adminModalBox"
-  >
 
-    <button
-      class="modal-close-button"
-      id="adminModalClose"
-      aria-label="Close"
-    >
-      ×
-    </button>
+<div class="gsa-admin-field">
 
-    <div id="adminModalContent"></div>
+<label for="gsaAdminEmail">
+EMAIL ADDRESS
+</label>
 
-  </div>
+<input
+  type="email"
+  id="gsaAdminEmail"
+  autocomplete="email"
+  placeholder="admin@example.com"
+  required
+>
 
 </div>
 
 
-<!-- TOAST -->
+
+<div class="gsa-admin-field">
+
+<label for="gsaAdminPassword">
+PASSWORD
+</label>
+
+<input
+  type="password"
+  id="gsaAdminPassword"
+  autocomplete="current-password"
+  placeholder="Enter your password"
+  required
+>
+
+</div>
+
+
 
 <div
-  class="toast-container"
-  id="toastContainer"
+  id="gsaAdminError"
+  class="gsa-admin-error"
+  role="alert"
 ></div>
 
 
-<!-- LOADING -->
 
-<div
-  class="admin-loading"
-  id="adminLoading"
+<button
+  type="submit"
+  id="gsaAdminLoginButton"
+  class="gsa-admin-login-button"
 >
+LOGIN TO ADMIN PANEL
+</button>
 
-  <div class="loading-logo">
 
-    <img
-      src="assets/gsa-logo.png"
-      alt="GSA"
-      onerror="this.style.display='none'"
-    >
+</form>
 
-    <span>GSA</span>
 
-  </div>
 
-  <strong>
-    GHOPKHALI SPORTS ARENA
-  </strong>
+<!-- FOOTER -->
 
-  <div class="loading-line"></div>
+<div class="gsa-admin-footer">
+
+<a href="index.html">
+← Back to Ghopkhali Sports Arena
+</a>
 
 </div>
 
 
-<!-- SUPABASE -->
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</main>
 
-<script src="admin.js"></script>
+
+
+<!-- ==================================================
+     LOADING
+================================================== -->
+
+<div
+  id="gsaAdminLoading"
+  class="gsa-admin-loading"
+  aria-hidden="true"
+>
+
+<div class="gsa-admin-loading-box">
+
+<div class="gsa-admin-spinner"></div>
+
+<p>
+Signing in...
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- ==================================================
+     SUPABASE
+================================================== -->
+
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+
+<!-- ==================================================
+     ADMIN LOGIN SCRIPT
+================================================== -->
+
+<script>
+
+"use strict";
+
+
+/* ==================================================
+   SUPABASE CONFIG
+================================================== */
+
+const SUPABASE_URL =
+  "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+/* ==================================================
+   CREATE CLIENT
+================================================== */
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* ==================================================
+   ELEMENTS
+================================================== */
+
+const loginForm =
+  document.getElementById(
+    "gsaAdminLoginForm"
+  );
+
+const emailInput =
+  document.getElementById(
+    "gsaAdminEmail"
+  );
+
+const passwordInput =
+  document.getElementById(
+    "gsaAdminPassword"
+  );
+
+const loginButton =
+  document.getElementById(
+    "gsaAdminLoginButton"
+  );
+
+const errorBox =
+  document.getElementById(
+    "gsaAdminError"
+  );
+
+const loading =
+  document.getElementById(
+    "gsaAdminLoading"
+  );
+
+
+/* ==================================================
+   LOADING
+================================================== */
+
+function setLoading(isLoading) {
+
+  if (loading) {
+
+    loading.style.display =
+      isLoading ? "flex" : "none";
+
+    loading.setAttribute(
+      "aria-hidden",
+      isLoading ? "false" : "true"
+    );
+
+  }
+
+
+  if (loginButton) {
+
+    loginButton.disabled =
+      isLoading;
+
+    loginButton.textContent =
+      isLoading
+        ? "SIGNING IN..."
+        : "LOGIN TO ADMIN PANEL";
+
+  }
+
+}
+
+
+/* ==================================================
+   ERROR
+================================================== */
+
+function showError(message) {
+
+  if (!errorBox) return;
+
+  errorBox.textContent =
+    message || "";
+
+}
+
+
+/* ==================================================
+   CHECK EXISTING SESSION
+================================================== */
+
+async function checkExistingSession() {
+
+  try {
+
+    const result =
+      await supabaseClient.auth.getSession();
+
+    const session =
+      result?.data?.session;
+
+
+    if (session && session.user) {
+
+      /*
+       * User is already logged in.
+       * Send directly to the dashboard.
+       */
+
+      window.location.replace(
+        "admin-dashboard.html"
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Session check failed:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   LOGIN
+================================================== */
+
+if (loginForm) {
+
+  loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+
+      showError("");
+
+
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
+
+      if (!email || !password) {
+
+        showError(
+          "Please enter your email and password."
+        );
+
+        return;
+
+      }
+
+
+      setLoading(true);
+
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth
+            .signInWithPassword({
+              email: email,
+              password: password
+            });
+
+
+        if (error) {
+
+          throw error;
+
+        }
+
+
+        if (!data || !data.user) {
+
+          throw new Error(
+            "Login failed. Please try again."
+          );
+
+        }
+
+
+        /*
+         * Login successful.
+         * Move to separate dashboard.
+         */
+
+        window.location.replace(
+          "admin-dashboard.html"
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "GSA Admin Login Error:",
+          error
+        );
+
+
+        let message =
+          "Login failed. Please check your email and password.";
+
+
+        if (error?.message) {
+
+          message =
+            error.message;
+
+        }
+
+
+        showError(message);
+
+        setLoading(false);
+
+      }
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   AUTH STATE
+================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+  function(event, session) {
+
+    if (
+      event === "SIGNED_IN" &&
+      session?.user
+    ) {
+
+      window.location.replace(
+        "admin-dashboard.html"
+      );
+
+    }
+
+  }
+);
+
+
+/* ==================================================
+   START
+================================================== */
+
+checkExistingSession();
+
+</script>
+
 
 </body>
+
 </html>
