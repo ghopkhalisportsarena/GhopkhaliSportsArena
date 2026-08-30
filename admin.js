@@ -8,8 +8,8 @@
    SUPABASE CONFIG
 ========================================================= */
 
-const SUPABASE_URL = "YOUR_SUPABASE_URL";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://cmygmswzokyrmgdnuszq.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
