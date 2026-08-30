@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#f5f5f7"
+>
+
+<meta
+  name="description"
+  content="GSA Admin - Matches & Fixtures"
+>
+
+<title>Fixtures | GSA Admin</title>
+
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background: #f5f5f7;
+  color: #111;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.admin-header {
+
+  background: #111;
+
+  color: #fff;
+
+  padding: 18px 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+}
+
+.brand {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+}
+
+.brand img {
+
+  width: 48px;
+
+  height: 48px;
+
+  object-fit: contain;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+}
+
+.brand strong {
+
+  display: block;
+
+  font-size: 16px;
+
+  letter-spacing: 1px;
+
+}
+
+.brand span {
+
+  display: block;
+
+  font-size: 11px;
+
+  color: #aaa;
+
+  margin-top: 3px;
+
+}
+
+.back-button {
+
+  text-decoration: none;
+
+  color: #111;
+
+  background: #fff;
+
+  padding: 11px 17px;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+main {
+
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 35px 20px 60px;
+
+}
+
+.page-top {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-end;
+
+  gap: 20px;
+
+  margin-bottom: 30px;
+
+}
+
+.label {
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  color: #777;
+
+  margin-bottom: 10px;
+
+}
+
+h1 {
+
+  font-size:
+    clamp(30px, 5vw, 52px);
+
+  line-height: 1;
+
+}
+
+h1 span {
+
+  color: #e21b23;
+
+}
+
+.description {
+
+  margin-top: 12px;
+
+  color: #666;
+
+  max-width: 650px;
+
+  line-height: 1.6;
+
+}
+
+.add-button {
+
+  border: 0;
+
+  background: #111;
+
+  color: #fff;
+
+  padding: 13px 20px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+}
+
+.add-button:hover {
+
+  background: #e21b23;
+
+}
+
+
+/* =====================================================
+   FIXTURE LIST
+===================================================== */
+
+.fixtures-list {
+
+  display: grid;
+
+  gap: 16px;
+
+}
+
+.fixture-card {
+
+  background: #fff;
+
+  border: 1px solid #e5e5e5;
+
+  border-radius: 14px;
+
+  padding: 22px;
+
+  display: grid;
+
+  grid-template-columns:
+    90px 1fr auto;
+
+  align-items: center;
+
+  gap: 22px;
+
+}
+
+.fixture-date {
+
+  text-align: center;
+
+  border-right: 1px solid #eee;
+
+  padding-right: 20px;
+
+}
+
+.fixture-date strong {
+
+  display: block;
+
+  font-size: 34px;
+
+  line-height: 1;
+
+}
+
+.fixture-date span {
+
+  display: block;
+
+  color: #777;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  margin-top: 5px;
+
+  text-transform: uppercase;
+
+}
+
+.fixture-content {
+
+  min-width: 0;
+
+}
+
+.fixture-tag {
+
+  display: inline-block;
+
+  background: #111;
+
+  color: #fff;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  padding: 6px 9px;
+
+  border-radius: 5px;
+
+  margin-bottom: 10px;
+
+}
+
+.fixture-teams {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+
+}
+
+.team {
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+}
+
+.vs {
+
+  color: #e21b23;
+
+  font-size: 12px;
+
+  font-weight: 900;
+
+}
+
+.fixture-details {
+
+  margin-top: 9px;
+
+  color: #777;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+}
+
+.fixture-actions {
+
+  display: flex;
+
+  gap: 8px;
+
+}
+
+.small-button {
+
+  border: 0;
+
+  padding: 10px 14px;
+
+  border-radius: 7px;
+
+  background: #eee;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+}
+
+.small-button.delete {
+
+  background: #ffe6e6;
+
+  color: #c40000;
+
+}
+
+.empty {
+
+  background: #fff;
+
+  border: 1px dashed #ccc;
+
+  border-radius: 14px;
+
+  padding: 60px 20px;
+
+  text-align: center;
+
+  color: #777;
+
+}
+
+.empty strong {
+
+  display: block;
+
+  color: #111;
+
+  font-size: 18px;
+
+  margin-bottom: 8px;
+
+}
+
+.loading {
+
+  text-align: center;
+
+  padding: 60px;
+
+  color: #777;
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal {
+
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    rgba(0,0,0,.65);
+
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  z-index: 999;
+
+}
+
+.modal.open {
+
+  display: flex;
+
+}
+
+.modal-box {
+
+  width: 100%;
+
+  max-width: 620px;
+
+  background: #fff;
+
+  border-radius: 16px;
+
+  padding: 28px;
+
+  position: relative;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+}
+
+.close {
+
+  position: absolute;
+
+  right: 18px;
+
+  top: 14px;
+
+  border: 0;
+
+  background: transparent;
+
+  font-size: 28px;
+
+  cursor: pointer;
+
+}
+
+.modal-box h2 {
+
+  margin-bottom: 25px;
+
+  font-size: 28px;
+
+}
+
+.form-group {
+
+  margin-bottom: 18px;
+
+}
+
+.form-group label {
+
+  display: block;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  margin-bottom: 8px;
+
+}
+
+.form-group input,
+
+.form-group select,
+
+.form-group textarea {
+
+  width: 100%;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  padding: 12px;
+
+  font-size: 14px;
+
+  outline: none;
+
+  background: #fff;
+
+}
+
+.form-group input:focus,
+
+.form-group select:focus,
+
+.form-group textarea:focus {
+
+  border-color: #111;
+
+}
+
+.form-row {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 15px;
+
+}
+
+.submit-button {
+
+  width: 100%;
+
+  border: 0;
+
+  background: #111;
+
+  color: #fff;
+
+  padding: 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-weight: 700;
+
+}
+
+.submit-button:hover {
+
+  background: #e21b23;
+
+}
+
+.message {
+
+  text-align: center;
+
+  font-size: 13px;
+
+  margin-top: 14px;
+
+  color: #555;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 750px) {
+
+  .page-top {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+  }
+
+  .add-button {
+
+    width: 100%;
+
+  }
+
+  .fixture-card {
+
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+
+  }
+
+  .fixture-date {
+
+    border-right: 0;
+
+    border-bottom: 1px solid #eee;
+
+    padding-right: 0;
+
+    padding-bottom: 15px;
+
+    text-align: left;
+
+  }
+
+  .fixture-date strong,
+  .fixture-date span {
+
+    display: inline;
+
+    margin-right: 5px;
+
+  }
+
+  .fixture-actions {
+
+    width: 100%;
+
+  }
+
+  .small-button {
+
+    flex: 1;
+
+  }
+
+  .form-row {
+
+    grid-template-columns: 1fr;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="admin-header">
+
+  <div class="brand">
+
+    <img
+      src="gsa.png"
+      alt="GSA"
+    >
+
+    <div>
+
+      <strong>
+        GSA ADMIN
+      </strong>
+
+      <span>
+        GHOPKHALI SPORTS ARENA
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <a
+    href="admin-dashboard.html"
+    class="back-button"
+  >
+    ← Dashboard
+  </a>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main>
+
+
+  <div class="page-top">
+
+    <div>
+
+      <div class="label">
+        GSA ADMINISTRATION / FIXTURES
+      </div>
+
+      <h1>
+        Matches &
+        <span>Fixtures.</span>
+      </h1>
+
+      <p class="description">
+
+        Create and manage friendly matches,
+        tournament matches and upcoming
+        fixtures of Ghopkhali Sports Arena.
+
+      </p>
+
+    </div>
+
+
+    <button
+      class="add-button"
+      id="openAddButton"
+    >
+      + Add Fixture
+    </button>
+
+  </div>
+
+
+
+  <!-- =================================================
+       FIXTURE LIST
+  ================================================== -->
+
+  <section
+    class="fixtures-list"
+    id="fixturesList"
+  >
+
+    <div class="loading">
+      Loading fixtures...
+    </div>
+
+  </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     ADD FIXTURE MODAL
+===================================================== -->
+
+<div
+  class="modal"
+  id="fixtureModal"
+>
+
+  <div class="modal-box">
+
+
+    <button
+      class="close"
+      id="closeModal"
+      aria-label="Close"
+    >
+      ×
+    </button>
+
+
+    <div class="label">
+      MATCH MANAGEMENT
+    </div>
+
+
+    <h2>
+      Add Fixture
+    </h2>
+
+
+    <form id="fixtureForm">
+
+
+      <div class="form-row">
+
+
+        <div class="form-group">
+
+          <label>
+            HOME TEAM
+          </label>
+
+          <input
+            type="text"
+            id="homeTeam"
+            placeholder="Ghopkhali Sports Arena"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            AWAY TEAM
+          </label>
+
+          <input
+            type="text"
+            id="awayTeam"
+            placeholder="Opponent team"
+            required
+          >
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="form-row">
+
+
+        <div class="form-group">
+
+          <label>
+            MATCH DATE
+          </label>
+
+          <input
+            type="date"
+            id="matchDate"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            KICKOFF TIME
+          </label>
+
+          <input
+            type="time"
+            id="matchTime"
+          >
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="form-row">
+
+
+        <div class="form-group">
+
+          <label>
+            MATCH TYPE
+          </label>
+
+          <select id="matchType">
+
+            <option value="FRIENDLY MATCH">
+              FRIENDLY MATCH
+            </option>
+
+            <option value="TOURNAMENT">
+              TOURNAMENT
+            </option>
+
+            <option value="LEAGUE">
+              LEAGUE
+            </option>
+
+            <option value="SEMI FINAL">
+              SEMI FINAL
+            </option>
+
+            <option value="FINAL">
+              FINAL
+            </option>
+
+            <option value="OTHER">
+              OTHER
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            VENUE
+          </label>
+
+          <input
+            type="text"
+            id="venue"
+            placeholder="Match venue"
+          >
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label>
+          STATUS
+        </label>
+
+        <select id="matchStatus">
+
+          <option value="UPCOMING">
+            UPCOMING
+          </option>
+
+          <option value="ONGOING">
+            ONGOING
+          </option>
+
+          <option value="COMPLETED">
+            COMPLETED
+          </option>
+
+          <option value="POSTPONED">
+            POSTPONED
+          </option>
+
+          <option value="CANCELLED">
+            CANCELLED
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <div class="form-group">
+
+        <label>
+          ADDITIONAL INFORMATION
+        </label>
+
+        <textarea
+          id="matchDescription"
+          rows="4"
+          placeholder="Additional match information..."
+        ></textarea>
+
+      </div>
+
+
+
+      <button
+        type="submit"
+        class="submit-button"
+      >
+        Add Fixture
+      </button>
+
+
+      <div
+        class="message"
+        id="formMessage"
+      ></div>
+
+
+    </form>
+
+  </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+
+
+<script>
+
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
+
+const SUPABASE_URL =
+  "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const fixturesList =
+  document.getElementById(
+    "fixturesList"
+  );
+
+
+const modal =
+  document.getElementById(
+    "fixtureModal"
+  );
+
+
+const openButton =
+  document.getElementById(
+    "openAddButton"
+  );
+
+
+const closeButton =
+  document.getElementById(
+    "closeModal"
+  );
+
+
+const form =
+  document.getElementById(
+    "fixtureForm"
+  );
+
+
+const message =
+  document.getElementById(
+    "formMessage"
+  );
+
+
+
+/* =====================================================
+   MODAL OPEN
+===================================================== */
+
+openButton.addEventListener(
+  "click",
+  () => {
+
+    modal.classList.add(
+      "open"
+    );
+
+  }
+);
+
+
+
+/* =====================================================
+   MODAL CLOSE
+===================================================== */
+
+closeButton.addEventListener(
+  "click",
+  () => {
+
+    modal.classList.remove(
+      "open"
+    );
+
+  }
+);
+
+
+modal.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target === modal
+    ) {
+
+      modal.classList.remove(
+        "open"
+      );
+
+    }
+
+  }
+);
+
+
+
+/* =====================================================
+   LOAD FIXTURES
+===================================================== */
+
+async function loadFixtures() {
+
+  fixturesList.innerHTML = `
+    <div class="loading">
+      Loading fixtures...
+    </div>
+  `;
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("fixtures")
+      .select("*")
+      .order(
+        "match_date",
+        {
+          ascending: true
+        }
+      );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    if (
+      !data ||
+      data.length === 0
+    ) {
+
+      fixturesList.innerHTML = `
+
+        <div class="empty">
+
+          <strong>
+            No fixtures yet
+          </strong>
+
+          <p>
+            Click "Add Fixture" to create
+            your first match.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    fixturesList.innerHTML =
+      data
+        .map(
+          renderFixture
+        )
+        .join("");
+
+
+  } catch (error) {
+
+    console.error(
+      "Fixture loading error:",
+      error
+    );
+
+
+    fixturesList.innerHTML = `
+
+      <div class="empty">
+
+        <strong>
+          Could not load fixtures
+        </strong>
+
+        <p>
+          ${escapeHTML(
+            error.message
+          )}
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+
+/* =====================================================
+   RENDER FIXTURE
+===================================================== */
+
+function renderFixture(
+  fixture
+) {
+
+  const id =
+    escapeAttribute(
+      fixture.id
+    );
+
+
+  const home =
+    escapeHTML(
+      fixture.home_team ||
+      fixture.homeTeam ||
+      "Home Team"
+    );
+
+
+  const away =
+    escapeHTML(
+      fixture.away_team ||
+      fixture.awayTeam ||
+      "Away Team"
+    );
+
+
+  const type =
+    escapeHTML(
+      fixture.match_type ||
+      fixture.type ||
+      "FRIENDLY MATCH"
+    );
+
+
+  const status =
+    escapeHTML(
+      fixture.status ||
+      "UPCOMING"
+    );
+
+
+  const venue =
+    escapeHTML(
+      fixture.venue ||
+      "Venue to be announced"
+    );
+
+
+  const description =
+    escapeHTML(
+      fixture.description ||
+      ""
+    );
+
+
+  let dateText =
+    "TBA";
+
+
+  let day =
+    "";
+
+
+  let month =
+    "";
+
+
+  let year =
+    "";
+
+
+  if (
+    fixture.match_date
+  ) {
+
+    const date =
+      new Date(
+        fixture.match_date
+      );
+
+
+    if (
+      !isNaN(
+        date.getTime()
+      )
+    ) {
+
+      day =
+        date
+          .getDate()
+          .toString()
+          .padStart(
+            2,
+            "0"
+          );
+
+
+      month =
+        date
+          .toLocaleDateString(
+            "en-US",
+            {
+              month: "short"
+            }
+          )
+          .toUpperCase();
+
+
+      year =
+        date.getFullYear();
+
+
+      dateText =
+        date.toLocaleDateString(
+          "en-US",
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+          }
+        );
+
+    }
+
+  }
+
+
+  let timeText =
+    "";
+
+
+  if (
+    fixture.match_time
+  ) {
+
+    timeText =
+      ` • ${escapeHTML(
+        String(
+          fixture.match_time
+        ).slice(
+          0,
+          5
+        )
+      )}`;
+
+  }
+
+
+  return `
+
+    <article
+      class="fixture-card"
+    >
+
+
+      <div class="fixture-date">
+
+        <strong>
+          ${day || "--"}
+        </strong>
+
+        <span>
+          ${month || "TBA"}
+        </span>
+
+        <span>
+          ${year || ""}
+        </span>
+
+      </div>
+
+
+
+      <div class="fixture-content">
+
+        <span class="fixture-tag">
+          ${type}
+        </span>
+
+
+        <div class="fixture-teams">
+
+          <span class="team">
+            ${home}
+          </span>
+
+          <span class="vs">
+            VS
+          </span>
+
+          <span class="team">
+            ${away}
+          </span>
+
+        </div>
+
+
+        <div class="fixture-details">
+
+          <strong>
+            ${status}
+          </strong>
+
+          •
+          ${dateText}
+
+          ${timeText}
+
+          <br>
+
+          Venue:
+          ${venue}
+
+          ${
+            description
+              ? `<br>${description}`
+              : ""
+          }
+
+        </div>
+
+      </div>
+
+
+
+      <div class="fixture-actions">
+
+        <button
+          class="small-button delete"
+          onclick="deleteFixture('${id}')"
+        >
+          Delete
+        </button>
+
+      </div>
+
+
+    </article>
+
+  `;
+
+}
+
+
+
+/* =====================================================
+   ADD FIXTURE
+===================================================== */
+
+form.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+
+    const homeTeam =
+      document
+        .getElementById(
+          "homeTeam"
+        )
+        .value
+        .trim();
+
+
+    const awayTeam =
+      document
+        .getElementById(
+          "awayTeam"
+        )
+        .value
+        .trim();
+
+
+    const matchDate =
+      document
+        .getElementById(
+          "matchDate"
+        )
+        .value;
+
+
+    const matchTime =
+      document
+        .getElementById(
+          "matchTime"
+        )
+        .value;
+
+
+    const matchType =
+      document
+        .getElementById(
+          "matchType"
+        )
+        .value;
+
+
+    const venue =
+      document
+        .getElementById(
+          "venue"
+        )
+        .value
+        .trim();
+
+
+    const status =
+      document
+        .getElementById(
+          "matchStatus"
+        )
+        .value;
+
+
+    const description =
+      document
+        .getElementById(
+          "matchDescription"
+        )
+        .value
+        .trim();
+
+
+    if (
+      !homeTeam ||
+      !awayTeam ||
+      !matchDate
+    ) {
+
+      message.textContent =
+        "Home team, away team and match date are required.";
+
+      return;
+
+    }
+
+
+    message.textContent =
+      "Saving fixture...";
+
+
+    try {
+
+      const {
+        error
+      } = await supabaseClient
+        .from("fixtures")
+        .insert({
+
+          home_team:
+            homeTeam,
+
+          away_team:
+            awayTeam,
+
+          match_date:
+            matchDate,
+
+          match_time:
+            matchTime || null,
+
+          match_type:
+            matchType,
+
+          venue:
+            venue,
+
+          status:
+            status,
+
+          description:
+            description
+
+        });
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      message.textContent =
+        "Fixture added successfully.";
+
+
+      form.reset();
+
+
+      await loadFixtures();
+
+
+      setTimeout(
+        () => {
+
+          modal.classList.remove(
+            "open"
+          );
+
+          message.textContent =
+            "";
+
+        },
+        800
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Add fixture error:",
+        error
+      );
+
+
+      message.textContent =
+        error.message ||
+        "Failed to add fixture.";
+
+    }
+
+  }
+);
+
+
+
+/* =====================================================
+   DELETE FIXTURE
+===================================================== */
+
+window.deleteFixture =
+  async function(id) {
+
+    const confirmed =
+      confirm(
+        "Are you sure you want to delete this fixture?"
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    try {
+
+      const {
+        error
+      } = await supabaseClient
+        .from("fixtures")
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      await loadFixtures();
+
+
+    } catch (error) {
+
+      console.error(
+        "Delete fixture error:",
+        error
+      );
+
+
+      alert(
+        error.message ||
+        "Failed to delete fixture."
+      );
+
+    }
+
+  };
+
+
+
+/* =====================================================
+   SECURITY HELPERS
+===================================================== */
+
+function escapeHTML(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+function escapeAttribute(value) {
+
+  return escapeHTML(
+    value
+  );
+
+}
+
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadFixtures();
+
+</script>
+
+
+</body>
+
+</html>
