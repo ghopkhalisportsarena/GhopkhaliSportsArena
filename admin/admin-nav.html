@@ -1,878 +1,375 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<meta
-  name="theme-color"
-  content="#111111"
->
-
-<title>GSA Admin Navigation</title>
-
-<style>
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f5f5f7;
-  color: #111;
-}
-
-
-/* =========================================
-   SIDEBAR
-========================================= */
-
-.admin-sidebar {
-
-  width: 270px;
-  min-height: 100vh;
-
-  background: #111;
-  color: #fff;
-
-  padding: 24px 16px;
-
-  display: flex;
-  flex-direction: column;
-
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-
-  z-index: 1000;
-
-}
-
-
-/* =========================================
-   BRAND
-========================================= */
-
-.admin-brand {
-
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  padding: 8px 10px 24px;
-
-  border-bottom: 1px solid #292929;
-
-  text-decoration: none;
-  color: #fff;
-
-}
-
-.admin-brand-logo {
-
-  width: 44px;
-  height: 44px;
-
-  border-radius: 50%;
-
-  background: #fff;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  overflow: hidden;
-
-}
-
-.admin-brand-logo img {
-
-  width: 100%;
-  height: 100%;
-
-  object-fit: contain;
-
-}
-
-.admin-brand-text strong {
-
-  display: block;
-
-  font-size: 13px;
-
-  letter-spacing: 1px;
-
-}
-
-.admin-brand-text span {
-
-  display: block;
-
-  color: #888;
-
-  font-size: 9px;
-
-  letter-spacing: 1.5px;
-
-  margin-top: 4px;
-
-}
-
-
-/* =========================================
-   NAVIGATION
-========================================= */
-
-.nav-title {
-
-  color: #666;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: 2px;
-
-  padding: 24px 12px 9px;
-
-}
-
-
-.admin-nav {
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 4px;
-
-}
-
-
-.admin-nav a {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  min-height: 45px;
-
-  padding: 0 12px;
-
-  color: #aaa;
-
-  text-decoration: none;
-
-  border-radius: 8px;
-
-  font-size: 12px;
-
-  transition: .2s ease;
-
-}
-
-
-.admin-nav a:hover {
-
-  background: #1f1f1f;
-
-  color: #fff;
-
-}
-
-
-.admin-nav a.active {
-
-  background: #fff;
-
-  color: #111;
-
-}
-
-
-/* =========================================
-   ICON
-========================================= */
-
-.nav-icon {
-
-  width: 25px;
-
-  text-align: center;
-
-  font-size: 15px;
-
-  flex-shrink: 0;
-
-}
-
-
-.nav-text {
-
-  flex: 1;
-
-}
-
-
-/* =========================================
-   APPLICATIONS
-========================================= */
-
-.application-link {
-
-  position: relative;
-
-}
-
-
-.application-badge {
-
-  min-width: 20px;
-
-  height: 20px;
-
-  padding: 0 5px;
-
-  border-radius: 10px;
-
-  background: #d71920;
-
-  color: #fff;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-}
-
-
-/* =========================================
-   DIVIDER
-========================================= */
-
-.nav-divider {
-
-  height: 1px;
-
-  background: #292929;
-
-  margin: 15px 8px;
-
-}
-
-
-/* =========================================
-   BOTTOM
-========================================= */
-
-.admin-sidebar-bottom {
-
-  margin-top: auto;
-
-}
-
-
-.profile-link {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  padding: 10px;
-
-  color: #aaa;
-
-  text-decoration: none;
-
-  border-radius: 8px;
-
-}
-
-
-.profile-link:hover {
-
-  background: #1f1f1f;
-
-  color: #fff;
-
-}
-
-
-.profile-avatar {
-
-  width: 34px;
-  height: 34px;
-
-  border-radius: 50%;
-
-  background: #fff;
-
-  color: #111;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 12px;
-
-  font-weight: 700;
-
-}
-
-
-.profile-info {
-
-  overflow: hidden;
-
-}
-
-
-.profile-info strong {
-
-  display: block;
-
-  color: #fff;
-
-  font-size: 11px;
-
-  white-space: nowrap;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-}
-
-
-.profile-info span {
-
-  display: block;
-
-  color: #777;
-
-  font-size: 9px;
-
-  margin-top: 3px;
-
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media (max-width: 800px) {
-
-  .admin-sidebar {
-
-    width: 240px;
-
-    transform: translateX(-100%);
-
-    transition: transform .25s ease;
-
-  }
-
-  .admin-sidebar.open {
-
-    transform: translateX(0);
-
-  }
-
-}
-
-</style>
-
-</head>
-
-
-<body>
-
+<!-- =========================================================
+     GSA ADMIN NAVIGATION
+     Ghopkhali Sports Arena
+========================================================= -->
 
 <aside
-  class="admin-sidebar"
   id="adminSidebar"
+  class="admin-sidebar"
+  aria-label="Admin navigation"
 >
 
+  <!-- =====================================================
+       BRAND
+  ====================================================== -->
 
-<!-- =======================================
-     BRAND
-======================================== -->
+  <a
+    href="admin-dashboard.html"
+    class="admin-brand"
+  >
 
-<a
-  href="admin-dashboard.html"
-  class="admin-brand"
->
+    <div class="admin-brand-logo">
 
-  <div class="admin-brand-logo">
+      <img
+        src="gsa.png"
+        alt="Ghopkhali Sports Arena"
+      >
 
-    <img
-      src="gsa.png"
-      alt="Ghopkhali Sports Arena"
+    </div>
+
+    <div class="admin-brand-text">
+
+      <strong>GHOPKHALI</strong>
+
+      <span>SPORTS ARENA • ADMIN</span>
+
+    </div>
+
+  </a>
+
+
+  <!-- =====================================================
+       NAVIGATION
+  ====================================================== -->
+
+  <nav class="admin-nav">
+
+
+    <!-- DASHBOARD -->
+
+    <div class="admin-nav-section">
+
+      <div class="admin-nav-title">
+        OVERVIEW
+      </div>
+
+      <a
+        href="admin-dashboard.html"
+        class="sidebar-link"
+        data-page="dashboard"
+      >
+
+        <span class="admin-nav-icon">⌂</span>
+
+        <span class="admin-nav-label">
+          Dashboard
+        </span>
+
+      </a>
+
+    </div>
+
+
+
+    <!-- CONTENT -->
+
+    <div class="admin-nav-section">
+
+      <div class="admin-nav-title">
+        CONTENT
+      </div>
+
+
+      <a
+        href="admin-notices.html"
+        class="sidebar-link"
+        data-page="notices"
+      >
+
+        <span class="admin-nav-icon">▤</span>
+
+        <span class="admin-nav-label">
+          Notices
+        </span>
+
+      </a>
+
+
+      <a
+        href="admin-gallery.html"
+        class="sidebar-link"
+        data-page="gallery"
+      >
+
+        <span class="admin-nav-icon">▧</span>
+
+        <span class="admin-nav-label">
+          Gallery
+        </span>
+
+      </a>
+
+
+      <a
+        href="admin-tournaments.html"
+        class="sidebar-link"
+        data-page="tournaments"
+      >
+
+        <span class="admin-nav-icon">♛</span>
+
+        <span class="admin-nav-label">
+          Tournaments
+        </span>
+
+      </a>
+
+
+      <a
+        href="admin-fixtures.html"
+        class="sidebar-link"
+        data-page="fixtures"
+      >
+
+        <span class="admin-nav-icon">⚽</span>
+
+        <span class="admin-nav-label">
+          Matches & Fixtures
+        </span>
+
+      </a>
+
+    </div>
+
+
+
+    <!-- ORGANIZATION -->
+
+    <div class="admin-nav-section">
+
+      <div class="admin-nav-title">
+        ORGANIZATION
+      </div>
+
+
+      <a
+        href="admin-leadership.html"
+        class="sidebar-link"
+        data-page="leadership"
+      >
+
+        <span class="admin-nav-icon">★</span>
+
+        <span class="admin-nav-label">
+          Leadership
+        </span>
+
+      </a>
+
+
+      <a
+        href="admin-committee.html"
+        class="sidebar-link"
+        data-page="committee"
+      >
+
+        <span class="admin-nav-icon">♙</span>
+
+        <span class="admin-nav-label">
+          Committee
+        </span>
+
+      </a>
+
+    </div>
+
+
+
+    <!-- APPLICATIONS -->
+
+    <div class="admin-nav-section">
+
+      <div class="admin-nav-title">
+        APPLICATIONS
+      </div>
+
+
+      <a
+        href="admin-friendly-applications.html"
+        class="sidebar-link"
+        data-page="friendly-applications"
+      >
+
+        <span class="admin-nav-icon">⚽</span>
+
+        <span class="admin-nav-label">
+          Friendly Applications
+        </span>
+
+      </a>
+
+
+      <a
+        href="admin-membership-applications.html"
+        class="sidebar-link"
+        data-page="membership-applications"
+      >
+
+        <span class="admin-nav-icon">✦</span>
+
+        <span class="admin-nav-label">
+          Membership Applications
+        </span>
+
+      </a>
+
+    </div>
+
+
+
+    <!-- SYSTEM -->
+
+    <div class="admin-nav-section">
+
+      <div class="admin-nav-title">
+        SYSTEM
+      </div>
+
+
+      <a
+        href="admin-users.html"
+        class="sidebar-link"
+        data-page="users"
+      >
+
+        <span class="admin-nav-icon">◎</span>
+
+        <span class="admin-nav-label">
+          Users
+        </span>
+
+      </a>
+
+
+      <a
+        href="admin-settings.html"
+        class="sidebar-link"
+        data-page="settings"
+      >
+
+        <span class="admin-nav-icon">⚙</span>
+
+        <span class="admin-nav-label">
+          Settings
+        </span>
+
+      </a>
+
+
+      <a
+        href="admin-profile.html"
+        class="sidebar-link"
+        data-page="profile"
+      >
+
+        <span class="admin-nav-icon">●</span>
+
+        <span class="admin-nav-label">
+          My Profile
+        </span>
+
+      </a>
+
+    </div>
+
+  </nav>
+
+
+
+  <!-- =====================================================
+       SIDEBAR FOOTER
+  ====================================================== -->
+
+  <div class="admin-sidebar-footer">
+
+
+    <!-- CURRENT USER -->
+
+    <div class="admin-user-mini">
+
+      <div
+        id="adminAvatar"
+        class="admin-avatar"
+      >
+        A
+      </div>
+
+
+      <div class="admin-user-info">
+
+        <strong id="adminName">
+          Administrator
+        </strong>
+
+        <span>
+          GSA Admin
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- LOGOUT -->
+
+    <button
+      type="button"
+      class="admin-nav"
+      id="logoutButton"
+      style="
+        width:100%;
+        display:flex;
+        align-items:center;
+        gap:12px;
+        padding:12px 13px;
+        border:0;
+        border-radius:11px;
+        background:transparent;
+        color:#aaa;
+        font-size:13px;
+        text-align:left;
+      "
     >
 
-  </div>
+      <span class="admin-nav-icon">
+        ↪
+      </span>
 
+      <span class="admin-nav-label">
+        Sign Out
+      </span>
 
-  <div class="admin-brand-text">
+    </button>
 
-    <strong>
-      GHOPKHALI
-    </strong>
-
-    <span>
-      SPORTS ARENA ADMIN
-    </span>
 
   </div>
-
-</a>
-
-
-<!-- =======================================
-     MAIN MENU
-======================================== -->
-
-<div class="nav-title">
-  MAIN MENU
-</div>
-
-
-<nav class="admin-nav">
-
-
-<a
-  href="admin-dashboard.html"
-  data-page="dashboard"
->
-
-  <span class="nav-icon">⌂</span>
-
-  <span class="nav-text">
-    Dashboard
-  </span>
-
-</a>
-
-
-<a
-  href="admin-notices.html"
-  data-page="notices"
->
-
-  <span class="nav-icon">◉</span>
-
-  <span class="nav-text">
-    Notices
-  </span>
-
-</a>
-
-
-<a
-  href="admin-gallery.html"
-  data-page="gallery"
->
-
-  <span class="nav-icon">▧</span>
-
-  <span class="nav-text">
-    Gallery
-  </span>
-
-</a>
-
-
-<a
-  href="admin-tournaments.html"
-  data-page="tournaments"
->
-
-  <span class="nav-icon">🏆</span>
-
-  <span class="nav-text">
-    Tournaments
-  </span>
-
-</a>
-
-
-<a
-  href="admin-fixtures.html"
-  data-page="fixtures"
->
-
-  <span class="nav-icon">⚽</span>
-
-  <span class="nav-text">
-    Matches & Fixtures
-  </span>
-
-</a>
-
-
-</nav>
-
-
-<!-- =======================================
-     CLUB MANAGEMENT
-======================================== -->
-
-<div class="nav-title">
-  CLUB MANAGEMENT
-</div>
-
-
-<nav class="admin-nav">
-
-
-<a
-  href="admin-leadership.html"
-  data-page="leadership"
->
-
-  <span class="nav-icon">★</span>
-
-  <span class="nav-text">
-    Leadership
-  </span>
-
-</a>
-
-
-<a
-  href="admin-committee.html"
-  data-page="committee"
->
-
-  <span class="nav-icon">♙</span>
-
-  <span class="nav-text">
-    Committee
-  </span>
-
-</a>
-
-
-</nav>
-
-
-<!-- =======================================
-     APPLICATIONS
-======================================== -->
-
-<div class="nav-title">
-  APPLICATIONS
-</div>
-
-
-<nav class="admin-nav">
-
-
-<a
-  href="admin-friendly-applications.html"
-  class="application-link"
->
-
-  <span class="nav-icon">⚽</span>
-
-  <span class="nav-text">
-    Friendly Matches
-  </span>
-
-  <span
-    class="application-badge"
-    id="friendlyBadge"
-  >
-    0
-  </span>
-
-</a>
-
-
-<a
-  href="admin-membership-applications.html"
-  class="application-link"
->
-
-  <span class="nav-icon">✦</span>
-
-  <span class="nav-text">
-    Membership
-  </span>
-
-  <span
-    class="application-badge"
-    id="membershipBadge"
-  >
-    0
-  </span>
-
-</a>
-
-
-</nav>
-
-
-<!-- =======================================
-     SYSTEM
-======================================== -->
-
-<div class="nav-title">
-  SYSTEM
-</div>
-
-
-<nav class="admin-nav">
-
-
-<a
-  href="admin-users.html"
->
-
-  <span class="nav-icon">♙</span>
-
-  <span class="nav-text">
-    Users
-  </span>
-
-</a>
-
-
-<a
-  href="admin-settings.html"
->
-
-  <span class="nav-icon">⚙</span>
-
-  <span class="nav-text">
-    Settings
-  </span>
-
-</a>
-
-
-</nav>
-
-
-<div class="nav-divider"></div>
-
-
-<!-- =======================================
-     BOTTOM PROFILE
-======================================== -->
-
-<div class="admin-sidebar-bottom">
-
-
-<a
-  href="admin-profile.html"
-  class="profile-link"
->
-
-  <div
-    class="profile-avatar"
-    id="profileAvatar"
-  >
-    A
-  </div>
-
-
-  <div class="profile-info">
-
-    <strong id="profileName">
-      Administrator
-    </strong>
-
-    <span>
-      View Profile
-    </span>
-
-  </div>
-
-</a>
-
-</div>
-
 
 </aside>
 
 
-<!-- =========================================
-     SUPABASE
-========================================= -->
+<!-- =========================================================
+     MOBILE SIDEBAR OVERLAY
+========================================================= -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-<script>
-
-/* =========================================
-   SUPABASE
-========================================= */
-
-const SUPABASE_URL =
-  "https://cmygmswzokyrmgdnuszq.supabase.co";
-
-const SUPABASE_ANON_KEY =
-  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
-
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
-
-
-/* =========================================
-   ACTIVE PAGE
-========================================= */
-
-const currentPage =
-  location.pathname
-    .split("/")
-    .pop();
-
-
-document
-  .querySelectorAll(".admin-nav a")
-  .forEach(link => {
-
-    const href =
-      link.getAttribute("href");
-
-    if (
-      href === currentPage
-    ) {
-
-      link.classList.add("active");
-
-    }
-
-  });
-
-
-/* =========================================
-   LOAD USER
-========================================= */
-
-async function loadAdminProfile() {
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.auth.getUser();
-
-
-    if (error || !data.user) {
-
-      return;
-
-    }
-
-
-    const email =
-      data.user.email ||
-      "Administrator";
-
-
-    const name =
-      email.split("@")[0] ||
-      "Administrator";
-
-
-    const nameElement =
-      document.getElementById(
-        "profileName"
-      );
-
-
-    const avatarElement =
-      document.getElementById(
-        "profileAvatar"
-      );
-
-
-    if (nameElement) {
-
-      nameElement.textContent =
-        name;
-
-    }
-
-
-    if (avatarElement) {
-
-      avatarElement.textContent =
-        name
-          .charAt(0)
-          .toUpperCase();
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "Profile loading error:",
-      error
-    );
-
-  }
-
-}
-
-
-loadAdminProfile();
-
-
-/* =========================================
-   AUTH STATE
-========================================= */
-
-supabaseClient.auth.onAuthStateChange(
-  (event, session) => {
-
-    if (
-      event === "SIGNED_OUT"
-    ) {
-
-      window.location.replace(
-        "admin-login.html"
-      );
-
-    }
-
-  }
-);
-
-</script>
-
-</body>
-
-</html>
+<div
+  id="adminSidebarOverlay"
+  aria-hidden="true"
+  style="
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:999;
+    display:none;
+  "
+></div>
