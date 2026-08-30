@@ -1,12 +1,12 @@
 /* =========================================================
    GSA ADMIN PANEL
-   Ghopkhali Sports Arena
-   Supabase — STABLE VERSION
+   GHOPKHALI SPORTS ARENA
+   SUPABASE — FULL REPLACEMENT
 ========================================================= */
 
 
 /* =========================================================
-   SUPABASE
+   SUPABASE CONFIG
 ========================================================= */
 
 const SUPABASE_URL =
@@ -16,7 +16,39 @@ const SUPABASE_ANON_KEY =
   "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
 
+/* =========================================================
+   SUPABASE INITIALIZATION
+========================================================= */
+
 let supabaseClient = null;
+
+try {
+
+  if (
+    typeof window.supabase === "undefined" ||
+    typeof window.supabase.createClient !== "function"
+  ) {
+
+    throw new Error(
+      "Supabase library is not loaded."
+    );
+
+  }
+
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+} catch (error) {
+
+  console.error(
+    "Supabase initialization error:",
+    error
+  );
+
+}
 
 
 /* =========================================================
@@ -25,8 +57,6 @@ let supabaseClient = null;
 
 let currentUser = null;
 let notices = [];
-
-let dashboardLoading = false;
 
 
 /* =========================================================
@@ -41,81 +71,42 @@ const $$ = selector =>
 
 
 /* =========================================================
-   INITIALIZE
+   DOM READY
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", async () => {
-
-  console.log("GSA Admin Panel starting...");
-
-  setCurrentYear();
-  setCurrentDate();
-
-  setupNavigation();
-  setupButtons();
-  setupModal();
-  setupLogin();
-  setupSidebar();
-
-  initializeSupabase();
-
-});
-
-
-/* =========================================================
-   SUPABASE INITIALIZATION
-========================================================= */
-
-function initializeSupabase() {
-
-  try {
-
-    if (!window.supabase) {
-
-      console.error(
-        "Supabase library not found."
-      );
-
-      showLoginError(
-        "Supabase library could not be loaded. Please refresh the page."
-      );
-
-      return;
-
-    }
-
-
-    supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-      );
-
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
 
     console.log(
-      "Supabase initialized successfully."
+      "GSA Admin Panel starting..."
     );
 
+    setCurrentYear();
+    setCurrentDate();
 
-    setupAuthListener();
+    setupNavigation();
+    setupButtons();
+    setupModal();
+    setupLogin();
+    setupSidebar();
 
-    checkSession();
+    /*
+      IMPORTANT:
+      Show login immediately.
+      This prevents infinite splash/loading.
+    */
 
+    showLogin();
 
-  } catch (error) {
+    /*
+      Check authentication after UI is ready.
+    */
 
-    console.error(
-      "Supabase initialization error:",
-      error
-    );
-
-    showLoginError(
-      "Unable to connect to Supabase."
-    );
+    await checkSession();
 
   }
-
-}
+);
 
 
 /* =========================================================
@@ -188,26 +179,25 @@ function setupLogin() {
       event.preventDefault();
 
 
-      if (!supabaseClient) {
+      const emailInput =
+        $("#adminEmail");
 
-        showLoginError(
-          "Supabase is not ready. Please refresh the page."
-        );
-
-        return;
-
-      }
-
-
-      const email =
-        $("#adminEmail")?.value.trim() || "";
-
-      const password =
-        $("#adminPassword")?.value || "";
-
+      const passwordInput =
+        $("#adminPassword");
 
       const errorBox =
         $("#loginError");
+
+
+      const email =
+        emailInput
+          ? emailInput.value.trim()
+          : "";
+
+      const password =
+        passwordInput
+          ? passwordInput.value
+          : "";
 
 
       if (errorBox) {
@@ -217,9 +207,12 @@ function setupLogin() {
 
       if (!email || !password) {
 
-        showLoginError(
-          "Please enter email and password."
-        );
+        if (errorBox) {
+
+          errorBox.textContent =
+            "Please enter email and password.";
+
+        }
 
         return;
 
@@ -231,19 +224,32 @@ function setupLogin() {
 
       try {
 
+        if (!supabaseClient) {
+
+          throw new Error(
+            "Supabase is not initialized."
+          );
+
+        }
+
+
         console.log(
           "Attempting admin login..."
         );
 
 
+        const result =
+          await supabaseClient.auth
+            .signInWithPassword({
+              email,
+              password
+            });
+
+
         const {
           data,
           error
-        } =
-          await supabaseClient.auth.signInWithPassword({
-            email,
-            password
-          });
+        } = result;
 
 
         if (error) {
@@ -251,10 +257,10 @@ function setupLogin() {
         }
 
 
-        if (!data?.user) {
+        if (!data || !data.user) {
 
           throw new Error(
-            "Login succeeded but no user was returned."
+            "Login successful but user data was not returned."
           );
 
         }
@@ -265,7 +271,7 @@ function setupLogin() {
 
 
         console.log(
-          "Login successful:",
+          "Admin login successful:",
           currentUser.email
         );
 
@@ -273,7 +279,20 @@ function setupLogin() {
         showAdminPanel();
 
 
-        await loadDashboard();
+        /*
+          Do not block the panel
+          while dashboard loads.
+        */
+
+        loadDashboard()
+          .catch(error => {
+
+            console.error(
+              "Dashboard loading error:",
+              error
+            );
+
+          });
 
 
         toast(
@@ -290,10 +309,13 @@ function setupLogin() {
         );
 
 
-        showLoginError(
-          getSupabaseErrorMessage(error)
-        );
+        if (errorBox) {
 
+          errorBox.textContent =
+            error.message ||
+            "Login failed.";
+
+        }
 
       } finally {
 
@@ -308,56 +330,16 @@ function setupLogin() {
 
 
 /* =========================================================
-   AUTH LISTENER
-========================================================= */
-
-function setupAuthListener() {
-
-  if (!supabaseClient) return;
-
-
-  supabaseClient.auth.onAuthStateChange(
-    (event, session) => {
-
-      console.log(
-        "Auth event:",
-        event
-      );
-
-
-      if (
-        event === "SIGNED_IN" &&
-        session?.user
-      ) {
-
-        currentUser =
-          session.user;
-
-      }
-
-
-      if (event === "SIGNED_OUT") {
-
-        currentUser =
-          null;
-
-        showLogin();
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   SESSION
+   SESSION CHECK
 ========================================================= */
 
 async function checkSession() {
 
   if (!supabaseClient) {
+
+    console.error(
+      "Supabase client unavailable."
+    );
 
     showLogin();
 
@@ -369,15 +351,46 @@ async function checkSession() {
   try {
 
     console.log(
-      "Checking session..."
+      "Checking admin session..."
     );
+
+
+    /*
+      Timeout prevents infinite loading.
+    */
+
+    const sessionPromise =
+      supabaseClient.auth.getSession();
+
+
+    const timeoutPromise =
+      new Promise(
+        (_, reject) => {
+
+          setTimeout(
+            () => {
+
+              reject(
+                new Error(
+                  "Session check timed out."
+                )
+              );
+
+            },
+            8000
+          );
+
+        }
+      );
 
 
     const {
       data,
       error
-    } =
-      await supabaseClient.auth.getSession();
+    } = await Promise.race([
+      sessionPromise,
+      timeoutPromise
+    ]);
 
 
     if (error) {
@@ -399,14 +412,26 @@ async function checkSession() {
 
 
       console.log(
-        "Existing session found."
+        "Existing admin session found."
       );
 
 
       showAdminPanel();
 
 
-      await loadDashboard();
+      /*
+        Dashboard loading is independent.
+      */
+
+      loadDashboard()
+        .catch(error => {
+
+          console.error(
+            "Dashboard error:",
+            error
+          );
+
+        });
 
 
     } else {
@@ -431,7 +456,60 @@ async function checkSession() {
 
     showLogin();
 
+
+    /*
+      Make sure loading overlay
+      can never remain visible.
+    */
+
+    showLoading(false);
+
   }
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+if (supabaseClient) {
+
+  supabaseClient.auth.onAuthStateChange(
+    (event, session) => {
+
+      console.log(
+        "Auth event:",
+        event
+      );
+
+
+      if (
+        event === "SIGNED_IN" &&
+        session?.user
+      ) {
+
+        currentUser =
+          session.user;
+
+        updateAdminProfile();
+
+      }
+
+
+      if (
+        event === "SIGNED_OUT"
+      ) {
+
+        currentUser =
+          null;
+
+        showLogin();
+
+      }
+
+    }
+  );
 
 }
 
@@ -464,11 +542,14 @@ function showLogin() {
 
   }
 
+
+  showLoading(false);
+
 }
 
 
 /* =========================================================
-   SHOW ADMIN
+   SHOW ADMIN PANEL
 ========================================================= */
 
 function showAdminPanel() {
@@ -553,13 +634,17 @@ function updateAdminProfile() {
 
 async function logout() {
 
-  if (!supabaseClient) return;
-
-
   showLoading(true);
 
 
   try {
+
+    if (!supabaseClient) {
+      throw new Error(
+        "Supabase is not initialized."
+      );
+    }
+
 
     const {
       error
@@ -594,7 +679,8 @@ async function logout() {
 
 
     toast(
-      getSupabaseErrorMessage(error),
+      error.message ||
+      "Logout failed.",
       "error"
     );
 
@@ -613,7 +699,6 @@ async function logout() {
 ========================================================= */
 
 function setupNavigation() {
-
 
   $$(".sidebar-link[data-page]")
     .forEach(button => {
@@ -661,12 +746,6 @@ async function openPage(page) {
   if (!page) return;
 
 
-  console.log(
-    "Opening page:",
-    page
-  );
-
-
   $$(".sidebar-link[data-page]")
     .forEach(link => {
 
@@ -694,7 +773,9 @@ async function openPage(page) {
 
 
   const pageElement =
-    document.getElementById(pageId);
+    document.getElementById(
+      pageId
+    );
 
 
   if (pageElement) {
@@ -711,57 +792,79 @@ async function openPage(page) {
 
   try {
 
-    switch (page) {
+    if (page === "dashboard") {
 
-      case "dashboard":
-        await loadDashboard();
-        break;
-
-      case "notices":
-        await loadNotices();
-        break;
-
-      case "gallery":
-        await loadGallery();
-        break;
-
-      case "tournaments":
-        await loadTournaments();
-        break;
-
-      case "fixtures":
-        await loadFixtures();
-        break;
-
-      case "leadership":
-        await loadLeadership();
-        break;
-
-      case "committee":
-        await loadCommittee();
-        break;
-
-      case "friendly-applications":
-        await loadFriendlyApplications();
-        break;
-
-      case "membership-applications":
-        await loadMembershipApplications();
-        break;
+      await loadDashboard();
 
     }
 
+
+    if (page === "notices") {
+
+      await loadNotices();
+
+    }
+
+
+    if (page === "gallery") {
+
+      await loadGallery();
+
+    }
+
+
+    if (page === "tournaments") {
+
+      await loadTournaments();
+
+    }
+
+
+    if (page === "fixtures") {
+
+      await loadFixtures();
+
+    }
+
+
+    if (page === "leadership") {
+
+      await loadLeadership();
+
+    }
+
+
+    if (page === "committee") {
+
+      await loadCommittee();
+
+    }
+
+
+    if (
+      page ===
+      "friendly-applications"
+    ) {
+
+      await loadFriendlyApplications();
+
+    }
+
+
+    if (
+      page ===
+      "membership-applications"
+    ) {
+
+      await loadMembershipApplications();
+
+    }
 
   } catch (error) {
 
     console.error(
       "Page loading error:",
       error
-    );
-
-    toast(
-      "Could not load page data.",
-      "error"
     );
 
   }
@@ -839,7 +942,9 @@ function setupSidebar() {
     $("#adminSidebar");
 
 
-  if (!toggle || !sidebar) return;
+  if (!toggle || !sidebar) {
+    return;
+  }
 
 
   toggle.addEventListener(
@@ -886,13 +991,34 @@ function setupButtons() {
       "click",
       async () => {
 
-        await loadDashboard();
+        showLoading(true);
 
 
-        toast(
-          "Data refreshed.",
-          "success"
-        );
+        try {
+
+          await loadDashboard();
+
+
+          toast(
+            "Data refreshed.",
+            "success"
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+
+          toast(
+            "Refresh failed.",
+            "error"
+          );
+
+        } finally {
+
+          showLoading(false);
+
+        }
 
       }
     );
@@ -929,63 +1055,89 @@ function setupButtons() {
 
 function handleAction(action) {
 
-  switch (action) {
+  if (
+    action ===
+    "add-notice"
+  ) {
 
-    case "add-notice":
+    openNoticeModal();
 
-      openNoticeModal();
+    return;
 
-      break;
-
-
-    case "add-gallery":
-
-      openSimpleModal(
-        "Add Gallery Photo",
-        "Gallery management will be connected next."
-      );
-
-      break;
+  }
 
 
-    case "add-tournament":
+  if (
+    action ===
+    "add-gallery"
+  ) {
 
-      openSimpleModal(
-        "Add Tournament",
-        "Tournament management will be connected next."
-      );
+    openSimpleModal(
+      "Add Gallery Photo",
+      "Gallery management will be connected next."
+    );
 
-      break;
+    return;
 
-
-    case "add-fixture":
-
-      openSimpleModal(
-        "Add Match",
-        "Fixture management will be connected next."
-      );
-
-      break;
+  }
 
 
-    case "add-leader":
+  if (
+    action ===
+    "add-tournament"
+  ) {
 
-      openSimpleModal(
-        "Add Leader",
-        "Leadership management will be connected next."
-      );
+    openSimpleModal(
+      "Add Tournament",
+      "Tournament management will be connected next."
+    );
 
-      break;
+    return;
+
+  }
 
 
-    case "add-committee":
+  if (
+    action ===
+    "add-fixture"
+  ) {
 
-      openSimpleModal(
-        "Add Committee Member",
-        "Committee management will be connected next."
-      );
+    openSimpleModal(
+      "Add Match",
+      "Fixture management will be connected next."
+    );
 
-      break;
+    return;
+
+  }
+
+
+  if (
+    action ===
+    "add-leader"
+  ) {
+
+    openSimpleModal(
+      "Add Leader",
+      "Leadership management will be connected next."
+    );
+
+    return;
+
+  }
+
+
+  if (
+    action ===
+    "add-committee"
+  ) {
+
+    openSimpleModal(
+      "Add Committee Member",
+      "Committee management will be connected next."
+    );
+
+    return;
 
   }
 
@@ -998,58 +1150,31 @@ function handleAction(action) {
 
 async function loadDashboard() {
 
-  if (!supabaseClient) {
-
-    console.warn(
-      "Dashboard skipped: Supabase unavailable."
-    );
-
-    return;
-
-  }
-
-
-  if (dashboardLoading) {
-    return;
-  }
-
-
-  dashboardLoading =
-    true;
-
-
   console.log(
     "Loading dashboard..."
   );
 
 
-  try {
+  /*
+    Do NOT show global loading here.
+    Otherwise a slow query can make the
+    entire admin panel look frozen.
+  */
 
-    await Promise.all([
-      loadNoticeStats(),
-      loadRecentActivity()
-    ]);
+  await Promise.allSettled([
 
+    loadNoticeStats(),
 
-    console.log(
-      "Dashboard loaded successfully."
-    );
+    loadRecentActivity(),
 
+    loadApplicationStats()
 
-  } catch (error) {
-
-    console.error(
-      "Dashboard error:",
-      error
-    );
+  ]);
 
 
-  } finally {
-
-    dashboardLoading =
-      false;
-
-  }
+  console.log(
+    "Dashboard loaded."
+  );
 
 }
 
@@ -1067,10 +1192,6 @@ async function loadNoticeStats() {
   if (!element) return;
 
 
-  element.textContent =
-    "…";
-
-
   try {
 
     const {
@@ -1079,13 +1200,10 @@ async function loadNoticeStats() {
     } =
       await supabaseClient
         .from("notices")
-        .select(
-          "id",
-          {
-            count: "exact",
-            head: true
-          }
-        );
+        .select("*", {
+          count: "exact",
+          head: true
+        });
 
 
     if (error) {
@@ -1094,7 +1212,7 @@ async function loadNoticeStats() {
 
 
     element.textContent =
-      count ?? 0;
+      count || 0;
 
 
   } catch (error) {
@@ -1106,7 +1224,106 @@ async function loadNoticeStats() {
 
 
     element.textContent =
-      "0";
+      "—";
+
+  }
+
+}
+
+
+/* =========================================================
+   APPLICATION STATS
+========================================================= */
+
+async function loadApplicationStats() {
+
+  const friendlyElement =
+    $("#totalFriendlyApplications");
+
+  const membershipElement =
+    $("#totalMembershipApplications");
+
+
+  if (
+    !friendlyElement &&
+    !membershipElement
+  ) {
+
+    return;
+
+  }
+
+
+  if (friendlyElement) {
+
+    try {
+
+      const {
+        count,
+        error
+      } =
+        await supabaseClient
+          .from(
+            "friendly_applications"
+          )
+          .select("*", {
+            count: "exact",
+            head: true
+          });
+
+
+      if (!error) {
+
+        friendlyElement.textContent =
+          count || 0;
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Friendly stats error:",
+        error
+      );
+
+    }
+
+  }
+
+
+  if (membershipElement) {
+
+    try {
+
+      const {
+        count,
+        error
+      } =
+        await supabaseClient
+          .from(
+            "membership_applications"
+          )
+          .select("*", {
+            count: "exact",
+            head: true
+          });
+
+
+      if (!error) {
+
+        membershipElement.textContent =
+          count || 0;
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Membership stats error:",
+        error
+      );
+
+    }
 
   }
 
@@ -1124,14 +1341,6 @@ async function loadRecentActivity() {
 
 
   if (!container) return;
-
-
-  container.innerHTML = `
-    <div class="empty-state small-empty">
-      <span>◌</span>
-      <p>Loading...</p>
-    </div>
-  `;
 
 
   try {
@@ -1178,40 +1387,40 @@ async function loadRecentActivity() {
 
     container.innerHTML =
       data
-        .map(notice => `
+        .map(notice => {
 
-          <div class="recent-item">
+          return `
+            <div class="recent-item">
 
-            <div class="recent-item-icon">
-              ◉
+              <div class="recent-item-icon">
+                ◉
+              </div>
+
+              <div class="recent-item-content">
+
+                <strong>
+                  ${escapeHTML(
+                    notice.title
+                  )}
+                </strong>
+
+                <span>
+                  ${escapeHTML(
+                    notice.category ||
+                    "GENERAL"
+                  )}
+                  •
+                  ${formatDate(
+                    notice.created_at
+                  )}
+                </span>
+
+              </div>
+
             </div>
+          `;
 
-            <div class="recent-item-content">
-
-              <strong>
-                ${escapeHTML(
-                  notice.title
-                )}
-              </strong>
-
-              <span>
-                ${escapeHTML(
-                  notice.category ||
-                  "GENERAL"
-                )}
-
-                •
-
-                ${formatDate(
-                  notice.created_at
-                )}
-              </span>
-
-            </div>
-
-          </div>
-
-        `)
+        })
         .join("");
 
 
@@ -1226,11 +1435,7 @@ async function loadRecentActivity() {
     container.innerHTML = `
       <div class="empty-state small-empty">
         <span>⚠</span>
-        <p>
-          ${escapeHTML(
-            getSupabaseErrorMessage(error)
-          )}
-        </p>
+        <p>Unable to load recent activity.</p>
       </div>
     `;
 
@@ -1320,17 +1525,12 @@ async function loadNotices() {
     container.innerHTML = `
       <div class="empty-state">
         <span>⚠</span>
-
-        <h4>
-          Could not load notices
-        </h4>
-
+        <h4>Could not load notices</h4>
         <p>
           ${escapeHTML(
-            getSupabaseErrorMessage(error)
+            error.message
           )}
         </p>
-
       </div>
     `;
 
@@ -1346,7 +1546,6 @@ async function loadNotices() {
 function renderNotice(notice) {
 
   return `
-
     <article class="admin-list-item">
 
       <div class="admin-list-content">
@@ -1368,13 +1567,11 @@ function renderNotice(notice) {
 
         </div>
 
-
         <h3>
           ${escapeHTML(
             notice.title
           )}
         </h3>
-
 
         <p>
           ${escapeHTML(
@@ -1382,25 +1579,19 @@ function renderNotice(notice) {
           )}
         </p>
 
-
-        <span
-          class="status-badge ${
-            notice.published
-              ? "published"
-              : "draft"
-          }"
-        >
-
+        <span class="status-badge ${
+          notice.published
+            ? "published"
+            : "draft"
+        }">
           ${
             notice.published
               ? "Published"
               : "Draft"
           }
-
         </span>
 
       </div>
-
 
       <div class="admin-list-actions">
 
@@ -1412,7 +1603,6 @@ function renderNotice(notice) {
         >
           Edit
         </button>
-
 
         <button
           class="admin-small-button danger"
@@ -1426,7 +1616,6 @@ function renderNotice(notice) {
       </div>
 
     </article>
-
   `;
 
 }
@@ -1452,7 +1641,6 @@ function openNoticeModal() {
       </h2>
 
     </div>
-
 
     <form
       id="noticeForm"
@@ -1481,7 +1669,9 @@ function openNoticeModal() {
           CATEGORY
         </label>
 
-        <select id="noticeCategory">
+        <select
+          id="noticeCategory"
+        >
 
           <option value="GENERAL">
             General
@@ -1549,7 +1739,6 @@ function openNoticeModal() {
       </button>
 
     </form>
-
   `;
 
 
@@ -1582,23 +1771,31 @@ async function createNotice(event) {
 
 
   const title =
-    $("#noticeTitle")?.value.trim() ||
-    "";
+    $("#noticeTitle")
+      ?.value
+      .trim();
+
 
   const content =
-    $("#noticeContent")?.value.trim() ||
-    "";
+    $("#noticeContent")
+      ?.value
+      .trim();
+
 
   const category =
-    $("#noticeCategory")?.value ||
-    "GENERAL";
+    $("#noticeCategory")
+      ?.value;
+
 
   const published =
-    $("#noticePublished")?.checked ||
-    false;
+    $("#noticePublished")
+      ?.checked;
 
 
-  if (!title || !content) {
+  if (
+    !title ||
+    !content
+  ) {
 
     toast(
       "Please fill in all required fields.",
@@ -1621,11 +1818,18 @@ async function createNotice(event) {
       await supabaseClient
         .from("notices")
         .insert({
+
           title,
+
           content,
+
           category,
-          image_url: null,
+
+          image_url:
+            null,
+
           published
+
         });
 
 
@@ -1644,15 +1848,7 @@ async function createNotice(event) {
 
 
     await loadDashboard();
-
-
-    if (
-      $("#noticesList")
-    ) {
-
-      await loadNotices();
-
-    }
+    await loadNotices();
 
 
   } catch (error) {
@@ -1664,7 +1860,8 @@ async function createNotice(event) {
 
 
     toast(
-      getSupabaseErrorMessage(error),
+      error.message ||
+      "Failed to create notice.",
       "error"
     );
 
@@ -1750,7 +1947,9 @@ window.editNotice =
             CATEGORY
           </label>
 
-          <select id="editNoticeCategory">
+          <select
+            id="editNoticeCategory"
+          >
 
             ${getCategoryOptions(
               notice.category
@@ -1807,7 +2006,6 @@ window.editNotice =
         </button>
 
       </form>
-
     `;
 
 
@@ -1842,7 +2040,8 @@ window.editNotice =
 
                 title:
                   $("#editNoticeTitle")
-                    .value.trim(),
+                    .value
+                    .trim(),
 
                 category:
                   $("#editNoticeCategory")
@@ -1850,14 +2049,16 @@ window.editNotice =
 
                 content:
                   $("#editNoticeContent")
-                    .value.trim(),
+                    .value
+                    .trim(),
 
                 published:
                   $("#editNoticePublished")
                     .checked,
 
                 updated_at:
-                  new Date().toISOString()
+                  new Date()
+                    .toISOString()
 
               })
               .eq(
@@ -1881,15 +2082,7 @@ window.editNotice =
 
 
           await loadDashboard();
-
-
-          if (
-            $("#noticesList")
-          ) {
-
-            await loadNotices();
-
-          }
+          await loadNotices();
 
 
         } catch (error) {
@@ -1901,7 +2094,8 @@ window.editNotice =
 
 
           toast(
-            getSupabaseErrorMessage(error),
+            error.message ||
+            "Failed to update notice.",
             "error"
           );
 
@@ -1974,15 +2168,7 @@ window.deleteNotice =
 
 
       await loadDashboard();
-
-
-      if (
-        $("#noticesList")
-      ) {
-
-        await loadNotices();
-
-      }
+      await loadNotices();
 
 
     } catch (error) {
@@ -1994,7 +2180,8 @@ window.deleteNotice =
 
 
       toast(
-        getSupabaseErrorMessage(error),
+        error.message ||
+        "Failed to delete notice.",
         "error"
       );
 
@@ -2022,21 +2209,13 @@ async function loadGallery() {
 
 
   container.innerHTML = `
-
     <div class="empty-state">
-
       <span>▧</span>
-
-      <h4>
-        Gallery
-      </h4>
-
+      <h4>Gallery</h4>
       <p>
-        Gallery management will be connected next.
+        Gallery database connection will be added next.
       </p>
-
     </div>
-
   `;
 
 }
@@ -2056,21 +2235,13 @@ async function loadTournaments() {
 
 
   container.innerHTML = `
-
     <div class="empty-state">
-
       <span>🏆</span>
-
-      <h4>
-        Tournaments
-      </h4>
-
+      <h4>Tournaments</h4>
       <p>
-        Tournament management will be connected next.
+        Tournament database connection will be added next.
       </p>
-
     </div>
-
   `;
 
 }
@@ -2090,21 +2261,13 @@ async function loadFixtures() {
 
 
   container.innerHTML = `
-
     <div class="empty-state">
-
       <span>⚽</span>
-
-      <h4>
-        Matches & Fixtures
-      </h4>
-
+      <h4>Matches & Fixtures</h4>
       <p>
-        Fixture management will be connected next.
+        Fixture database connection will be added next.
       </p>
-
     </div>
-
   `;
 
 }
@@ -2124,21 +2287,13 @@ async function loadLeadership() {
 
 
   container.innerHTML = `
-
     <div class="empty-state">
-
       <span>★</span>
-
-      <h4>
-        Leadership
-      </h4>
-
+      <h4>Leadership</h4>
       <p>
-        Leadership management will be connected next.
+        Leadership database connection will be added next.
       </p>
-
     </div>
-
   `;
 
 }
@@ -2158,21 +2313,13 @@ async function loadCommittee() {
 
 
   container.innerHTML = `
-
     <div class="empty-state">
-
       <span>♙</span>
-
-      <h4>
-        Committee
-      </h4>
-
+      <h4>Committee</h4>
       <p>
-        Committee management will be connected next.
+        Committee database connection will be added next.
       </p>
-
     </div>
-
   `;
 
 }
@@ -2192,22 +2339,13 @@ async function loadFriendlyApplications() {
 
 
   container.innerHTML = `
-
     <div class="empty-state">
-
       <span>⚽</span>
-
-      <h4>
-        No applications loaded
-      </h4>
-
+      <h4>Friendly Match Applications</h4>
       <p>
-        Friendly Match applications
-        will appear here.
+        Applications will appear here.
       </p>
-
     </div>
-
   `;
 
 }
@@ -2227,22 +2365,13 @@ async function loadMembershipApplications() {
 
 
   container.innerHTML = `
-
     <div class="empty-state">
-
       <span>✦</span>
-
-      <h4>
-        No applications loaded
-      </h4>
-
+      <h4>Membership Applications</h4>
       <p>
-        Membership applications
-        will appear here.
+        Applications will appear here.
       </p>
-
     </div>
-
   `;
 
 }
@@ -2279,7 +2408,8 @@ function setupModal() {
       event => {
 
         if (
-          event.target === modal
+          event.target ===
+          modal
         ) {
 
           closeModal();
@@ -2311,10 +2441,6 @@ function openModal(content) {
     !modal ||
     !modalContent
   ) {
-
-    console.error(
-      "Admin modal elements not found."
-    );
 
     return;
 
@@ -2418,26 +2544,6 @@ function showLoading(show) {
     show
       ? "flex"
       : "none";
-
-}
-
-
-/* =========================================================
-   LOGIN ERROR
-========================================================= */
-
-function showLoginError(message) {
-
-  const errorBox =
-    $("#loginError");
-
-
-  if (errorBox) {
-
-    errorBox.textContent =
-      message;
-
-  }
 
 }
 
@@ -2597,96 +2703,44 @@ function getCategoryOptions(
   const categories = [
 
     "GENERAL",
+
     "SPORTS",
+
     "MATCH",
+
     "TOURNAMENT",
+
     "ANNOUNCEMENT"
 
   ];
 
 
   return categories
-    .map(category => `
+    .map(category => {
 
-      <option
-        value="${category}"
-        ${
-          String(selected)
-            .toUpperCase() ===
-          category
-            ? "selected"
-            : ""
-        }
-      >
-        ${category}
-      </option>
+      return `
+        <option
+          value="${category}"
+          ${
+            String(selected)
+              .toUpperCase() ===
+            category
+              ? "selected"
+              : ""
+          }
+        >
+          ${category}
+        </option>
+      `;
 
-    `)
+    })
     .join("");
 
 }
 
 
 /* =========================================================
-   SUPABASE ERROR
-========================================================= */
-
-function getSupabaseErrorMessage(
-  error
-) {
-
-  if (!error) {
-
-    return "Unknown error.";
-
-  }
-
-
-  if (
-    error.message
-  ) {
-
-    return error.message;
-
-  }
-
-
-  if (
-    error.error_description
-  ) {
-
-    return error.error_description;
-
-  }
-
-
-  return "Something went wrong.";
-
-}
-
-
-/* =========================================================
-   ESC KEY
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key === "Escape"
-    ) {
-
-      closeModal();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   GLOBAL ERROR LOGGER
+   GLOBAL ERROR HANDLER
 ========================================================= */
 
 window.addEventListener(
@@ -2694,10 +2748,17 @@ window.addEventListener(
   event => {
 
     console.error(
-      "JavaScript error:",
+      "GSA Admin JS Error:",
       event.error ||
       event.message
     );
+
+    /*
+      Never allow a JavaScript error
+      to leave the loading screen stuck.
+    */
+
+    showLoading(false);
 
   }
 );
@@ -2708,5 +2769,5 @@ window.addEventListener(
 ========================================================= */
 
 console.log(
-  "GSA Admin JS loaded."
+  "GSA Admin Panel JavaScript loaded."
 );
