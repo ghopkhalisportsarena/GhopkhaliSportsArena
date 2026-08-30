@@ -366,6 +366,11 @@ announcements and upcoming activities.
 </div>
 
 
+
+<!-- ==================================================
+     IMPORTANT NOTICE TICKER
+================================================== -->
+
 <div class="notice-ticker">
 
 <div class="notice-ticker-label">
@@ -374,7 +379,10 @@ IMPORTANT NOTICE
 
 <div class="notice-ticker-window">
 
-<div class="notice-ticker-track">
+<div
+class="notice-ticker-track"
+id="noticeTickerTrack"
+>
 
 <span>
 Welcome to Ghopkhali Sports Arena Sports Club.
@@ -398,69 +406,28 @@ all official rules and regulations.
 </div>
 
 
-<div class="updates-grid">
 
+<!-- ==================================================
+     DYNAMIC NOTICE CONTAINER
+================================================== -->
 
-<article class="update-card">
+<div
+class="updates-grid"
+id="notice-container"
+>
 
-<div class="update-date">
-27 AUG 2026
-</div>
+<!--
+  NOTICE CARDS WILL BE LOADED HERE
+  FROM THE NOTICE DATABASE.
 
-<div class="update-tag">
-CLUB UPDATE
-</div>
+  JavaScript will replace this
+  loading card with real notices.
+-->
 
-<h3>
-Ghopkhali Sports Arena
-official website launched.
-</h3>
-
-<p>
-Our official digital platform is now available
-for club updates, fixtures, notices and applications.
-</p>
-
-<a href="#contact" class="update-link">
-Read More ↗
-</a>
-
-</article>
-
-
-
-<article class="update-card">
+<article class="update-card notice-loading-card">
 
 <div class="update-date">
-UPCOMING
-</div>
-
-<div class="update-tag">
-MATCH UPDATE
-</div>
-
-<h3>
-Friendly match & sports
-activities.
-</h3>
-
-<p>
-Upcoming fixtures, tournaments and sporting
-events will be published through this section.
-</p>
-
-<a href="#fixtures" class="update-link">
-View Fixtures →
-</a>
-
-</article>
-
-
-
-<article class="update-card">
-
-<div class="update-date">
-IMPORTANT
+LOADING
 </div>
 
 <div class="update-tag">
@@ -468,25 +435,18 @@ NOTICE
 </div>
 
 <h3>
-Club rules must be
-followed by everyone.
+Loading latest notices...
 </h3>
 
 <p>
-Members and participating teams are expected
-to maintain discipline, respect and fair play.
+Please wait while the latest Ghopkhali
+Sports Arena notices are being loaded.
 </p>
-
-<button
-class="update-link button-reset"
-data-open-rules
->
-View Rules →
-</button>
 
 </article>
 
 </div>
+
 
 </section>
 
@@ -652,7 +612,10 @@ Matchday
 
 </div>
 
-<a href="#friendly-application" class="text-link">
+<a
+href="#friendly-application"
+class="text-link"
+>
 Apply for Friendly Match +
 </a>
 
@@ -2424,6 +2387,10 @@ All rights reserved.
 </footer>
 
 
+
+<!-- ==================================================
+     MAIN JAVASCRIPT
+================================================== -->
 
 <script src="script.js"></script>
 
