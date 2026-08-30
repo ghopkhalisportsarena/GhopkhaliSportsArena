@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#111111"
+>
+
+<meta
+  name="description"
+  content="GSA Admin - Friendly Match Applications"
+>
+
+<title>Friendly Applications | GSA Admin</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  background: #f5f5f5;
+  color: #111;
+}
+
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.admin-header {
+
+  min-height: 72px;
+
+  background: #111;
+
+  color: #fff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 28px;
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 100;
+
+}
+
+.brand {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  text-decoration: none;
+
+  color: #fff;
+
+}
+
+.brand-logo {
+
+  width: 44px;
+
+  height: 44px;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background: #fff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+.brand-logo img {
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+
+}
+
+.brand-text {
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+.brand-text strong {
+
+  font-size: 15px;
+
+  letter-spacing: 1px;
+
+}
+
+.brand-text span {
+
+  font-size: 10px;
+
+  color: #aaa;
+
+  letter-spacing: 1.5px;
+
+}
+
+
+/* ==================================================
+   HEADER BUTTON
+================================================== */
+
+.header-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+}
+
+.header-button {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 40px;
+
+  padding: 0 16px;
+
+  border: 1px solid #444;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #fff;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition: .2s;
+
+}
+
+.header-button:hover {
+
+  background: #fff;
+
+  color: #111;
+
+}
+
+
+/* ==================================================
+   MAIN
+================================================== */
+
+main {
+
+  width: min(
+    1200px,
+    calc(100% - 32px)
+  );
+
+  margin: 0 auto;
+
+  padding: 42px 0 70px;
+
+}
+
+
+/* ==================================================
+   PAGE HEADER
+================================================== */
+
+.page-header {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 28px;
+
+}
+
+.page-label {
+
+  display: block;
+
+  font-size: 11px;
+
+  letter-spacing: 2px;
+
+  font-weight: 700;
+
+  color: #777;
+
+  margin-bottom: 8px;
+
+}
+
+.page-header h1 {
+
+  font-size: clamp(
+    30px,
+    5vw,
+    52px
+  );
+
+  line-height: 1;
+
+  letter-spacing: -2px;
+
+}
+
+.page-header h1 span {
+
+  color: #d71920;
+
+}
+
+.page-description {
+
+  margin-top: 12px;
+
+  color: #666;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+}
+
+
+/* ==================================================
+   STATS
+================================================== */
+
+.stats-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 14px;
+
+  margin-bottom: 24px;
+
+}
+
+.stat-card {
+
+  background: #fff;
+
+  border: 1px solid #e5e5e5;
+
+  border-radius: 14px;
+
+  padding: 22px;
+
+}
+
+.stat-card span {
+
+  display: block;
+
+  color: #777;
+
+  font-size: 11px;
+
+  letter-spacing: 1.5px;
+
+  margin-bottom: 10px;
+
+  font-weight: 700;
+
+}
+
+.stat-card strong {
+
+  font-size: 30px;
+
+}
+
+
+/* ==================================================
+   TOOLBAR
+================================================== */
+
+.toolbar {
+
+  background: #fff;
+
+  border: 1px solid #e5e5e5;
+
+  border-radius: 14px;
+
+  padding: 16px;
+
+  display: flex;
+
+  gap: 12px;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+
+}
+
+.search-box {
+
+  flex: 1;
+
+}
+
+.search-box input {
+
+  width: 100%;
+
+  height: 44px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  padding: 0 14px;
+
+  font-size: 14px;
+
+  outline: none;
+
+}
+
+.search-box input:focus {
+
+  border-color: #111;
+
+}
+
+.filter-box select {
+
+  height: 44px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  padding: 0 12px;
+
+  background: #fff;
+
+  min-width: 150px;
+
+}
+
+
+/* ==================================================
+   APPLICATIONS
+================================================== */
+
+.applications {
+
+  display: grid;
+
+  gap: 14px;
+
+}
+
+.application-card {
+
+  background: #fff;
+
+  border: 1px solid #e4e4e4;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+}
+
+.application-top {
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid #eee;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+}
+
+.application-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+}
+
+.application-number {
+
+  width: 38px;
+
+  height: 38px;
+
+  background: #111;
+
+  color: #fff;
+
+  border-radius: 9px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+}
+
+.application-title h3 {
+
+  font-size: 18px;
+
+}
+
+.application-date {
+
+  font-size: 12px;
+
+  color: #777;
+
+}
+
+
+/* ==================================================
+   STATUS
+================================================== */
+
+.status {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+}
+
+.status.pending {
+
+  background: #fff4d6;
+
+  color: #8a6200;
+
+}
+
+.status.approved {
+
+  background: #e4f7e9;
+
+  color: #176b2d;
+
+}
+
+.status.rejected {
+
+  background: #ffe4e4;
+
+  color: #a31313;
+
+}
+
+
+/* ==================================================
+   APPLICATION BODY
+================================================== */
+
+.application-body {
+
+  padding: 20px;
+
+}
+
+.info-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 16px;
+
+}
+
+.info-item {
+
+  min-width: 0;
+
+}
+
+.info-item.full {
+
+  grid-column: 1 / -1;
+
+}
+
+.info-label {
+
+  display: block;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  color: #888;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 5px;
+
+}
+
+.info-value {
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  word-break: break-word;
+
+}
+
+
+/* ==================================================
+   MESSAGE
+================================================== */
+
+.message-box {
+
+  margin-top: 18px;
+
+  padding: 15px;
+
+  background: #f7f7f7;
+
+  border-radius: 10px;
+
+}
+
+.message-box p {
+
+  font-size: 14px;
+
+  color: #555;
+
+  line-height: 1.6;
+
+}
+
+
+/* ==================================================
+   ACTIONS
+================================================== */
+
+.application-actions {
+
+  padding: 15px 20px;
+
+  border-top: 1px solid #eee;
+
+  display: flex;
+
+  gap: 8px;
+
+  justify-content: flex-end;
+
+  flex-wrap: wrap;
+
+}
+
+.action-button {
+
+  height: 38px;
+
+  padding: 0 14px;
+
+  border-radius: 8px;
+
+  border: 1px solid #ddd;
+
+  background: #fff;
+
+  color: #111;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+}
+
+.action-button:hover {
+
+  background: #f1f1f1;
+
+}
+
+.action-button.approve {
+
+  background: #111;
+
+  border-color: #111;
+
+  color: #fff;
+
+}
+
+.action-button.reject {
+
+  color: #b00000;
+
+}
+
+.action-button.delete {
+
+  background: #d71920;
+
+  border-color: #d71920;
+
+  color: #fff;
+
+}
+
+
+/* ==================================================
+   EMPTY
+================================================== */
+
+.empty-state {
+
+  background: #fff;
+
+  border: 1px dashed #ccc;
+
+  border-radius: 14px;
+
+  padding: 55px 20px;
+
+  text-align: center;
+
+}
+
+.empty-state-icon {
+
+  font-size: 35px;
+
+  margin-bottom: 12px;
+
+}
+
+.empty-state h3 {
+
+  font-size: 18px;
+
+  margin-bottom: 6px;
+
+}
+
+.empty-state p {
+
+  color: #777;
+
+  font-size: 13px;
+
+}
+
+
+/* ==================================================
+   LOADING
+================================================== */
+
+.loading {
+
+  text-align: center;
+
+  padding: 50px;
+
+  color: #777;
+
+}
+
+
+/* ==================================================
+   TOAST
+================================================== */
+
+#toast {
+
+  position: fixed;
+
+  right: 20px;
+
+  bottom: 20px;
+
+  z-index: 9999;
+
+  padding: 13px 17px;
+
+  background: #111;
+
+  color: #fff;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+
+  display: none;
+
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 700px) {
+
+  .admin-header {
+
+    padding: 0 15px;
+
+  }
+
+  .brand-text {
+
+    display: none;
+
+  }
+
+  main {
+
+    width: min(
+      100% - 20px,
+      1200px
+    );
+
+    padding-top: 28px;
+
+  }
+
+  .page-header {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+  }
+
+  .stats-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .toolbar {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+  }
+
+  .filter-box select {
+
+    width: 100%;
+
+  }
+
+  .info-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .info-item.full {
+
+    grid-column: auto;
+
+  }
+
+  .application-top {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+  }
+
+  .application-actions {
+
+    justify-content: stretch;
+
+  }
+
+  .action-button {
+
+    flex: 1;
+
+  }
+
+}
+
+
+/* ==================================================
+   PRINT
+================================================== */
+
+@media print {
+
+  .admin-header,
+  .toolbar,
+  .application-actions {
+
+    display: none !important;
+
+  }
+
+  main {
+
+    width: 100%;
+
+    padding: 0;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header class="admin-header">
+
+<a
+  href="admin-dashboard.html"
+  class="brand"
+>
+
+<div class="brand-logo">
+
+<img
+  src="gsa.png"
+  alt="GSA"
+>
+
+</div>
+
+<div class="brand-text">
+
+<strong>GHOPKHALI SPORTS ARENA</strong>
+
+<span>ADMIN PANEL</span>
+
+</div>
+
+</a>
+
+
+<div class="header-actions">
+
+<a
+  href="admin-dashboard.html"
+  class="header-button"
+>
+Dashboard
+</a>
+
+<a
+  href="index.html"
+  target="_blank"
+  class="header-button"
+>
+Website ↗
+</a>
+
+</div>
+
+</header>
+
+
+
+<!-- ==================================================
+     MAIN
+================================================== -->
+
+<main>
+
+
+<!-- PAGE HEADER -->
+
+<section class="page-header">
+
+<div>
+
+<span class="page-label">
+APPLICATION MANAGEMENT
+</span>
+
+<h1>
+Friendly Match
+<span>Applications.</span>
+</h1>
+
+<p class="page-description">
+Review and manage friendly match applications
+submitted to Ghopkhali Sports Arena.
+</p>
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+     STATS
+================================================== -->
+
+<section class="stats-grid">
+
+<div class="stat-card">
+
+<span>TOTAL APPLICATIONS</span>
+
+<strong id="totalApplications">
+0
+</strong>
+
+</div>
+
+
+<div class="stat-card">
+
+<span>PENDING</span>
+
+<strong id="pendingApplications">
+0
+</strong>
+
+</div>
+
+
+<div class="stat-card">
+
+<span>APPROVED</span>
+
+<strong id="approvedApplications">
+0
+</strong>
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+     TOOLBAR
+================================================== -->
+
+<section class="toolbar">
+
+<div class="search-box">
+
+<input
+  type="search"
+  id="searchInput"
+  placeholder="Search team, representative or phone..."
+>
+
+</div>
+
+
+<div class="filter-box">
+
+<select id="statusFilter">
+
+<option value="all">
+All Applications
+</option>
+
+<option value="pending">
+Pending
+</option>
+
+<option value="approved">
+Approved
+</option>
+
+<option value="rejected">
+Rejected
+</option>
+
+</select>
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+     APPLICATION LIST
+================================================== -->
+
+<section
+  id="applicationsContainer"
+  class="applications"
+>
+
+<div class="loading">
+Loading applications...
+</div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- ==================================================
+     TOAST
+================================================== -->
+
+<div id="toast"></div>
+
+
+
+<!-- ==================================================
+     SUPABASE
+================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* ==================================================
+   SUPABASE CONFIG
+================================================== */
+
+const SUPABASE_URL =
+  "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* ==================================================
+   GLOBAL
+================================================== */
+
+let applications = [];
+
+
+/* ==================================================
+   DOM
+================================================== */
+
+const container =
+  document.getElementById(
+    "applicationsContainer"
+  );
+
+const searchInput =
+  document.getElementById(
+    "searchInput"
+  );
+
+const statusFilter =
+  document.getElementById(
+    "statusFilter"
+  );
+
+
+/* ==================================================
+   LOAD APPLICATIONS
+================================================== */
+
+async function loadApplications() {
+
+  container.innerHTML = `
+    <div class="loading">
+      Loading applications...
+    </div>
+  `;
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+
+      .from("friendly_applications")
+
+      .select("*")
+
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    applications =
+      data || [];
+
+
+    updateStats();
+
+    renderApplications();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Application loading error:",
+      error
+    );
+
+
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <div class="empty-state-icon">
+          ⚠️
+        </div>
+
+        <h3>
+          Could not load applications
+        </h3>
+
+        <p>
+          ${escapeHTML(
+            error.message ||
+            "Database error."
+          )}
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* ==================================================
+   STATS
+================================================== */
+
+function updateStats() {
+
+  const total =
+    applications.length;
+
+
+  const pending =
+    applications.filter(
+      item =>
+        getStatus(item) ===
+        "pending"
+    ).length;
+
+
+  const approved =
+    applications.filter(
+      item =>
+        getStatus(item) ===
+        "approved"
+    ).length;
+
+
+  document.getElementById(
+    "totalApplications"
+  ).textContent = total;
+
+
+  document.getElementById(
+    "pendingApplications"
+  ).textContent = pending;
+
+
+  document.getElementById(
+    "approvedApplications"
+  ).textContent = approved;
+
+}
+
+
+/* ==================================================
+   STATUS
+================================================== */
+
+function getStatus(application) {
+
+  return (
+    application.status ||
+    "pending"
+  )
+  .toString()
+  .toLowerCase();
+
+}
+
+
+/* ==================================================
+   RENDER
+================================================== */
+
+function renderApplications() {
+
+  const search =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+
+  const filter =
+    statusFilter.value;
+
+
+  const filtered =
+    applications.filter(
+      application => {
+
+        const status =
+          getStatus(
+            application
+          );
+
+
+        const searchable = [
+
+          application.team_name,
+
+          application.team_or_club_name,
+
+          application.representative_name,
+
+          application.phone_number,
+
+          application.email,
+
+          application.sport
+
+        ]
+
+        .filter(Boolean)
+
+        .join(" ")
+
+        .toLowerCase();
+
+
+        const matchesSearch =
+          !search ||
+          searchable.includes(
+            search
+          );
+
+
+        const matchesStatus =
+          filter === "all" ||
+          status === filter;
+
+
+        return (
+          matchesSearch &&
+          matchesStatus
+        );
+
+      }
+    );
+
+
+  if (!filtered.length) {
+
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <div class="empty-state-icon">
+          ⚽
+        </div>
+
+        <h3>
+          No applications found
+        </h3>
+
+        <p>
+          There are no applications
+          matching your search.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    filtered
+      .map(
+        (application, index) =>
+          renderApplication(
+            application,
+            index
+          )
+      )
+      .join("");
+
+}
+
+
+/* ==================================================
+   APPLICATION CARD
+================================================== */
+
+function renderApplication(
+  application,
+  index
+) {
+
+  const team =
+    application.team_name ||
+    application.team_or_club_name ||
+    "Unknown Team";
+
+
+  const representative =
+    application.representative_name ||
+    application.team_representative_name ||
+    "Not provided";
+
+
+  const phone =
+    application.phone_number ||
+    application.phone ||
+    "Not provided";
+
+
+  const email =
+    application.email ||
+    "Not provided";
+
+
+  const sport =
+    application.sport ||
+    "Not specified";
+
+
+  const players =
+    application.number_of_players ||
+    "Not specified";
+
+
+  const preferredDate =
+    application.preferred_date ||
+    application.match_date ||
+    "";
+
+
+  const preferredTime =
+    application.preferred_time ||
+    application.match_time ||
+    "";
+
+
+  const message =
+    application.additional_message ||
+    application.message ||
+    "";
+
+
+  const status =
+    getStatus(
+      application
+    );
+
+
+  const created =
+    application.created_at
+      ? formatDate(
+          application.created_at
+        )
+      : "Unknown date";
+
+
+  return `
+
+    <article
+      class="application-card"
+      data-id="${escapeAttribute(
+        application.id
+      )}"
+    >
+
+
+      <div class="application-top">
+
+        <div class="application-title">
+
+          <div class="application-number">
+
+            ${String(
+              index + 1
+            ).padStart(2, "0")}
+
+          </div>
+
+
+          <div>
+
+            <h3>
+              ${escapeHTML(
+                team
+              )}
+            </h3>
+
+            <div class="application-date">
+
+              Applied:
+              ${escapeHTML(
+                created
+              )}
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <span
+          class="status ${escapeAttribute(
+            status
+          )}"
+        >
+
+          ${escapeHTML(
+            status.toUpperCase()
+          )}
+
+        </span>
+
+      </div>
+
+
+
+      <div class="application-body">
+
+        <div class="info-grid">
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              REPRESENTATIVE
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                representative
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              PHONE
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                phone
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              EMAIL
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                email
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              SPORT
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                sport
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              PLAYERS
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                String(players)
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              PREFERRED DATE
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                formatDateOnly(
+                  preferredDate
+                )
+              )}
+            </div>
+
+          </div>
+
+
+          <div class="info-item">
+
+            <span class="info-label">
+              PREFERRED TIME
+            </span>
+
+            <div class="info-value">
+              ${escapeHTML(
+                preferredTime ||
+                "Not specified"
+              )}
+            </div>
+
+          </div>
+
+
+          ${
+            message
+              ? `
+
+                <div
+                  class="info-item full"
+                >
+
+                  <span
+                    class="info-label"
+                  >
+                    ADDITIONAL MESSAGE
+                  </span>
+
+                  <div
+                    class="message-box"
+                  >
+
+                    <p>
+                      ${escapeHTML(
+                        message
+                      )}
+                    </p>
+
+                  </div>
+
+                </div>
+
+              `
+              : ""
+          }
+
+
+        </div>
+
+      </div>
+
+
+
+      <div class="application-actions">
+
+
+        ${
+          status !== "approved"
+            ? `
+
+              <button
+                class="action-button approve"
+                onclick="updateStatus(
+                  '${escapeAttribute(
+                    application.id
+                  )}',
+                  'approved'
+                )"
+              >
+                Approve
+              </button>
+
+            `
+            : ""
+        }
+
+
+        ${
+          status !== "rejected"
+            ? `
+
+              <button
+                class="action-button reject"
+                onclick="updateStatus(
+                  '${escapeAttribute(
+                    application.id
+                  )}',
+                  'rejected'
+                )"
+              >
+                Reject
+              </button>
+
+            `
+            : ""
+        }
+
+
+        <button
+          class="action-button"
+          onclick="printApplication(
+            '${escapeAttribute(
+              application.id
+            )}'
+          )"
+        >
+          Print
+        </button>
+
+
+        <button
+          class="action-button delete"
+          onclick="deleteApplication(
+            '${escapeAttribute(
+              application.id
+            )}'
+          )"
+        >
+          Delete
+        </button>
+
+
+      </div>
+
+
+    </article>
+
+  `;
+
+}
+
+
+/* ==================================================
+   UPDATE STATUS
+================================================== */
+
+async function updateStatus(
+  id,
+  status
+) {
+
+  const application =
+    applications.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if (!application) return;
+
+
+  const confirmed =
+    confirm(
+      `Change application status to ${status.toUpperCase()}?`
+    );
+
+
+  if (!confirmed) return;
+
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient
+
+        .from(
+          "friendly_applications"
+        )
+
+        .update({
+          status: status
+        })
+
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    showToast(
+      `Application ${status}.`
+    );
+
+
+    await loadApplications();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    showToast(
+      error.message ||
+      "Failed to update application."
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   DELETE
+================================================== */
+
+async function deleteApplication(
+  id
+) {
+
+  const application =
+    applications.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if (!application) return;
+
+
+  const team =
+    application.team_name ||
+    application.team_or_club_name ||
+    "this application";
+
+
+  const confirmed =
+    confirm(
+      `Delete ${team}'s application?`
+    );
+
+
+  if (!confirmed) return;
+
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient
+
+        .from(
+          "friendly_applications"
+        )
+
+        .delete()
+
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    showToast(
+      "Application deleted."
+    );
+
+
+    await loadApplications();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    showToast(
+      error.message ||
+      "Failed to delete application."
+    );
+
+  }
+
+}
+
+
+/* ==================================================
+   PRINT
+================================================== */
+
+function printApplication(
+  id
+) {
+
+  const application =
+    applications.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if (!application) return;
+
+
+  const team =
+    application.team_name ||
+    application.team_or_club_name ||
+    "Unknown Team";
+
+
+  const representative =
+    application.representative_name ||
+    application.team_representative_name ||
+    "";
+
+
+  const phone =
+    application.phone_number ||
+    application.phone ||
+    "";
+
+
+  const email =
+    application.email ||
+    "";
+
+
+  const sport =
+    application.sport ||
+    "";
+
+
+  const date =
+    application.preferred_date ||
+    application.match_date ||
+    "";
+
+
+  const time =
+    application.preferred_time ||
+    application.match_time ||
+    "";
+
+
+  const players =
+    application.number_of_players ||
+    "";
+
+
+  const message =
+    application.additional_message ||
+    application.message ||
+    "";
+
+
+  const printWindow =
+    window.open(
+      "",
+      "_blank",
+      "width=800,height=700"
+    );
+
+
+  if (!printWindow) {
+
+    showToast(
+      "Please allow popups to print."
+    );
+
+    return;
+
+  }
+
+
+  printWindow.document.write(`
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+
+      <title>
+        Friendly Match Application
+      </title>
+
+      <style>
+
+        body {
+          font-family: Arial;
+          padding: 40px;
+          color: #111;
+        }
+
+        h1 {
+          margin-bottom: 5px;
+        }
+
+        .label {
+          color: #777;
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          margin-top: 20px;
+        }
+
+        .value {
+          font-size: 16px;
+          margin-top: 5px;
+        }
+
+        .header {
+          border-bottom: 2px solid #111;
+          padding-bottom: 20px;
+          margin-bottom: 25px;
+        }
+
+        .message {
+          margin-top: 20px;
+          padding: 15px;
+          background: #f5f5f5;
+        }
+
+      </style>
+
+    </head>
+
+    <body>
+
+      <div class="header">
+
+        <h1>
+          GHOPKHALI SPORTS ARENA
+        </h1>
+
+        <p>
+          Friendly Match Application
+        </p>
+
+      </div>
+
+
+      <div class="label">
+        Team / Club
+      </div>
+
+      <div class="value">
+        ${escapeHTML(team)}
+      </div>
+
+
+      <div class="label">
+        Representative
+      </div>
+
+      <div class="value">
+        ${escapeHTML(
+          representative
+        )}
+      </div>
+
+
+      <div class="label">
+        Phone
+      </div>
+
+      <div class="value">
+        ${escapeHTML(phone)}
+      </div>
+
+
+      <div class="label">
+        Email
+      </div>
+
+      <div class="value">
+        ${escapeHTML(email)}
+      </div>
+
+
+      <div class="label">
+        Sport
+      </div>
+
+      <div class="value">
+        ${escapeHTML(sport)}
+      </div>
+
+
+      <div class="label">
+        Preferred Date
+      </div>
+
+      <div class="value">
+        ${escapeHTML(
+          formatDateOnly(date)
+        )}
+      </div>
+
+
+      <div class="label">
+        Preferred Time
+      </div>
+
+      <div class="value">
+        ${escapeHTML(time)}
+      </div>
+
+
+      <div class="label">
+        Number of Players
+      </div>
+
+      <div class="value">
+        ${escapeHTML(
+          String(players)
+        )}
+      </div>
+
+
+      ${
+        message
+          ? `
+
+            <div class="label">
+              Additional Message
+            </div>
+
+            <div class="message">
+              ${escapeHTML(message)}
+            </div>
+
+          `
+          : ""
+      }
+
+
+    </body>
+
+    </html>
+
+  `);
+
+
+  printWindow.document.close();
+
+  printWindow.focus();
+
+  setTimeout(
+    () => {
+
+      printWindow.print();
+
+    },
+    300
+  );
+
+}
+
+
+/* ==================================================
+   SEARCH
+================================================== */
+
+searchInput.addEventListener(
+  "input",
+  renderApplications
+);
+
+
+statusFilter.addEventListener(
+  "change",
+  renderApplications
+);
+
+
+/* ==================================================
+   TOAST
+================================================== */
+
+function showToast(
+  message
+) {
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+
+  toast.textContent =
+    message;
+
+
+  toast.style.display =
+    "block";
+
+
+  clearTimeout(
+    window.toastTimer
+  );
+
+
+  window.toastTimer =
+    setTimeout(
+      () => {
+
+        toast.style.display =
+          "none";
+
+      },
+      3000
+    );
+
+}
+
+
+/* ==================================================
+   HELPERS
+================================================== */
+
+function escapeHTML(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+function escapeAttribute(
+  value
+) {
+
+  return escapeHTML(
+    value
+  );
+
+}
+
+
+function formatDate(
+  value
+) {
+
+  if (!value) {
+
+    return "";
+
+  }
+
+
+  const date =
+    new Date(value);
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return String(value);
+
+  }
+
+
+  return date.toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    }
+  );
+
+}
+
+
+function formatDateOnly(
+  value
+) {
+
+  if (!value) {
+
+    return "Not specified";
+
+  }
+
+
+  const date =
+    new Date(
+      `${value}T00:00:00`
+    );
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return String(value);
+
+  }
+
+
+  return date.toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    }
+  );
+
+}
+
+
+/* ==================================================
+   START
+================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    loadApplications();
+
+  }
+);
+
+</script>
+
+
+</body>
+
+</html>
