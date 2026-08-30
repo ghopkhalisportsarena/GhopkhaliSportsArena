@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#f5f5f7">
+  <meta name="description" content="Ghopkhali Sports Arena — Official Club Gallery.">
+
+  <title>Gallery | Ghopkhali Sports Arena</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f7;
+      color: #111;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* HEADER */
+
+    .site-header {
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: auto;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+    }
+
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .brand-name strong {
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+
+    .brand-name span {
+      margin-top: 5px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #777;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .nav-menu a:hover {
+      opacity: .6;
+    }
+
+    .nav-button {
+      background: #111;
+      color: #fff;
+      padding: 11px 18px;
+      border-radius: 4px;
+    }
+
+    /* HERO */
+
+    .hero {
+      max-width: 1200px;
+      margin: auto;
+      padding: 80px 22px 55px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #777;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(48px, 8vw, 90px);
+      line-height: .9;
+      letter-spacing: -4px;
+      max-width: 850px;
+    }
+
+    .hero h1 span {
+      display: block;
+      color: #d71920;
+    }
+
+    .hero-description {
+      max-width: 600px;
+      margin-top: 30px;
+      color: #666;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    /* FILTER */
+
+    .gallery-controls {
+      max-width: 1200px;
+      margin: 0 auto 35px;
+      padding: 0 22px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-button {
+      border: 1px solid #ccc;
+      background: #fff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .filter-button.active,
+    .filter-button:hover {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+
+    /* GALLERY */
+
+    .gallery-container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 22px 80px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      background: #ddd;
+      aspect-ratio: 4 / 3;
+      cursor: pointer;
+    }
+
+    .gallery-item.large {
+      grid-column: span 2;
+      aspect-ratio: 8 / 5;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform .45s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.06);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 25px 18px 18px;
+      color: #fff;
+      background: linear-gradient(
+        transparent,
+        rgba(0,0,0,.8)
+      );
+      opacity: 0;
+      transition: .3s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .gallery-overlay small {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+
+    .gallery-overlay strong {
+      font-size: 18px;
+    }
+
+    /* EMPTY */
+
+    .empty-state {
+      text-align: center;
+      padding: 70px 20px;
+      background: #fff;
+      border: 1px solid #ddd;
+      display: none;
+    }
+
+    .empty-state h3 {
+      margin-bottom: 10px;
+    }
+
+    .empty-state p {
+      color: #777;
+    }
+
+    /* LIGHTBOX */
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.92);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 92vw;
+      max-height: 88vh;
+      object-fit: contain;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      width: 45px;
+      height: 45px;
+      border: 0;
+      background: #fff;
+      color: #111;
+      border-radius: 50%;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      background: #111;
+      color: #fff;
+      padding: 35px 22px;
+      text-align: center;
+    }
+
+    footer strong {
+      display: block;
+      letter-spacing: 1px;
+    }
+
+    footer span {
+      display: block;
+      margin-top: 6px;
+      color: #999;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    footer p {
+      margin-top: 20px;
+      color: #777;
+      font-size: 12px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 800px) {
+
+      .nav-menu {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 55px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .gallery-item.large {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 520px) {
+
+      .brand-name strong {
+        font-size: 13px;
+      }
+
+      .hero {
+        padding-top: 45px;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-item.large {
+        grid-column: span 1;
+        aspect-ratio: 4 / 3;
+      }
+
+      .gallery-overlay {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+
+  <header class="site-header">
+    <nav class="navbar">
+
+      <a href="index.html" class="brand">
+
+        <div class="brand-logo">
+          <img src="gsa.png" alt="Ghopkhali Sports Arena Logo">
+        </div>
+
+        <div class="brand-name">
+          <strong>GHOPKHALI</strong>
+          <span>SPORTS ARENA</span>
+        </div>
+
+      </a>
+
+      <div class="nav-menu">
+        <a href="index.html">Home</a>
+        <a href="notices.html">Notices</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="committee.html">Committee</a>
+        <a href="index.html#contact" class="nav-button">
+          Contact
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+
+  <!-- HERO -->
+
+  <main>
+
+    <section class="hero">
+
+      <div class="section-label">
+        02 / GALLERY
+      </div>
+
+      <div class="eyebrow">
+        GHOPKHALI SPORTS ARENA • CLUB MOMENTS
+      </div>
+
+      <h1>
+        Captured
+        <span>in motion.</span>
+      </h1>
+
+      <p class="hero-description">
+        Photos from matches, tournaments, training
+        sessions, community events and memorable
+        moments of Ghopkhali Sports Arena.
+      </p>
+
+    </section>
+
+
+    <!-- FILTER -->
+
+    <div class="gallery-controls">
+
+      <button
+        class="filter-button active"
+        data-filter="all"
+      >
+        All
+      </button>
+
+      <button
+        class="filter-button"
+        data-filter="match"
+      >
+        Matchday
+      </button>
+
+      <button
+        class="filter-button"
+        data-filter="tournament"
+      >
+        Tournaments
+      </button>
+
+      <button
+        class="filter-button"
+        data-filter="training"
+      >
+        Training
+      </button>
+
+      <button
+        class="filter-button"
+        data-filter="community"
+      >
+        Community
+      </button>
+
+    </div>
+
+
+    <!-- GALLERY -->
+
+    <section class="gallery-container">
+
+      <div class="gallery-grid" id="galleryGrid">
+
+        <!--
+          Replace these image files with your actual
+          club photographs.
+
+          Example:
+          photo-01.jpg
+          photo-02.jpg
+          photo-03.jpg
+        -->
+
+
+        <article
+          class="gallery-item large"
+          data-category="match"
+          data-title="GSA Matchday"
+        >
+
+          <img
+            src="gsa.png"
+            alt="Ghopkhali Sports Arena Matchday"
+            loading="lazy"
+          >
+
+          <div class="gallery-overlay">
+            <small>MATCHDAY</small>
+            <strong>GSA Sports Match</strong>
+          </div>
+
+        </article>
+
+
+        <article
+          class="gallery-item"
+          data-category="tournament"
+          data-title="GSA Tournament"
+        >
+
+          <img
+            src="gsa.png"
+            alt="GSA Tournament"
+            loading="lazy"
+          >
+
+          <div class="gallery-overlay">
+            <small>TOURNAMENT</small>
+            <strong>Competition Day</strong>
+          </div>
+
+        </article>
+
+
+        <article
+          class="gallery-item"
+          data-category="training"
+          data-title="Training Session"
+        >
+
+          <img
+            src="gsa.png"
+            alt="GSA Training Session"
+            loading="lazy"
+          >
+
+          <div class="gallery-overlay">
+            <small>TRAINING</small>
+            <strong>Training Session</strong>
+          </div>
+
+        </article>
+
+
+        <article
+          class="gallery-item"
+          data-category="community"
+          data-title="GSA Community"
+        >
+
+          <img
+            src="gsa.png"
+            alt="GSA Community Event"
+            loading="lazy"
+          >
+
+          <div class="gallery-overlay">
+            <small>COMMUNITY</small>
+            <strong>Community Event</strong>
+          </div>
+
+        </article>
+
+
+        <article
+          class="gallery-item"
+          data-category="match"
+          data-title="Friendly Match"
+        >
+
+          <img
+            src="gsa.png"
+            alt="GSA Friendly Match"
+            loading="lazy"
+          >
+
+          <div class="gallery-overlay">
+            <small>FRIENDLY MATCH</small>
+            <strong>Play With Purpose</strong>
+          </div>
+
+        </article>
+
+
+        <article
+          class="gallery-item"
+          data-category="tournament"
+          data-title="Sports Competition"
+        >
+
+          <img
+            src="gsa.png"
+            alt="GSA Sports Competition"
+            loading="lazy"
+          >
+
+          <div class="gallery-overlay">
+            <small>SPORTS</small>
+            <strong>Competition</strong>
+          </div>
+
+        </article>
+
+      </div>
+
+
+      <div class="empty-state" id="emptyState">
+
+        <h3>
+          No photos found
+        </h3>
+
+        <p>
+          Photos for this category will be added soon.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- LIGHTBOX -->
+
+  <div
+    class="lightbox"
+    id="lightbox"
+    aria-hidden="true"
+  >
+
+    <button
+      class="lightbox-close"
+      id="lightboxClose"
+      aria-label="Close image"
+    >
+      ×
+    </button>
+
+    <img
+      id="lightboxImage"
+      src=""
+      alt=""
+    >
+
+    <div
+      class="lightbox-caption"
+      id="lightboxCaption"
+    ></div>
+
+  </div>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <strong>
+      GHOPKHALI SPORTS ARENA
+    </strong>
+
+    <span>
+      SPORTS CLUB
+    </span>
+
+    <p>
+      © <span id="year"></span>
+      Ghopkhali Sports Arena.
+      All rights reserved.
+    </p>
+
+  </footer>
+
+
+  <script>
+
+    /* CURRENT YEAR */
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+
+    /* CATEGORY FILTER */
+
+    const filterButtons =
+      document.querySelectorAll(".filter-button");
+
+    const galleryItems =
+      document.querySelectorAll(".gallery-item");
+
+    const emptyState =
+      document.getElementById("emptyState");
+
+
+    filterButtons.forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        const filter =
+          button.dataset.filter;
+
+        filterButtons.forEach(btn => {
+          btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        let visibleCount = 0;
+
+
+        galleryItems.forEach(item => {
+
+          const category =
+            item.dataset.category;
+
+          if (
+            filter === "all" ||
+            category === filter
+          ) {
+
+            item.style.display = "";
+
+            visibleCount++;
+
+          } else {
+
+            item.style.display = "none";
+
+          }
+
+        });
+
+
+        emptyState.style.display =
+          visibleCount === 0
+            ? "block"
+            : "none";
+
+      });
+
+    });
+
+
+    /* LIGHTBOX */
+
+    const lightbox =
+      document.getElementById("lightbox");
+
+    const lightboxImage =
+      document.getElementById("lightboxImage");
+
+    const lightboxCaption =
+      document.getElementById("lightboxCaption");
+
+    const lightboxClose =
+      document.getElementById("lightboxClose");
+
+
+    galleryItems.forEach(item => {
+
+      item.addEventListener("click", () => {
+
+        const image =
+          item.querySelector("img");
+
+        if (!image) return;
+
+        lightboxImage.src =
+          image.src;
+
+        lightboxImage.alt =
+          image.alt;
+
+        lightboxCaption.textContent =
+          item.dataset.title || "";
+
+        lightbox.classList.add("active");
+
+        lightbox.setAttribute(
+          "aria-hidden",
+          "false"
+        );
+
+        document.body.style.overflow =
+          "hidden";
+
+      });
+
+    });
+
+
+    function closeLightbox() {
+
+      lightbox.classList.remove("active");
+
+      lightbox.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      document.body.style.overflow =
+        "";
+
+      lightboxImage.src =
+        "";
+
+    }
+
+
+    lightboxClose.addEventListener(
+      "click",
+      closeLightbox
+    );
+
+
+    lightbox.addEventListener(
+      "click",
+      event => {
+
+        if (event.target === lightbox) {
+          closeLightbox();
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (event.key === "Escape") {
+          closeLightbox();
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
