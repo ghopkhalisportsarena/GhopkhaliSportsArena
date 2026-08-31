@@ -770,97 +770,59 @@ Details will be published
 
 </section>
 
-
-
 <!-- ==================================================
      PHOTO GALLERY
 ================================================== -->
 
 <section id="gallery" class="gallery-section">
 
-<div class="gallery-header">
+    <div class="gallery-header">
 
-<div>
+        <div>
 
-<p class="section-kicker">
-CLUB MOMENTS
-</p>
+            <p class="section-kicker">
+                CLUB MOMENTS
+            </p>
 
-<h2>
-Captured
-<span>in motion.</span>
-</h2>
+            <h2>
+                Captured
+                <span>in motion.</span>
+            </h2>
 
-</div>
+        </div>
 
-<p>
-Photos from matches, tournaments,
-training sessions and club activities.
-</p>
+        <p>
+            Photos from matches, tournaments,
+            training sessions and club activities.
+        </p>
 
-</div>
-
-
-<div class="gallery-window">
-
-<div class="gallery-track">
-
-<div class="gallery-item">
-
-<img src="gsa.png" alt="Ghopkhali Sports Arena">
-
-<div class="gallery-overlay">
-GSA • SPORTS CLUB
-</div>
-
-</div>
+    </div>
 
 
-<div class="gallery-item">
+    <div class="gallery-window">
 
-<img src="gsa.png" alt="GSA Club">
+        <div
+            class="gallery-track"
+            id="homeGalleryTrack"
+        >
 
-<div class="gallery-overlay">
-MATCHDAY
-</div>
+            <div class="gallery-loading">
+                Loading gallery...
+            </div>
 
-</div>
+        </div>
 
-
-<div class="gallery-item">
-
-<img src="gsa.png" alt="GSA Sports">
-
-<div class="gallery-overlay">
-COMMUNITY
-</div>
-
-</div>
+    </div>
 
 
-<div class="gallery-item">
-
-<img src="gsa.png" alt="GSA Activity">
-
-<div class="gallery-overlay">
-SPORTSMANSHIP
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<p class="gallery-note">
-Replace the gallery images with your real club photos
-using files such as <strong>photo-01.jpg</strong>,
-<strong>photo-02.jpg</strong>, etc.
-</p>
+    <p
+        class="gallery-note"
+        id="galleryNote"
+    >
+        Photos from Ghopkhali Sports Arena.
+    </p>
 
 </section>
-
 
 
 <!-- ==================================================
@@ -2599,6 +2561,150 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* =============================================
        HTML ESCAPE
     ============================================= */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
+    const galleryTrack =
+        document.getElementById(
+            "homeGalleryTrack"
+        );
+
+
+    if (!galleryTrack) {
+        console.error(
+            "homeGalleryTrack not found."
+        );
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .storage
+            .from("gallery")
+            .list("", {
+                limit: 100,
+                sortBy: {
+                    column: "created_at",
+                    order: "desc"
+                }
+            });
+
+
+        if (error) {
+            console.error(
+                "Gallery error:",
+                error
+            );
+
+            galleryTrack.innerHTML = `
+                <div class="gallery-loading">
+                    Unable to load gallery.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        const files =
+            (data || []).filter(file =>
+                file.name &&
+                file.name !==
+                ".emptyFolderPlaceholder"
+            );
+
+
+        if (!files.length) {
+
+            galleryTrack.innerHTML = `
+                <div class="gallery-loading">
+                    No photos available yet.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        galleryTrack.innerHTML =
+            files.map(file => {
+
+                const {
+                    data: publicData
+                } = supabaseClient
+                    .storage
+                    .from("gallery")
+                    .getPublicUrl(
+                        file.name
+                    );
+
+
+                return `
+
+                    <div class="gallery-item">
+
+                        <img
+                            src="${escapeHTML(
+                                publicData.publicUrl
+                            )}"
+                            alt="Ghopkhali Sports Arena"
+                            loading="lazy"
+                        >
+
+                        <div class="gallery-overlay">
+                            GSA • SPORTS CLUB
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected gallery error:",
+            error
+        );
+
+    }
+
 
     function escapeHTML(value) {
 
