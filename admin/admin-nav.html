@@ -1,163 +1,57 @@
-<!-- =========================================================
-     GSA ADMIN NAVIGATION
-     Ghopkhali Sports Arena
-========================================================= -->
+<aside id="adminSidebar" class="admin-sidebar">
 
-<aside
-  id="adminSidebar"
-  class="admin-sidebar"
-  aria-label="Admin navigation"
->
-
-  <!-- BRAND -->
-  <a
-    href="admin-dashboard.html"
-    class="admin-brand"
-  >
-
+  <a href="admin-dashboard.html" class="admin-brand">
     <div class="admin-brand-logo">
-      <img
-        src="../gsa.png"
-        alt="Ghopkhali Sports Arena"
-      >
+      <img src="../gsa.png" alt="GSA">
     </div>
 
-    <div class="admin-brand-text">
+    <div>
       <strong>GHOPKHALI</strong>
-      <span>SPORTS ARENA • ADMIN</span>
+      <span>SPORTS ARENA</span>
     </div>
-
   </a>
 
-
-  <!-- NAVIGATION -->
   <nav class="admin-nav">
 
-    <!-- OVERVIEW -->
-    <div class="admin-nav-section">
+    <div class="nav-heading">OVERVIEW</div>
 
-      <div class="admin-nav-title">
-        OVERVIEW
-      </div>
+    <a href="admin-dashboard.html" class="sidebar-link" data-page="dashboard">
+      <span>⌂</span>
+      <b>Dashboard</b>
+    </a>
 
-      <a
-        href="admin-dashboard.html"
-        class="sidebar-link"
-        data-page="dashboard"
-      >
-        <span class="admin-nav-icon">⌂</span>
-        <span class="admin-nav-label">
-          Dashboard
-        </span>
-      </a>
+    <div class="nav-heading">WEBSITE</div>
 
-    </div>
+    <a href="../index.html" target="_blank" class="sidebar-link">
+      <span>↗</span>
+      <b>View Website</b>
+    </a>
 
-
-    <!-- QUICK ACCESS -->
-    <div class="admin-nav-section">
-
-      <div class="admin-nav-title">
-        QUICK ACCESS
-      </div>
-
-      <a
-        href="../index.html"
-        class="sidebar-link"
-        target="_blank"
-        rel="noopener"
-      >
-        <span class="admin-nav-icon">↗</span>
-        <span class="admin-nav-label">
-          View Website
-        </span>
-      </a>
-
-      <a
-        href="../gallery.html"
-        class="sidebar-link"
-        target="_blank"
-        rel="noopener"
-      >
-        <span class="admin-nav-icon">▧</span>
-        <span class="admin-nav-label">
-          Public Gallery
-        </span>
-      </a>
-
-    </div>
-
-
-    <!-- ACCOUNT -->
-    <div class="admin-nav-section">
-
-      <div class="admin-nav-title">
-        ACCOUNT
-      </div>
-
-      <a
-        href="admin.html"
-        class="sidebar-link"
-        data-page="login"
-      >
-        <span class="admin-nav-icon">●</span>
-        <span class="admin-nav-label">
-          Admin Login
-        </span>
-      </a>
-
-    </div>
+    <a href="../gallery.html" target="_blank" class="sidebar-link">
+      <span>▧</span>
+      <b>Gallery</b>
+    </a>
 
   </nav>
 
+  <div class="admin-sidebar-bottom">
 
-  <!-- SIDEBAR FOOTER -->
-  <div class="admin-sidebar-footer">
+    <div class="admin-user">
+      <div id="adminAvatar" class="admin-avatar">A</div>
 
-    <div class="admin-user-mini">
-
-      <div
-        id="adminAvatar"
-        class="admin-avatar"
-      >
-        A
+      <div>
+        <strong id="adminName">Administrator</strong>
+        <small>GSA Admin</small>
       </div>
-
-      <div class="admin-user-info">
-
-        <strong id="adminName">
-          Administrator
-        </strong>
-
-        <span>
-          GSA Admin
-        </span>
-
-      </div>
-
     </div>
 
-
-    <!-- LOGOUT -->
-    <button
-      type="button"
-      id="logoutButton"
-      class="nav-logout"
-    >
-      <span class="admin-nav-icon">↪</span>
-      <span class="admin-nav-label">
-        Logout
-      </span>
+    <button id="logoutButton" class="logout-button">
+      <span>↪</span>
+      Logout
     </button>
 
   </div>
 
 </aside>
 
-
-<!-- MOBILE OVERLAY -->
-<div
-  id="adminSidebarOverlay"
-  class="admin-sidebar-overlay"
-  aria-hidden="true"
-</div>
+<div id="adminSidebarOverlay" class="admin-sidebar-overlay"></div>
