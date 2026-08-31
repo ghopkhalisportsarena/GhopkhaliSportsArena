@@ -571,6 +571,72 @@ document.addEventListener("DOMContentLoaded", async () => {
     );
 
 
+/* =====================================================
+   TOURNAMENT - ADD BUTTON
+===================================================== */
+
+const newTournamentButton =
+    $("newTournamentButton");
+
+const tournamentModal =
+    $("tournamentModal");
+
+
+newTournamentButton?.addEventListener(
+    "click",
+    event => {
+
+        event.preventDefault();
+
+        console.log(
+            "Add Tournament clicked"
+        );
+
+
+        if (!tournamentModal) {
+
+            alert(
+                "Tournament modal not found in admin.html."
+            );
+
+            return;
+        }
+
+
+        const form =
+            $("tournamentForm");
+
+        if (form) {
+            form.reset();
+        }
+
+
+        if ($("tournamentId")) {
+            $("tournamentId").value = "";
+        }
+
+
+        if ($("tournamentPublished")) {
+            $("tournamentPublished").checked = true;
+        }
+
+
+        const title =
+            tournamentModal.querySelector("h2");
+
+        if (title) {
+            title.textContent =
+                "Add Tournament";
+        }
+
+
+        openModal(
+            tournamentModal
+        );
+
+    }
+);
+
     /* =====================================================
        DASHBOARD COUNTS
     ===================================================== */
