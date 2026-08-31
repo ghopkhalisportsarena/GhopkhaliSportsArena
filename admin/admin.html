@@ -4,325 +4,78 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f5f5f7">
-<title>GSA Admin Login</title>
-
-<style>
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  min-height:100vh;
-  background:#f5f5f7;
-  color:#1d1d1f;
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
-  "SF Pro Text","Helvetica Neue",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-
-.login-page{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
-
-.login-card{
-  width:100%;
-  max-width:420px;
-  background:#fff;
-  border:1px solid #d2d2d7;
-  border-radius:28px;
-  padding:38px;
-  box-shadow:0 25px 70px rgba(0,0,0,.08);
-}
-
-.logo{
-  width:72px;
-  height:72px;
-  margin:0 auto 25px;
-  border-radius:20px;
-  overflow:hidden;
-  background:#fff;
-}
-
-.logo img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-.brand{
-  text-align:center;
-}
-
-.brand small{
-  display:block;
-  font-size:9px;
-  font-weight:700;
-  letter-spacing:.16em;
-  color:#86868b;
-  margin-bottom:9px;
-}
-
-.brand h1{
-  margin:0;
-  font-size:30px;
-  letter-spacing:-.045em;
-}
-
-.brand p{
-  margin:8px 0 28px;
-  color:#6e6e73;
-  font-size:12px;
-}
-
-.form{
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-
-.field label{
-  display:block;
-  margin-bottom:7px;
-  font-size:10px;
-  font-weight:700;
-  color:#6e6e73;
-  letter-spacing:.07em;
-}
-
-.field input{
-  width:100%;
-  height:48px;
-  border:1px solid #d2d2d7;
-  border-radius:12px;
-  padding:0 14px;
-  outline:none;
-  background:#f8f8fa;
-  color:#1d1d1f;
-  font-size:13px;
-}
-
-.field input:focus{
-  background:#fff;
-  border-color:#1d1d1f;
-  box-shadow:0 0 0 3px rgba(0,0,0,.06);
-}
-
-.login-button{
-  height:48px;
-  margin-top:3px;
-  border:0;
-  border-radius:12px;
-  background:#1d1d1f;
-  color:#fff;
-  font-size:12px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-.login-button:hover{
-  opacity:.88;
-}
-
-.login-button:disabled{
-  opacity:.5;
-}
-
-.error{
-  min-height:18px;
-  color:#d70015;
-  font-size:11px;
-  line-height:1.5;
-}
-
-.back{
-  display:block;
-  text-align:center;
-  margin-top:25px;
-  padding-top:20px;
-  border-top:1px solid #eee;
-  color:#6e6e73;
-  font-size:11px;
-}
-
-.back:hover{
-  color:#1d1d1f;
-}
-
-.loading{
-  position:fixed;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(245,245,247,.9);
-  backdrop-filter:blur(15px);
-  z-index:9999;
-}
-
-.spinner{
-  width:34px;
-  height:34px;
-  border:3px solid #d2d2d7;
-  border-top-color:#1d1d1f;
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-@media(max-width:500px){
-  .login-card{
-    padding:30px 22px;
-    border-radius:22px;
-  }
-}
-</style>
+<title>GSA Admin | Login</title>
+<link rel="stylesheet" href="admin.css">
 </head>
 
-<body>
+<body class="login-page">
 
-<main class="login-page">
+<main class="login-shell">
 
-  <section class="login-card">
+<section class="login-card">
 
-    <div class="brand">
+<div class="login-logo">
+<img src="gsa.png" alt="Ghopkhali Sports Arena">
+</div>
 
-      <div class="logo">
-        <img src="../gsa.png" alt="Ghopkhali Sports Arena">
-      </div>
+<p class="eyebrow">GHOPKHALI SPORTS ARENA</p>
 
-      <small>GSA ADMINISTRATION</small>
+<h1>Admin<br><span>Administration.</span></h1>
 
-      <h1>Ghopkhali</h1>
+<p class="login-subtitle">
+Secure access to the GSA management panel.
+</p>
 
-      <p>Sports Arena · Admin Panel</p>
+<form id="gsaAdminLoginForm">
 
-    </div>
+<label>
+EMAIL ADDRESS
+<input
+type="email"
+id="gsaAdminEmail"
+placeholder="admin@example.com"
+autocomplete="email"
+required>
+</label>
 
-    <form id="loginForm" class="form">
+<label>
+PASSWORD
+<input
+type="password"
+id="gsaAdminPassword"
+placeholder="Enter your password"
+autocomplete="current-password"
+required>
+</label>
 
-      <div class="field">
-        <label for="email">EMAIL ADDRESS</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="admin@example.com"
-          autocomplete="email"
-          required
-        >
-      </div>
+<div id="gsaAdminError" class="login-error"></div>
 
-      <div class="field">
-        <label for="password">PASSWORD</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="Enter your password"
-          autocomplete="current-password"
-          required
-        >
-      </div>
+<button
+type="submit"
+id="gsaAdminLoginButton"
+class="primary-button">
+Login to Admin Panel
+</button>
 
-      <div id="error" class="error"></div>
+</form>
 
-      <button id="loginButton" class="login-button" type="submit">
-        Sign In
-      </button>
+<a href="../index.html" class="back-link">
+← Back to Ghopkhali Sports Arena
+</a>
 
-    </form>
-
-    <a href="../index.html" class="back">
-      ← Back to Ghopkhali Sports Arena
-    </a>
-
-  </section>
+</section>
 
 </main>
 
-<div id="loading" class="loading">
-  <div class="spinner"></div>
+<div id="gsaAdminLoading" class="loading-screen">
+<div class="loading-box">
+<div class="spinner"></div>
+<p>Signing in...</p>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-"use strict";
-
-const SUPABASE_URL =
-"https://cmygmswzokyrmgdnuszq.supabase.co";
-
-const SUPABASE_ANON_KEY =
-"sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
-
-const supabaseClient =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-const form=document.getElementById("loginForm");
-const email=document.getElementById("email");
-const password=document.getElementById("password");
-const errorBox=document.getElementById("error");
-const button=document.getElementById("loginButton");
-const loading=document.getElementById("loading");
-
-async function checkSession(){
-
-  const {data}=await supabaseClient.auth.getSession();
-
-  if(data?.session){
-    location.replace("admin-dashboard.html");
-  }
-}
-
-form.addEventListener("submit",async(e)=>{
-
-  e.preventDefault();
-
-  errorBox.textContent="";
-  button.disabled=true;
-  button.textContent="Signing In...";
-  loading.style.display="flex";
-
-  try{
-
-    const {data,error}=await supabaseClient.auth
-      .signInWithPassword({
-        email:email.value.trim(),
-        password:password.value
-      });
-
-    if(error) throw error;
-
-    if(!data?.user){
-      throw new Error("Login failed.");
-    }
-
-    location.replace("admin-dashboard.html");
-
-  }catch(err){
-
-    console.error(err);
-
-    errorBox.textContent =
-      err?.message ||
-      "Incorrect email or password.";
-
-    button.disabled=false;
-    button.textContent="Sign In";
-    loading.style.display="none";
-  }
-
-});
-
-checkSession();
-</script>
+<script src="admin.js"></script>
 
 </body>
 </html>
