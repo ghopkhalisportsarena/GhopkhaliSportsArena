@@ -4040,61 +4040,54 @@ font-size:22px;
 }
 
 /* ==================================================
-   PREMIUM FIXTURE CARD
+   GSA — PREMIUM HOME FIXTURE
 ================================================== */
 
 #homeFixturesList {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    margin-top: 25px;
+    gap: 20px;
+    margin: 28px 0 35px;
 }
 
 #homeFixturesList .fixture-card {
-    position: relative;
-    display: grid;
-    grid-template-columns: 110px 1fr 90px;
+    position: relative !important;
+
+    display: grid !important;
+    grid-template-columns: 120px minmax(0, 1fr) 90px !important;
     align-items: center;
+
     gap: 28px;
 
-    min-height: 170px;
+    width: 100%;
+    min-height: 175px;
+
     padding: 28px 32px;
 
-    background:
-        linear-gradient(
-            135deg,
-            #ffffff 0%,
-            #f7f8fa 100%
-        );
+    box-sizing: border-box;
 
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 24px;
+    background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #f7f7f8 100%
+    ) !important;
+
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 24px !important;
 
     box-shadow:
-        0 18px 45px rgba(0, 0, 0, 0.08);
+        0 15px 40px rgba(0, 0, 0, 0.08) !important;
 
     overflow: hidden;
 
     transition:
-        transform 0.35s ease,
-        box-shadow 0.35s ease,
-        border-color 0.35s ease;
+        transform .3s ease,
+        box-shadow .3s ease;
 }
 
 
-/* Premium hover */
-
-#homeFixturesList .fixture-card:hover {
-    transform: translateY(-5px);
-
-    box-shadow:
-        0 25px 55px rgba(0, 0, 0, 0.13);
-
-    border-color: rgba(0, 0, 0, 0.15);
-}
-
-
-/* Accent line */
+/* Left premium accent */
 
 #homeFixturesList .fixture-card::before {
     content: "";
@@ -4108,147 +4101,173 @@ font-size:22px;
     width: 5px;
 
     background: #111;
+
+    border-radius: 24px 0 0 24px;
 }
 
 
-/* Soft background decoration */
+/* Background decoration */
 
 #homeFixturesList .fixture-card::after {
     content: "";
 
     position: absolute;
 
-    width: 180px;
-    height: 180px;
+    width: 220px;
+    height: 220px;
 
-    right: -80px;
-    top: -80px;
+    right: -100px;
+    top: -100px;
 
     border-radius: 50%;
 
-    background: rgba(0, 0, 0, 0.035);
+    background: rgba(0, 0, 0, .035);
 
     pointer-events: none;
 }
 
 
+/* Hover */
+
+#homeFixturesList .fixture-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 22px 50px rgba(0, 0, 0, .13) !important;
+}
+
+
 /* ==================================================
-   DATE
+   DATE BOX
 ================================================== */
 
 #homeFixturesList .fixture-date {
+    position: relative;
+    z-index: 2;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     gap: 10px;
-
-    padding: 16px 12px;
-
-    background: #111;
-    color: #fff;
-
-    border-radius: 18px;
 
     min-width: 100px;
 
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.16);
-}
+    padding: 17px 12px;
 
+    box-sizing: border-box;
+
+    background: #111 !important;
+    color: #fff !important;
+
+    border-radius: 18px !important;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, .18);
+}
 
 #homeFixturesList .fixture-date strong {
-    font-size: 42px;
+    display: block;
+
+    margin: 0;
+
+    font-size: 42px !important;
     line-height: 1;
+
     font-weight: 800;
-    letter-spacing: -0.05em;
+
+    color: #fff !important;
 }
 
-
 #homeFixturesList .fixture-date span {
-    font-size: 11px;
-    line-height: 1.25;
+    display: block;
+
+    margin: 0;
+
+    font-size: 10px !important;
+    line-height: 1.35;
 
     font-weight: 700;
 
-    letter-spacing: 0.12em;
+    letter-spacing: .12em;
 
-    opacity: 0.8;
+    color: rgba(255,255,255,.75) !important;
 }
 
 
 /* ==================================================
-   MATCH INFO
+   MATCH INFORMATION
 ================================================== */
 
 #homeFixturesList .fixture-info {
+    position: relative;
+    z-index: 2;
+
     min-width: 0;
 }
-
 
 #homeFixturesList .fixture-tag {
     display: inline-flex;
 
-    padding: 7px 11px;
+    align-items: center;
+
+    padding: 7px 12px;
 
     margin-bottom: 12px;
 
     border-radius: 999px;
 
-    background: #111;
-    color: #fff;
+    background: #111 !important;
+    color: #fff !important;
 
-    font-size: 10px;
+    font-size: 9px !important;
 
     font-weight: 800;
 
-    letter-spacing: 0.12em;
+    letter-spacing: .14em;
 
     text-transform: uppercase;
 }
 
-
 #homeFixturesList .fixture-info h3 {
-    margin: 0;
+    margin: 0 !important;
 
-    font-size: clamp(
-        20px,
-        2.2vw,
-        30px
-    );
+    font-size: clamp(20px, 2.5vw, 30px) !important;
 
     line-height: 1.25;
 
     font-weight: 800;
 
-    letter-spacing: -0.025em;
-}
+    letter-spacing: -.025em;
 
+    color: #111 !important;
+}
 
 #homeFixturesList .fixture-info h3 span {
     display: inline-block;
 
     margin: 0 10px;
 
-    font-size: 12px;
+    font-size: 11px !important;
 
     font-weight: 800;
 
-    letter-spacing: 0.15em;
+    letter-spacing: .16em;
 
-    opacity: 0.45;
+    color: #777 !important;
 
     vertical-align: middle;
 }
 
-
 #homeFixturesList .fixture-info p {
-    margin: 12px 0 0;
+    margin: 12px 0 0 !important;
 
-    color: #6b6b6b;
-
-    font-size: 13px;
+    font-size: 13px !important;
 
     line-height: 1.6;
+
+    color: #777 !important;
 }
 
 
@@ -4258,35 +4277,33 @@ font-size:22px;
 
 #homeFixturesList .fixture-logo {
     position: relative;
+    z-index: 3;
 
-    display: flex;
+    display: flex !important;
 
     align-items: center;
     justify-content: center;
 
-    width: 76px;
-    height: 76px;
+    width: 78px;
+    height: 78px;
 
     border-radius: 50%;
 
-    background: #fff;
+    background: #fff !important;
 
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0,0,0,.08);
 
     box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.10);
-
-    z-index: 2;
+        0 12px 30px rgba(0,0,0,.12);
 }
 
-
 #homeFixturesList .fixture-logo img {
+    display: block;
+
     width: 58px;
     height: 58px;
 
     object-fit: contain;
-
-    display: block;
 }
 
 
@@ -4296,7 +4313,11 @@ font-size:22px;
 
 #homeFixturesList .loading-state,
 #homeFixturesList .empty-state {
-    padding: 35px;
+    width: 100%;
+
+    padding: 35px 20px;
+
+    box-sizing: border-box;
 
     text-align: center;
 
@@ -4316,61 +4337,57 @@ font-size:22px;
 
 @media (max-width: 700px) {
 
+    #homeFixturesList {
+        margin-top: 20px;
+    }
+
     #homeFixturesList .fixture-card {
-        grid-template-columns: 78px 1fr;
+        grid-template-columns: 75px minmax(0, 1fr) !important;
 
-        gap: 18px;
-
-        padding: 20px;
+        gap: 16px;
 
         min-height: 145px;
 
-        border-radius: 20px;
-    }
+        padding: 20px;
 
+        border-radius: 20px !important;
+    }
 
     #homeFixturesList .fixture-date {
-        min-width: 78px;
+        min-width: 75px;
 
-        padding: 12px 8px;
-
-        border-radius: 15px;
+        padding: 13px 7px;
 
         gap: 5px;
-    }
 
+        border-radius: 15px !important;
+    }
 
     #homeFixturesList .fixture-date strong {
-        font-size: 30px;
+        font-size: 30px !important;
     }
-
 
     #homeFixturesList .fixture-date span {
-        font-size: 8px;
+        font-size: 8px !important;
     }
-
 
     #homeFixturesList .fixture-info h3 {
-        font-size: 18px;
+        font-size: 17px !important;
     }
-
 
     #homeFixturesList .fixture-info h3 span {
         display: block;
 
         margin: 5px 0;
 
-        font-size: 9px;
+        font-size: 9px !important;
     }
-
 
     #homeFixturesList .fixture-info p {
-        font-size: 11px;
+        font-size: 11px !important;
     }
-
 
     #homeFixturesList .fixture-logo {
-        display: none;
+        display: none !important;
     }
-
 }
