@@ -1,727 +1,994 @@
+"use strict";
+
 /* =========================================================
-   GSA APPLICATION SYSTEM
-   Supabase — Friendly Match + Membership
+   GSA ADMIN SYSTEM
+   Ghopkhali Sports Arena
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+const SUPABASE_URL =
+  "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-  /* -------------------------------------------------------
-     SUPABASE
-  ------------------------------------------------------- */
+const SUPABASE_ANON_KEY =
+  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-  if (typeof window.supabase === "undefined") {
-    console.error("Supabase library is not loaded.");
-    return;
-  }
-
-  const SUPABASE_URL = "https://cmygmswzokyrmgdnuszq.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
-
-  const supabaseClient = window.supabase.createClient(
+const supabaseClient =
+  window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
 
 
-  /* -------------------------------------------------------
-     MODAL HELPERS
-  ------------------------------------------------------- */
+/* =========================================================
+   AUTH
+========================================================= */
 
-  const friendlyModal = document.getElementById("friendlyModal");
-  const membershipModal = document.getElementById("membershipModal");
-  const rulesModal = document.getElementById("rulesModal");
+async function requireAdmin() {
 
+  const {
+    data: {
+      session
+    }
+  } = await supabaseClient.auth.getSession();
 
-  function openModal(modal) {
-    if (!modal) return;
+  if (!session || !session.user) {
 
-    modal.classList.add("active");
-    modal.setAttribute("aria-hidden", "false");
+    window.location.replace("admin.html");
 
-    document.body.classList.add("modal-open");
+    return null;
   }
 
-
-  function closeModal(modal) {
-    if (!modal) return;
-
-    modal.classList.remove("active");
-    modal.setAttribute("aria-hidden", "true");
-
-    document.body.classList.remove("modal-open");
-  }
+  return session;
+}
 
 
-  /* -------------------------------------------------------
-     OPEN FRIENDLY MATCH
-  ------------------------------------------------------- */
+/* =========================================================
+   LOGOUT
+========================================================= */
 
-  document.querySelectorAll("[data-open-friendly]").forEach(button => {
+async function logoutAdmin() {
 
-    button.addEventListener("click", () => {
-      openModal(friendlyModal);
-    });
+  await supabaseClient.auth.signOut();
 
-  });
-
-
-  /* -------------------------------------------------------
-     OPEN MEMBERSHIP
-  ------------------------------------------------------- */
-
-  document.querySelectorAll("[data-open-membership]").forEach(button => {
-
-    button.addEventListener("click", () => {
-      openModal(membershipModal);
-    });
-
-  });
+  window.location.replace("admin.html");
+}
 
 
-  /* -------------------------------------------------------
-     OPEN RULES
-  ------------------------------------------------------- */
+/* =========================================================
+   FORMAT DATE
+========================================================= */
 
-  document.querySelectorAll("[data-open-rules]").forEach(button => {
+function formatDate(date) {
 
-    button.addEventListener("click", () => {
-      openModal(rulesModal);
-    });
+  if (!date) return "—";
 
-  });
+  try {
 
-
-  /* -------------------------------------------------------
-     CLOSE FRIENDLY
-  ------------------------------------------------------- */
-
-  document.querySelectorAll("[data-close-friendly]").forEach(button => {
-
-    button.addEventListener("click", () => {
-      closeModal(friendlyModal);
-    });
-
-  });
-
-
-  /* -------------------------------------------------------
-     CLOSE MEMBERSHIP
-  ------------------------------------------------------- */
-
-  document.querySelectorAll("[data-close-membership]").forEach(button => {
-
-    button.addEventListener("click", () => {
-      closeModal(membershipModal);
-    });
-
-  });
-
-
-  /* -------------------------------------------------------
-     CLOSE RULES
-  ------------------------------------------------------- */
-
-  document.querySelectorAll("[data-close-rules]").forEach(button => {
-
-    button.addEventListener("click", () => {
-      closeModal(rulesModal);
-    });
-
-  });
-
-
-  /* -------------------------------------------------------
-     CLOSE WHEN CLICKING OUTSIDE MODAL
-  ------------------------------------------------------- */
-
-  document.querySelectorAll(".modal").forEach(modal => {
-
-    modal.addEventListener("click", event => {
-
-      if (event.target === modal) {
-        closeModal(modal);
+    return new Date(date).toLocaleDateString(
+      "en-GB",
+      {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
       }
+    );
 
-    });
+  } catch {
+
+    return date;
+  }
+}
+
+
+/* =========================================================
+   FRIENDLY APPLICATIONS
+========================================================= */
+
+async function loadFriendlyApplications() {
+
+  const container =
+    document.getElementById(
+      "friendlyApplications"
+    );
+
+  if (!container) return;
+
+
+  container.innerHTML =
+    `<div class="admin-loading">
+      Loading applications...
+    </div>`;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("friendly_applications")
+      .select("*")
+      .order("created_at", {
+        ascending: false
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    container.innerHTML =
+      `<div class="admin-error">
+        Unable to load friendly match applications.
+      </div>`;
+
+    return;
+  }
+
+
+  if (!data || !data.length) {
+
+    container.innerHTML =
+      `<div class="admin-empty">
+        No friendly match applications found.
+      </div>`;
+
+    return;
+  }
+
+
+  container.innerHTML = "";
+
+
+  data.forEach(application => {
+
+    const card =
+      document.createElement("article");
+
+    card.className =
+      "application-card";
+
+
+    const status =
+      application.status || "pending";
+
+
+    card.innerHTML = `
+
+      <div class="application-card-header">
+
+        <div>
+
+          <span class="application-label">
+            FRIENDLY MATCH
+          </span>
+
+          <h3>
+            ${escapeHTML(
+              application.team_name || "Unnamed Team"
+            )}
+          </h3>
+
+        </div>
+
+        <span class="status status-${escapeHTML(status)}">
+          ${escapeHTML(status.toUpperCase())}
+        </span>
+
+      </div>
+
+
+      <div class="application-grid">
+
+        <div>
+          <small>Representative</small>
+          <strong>
+            ${escapeHTML(
+              application.contact_person || "—"
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Phone</small>
+          <strong>
+            ${escapeHTML(
+              application.phone || "—"
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Email</small>
+          <strong>
+            ${escapeHTML(
+              application.email || "—"
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Match Date</small>
+          <strong>
+            ${formatDate(
+              application.preferred_date
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Match Time</small>
+          <strong>
+            ${escapeHTML(
+              application.preferred_time || "—"
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Submitted</small>
+          <strong>
+            ${formatDate(
+              application.created_at
+            )}
+          </strong>
+        </div>
+
+      </div>
+
+
+      <div class="application-message">
+
+        <small>MESSAGE</small>
+
+        <p>
+          ${escapeHTML(
+            application.message || "No additional message."
+          )}
+        </p>
+
+      </div>
+
+
+      <div class="application-actions">
+
+        <button
+          class="admin-button success"
+          onclick="updateFriendlyStatus(
+            '${application.id}',
+            'approved'
+          )"
+        >
+          Approve
+        </button>
+
+
+        <button
+          class="admin-button warning"
+          onclick="updateFriendlyStatus(
+            '${application.id}',
+            'rejected'
+          )"
+        >
+          Reject
+        </button>
+
+
+        <button
+          class="admin-button danger"
+          onclick="deleteFriendlyApplication(
+            '${application.id}'
+          )"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    `;
+
+
+    container.appendChild(card);
 
   });
 
+}
 
-  /* -------------------------------------------------------
-     ESC KEY
-  ------------------------------------------------------- */
 
-  document.addEventListener("keydown", event => {
+/* =========================================================
+   UPDATE FRIENDLY STATUS
+========================================================= */
 
-    if (event.key !== "Escape") return;
+async function updateFriendlyStatus(
+  id,
+  status
+) {
 
-    closeModal(friendlyModal);
-    closeModal(membershipModal);
-    closeModal(rulesModal);
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("friendly_applications")
+      .update({
+        status: status
+      })
+      .eq("id", id);
+
+
+  if (error) {
+
+    console.error(error);
+
+    alert(
+      "Unable to update application."
+    );
+
+    return;
+  }
+
+
+  await loadFriendlyApplications();
+
+  await loadDashboardStats();
+
+}
+
+
+/* =========================================================
+   DELETE FRIENDLY APPLICATION
+========================================================= */
+
+async function deleteFriendlyApplication(id) {
+
+  if (
+    !confirm(
+      "Delete this friendly match application?"
+    )
+  ) {
+
+    return;
+  }
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("friendly_applications")
+      .delete()
+      .eq("id", id);
+
+
+  if (error) {
+
+    console.error(error);
+
+    alert(
+      "Unable to delete application."
+    );
+
+    return;
+  }
+
+
+  await loadFriendlyApplications();
+
+  await loadDashboardStats();
+}
+
+
+/* =========================================================
+   MEMBERSHIP APPLICATIONS
+========================================================= */
+
+async function loadMembershipApplications() {
+
+  const container =
+    document.getElementById(
+      "membershipApplications"
+    );
+
+  if (!container) return;
+
+
+  container.innerHTML =
+    `<div class="admin-loading">
+      Loading applications...
+    </div>`;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("membership_applications")
+      .select("*")
+      .order("created_at", {
+        ascending: false
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    container.innerHTML =
+      `<div class="admin-error">
+        Unable to load membership applications.
+      </div>`;
+
+    return;
+  }
+
+
+  if (!data || !data.length) {
+
+    container.innerHTML =
+      `<div class="admin-empty">
+        No membership applications found.
+      </div>`;
+
+    return;
+  }
+
+
+  container.innerHTML = "";
+
+
+  data.forEach(application => {
+
+    const card =
+      document.createElement("article");
+
+    card.className =
+      "application-card";
+
+
+    const status =
+      application.status || "pending";
+
+
+    card.innerHTML = `
+
+      <div class="application-card-header">
+
+        <div>
+
+          <span class="application-label">
+            CLUB MEMBERSHIP
+          </span>
+
+          <h3>
+            ${escapeHTML(
+              application.full_name || "Unnamed Applicant"
+            )}
+          </h3>
+
+        </div>
+
+        <span class="status status-${escapeHTML(status)}">
+          ${escapeHTML(status.toUpperCase())}
+        </span>
+
+      </div>
+
+
+      <div class="application-grid">
+
+        <div>
+          <small>Phone</small>
+          <strong>
+            ${escapeHTML(
+              application.phone || "—"
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Date of Birth</small>
+          <strong>
+            ${formatDate(
+              application.date_of_birth
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Occupation</small>
+          <strong>
+            ${escapeHTML(
+              application.occupation || "—"
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Position / Skill</small>
+          <strong>
+            ${escapeHTML(
+              application.preferred_position || "—"
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Submitted</small>
+          <strong>
+            ${formatDate(
+              application.created_at
+            )}
+          </strong>
+        </div>
+
+        <div>
+          <small>Address</small>
+          <strong>
+            ${escapeHTML(
+              application.address || "—"
+            )}
+          </strong>
+        </div>
+
+      </div>
+
+
+      <div class="application-message">
+
+        <small>SPORTS / EXPERIENCE</small>
+
+        <p>
+          ${escapeHTML(
+            application.experience || "—"
+          )}
+        </p>
+
+      </div>
+
+
+      <div class="application-message">
+
+        <small>ADDITIONAL INFORMATION</small>
+
+        <p>
+          ${escapeHTML(
+            application.message || "—"
+          )}
+        </p>
+
+      </div>
+
+
+      <div class="application-actions">
+
+        <button
+          class="admin-button success"
+          onclick="updateMembershipStatus(
+            '${application.id}',
+            'approved'
+          )"
+        >
+          Approve
+        </button>
+
+
+        <button
+          class="admin-button warning"
+          onclick="updateMembershipStatus(
+            '${application.id}',
+            'rejected'
+          )"
+        >
+          Reject
+        </button>
+
+
+        <button
+          class="admin-button danger"
+          onclick="deleteMembershipApplication(
+            '${application.id}'
+          )"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    `;
+
+
+    container.appendChild(card);
 
   });
 
-
-  /* =======================================================
-     FRIENDLY MATCH APPLICATION
-  ======================================================= */
-
-  const friendlyForm = friendlyModal
-    ? friendlyModal.querySelector("form.application-form")
-    : null;
+}
 
 
-  if (friendlyForm) {
+/* =========================================================
+   UPDATE MEMBERSHIP STATUS
+========================================================= */
 
-    friendlyForm.addEventListener("submit", async event => {
+async function updateMembershipStatus(
+  id,
+  status
+) {
 
-      event.preventDefault();
-
-      const submitButton =
-        friendlyForm.querySelector(".form-submit");
-
-      const originalText = submitButton
-        ? submitButton.innerHTML
-        : "Submit Application ↗";
-
-
-      try {
-
-        if (submitButton) {
-          submitButton.disabled = true;
-          submitButton.innerHTML = "Submitting...";
-        }
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("membership_applications")
+      .update({
+        status: status
+      })
+      .eq("id", id);
 
 
-        const formData = new FormData(friendlyForm);
+  if (error) {
+
+    console.error(error);
+
+    alert(
+      "Unable to update application."
+    );
+
+    return;
+  }
 
 
-        const teamName =
-          formData.get("Team or Club Name")?.trim() || "";
+  await loadMembershipApplications();
+
+  await loadDashboardStats();
+}
 
 
-        const contactPerson =
-          formData.get("Representative Name")?.trim() || "";
+/* =========================================================
+   DELETE MEMBERSHIP APPLICATION
+========================================================= */
+
+async function deleteMembershipApplication(id) {
+
+  if (
+    !confirm(
+      "Delete this membership application?"
+    )
+  ) {
+
+    return;
+  }
 
 
-        const phone =
-          formData.get("Phone Number")?.trim() || "";
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("membership_applications")
+      .delete()
+      .eq("id", id);
 
 
-        const email =
-          formData.get("Email")?.trim() || "";
+  if (error) {
+
+    console.error(error);
+
+    alert(
+      "Unable to delete application."
+    );
+
+    return;
+  }
 
 
-        const preferredDate =
-          formData.get("Preferred Date") || null;
+  await loadMembershipApplications();
+
+  await loadDashboardStats();
+}
 
 
-        const preferredTime =
-          formData.get("Preferred Time") || null;
+/* =========================================================
+   DASHBOARD STATISTICS
+========================================================= */
+
+async function loadDashboardStats() {
+
+  const noticeElement =
+    document.getElementById(
+      "totalNotices"
+    );
+
+  const fixtureElement =
+    document.getElementById(
+      "totalFixtures"
+    );
+
+  const memberElement =
+    document.getElementById(
+      "totalMembers"
+    );
+
+  const applicationElement =
+    document.getElementById(
+      "totalApplications"
+    );
 
 
-        const sport =
-          formData.get("Sport") || "";
+  /* MEMBERSHIP */
+
+  const membership =
+    await supabaseClient
+      .from("membership_applications")
+      .select("id", {
+        count: "exact",
+        head: true
+      });
 
 
-        const players =
-          formData.get("Number of Players") || "";
+  /* FRIENDLY */
+
+  const friendly =
+    await supabaseClient
+      .from("friendly_applications")
+      .select("id", {
+        count: "exact",
+        head: true
+      });
 
 
-        const additionalMessage =
-          formData.get("Additional Message")?.trim() || "";
+  if (memberElement) {
 
-
-        /* -----------------------------------------------
-           Combine fields which don't have separate columns
-        ------------------------------------------------ */
-
-        const messageParts = [];
-
-        if (sport) {
-          messageParts.push(`Sport: ${sport}`);
-        }
-
-        if (players) {
-          messageParts.push(`Number of Players: ${players}`);
-        }
-
-        if (additionalMessage) {
-          messageParts.push(
-            `Additional Message: ${additionalMessage}`
-          );
-        }
-
-
-        const message = messageParts.join("\n");
-
-
-        /* -----------------------------------------------
-           SUPABASE INSERT
-        ------------------------------------------------ */
-
-        const { data, error } =
-          await supabaseClient
-            .from("friendly_applications")
-            .insert([
-              {
-                team_name: teamName,
-                contact_person: contactPerson,
-                phone: phone,
-                email: email || null,
-                preferred_date: preferredDate,
-                preferred_time: preferredTime || null,
-                venue: null,
-                message: message || null,
-                status: "pending"
-              }
-            ])
-            .select()
-            .single();
-
-
-        if (error) {
-          console.error(
-            "Friendly application error:",
-            error
-          );
-
-          throw error;
-        }
-
-
-        console.log(
-          "Friendly application submitted:",
-          data
-        );
-
-
-        alert(
-          "Your Friendly Match application has been submitted successfully."
-        );
-
-
-        friendlyForm.reset();
-
-        closeModal(friendlyModal);
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "Application submission failed.\n\n" +
-          "Please try again later."
-        );
-
-
-      } finally {
-
-        if (submitButton) {
-
-          submitButton.disabled = false;
-          submitButton.innerHTML = originalText;
-
-        }
-
-      }
-
-    });
+    memberElement.textContent =
+      membership.count || 0;
 
   }
 
 
-  /* =======================================================
-     MEMBERSHIP APPLICATION
-  ======================================================= */
-
-  const membershipForm = membershipModal
-    ? membershipModal.querySelector("form.application-form")
-    : null;
-
-
-  if (membershipForm) {
-
-    membershipForm.addEventListener("submit", async event => {
-
-      event.preventDefault();
-
-
-      const submitButton =
-        membershipForm.querySelector(".form-submit");
-
-
-      const originalText = submitButton
-        ? submitButton.innerHTML
-        : "সদস্যপদ আবেদন জমা দিন ↗";
-
-
-      try {
-
-        if (submitButton) {
-
-          submitButton.disabled = true;
-          submitButton.innerHTML = "জমা হচ্ছে...";
-
-        }
-
-
-        const formData = new FormData(membershipForm);
-
-
-        /* -----------------------------------------------
-           BASIC INFORMATION
-        ------------------------------------------------ */
-
-        const fullNameBangla =
-          formData.get("পূর্ণ নাম বাংলায়")?.trim() || "";
-
-
-        const fullNameEnglish =
-          formData.get("Full Name English")?.trim() || "";
-
-
-        const fatherName =
-          formData.get("Father Name")?.trim() || "";
-
-
-        const motherName =
-          formData.get("Mother Name")?.trim() || "";
-
-
-        const dateOfBirth =
-          formData.get("Date of Birth") || null;
-
-
-        const profession =
-          formData.get("Profession")?.trim() || "";
-
-
-        const nid =
-          formData.get("NID or Birth Registration")?.trim() || "";
-
-
-        /* -----------------------------------------------
-           CONTACT
-        ------------------------------------------------ */
-
-        const currentAddress =
-          formData.get("Current Address")?.trim() || "";
-
-
-        const permanentAddress =
-          formData.get("Permanent Address")?.trim() || "";
-
-
-        const mobile =
-          formData.get("Mobile Number")?.trim() || "";
-
-
-        const alternativeMobile =
-          formData.get("Alternative Mobile Number")?.trim() || "";
-
-
-        /* -----------------------------------------------
-           SPORTS
-        ------------------------------------------------ */
-
-        const selectedSports =
-          formData.getAll("Sports[]");
-
-
-        const otherSports =
-          formData.get("Other Sports")?.trim() || "";
-
-
-        const mainSkill =
-          formData.get("Main Sports Skill")?.trim() || "";
-
-
-        const previousExperience =
-          formData.get("Previous Club Experience")?.trim() || "";
-
-
-        /* -----------------------------------------------
-           EMERGENCY CONTACT
-        ------------------------------------------------ */
-
-        const emergencyName =
-          formData.get("Emergency Contact Name")?.trim() || "";
-
-
-        const emergencyRelationship =
-          formData.get("Emergency Contact Relationship")?.trim() || "";
-
-
-        const emergencyMobile =
-          formData.get("Emergency Contact Mobile")?.trim() || "";
-
-
-        /* -----------------------------------------------
-           BUILD EXPERIENCE
-        ------------------------------------------------ */
-
-        const experienceParts = [];
-
-
-        if (selectedSports.length) {
-
-          experienceParts.push(
-            `Interested Sports: ${selectedSports.join(", ")}`
-          );
-
-        }
-
-
-        if (otherSports) {
-
-          experienceParts.push(
-            `Other Sports: ${otherSports}`
-          );
-
-        }
-
-
-        if (mainSkill) {
-
-          experienceParts.push(
-            `Main Sports Skill: ${mainSkill}`
-          );
-
-        }
-
-
-        if (previousExperience) {
-
-          experienceParts.push(
-            `Previous Club Experience: ${previousExperience}`
-          );
-
-        }
-
-
-        const experience =
-          experienceParts.join("\n");
-
-
-        /* -----------------------------------------------
-           BUILD MESSAGE
-        ------------------------------------------------ */
-
-        const messageParts = [];
-
-
-        if (fullNameBangla) {
-
-          messageParts.push(
-            `Full Name (Bangla): ${fullNameBangla}`
-          );
-
-        }
-
-
-        if (fatherName) {
-
-          messageParts.push(
-            `Father's Name: ${fatherName}`
-          );
-
-        }
-
-
-        if (motherName) {
-
-          messageParts.push(
-            `Mother's Name: ${motherName}`
-          );
-
-        }
-
-
-        if (profession) {
-
-          messageParts.push(
-            `Profession: ${profession}`
-          );
-
-        }
-
-
-        if (nid) {
-
-          messageParts.push(
-            `NID/Birth Registration: ${nid}`
-          );
-
-        }
-
-
-        if (currentAddress) {
-
-          messageParts.push(
-            `Current Address: ${currentAddress}`
-          );
-
-        }
-
-
-        if (permanentAddress) {
-
-          messageParts.push(
-            `Permanent Address: ${permanentAddress}`
-          );
-
-        }
-
-
-        if (alternativeMobile) {
-
-          messageParts.push(
-            `Alternative Mobile: ${alternativeMobile}`
-          );
-
-        }
-
-
-        if (emergencyName) {
-
-          messageParts.push(
-            `Emergency Contact: ${emergencyName}`
-          );
-
-        }
-
-
-        if (emergencyRelationship) {
-
-          messageParts.push(
-            `Emergency Relationship: ${emergencyRelationship}`
-          );
-
-        }
-
-
-        if (emergencyMobile) {
-
-          messageParts.push(
-            `Emergency Mobile: ${emergencyMobile}`
-          );
-
-        }
-
-
-        const message =
-          messageParts.join("\n");
-
-
-        /* -----------------------------------------------
-           SUPABASE INSERT
-        ------------------------------------------------ */
-
-        const { data, error } =
-          await supabaseClient
-            .from("membership_applications")
-            .insert([
-              {
-                full_name:
-                  fullNameEnglish || fullNameBangla,
-
-                date_of_birth:
-                  dateOfBirth,
-
-                phone:
-                  mobile,
-
-                email:
-                  null,
-
-                address:
-                  currentAddress,
-
-                occupation:
-                  profession,
-
-                preferred_position:
-                  mainSkill || null,
-
-                experience:
-                  experience || null,
-
-                message:
-                  message || null,
-
-                photo_url:
-                  null,
-
-                status:
-                  "pending",
-
-                admin_note:
-                  null
-              }
-            ])
-            .select()
-            .single();
-
-
-        if (error) {
-
-          console.error(
-            "Membership application error:",
-            error
-          );
-
-          throw error;
-
-        }
-
-
-        console.log(
-          "Membership application submitted:",
-          data
-        );
-
-
-        alert(
-          "সদস্যপদ আবেদন সফলভাবে জমা হয়েছে।\n\nক্লাব কর্তৃপক্ষ আপনার আবেদন পর্যালোচনা করবে।"
-        );
-
-
-        membershipForm.reset();
-
-        closeModal(membershipModal);
-
-
-      } catch (error) {
-
-        console.error(error);
-
-
-        alert(
-          "আবেদন জমা দেওয়া যায়নি।\n\n" +
-          "দয়া করে আবার চেষ্টা করুন।"
-        );
-
-
-      } finally {
-
-        if (submitButton) {
-
-          submitButton.disabled = false;
-          submitButton.innerHTML = originalText;
-
-        }
-
-      }
-
-    });
+  if (applicationElement) {
+
+    applicationElement.textContent =
+      (friendly.count || 0) +
+      (membership.count || 0);
 
   }
 
 
-  console.log(
-    "GSA Application System initialized."
+  /*
+   * Notices / Fixtures are intentionally
+   * left at zero until their real Supabase
+   * table schema is connected.
+   */
+
+  if (noticeElement) {
+
+    noticeElement.textContent = "—";
+
+  }
+
+
+  if (fixtureElement) {
+
+    fixtureElement.textContent = "—";
+
+  }
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
+
+  if (value === null ||
+      value === undefined) {
+
+    return "";
+
+  }
+
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function initSidebar() {
+
+  const toggle =
+    document.getElementById(
+      "adminMenuToggle"
+    );
+
+  const sidebar =
+    document.getElementById(
+      "adminSidebar"
+    );
+
+  const overlay =
+    document.getElementById(
+      "adminSidebarOverlay"
+    );
+
+
+  if (!toggle || !sidebar) return;
+
+
+  function openSidebar() {
+
+    sidebar.classList.add("open");
+
+    if (overlay) {
+      overlay.style.display = "block";
+    }
+
+  }
+
+
+  function closeSidebar() {
+
+    sidebar.classList.remove("open");
+
+    if (overlay) {
+      overlay.style.display = "none";
+    }
+
+  }
+
+
+  toggle.addEventListener(
+    "click",
+    openSidebar
   );
 
-});
+
+  if (overlay) {
+
+    overlay.addEventListener(
+      "click",
+      closeSidebar
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   ACTIVE PAGE
+========================================================= */
+
+function setActivePage() {
+
+  const page =
+    document.body.dataset.page;
+
+  if (!page) return;
+
+
+  document
+    .querySelectorAll(
+      ".sidebar-link"
+    )
+    .forEach(link => {
+
+      if (
+        link.dataset.page === page
+      ) {
+
+        link.classList.add(
+          "active"
+        );
+
+      }
+
+    });
+
+}
+
+
+/* =========================================================
+   CURRENT USER
+========================================================= */
+
+async function loadAdminUser() {
+
+  const {
+    data: {
+      user
+    }
+  } =
+    await supabaseClient.auth.getUser();
+
+
+  if (!user) return;
+
+
+  const nameElement =
+    document.getElementById(
+      "adminName"
+    );
+
+  const avatarElement =
+    document.getElementById(
+      "adminAvatar"
+    );
+
+
+  const name =
+    user.user_metadata?.full_name ||
+    user.email ||
+    "Administrator";
+
+
+  if (nameElement) {
+
+    nameElement.textContent =
+      name;
+
+  }
+
+
+  if (avatarElement) {
+
+    avatarElement.textContent =
+      name
+        .charAt(0)
+        .toUpperCase();
+
+  }
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    const session =
+      await requireAdmin();
+
+    if (!session) return;
+
+
+    document
+      .querySelectorAll(
+        "#logoutButton"
+      )
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          logoutAdmin
+        );
+
+      });
+
+
+    initSidebar();
+
+    setActivePage();
+
+    loadAdminUser();
+
+    loadDashboardStats();
+
+    loadFriendlyApplications();
+
+    loadMembershipApplications();
+
+    console.log(
+      "GSA Admin System initialized."
+    );
+
+  }
+);
