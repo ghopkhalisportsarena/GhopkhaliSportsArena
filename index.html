@@ -39,6 +39,8 @@
 
 <link rel="stylesheet" href="style.css">
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 
@@ -2388,6 +2390,229 @@ src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 
 <script src="script.js"></script>
 
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+    const noticesContainer =
+        document.getElementById("home-notices");
+
+    const ticker =
+        document.getElementById("homeNoticeTicker");
+
+    if (!noticesContainer) return;
+
+    try {
+
+        const { data, error } =
+            await supabaseClient
+                .from("notices")
+                .select("*")
+                .eq("published", true)
+                .order("created_at", {
+                    ascending: false
+                })
+                .limit(6);
+
+        if (error) {
+            console.error(
+                "Notice loading error:",
+                error
+            );
+
+            noticesContainer.innerHTML = `
+                <article class="update-card">
+                    <div class="update-date">
+                        NOTICE
+                    </div>
+
+                    <div class="update-tag">
+                        GSA
+                    </div>
+
+                    <h3>
+                        Unable to load notices
+                    </h3>
+
+                    <p>
+                        Please try again later.
+                    </p>
+                </article>
+            `;
+
+            return;
+        }
+
+        if (!data || data.length === 0) {
+
+            noticesContainer.innerHTML = `
+                <article class="update-card">
+
+                    <div class="update-date">
+                        GSA
+                    </div>
+
+                    <div class="update-tag">
+                        NOTICE
+                    </div>
+
+                    <h3>
+                        No notices available
+                    </h3>
+
+                    <p>
+                        There are currently no published
+                        notices from Ghopkhali Sports Arena.
+                    </p>
+
+                </article>
+            `;
+
+            if (ticker) {
+                ticker.innerHTML = `
+                    <span class="notice-ticker-item">
+                        No important notices at this time.
+                    </span>
+                `;
+            }
+
+            return;
+        }
+
+        /* =========================================
+           NOTICE CARDS
+        ========================================= */
+
+        noticesContainer.innerHTML =
+            data.map(notice => {
+
+                const date =
+                    notice.created_at
+                        ? new Date(
+                            notice.created_at
+                        ).toLocaleDateString(
+                            "en-GB",
+                            {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric"
+                            }
+                        )
+                        : "";
+
+                const title =
+                    escapeHTML(
+                        notice.title || "GSA Notice"
+                    );
+
+                const content =
+                    escapeHTML(
+                        notice.content || ""
+                    );
+
+                const category =
+                    escapeHTML(
+                        notice.category ||
+                        "NOTICE"
+                    );
+
+                return `
+                    <article class="update-card">
+
+                        <div class="update-date">
+                            ${date}
+                        </div>
+
+                        <div class="update-tag">
+                            ${category}
+                        </div>
+
+                        <h3>
+                            ${title}
+                        </h3>
+
+                        <p>
+                            ${content}
+                        </p>
+
+                    </article>
+                `;
+
+            }).join("");
+
+
+        /* =========================================
+           IMPORTANT NOTICE TICKER
+        ========================================= */
+
+        if (ticker) {
+
+            const important =
+                data.filter(
+                    notice =>
+                        notice.important === true
+                );
+
+            const tickerData =
+                important.length
+                    ? important
+                    : data;
+
+            ticker.innerHTML =
+                tickerData
+                    .map(
+                        notice => `
+                            <span
+                                class="notice-ticker-item"
+                            >
+                                ${escapeHTML(
+                                    notice.title ||
+                                    "GSA Notice"
+                                )}
+                            </span>
+                        `
+                    )
+                    .join("");
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected notice error:",
+            error
+        );
+
+    }
+
+
+    /* =============================================
+       HTML ESCAPE
+    ============================================= */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+});
+</script>
 
 </body>
 
