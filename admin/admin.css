@@ -951,3 +951,436 @@ button {
     }
 
 }
+
+/* ==================================================
+   PREMIUM ADMIN FIXTURES
+================================================== */
+
+#fixtureList {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 25px;
+}
+
+
+/* FIXTURE CARD */
+
+.admin-fixture-card {
+    position: relative;
+
+    display: grid;
+    grid-template-columns: 105px 1fr auto;
+
+    align-items: center;
+    gap: 25px;
+
+    min-height: 150px;
+
+    padding: 24px 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f7f8fa
+        );
+
+    border: 1px solid rgba(0,0,0,.08);
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.07);
+
+    overflow: hidden;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+
+.admin-fixture-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 22px 50px rgba(0,0,0,.11);
+}
+
+
+/* ACCENT */
+
+.admin-fixture-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 5px;
+
+    background: #111;
+}
+
+
+/* DATE */
+
+.admin-fixture-date {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    min-width: 95px;
+
+    padding: 15px 10px;
+
+    background: #111;
+
+    color: #fff;
+
+    border-radius: 17px;
+}
+
+
+.admin-fixture-date strong {
+    font-size: 38px;
+
+    line-height: 1;
+
+    font-weight: 800;
+}
+
+
+.admin-fixture-date span {
+    font-size: 10px;
+
+    line-height: 1.25;
+
+    font-weight: 700;
+
+    letter-spacing: .1em;
+
+    opacity: .8;
+}
+
+
+/* INFO */
+
+.admin-fixture-info {
+    min-width: 0;
+}
+
+
+.admin-fixture-tag {
+    display: inline-flex;
+
+    padding: 6px 10px;
+
+    margin-bottom: 9px;
+
+    border-radius: 999px;
+
+    background: #111;
+
+    color: #fff;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .1em;
+}
+
+
+.admin-fixture-info h3 {
+    margin: 0;
+
+    font-size: 22px;
+
+    line-height: 1.35;
+
+    font-weight: 800;
+}
+
+
+.admin-fixture-info h3 span {
+    margin: 0 8px;
+
+    font-size: 10px;
+
+    opacity: .4;
+
+    letter-spacing: .12em;
+}
+
+
+.admin-fixture-info p {
+    margin: 9px 0 0;
+
+    color: #777;
+
+    font-size: 12px;
+}
+
+
+/* STATUS */
+
+.admin-fixture-status {
+    display: inline-flex;
+
+    margin-top: 10px;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: .08em;
+}
+
+
+.admin-fixture-status.published {
+    background: #111;
+    color: #fff;
+}
+
+
+.admin-fixture-status.draft {
+    background: #e9e9e9;
+    color: #555;
+}
+
+
+/* ACTIONS */
+
+.admin-fixture-actions {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    min-width: 105px;
+}
+
+
+.admin-fixture-actions button {
+    border: 1px solid rgba(0,0,0,.1);
+
+    background: #fff;
+
+    color: #111;
+
+    padding: 8px 12px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+}
+
+
+.admin-fixture-actions button:hover {
+    background: #111;
+    color: #fff;
+}
+
+
+.admin-fixture-actions .danger:hover {
+    background: #b00020;
+    color: #fff;
+}
+
+
+/* MODAL FORM */
+
+#fixtureForm {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 17px;
+}
+
+
+#fixtureForm .form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+#fixtureForm label {
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+#fixtureForm input,
+#fixtureForm select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 13px;
+
+    border: 1px solid rgba(0,0,0,.12);
+
+    border-radius: 10px;
+
+    background: #fff;
+
+    font: inherit;
+
+    outline: none;
+}
+
+
+#fixtureForm input:focus,
+#fixtureForm select:focus {
+    border-color: #111;
+
+    box-shadow:
+        0 0 0 3px rgba(0,0,0,.05);
+}
+
+
+/* CHECKBOX */
+
+#fixtureForm .form-check {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 10px 0;
+}
+
+
+#fixtureForm .form-check input {
+    width: auto;
+}
+
+
+#fixtureForm .form-check label {
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* MODAL ACTIONS */
+
+#fixtureForm .modal-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+
+#fixtureForm .secondary-button {
+    padding: 11px 17px;
+
+    border: 1px solid rgba(0,0,0,.12);
+
+    background: #fff;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+
+#fixtureForm .primary-button {
+    padding: 11px 18px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .admin-fixture-card {
+        grid-template-columns: 75px 1fr;
+
+        gap: 15px;
+
+        padding: 18px;
+
+        border-radius: 18px;
+    }
+
+
+    .admin-fixture-date {
+        min-width: 75px;
+
+        padding: 12px 7px;
+    }
+
+
+    .admin-fixture-date strong {
+        font-size: 29px;
+    }
+
+
+    .admin-fixture-date span {
+        font-size: 8px;
+    }
+
+
+    .admin-fixture-info h3 {
+        font-size: 17px;
+    }
+
+
+    .admin-fixture-info h3 span {
+        display: block;
+
+        margin: 4px 0;
+
+        font-size: 9px;
+    }
+
+
+    .admin-fixture-actions {
+        grid-column: 1 / -1;
+
+        flex-direction: row;
+
+        width: 100%;
+    }
+
+
+    .admin-fixture-actions button {
+        flex: 1;
+    }
+
+}
