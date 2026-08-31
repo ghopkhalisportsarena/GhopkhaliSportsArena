@@ -1,7 +1,3 @@
-/* =========================================================
-   GSA ADMIN JAVASCRIPT
-========================================================= */
-
 "use strict";
 
 
@@ -24,324 +20,38 @@ const supabaseClient =
 
 
 /* =========================================================
-   LOAD NAVIGATION
-========================================================= */
-
-async function loadNavigation() {
-
-  const container =
-    document.getElementById("navContainer");
-
-  if (!container) return;
-
-  try {
-
-    const response =
-      await fetch("admin-nav.html");
-
-    if (!response.ok) {
-
-      throw new Error(
-        "Navigation file could not be loaded."
-      );
-
-    }
-
-    container.innerHTML =
-      await response.text();
-
-    initializeNavigation();
-
-    updateCurrentUser();
-
-  } catch (error) {
-
-    console.error(
-      "Navigation error:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function initializeNavigation() {
-
-  const toggle =
-    document.getElementById(
-      "sidebarToggle"
-    );
-
-  const sidebar =
-    document.getElementById(
-      "adminSidebar"
-    );
-
-  const overlay =
-    document.getElementById(
-      "adminSidebarOverlay"
-    );
-
-
-  function openSidebar() {
-
-    if (!sidebar) return;
-
-    sidebar.classList.add("open");
-
-    if (overlay) {
-
-      overlay.classList.add("open");
-
-    }
-
-  }
-
-
-  function closeSidebar() {
-
-    if (!sidebar) return;
-
-    sidebar.classList.remove("open");
-
-    if (overlay) {
-
-      overlay.classList.remove("open");
-
-    }
-
-  }
-
-
-  if (toggle) {
-
-    toggle.addEventListener(
-      "click",
-      openSidebar
-    );
-
-  }
-
-
-  if (overlay) {
-
-    overlay.addEventListener(
-      "click",
-      closeSidebar
-    );
-
-  }
-
-
-  /*
-   * Active page
-   */
-
-  const currentPage =
-    location.pathname
-      .split("/")
-      .pop()
-      .replace(
-        ".html",
-        ""
-      )
-      .replace(
-        "admin-",
-        ""
-      );
-
-
-  document
-    .querySelectorAll(".sidebar-link")
-    .forEach(function(link) {
-
-      const page =
-        link.dataset.page;
-
-      if (
-        page &&
-        page === currentPage
-      ) {
-
-        link.classList.add("active");
-
-      }
-
-    });
-
-
-  /*
-   * Close mobile menu after link
-   */
-
-  document
-    .querySelectorAll(".sidebar-link")
-    .forEach(function(link) {
-
-      link.addEventListener(
-        "click",
-        closeSidebar
-      );
-
-    });
-
-
-  /*
-   * Logout
-   */
-
-  const logout =
-    document.getElementById(
-      "logoutButton"
-    );
-
-  if (logout) {
-
-    logout.addEventListener(
-      "click",
-      logoutAdmin
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   CURRENT USER
-========================================================= */
-
-async function updateCurrentUser() {
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.auth
-        .getUser();
-
-
-    if (error) {
-
-      console.warn(
-        "Could not get user:",
-        error
-      );
-
-      return;
-
-    }
-
-
-    const user =
-      data?.user;
-
-
-    if (!user) return;
-
-
-    const email =
-      user.email || "Administrator";
-
-
-    const name =
-      email
-        .split("@")[0]
-        .replace(
-          /^[a-z]/,
-          function(letter) {
-            return letter.toUpperCase();
-          }
-        );
-
-
-    const nameElement =
-      document.getElementById(
-        "adminName"
-      );
-
-    const avatarElement =
-      document.getElementById(
-        "adminAvatar"
-      );
-
-
-    if (nameElement) {
-
-      nameElement.textContent =
-        name;
-
-    }
-
-
-    if (avatarElement) {
-
-      avatarElement.textContent =
-        name.charAt(0)
-          .toUpperCase();
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "User error:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
    AUTH CHECK
 ========================================================= */
 
-async function checkAuthentication() {
+async function checkAuthentication(){
 
-  try {
+  try{
 
     const {
       data,
       error
     } =
-      await supabaseClient.auth
-        .getSession();
+      await supabaseClient.auth.getSession();
 
 
-    if (error) {
-
+    if(error){
       throw error;
-
     }
 
 
-    const session =
-      data?.session;
-
-
-    if (!session) {
+    if(!data?.session){
 
       window.location.replace(
         "admin.html"
       );
 
       return false;
-
     }
 
 
     return true;
 
-  } catch (error) {
+  }catch(error){
 
     console.error(
       "Authentication error:",
@@ -353,8 +63,154 @@ async function checkAuthentication() {
     );
 
     return false;
+  }
+}
+
+
+/* =========================================================
+   USER
+========================================================= */
+
+async function loadUser(){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if(error || !data?.user){
+      return;
+    }
+
+
+    const email =
+      data.user.email ||
+      "Administrator";
+
+
+    let name =
+      email.split("@")[0];
+
+
+    name =
+      name
+        .replace(/[._-]+/g," ")
+        .replace(/\b\w/g,c=>c.toUpperCase());
+
+
+    const nameElement =
+      document.getElementById(
+        "userName"
+      );
+
+    const avatarElement =
+      document.getElementById(
+        "avatar"
+      );
+
+
+    if(nameElement){
+      nameElement.textContent =
+        name;
+    }
+
+
+    if(avatarElement){
+      avatarElement.textContent =
+        name.charAt(0).toUpperCase();
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "User loading error:",
+      error
+    );
 
   }
+}
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+function setupSidebar(){
+
+  const sidebar =
+    document.getElementById(
+      "sidebar"
+    );
+
+  const menuButton =
+    document.getElementById(
+      "menuButton"
+    );
+
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
+
+
+  if(!sidebar) return;
+
+
+  function open(){
+
+    sidebar.classList.add("open");
+
+    if(overlay){
+      overlay.classList.add("open");
+    }
+  }
+
+
+  function close(){
+
+    sidebar.classList.remove("open");
+
+    if(overlay){
+      overlay.classList.remove("open");
+    }
+  }
+
+
+  if(menuButton){
+
+    menuButton.addEventListener(
+      "click",
+      open
+    );
+
+  }
+
+
+  if(overlay){
+
+    overlay.addEventListener(
+      "click",
+      close
+    );
+
+  }
+
+
+  document
+    .querySelectorAll(".nav-item")
+    .forEach(link=>{
+
+      link.addEventListener(
+        "click",
+        close
+      );
+
+    });
 
 }
 
@@ -363,7 +219,7 @@ async function checkAuthentication() {
    LOGOUT
 ========================================================= */
 
-async function logoutAdmin() {
+function setupLogout(){
 
   const button =
     document.getElementById(
@@ -371,33 +227,37 @@ async function logoutAdmin() {
     );
 
 
-  if (button) {
-
-    button.disabled =
-      true;
-
-    button.innerHTML =
-      "<span>...</span><span>Signing out</span>";
-
-  }
+  if(!button) return;
 
 
-  try {
+  button.addEventListener(
+    "click",
+    async function(){
 
-    await supabaseClient.auth.signOut();
-
-  } catch (error) {
-
-    console.error(
-      "Logout error:",
-      error
-    );
-
-  }
+      button.disabled=true;
+      button.innerHTML=
+        "<span>...</span> Signing out";
 
 
-  window.location.replace(
-    "admin.html"
+      try{
+
+        await supabaseClient.auth.signOut();
+
+      }catch(error){
+
+        console.error(
+          "Logout error:",
+          error
+        );
+
+      }
+
+
+      window.location.replace(
+        "admin.html"
+      );
+
+    }
   );
 
 }
@@ -408,11 +268,9 @@ async function logoutAdmin() {
 ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-  function(event, session) {
+  function(event){
 
-    if (
-      event === "SIGNED_OUT"
-    ) {
+    if(event === "SIGNED_OUT"){
 
       window.location.replace(
         "admin.html"
@@ -430,14 +288,22 @@ supabaseClient.auth.onAuthStateChange(
 
 document.addEventListener(
   "DOMContentLoaded",
-  async function() {
+  async function(){
 
     const authenticated =
       await checkAuthentication();
 
-    if (!authenticated) return;
 
-    await loadNavigation();
+    if(!authenticated){
+      return;
+    }
+
+
+    setupSidebar();
+
+    setupLogout();
+
+    await loadUser();
 
   }
 );
