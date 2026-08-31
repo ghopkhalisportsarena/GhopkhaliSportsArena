@@ -2734,48 +2734,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             SUPABASE_ANON_KEY
         );
 
+
     const fixtureContainer =
         document.getElementById("homeFixturesList");
+
 
     if (!fixtureContainer) {
         console.error("homeFixturesList not found.");
         return;
-    }
-
-
-    /* ==========================================
-       DATE
-    ========================================== */
-
-    function getDateParts(value) {
-
-        const date = new Date(value);
-
-        if (Number.isNaN(date.getTime())) {
-            return {
-                day: "--",
-                month: "---",
-                year: "----",
-                weekday: ""
-            };
-        }
-
-        return {
-            day: String(date.getDate()).padStart(2, "0"),
-
-            month: date
-                .toLocaleDateString("en-US", {
-                    month: "short"
-                })
-                .toUpperCase(),
-
-            year: date.getFullYear(),
-
-            weekday: date
-                .toLocaleDateString("en-US", {
-                    weekday: "long"
-                })
-        };
     }
 
 
@@ -2791,7 +2757,73 @@ document.addEventListener("DOMContentLoaded", async () => {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
+
     }
+
+
+    /* ==========================================
+       DATE FORMAT
+    ========================================== */
+
+    function getDateParts(value) {
+
+        const date = new Date(value);
+
+
+        if (Number.isNaN(date.getTime())) {
+
+            return {
+                day: "--",
+                month: "---",
+                year: "----",
+                weekday: ""
+            };
+
+        }
+
+
+        return {
+
+            day:
+                String(
+                    date.getDate()
+                ).padStart(2, "0"),
+
+            month:
+                date
+                    .toLocaleDateString(
+                        "en-US",
+                        {
+                            month: "short"
+                        }
+                    )
+                    .toUpperCase(),
+
+            year:
+                date.getFullYear(),
+
+            weekday:
+                date.toLocaleDateString(
+                    "en-US",
+                    {
+                        weekday: "long"
+                    }
+                )
+
+        };
+
+    }
+
+
+    /* ==========================================
+       LOADING
+    ========================================== */
+
+    fixtureContainer.innerHTML = `
+        <div class="loading-state">
+            Loading fixtures...
+        </div>
+    `;
 
 
     /* ==========================================
@@ -2807,9 +2839,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             .from("fixtures")
             .select("*")
             .eq("published", true)
-            .order("match_date", {
-                ascending: true
-            });
+            .order(
+                "match_date",
+                {
+                    ascending: true
+                }
+            );
 
 
         if (error) {
@@ -2817,7 +2852,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
 
-        const fixtures = data || [];
+        const fixtures =
+            data || [];
 
 
         /* ======================================
@@ -2829,7 +2865,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             fixtureContainer.innerHTML = `
                 <div class="coming-soon">
 
-                    <span class="plus">+</span>
+                    <span class="plus">
+                        +
+                    </span>
 
                     <div>
 
@@ -2855,8 +2893,8 @@ document.addEventListener("DOMContentLoaded", async () => {
            RENDER FIXTURES
         ====================================== */
 
-        fixtureContainer.innerHTML = fixtures
-            .map(fixture => {
+        fixtureContainer.innerHTML =
+            fixtures.map(fixture => {
 
                 const date =
                     getDateParts(
@@ -2874,7 +2912,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     "Opponent";
 
 
-                const type =
+                const matchType =
                     fixture.type ||
                     "FIXTURE";
 
@@ -2884,11 +2922,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                     "Venue TBA";
 
 
-                let time = "";
+                let matchTime = "";
+
 
                 if (fixture.match_time) {
 
-                    time =
+                    matchTime =
                         String(
                             fixture.match_time
                         ).slice(0, 5);
@@ -2898,8 +2937,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 return `
                     <article class="fixture-card">
-
-                        <!-- DATE -->
 
                         <div class="fixture-date">
 
@@ -2922,13 +2959,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </div>
 
 
-                        <!-- MATCH INFO -->
-
                         <div class="fixture-info">
 
                             <span class="fixture-tag">
                                 ${escapeHTML(
-                                    type
+                                    matchType
                                 )}
                             </span>
 
@@ -2957,28 +2992,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 )}
 
                                 •
-                                
+
                                 ${escapeHTML(
                                     venue
                                 )}
 
                                 ${
-                                    time
-                                    ? `
-                                        •
-                                        ${escapeHTML(
-                                            time
-                                        )
-                                    `
-                                    : ""
+                                    matchTime
+                                        ? ` • ${escapeHTML(matchTime)}`
+                                        : ""
                                 }
 
                             </p>
 
                         </div>
 
-
-                        <!-- GSA LOGO -->
 
                         <div class="fixture-logo">
 
@@ -2993,8 +3021,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </article>
                 `;
 
-            })
-            .join("");
+            }).join("");
 
 
         console.log(
@@ -3010,10 +3037,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             error
         );
 
+
         fixtureContainer.innerHTML = `
             <div class="coming-soon">
 
-                <span class="plus">!</span>
+                <span class="plus">
+                    !
+                </span>
 
                 <div>
 
