@@ -10,7 +10,7 @@ content="width=device-width, initial-scale=1.0">
 
 <meta name="theme-color" content="#f5f5f7">
 
-<title>Dashboard | Ghopkhali Sports Arena</title>
+<title>Dashboard · GSA Admin</title>
 
 <link rel="stylesheet" href="admin.css">
 
@@ -22,22 +22,120 @@ content="width=device-width, initial-scale=1.0">
 
   <!-- SIDEBAR -->
 
-  <div id="navContainer"></div>
+  <aside id="sidebar" class="sidebar">
+
+    <a href="admin-dashboard.html" class="brand">
+
+      <div class="brand-logo">
+        <img src="../gsa.png" alt="GSA">
+      </div>
+
+      <div class="brand-text">
+        <strong>GHOPKHALI</strong>
+        <span>SPORTS ARENA</span>
+      </div>
+
+    </a>
+
+
+    <nav class="nav">
+
+      <div class="nav-title">
+        ADMIN
+      </div>
+
+      <a
+        href="admin-dashboard.html"
+        class="nav-item active"
+      >
+        <span>⌂</span>
+        <strong>Dashboard</strong>
+      </a>
+
+
+      <div class="nav-title">
+        WEBSITE
+      </div>
+
+      <a
+        href="../index.html"
+        target="_blank"
+        class="nav-item"
+      >
+        <span>↗</span>
+        <strong>View Website</strong>
+      </a>
+
+      <a
+        href="../gallery.html"
+        target="_blank"
+        class="nav-item"
+      >
+        <span>▧</span>
+        <strong>Gallery</strong>
+      </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <div class="user">
+
+        <div id="avatar" class="avatar">
+          A
+        </div>
+
+        <div class="user-info">
+
+          <strong id="userName">
+            Administrator
+          </strong>
+
+          <span>
+            GSA Admin
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        id="logoutButton"
+        class="logout"
+      >
+        <span>↪</span>
+        Logout
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MOBILE OVERLAY -->
+
+  <div
+    id="overlay"
+    class="overlay"
+  ></div>
 
 
   <!-- MAIN -->
 
-  <main class="admin-main">
+  <main class="main">
+
 
     <!-- TOPBAR -->
 
-    <header class="admin-topbar">
+    <header class="topbar">
 
       <div class="topbar-left">
 
         <button
-          id="sidebarToggle"
-          class="sidebar-toggle"
+          id="menuButton"
+          class="menu-button"
           aria-label="Open menu"
         >
           <span></span>
@@ -45,11 +143,12 @@ content="width=device-width, initial-scale=1.0">
           <span></span>
         </button>
 
+
         <div>
 
-          <div class="topbar-label">
+          <small>
             GSA ADMINISTRATION
-          </div>
+          </small>
 
           <h1>
             Dashboard
@@ -60,39 +159,40 @@ content="width=device-width, initial-scale=1.0">
       </div>
 
 
-      <div class="topbar-right">
-
-        <a
-          href="../index.html"
-          target="_blank"
-          class="view-site"
-        >
-          View Website ↗
-        </a>
-
-      </div>
+      <a
+        href="../index.html"
+        target="_blank"
+        class="website-button"
+      >
+        Visit Website ↗
+      </a>
 
     </header>
 
 
     <!-- CONTENT -->
 
-    <section class="admin-content">
+    <section class="content">
 
-      <div class="page-intro">
+
+      <!-- HEADER -->
+
+      <div class="welcome">
 
         <div>
 
-          <div class="page-kicker">
+          <div class="eyebrow">
             OVERVIEW
           </div>
 
           <h2>
-            Welcome back.
+            Manage Ghopkhali<br>
+            Sports Arena.
           </h2>
 
           <p>
-            Manage Ghopkhali Sports Arena from one place.
+            Everything you need to manage your club,
+            all in one place.
           </p>
 
         </div>
@@ -102,155 +202,102 @@ content="width=device-width, initial-scale=1.0">
 
       <!-- STATS -->
 
-      <div class="stats-grid">
+      <div class="stats">
 
-        <article class="stat-card">
 
-          <div class="stat-icon">
-            ◉
+        <article class="stat">
+
+          <div class="stat-top">
+            <span>NOTICES</span>
+            <i>▤</i>
           </div>
 
-          <div class="stat-label">
-            WEBSITE STATUS
-          </div>
-
-          <strong class="stat-value">
-            LIVE
+          <strong id="noticeCount">
+            0
           </strong>
 
-          <span class="stat-note">
-            Ghopkhali Sports Arena
-          </span>
+          <p>
+            Total published notices
+          </p>
 
         </article>
 
 
-        <article class="stat-card">
+        <article class="stat">
 
-          <div class="stat-icon">
-            ⚽
+          <div class="stat-top">
+            <span>FIXTURES</span>
+            <i>⚽</i>
           </div>
 
-          <div class="stat-label">
-            FOOTBALL
-          </div>
-
-          <strong class="stat-value">
-            GSA
+          <strong id="fixtureCount">
+            0
           </strong>
 
-          <span class="stat-note">
-            Sports community
-          </span>
+          <p>
+            Upcoming fixtures
+          </p>
 
         </article>
 
 
-        <article class="stat-card">
+        <article class="stat">
 
-          <div class="stat-icon">
-            ▧
+          <div class="stat-top">
+            <span>MEMBERS</span>
+            <i>◎</i>
           </div>
 
-          <div class="stat-label">
-            GALLERY
-          </div>
-
-          <strong class="stat-value">
-            ACTIVE
+          <strong id="memberCount">
+            0
           </strong>
 
-          <span class="stat-note">
-            Public gallery
-          </span>
+          <p>
+            Registered members
+          </p>
 
         </article>
 
 
-        <article class="stat-card">
+        <article class="stat">
 
-          <div class="stat-icon">
-            ✓
+          <div class="stat-top">
+            <span>APPLICATIONS</span>
+            <i>＋</i>
           </div>
 
-          <div class="stat-label">
-            ADMIN
-          </div>
-
-          <strong class="stat-value">
-            ACTIVE
+          <strong id="applicationCount">
+            0
           </strong>
 
-          <span class="stat-note">
-            Secure session
-          </span>
+          <p>
+            Pending applications
+          </p>
 
         </article>
 
       </div>
 
 
-      <!-- MAIN GRID -->
+      <!-- GRID -->
 
       <div class="dashboard-grid">
 
 
-        <!-- WELCOME CARD -->
+        <!-- ACTIVITY -->
 
-        <article class="dashboard-card dashboard-hero">
-
-          <div class="card-kicker">
-            GHOPKHALI SPORTS ARENA
-          </div>
-
-          <h3>
-            Your club.<br>
-            Your community.
-          </h3>
-
-          <p>
-            Welcome to the GSA administration panel.
-            From here you can access the public website
-            and manage your club administration.
-          </p>
-
-          <div class="hero-actions">
-
-            <a
-              href="../index.html"
-              target="_blank"
-              class="primary-button"
-            >
-              Open Website ↗
-            </a>
-
-            <a
-              href="../gallery.html"
-              target="_blank"
-              class="secondary-button"
-            >
-              View Gallery
-            </a>
-
-          </div>
-
-        </article>
-
-
-        <!-- QUICK LINKS -->
-
-        <article class="dashboard-card">
+        <section class="card activity-card">
 
           <div class="card-header">
 
             <div>
 
               <span>
-                QUICK ACCESS
+                RECENT ACTIVITY
               </span>
 
               <h3>
-                Website
+                Latest admin activities
               </h3>
 
             </div>
@@ -258,25 +305,103 @@ content="width=device-width, initial-scale=1.0">
           </div>
 
 
-          <div class="quick-list">
+          <div class="activity-list">
+
+            <div class="activity">
+
+              <div class="activity-icon">
+                ✓
+              </div>
+
+              <div>
+
+                <strong>
+                  Admin panel ready
+                </strong>
+
+                <p>
+                  System initialized successfully
+                </p>
+
+              </div>
+
+              <time>
+                Now
+              </time>
+
+            </div>
+
+
+            <div class="activity">
+
+              <div class="activity-icon">
+                ◉
+              </div>
+
+              <div>
+
+                <strong>
+                  GSA Administration
+                </strong>
+
+                <p>
+                  Welcome to the admin panel
+                </p>
+
+              </div>
+
+              <time>
+                Today
+              </time>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <section class="card">
+
+          <div class="card-header">
+
+            <div>
+
+              <span>
+                QUICK ACTIONS
+              </span>
+
+              <h3>
+                Frequently used tools
+              </h3>
+
+            </div>
+
+          </div>
+
+
+          <div class="quick-actions">
+
 
             <a
               href="../index.html"
               target="_blank"
-              class="quick-item"
+              class="quick-action"
             >
 
-              <div class="quick-icon">
+              <div class="quick-action-icon">
                 ↗
               </div>
 
               <div>
                 <strong>
-                  Main Website
+                  Visit Website
                 </strong>
 
                 <small>
-                  Open Ghopkhali Sports Arena
+                  Open public website
                 </small>
               </div>
 
@@ -288,16 +413,16 @@ content="width=device-width, initial-scale=1.0">
             <a
               href="../gallery.html"
               target="_blank"
-              class="quick-item"
+              class="quick-action"
             >
 
-              <div class="quick-icon">
+              <div class="quick-action-icon">
                 ▧
               </div>
 
               <div>
                 <strong>
-                  Gallery
+                  Open Gallery
                 </strong>
 
                 <small>
@@ -309,57 +434,41 @@ content="width=device-width, initial-scale=1.0">
 
             </a>
 
-          </div>
-
-        </article>
-
-
-        <!-- SYSTEM STATUS -->
-
-        <article class="dashboard-card">
-
-          <div class="card-header">
-
-            <div>
-
-              <span>
-                SYSTEM
-              </span>
-
-              <h3>
-                Status
-              </h3>
-
-            </div>
-
-            <div class="status-dot"></div>
 
           </div>
 
-
-          <div class="system-list">
-
-            <div>
-              <span>Authentication</span>
-              <strong>Connected</strong>
-            </div>
-
-            <div>
-              <span>Admin Panel</span>
-              <strong>Online</strong>
-            </div>
-
-            <div>
-              <span>Website</span>
-              <strong>Available</strong>
-            </div>
-
-          </div>
-
-        </article>
+        </section>
 
 
       </div>
+
+
+      <!-- FOOTER CARD -->
+
+      <section class="system-card">
+
+        <div>
+
+          <span>
+            GHOPKHALI SPORTS ARENA
+          </span>
+
+          <strong>
+            Your club. Your community.
+          </strong>
+
+        </div>
+
+        <div class="online">
+
+          <i></i>
+
+          System Online
+
+        </div>
+
+      </section>
+
 
     </section>
 
@@ -367,8 +476,6 @@ content="width=device-width, initial-scale=1.0">
 
 </div>
 
-
-<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
