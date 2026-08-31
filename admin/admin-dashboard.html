@@ -5,2039 +5,374 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <meta name="theme-color" content="#f5f5f7">
 
-<meta
-  name="description"
-  content="Ghopkhali Sports Arena Admin Dashboard"
->
+<title>Dashboard | Ghopkhali Sports Arena</title>
 
-<title>GSA Admin Dashboard | Ghopkhali Sports Arena</title>
-
-<link rel="stylesheet" href="style.css">
-
-<style>
-
-/* ==================================================
-   ADMIN DASHBOARD
-================================================== */
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: #f5f5f7;
-  color: #111;
-}
-
-
-/* ==================================================
-   LAYOUT
-================================================== */
-
-.gsa-dashboard {
-  min-height: 100vh;
-  display: flex;
-}
-
-
-/* ==================================================
-   SIDEBAR
-================================================== */
-
-.gsa-sidebar {
-  width: 260px;
-  min-height: 100vh;
-  background: #111;
-  color: #fff;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-}
-
-.gsa-sidebar-brand {
-  padding: 28px 24px;
-  border-bottom: 1px solid #2d2d2d;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.gsa-sidebar-logo {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-}
-
-.gsa-sidebar-logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.gsa-sidebar-brand-text strong {
-  display: block;
-  font-size: 14px;
-  letter-spacing: 1px;
-}
-
-.gsa-sidebar-brand-text span {
-  display: block;
-  font-size: 9px;
-  color: #aaa;
-  margin-top: 4px;
-  letter-spacing: 1px;
-}
-
-
-/* ==================================================
-   NAVIGATION
-================================================== */
-
-.gsa-sidebar-nav {
-  padding: 20px 14px;
-  flex: 1;
-  overflow-y: auto;
-}
-
-.gsa-nav-label {
-  font-size: 9px;
-  color: #777;
-  letter-spacing: 1.5px;
-  font-weight: 800;
-  padding: 0 12px;
-  margin: 8px 0 10px;
-}
-
-.gsa-nav-link {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 12px;
-  margin-bottom: 3px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: #bbb;
-  text-decoration: none;
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-  text-align: left;
-}
-
-.gsa-nav-link:hover {
-  background: #1f1f1f;
-  color: #fff;
-}
-
-.gsa-nav-link.active {
-  background: #fff;
-  color: #111;
-}
-
-.gsa-nav-icon {
-  width: 22px;
-  text-align: center;
-  font-size: 15px;
-}
-
-
-/* ==================================================
-   SIDEBAR FOOTER
-================================================== */
-
-.gsa-sidebar-footer {
-  border-top: 1px solid #2d2d2d;
-  padding: 18px;
-}
-
-.gsa-admin-user {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.gsa-admin-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #fff;
-  color: #111;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 14px;
-}
-
-.gsa-admin-user-info {
-  min-width: 0;
-}
-
-.gsa-admin-user-info strong {
-  display: block;
-  font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.gsa-admin-user-info span {
-  display: block;
-  font-size: 9px;
-  color: #888;
-  margin-top: 3px;
-}
-
-.gsa-logout-button {
-  width: 100%;
-  border: 1px solid #333;
-  background: transparent;
-  color: #bbb;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.gsa-logout-button:hover {
-  color: #fff;
-  border-color: #777;
-}
-
-
-/* ==================================================
-   MAIN
-================================================== */
-
-.gsa-main {
-  margin-left: 260px;
-  width: calc(100% - 260px);
-  min-height: 100vh;
-}
-
-
-/* ==================================================
-   TOPBAR
-================================================== */
-
-.gsa-topbar {
-  height: 76px;
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  position: sticky;
-  top: 0;
-  z-index: 500;
-}
-
-.gsa-topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.gsa-mobile-menu {
-  display: none;
-  border: 0;
-  background: transparent;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.gsa-page-label {
-  font-size: 10px;
-  color: #888;
-  letter-spacing: 1.5px;
-  font-weight: 800;
-}
-
-.gsa-topbar-date {
-  font-size: 12px;
-  color: #777;
-}
-
-
-/* ==================================================
-   CONTENT
-================================================== */
-
-.gsa-content {
-  padding: 34px;
-  max-width: 1500px;
-}
-
-.gsa-page-header {
-  margin-bottom: 30px;
-}
-
-.gsa-page-header small {
-  display: block;
-  font-size: 10px;
-  color: #888;
-  letter-spacing: 1.5px;
-  font-weight: 800;
-  margin-bottom: 8px;
-}
-
-.gsa-page-header h1 {
-  margin: 0;
-  font-size: 34px;
-  line-height: 1.1;
-}
-
-.gsa-page-header p {
-  margin: 10px 0 0;
-  color: #777;
-  font-size: 14px;
-}
-
-
-/* ==================================================
-   STATS
-================================================== */
-
-.gsa-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 28px;
-}
-
-.gsa-stat-card {
-  background: #fff;
-  border: 1px solid #e5e5e5;
-  padding: 24px;
-}
-
-.gsa-stat-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 22px;
-}
-
-.gsa-stat-label {
-  font-size: 10px;
-  color: #888;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-.gsa-stat-icon {
-  font-size: 18px;
-}
-
-.gsa-stat-number {
-  font-size: 34px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.gsa-stat-card p {
-  margin: 8px 0 0;
-  font-size: 11px;
-  color: #888;
-}
-
-
-/* ==================================================
-   DASHBOARD GRID
-================================================== */
-
-.gsa-dashboard-grid {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 20px;
-}
-
-.gsa-panel {
-  background: #fff;
-  border: 1px solid #e5e5e5;
-}
-
-.gsa-panel-header {
-  padding: 20px 22px;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.gsa-panel-header h2 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.gsa-panel-header span {
-  font-size: 10px;
-  color: #888;
-}
-
-
-/* ==================================================
-   QUICK ACTIONS
-================================================== */
-
-.gsa-quick-actions {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 20px;
-}
-
-.gsa-action {
-  border: 1px solid #e5e5e5;
-  background: #fafafa;
-  padding: 18px;
-  text-decoration: none;
-  color: #111;
-  transition: 0.2s;
-}
-
-.gsa-action:hover {
-  background: #111;
-  color: #fff;
-}
-
-.gsa-action-icon {
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-
-.gsa-action strong {
-  display: block;
-  font-size: 13px;
-}
-
-.gsa-action span {
-  display: block;
-  margin-top: 5px;
-  font-size: 10px;
-  color: #888;
-}
-
-.gsa-action:hover span {
-  color: #aaa;
-}
-
-
-/* ==================================================
-   RECENT ACTIVITY
-================================================== */
-
-.gsa-activity-list {
-  padding: 8px 20px 20px;
-}
-
-.gsa-activity-item {
-  display: flex;
-  gap: 12px;
-  padding: 15px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.gsa-activity-item:last-child {
-  border-bottom: 0;
-}
-
-.gsa-activity-icon {
-  width: 34px;
-  height: 34px;
-  background: #f1f1f1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.gsa-activity-content {
-  min-width: 0;
-}
-
-.gsa-activity-content strong {
-  display: block;
-  font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.gsa-activity-content span {
-  display: block;
-  margin-top: 5px;
-  font-size: 10px;
-  color: #888;
-}
-
-
-/* ==================================================
-   WELCOME PANEL
-================================================== */
-
-.gsa-welcome {
-  margin-top: 20px;
-  padding: 26px;
-  background: #111;
-  color: #fff;
-}
-
-.gsa-welcome small {
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  color: #aaa;
-}
-
-.gsa-welcome h2 {
-  margin: 8px 0;
-  font-size: 22px;
-}
-
-.gsa-welcome p {
-  margin: 0;
-  color: #aaa;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-
-/* ==================================================
-   EMPTY
-================================================== */
-
-.gsa-empty {
-  padding: 35px 20px;
-  text-align: center;
-  color: #888;
-}
-
-.gsa-empty-icon {
-  font-size: 24px;
-  margin-bottom: 8px;
-}
-
-.gsa-empty p {
-  margin: 0;
-  font-size: 12px;
-}
-
-
-/* ==================================================
-   LOADING SCREEN
-================================================== */
-
-#gsaDashboardLoading {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  background: #f5f5f7;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.gsa-loading-box {
-  text-align: center;
-}
-
-.gsa-spinner {
-  width: 38px;
-  height: 38px;
-  border: 3px solid #ddd;
-  border-top-color: #111;
-  border-radius: 50%;
-  animation: gsaSpin 0.8s linear infinite;
-  margin: 0 auto 14px;
-}
-
-.gsa-loading-box p {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-@keyframes gsaSpin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media (max-width: 1000px) {
-
-  .gsa-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .gsa-dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-
-}
-
-
-@media (max-width: 760px) {
-
-  .gsa-sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.25s ease;
-  }
-
-  .gsa-sidebar.open {
-    transform: translateX(0);
-  }
-
-  .gsa-main {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .gsa-mobile-menu {
-    display: block;
-  }
-
-  .gsa-topbar {
-    padding: 0 18px;
-  }
-
-  .gsa-content {
-    padding: 22px 16px;
-  }
-
-  .gsa-page-header h1 {
-    font-size: 28px;
-  }
-
-}
-
-
-@media (max-width: 520px) {
-
-  .gsa-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .gsa-quick-actions {
-    grid-template-columns: 1fr;
-  }
-
-  .gsa-topbar-date {
-    display: none;
-  }
-
-}
-
-</style>
+<link rel="stylesheet" href="admin.css">
 
 </head>
 
-
 <body>
 
+<div class="admin-app">
 
-<!-- ==================================================
-     INITIAL LOADING
-================================================== -->
+  <!-- SIDEBAR -->
 
-<div id="gsaDashboardLoading">
+  <div id="navContainer"></div>
 
-  <div class="gsa-loading-box">
 
-    <div class="gsa-spinner"></div>
+  <!-- MAIN -->
 
-    <p>Loading GSA Admin...</p>
+  <main class="admin-main">
 
-  </div>
+    <!-- TOPBAR -->
 
-</div>
+    <header class="admin-topbar">
 
+      <div class="topbar-left">
 
+        <button
+          id="sidebarToggle"
+          class="sidebar-toggle"
+          aria-label="Open menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
-<div class="gsa-dashboard" id="gsaDashboard" style="display:none;">
+        <div>
 
-
-<!-- ==================================================
-     SIDEBAR
-================================================== -->
-
-<aside class="gsa-sidebar" id="gsaSidebar">
-
-
-<div class="gsa-sidebar-brand">
-
-<div class="gsa-sidebar-logo">
-
-<img
-  src="gsa.png"
-  alt="GSA"
->
-
-</div>
-
-<div class="gsa-sidebar-brand-text">
-
-<strong>GSA ADMIN</strong>
-
-<span>GHOPKHALI SPORTS ARENA</span>
-
-</div>
-
-</div>
-
-
-
-<nav class="gsa-sidebar-nav">
-
-
-<div class="gsa-nav-label">
-MAIN
-</div>
-
-
-<a
-  href="admin-dashboard.html"
-  class="gsa-nav-link active"
->
-
-<span class="gsa-nav-icon">⌂</span>
-
-<span>Dashboard</span>
-
-</a>
-
-
-
-<div class="gsa-nav-label">
-CONTENT
-</div>
-
-
-<a
-  href="notices.html"
-  class="gsa-nav-link"
->
-
-<span class="gsa-nav-icon">▤</span>
-
-<span>Notices</span>
-
-</a>
-
-
-<a
-  href="gallery.html"
-  class="gsa-nav-link"
->
-
-<span class="gsa-nav-icon">▧</span>
-
-<span>Gallery</span>
-
-</a>
-
-
-<a
-  href="fixtures.html"
-  class="gsa-nav-link"
->
-
-<span class="gsa-nav-icon">⚽</span>
-
-<span>Fixtures</span>
-
-</a>
-
-
-<a
-  href="committee.html"
-  class="gsa-nav-link"
->
-
-<span class="gsa-nav-icon">♙</span>
-
-<span>Committee</span>
-
-</a>
-
-
-<a
-  href="leadership.html"
-  class="gsa-nav-link"
->
-
-<span class="gsa-nav-icon">★</span>
-
-<span>Leadership</span>
-
-</a>
-
-
-
-<div class="gsa-nav-label">
-APPLICATIONS
-</div>
-
-
-<a
-  href="friendly-application.html"
-  class="gsa-nav-link"
->
-
-<span class="gsa-nav-icon">⚽</span>
-
-<span>Friendly Applications</span>
-
-</a>
-
-
-<a
-  href="membership-application.html"
-  class="gsa-nav-link"
->
-
-<span class="gsa-nav-icon">✦</span>
-
-<span>Membership Applications</span>
-
-</a>
-
-
-
-<div class="gsa-nav-label">
-CLUB
-</div>
-
-
-<a
-  href="rules.html"
-  class="gsa-nav-link"
->
-
-<span class="gsa-nav-icon">✓</span>
-
-<span>Rules & Regulations</span>
-
-</a>
-
-
-<a
-  href="index.html"
-  class="gsa-nav-link"
->
-
-<span class="gsa-nav-icon">↗</span>
-
-<span>View Website</span>
-
-</a>
-
-
-</nav>
-
-
-
-<!-- SIDEBAR FOOTER -->
-
-<div class="gsa-sidebar-footer">
-
-
-<div class="gsa-admin-user">
-
-<div
-  class="gsa-admin-avatar"
-  id="gsaAdminAvatar"
->
-A
-</div>
-
-
-<div class="gsa-admin-user-info">
-
-<strong id="gsaAdminName">
-Administrator
-</strong>
-
-<span>
-ADMINISTRATOR
-</span>
-
-</div>
-
-</div>
-
-
-
-<button
-  type="button"
-  id="gsaLogoutButton"
-  class="gsa-logout-button"
->
-SIGN OUT
-</button>
-
-
-</div>
-
-
-</aside>
-
-
-
-<!-- ==================================================
-     MAIN
-================================================== -->
-
-<main class="gsa-main">
-
-
-<!-- TOPBAR -->
-
-<header class="gsa-topbar">
-
-
-<div class="gsa-topbar-left">
-
-<button
-  type="button"
-  class="gsa-mobile-menu"
-  id="gsaMobileMenu"
-  aria-label="Open menu"
->
-☰
-</button>
-
-<div>
-
-<div class="gsa-page-label">
-GSA ADMINISTRATION
-</div>
-
-</div>
-
-</div>
-
-
-<div
-  class="gsa-topbar-date"
-  id="gsaCurrentDate"
->
-Loading date...
-</div>
-
-
-</header>
-
-
-
-<!-- ==================================================
-     CONTENT
-================================================== -->
-
-<div class="gsa-content">
-
-
-<div class="gsa-page-header">
-
-<small>
-ADMIN DASHBOARD
-</small>
-
-<h1>
-Welcome back.
-</h1>
-
-<p>
-Manage Ghopkhali Sports Arena from one place.
-</p>
-
-</div>
-
-
-
-<!-- ==================================================
-     STATS
-================================================== -->
-
-<section class="gsa-stats">
-
-
-<div class="gsa-stat-card">
-
-<div class="gsa-stat-top">
-
-<span class="gsa-stat-label">
-NOTICES
-</span>
-
-<span class="gsa-stat-icon">
-▤
-</span>
-
-</div>
-
-<div
-  class="gsa-stat-number"
-  id="gsaNoticeCount"
->
-—
-</div>
-
-<p>
-Total published & draft notices
-</p>
-
-</div>
-
-
-
-<div class="gsa-stat-card">
-
-<div class="gsa-stat-top">
-
-<span class="gsa-stat-label">
-GALLERY
-</span>
-
-<span class="gsa-stat-icon">
-▧
-</span>
-
-</div>
-
-<div
-  class="gsa-stat-number"
-  id="gsaGalleryCount"
->
-—
-</div>
-
-<p>
-Gallery photos
-</p>
-
-</div>
-
-
-
-<div class="gsa-stat-card">
-
-<div class="gsa-stat-top">
-
-<span class="gsa-stat-label">
-FIXTURES
-</span>
-
-<span class="gsa-stat-icon">
-⚽
-</span>
-
-</div>
-
-<div
-  class="gsa-stat-number"
-  id="gsaFixtureCount"
->
-—
-</div>
-
-<p>
-Matches & fixtures
-</p>
-
-</div>
-
-
-
-<div class="gsa-stat-card">
-
-<div class="gsa-stat-top">
-
-<span class="gsa-stat-label">
-APPLICATIONS
-</span>
-
-<span class="gsa-stat-icon">
-✦
-</span>
-
-</div>
-
-<div
-  class="gsa-stat-number"
-  id="gsaApplicationCount"
->
-—
-</div>
-
-<p>
-Club applications
-</p>
-
-</div>
-
-
-</section>
-
-
-
-<!-- ==================================================
-     DASHBOARD GRID
-================================================== -->
-
-<div class="gsa-dashboard-grid">
-
-
-<!-- QUICK ACTIONS -->
-
-<section class="gsa-panel">
-
-
-<div class="gsa-panel-header">
-
-<h2>
-Quick Actions
-</h2>
-
-<span>
-MANAGE
-</span>
-
-</div>
-
-
-<div class="gsa-quick-actions">
-
-
-<a
-  href="notices.html"
-  class="gsa-action"
->
-
-<div class="gsa-action-icon">
-▤
-</div>
-
-<strong>
-Manage Notices
-</strong>
-
-<span>
-Create, edit & delete notices
-</span>
-
-</a>
-
-
-
-<a
-  href="gallery.html"
-  class="gsa-action"
->
-
-<div class="gsa-action-icon">
-▧
-</div>
-
-<strong>
-Manage Gallery
-</strong>
-
-<span>
-Add & manage club photos
-</span>
-
-</a>
-
-
-
-<a
-  href="fixtures.html"
-  class="gsa-action"
->
-
-<div class="gsa-action-icon">
-⚽
-</div>
-
-<strong>
-Manage Fixtures
-</strong>
-
-<span>
-Matches & upcoming games
-</span>
-
-</a>
-
-
-
-<a
-  href="leadership.html"
-  class="gsa-action"
->
-
-<div class="gsa-action-icon">
-★
-</div>
-
-<strong>
-Manage Leadership
-</strong>
-
-<span>
-Club leadership members
-</span>
-
-</a>
-
-
-</div>
-
-</section>
-
-
-
-<!-- RECENT ACTIVITY -->
-
-<section class="gsa-panel">
-
-
-<div class="gsa-panel-header">
-
-<h2>
-Recent Notices
-</h2>
-
-<span>
-LATEST 5
-</span>
-
-</div>
-
-
-<div
-  class="gsa-activity-list"
-  id="gsaRecentNotices"
->
-
-<div class="gsa-empty">
-
-<div class="gsa-empty-icon">
-◌
-</div>
-
-<p>
-Loading recent notices...
-</p>
-
-</div>
-
-</div>
-
-
-</section>
-
-
-</div>
-
-
-
-<!-- WELCOME -->
-
-<section class="gsa-welcome">
-
-<small>
-GHOPKHALI SPORTS ARENA
-</small>
-
-<h2>
-Play with purpose. Move as one.
-</h2>
-
-<p>
-This administration panel is designed to manage
-the public Ghopkhali Sports Arena website.
-Each section is connected independently so that
-one module does not need to load the others.
-</p>
-
-</section>
-
-
-</div>
-
-</main>
-
-
-</div>
-
-
-
-<!-- ==================================================
-     SUPABASE
-================================================== -->
-
-<script
-src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
-
-
-
-<script>
-
-"use strict";
-
-
-/* ==================================================
-   SUPABASE
-================================================== */
-
-const SUPABASE_URL =
-  "https://cmygmswzokyrmgdnuszq.supabase.co";
-
-const SUPABASE_ANON_KEY =
-  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
-
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
-
-
-/* ==================================================
-   ELEMENTS
-================================================== */
-
-const dashboardLoading =
-  document.getElementById(
-    "gsaDashboardLoading"
-  );
-
-const dashboard =
-  document.getElementById(
-    "gsaDashboard"
-  );
-
-const sidebar =
-  document.getElementById(
-    "gsaSidebar"
-  );
-
-const mobileMenu =
-  document.getElementById(
-    "gsaMobileMenu"
-  );
-
-const logoutButton =
-  document.getElementById(
-    "gsaLogoutButton"
-  );
-
-
-/* ==================================================
-   DATE
-================================================== */
-
-function setDate() {
-
-  const element =
-    document.getElementById(
-      "gsaCurrentDate"
-    );
-
-  if (!element) return;
-
-  element.textContent =
-    new Date().toLocaleDateString(
-      "en-US",
-      {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      }
-    );
-
-}
-
-
-/* ==================================================
-   SHOW DASHBOARD
-================================================== */
-
-function showDashboard() {
-
-  if (dashboardLoading) {
-    dashboardLoading.style.display =
-      "none";
-  }
-
-  if (dashboard) {
-    dashboard.style.display =
-      "flex";
-  }
-
-}
-
-
-/* ==================================================
-   SHOW LOADING
-================================================== */
-
-function showLoading() {
-
-  if (dashboardLoading) {
-    dashboardLoading.style.display =
-      "flex";
-  }
-
-  if (dashboard) {
-    dashboard.style.display =
-      "none";
-  }
-
-}
-
-
-/* ==================================================
-   ADMIN PROFILE
-================================================== */
-
-function updateAdminProfile(user) {
-
-  if (!user) return;
-
-  const email =
-    user.email || "Administrator";
-
-  const name =
-    email.split("@")[0] ||
-    "Administrator";
-
-
-  const nameElement =
-    document.getElementById(
-      "gsaAdminName"
-    );
-
-  const avatarElement =
-    document.getElementById(
-      "gsaAdminAvatar"
-    );
-
-
-  if (nameElement) {
-
-    nameElement.textContent =
-      name;
-
-  }
-
-
-  if (avatarElement) {
-
-    avatarElement.textContent =
-      name.charAt(0).toUpperCase();
-
-  }
-
-}
-
-
-/* ==================================================
-   LOAD NOTICE COUNT
-================================================== */
-
-async function loadNoticeCount() {
-
-  const element =
-    document.getElementById(
-      "gsaNoticeCount"
-    );
-
-  if (!element) return;
-
-
-  try {
-
-    const {
-      count,
-      error
-    } =
-      await supabaseClient
-        .from("notices")
-        .select("*", {
-          count: "exact",
-          head: true
-        });
-
-
-    if (error) throw error;
-
-
-    element.textContent =
-      count ?? 0;
-
-
-  } catch (error) {
-
-    console.error(
-      "Notice count error:",
-      error
-    );
-
-    element.textContent =
-      "—";
-
-  }
-
-}
-
-
-/* ==================================================
-   GENERIC TABLE COUNT
-================================================== */
-
-async function loadTableCount(
-  table,
-  elementId
-) {
-
-  const element =
-    document.getElementById(
-      elementId
-    );
-
-  if (!element) return;
-
-
-  try {
-
-    const {
-      count,
-      error
-    } =
-      await supabaseClient
-        .from(table)
-        .select("*", {
-          count: "exact",
-          head: true
-        });
-
-
-    if (error) throw error;
-
-
-    element.textContent =
-      count ?? 0;
-
-
-  } catch (error) {
-
-    /*
-     * If a table has not been created yet,
-     * show 0 instead of breaking dashboard.
-     */
-
-    console.warn(
-      "Count unavailable:",
-      table,
-      error.message
-    );
-
-    element.textContent =
-      "0";
-
-  }
-
-}
-
-
-/* ==================================================
-   LOAD RECENT NOTICES
-================================================== */
-
-async function loadRecentNotices() {
-
-  const container =
-    document.getElementById(
-      "gsaRecentNotices"
-    );
-
-  if (!container) return;
-
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("notices")
-        .select(
-          "id,title,category,published,created_at"
-        )
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        )
-        .limit(5);
-
-
-    if (error) throw error;
-
-
-    if (
-      !data ||
-      data.length === 0
-    ) {
-
-      container.innerHTML = `
-
-        <div class="gsa-empty">
-
-          <div class="gsa-empty-icon">
-            ◌
+          <div class="topbar-label">
+            GSA ADMINISTRATION
           </div>
 
+          <h1>
+            Dashboard
+          </h1>
+
+        </div>
+
+      </div>
+
+
+      <div class="topbar-right">
+
+        <a
+          href="../index.html"
+          target="_blank"
+          class="view-site"
+        >
+          View Website ↗
+        </a>
+
+      </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+
+    <section class="admin-content">
+
+      <div class="page-intro">
+
+        <div>
+
+          <div class="page-kicker">
+            OVERVIEW
+          </div>
+
+          <h2>
+            Welcome back.
+          </h2>
+
           <p>
-            No notices yet.
+            Manage Ghopkhali Sports Arena from one place.
           </p>
 
         </div>
 
-      `;
-
-      return;
-
-    }
+      </div>
 
 
-    container.innerHTML =
-      data.map(
-        function(notice) {
+      <!-- STATS -->
 
-          const title =
-            escapeHTML(
-              notice.title ||
-              "Untitled notice"
-            );
+      <div class="stats-grid">
 
-          const category =
-            escapeHTML(
-              notice.category ||
-              "GENERAL"
-            );
+        <article class="stat-card">
 
-          const date =
-            formatDate(
-              notice.created_at
-            );
+          <div class="stat-icon">
+            ◉
+          </div>
 
+          <div class="stat-label">
+            WEBSITE STATUS
+          </div>
 
-          return `
+          <strong class="stat-value">
+            LIVE
+          </strong>
 
-            <div class="gsa-activity-item">
+          <span class="stat-note">
+            Ghopkhali Sports Arena
+          </span>
 
-              <div class="gsa-activity-icon">
-                ▤
-              </div>
-
-              <div class="gsa-activity-content">
-
-                <strong>
-                  ${title}
-                </strong>
-
-                <span>
-                  ${category} • ${date}
-                </span>
-
-              </div>
-
-            </div>
-
-          `;
-
-        }
-      ).join("");
+        </article>
 
 
-  } catch (error) {
+        <article class="stat-card">
 
-    console.error(
-      "Recent notices error:",
-      error
-    );
+          <div class="stat-icon">
+            ⚽
+          </div>
+
+          <div class="stat-label">
+            FOOTBALL
+          </div>
+
+          <strong class="stat-value">
+            GSA
+          </strong>
+
+          <span class="stat-note">
+            Sports community
+          </span>
+
+        </article>
 
 
-    container.innerHTML = `
+        <article class="stat-card">
 
-      <div class="gsa-empty">
+          <div class="stat-icon">
+            ▧
+          </div>
 
-        <div class="gsa-empty-icon">
-          ⚠
-        </div>
+          <div class="stat-label">
+            GALLERY
+          </div>
 
-        <p>
-          Could not load notices.
-        </p>
+          <strong class="stat-value">
+            ACTIVE
+          </strong>
+
+          <span class="stat-note">
+            Public gallery
+          </span>
+
+        </article>
+
+
+        <article class="stat-card">
+
+          <div class="stat-icon">
+            ✓
+          </div>
+
+          <div class="stat-label">
+            ADMIN
+          </div>
+
+          <strong class="stat-value">
+            ACTIVE
+          </strong>
+
+          <span class="stat-note">
+            Secure session
+          </span>
+
+        </article>
 
       </div>
 
-    `;
 
-  }
+      <!-- MAIN GRID -->
 
-}
+      <div class="dashboard-grid">
 
 
-/* ==================================================
-   FORMAT DATE
-================================================== */
+        <!-- WELCOME CARD -->
 
-function formatDate(value) {
+        <article class="dashboard-card dashboard-hero">
 
-  if (!value) return "";
+          <div class="card-kicker">
+            GHOPKHALI SPORTS ARENA
+          </div>
 
-  const date =
-    new Date(value);
+          <h3>
+            Your club.<br>
+            Your community.
+          </h3>
 
-  if (
-    Number.isNaN(
-      date.getTime()
-    )
-  ) {
-    return "";
-  }
+          <p>
+            Welcome to the GSA administration panel.
+            From here you can access the public website
+            and manage your club administration.
+          </p>
 
+          <div class="hero-actions">
 
-  return date.toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    }
-  );
+            <a
+              href="../index.html"
+              target="_blank"
+              class="primary-button"
+            >
+              Open Website ↗
+            </a>
 
-}
+            <a
+              href="../gallery.html"
+              target="_blank"
+              class="secondary-button"
+            >
+              View Gallery
+            </a>
 
+          </div>
 
-/* ==================================================
-   ESCAPE HTML
-================================================== */
+        </article>
 
-function escapeHTML(value) {
 
-  if (
-    value === null ||
-    value === undefined
-  ) {
-    return "";
-  }
+        <!-- QUICK LINKS -->
 
+        <article class="dashboard-card">
 
-  return String(value)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+          <div class="card-header">
 
-}
+            <div>
 
+              <span>
+                QUICK ACCESS
+              </span>
 
-/* ==================================================
-   LOAD DASHBOARD
-================================================== */
+              <h3>
+                Website
+              </h3>
 
-async function loadDashboard(
-  user
-) {
+            </div>
 
-  updateAdminProfile(user);
+          </div>
 
-  setDate();
 
-  showDashboard();
+          <div class="quick-list">
 
+            <a
+              href="../index.html"
+              target="_blank"
+              class="quick-item"
+            >
 
-  /*
-   * Each request is independent.
-   * If one table doesn't exist, the dashboard
-   * will still remain open.
-   */
+              <div class="quick-icon">
+                ↗
+              </div>
 
-  await Promise.allSettled([
+              <div>
+                <strong>
+                  Main Website
+                </strong>
 
-    loadNoticeCount(),
+                <small>
+                  Open Ghopkhali Sports Arena
+                </small>
+              </div>
 
-    loadTableCount(
-      "gallery",
-      "gsaGalleryCount"
-    ),
+              <span>›</span>
 
-    loadTableCount(
-      "fixtures",
-      "gsaFixtureCount"
-    ),
+            </a>
 
-    loadTableCount(
-      "friendly_applications",
-      "gsaApplicationCount"
-    ),
 
-    loadRecentNotices()
+            <a
+              href="../gallery.html"
+              target="_blank"
+              class="quick-item"
+            >
 
-  ]);
+              <div class="quick-icon">
+                ▧
+              </div>
 
-}
+              <div>
+                <strong>
+                  Gallery
+                </strong>
 
+                <small>
+                  View club photos
+                </small>
+              </div>
 
-/* ==================================================
-   CHECK AUTH
-================================================== */
+              <span>›</span>
 
-async function checkAuth() {
+            </a>
 
-  showLoading();
+          </div>
 
+        </article>
 
-  try {
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.auth
-        .getSession();
+        <!-- SYSTEM STATUS -->
 
+        <article class="dashboard-card">
 
-    if (error) {
+          <div class="card-header">
 
-      throw error;
+            <div>
 
-    }
+              <span>
+                SYSTEM
+              </span>
 
+              <h3>
+                Status
+              </h3>
 
-    const session =
-      data?.session;
+            </div>
 
+            <div class="status-dot"></div>
 
-    if (
-      !session ||
-      !session.user
-    ) {
+          </div>
 
-      window.location.replace(
-        "admin.html"
-      );
 
-      return;
+          <div class="system-list">
 
-    }
+            <div>
+              <span>Authentication</span>
+              <strong>Connected</strong>
+            </div>
 
+            <div>
+              <span>Admin Panel</span>
+              <strong>Online</strong>
+            </div>
 
-    await loadDashboard(
-      session.user
-    );
+            <div>
+              <span>Website</span>
+              <strong>Available</strong>
+            </div>
 
+          </div>
 
-  } catch (error) {
+        </article>
 
-    console.error(
-      "Authentication error:",
-      error
-    );
 
+      </div>
 
-    window.location.replace(
-      "admin.html"
-    );
+    </section>
 
-  }
+  </main>
 
-}
+</div>
 
 
-/* ==================================================
-   LOGOUT
-================================================== */
+<!-- SUPABASE -->
 
-async function logout() {
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  if (logoutButton) {
-
-    logoutButton.disabled =
-      true;
-
-    logoutButton.textContent =
-      "SIGNING OUT...";
-
-  }
-
-
-  try {
-
-    await supabaseClient.auth.signOut();
-
-  } catch (error) {
-
-    console.error(
-      "Logout error:",
-      error
-    );
-
-  }
-
-
-  window.location.replace(
-    "admin.html"
-  );
-
-}
-
-
-/* ==================================================
-   MOBILE SIDEBAR
-================================================== */
-
-if (mobileMenu) {
-
-  mobileMenu.addEventListener(
-    "click",
-    function() {
-
-      if (sidebar) {
-
-        sidebar.classList.toggle(
-          "open"
-        );
-
-      }
-
-    }
-  );
-
-}
-
-
-/* ==================================================
-   CLOSE MOBILE SIDEBAR
-================================================== */
-
-document
-  .querySelectorAll(
-    ".gsa-nav-link"
-  )
-  .forEach(
-    function(link) {
-
-      link.addEventListener(
-        "click",
-        function() {
-
-          if (
-            window.innerWidth <= 760 &&
-            sidebar
-          ) {
-
-            sidebar.classList.remove(
-              "open"
-            );
-
-          }
-
-        }
-      );
-
-    }
-  );
-
-
-/* ==================================================
-   LOGOUT EVENT
-================================================== */
-
-if (logoutButton) {
-
-  logoutButton.addEventListener(
-    "click",
-    logout
-  );
-
-}
-
-
-/* ==================================================
-   AUTH STATE
-================================================== */
-
-supabaseClient.auth.onAuthStateChange(
-  function(event) {
-
-    if (
-      event === "SIGNED_OUT"
-    ) {
-
-      window.location.replace(
-        "admin.html"
-      );
-
-    }
-
-  }
-);
-
-
-/* ==================================================
-   START
-================================================== */
-
-checkAuth();
-
-</script>
-
+<script src="admin.js"></script>
 
 </body>
-
 </html>
