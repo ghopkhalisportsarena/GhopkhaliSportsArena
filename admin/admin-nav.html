@@ -3,10 +3,17 @@
      Ghopkhali Sports Arena
 ========================================================= -->
 
-<aside id="adminSidebar" class="admin-sidebar">
+<aside
+  id="adminSidebar"
+  class="admin-sidebar"
+  aria-label="Admin navigation"
+>
 
   <!-- BRAND -->
-  <a href="admin-dashboard.html" class="admin-brand">
+  <a
+    href="admin-dashboard.html"
+    class="admin-brand"
+  >
 
     <div class="admin-brand-logo">
       <img
@@ -17,7 +24,7 @@
 
     <div class="admin-brand-text">
       <strong>GHOPKHALI</strong>
-      <span>SPORTS ARENA · ADMIN</span>
+      <span>SPORTS ARENA • ADMIN</span>
     </div>
 
   </a>
@@ -26,6 +33,7 @@
   <!-- NAVIGATION -->
   <nav class="admin-nav">
 
+    <!-- OVERVIEW -->
     <div class="admin-nav-section">
 
       <div class="admin-nav-title">
@@ -38,12 +46,15 @@
         data-page="dashboard"
       >
         <span class="admin-nav-icon">⌂</span>
-        <span class="admin-nav-label">Dashboard</span>
+        <span class="admin-nav-label">
+          Dashboard
+        </span>
       </a>
 
     </div>
 
 
+    <!-- QUICK ACCESS -->
     <div class="admin-nav-section">
 
       <div class="admin-nav-title">
@@ -53,22 +64,31 @@
       <a
         href="../index.html"
         class="sidebar-link"
+        target="_blank"
+        rel="noopener"
       >
         <span class="admin-nav-icon">↗</span>
-        <span class="admin-nav-label">View Website</span>
+        <span class="admin-nav-label">
+          View Website
+        </span>
       </a>
 
       <a
         href="../gallery.html"
         class="sidebar-link"
+        target="_blank"
+        rel="noopener"
       >
         <span class="admin-nav-icon">▧</span>
-        <span class="admin-nav-label">Website Gallery</span>
+        <span class="admin-nav-label">
+          Public Gallery
+        </span>
       </a>
 
     </div>
 
 
+    <!-- ACCOUNT -->
     <div class="admin-nav-section">
 
       <div class="admin-nav-title">
@@ -78,10 +98,12 @@
       <a
         href="admin.html"
         class="sidebar-link"
-        data-page="admin"
+        data-page="login"
       >
         <span class="admin-nav-icon">●</span>
-        <span class="admin-nav-label">Admin Home</span>
+        <span class="admin-nav-label">
+          Admin Login
+        </span>
       </a>
 
     </div>
@@ -89,7 +111,7 @@
   </nav>
 
 
-  <!-- FOOTER -->
+  <!-- SIDEBAR FOOTER -->
   <div class="admin-sidebar-footer">
 
     <div class="admin-user-mini">
@@ -107,7 +129,7 @@
           Administrator
         </strong>
 
-        <span id="adminEmail">
+        <span>
           GSA Admin
         </span>
 
@@ -116,18 +138,16 @@
     </div>
 
 
+    <!-- LOGOUT -->
     <button
       type="button"
       id="logoutButton"
       class="nav-logout"
     >
-
       <span class="admin-nav-icon">↪</span>
-
       <span class="admin-nav-label">
         Logout
       </span>
-
     </button>
 
   </div>
@@ -136,8 +156,8 @@
 
 
 <!-- MOBILE OVERLAY -->
-
 <div
   id="adminSidebarOverlay"
   class="admin-sidebar-overlay"
-></div>
+  aria-hidden="true"
+</div>
