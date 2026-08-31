@@ -1,45 +1,25 @@
 /* =========================================================
    GSA ADMIN SYSTEM
-   Ghopkhali Sports Arena
-   Supabase Admin Panel
-
-   Features:
-   - Dashboard
-   - Notices
-   - Add Notice
-   - Edit Notice
-   - Delete Notice
-   - Publish / Unpublish
-   - Important Notice
-   - Notice Count
-   - Mobile Sidebar
-   - Logout
+   Supabase
+   Dashboard + Notices + Applications
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    "use strict";
-
 
     /* =====================================================
        SUPABASE
     ===================================================== */
 
     if (typeof window.supabase === "undefined") {
-
         console.error("Supabase library is not loaded.");
-
         return;
     }
-
 
     const SUPABASE_URL =
         "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-
     const SUPABASE_ANON_KEY =
         "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
-
 
     const supabaseClient =
         window.supabase.createClient(
@@ -48,17 +28,52 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-    console.log("GSA Admin: Supabase initialized.");
-
-
-
     /* =====================================================
-       CURRENT PAGE
+       COMMON HELPERS
     ===================================================== */
 
-    const currentPage =
+    const page =
         document.body.dataset.page || "";
 
+
+    const escapeHTML = value => {
+
+        if (value === null || value === undefined) {
+            return "";
+        }
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    };
+
+
+    const formatDate = value => {
+
+        if (!value) {
+            return "No date";
+        }
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return "No date";
+        }
+
+        return date.toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+    };
 
 
     /* =====================================================
@@ -68,77 +83,54 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar =
         document.getElementById("adminSidebar");
 
-
-    const sidebarToggle =
-        document.getElementById("sidebarToggle");
-
-
-    const sidebarOverlay =
+    const overlay =
         document.getElementById("adminSidebarOverlay");
+
+    const toggle =
+        document.getElementById("sidebarToggle");
 
 
     function openSidebar() {
 
-        if (!sidebar) return;
-
-        sidebar.classList.add("open");
-
-        if (sidebarOverlay) {
-
-            sidebarOverlay.classList.add("active");
-
+        if (sidebar) {
+            sidebar.classList.add("active");
         }
 
+        if (overlay) {
+            overlay.classList.add("active");
+        }
+
+        document.body.classList.add("sidebar-open");
     }
 
 
     function closeSidebar() {
 
-        if (!sidebar) return;
-
-        sidebar.classList.remove("open");
-
-        if (sidebarOverlay) {
-
-            sidebarOverlay.classList.remove("active");
-
+        if (sidebar) {
+            sidebar.classList.remove("active");
         }
 
+        if (overlay) {
+            overlay.classList.remove("active");
+        }
+
+        document.body.classList.remove("sidebar-open");
     }
 
 
-    if (sidebarToggle) {
-
-        sidebarToggle.addEventListener(
+    if (toggle) {
+        toggle.addEventListener(
             "click",
-            () => {
-
-                if (
-                    sidebar &&
-                    sidebar.classList.contains("open")
-                ) {
-
-                    closeSidebar();
-
-                } else {
-
-                    openSidebar();
-
-                }
-
-            }
+            openSidebar
         );
-
     }
 
 
-    if (sidebarOverlay) {
-
-        sidebarOverlay.addEventListener(
+    if (overlay) {
+        overlay.addEventListener(
             "click",
             closeSidebar
         );
-
     }
 
 
@@ -152,43 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
         });
-
-
-
-    /* =====================================================
-       ADMIN USER
-    ===================================================== */
-
-    const adminName =
-        document.getElementById("adminName");
-
-
-    const adminAvatar =
-        document.getElementById("adminAvatar");
-
-
-    if (adminName) {
-
-        adminName.textContent =
-            localStorage.getItem("gsaAdminName") ||
-            "Administrator";
-
-    }
-
-
-    if (adminAvatar) {
-
-        const name =
-            adminName
-                ? adminName.textContent.trim()
-                : "Administrator";
-
-
-        adminAvatar.textContent =
-            name.charAt(0).toUpperCase();
-
-    }
-
 
 
     /* =====================================================
@@ -205,18 +160,21 @@ document.addEventListener("DOMContentLoaded", () => {
             "click",
             async () => {
 
-                const confirmLogout =
+                const confirmed =
                     confirm(
                         "Are you sure you want to logout?"
                     );
 
-
-                if (!confirmLogout) return;
-
+                if (!confirmed) {
+                    return;
+                }
 
                 try {
 
                     await supabaseClient.auth.signOut();
+
+                    window.location.href =
+                        "../index.html";
 
                 } catch (error) {
 
@@ -225,21 +183,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         error
                     );
 
+                    window.location.href =
+                        "../index.html";
+
                 }
-
-
-                localStorage.removeItem(
-                    "gsaAdminName"
-                );
-
-
-                localStorage.removeItem(
-                    "gsaAdminLoggedIn"
-                );
-
-
-                window.location.href =
-                    "admin.html";
 
             }
         );
@@ -247,308 +194,224 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-
     /* =====================================================
-       NOTICE SYSTEM
+       NOTICE MANAGEMENT
     ===================================================== */
 
-    const noticeFormPanel =
-        document.getElementById("noticeFormPanel");
+    if (page === "notices") {
 
-
-    const newNoticeButton =
-        document.getElementById("newNoticeButton");
-
-
-    const cancelNoticeButton =
-        document.getElementById("cancelNoticeButton");
-
-
-    const cancelNoticeButton2 =
-        document.getElementById("cancelNoticeButton2");
-
-
-    const noticeForm =
-        document.getElementById("noticeForm");
-
-
-    const noticeId =
-        document.getElementById("noticeId");
-
-
-    const noticeTitle =
-        document.getElementById("noticeTitle");
-
-
-    const noticeDate =
-        document.getElementById("noticeDate");
-
-
-    const noticeTag =
-        document.getElementById("noticeTag");
-
-
-    const noticeDescription =
-        document.getElementById("noticeDescription");
-
-
-    const noticeImportant =
-        document.getElementById("noticeImportant");
-
-
-    const noticePublished =
-        document.getElementById("noticePublished");
-
-
-    const saveNoticeButton =
-        document.getElementById("saveNoticeButton");
-
-
-    const formTitle =
-        document.getElementById("formTitle");
-
-
-    const noticeList =
-        document.getElementById("noticeList");
-
-
-    const totalNoticeCount =
-        document.getElementById(
-            "totalNoticeCount"
-        );
-
-
-    const dashboardNoticeCount =
-        document.getElementById(
-            "noticeCount"
-        );
-
-
-
-    /* =====================================================
-       SHOW NOTICE FORM
-    ===================================================== */
-
-    function showNoticeForm() {
-
-        if (!noticeFormPanel) return;
-
-        noticeFormPanel.hidden = false;
-
-        noticeFormPanel.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+        initNoticeManagement();
 
     }
 
 
+    async function initNoticeManagement() {
 
-    /* =====================================================
-       HIDE NOTICE FORM
-    ===================================================== */
+        const noticeList =
+            document.getElementById("noticeList");
 
-    function hideNoticeForm() {
+        const noticeForm =
+            document.getElementById("noticeForm");
 
-        if (!noticeFormPanel) return;
+        const modal =
+            document.getElementById("noticeModal");
 
-        noticeFormPanel.hidden = true;
+        const newButton =
+            document.getElementById("newNoticeButton");
 
-        resetNoticeForm();
+        const closeButton =
+            document.getElementById("closeNoticeModal");
 
-    }
+        const cancelButton =
+            document.getElementById("cancelNoticeButton");
 
 
+        let notices = [];
 
-    /* =====================================================
-       RESET NOTICE FORM
-    ===================================================== */
 
-    function resetNoticeForm() {
+        /* -------------------------------------------------
+           MODAL
+        ------------------------------------------------- */
 
-        if (noticeForm) {
+        function openNoticeModal(notice = null) {
+
+            if (!modal || !noticeForm) {
+                return;
+            }
 
             noticeForm.reset();
 
+            const id =
+                document.getElementById("noticeId");
+
+            const title =
+                document.getElementById("noticeTitle");
+
+            const content =
+                document.getElementById("noticeContent");
+
+            const published =
+                document.getElementById("noticePublished");
+
+            const important =
+                document.getElementById("noticeImportant");
+
+            const modalTitle =
+                document.getElementById("noticeModalTitle");
+
+
+            if (notice) {
+
+                modalTitle.textContent =
+                    "Edit Notice";
+
+                id.value =
+                    notice.id || "";
+
+                title.value =
+                    notice.title || "";
+
+                content.value =
+                    notice.content || "";
+
+                published.checked =
+                    notice.published === true;
+
+                important.checked =
+                    notice.important === true;
+
+            } else {
+
+                modalTitle.textContent =
+                    "New Notice";
+
+                id.value = "";
+
+                published.checked = true;
+
+                important.checked = false;
+
+            }
+
+
+            modal.classList.add("active");
+
+            modal.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+
+            setTimeout(() => {
+
+                title.focus();
+
+            }, 100);
+
         }
 
 
-        if (noticeId) {
+        function closeNoticeModal() {
 
-            noticeId.value = "";
+            if (!modal) {
+                return;
+            }
 
-        }
+            modal.classList.remove("active");
 
-
-        if (formTitle) {
-
-            formTitle.textContent =
-                "Create Notice";
-
-        }
-
-
-        if (saveNoticeButton) {
-
-            saveNoticeButton.textContent =
-                "Publish Notice ↗";
+            modal.setAttribute(
+                "aria-hidden",
+                "true"
+            );
 
         }
 
 
-        if (noticePublished) {
+        if (newButton) {
 
-            noticePublished.checked = true;
-
-        }
-
-
-        if (noticeImportant) {
-
-            noticeImportant.checked = false;
+            newButton.addEventListener(
+                "click",
+                () => openNoticeModal()
+            );
 
         }
 
 
-        if (noticeDate) {
+        if (closeButton) {
 
-            const today =
-                new Date()
-                    .toISOString()
-                    .split("T")[0];
-
-
-            noticeDate.value = today;
+            closeButton.addEventListener(
+                "click",
+                closeNoticeModal
+            );
 
         }
 
-    }
+
+        if (cancelButton) {
+
+            cancelButton.addEventListener(
+                "click",
+                closeNoticeModal
+            );
+
+        }
 
 
+        if (modal) {
 
-    /* =====================================================
-       NEW NOTICE
-    ===================================================== */
+            modal.addEventListener(
+                "click",
+                event => {
 
-    if (newNoticeButton) {
+                    if (
+                        event.target === modal
+                    ) {
 
-        newNoticeButton.addEventListener(
-            "click",
-            () => {
+                        closeNoticeModal();
 
-                resetNoticeForm();
+                    }
 
-                showNoticeForm();
+                }
+            );
+
+        }
+
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Escape" &&
+                    modal &&
+                    modal.classList.contains("active")
+                ) {
+
+                    closeNoticeModal();
+
+                }
 
             }
         );
 
-    }
 
+        /* -------------------------------------------------
+           LOAD NOTICES
+        ------------------------------------------------- */
 
+        async function loadNotices() {
 
-    /* =====================================================
-       CANCEL NOTICE
-    ===================================================== */
-
-    if (cancelNoticeButton) {
-
-        cancelNoticeButton.addEventListener(
-            "click",
-            hideNoticeForm
-        );
-
-    }
-
-
-    if (cancelNoticeButton2) {
-
-        cancelNoticeButton2.addEventListener(
-            "click",
-            hideNoticeForm
-        );
-
-    }
-
-
-
-    /* =====================================================
-       DATE FORMAT
-    ===================================================== */
-
-    function formatDate(dateValue) {
-
-        if (!dateValue) {
-
-            return "No date";
-
-        }
-
-
-        const date =
-            new Date(dateValue);
-
-
-        if (Number.isNaN(date.getTime())) {
-
-            return dateValue;
-
-        }
-
-
-        return date.toLocaleDateString(
-            "en-GB",
-            {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
+            if (!noticeList) {
+                return;
             }
-        );
 
-    }
+            noticeList.innerHTML = `
+                <div class="notice-loading">
+                    <div class="loading-spinner"></div>
+                    <span>Loading notices...</span>
+                </div>
+            `;
 
-
-
-    /* =====================================================
-       ESCAPE HTML
-    ===================================================== */
-
-    function escapeHTML(value) {
-
-        if (value === null ||
-            value === undefined) {
-
-            return "";
-
-        }
-
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-
-
-
-    /* =====================================================
-       LOAD NOTICES
-    ===================================================== */
-
-    async function loadNotices() {
-
-        if (!noticeList &&
-            !dashboardNoticeCount) {
-
-            return;
-
-        }
-
-
-        try {
 
             const {
                 data,
@@ -571,724 +434,1160 @@ document.addEventListener("DOMContentLoaded", () => {
                     error
                 );
 
-
-                showNoticeError(
-                    error.message
-                );
-
+                noticeList.innerHTML = `
+                    <div class="notice-empty">
+                        <div class="notice-empty-icon">!</div>
+                        <h3>Unable to load notices</h3>
+                        <p>
+                            Please check your Supabase table and RLS policies.
+                        </p>
+                    </div>
+                `;
 
                 return;
 
             }
 
 
-            const notices =
-                data || [];
+            notices = data || [];
+
+            renderNotices();
+
+            updateNoticeSummary();
+
+            updateDashboardNoticeCount();
+
+        }
 
 
-            updateNoticeCount(
-                notices
-            );
+        /* -------------------------------------------------
+           RENDER
+        ------------------------------------------------- */
+
+        function renderNotices() {
+
+            if (!noticeList) {
+                return;
+            }
 
 
-            if (noticeList) {
-
-                renderNoticeList(
-                    notices
+            const count =
+                document.getElementById(
+                    "noticeListCount"
                 );
+
+
+            if (count) {
+
+                count.textContent =
+                    `${notices.length} ${
+                        notices.length === 1
+                            ? "notice"
+                            : "notices"
+                    }`;
 
             }
 
-        } catch (error) {
 
-            console.error(
-                "Unexpected notice error:",
-                error
-            );
+            if (!notices.length) {
+
+                noticeList.innerHTML = `
+                    <div class="notice-empty">
+
+                        <div class="notice-empty-icon">
+                            ▤
+                        </div>
+
+                        <h3>
+                            No notices yet
+                        </h3>
+
+                        <p>
+                            Create your first Ghopkhali Sports Arena notice.
+                        </p>
+
+                    </div>
+                `;
+
+                return;
+
+            }
 
 
-            showNoticeError(
-                "Unable to load notices."
-            );
+            noticeList.innerHTML =
+                notices.map(notice => {
+
+                    const isPublished =
+                        notice.published === true;
+
+                    const isImportant =
+                        notice.important === true;
+
+
+                    return `
+                        <article
+                            class="notice-management-card"
+                            data-notice-id="${escapeHTML(notice.id)}">
+
+                            <div class="notice-card-top">
+
+                                <div>
+
+                                    <div class="notice-card-meta">
+
+                                        ${
+                                            isPublished
+                                                ? `
+                                                    <span class="notice-badge published">
+                                                        ● Published
+                                                    </span>
+                                                  `
+                                                : `
+                                                    <span class="notice-badge draft">
+                                                        ◐ Draft
+                                                    </span>
+                                                  `
+                                        }
+
+                                        ${
+                                            isImportant
+                                                ? `
+                                                    <span class="notice-badge important">
+                                                        ★ Important
+                                                    </span>
+                                                  `
+                                                : ""
+                                        }
+
+                                    </div>
+
+                                    <div class="notice-card-date">
+                                        ${formatDate(notice.created_at)}
+                                    </div>
+
+                                    <h3 class="notice-card-title">
+                                        ${escapeHTML(notice.title)}
+                                    </h3>
+
+                                    <div class="notice-card-content">
+                                        ${escapeHTML(notice.content)}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="notice-card-actions">
+
+                                <button
+                                    type="button"
+                                    class="notice-action-button"
+                                    data-action="edit"
+                                    data-id="${escapeHTML(notice.id)}">
+
+                                    Edit
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="notice-action-button publish"
+                                    data-action="publish"
+                                    data-id="${escapeHTML(notice.id)}">
+
+                                    ${
+                                        isPublished
+                                            ? "Unpublish"
+                                            : "Publish"
+                                    }
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="notice-action-button ${
+                                        isImportant
+                                            ? "important-active"
+                                            : ""
+                                    }"
+                                    data-action="important"
+                                    data-id="${escapeHTML(notice.id)}">
+
+                                    ${
+                                        isImportant
+                                            ? "Remove Important"
+                                            : "Important"
+                                    }
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="notice-action-button delete"
+                                    data-action="delete"
+                                    data-id="${escapeHTML(notice.id)}">
+
+                                    Delete
+
+                                </button>
+
+                            </div>
+
+                        </article>
+                    `;
+
+                }).join("");
 
         }
 
-    }
 
+        /* -------------------------------------------------
+           SUMMARY
+        ------------------------------------------------- */
 
+        function updateNoticeSummary() {
 
-    /* =====================================================
-       NOTICE COUNT
-    ===================================================== */
-
-    function updateNoticeCount(
-        notices
-    ) {
-
-        const publishedCount =
-            notices.filter(
-                notice =>
-                    notice.published === true
-            ).length;
-
-
-        if (totalNoticeCount) {
-
-            totalNoticeCount.textContent =
+            const total =
                 notices.length;
 
-        }
-
-
-        if (dashboardNoticeCount) {
-
-            dashboardNoticeCount.textContent =
-                publishedCount;
-
-        }
-
-    }
-
-
-
-    /* =====================================================
-       RENDER NOTICE LIST
-    ===================================================== */
-
-    function renderNoticeList(
-        notices
-    ) {
-
-        if (!noticeList) return;
-
-
-        if (!notices.length) {
-
-            noticeList.innerHTML = `
-
-                <div class="notice-loading">
-
-                    <strong>
-                        No notices yet
-                    </strong>
-
-                    <p>
-                        Click "+ New Notice"
-                        to publish your first notice.
-                    </p>
-
-                </div>
-
-            `;
-
-            return;
-
-        }
-
-
-        noticeList.innerHTML =
-            notices.map(
-                notice =>
-                    createNoticeHTML(
-                        notice
-                    )
-            ).join("");
-
-
-        attachNoticeActions();
-
-    }
-
-
-
-    /* =====================================================
-       NOTICE HTML
-    ===================================================== */
-
-    function createNoticeHTML(
-        notice
-    ) {
-
-        const id =
-            escapeHTML(notice.id);
-
-
-        const title =
-            escapeHTML(notice.title);
-
-
-        const description =
-            escapeHTML(
-                notice.description
-            );
-
-
-        const tag =
-            escapeHTML(
-                notice.tag || "NOTICE"
-            );
-
-
-        const date =
-            formatDate(
-                notice.date
-            );
-
-
-        const published =
-            notice.published === true;
-
-
-        const important =
-            notice.important === true;
-
-
-        const statusClass =
-            published
-                ? "published"
-                : "draft";
-
-
-        const statusText =
-            published
-                ? "PUBLISHED"
-                : "DRAFT";
-
-
-        return `
-
-        <article
-            class="admin-notice-card
-            ${important ? "important" : ""}"
-            data-notice-id="${id}"
-        >
-
-            <div class="admin-notice-top">
-
-                <div class="admin-notice-date">
-
-                    ${date}
-
-                </div>
-
-
-                <div class="admin-notice-badges">
-
-                    <span class="notice-tag">
-                        ${tag}
-                    </span>
-
-
-                    ${
-                        important
-                            ? `
-                            <span
-                                class="important-badge"
-                            >
-                                IMPORTANT
-                            </span>
-                            `
-                            : ""
-                    }
-
-
-                    <span
-                        class="notice-status ${statusClass}"
-                    >
-                        ${statusText}
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="admin-notice-content">
-
-                <h3>
-                    ${title}
-                </h3>
-
-
-                <p>
-                    ${description}
-                </p>
-
-            </div>
-
-
-            <div class="admin-notice-actions">
-
-
-                <button
-                    type="button"
-                    class="notice-action edit"
-                    data-action="edit"
-                    data-id="${id}"
-                >
-                    Edit
-                </button>
-
-
-                <button
-                    type="button"
-                    class="notice-action toggle"
-                    data-action="toggle"
-                    data-id="${id}"
-                >
-                    ${
-                        published
-                            ? "Unpublish"
-                            : "Publish"
-                    }
-                </button>
-
-
-                <button
-                    type="button"
-                    class="notice-action delete"
-                    data-action="delete"
-                    data-id="${id}"
-                >
-                    Delete
-                </button>
-
-
-            </div>
-
-        </article>
-
-        `;
-
-    }
-
-
-
-    /* =====================================================
-       NOTICE ACTION EVENTS
-    ===================================================== */
-
-    function attachNoticeActions() {
-
-        document
-            .querySelectorAll(
-                ".notice-action"
-            )
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    async () => {
-
-                        const action =
-                            button.dataset.action;
-
-
-                        const id =
-                            button.dataset.id;
-
-
-                        if (!id) return;
-
-
-                        if (action === "edit") {
-
-                            await editNotice(id);
-
-                        }
-
-
-                        if (action === "toggle") {
-
-                            await toggleNotice(id);
-
-                        }
-
-
-                        if (action === "delete") {
-
-                            await deleteNotice(id);
-
-                        }
-
-                    }
+            const published =
+                notices.filter(
+                    notice =>
+                        notice.published === true
+                ).length;
+
+            const drafts =
+                notices.filter(
+                    notice =>
+                        notice.published !== true
+                ).length;
+
+            const important =
+                notices.filter(
+                    notice =>
+                        notice.important === true
+                ).length;
+
+
+            const totalElement =
+                document.getElementById(
+                    "noticeTotalCount"
                 );
 
-            });
+            const publishedElement =
+                document.getElementById(
+                    "noticePublishedCount"
+                );
 
-    }
+            const draftElement =
+                document.getElementById(
+                    "noticeDraftCount"
+                );
+
+            const importantElement =
+                document.getElementById(
+                    "noticeImportantCount"
+                );
 
 
+            if (totalElement) {
+                totalElement.textContent = total;
+            }
 
-    /* =====================================================
-       EDIT NOTICE
-    ===================================================== */
+            if (publishedElement) {
+                publishedElement.textContent =
+                    published;
+            }
 
-    async function editNotice(
-        id
-    ) {
+            if (draftElement) {
+                draftElement.textContent =
+                    drafts;
+            }
 
-        try {
+            if (importantElement) {
+                importantElement.textContent =
+                    important;
+            }
+
+        }
+
+
+        /* -------------------------------------------------
+           DASHBOARD COUNT
+        ------------------------------------------------- */
+
+        async function updateDashboardNoticeCount() {
+
+            const countElement =
+                document.getElementById(
+                    "noticeCount"
+                );
+
+            if (!countElement) {
+                return;
+            }
+
 
             const {
-                data,
+                count,
                 error
             } = await supabaseClient
                 .from("notices")
-                .select("*")
-                .eq("id", id)
-                .single();
-
-
-            if (error) {
-
-                console.error(
-                    "Edit notice error:",
-                    error
+                .select(
+                    "id",
+                    {
+                        count: "exact",
+                        head: true
+                    }
                 );
 
 
-                alert(
-                    "Unable to load this notice."
-                );
+            if (!error) {
 
-
-                return;
+                countElement.textContent =
+                    count || 0;
 
             }
 
-
-            if (!data) {
-
-                alert(
-                    "Notice not found."
-                );
+        }
 
 
-                return;
+        /* -------------------------------------------------
+           ADD / EDIT
+        ------------------------------------------------- */
 
-            }
+        if (noticeForm) {
 
+            noticeForm.addEventListener(
+                "submit",
+                async event => {
 
-            if (noticeId) {
-
-                noticeId.value =
-                    data.id;
-
-            }
-
-
-            if (noticeTitle) {
-
-                noticeTitle.value =
-                    data.title || "";
-
-            }
+                    event.preventDefault();
 
 
-            if (noticeDate) {
-
-                noticeDate.value =
-                    data.date || "";
-
-            }
+                    const saveButton =
+                        document.getElementById(
+                            "saveNoticeButton"
+                        );
 
 
-            if (noticeTag) {
-
-                noticeTag.value =
-                    data.tag || "NOTICE";
-
-            }
+                    const id =
+                        document.getElementById(
+                            "noticeId"
+                        ).value.trim();
 
 
-            if (noticeDescription) {
-
-                noticeDescription.value =
-                    data.description || "";
-
-            }
+                    const title =
+                        document.getElementById(
+                            "noticeTitle"
+                        ).value.trim();
 
 
-            if (noticeImportant) {
-
-                noticeImportant.checked =
-                    data.important === true;
-
-            }
+                    const content =
+                        document.getElementById(
+                            "noticeContent"
+                        ).value.trim();
 
 
-            if (noticePublished) {
-
-                noticePublished.checked =
-                    data.published === true;
-
-            }
+                    const published =
+                        document.getElementById(
+                            "noticePublished"
+                        ).checked;
 
 
-            if (formTitle) {
-
-                formTitle.textContent =
-                    "Edit Notice";
-
-            }
+                    const important =
+                        document.getElementById(
+                            "noticeImportant"
+                        ).checked;
 
 
-            if (saveNoticeButton) {
+                    if (!title) {
 
-                saveNoticeButton.textContent =
-                    "Update Notice ↗";
+                        alert(
+                            "Please enter a notice title."
+                        );
 
-            }
+                        return;
+
+                    }
 
 
-            showNoticeForm();
+                    if (!content) {
 
-        } catch (error) {
+                        alert(
+                            "Please write the notice content."
+                        );
 
-            console.error(error);
+                        return;
 
-            alert(
-                "Something went wrong."
+                    }
+
+
+                    const originalText =
+                        saveButton
+                            ? saveButton.textContent
+                            : "Save Notice";
+
+
+                    try {
+
+                        if (saveButton) {
+
+                            saveButton.disabled =
+                                true;
+
+                            saveButton.textContent =
+                                id
+                                    ? "Updating..."
+                                    : "Saving...";
+
+                        }
+
+
+                        let response;
+
+
+                        if (id) {
+
+                            response =
+                                await supabaseClient
+                                    .from("notices")
+                                    .update({
+                                        title,
+                                        content,
+                                        published,
+                                        important
+                                    })
+                                    .eq(
+                                        "id",
+                                        id
+                                    )
+                                    .select()
+                                    .single();
+
+                        } else {
+
+                            response =
+                                await supabaseClient
+                                    .from("notices")
+                                    .insert([
+                                        {
+                                            title,
+                                            content,
+                                            published,
+                                            important
+                                        }
+                                    ])
+                                    .select()
+                                    .single();
+
+                        }
+
+
+                        if (response.error) {
+
+                            throw response.error;
+
+                        }
+
+
+                        alert(
+                            id
+                                ? "Notice updated successfully."
+                                : "Notice created successfully."
+                        );
+
+
+                        closeNoticeModal();
+
+                        await loadNotices();
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Notice save error:",
+                            error
+                        );
+
+                        alert(
+                            "Notice could not be saved.\n\n" +
+                            (
+                                error.message ||
+                                "Please try again."
+                            )
+                        );
+
+
+                    } finally {
+
+                        if (saveButton) {
+
+                            saveButton.disabled =
+                                false;
+
+                            saveButton.textContent =
+                                originalText;
+
+                        }
+
+                    }
+
+                }
             );
+
+        }
+
+
+        /* -------------------------------------------------
+           EDIT / PUBLISH / IMPORTANT / DELETE
+        ------------------------------------------------- */
+
+        if (noticeList) {
+
+            noticeList.addEventListener(
+                "click",
+                async event => {
+
+                    const button =
+                        event.target.closest(
+                            "[data-action]"
+                        );
+
+
+                    if (!button) {
+                        return;
+                    }
+
+
+                    const action =
+                        button.dataset.action;
+
+
+                    const id =
+                        button.dataset.id;
+
+
+                    const notice =
+                        notices.find(
+                            item =>
+                                String(item.id) ===
+                                String(id)
+                        );
+
+
+                    if (!notice) {
+                        return;
+                    }
+
+
+                    /* EDIT */
+
+                    if (action === "edit") {
+
+                        openNoticeModal(notice);
+
+                        return;
+
+                    }
+
+
+                    /* PUBLISH / UNPUBLISH */
+
+                    if (action === "publish") {
+
+                        const newValue =
+                            notice.published !== true;
+
+
+                        const confirmed =
+                            confirm(
+                                newValue
+                                    ? "Publish this notice?"
+                                    : "Unpublish this notice?"
+                            );
+
+
+                        if (!confirmed) {
+                            return;
+                        }
+
+
+                        button.disabled = true;
+
+
+                        const {
+                            error
+                        } = await supabaseClient
+                            .from("notices")
+                            .update({
+                                published:
+                                    newValue
+                            })
+                            .eq(
+                                "id",
+                                id
+                            );
+
+
+                        button.disabled = false;
+
+
+                        if (error) {
+
+                            console.error(
+                                error
+                            );
+
+                            alert(
+                                "Could not update notice status."
+                            );
+
+                            return;
+
+                        }
+
+
+                        await loadNotices();
+
+                        return;
+
+                    }
+
+
+                    /* IMPORTANT */
+
+                    if (action === "important") {
+
+                        const newValue =
+                            notice.important !== true;
+
+
+                        const {
+                            error
+                        } = await supabaseClient
+                            .from("notices")
+                            .update({
+                                important:
+                                    newValue
+                            })
+                            .eq(
+                                "id",
+                                id
+                            );
+
+
+                        if (error) {
+
+                            console.error(
+                                error
+                            );
+
+                            alert(
+                                "Could not update Important status."
+                            );
+
+                            return;
+
+                        }
+
+
+                        await loadNotices();
+
+                        return;
+
+                    }
+
+
+                    /* DELETE */
+
+                    if (action === "delete") {
+
+                        const confirmed =
+                            confirm(
+                                `Delete "${notice.title}"?\n\nThis action cannot be undone.`
+                            );
+
+
+                        if (!confirmed) {
+                            return;
+                        }
+
+
+                        button.disabled = true;
+
+
+                        const {
+                            error
+                        } = await supabaseClient
+                            .from("notices")
+                            .delete()
+                            .eq(
+                                "id",
+                                id
+                            );
+
+
+                        button.disabled = false;
+
+
+                        if (error) {
+
+                            console.error(
+                                "Delete error:",
+                                error
+                            );
+
+                            alert(
+                                "Notice could not be deleted.\n\n" +
+                                (
+                                    error.message ||
+                                    "Please try again."
+                                )
+                            );
+
+                            return;
+
+                        }
+
+
+                        await loadNotices();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* -------------------------------------------------
+           INITIAL LOAD
+        ------------------------------------------------- */
+
+        await loadNotices();
+
+    }
+
+
+    /* =====================================================
+       DASHBOARD NOTICE COUNT
+    ===================================================== */
+
+    if (page === "dashboard") {
+
+        loadDashboardCounts();
+
+    }
+
+
+    async function loadDashboardCounts() {
+
+        const noticeCount =
+            document.getElementById(
+                "noticeCount"
+            );
+
+
+        if (noticeCount) {
+
+            const {
+                count,
+                error
+            } = await supabaseClient
+                .from("notices")
+                .select(
+                    "id",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                );
+
+
+            if (!error) {
+
+                noticeCount.textContent =
+                    count || 0;
+
+            }
+
+        }
+
+
+        const memberCount =
+            document.getElementById(
+                "memberCount"
+            );
+
+
+        if (memberCount) {
+
+            const {
+                count,
+                error
+            } = await supabaseClient
+                .from("membership_applications")
+                .select(
+                    "id",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                );
+
+
+            if (!error) {
+
+                memberCount.textContent =
+                    count || 0;
+
+            }
+
+        }
+
+
+        const applicationCount =
+            document.getElementById(
+                "applicationCount"
+            );
+
+
+        if (applicationCount) {
+
+            const membership =
+                await supabaseClient
+                    .from(
+                        "membership_applications"
+                    )
+                    .select(
+                        "id",
+                        {
+                            count: "exact",
+                            head: true
+                        }
+                    );
+
+
+            const friendly =
+                await supabaseClient
+                    .from(
+                        "friendly_applications"
+                    )
+                    .select(
+                        "id",
+                        {
+                            count: "exact",
+                            head: true
+                        }
+                    );
+
+
+            const membershipCount =
+                membership.count || 0;
+
+            const friendlyCount =
+                friendly.count || 0;
+
+
+            applicationCount.textContent =
+                membershipCount +
+                friendlyCount;
+
+        }
+
+
+        const fixtureCount =
+            document.getElementById(
+                "fixtureCount"
+            );
+
+
+        if (fixtureCount) {
+
+            const {
+                count,
+                error
+            } = await supabaseClient
+                .from("fixtures")
+                .select(
+                    "id",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                );
+
+
+            if (!error) {
+
+                fixtureCount.textContent =
+                    count || 0;
+
+            }
 
         }
 
     }
 
 
-
     /* =====================================================
-       SAVE NOTICE
+       FRIENDLY MATCH APPLICATION
     ===================================================== */
 
-    if (noticeForm) {
+    const friendlyModal =
+        document.getElementById(
+            "friendlyModal"
+        );
 
-        noticeForm.addEventListener(
+
+    const friendlyForm =
+        friendlyModal
+            ? friendlyModal.querySelector(
+                "form.application-form"
+            )
+            : null;
+
+
+    if (friendlyForm) {
+
+        friendlyForm.addEventListener(
             "submit",
             async event => {
 
                 event.preventDefault();
 
 
-                const id =
-                    noticeId
-                        ? noticeId.value.trim()
-                        : "";
-
-
-                const title =
-                    noticeTitle
-                        ? noticeTitle.value.trim()
-                        : "";
-
-
-                const date =
-                    noticeDate
-                        ? noticeDate.value
-                        : "";
-
-
-                const tag =
-                    noticeTag
-                        ? noticeTag.value
-                        : "NOTICE";
-
-
-                const description =
-                    noticeDescription
-                        ? noticeDescription.value.trim()
-                        : "";
-
-
-                const important =
-                    noticeImportant
-                        ? noticeImportant.checked
-                        : false;
-
-
-                const published =
-                    noticePublished
-                        ? noticePublished.checked
-                        : true;
-
-
-                if (!title) {
-
-                    alert(
-                        "Please enter a notice title."
+                const submitButton =
+                    friendlyForm.querySelector(
+                        ".form-submit"
                     );
 
 
-                    return;
-
-                }
-
-
-                if (!date) {
-
-                    alert(
-                        "Please select a notice date."
-                    );
-
-
-                    return;
-
-                }
-
-
-                if (!description) {
-
-                    alert(
-                        "Please write the notice details."
-                    );
-
-
-                    return;
-
-                }
+                const originalText =
+                    submitButton
+                        ? submitButton.innerHTML
+                        : "Submit Application ↗";
 
 
                 try {
 
-                    if (saveNoticeButton) {
+                    if (submitButton) {
 
-                        saveNoticeButton.disabled =
+                        submitButton.disabled =
                             true;
 
-
-                        saveNoticeButton.textContent =
-                            "Saving...";
-
-                    }
-
-
-                    let result;
-
-
-                    /* =================================
-                       UPDATE
-                    ================================= */
-
-                    if (id) {
-
-                        result =
-                            await supabaseClient
-                                .from("notices")
-                                .update({
-
-                                    title:
-                                        title,
-
-                                    description:
-                                        description,
-
-                                    date:
-                                        date,
-
-                                    tag:
-                                        tag,
-
-                                    important:
-                                        important,
-
-                                    published:
-                                        published
-
-                                })
-                                .eq(
-                                    "id",
-                                    id
-                                )
-                                .select()
-                                .single();
+                        submitButton.innerHTML =
+                            "Submitting...";
 
                     }
 
 
-                    /* =================================
-                       INSERT
-                    ================================= */
-
-                    else {
-
-                        result =
-                            await supabaseClient
-                                .from("notices")
-                                .insert([{
-
-                                    title:
-                                        title,
-
-                                    description:
-                                        description,
-
-                                    date:
-                                        date,
-
-                                    tag:
-                                        tag,
-
-                                    important:
-                                        important,
-
-                                    published:
-                                        published
-
-                                }])
-                                .select()
-                                .single();
-
-                    }
-
-
-                    if (result.error) {
-
-                        console.error(
-                            "Save notice error:",
-                            result.error
+                    const formData =
+                        new FormData(
+                            friendlyForm
                         );
 
 
-                        throw result.error;
+                    const teamName =
+                        formData
+                            .get(
+                                "Team or Club Name"
+                            )
+                            ?.trim() || "";
+
+
+                    const contactPerson =
+                        formData
+                            .get(
+                                "Representative Name"
+                            )
+                            ?.trim() || "";
+
+
+                    const phone =
+                        formData
+                            .get(
+                                "Phone Number"
+                            )
+                            ?.trim() || "";
+
+
+                    const email =
+                        formData
+                            .get(
+                                "Email"
+                            )
+                            ?.trim() || "";
+
+
+                    const preferredDate =
+                        formData.get(
+                            "Preferred Date"
+                        ) || null;
+
+
+                    const preferredTime =
+                        formData.get(
+                            "Preferred Time"
+                        ) || null;
+
+
+                    const sport =
+                        formData.get(
+                            "Sport"
+                        ) || "";
+
+
+                    const players =
+                        formData.get(
+                            "Number of Players"
+                        ) || "";
+
+
+                    const additionalMessage =
+                        formData
+                            .get(
+                                "Additional Message"
+                            )
+                            ?.trim() || "";
+
+
+                    const messageParts = [];
+
+
+                    if (sport) {
+
+                        messageParts.push(
+                            `Sport: ${sport}`
+                        );
 
                     }
 
 
-                    alert(
-                        id
-                            ? "Notice updated successfully."
-                            : "Notice published successfully."
+                    if (players) {
+
+                        messageParts.push(
+                            `Number of Players: ${players}`
+                        );
+
+                    }
+
+
+                    if (additionalMessage) {
+
+                        messageParts.push(
+                            `Additional Message: ${additionalMessage}`
+                        );
+
+                    }
+
+
+                    const message =
+                        messageParts.join(
+                            "\n"
+                        );
+
+
+                    const {
+                        data,
+                        error
+                    } = await supabaseClient
+                        .from(
+                            "friendly_applications"
+                        )
+                        .insert([
+                            {
+                                team_name:
+                                    teamName,
+
+                                contact_person:
+                                    contactPerson,
+
+                                phone:
+                                    phone,
+
+                                email:
+                                    email ||
+                                    null,
+
+                                preferred_date:
+                                    preferredDate,
+
+                                preferred_time:
+                                    preferredTime ||
+                                    null,
+
+                                venue:
+                                    null,
+
+                                message:
+                                    message ||
+                                    null,
+
+                                status:
+                                    "pending"
+                            }
+                        ])
+                        .select()
+                        .single();
+
+
+                    if (error) {
+                        throw error;
+                    }
+
+
+                    console.log(
+                        "Friendly application submitted:",
+                        data
                     );
 
 
-                    hideNoticeForm();
+                    alert(
+                        "Your Friendly Match application has been submitted successfully."
+                    );
 
 
-                    await loadNotices();
+                    friendlyForm.reset();
+
+
+                    const modal =
+                        friendlyModal;
+
+                    if (modal) {
+
+                        modal.classList.remove(
+                            "active"
+                        );
+
+                    }
+
 
                 } catch (error) {
 
-                    console.error(error);
-
+                    console.error(
+                        error
+                    );
 
                     alert(
-                        "Notice could not be saved.\n\n" +
-                        error.message
+                        "Application submission failed.\n\nPlease try again later."
                     );
+
 
                 } finally {
 
-                    if (saveNoticeButton) {
+                    if (submitButton) {
 
-                        saveNoticeButton.disabled =
+                        submitButton.disabled =
                             false;
 
-
-                        saveNoticeButton.textContent =
-                            id
-                                ? "Update Notice ↗"
-                                : "Publish Notice ↗";
+                        submitButton.innerHTML =
+                            originalText;
 
                     }
 
@@ -1300,409 +1599,690 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-
     /* =====================================================
-       PUBLISH / UNPUBLISH
+       MEMBERSHIP APPLICATION
     ===================================================== */
 
-    async function toggleNotice(
-        id
-    ) {
-
-        try {
-
-            const {
-                data,
-                error
-            } = await supabaseClient
-                .from("notices")
-                .select("published")
-                .eq("id", id)
-                .single();
-
-
-            if (error) {
-
-                throw error;
-
-            }
-
-
-            const newStatus =
-                data.published !== true;
-
-
-            const {
-                error: updateError
-            } = await supabaseClient
-                .from("notices")
-                .update({
-
-                    published:
-                        newStatus
-
-                })
-                .eq(
-                    "id",
-                    id
-                );
-
-
-            if (updateError) {
-
-                throw updateError;
-
-            }
-
-
-            alert(
-                newStatus
-                    ? "Notice published."
-                    : "Notice unpublished."
-            );
-
-
-            await loadNotices();
-
-        } catch (error) {
-
-            console.error(
-                "Publish toggle error:",
-                error
-            );
-
-
-            alert(
-                "Unable to change notice status."
-            );
-
-        }
-
-    }
-
-
-
-    /* =====================================================
-       DELETE NOTICE
-    ===================================================== */
-
-    async function deleteNotice(
-        id
-    ) {
-
-        const confirmed =
-            confirm(
-                "Are you sure you want to delete this notice?\n\nThis action cannot be undone."
-            );
-
-
-        if (!confirmed) return;
-
-
-        try {
-
-            const {
-                error
-            } = await supabaseClient
-                .from("notices")
-                .delete()
-                .eq(
-                    "id",
-                    id
-                );
-
-
-            if (error) {
-
-                throw error;
-
-            }
-
-
-            alert(
-                "Notice deleted successfully."
-            );
-
-
-            await loadNotices();
-
-        } catch (error) {
-
-            console.error(
-                "Delete notice error:",
-                error
-            );
-
-
-            alert(
-                "Unable to delete this notice.\n\n" +
-                error.message
-            );
-
-        }
-
-    }
-
-
-
-    /* =====================================================
-       NOTICE ERROR
-    ===================================================== */
-
-    function showNoticeError(
-        message
-    ) {
-
-        if (!noticeList) return;
-
-
-        noticeList.innerHTML = `
-
-            <div class="notice-loading">
-
-                <strong>
-                    Unable to load notices
-                </strong>
-
-                <p>
-                    ${escapeHTML(message)}
-                </p>
-
-            </div>
-
-        `;
-
-    }
-
-
-
-    /* =====================================================
-       DASHBOARD COUNTS
-    ===================================================== */
-
-    async function loadDashboardCounts() {
-
-        const memberCount =
-            document.getElementById(
-                "memberCount"
-            );
-
-
-        const applicationCount =
-            document.getElementById(
-                "applicationCount"
-            );
-
-
-        const fixtureCount =
-            document.getElementById(
-                "fixtureCount"
-            );
-
-
-        /* ================================================
-           MEMBERS
-        ================================================ */
-
-        if (memberCount) {
-
-            try {
-
-                const {
-                    count,
-                    error
-                } = await supabaseClient
-                    .from(
-                        "membership_applications"
-                    )
-                    .select(
-                        "*",
-                        {
-                            count: "exact",
-                            head: true
-                        }
-                    );
-
-
-                if (!error) {
-
-                    memberCount.textContent =
-                        count || 0;
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Member count error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-
-        /* ================================================
-           FRIENDLY APPLICATIONS
-        ================================================ */
-
-        if (applicationCount) {
-
-            try {
-
-                const {
-                    count: friendlyCount,
-                    error: friendlyError
-                } = await supabaseClient
-                    .from(
-                        "friendly_applications"
-                    )
-                    .select(
-                        "*",
-                        {
-                            count: "exact",
-                            head: true
-                        }
-                    );
-
-
-                const {
-                    count: membershipCount,
-                    error: membershipError
-                } = await supabaseClient
-                    .from(
-                        "membership_applications"
-                    )
-                    .select(
-                        "*",
-                        {
-                            count: "exact",
-                            head: true
-                        }
-                    );
-
-
-                if (
-                    !friendlyError &&
-                    !membershipError
-                ) {
-
-                    applicationCount.textContent =
-                        (friendlyCount || 0) +
-                        (membershipCount || 0);
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Application count error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-
-        /* ================================================
-           FIXTURES
-        ================================================ */
-
-        if (fixtureCount) {
-
-            try {
-
-                const {
-                    count,
-                    error
-                } = await supabaseClient
-                    .from("fixtures")
-                    .select(
-                        "*",
-                        {
-                            count: "exact",
-                            head: true
-                        }
-                    );
-
-
-                if (!error) {
-
-                    fixtureCount.textContent =
-                        count || 0;
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Fixture count error:",
-                    error
-                );
-
-            }
-
-        }
-
-    }
-
-
-
-    /* =====================================================
-       INITIAL LOAD
-    ===================================================== */
-
-    if (
-        currentPage === "notices" ||
-        noticeList
-    ) {
-
-        loadNotices();
-
-    }
-
-
-    if (
-        currentPage === "dashboard" ||
+    const membershipModal =
         document.getElementById(
-            "memberCount"
-        )
-    ) {
+            "membershipModal"
+        );
 
-        loadDashboardCounts();
 
-        loadNotices();
+    const membershipForm =
+        membershipModal
+            ? membershipModal.querySelector(
+                "form.application-form"
+            )
+            : null;
+
+
+    if (membershipForm) {
+
+        membershipForm.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                const submitButton =
+                    membershipForm.querySelector(
+                        ".form-submit"
+                    );
+
+
+                const originalText =
+                    submitButton
+                        ? submitButton.innerHTML
+                        : "সদস্যপদ আবেদন জমা দিন ↗";
+
+
+                try {
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            true;
+
+                        submitButton.innerHTML =
+                            "জমা হচ্ছে...";
+
+                    }
+
+
+                    const formData =
+                        new FormData(
+                            membershipForm
+                        );
+
+
+                    const fullNameBangla =
+                        formData
+                            .get(
+                                "পূর্ণ নাম বাংলায়"
+                            )
+                            ?.trim() || "";
+
+
+                    const fullNameEnglish =
+                        formData
+                            .get(
+                                "Full Name English"
+                            )
+                            ?.trim() || "";
+
+
+                    const fatherName =
+                        formData
+                            .get(
+                                "Father Name"
+                            )
+                            ?.trim() || "";
+
+
+                    const motherName =
+                        formData
+                            .get(
+                                "Mother Name"
+                            )
+                            ?.trim() || "";
+
+
+                    const dateOfBirth =
+                        formData.get(
+                            "Date of Birth"
+                        ) || null;
+
+
+                    const profession =
+                        formData
+                            .get(
+                                "Profession"
+                            )
+                            ?.trim() || "";
+
+
+                    const nid =
+                        formData
+                            .get(
+                                "NID or Birth Registration"
+                            )
+                            ?.trim() || "";
+
+
+                    const currentAddress =
+                        formData
+                            .get(
+                                "Current Address"
+                            )
+                            ?.trim() || "";
+
+
+                    const permanentAddress =
+                        formData
+                            .get(
+                                "Permanent Address"
+                            )
+                            ?.trim() || "";
+
+
+                    const mobile =
+                        formData
+                            .get(
+                                "Mobile Number"
+                            )
+                            ?.trim() || "";
+
+
+                    const alternativeMobile =
+                        formData
+                            .get(
+                                "Alternative Mobile Number"
+                            )
+                            ?.trim() || "";
+
+
+                    const selectedSports =
+                        formData.getAll(
+                            "Sports[]"
+                        );
+
+
+                    const otherSports =
+                        formData
+                            .get(
+                                "Other Sports"
+                            )
+                            ?.trim() || "";
+
+
+                    const mainSkill =
+                        formData
+                            .get(
+                                "Main Sports Skill"
+                            )
+                            ?.trim() || "";
+
+
+                    const previousExperience =
+                        formData
+                            .get(
+                                "Previous Club Experience"
+                            )
+                            ?.trim() || "";
+
+
+                    const emergencyName =
+                        formData
+                            .get(
+                                "Emergency Contact Name"
+                            )
+                            ?.trim() || "";
+
+
+                    const emergencyRelationship =
+                        formData
+                            .get(
+                                "Emergency Contact Relationship"
+                            )
+                            ?.trim() || "";
+
+
+                    const emergencyMobile =
+                        formData
+                            .get(
+                                "Emergency Contact Mobile"
+                            )
+                            ?.trim() || "";
+
+
+                    const experienceParts = [];
+
+
+                    if (
+                        selectedSports.length
+                    ) {
+
+                        experienceParts.push(
+                            `Interested Sports: ${selectedSports.join(", ")}`
+                        );
+
+                    }
+
+
+                    if (otherSports) {
+
+                        experienceParts.push(
+                            `Other Sports: ${otherSports}`
+                        );
+
+                    }
+
+
+                    if (mainSkill) {
+
+                        experienceParts.push(
+                            `Main Sports Skill: ${mainSkill}`
+                        );
+
+                    }
+
+
+                    if (previousExperience) {
+
+                        experienceParts.push(
+                            `Previous Club Experience: ${previousExperience}`
+                        );
+
+                    }
+
+
+                    const experience =
+                        experienceParts.join(
+                            "\n"
+                        );
+
+
+                    const messageParts = [];
+
+
+                    if (fullNameBangla) {
+
+                        messageParts.push(
+                            `Full Name (Bangla): ${fullNameBangla}`
+                        );
+
+                    }
+
+
+                    if (fatherName) {
+
+                        messageParts.push(
+                            `Father's Name: ${fatherName}`
+                        );
+
+                    }
+
+
+                    if (motherName) {
+
+                        messageParts.push(
+                            `Mother's Name: ${motherName}`
+                        );
+
+                    }
+
+
+                    if (profession) {
+
+                        messageParts.push(
+                            `Profession: ${profession}`
+                        );
+
+                    }
+
+
+                    if (nid) {
+
+                        messageParts.push(
+                            `NID/Birth Registration: ${nid}`
+                        );
+
+                    }
+
+
+                    if (currentAddress) {
+
+                        messageParts.push(
+                            `Current Address: ${currentAddress}`
+                        );
+
+                    }
+
+
+                    if (permanentAddress) {
+
+                        messageParts.push(
+                            `Permanent Address: ${permanentAddress}`
+                        );
+
+                    }
+
+
+                    if (alternativeMobile) {
+
+                        messageParts.push(
+                            `Alternative Mobile: ${alternativeMobile}`
+                        );
+
+                    }
+
+
+                    if (emergencyName) {
+
+                        messageParts.push(
+                            `Emergency Contact: ${emergencyName}`
+                        );
+
+                    }
+
+
+                    if (
+                        emergencyRelationship
+                    ) {
+
+                        messageParts.push(
+                            `Emergency Relationship: ${emergencyRelationship}`
+                        );
+
+                    }
+
+
+                    if (emergencyMobile) {
+
+                        messageParts.push(
+                            `Emergency Mobile: ${emergencyMobile}`
+                        );
+
+                    }
+
+
+                    const message =
+                        messageParts.join(
+                            "\n"
+                        );
+
+
+                    const {
+                        data,
+                        error
+                    } = await supabaseClient
+                        .from(
+                            "membership_applications"
+                        )
+                        .insert([
+                            {
+                                full_name:
+                                    fullNameEnglish ||
+                                    fullNameBangla,
+
+                                date_of_birth:
+                                    dateOfBirth,
+
+                                phone:
+                                    mobile,
+
+                                email:
+                                    null,
+
+                                address:
+                                    currentAddress,
+
+                                occupation:
+                                    profession,
+
+                                preferred_position:
+                                    mainSkill ||
+                                    null,
+
+                                experience:
+                                    experience ||
+                                    null,
+
+                                message:
+                                    message ||
+                                    null,
+
+                                photo_url:
+                                    null,
+
+                                status:
+                                    "pending",
+
+                                admin_note:
+                                    null
+                            }
+                        ])
+                        .select()
+                        .single();
+
+
+                    if (error) {
+                        throw error;
+                    }
+
+
+                    console.log(
+                        "Membership application submitted:",
+                        data
+                    );
+
+
+                    alert(
+                        "সদস্যপদ আবেদন সফলভাবে জমা হয়েছে।\n\nক্লাব কর্তৃপক্ষ আপনার আবেদন পর্যালোচনা করবে।"
+                    );
+
+
+                    membershipForm.reset();
+
+
+                    if (membershipModal) {
+
+                        membershipModal.classList.remove(
+                            "active"
+                        );
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+                    alert(
+                        "আবেদন জমা দেওয়া যায়নি।\n\nদয়া করে আবার চেষ্টা করুন।"
+                    );
+
+
+                } finally {
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            false;
+
+                        submitButton.innerHTML =
+                            originalText;
+
+                    }
+
+                }
+
+            }
+        );
 
     }
 
 
     /* =====================================================
-       CURRENT YEAR
+       MODAL OPEN / CLOSE FOR OTHER PAGES
     ===================================================== */
+
+    const friendlyModalElement =
+        document.getElementById(
+            "friendlyModal"
+        );
+
+    const membershipModalElement =
+        document.getElementById(
+            "membershipModal"
+        );
+
+    const rulesModalElement =
+        document.getElementById(
+            "rulesModal"
+        );
+
+
+    function openModal(modal) {
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.add(
+            "active"
+        );
+
+        modal.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        document.body.classList.add(
+            "modal-open"
+        );
+
+    }
+
+
+    function closeModal(modal) {
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove(
+            "active"
+        );
+
+        modal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        document.body.classList.remove(
+            "modal-open"
+        );
+
+    }
+
 
     document
         .querySelectorAll(
-            "[data-current-year]"
+            "[data-open-friendly]"
         )
-        .forEach(element => {
+        .forEach(button => {
 
-            element.textContent =
-                new Date().getFullYear();
+            button.addEventListener(
+                "click",
+                () =>
+                    openModal(
+                        friendlyModalElement
+                    )
+            );
 
         });
 
 
+    document
+        .querySelectorAll(
+            "[data-open-membership]"
+        )
+        .forEach(button => {
 
-    /* =====================================================
-       CONSOLE
-    ===================================================== */
+            button.addEventListener(
+                "click",
+                () =>
+                    openModal(
+                        membershipModalElement
+                    )
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "[data-open-rules]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () =>
+                    openModal(
+                        rulesModalElement
+                    )
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "[data-close-friendly]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () =>
+                    closeModal(
+                        friendlyModalElement
+                    )
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "[data-close-membership]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () =>
+                    closeModal(
+                        membershipModalElement
+                    )
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "[data-close-rules]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () =>
+                    closeModal(
+                        rulesModalElement
+                    )
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(".modal")
+        .forEach(modal => {
+
+            modal.addEventListener(
+                "click",
+                event => {
+
+                    if (
+                        event.target === modal
+                    ) {
+
+                        closeModal(modal);
+
+                    }
+
+                }
+            );
+
+        });
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key !== "Escape"
+            ) {
+                return;
+            }
+
+            closeModal(
+                friendlyModalElement
+            );
+
+            closeModal(
+                membershipModalElement
+            );
+
+            closeModal(
+                rulesModalElement
+            );
+
+        }
+    );
+
 
     console.log(
-        "GSA Admin System initialized successfully."
+        "GSA Admin System initialized."
     );
 
 });
