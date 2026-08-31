@@ -2715,364 +2715,324 @@ document.addEventListener("DOMContentLoaded", async () => {
 </script>
 
 <script>
+document.addEventListener("DOMContentLoaded", async () => {
 
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
+    if (!window.supabase) {
+        console.error("Supabase library not loaded.");
+        return;
+    }
 
-        if (!window.supabase) {
-            console.error(
-                "Supabase library not loaded."
-            );
-            return;
-        }
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
 
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-        const SUPABASE_URL =
-            "https://cmygmswzokyrmgdnuszq.supabase.co";
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
 
+    const fixtureContainer =
+        document.getElementById("homeFixturesList");
 
-        const SUPABASE_ANON_KEY =
-            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
-
-
-        const supabaseClient =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_ANON_KEY
-            );
-
-
-        const fixtureContainer =
-            document.getElementById(
-                "homeFixturesList"
-            );
+    if (!fixtureContainer) {
+        console.error("homeFixturesList not found.");
+        return;
+    }
 
 
-        if (!fixtureContainer) {
+    /* ==========================================
+       DATE
+    ========================================== */
 
-            console.error(
-                "homeFixturesList not found."
-            );
+    function getDateParts(value) {
 
-            return;
+        const date = new Date(value);
 
-        }
-
-
-        function escapeHTML(value) {
-
-            return String(value ?? "")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-
-        }
-
-
-        function getDateParts(value) {
-
-            const date =
-                new Date(value);
-
-            if (
-                Number.isNaN(
-                    date.getTime()
-                )
-            ) {
-
-                return {
-                    day: "--",
-                    month: "---",
-                    year: "----"
-                };
-
-            }
-
-
+        if (Number.isNaN(date.getTime())) {
             return {
-
-                day:
-                    date
-                        .getDate()
-                        .toString()
-                        .padStart(
-                            2,
-                            "0"
-                        ),
-
-                month:
-                    date
-                        .toLocaleDateString(
-                            "en-US",
-                            {
-                                month: "short"
-                            }
-                        )
-                        .toUpperCase(),
-
-                year:
-                    date.getFullYear()
-
+                day: "--",
+                month: "---",
+                year: "----",
+                weekday: ""
             };
-
         }
 
+        return {
+            day: String(date.getDate()).padStart(2, "0"),
 
-        function getDayName(value) {
+            month: date
+                .toLocaleDateString("en-US", {
+                    month: "short"
+                })
+                .toUpperCase(),
 
-            const date =
-                new Date(value);
+            year: date.getFullYear(),
 
-            if (
-                Number.isNaN(
-                    date.getTime()
-                )
-            ) {
-                return "";
-            }
-
-            return date.toLocaleDateString(
-                "en-US",
-                {
+            weekday: date
+                .toLocaleDateString("en-US", {
                     weekday: "long"
-                }
-            );
+                })
+        };
+    }
 
+
+    /* ==========================================
+       ESCAPE HTML
+    ========================================== */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    /* ==========================================
+       LOAD FIXTURES
+    ========================================== */
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("fixtures")
+            .select("*")
+            .eq("published", true)
+            .order("match_date", {
+                ascending: true
+            });
+
+
+        if (error) {
+            throw error;
         }
 
 
-        try {
+        const fixtures = data || [];
 
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from("fixtures")
-                    .select("*")
-                    .eq(
-                        "published",
-                        true
-                    )
-                    .order(
-                        "match_date",
-                        {
-                            ascending: true
-                        }
+
+        /* ======================================
+           NO FIXTURE
+        ====================================== */
+
+        if (!fixtures.length) {
+
+            fixtureContainer.innerHTML = `
+                <div class="coming-soon">
+
+                    <span class="plus">+</span>
+
+                    <div>
+
+                        <strong>
+                            More fixtures coming soon
+                        </strong>
+
+                        <p>
+                            Follow the club for match updates
+                            and announcements.
+                        </p>
+
+                    </div>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /* ======================================
+           RENDER FIXTURES
+        ====================================== */
+
+        fixtureContainer.innerHTML = fixtures
+            .map(fixture => {
+
+                const date =
+                    getDateParts(
+                        fixture.match_date
                     );
 
 
-            if (error) {
+                const homeTeam =
+                    fixture.home_team ||
+                    "Ghopkhali Sports Arena";
 
-                console.error(
-                    "Fixture loading error:",
-                    error
-                );
 
-                fixtureContainer.innerHTML = `
-                    <div class="coming-soon">
+                const awayTeam =
+                    fixture.away_team ||
+                    "Opponent";
 
-                        <span class="plus">
-                            !
-                        </span>
 
-                        <div>
+                const type =
+                    fixture.type ||
+                    "FIXTURE";
+
+
+                const venue =
+                    fixture.venue ||
+                    "Venue TBA";
+
+
+                let time = "";
+
+                if (fixture.match_time) {
+
+                    time =
+                        String(
+                            fixture.match_time
+                        ).slice(0, 5);
+
+                }
+
+
+                return `
+                    <article class="fixture-card">
+
+                        <!-- DATE -->
+
+                        <div class="fixture-date">
 
                             <strong>
-                                Unable to load fixtures
+                                ${escapeHTML(
+                                    date.day
+                                )}
                             </strong>
 
-                            <p>
-                                Please try again later.
-                            </p>
+                            <span>
+                                ${escapeHTML(
+                                    date.month
+                                )}
+                                <br>
+                                ${escapeHTML(
+                                    date.year
+                                )}
+                            </span>
 
                         </div>
 
-                    </div>
-                `;
 
-                return;
+                        <!-- MATCH INFO -->
 
-            }
+                        <div class="fixture-info">
+
+                            <span class="fixture-tag">
+                                ${escapeHTML(
+                                    type
+                                )}
+                            </span>
 
 
-            const fixtures =
-                data || [];
+                            <h3>
 
+                                ${escapeHTML(
+                                    homeTeam
+                                )}
 
-            if (!fixtures.length) {
+                                <span>
+                                    VS
+                                </span>
 
-                fixtureContainer.innerHTML = `
-                    <div class="coming-soon">
+                                ${escapeHTML(
+                                    awayTeam
+                                )}
 
-                        <span class="plus">
-                            +
-                        </span>
+                            </h3>
 
-                        <div>
-
-                            <strong>
-                                More fixtures coming soon
-                            </strong>
 
                             <p>
-                                Follow the club for match updates
-                                and announcements.
-                            </p>
 
-                        </div>
+                                ${escapeHTML(
+                                    date.weekday
+                                )}
 
-                    </div>
-                `;
+                                •
+                                
+                                ${escapeHTML(
+                                    venue
+                                )}
 
-                return;
-
-            }
-
-
-            fixtureContainer.innerHTML =
-                fixtures
-                    .map(
-                        fixture => {
-
-                            const date =
-                                getDateParts(
-                                    fixture.match_date
-                                );
-
-
-                            const day =
-                                getDayName(
-                                    fixture.match_date
-                                );
-
-
-                            const time =
-                                fixture.match_time
-                                    ? String(
-                                        fixture.match_time
-                                    ).slice(
-                                        0,
-                                        5
-                                    )
-                                    : "Kickoff TBA";
-
-
-                            const venue =
-                                fixture.venue ||
-                                "Venue TBA";
-
-
-                            return `
-
-                            <div class="fixture-card">
-
-                                <div class="fixture-date">
-
-                                    <strong>
-                                        ${date.day}
-                                    </strong>
-
-                                    <span>
-                                        ${date.month}
-                                        <br>
-                                        ${date.year}
-                                    </span>
-
-                                </div>
-
-
-                                <div class="fixture-info">
-
-                                    <span class="fixture-tag">
-                                        ${escapeHTML(
-                                            fixture.type ||
-                                            "MATCH"
-                                        )}
-                                    </span>
-
-
-                                    <h3>
-
-                                        ${escapeHTML(
-                                            fixture.home_team ||
-                                            "Home Team"
-                                        )}
-
-                                        <span>
-                                            VS
-                                        </span>
-
-                                        ${escapeHTML(
-                                            fixture.away_team ||
-                                            "Away Team"
-                                        )}
-
-                                    </h3>
-
-
-                                    <p>
-
-                                        ${escapeHTML(
-                                            day
-                                        )}
-
+                                ${
+                                    time
+                                    ? `
                                         •
-                                        
                                         ${escapeHTML(
-                                            venue
-                                        )}
+                                            time
+                                        )
+                                    `
+                                    : ""
+                                }
 
-                                        ${
-                                            fixture.match_time
-                                                ? `
-                                                •
-                                                ${escapeHTML(
-                                                    time
-                                                )}
-                                                `
-                                                : ""
-                                        }
+                            </p>
 
-                                    </p>
-
-                                </div>
+                        </div>
 
 
-                                <div class="fixture-logo">
+                        <!-- GSA LOGO -->
 
-                                    <img
-                                        src="gsa.png"
-                                        alt="Ghopkhali Sports Arena"
-                                    >
+                        <div class="fixture-logo">
 
-                                </div>
+                            <img
+                                src="gsa.png"
+                                alt="Ghopkhali Sports Arena"
+                                loading="lazy"
+                            >
 
-                            </div>
+                        </div>
 
-                            `;
+                    </article>
+                `;
 
-                        }
-                    )
-                    .join("");
+            })
+            .join("");
 
 
-        } catch (error) {
+        console.log(
+            "Fixtures loaded:",
+            fixtures.length
+        );
 
-            console.error(
-                "Unexpected fixture error:",
-                error
-            );
 
-        }
+    } catch (error) {
+
+        console.error(
+            "Fixture loading error:",
+            error
+        );
+
+        fixtureContainer.innerHTML = `
+            <div class="coming-soon">
+
+                <span class="plus">!</span>
+
+                <div>
+
+                    <strong>
+                        Unable to load fixtures
+                    </strong>
+
+                    <p>
+                        Please try again later.
+                    </p>
+
+                </div>
+
+            </div>
+        `;
 
     }
 
-);
-
+});
 </script>
 
 </body>
