@@ -2585,7 +2585,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const SUPABASE_ANON_KEY =
         "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-
     const supabaseClient =
         window.supabase.createClient(
             SUPABASE_URL,
@@ -2625,6 +2624,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         if (error) {
+
             console.error(
                 "Gallery error:",
                 error
@@ -2641,10 +2641,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         const files =
-            (data || []).filter(file =>
-                file.name &&
-                file.name !==
-                ".emptyFolderPlaceholder"
+            (data || []).filter(
+                file =>
+                    file.name &&
+                    file.name !==
+                    ".emptyFolderPlaceholder"
             );
 
 
@@ -2660,7 +2661,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
 
-        galleryTrack.innerHTML =
+        /* =========================================
+           CREATE GALLERY HTML
+        ========================================= */
+
+        const galleryHTML =
             files.map(file => {
 
                 const {
@@ -2696,6 +2701,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             }).join("");
 
 
+        /* =========================================
+           DUPLICATE FOR INFINITE SLIDER
+        ========================================= */
+
+        galleryTrack.innerHTML =
+            galleryHTML + galleryHTML;
+
+
     } catch (error) {
 
         console.error(
@@ -2705,6 +2718,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
+
+    /* =============================================
+       ESCAPE HTML
+    ============================================= */
 
     function escapeHTML(value) {
 
