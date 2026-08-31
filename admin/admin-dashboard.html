@@ -1,484 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f5f5f7">
 
-<title>Dashboard · GSA Admin</title>
+<title>GSA Admin Dashboard</title>
 
 <link rel="stylesheet" href="admin.css">
 
 </head>
 
-<body>
+<body data-page="dashboard">
 
-<div class="admin-app">
+<div id="adminSidebarOverlay"></div>
 
-  <!-- SIDEBAR -->
+<aside id="adminSidebar" class="admin-sidebar">
 
-  <aside id="sidebar" class="sidebar">
+<a href="admin-dashboard.html" class="admin-brand">
 
-    <a href="admin-dashboard.html" class="brand">
+<div class="brand-logo">
+<img src="gsa.png" alt="GSA">
+</div>
 
-      <div class="brand-logo">
-        <img src="../gsa.png" alt="GSA">
-      </div>
+<div>
+<strong>GHOPKHALI</strong>
+<span>SPORTS ARENA</span>
+</div>
 
-      <div class="brand-text">
-        <strong>GHOPKHALI</strong>
-        <span>SPORTS ARENA</span>
-      </div>
+</a>
 
-    </a>
+<nav class="sidebar-nav">
 
+<p>OVERVIEW</p>
 
-    <nav class="nav">
+<a href="admin-dashboard.html"
+class="sidebar-link active">
+⌂ <span>Dashboard</span>
+</a>
 
-      <div class="nav-title">
-        ADMIN
-      </div>
+<p>MANAGEMENT</p>
 
-      <a
-        href="admin-dashboard.html"
-        class="nav-item active"
-      >
-        <span>⌂</span>
-        <strong>Dashboard</strong>
-      </a>
+<a href="#notices" class="sidebar-link">
+▤ <span>Notices</span>
+</a>
 
+<a href="#fixtures" class="sidebar-link">
+▦ <span>Fixtures</span>
+</a>
 
-      <div class="nav-title">
-        WEBSITE
-      </div>
+<a href="#tournaments" class="sidebar-link">
+♛ <span>Tournaments</span>
+</a>
 
-      <a
-        href="../index.html"
-        target="_blank"
-        class="nav-item"
-      >
-        <span>↗</span>
-        <strong>View Website</strong>
-      </a>
+<a href="#gallery" class="sidebar-link">
+▧ <span>Gallery</span>
+</a>
 
-      <a
-        href="../gallery.html"
-        target="_blank"
-        class="nav-item"
-      >
-        <span>▧</span>
-        <strong>Gallery</strong>
-      </a>
+<p>APPLICATIONS</p>
 
-    </nav>
+<a href="#friendly" class="sidebar-link">
+⚽ <span>Friendly Match</span>
+</a>
 
+<a href="#membership" class="sidebar-link">
+✦ <span>Membership</span>
+</a>
 
-    <div class="sidebar-bottom">
+</nav>
 
-      <div class="user">
+<div class="sidebar-bottom">
 
-        <div id="avatar" class="avatar">
-          A
-        </div>
+<div class="admin-user-mini">
 
-        <div class="user-info">
+<div id="adminAvatar" class="avatar">
+A
+</div>
 
-          <strong id="userName">
-            Administrator
-          </strong>
-
-          <span>
-            GSA Admin
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <button
-        id="logoutButton"
-        class="logout"
-      >
-        <span>↪</span>
-        Logout
-      </button>
-
-    </div>
-
-  </aside>
-
-
-  <!-- MOBILE OVERLAY -->
-
-  <div
-    id="overlay"
-    class="overlay"
-  ></div>
-
-
-  <!-- MAIN -->
-
-  <main class="main">
-
-
-    <!-- TOPBAR -->
-
-    <header class="topbar">
-
-      <div class="topbar-left">
-
-        <button
-          id="menuButton"
-          class="menu-button"
-          aria-label="Open menu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
-
-        <div>
-
-          <small>
-            GSA ADMINISTRATION
-          </small>
-
-          <h1>
-            Dashboard
-          </h1>
-
-        </div>
-
-      </div>
-
-
-      <a
-        href="../index.html"
-        target="_blank"
-        class="website-button"
-      >
-        Visit Website ↗
-      </a>
-
-    </header>
-
-
-    <!-- CONTENT -->
-
-    <section class="content">
-
-
-      <!-- HEADER -->
-
-      <div class="welcome">
-
-        <div>
-
-          <div class="eyebrow">
-            OVERVIEW
-          </div>
-
-          <h2>
-            Manage Ghopkhali<br>
-            Sports Arena.
-          </h2>
-
-          <p>
-            Everything you need to manage your club,
-            all in one place.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <!-- STATS -->
-
-      <div class="stats">
-
-
-        <article class="stat">
-
-          <div class="stat-top">
-            <span>NOTICES</span>
-            <i>▤</i>
-          </div>
-
-          <strong id="noticeCount">
-            0
-          </strong>
-
-          <p>
-            Total published notices
-          </p>
-
-        </article>
-
-
-        <article class="stat">
-
-          <div class="stat-top">
-            <span>FIXTURES</span>
-            <i>⚽</i>
-          </div>
-
-          <strong id="fixtureCount">
-            0
-          </strong>
-
-          <p>
-            Upcoming fixtures
-          </p>
-
-        </article>
-
-
-        <article class="stat">
-
-          <div class="stat-top">
-            <span>MEMBERS</span>
-            <i>◎</i>
-          </div>
-
-          <strong id="memberCount">
-            0
-          </strong>
-
-          <p>
-            Registered members
-          </p>
-
-        </article>
-
-
-        <article class="stat">
-
-          <div class="stat-top">
-            <span>APPLICATIONS</span>
-            <i>＋</i>
-          </div>
-
-          <strong id="applicationCount">
-            0
-          </strong>
-
-          <p>
-            Pending applications
-          </p>
-
-        </article>
-
-      </div>
-
-
-      <!-- GRID -->
-
-      <div class="dashboard-grid">
-
-
-        <!-- ACTIVITY -->
-
-        <section class="card activity-card">
-
-          <div class="card-header">
-
-            <div>
-
-              <span>
-                RECENT ACTIVITY
-              </span>
-
-              <h3>
-                Latest admin activities
-              </h3>
-
-            </div>
-
-          </div>
-
-
-          <div class="activity-list">
-
-            <div class="activity">
-
-              <div class="activity-icon">
-                ✓
-              </div>
-
-              <div>
-
-                <strong>
-                  Admin panel ready
-                </strong>
-
-                <p>
-                  System initialized successfully
-                </p>
-
-              </div>
-
-              <time>
-                Now
-              </time>
-
-            </div>
-
-
-            <div class="activity">
-
-              <div class="activity-icon">
-                ◉
-              </div>
-
-              <div>
-
-                <strong>
-                  GSA Administration
-                </strong>
-
-                <p>
-                  Welcome to the admin panel
-                </p>
-
-              </div>
-
-              <time>
-                Today
-              </time>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        <!-- QUICK ACTIONS -->
-
-        <section class="card">
-
-          <div class="card-header">
-
-            <div>
-
-              <span>
-                QUICK ACTIONS
-              </span>
-
-              <h3>
-                Frequently used tools
-              </h3>
-
-            </div>
-
-          </div>
-
-
-          <div class="quick-actions">
-
-
-            <a
-              href="../index.html"
-              target="_blank"
-              class="quick-action"
-            >
-
-              <div class="quick-action-icon">
-                ↗
-              </div>
-
-              <div>
-                <strong>
-                  Visit Website
-                </strong>
-
-                <small>
-                  Open public website
-                </small>
-              </div>
-
-              <span>›</span>
-
-            </a>
-
-
-            <a
-              href="../gallery.html"
-              target="_blank"
-              class="quick-action"
-            >
-
-              <div class="quick-action-icon">
-                ▧
-              </div>
-
-              <div>
-                <strong>
-                  Open Gallery
-                </strong>
-
-                <small>
-                  View club photos
-                </small>
-              </div>
-
-              <span>›</span>
-
-            </a>
-
-
-          </div>
-
-        </section>
-
-
-      </div>
-
-
-      <!-- FOOTER CARD -->
-
-      <section class="system-card">
-
-        <div>
-
-          <span>
-            GHOPKHALI SPORTS ARENA
-          </span>
-
-          <strong>
-            Your club. Your community.
-          </strong>
-
-        </div>
-
-        <div class="online">
-
-          <i></i>
-
-          System Online
-
-        </div>
-
-      </section>
-
-
-    </section>
-
-  </main>
+<div>
+<strong id="adminName">Administrator</strong>
+<span>GSA Admin</span>
+</div>
 
 </div>
 
+<button id="logoutButton" class="logout-button">
+↪ Logout
+</button>
+
+</div>
+
+</aside>
+
+
+<main class="admin-main">
+
+<header class="topbar">
+
+<button id="adminMenuToggle"
+class="menu-button"
+aria-label="Open menu">
+☰
+</button>
+
+<div>
+<p class="topbar-kicker">GSA ADMINISTRATION</p>
+<h1>Dashboard</h1>
+</div>
+
+<a href="../index.html"
+target="_blank"
+class="website-button">
+View Website ↗
+</a>
+
+</header>
+
+
+<section class="welcome-card">
+
+<div>
+
+<p class="eyebrow">CONTROL CENTER</p>
+
+<h2>
+Manage Ghopkhali Sports Arena
+<span>from one place.</span>
+</h2>
+
+<p>
+Create content, review applications and
+manage your club information.
+</p>
+
+</div>
+
+<a href="../index.html"
+target="_blank"
+class="primary-button">
+Visit Website ↗
+</a>
+
+</section>
+
+
+<section class="stats-grid">
+
+<div class="stat-card">
+
+<span>MEMBERSHIP</span>
+
+<strong id="totalMembers">0</strong>
+
+<p>Registered applications</p>
+
+</div>
+
+<div class="stat-card">
+
+<span>APPLICATIONS</span>
+
+<strong id="totalApplications">0</strong>
+
+<p>Friendly + membership</p>
+
+</div>
+
+<div class="stat-card">
+
+<span>NOTICES</span>
+
+<strong id="totalNotices">—</strong>
+
+<p>Published notices</p>
+
+</div>
+
+<div class="stat-card">
+
+<span>FIXTURES</span>
+
+<strong id="totalFixtures">—</strong>
+
+<p>Upcoming fixtures</p>
+
+</div>
+
+</section>
+
+
+<section class="content-section" id="notices">
+
+<div class="section-header">
+
+<div>
+<p class="eyebrow">CONTENT</p>
+<h2>Notices</h2>
+<p>Notice management will connect here.</p>
+</div>
+
+<button class="primary-button"
+onclick="showComingSoon('Notice Management')">
++ New Notice
+</button>
+
+</div>
+
+<div class="empty-management">
+<div>▤</div>
+<h3>Notice Management</h3>
+<p>
+The existing main website does not currently
+provide a Supabase notices table/schema.
+</p>
+</div>
+
+</section>
+
+
+<section class="content-section" id="fixtures">
+
+<div class="section-header">
+
+<div>
+<p class="eyebrow">MATCHDAY</p>
+<h2>Fixtures</h2>
+</div>
+
+<button class="primary-button"
+onclick="showComingSoon('Fixture Management')">
++ Add Fixture
+</button>
+
+</div>
+
+<div class="empty-management">
+<div>⚽</div>
+<h3>Fixture Management</h3>
+<p>
+Ready to connect once the Supabase fixture
+table structure is available.
+</p>
+</div>
+
+</section>
+
+
+<section class="content-section" id="tournaments">
+
+<div class="section-header">
+
+<div>
+<p class="eyebrow">COMPETITION</p>
+<h2>Tournaments</h2>
+</div>
+
+<button class="primary-button"
+onclick="showComingSoon('Tournament Management')">
++ Tournament
+</button>
+
+</div>
+
+<div class="empty-management">
+<div>♛</div>
+<h3>Tournament Management</h3>
+<p>
+Ready for Supabase tournament data.
+</p>
+</div>
+
+</section>
+
+
+<section class="content-section" id="gallery">
+
+<div class="section-header">
+
+<div>
+<p class="eyebrow">MEDIA</p>
+<h2>Gallery</h2>
+</div>
+
+<button class="primary-button"
+onclick="showComingSoon('Gallery Management')">
++ Add Photo
+</button>
+
+</div>
+
+<div class="empty-management">
+<div>▧</div>
+<h3>Gallery Management</h3>
+<p>
+Your current main website uses static image
+files. Supabase storage/table information is
+required for online gallery management.
+</p>
+</div>
+
+</section>
+
+
+<section class="content-section" id="friendly">
+
+<div class="section-header">
+
+<div>
+<p class="eyebrow">APPLICATIONS</p>
+<h2>Friendly Match Applications</h2>
+<p>Review applications submitted from the website.</p>
+</div>
+
+<button class="secondary-button"
+onclick="loadFriendlyApplications()">
+↻ Refresh
+</button>
+
+</div>
+
+<div id="friendlyApplications"
+class="application-list">
+
+<div class="admin-loading">
+Loading applications...
+</div>
+
+</div>
+
+</section>
+
+
+<section class="content-section" id="membership">
+
+<div class="section-header">
+
+<div>
+<p class="eyebrow">APPLICATIONS</p>
+<h2>Club Membership</h2>
+<p>Review new membership applications.</p>
+</div>
+
+<button class="secondary-button"
+onclick="loadMembershipApplications()">
+↻ Refresh
+</button>
+
+</div>
+
+<div id="membershipApplications"
+class="application-list">
+
+<div class="admin-loading">
+Loading applications...
+</div>
+
+</div>
+
+</section>
+
+
+<footer class="admin-footer">
+Ghopkhali Sports Arena · Administration
+</footer>
+
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="admin.js"></script>
 
 </body>
