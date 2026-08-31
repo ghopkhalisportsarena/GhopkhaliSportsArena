@@ -1,7 +1,12 @@
 /* =========================================================
-   GSA ADMIN SYSTEM
-   Ghopkhali Sports Arena
-   Supabase Admin JavaScript
+   GSA ADMIN JAVASCRIPT
+========================================================= */
+
+"use strict";
+
+
+/* =========================================================
+   SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
@@ -11,10 +16,6 @@ const SUPABASE_ANON_KEY =
   "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
 
-/* =========================================================
-   SUPABASE
-========================================================= */
-
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
@@ -23,407 +24,44 @@ const supabaseClient =
 
 
 /* =========================================================
-   GLOBAL
+   LOAD NAVIGATION
 ========================================================= */
 
-let currentUser = null;
+async function loadNavigation() {
 
+  const container =
+    document.getElementById("navContainer");
 
-/* =========================================================
-   DOM HELPERS
-========================================================= */
-
-const $ = (selector) =>
-  document.querySelector(selector);
-
-const $$ = (selector) =>
-  document.querySelectorAll(selector);
-
-
-/* =========================================================
-   PAGE READY
-========================================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  async () => {
-
-    setCurrentYear();
-
-    setupSidebar();
-
-    setupLogout();
-
-    setupNavigation();
-
-    setupMobileMenu();
-
-    await checkAuthentication();
-
-  }
-);
-
-
-/* =========================================================
-   CURRENT YEAR
-========================================================= */
-
-function setCurrentYear() {
-
-  $$("[data-current-year]").forEach(
-    (element) => {
-
-      element.textContent =
-        new Date().getFullYear();
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   AUTHENTICATION
-========================================================= */
-
-async function checkAuthentication() {
+  if (!container) return;
 
   try {
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.auth.getSession();
+    const response =
+      await fetch("admin-nav.html");
 
-    if (error) {
+    if (!response.ok) {
 
-      console.error(
-        "Session error:",
-        error
+      throw new Error(
+        "Navigation file could not be loaded."
       );
 
-      redirectToLogin();
-
-      return;
-
     }
 
+    container.innerHTML =
+      await response.text();
 
-    const session =
-      data?.session;
+    initializeNavigation();
 
-
-    if (!session?.user) {
-
-      redirectToLogin();
-
-      return;
-
-    }
-
-
-    currentUser =
-      session.user;
-
-
-    updateAdminInformation();
-
+    updateCurrentUser();
 
   } catch (error) {
 
     console.error(
-      "Authentication error:",
+      "Navigation error:",
       error
     );
 
-    redirectToLogin();
-
   }
-
-}
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-supabaseClient.auth.onAuthStateChange(
-  (event, session) => {
-
-    if (
-      event === "SIGNED_IN" &&
-      session?.user
-    ) {
-
-      currentUser =
-        session.user;
-
-      updateAdminInformation();
-
-    }
-
-
-    if (
-      event === "SIGNED_OUT"
-    ) {
-
-      currentUser = null;
-
-      redirectToLogin();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   LOGIN REDIRECT
-========================================================= */
-
-function redirectToLogin() {
-
-  const currentPage =
-    window.location.pathname
-      .split("/")
-      .pop();
-
-
-  if (
-    currentPage ===
-    "admin-login.html"
-  ) {
-
-    return;
-
-  }
-
-
-  window.location.href =
-    "admin-login.html";
-
-}
-
-
-/* =========================================================
-   ADMIN INFORMATION
-========================================================= */
-
-function updateAdminInformation() {
-
-  if (!currentUser)
-    return;
-
-
-  const email =
-    currentUser.email ||
-    "Administrator";
-
-
-  const username =
-    email.split("@")[0] ||
-    "Administrator";
-
-
-  $$("[data-admin-email]")
-    .forEach((element) => {
-
-      element.textContent =
-        email;
-
-    });
-
-
-  $$("[data-admin-name]")
-    .forEach((element) => {
-
-      element.textContent =
-        username;
-
-    });
-
-
-  $$("[data-admin-avatar]")
-    .forEach((element) => {
-
-      element.textContent =
-        username
-          .charAt(0)
-          .toUpperCase();
-
-    });
-
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-function setupLogout() {
-
-  const buttons =
-    $$("[data-admin-logout]");
-
-
-  buttons.forEach(
-    (button) => {
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          button.disabled = true;
-
-          button.textContent =
-            "Signing out...";
-
-
-          try {
-
-            const {
-              error
-            } =
-              await supabaseClient
-                .auth
-                .signOut();
-
-
-            if (error)
-              throw error;
-
-
-            window.location.href =
-              "admin-login.html";
-
-
-          } catch (error) {
-
-            console.error(
-              "Logout error:",
-              error
-            );
-
-
-            button.disabled =
-              false;
-
-            button.textContent =
-              "Logout";
-
-
-            showToast(
-              error.message ||
-              "Logout failed.",
-              "error"
-            );
-
-          }
-
-        }
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-function setupSidebar() {
-
-  const toggle =
-    $("#sidebarToggle");
-
-  const sidebar =
-    $("#adminSidebar");
-
-  const overlay =
-    $("#sidebarOverlay");
-
-
-  if (
-    !toggle ||
-    !sidebar
-  )
-    return;
-
-
-  toggle.addEventListener(
-    "click",
-    () => {
-
-      sidebar.classList.toggle(
-        "open"
-      );
-
-
-      if (overlay) {
-
-        overlay.classList.toggle(
-          "active"
-        );
-
-      }
-
-    }
-  );
-
-
-  if (overlay) {
-
-    overlay.addEventListener(
-      "click",
-      () => {
-
-        sidebar.classList.remove(
-          "open"
-        );
-
-        overlay.classList.remove(
-          "active"
-        );
-
-      }
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-function setupMobileMenu() {
-
-  $$("[data-sidebar-toggle]")
-    .forEach((button) => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          const sidebar =
-            $("#adminSidebar");
-
-          if (!sidebar)
-            return;
-
-
-          sidebar.classList.toggle(
-            "open"
-          );
-
-        }
-      );
-
-    });
 
 }
 
@@ -432,534 +70,153 @@ function setupMobileMenu() {
    NAVIGATION
 ========================================================= */
 
-function setupNavigation() {
+function initializeNavigation() {
 
-  $$("[data-admin-page]")
-    .forEach((link) => {
-
-      link.addEventListener(
-        "click",
-        () => {
-
-          const page =
-            link.dataset.adminPage;
-
-
-          if (!page)
-            return;
-
-
-          navigateToAdminPage(
-            page
-          );
-
-        }
-      );
-
-    });
-
-}
-
-
-/* =========================================================
-   NAVIGATE
-========================================================= */
-
-function navigateToAdminPage(
-  page
-) {
-
-  const pages = {
-
-    dashboard:
-      "admin-dashboard.html",
-
-    notices:
-      "admin-notices.html",
-
-    gallery:
-      "admin-gallery.html",
-
-    tournaments:
-      "admin-tournaments.html",
-
-    fixtures:
-      "admin-fixtures.html",
-
-    leadership:
-      "admin-leadership.html",
-
-    committee:
-      "admin-committee.html",
-
-    "friendly-applications":
-      "admin-friendly-applications.html",
-
-    "membership-applications":
-      "admin-membership-applications.html",
-
-    settings:
-      "admin-settings.html",
-
-    users:
-      "admin-users.html",
-
-    profile:
-      "admin-profile.html"
-
-  };
-
-
-  const target =
-    pages[page];
-
-
-  if (!target) {
-
-    console.warn(
-      "Unknown admin page:",
-      page
+  const toggle =
+    document.getElementById(
+      "sidebarToggle"
     );
 
-    return;
+  const sidebar =
+    document.getElementById(
+      "adminSidebar"
+    );
+
+  const overlay =
+    document.getElementById(
+      "adminSidebarOverlay"
+    );
+
+
+  function openSidebar() {
+
+    if (!sidebar) return;
+
+    sidebar.classList.add("open");
+
+    if (overlay) {
+
+      overlay.classList.add("open");
+
+    }
 
   }
 
 
-  window.location.href =
-    target;
+  function closeSidebar() {
 
-}
+    if (!sidebar) return;
+
+    sidebar.classList.remove("open");
+
+    if (overlay) {
+
+      overlay.classList.remove("open");
+
+    }
+
+  }
 
 
-/* =========================================================
-   ACTIVE NAVIGATION
-========================================================= */
+  if (toggle) {
 
-function setActiveNavigation() {
+    toggle.addEventListener(
+      "click",
+      openSidebar
+    );
 
-  const filename =
-    window.location.pathname
+  }
+
+
+  if (overlay) {
+
+    overlay.addEventListener(
+      "click",
+      closeSidebar
+    );
+
+  }
+
+
+  /*
+   * Active page
+   */
+
+  const currentPage =
+    location.pathname
       .split("/")
-      .pop();
-
-
-  $$("[data-admin-page]")
-    .forEach((link) => {
-
-      link.classList.remove(
-        "active"
+      .pop()
+      .replace(
+        ".html",
+        ""
+      )
+      .replace(
+        "admin-",
+        ""
       );
 
 
+  document
+    .querySelectorAll(".sidebar-link")
+    .forEach(function(link) {
+
       const page =
-        link.dataset.adminPage;
-
-
-      const pageMap = {
-
-        dashboard:
-          "admin-dashboard.html",
-
-        notices:
-          "admin-notices.html",
-
-        gallery:
-          "admin-gallery.html",
-
-        tournaments:
-          "admin-tournaments.html",
-
-        fixtures:
-          "admin-fixtures.html",
-
-        leadership:
-          "admin-leadership.html",
-
-        committee:
-          "admin-committee.html",
-
-        "friendly-applications":
-          "admin-friendly-applications.html",
-
-        "membership-applications":
-          "admin-membership-applications.html",
-
-        settings:
-          "admin-settings.html",
-
-        users:
-          "admin-users.html",
-
-        profile:
-          "admin-profile.html"
-
-      };
-
+        link.dataset.page;
 
       if (
-        pageMap[page] ===
-        filename
+        page &&
+        page === currentPage
       ) {
 
-        link.classList.add(
-          "active"
-        );
+        link.classList.add("active");
 
       }
 
     });
 
-}
 
+  /*
+   * Close mobile menu after link
+   */
 
-/* =========================================================
-   RUN ACTIVE NAV
-========================================================= */
+  document
+    .querySelectorAll(".sidebar-link")
+    .forEach(function(link) {
 
-document.addEventListener(
-  "DOMContentLoaded",
-  setActiveNavigation
-);
-
-
-/* =========================================================
-   SUPABASE ERROR HANDLER
-========================================================= */
-
-function handleSupabaseError(
-  error,
-  fallbackMessage =
-    "Something went wrong."
-) {
-
-  console.error(
-    "Supabase error:",
-    error
-  );
-
-
-  if (
-    error?.message
-  ) {
-
-    showToast(
-      error.message,
-      "error"
-    );
-
-  } else {
-
-    showToast(
-      fallbackMessage,
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-function showLoading(
-  show = true
-) {
-
-  const loader =
-    $("#adminLoading");
-
-
-  if (!loader)
-    return;
-
-
-  loader.style.display =
-    show ? "flex" : "none";
-
-}
-
-
-/* =========================================================
-   BUTTON LOADING
-========================================================= */
-
-function buttonLoading(
-  button,
-  loading = true,
-  loadingText = "Loading..."
-) {
-
-  if (!button)
-    return;
-
-
-  if (loading) {
-
-    button.dataset.originalText =
-      button.innerHTML;
-
-    button.disabled = true;
-
-    button.innerHTML =
-      loadingText;
-
-  } else {
-
-    button.disabled = false;
-
-    if (
-      button.dataset.originalText
-    ) {
-
-      button.innerHTML =
-        button.dataset.originalText;
-
-    }
-
-  }
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-function showToast(
-  message,
-  type = "success"
-) {
-
-  let container =
-    $("#adminToastContainer");
-
-
-  if (!container) {
-
-    container =
-      document.createElement(
-        "div"
+      link.addEventListener(
+        "click",
+        closeSidebar
       );
 
-    container.id =
-      "adminToastContainer";
-
-    container.className =
-      "admin-toast-container";
+    });
 
 
-    document.body.appendChild(
-      container
+  /*
+   * Logout
+   */
+
+  const logout =
+    document.getElementById(
+      "logoutButton"
+    );
+
+  if (logout) {
+
+    logout.addEventListener(
+      "click",
+      logoutAdmin
     );
 
   }
 
-
-  const toast =
-    document.createElement(
-      "div"
-    );
-
-
-  toast.className =
-    `admin-toast admin-toast-${type}`;
-
-
-  toast.textContent =
-    message;
-
-
-  container.appendChild(
-    toast
-  );
-
-
-  setTimeout(
-    () => {
-
-      toast.classList.add(
-        "hide"
-      );
-
-
-      setTimeout(
-        () => {
-
-          toast.remove();
-
-        },
-        300
-      );
-
-    },
-    3500
-  );
-
 }
 
 
 /* =========================================================
-   CONFIRM DELETE
+   CURRENT USER
 ========================================================= */
 
-function confirmDelete(
-  message =
-    "Are you sure you want to delete this item?"
-) {
-
-  return window.confirm(
-    message
-  );
-
-}
-
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
-
-function escapeHTML(
-  value
-) {
-
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return "";
-
-  }
-
-
-  return String(value)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =========================================================
-   ATTRIBUTE ESCAPE
-========================================================= */
-
-function escapeAttribute(
-  value
-) {
-
-  return escapeHTML(
-    value
-  );
-
-}
-
-
-/* =========================================================
-   DATE FORMAT
-========================================================= */
-
-function formatDate(
-  date
-) {
-
-  if (!date)
-    return "—";
-
-
-  const parsed =
-    new Date(date);
-
-
-  if (
-    Number.isNaN(
-      parsed.getTime()
-    )
-  ) {
-
-    return "—";
-
-  }
-
-
-  return parsed.toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    }
-  );
-
-}
-
-
-/* =========================================================
-   DATE + TIME
-========================================================= */
-
-function formatDateTime(
-  date
-) {
-
-  if (!date)
-    return "—";
-
-
-  const parsed =
-    new Date(date);
-
-
-  if (
-    Number.isNaN(
-      parsed.getTime()
-    )
-  ) {
-
-    return "—";
-
-  }
-
-
-  return parsed.toLocaleString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit"
-    }
-  );
-
-}
-
-
-/* =========================================================
-   SUPABASE USER
-========================================================= */
-
-async function getCurrentUser() {
+async function updateCurrentUser() {
 
   try {
 
@@ -971,20 +228,131 @@ async function getCurrentUser() {
         .getUser();
 
 
-    if (error)
-      throw error;
+    if (error) {
+
+      console.warn(
+        "Could not get user:",
+        error
+      );
+
+      return;
+
+    }
 
 
-    return data?.user || null;
+    const user =
+      data?.user;
+
+
+    if (!user) return;
+
+
+    const email =
+      user.email || "Administrator";
+
+
+    const name =
+      email
+        .split("@")[0]
+        .replace(
+          /^[a-z]/,
+          function(letter) {
+            return letter.toUpperCase();
+          }
+        );
+
+
+    const nameElement =
+      document.getElementById(
+        "adminName"
+      );
+
+    const avatarElement =
+      document.getElementById(
+        "adminAvatar"
+      );
+
+
+    if (nameElement) {
+
+      nameElement.textContent =
+        name;
+
+    }
+
+
+    if (avatarElement) {
+
+      avatarElement.textContent =
+        name.charAt(0)
+          .toUpperCase();
+
+    }
 
   } catch (error) {
 
     console.error(
-      "Get user error:",
+      "User error:",
       error
     );
 
-    return null;
+  }
+
+}
+
+
+/* =========================================================
+   AUTH CHECK
+========================================================= */
+
+async function checkAuthentication() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .getSession();
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    const session =
+      data?.session;
+
+
+    if (!session) {
+
+      window.location.replace(
+        "admin.html"
+      );
+
+      return false;
+
+    }
+
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Authentication error:",
+      error
+    );
+
+    window.location.replace(
+      "admin.html"
+    );
+
+    return false;
 
   }
 
@@ -992,296 +360,84 @@ async function getCurrentUser() {
 
 
 /* =========================================================
-   REQUIRE AUTH
+   LOGOUT
 ========================================================= */
 
-async function requireAuth() {
+async function logoutAdmin() {
 
-  const user =
-    await getCurrentUser();
-
-
-  if (!user) {
-
-    redirectToLogin();
-
-    return null;
-
-  }
+  const button =
+    document.getElementById(
+      "logoutButton"
+    );
 
 
-  currentUser =
-    user;
+  if (button) {
 
+    button.disabled =
+      true;
 
-  updateAdminInformation();
-
-
-  return user;
-
-}
-
-
-/* =========================================================
-   DATABASE HELPER
-========================================================= */
-
-async function fetchTable(
-  table,
-  options = {}
-) {
-
-  let query =
-    supabaseClient
-      .from(table)
-      .select(
-        options.select || "*"
-      );
-
-
-  if (
-    options.order
-  ) {
-
-    query =
-      query.order(
-        options.order,
-        {
-          ascending:
-            options.ascending ??
-            false
-        }
-      );
+    button.innerHTML =
+      "<span>...</span><span>Signing out</span>";
 
   }
 
 
-  if (
-    options.limit
-  ) {
+  try {
 
-    query =
-      query.limit(
-        options.limit
-      );
+    await supabaseClient.auth.signOut();
 
-  }
+  } catch (error) {
 
-
-  if (
-    options.eq
-  ) {
-
-    Object.entries(
-      options.eq
-    ).forEach(
-      ([column, value]) => {
-
-        query =
-          query.eq(
-            column,
-            value
-          );
-
-      }
+    console.error(
+      "Logout error:",
+      error
     );
 
   }
 
 
-  const {
-    data,
-    error
-  } =
-    await query;
-
-
-  if (error)
-    throw error;
-
-
-  return data || [];
+  window.location.replace(
+    "admin.html"
+  );
 
 }
 
 
 /* =========================================================
-   DATABASE INSERT
+   AUTH STATE
 ========================================================= */
 
-async function insertRecord(
-  table,
-  record
-) {
+supabaseClient.auth.onAuthStateChange(
+  function(event, session) {
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from(table)
-      .insert(record)
-      .select();
+    if (
+      event === "SIGNED_OUT"
+    ) {
 
-
-  if (error)
-    throw error;
-
-
-  return data;
-
-}
-
-
-/* =========================================================
-   DATABASE UPDATE
-========================================================= */
-
-async function updateRecord(
-  table,
-  id,
-  record
-) {
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from(table)
-      .update(record)
-      .eq(
-        "id",
-        id
-      )
-      .select();
-
-
-  if (error)
-    throw error;
-
-
-  return data;
-
-}
-
-
-/* =========================================================
-   DATABASE DELETE
-========================================================= */
-
-async function deleteRecord(
-  table,
-  id
-) {
-
-  const {
-    error
-  } =
-    await supabaseClient
-      .from(table)
-      .delete()
-      .eq(
-        "id",
-        id
+      window.location.replace(
+        "admin.html"
       );
 
+    }
 
-  if (error)
-    throw error;
-
-
-  return true;
-
-}
+  }
+);
 
 
 /* =========================================================
-   TABLE COUNT
+   START
 ========================================================= */
 
-async function getTableCount(
-  table
-) {
+document.addEventListener(
+  "DOMContentLoaded",
+  async function() {
 
-  const {
-    count,
-    error
-  } =
-    await supabaseClient
-      .from(table)
-      .select(
-        "*",
-        {
-          count: "exact",
-          head: true
-        }
-      );
+    const authenticated =
+      await checkAuthentication();
 
+    if (!authenticated) return;
 
-  if (error)
-    throw error;
+    await loadNavigation();
 
-
-  return count || 0;
-
-}
-
-
-/* =========================================================
-   GLOBAL EXPORTS
-========================================================= */
-
-window.supabaseClient =
-  supabaseClient;
-
-window.currentUser =
-  currentUser;
-
-window.showLoading =
-  showLoading;
-
-window.buttonLoading =
-  buttonLoading;
-
-window.showToast =
-  showToast;
-
-window.confirmDelete =
-  confirmDelete;
-
-window.escapeHTML =
-  escapeHTML;
-
-window.escapeAttribute =
-  escapeAttribute;
-
-window.formatDate =
-  formatDate;
-
-window.formatDateTime =
-  formatDateTime;
-
-window.getCurrentUser =
-  getCurrentUser;
-
-window.requireAuth =
-  requireAuth;
-
-window.fetchTable =
-  fetchTable;
-
-window.insertRecord =
-  insertRecord;
-
-window.updateRecord =
-  updateRecord;
-
-window.deleteRecord =
-  deleteRecord;
-
-window.getTableCount =
-  getTableCount;
-
-window.navigateToAdminPage =
-  navigateToAdminPage;
+  }
+);
