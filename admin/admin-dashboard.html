@@ -1,160 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f5f5f7">
+<meta name="description" content="Ghopkhali Sports Arena Administration">
 
-<title>GSA Admin Dashboard</title>
+<title>GSA Administration</title>
 
 <link rel="stylesheet" href="admin.css">
-
 </head>
 
 <body data-page="dashboard">
 
-<!-- MOBILE OVERLAY -->
 <div id="adminSidebarOverlay" class="sidebar-overlay"></div>
-
-
-<!-- =====================================================
-     SIDEBAR
-===================================================== -->
 
 <aside id="adminSidebar" class="admin-sidebar">
 
-    <!-- BRAND -->
-
     <a href="admin-dashboard.html" class="admin-brand">
-
         <div class="brand-logo">
-            <img src="gsa.png" alt="GSA">
+            <img src="../gsa.png" alt="GSA">
         </div>
 
         <div class="brand-text">
             <strong>GHOPKHALI</strong>
             <span>SPORTS ARENA</span>
         </div>
-
     </a>
-
-
-    <!-- NAVIGATION -->
 
     <nav class="sidebar-nav">
 
-        <div class="nav-label">
-            OVERVIEW
-        </div>
+        <div class="nav-label">OVERVIEW</div>
 
-        <a href="admin-dashboard.html"
-           class="sidebar-link active">
-
+        <a href="#dashboard" class="sidebar-link active">
             <span class="nav-icon">⌂</span>
             <span>Dashboard</span>
-
         </a>
 
+        <div class="nav-label">MANAGEMENT</div>
 
-        <div class="nav-label">
-            MANAGEMENT
-        </div>
-
-        <a href="admin-notices.html"
-           class="sidebar-link">
-
+        <a href="#notices" class="sidebar-link" data-section="notices">
             <span class="nav-icon">▤</span>
             <span>Notices</span>
-
         </a>
 
-
-        <a href="admin-fixtures.html"
-           class="sidebar-link">
-
+        <a href="#fixtures" class="sidebar-link" data-section="fixtures">
             <span class="nav-icon">▦</span>
             <span>Fixtures</span>
-
         </a>
 
-
-        <a href="admin-tournaments.html"
-           class="sidebar-link">
-
+        <a href="#tournaments" class="sidebar-link" data-section="tournaments">
             <span class="nav-icon">♛</span>
             <span>Tournaments</span>
-
         </a>
 
-
-        <a href="admin-gallery.html"
-           class="sidebar-link">
-
+        <a href="#gallery" class="sidebar-link" data-section="gallery">
             <span class="nav-icon">▧</span>
             <span>Gallery</span>
-
         </a>
 
+        <div class="nav-label">APPLICATIONS</div>
 
-        <div class="nav-label">
-            APPLICATIONS
-        </div>
-
-
-        <a href="admin-friendly-applications.html"
-           class="sidebar-link">
-
+        <a href="#friendly" class="sidebar-link" data-section="friendly">
             <span class="nav-icon">⚽</span>
             <span>Friendly Match</span>
-
         </a>
 
-
-        <a href="admin-membership-applications.html"
-           class="sidebar-link">
-
+        <a href="#membership" class="sidebar-link" data-section="membership">
             <span class="nav-icon">✦</span>
             <span>Membership</span>
-
         </a>
 
     </nav>
 
-
-    <!-- SIDEBAR BOTTOM -->
-
     <div class="sidebar-bottom">
 
         <div class="admin-user">
-
-            <div class="user-avatar" id="adminAvatar">
-                A
-            </div>
+            <div class="user-avatar">A</div>
 
             <div class="user-details">
-
-                <strong id="adminName">
-                    Administrator
-                </strong>
-
-                <span>
-                    GSA Admin
-                </span>
-
+                <strong>Administrator</strong>
+                <span>GSA Admin</span>
             </div>
-
         </div>
 
-
-        <button
-            type="button"
-            id="logoutButton"
-            class="logout-button">
-
+        <button type="button" id="logoutButton" class="logout-button">
             <span>↪</span>
             Logout
-
         </button>
 
     </div>
@@ -162,466 +94,633 @@
 </aside>
 
 
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
 <main class="admin-main">
 
+<header class="admin-topbar">
 
-    <!-- TOP BAR -->
+    <button
+        id="sidebarToggle"
+        class="sidebar-toggle"
+        type="button"
+        aria-label="Open menu">
 
-    <header class="admin-topbar">
+        <span></span>
+        <span></span>
+        <span></span>
 
-        <button
-            id="sidebarToggle"
-            class="sidebar-toggle"
-            type="button"
-            aria-label="Open menu">
+    </button>
 
-            <span></span>
-            <span></span>
-            <span></span>
+    <a href="../index.html" class="view-site">
+        View Website <span>↗</span>
+    </a>
+
+</header>
+
+
+<div class="dashboard-container">
+
+<section id="dashboard" class="page-header">
+
+    <div>
+        <p class="eyebrow">GSA ADMINISTRATION</p>
+
+        <h1>Dashboard</h1>
+
+        <p class="page-description">
+            Manage Ghopkhali Sports Arena from one place.
+        </p>
+    </div>
+
+    <a href="../index.html" class="primary-button">
+        Visit Website <span>↗</span>
+    </a>
+
+</section>
+
+
+<!-- =====================================================
+     STATS
+===================================================== -->
+
+<section class="stats-grid">
+
+    <button class="stat-card" data-scroll="notices">
+
+        <div class="stat-card-top">
+            <span class="stat-icon">▤</span>
+            <span class="stat-arrow">↗</span>
+        </div>
+
+        <div class="stat-number" id="noticeCount">0</div>
+        <div class="stat-title">NOTICES</div>
+
+        <p>Published and draft notices</p>
+
+    </button>
+
+
+    <button class="stat-card" data-scroll="fixtures">
+
+        <div class="stat-card-top">
+            <span class="stat-icon">◷</span>
+            <span class="stat-arrow">↗</span>
+        </div>
+
+        <div class="stat-number" id="fixtureCount">0</div>
+        <div class="stat-title">FIXTURES</div>
+
+        <p>Upcoming fixtures</p>
+
+    </button>
+
+
+    <button class="stat-card" data-scroll="membership">
+
+        <div class="stat-card-top">
+            <span class="stat-icon">✦</span>
+            <span class="stat-arrow">↗</span>
+        </div>
+
+        <div class="stat-number" id="memberCount">0</div>
+        <div class="stat-title">MEMBERS</div>
+
+        <p>Membership applications</p>
+
+    </button>
+
+
+    <button class="stat-card" data-scroll="friendly">
+
+        <div class="stat-card-top">
+            <span class="stat-icon">⚽</span>
+            <span class="stat-arrow">↗</span>
+        </div>
+
+        <div class="stat-number" id="applicationCount">0</div>
+        <div class="stat-title">APPLICATIONS</div>
+
+        <p>Friendly + membership</p>
+
+    </button>
+
+</section>
+
+
+<!-- =====================================================
+     QUICK ACTIONS
+===================================================== -->
+
+<section class="dashboard-section">
+
+    <div class="section-heading">
+
+        <div>
+            <p class="section-mini-label">CONTENT</p>
+            <h2>Quick Actions</h2>
+        </div>
+
+        <p>Frequently used management tools.</p>
+
+    </div>
+
+
+    <div class="action-grid">
+
+        <button class="action-card" data-action="new-notice">
+
+            <span class="action-icon">+</span>
+
+            <div>
+                <strong>New Notice</strong>
+                <p>Publish a club announcement</p>
+            </div>
+
+            <span class="action-arrow">→</span>
 
         </button>
 
 
-        <a
-            href="../index.html"
-            class="view-site">
+        <button class="action-card" data-action="new-fixture">
 
-            View Website
-            <span>↗</span>
+            <span class="action-icon">+</span>
 
-        </a>
+            <div>
+                <strong>Add Fixture</strong>
+                <p>Create an upcoming match</p>
+            </div>
 
-    </header>
+            <span class="action-arrow">→</span>
+
+        </button>
 
 
+        <button class="action-card" data-action="new-tournament">
 
-    <!-- PAGE HEADER -->
+            <span class="action-icon">+</span>
 
-    <section class="page-header">
+            <div>
+                <strong>Tournament</strong>
+                <p>Manage competition calendar</p>
+            </div>
+
+            <span class="action-arrow">→</span>
+
+        </button>
+
+
+        <button class="action-card" data-action="upload-photo">
+
+            <span class="action-icon">+</span>
+
+            <div>
+                <strong>Add Photo</strong>
+                <p>Upload a gallery image</p>
+            </div>
+
+            <span class="action-arrow">→</span>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     NOTICE MANAGEMENT
+===================================================== -->
+
+<section id="notices" class="management-section">
+
+    <div class="management-header">
 
         <div>
-
-            <p class="eyebrow">
-                GSA ADMINISTRATION
-            </p>
-
-            <h1>
-                Dashboard
-            </h1>
-
-            <p class="page-description">
-                Manage Ghopkhali Sports Arena from one place.
-            </p>
-
+            <p class="section-mini-label">CONTENT MANAGEMENT</p>
+            <h2>Notice Management</h2>
+            <p>Create, edit, publish and remove notices.</p>
         </div>
 
+        <button class="primary-button" id="newNoticeButton">
+            + New Notice
+        </button>
 
-        <a
-            href="../index.html"
-            class="primary-button">
+    </div>
 
-            Visit Website
-            <span>↗</span>
 
-        </a>
+    <div class="mini-stats">
 
-    </section>
-
-
-
-    <!-- =================================================
-         STAT CARDS
-    ================================================= -->
-
-    <section class="stats-grid">
-
-
-        <!-- MEMBERS -->
-
-        <a
-            href="admin-membership-applications.html"
-            class="stat-card">
-
-            <div class="stat-card-top">
-
-                <span class="stat-icon">
-                    ✦
-                </span>
-
-                <span class="stat-arrow">
-                    ↗
-                </span>
-
-            </div>
-
-            <div class="stat-number"
-                 id="memberCount">
-                0
-            </div>
-
-            <div class="stat-title">
-                MEMBERS
-            </div>
-
-            <p>
-                Registered applications
-            </p>
-
-        </a>
-
-
-
-        <!-- APPLICATIONS -->
-
-        <a
-            href="admin-friendly-applications.html"
-            class="stat-card">
-
-            <div class="stat-card-top">
-
-                <span class="stat-icon">
-                    ⚽
-                </span>
-
-                <span class="stat-arrow">
-                    ↗
-                </span>
-
-            </div>
-
-            <div class="stat-number"
-                 id="applicationCount">
-                0
-            </div>
-
-            <div class="stat-title">
-                APPLICATIONS
-            </div>
-
-            <p>
-                Friendly + membership
-            </p>
-
-        </a>
-
-
-
-        <!-- NOTICES -->
-
-        <a
-            href="admin-notices.html"
-            class="stat-card">
-
-            <div class="stat-card-top">
-
-                <span class="stat-icon">
-                    ▤
-                </span>
-
-                <span class="stat-arrow">
-                    ↗
-                </span>
-
-            </div>
-
-            <div class="stat-number"
-                 id="noticeCount">
-                0
-            </div>
-
-            <div class="stat-title">
-                NOTICES
-            </div>
-
-            <p>
-                Published notices
-            </p>
-
-        </a>
-
-
-
-        <!-- FIXTURES -->
-
-        <a
-            href="admin-fixtures.html"
-            class="stat-card">
-
-            <div class="stat-card-top">
-
-                <span class="stat-icon">
-                    ◷
-                </span>
-
-                <span class="stat-arrow">
-                    ↗
-                </span>
-
-            </div>
-
-            <div class="stat-number"
-                 id="fixtureCount">
-                0
-            </div>
-
-            <div class="stat-title">
-                FIXTURES
-            </div>
-
-            <p>
-                Upcoming fixtures
-            </p>
-
-        </a>
-
-    </section>
-
-
-
-    <!-- =================================================
-         QUICK ACTIONS
-    ================================================= -->
-
-    <section class="dashboard-section">
-
-        <div class="section-heading">
-
-            <div>
-
-                <p class="section-mini-label">
-                    CONTENT
-                </p>
-
-                <h2>
-                    Quick Actions
-                </h2>
-
-            </div>
-
-            <p>
-                Frequently used management tools.
-            </p>
-
+        <div>
+            <strong id="noticeTotalCount">0</strong>
+            <span>Total</span>
         </div>
 
-
-        <div class="action-grid">
-
-
-            <a
-                href="admin-notices.html"
-                class="action-card">
-
-                <span class="action-icon">
-                    +
-                </span>
-
-                <div>
-
-                    <strong>
-                        New Notice
-                    </strong>
-
-                    <p>
-                        Publish a club announcement
-                    </p>
-
-                </div>
-
-                <span class="action-arrow">
-                    →
-                </span>
-
-            </a>
-
-
-
-            <a
-                href="admin-gallery.html"
-                class="action-card">
-
-                <span class="action-icon">
-                    +
-                </span>
-
-                <div>
-
-                    <strong>
-                        Add Photo
-                    </strong>
-
-                    <p>
-                        Add a new gallery image
-                    </p>
-
-                </div>
-
-                <span class="action-arrow">
-                    →
-                </span>
-
-            </a>
-
-
-
-            <a
-                href="admin-fixtures.html"
-                class="action-card">
-
-                <span class="action-icon">
-                    +
-                </span>
-
-                <div>
-
-                    <strong>
-                        Add Fixture
-                    </strong>
-
-                    <p>
-                        Create upcoming match
-                    </p>
-
-                </div>
-
-                <span class="action-arrow">
-                    →
-                </span>
-
-            </a>
-
-
-
-            <a
-                href="admin-tournaments.html"
-                class="action-card">
-
-                <span class="action-icon">
-                    +
-                </span>
-
-                <div>
-
-                    <strong>
-                        Tournament
-                    </strong>
-
-                    <p>
-                        Manage competition calendar
-                    </p>
-
-                </div>
-
-                <span class="action-arrow">
-                    →
-                </span>
-
-            </a>
-
+        <div>
+            <strong id="noticePublishedCount">0</strong>
+            <span>Published</span>
         </div>
 
-    </section>
-
-
-
-    <!-- =================================================
-         RECENT ACTIVITY
-    ================================================= -->
-
-    <section class="dashboard-section">
-
-        <div class="section-heading">
-
-            <div>
-
-                <p class="section-mini-label">
-                    ACTIVITY
-                </p>
-
-                <h2>
-                    Recent Activity
-                </h2>
-
-            </div>
-
+        <div>
+            <strong id="noticeDraftCount">0</strong>
+            <span>Drafts</span>
         </div>
 
-
-        <div class="activity-panel">
-
-            <div class="activity-item">
-
-                <div class="activity-dot"></div>
-
-                <div>
-
-                    <strong>
-                        Admin panel ready
-                    </strong>
-
-                    <p>
-                        System initialized successfully.
-                    </p>
-
-                </div>
-
-                <span>
-                    Now
-                </span>
-
-            </div>
-
-
-            <div class="activity-item empty-activity">
-
-                <div class="activity-icon-small">
-                    ✦
-                </div>
-
-                <div>
-
-                    <strong>
-                        No recent activity
-                    </strong>
-
-                    <p>
-                        New activities will appear here.
-                    </p>
-
-                </div>
-
-            </div>
-
+        <div>
+            <strong id="noticeImportantCount">0</strong>
+            <span>Important</span>
         </div>
 
-    </section>
+    </div>
 
 
+    <div id="noticeList" class="management-list">
+        <div class="loading-state">Loading notices...</div>
+    </div>
 
-    <!-- FOOTER -->
-
-    <footer class="admin-footer">
-
-        <span>
-            Ghopkhali Sports Arena
-        </span>
-
-        <span>
-            Admin Panel • 2026
-        </span>
-
-    </footer>
+</section>
 
 
+<!-- =====================================================
+     FIXTURES
+===================================================== -->
+
+<section id="fixtures" class="management-section">
+
+    <div class="management-header">
+
+        <div>
+            <p class="section-mini-label">MATCH MANAGEMENT</p>
+            <h2>Fixtures</h2>
+            <p>Manage upcoming matches.</p>
+        </div>
+
+        <button class="primary-button" id="newFixtureButton">
+            + Add Fixture
+        </button>
+
+    </div>
+
+    <div id="fixtureList" class="management-list">
+        <div class="loading-state">Loading fixtures...</div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TOURNAMENTS
+===================================================== -->
+
+<section id="tournaments" class="management-section">
+
+    <div class="management-header">
+
+        <div>
+            <p class="section-mini-label">COMPETITION</p>
+            <h2>Tournaments</h2>
+            <p>Manage competition information.</p>
+        </div>
+
+        <button class="primary-button" id="newTournamentButton">
+            + Add Tournament
+        </button>
+
+    </div>
+
+    <div id="tournamentList" class="management-list">
+        <div class="loading-state">Loading tournaments...</div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GALLERY
+===================================================== -->
+
+<section id="gallery" class="management-section">
+
+    <div class="management-header">
+
+        <div>
+            <p class="section-mini-label">MEDIA</p>
+            <h2>Gallery</h2>
+            <p>Upload and manage club photos.</p>
+        </div>
+
+        <label class="upload-button">
+
+            + Upload Photo
+
+            <input
+                type="file"
+                id="galleryUpload"
+                accept="image/*"
+                multiple
+                hidden>
+
+        </label>
+
+    </div>
+
+    <div id="galleryList" class="gallery-admin-grid">
+        <div class="loading-state">Loading gallery...</div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FRIENDLY APPLICATIONS
+===================================================== -->
+
+<section id="friendly" class="management-section">
+
+    <div class="management-header">
+
+        <div>
+            <p class="section-mini-label">APPLICATIONS</p>
+            <h2>Friendly Match Applications</h2>
+            <p>Review external team applications.</p>
+        </div>
+
+    </div>
+
+    <div id="friendlyList" class="management-list">
+        <div class="loading-state">
+            Loading applications...
+        </div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MEMBERSHIP APPLICATIONS
+===================================================== -->
+
+<section id="membership" class="management-section">
+
+    <div class="management-header">
+
+        <div>
+            <p class="section-mini-label">APPLICATIONS</p>
+            <h2>Club Membership Applications</h2>
+            <p>Review membership applications.</p>
+        </div>
+
+    </div>
+
+    <div id="membershipList" class="management-list">
+        <div class="loading-state">
+            Loading applications...
+        </div>
+    </div>
+
+</section>
+
+
+<section class="admin-footer">
+    <span>Ghopkhali Sports Arena</span>
+    <span>Admin Panel • 2026</span>
+</section>
+
+</div>
 </main>
 
 
+<!-- =====================================================
+     NOTICE MODAL
+===================================================== -->
 
+<div class="modal" id="noticeModal" aria-hidden="true">
+
+<div class="modal-box">
+
+<button class="modal-close" data-close-modal>×</button>
+
+<p class="section-mini-label">GSA CONTENT</p>
+
+<h2 id="noticeModalTitle">New Notice</h2>
+
+<form id="noticeForm">
+
+<input type="hidden" id="noticeId">
+
+<label>Notice Title</label>
+
+<input
+    id="noticeTitle"
+    type="text"
+    placeholder="Enter notice title"
+    required>
+
+
+<label>Notice Content</label>
+
+<textarea
+    id="noticeContent"
+    rows="7"
+    placeholder="Write your notice..."
+    required></textarea>
+
+
+<div class="check-row">
+
+<label>
+<input type="checkbox" id="noticePublished" checked>
+Published
+</label>
+
+<label>
+<input type="checkbox" id="noticeImportant">
+Important Notice
+</label>
+
+</div>
+
+
+<div class="modal-actions">
+
+<button type="button" class="secondary-button" data-close-modal>
+Cancel
+</button>
+
+<button type="submit" class="primary-button" id="saveNoticeButton">
+Save Notice
+</button>
+
+</div>
+
+</form>
+
+</div>
+</div>
+
+
+<!-- =====================================================
+     FIXTURE MODAL
+===================================================== -->
+
+<div class="modal" id="fixtureModal" aria-hidden="true">
+
+<div class="modal-box">
+
+<button class="modal-close" data-close-modal>×</button>
+
+<p class="section-mini-label">MATCH MANAGEMENT</p>
+
+<h2>Fixture</h2>
+
+<form id="fixtureForm">
+
+<input type="hidden" id="fixtureId">
+
+<label>Home Team</label>
+<input id="fixtureHome" required placeholder="Ghopkhali Sports Arena">
+
+<label>Away Team</label>
+<input id="fixtureAway" required placeholder="Opponent">
+
+<div class="form-two">
+
+<div>
+<label>Date</label>
+<input id="fixtureDate" type="date" required>
+</div>
+
+<div>
+<label>Time</label>
+<input id="fixtureTime" type="time">
+</div>
+
+</div>
+
+<label>Venue</label>
+<input id="fixtureVenue" placeholder="GSA Ground">
+
+<label>Type</label>
+
+<select id="fixtureType">
+<option>FRIENDLY MATCH</option>
+<option>TOURNAMENT</option>
+<option>LEAGUE</option>
+<option>OTHER</option>
+</select>
+
+<div class="check-row">
+
+<label>
+<input type="checkbox" id="fixturePublished" checked>
+Published
+</label>
+
+</div>
+
+<div class="modal-actions">
+
+<button type="button" class="secondary-button" data-close-modal>
+Cancel
+</button>
+
+<button type="submit" class="primary-button">
+Save Fixture
+</button>
+
+</div>
+
+</form>
+
+</div>
+</div>
+
+
+<!-- =====================================================
+     TOURNAMENT MODAL
+===================================================== -->
+
+<div class="modal" id="tournamentModal" aria-hidden="true">
+
+<div class="modal-box">
+
+<button class="modal-close" data-close-modal>×</button>
+
+<p class="section-mini-label">COMPETITION</p>
+
+<h2>Tournament</h2>
+
+<form id="tournamentForm">
+
+<input type="hidden" id="tournamentId">
+
+<label>Tournament Name</label>
+<input id="tournamentName" required>
+
+<label>Season / Subtitle</label>
+<input id="tournamentSubtitle">
+
+<label>Date</label>
+<input id="tournamentDate" type="date">
+
+<label>Status</label>
+
+<select id="tournamentStatus">
+<option>UPCOMING</option>
+<option>PLANNED</option>
+<option>COMPLETED</option>
+<option>CANCELLED</option>
+</select>
+
+<label>Details</label>
+
+<textarea id="tournamentDetails" rows="5"></textarea>
+
+<div class="modal-actions">
+
+<button type="button" class="secondary-button" data-close-modal>
+Cancel
+</button>
+
+<button type="submit" class="primary-button">
+Save Tournament
+</button>
+
+</div>
+
+</form>
+
+</div>
+</div>
+
+
+<!-- =====================================================
+     APPLICATION VIEW MODAL
+===================================================== -->
+
+<div class="modal" id="applicationModal" aria-hidden="true">
+
+<div class="modal-box large-modal">
+
+<button class="modal-close" data-close-modal>×</button>
+
+<p class="section-mini-label">APPLICATION DETAILS</p>
+
+<h2 id="applicationModalTitle">Application</h2>
+
+<div id="applicationDetails"></div>
+
+<div class="modal-actions">
+
+<button type="button" class="secondary-button" data-close-modal>
+Close
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="admin.js"></script>
 
 </body>
