@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5f5f7">
+
+<title>Notices | GSA Admin</title>
+
+<link rel="stylesheet" href="admin.css">
+
+</head>
+
+<body data-page="notices">
+
+<!-- MOBILE OVERLAY -->
+<div id="adminSidebarOverlay" class="sidebar-overlay"></div>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside id="adminSidebar" class="admin-sidebar">
+
+    <a href="admin-dashboard.html" class="admin-brand">
+
+        <div class="brand-logo">
+            <img src="../gsa.png" alt="GSA">
+        </div>
+
+        <div class="brand-text">
+            <strong>GHOPKHALI</strong>
+            <span>SPORTS ARENA</span>
+        </div>
+
+    </a>
+
+
+    <nav class="sidebar-nav">
+
+        <div class="nav-label">OVERVIEW</div>
+
+        <a href="admin-dashboard.html" class="sidebar-link">
+            <span class="nav-icon">⌂</span>
+            <span>Dashboard</span>
+        </a>
+
+
+        <div class="nav-label">MANAGEMENT</div>
+
+        <a href="admin-notices.html"
+           class="sidebar-link active">
+            <span class="nav-icon">▤</span>
+            <span>Notices</span>
+        </a>
+
+
+        <a href="admin-fixtures.html" class="sidebar-link">
+            <span class="nav-icon">▦</span>
+            <span>Fixtures</span>
+        </a>
+
+
+        <a href="admin-tournaments.html" class="sidebar-link">
+            <span class="nav-icon">♛</span>
+            <span>Tournaments</span>
+        </a>
+
+
+        <a href="admin-gallery.html" class="sidebar-link">
+            <span class="nav-icon">▧</span>
+            <span>Gallery</span>
+        </a>
+
+
+        <div class="nav-label">APPLICATIONS</div>
+
+        <a href="admin-friendly-applications.html"
+           class="sidebar-link">
+            <span class="nav-icon">⚽</span>
+            <span>Friendly Match</span>
+        </a>
+
+
+        <a href="admin-membership-applications.html"
+           class="sidebar-link">
+            <span class="nav-icon">✦</span>
+            <span>Membership</span>
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="admin-user">
+
+            <div class="user-avatar" id="adminAvatar">
+                A
+            </div>
+
+            <div class="user-details">
+                <strong id="adminName">
+                    Administrator
+                </strong>
+
+                <span>
+                    GSA Admin
+                </span>
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="logoutButton"
+            class="logout-button">
+
+            <span>↪</span>
+            Logout
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="admin-main">
+
+
+    <!-- TOPBAR -->
+
+    <header class="admin-topbar">
+
+        <button
+            id="sidebarToggle"
+            class="sidebar-toggle"
+            type="button"
+            aria-label="Open menu">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+
+        <a
+            href="../index.html"
+            class="view-site">
+
+            View Website
+            <span>↗</span>
+
+        </a>
+
+    </header>
+
+
+
+    <!-- PAGE HEADER -->
+
+    <section class="page-header">
+
+        <div>
+
+            <p class="eyebrow">
+                GSA ADMINISTRATION
+            </p>
+
+            <h1>
+                Notices
+            </h1>
+
+            <p class="page-description">
+                Create, publish and manage Ghopkhali Sports Arena notices.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="newNoticeButton"
+            class="primary-button">
+
+            + New Notice
+
+        </button>
+
+    </section>
+
+
+
+    <!-- =================================================
+         NOTICE FORM
+    ================================================= -->
+
+    <section
+        id="noticeFormPanel"
+        class="notice-form-panel"
+        hidden>
+
+        <div class="form-panel-header">
+
+            <div>
+
+                <p class="section-mini-label">
+                    CONTENT MANAGEMENT
+                </p>
+
+                <h2 id="formTitle">
+                    Create Notice
+                </h2>
+
+            </div>
+
+            <button
+                type="button"
+                id="cancelNoticeButton"
+                class="close-form">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="noticeForm">
+
+
+            <!-- EDIT ID -->
+
+            <input
+                type="hidden"
+                id="noticeId"
+            >
+
+
+            <div class="notice-form-grid">
+
+
+                <!-- TITLE -->
+
+                <div class="input-group full">
+
+                    <label for="noticeTitle">
+                        Notice Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="noticeTitle"
+                        placeholder="Enter notice title"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- DATE -->
+
+                <div class="input-group">
+
+                    <label for="noticeDate">
+                        Notice Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="noticeDate"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- TAG -->
+
+                <div class="input-group">
+
+                    <label for="noticeTag">
+                        Category
+                    </label>
+
+                    <select id="noticeTag">
+
+                        <option value="NOTICE">
+                            NOTICE
+                        </option>
+
+                        <option value="ANNOUNCEMENT">
+                            ANNOUNCEMENT
+                        </option>
+
+                        <option value="MATCH">
+                            MATCH
+                        </option>
+
+                        <option value="TOURNAMENT">
+                            TOURNAMENT
+                        </option>
+
+                        <option value="GENERAL">
+                            GENERAL
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="input-group full">
+
+                    <label for="noticeDescription">
+                        Notice Details
+                    </label>
+
+                    <textarea
+                        id="noticeDescription"
+                        rows="8"
+                        placeholder="Write the complete notice..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+
+                <!-- IMPORTANT -->
+
+                <div class="notice-options full">
+
+                    <label class="checkbox-option">
+
+                        <input
+                            type="checkbox"
+                            id="noticeImportant"
+                        >
+
+                        <span>
+                            Mark as Important Notice
+                        </span>
+
+                    </label>
+
+
+                    <label class="checkbox-option">
+
+                        <input
+                            type="checkbox"
+                            id="noticePublished"
+                            checked
+                        >
+
+                        <span>
+                            Publish this notice
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    id="cancelNoticeButton2"
+                    class="secondary-button">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    id="saveNoticeButton"
+                    class="primary-button">
+
+                    Publish Notice ↗
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =================================================
+         NOTICE LIST
+    ================================================= -->
+
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="section-mini-label">
+                    PUBLISHED & DRAFTS
+                </p>
+
+                <h2>
+                    All Notices
+                </h2>
+
+            </div>
+
+
+            <div class="notice-count-label">
+
+                <span id="totalNoticeCount">
+                    0
+                </span>
+
+                notices
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="noticeList"
+            class="notice-admin-list">
+
+            <div class="notice-loading">
+
+                Loading notices...
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FOOTER -->
+
+    <footer class="admin-footer">
+
+        <span>
+            Ghopkhali Sports Arena
+        </span>
+
+        <span>
+            Admin Panel • 2026
+        </span>
+
+    </footer>
+
+</main>
+
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="admin.js"></script>
+
+</body>
+</html>
