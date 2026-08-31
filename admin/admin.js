@@ -1,7 +1,7 @@
 /* =========================================================
-   GSA ADMIN CMS
-   Login + Dashboard + Notices + Gallery
-   Supabase
+   GHOPKHALI SPORTS ARENA
+   ADMIN DASHBOARD
+   Supabase Management System
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -36,39 +36,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById(id);
 
 
-    const escapeHTML = value => {
+    function escapeHTML(value) {
 
-        if (
-            value === null ||
-            value === undefined
-        ) {
-            return "";
-        }
-
-        return String(value)
+        return String(value ?? "")
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
 
-    };
+    }
 
 
-    const formatDate = value => {
+    function formatDate(value) {
 
-        if (!value) {
-            return "No date";
-        }
+        if (!value) return "No date";
 
-        const date =
-            new Date(value);
+        const date = new Date(value);
 
-        if (
-            Number.isNaN(
-                date.getTime()
-            )
-        ) {
+        if (Number.isNaN(date.getTime())) {
             return "No date";
         }
 
@@ -81,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         );
 
-    };
+    }
 
 
     function showError(error) {
@@ -97,267 +83,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     /* =====================================================
-       ELEMENTS
-    ===================================================== */
-
-    const loginScreen =
-        $("loginScreen");
-
-    const dashboardScreen =
-        $("dashboardScreen");
-
-    const loginForm =
-        $("gsaAdminLoginForm");
-
-    const emailInput =
-        $("gsaAdminEmail");
-
-    const passwordInput =
-        $("gsaAdminPassword");
-
-    const loginButton =
-        $("gsaAdminLoginButton");
-
-    const loginError =
-        $("gsaAdminError");
-
-    const loadingScreen =
-        $("gsaAdminLoading");
-
-
-    /* =====================================================
-       AUTH UI
-    ===================================================== */
-
-    function showLogin() {
-
-        if (loginScreen) {
-            loginScreen.hidden = false;
-        }
-
-        if (dashboardScreen) {
-            dashboardScreen.hidden = true;
-        }
-
-    }
-
-
-    function showDashboard() {
-
-        if (loginScreen) {
-            loginScreen.hidden = true;
-        }
-
-        if (dashboardScreen) {
-            dashboardScreen.hidden = false;
-        }
-
-    }
-
-
-    function showLoading(show) {
-
-        if (!loadingScreen) {
-            return;
-        }
-
-        loadingScreen.hidden =
-            !show;
-
-    }
-
-
-    function setLoginError(message) {
-
-        if (!loginError) {
-            return;
-        }
-
-        loginError.textContent =
-            message || "";
-
-    }
-
-
-    /* =====================================================
-       CHECK CURRENT SESSION
-    ===================================================== */
-
-    const {
-        data: {
-            session
-        }
-    } =
-        await supabaseClient
-            .auth
-            .getSession();
-
-
-    if (session) {
-
-        showDashboard();
-
-    } else {
-
-        showLogin();
-
-    }
-
-
-    /* =====================================================
-       LOGIN
-    ===================================================== */
-
-    loginForm?.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-            setLoginError("");
-
-            const email =
-                emailInput
-                    ?.value
-                    .trim();
-
-            const password =
-                passwordInput
-                    ?.value || "";
-
-
-            if (!email || !password) {
-
-                setLoginError(
-                    "Please enter your email and password."
-                );
-
-                return;
-
-            }
-
-
-            if (loginButton) {
-                loginButton.disabled = true;
-            }
-
-            showLoading(true);
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .auth
-                        .signInWithPassword({
-                            email,
-                            password
-                        });
-
-
-                if (error) {
-                    throw error;
-                }
-
-
-                if (!data.session) {
-
-                    throw new Error(
-                        "Login failed. No active session."
-                    );
-
-                }
-
-
-                showDashboard();
-
-                await initializeDashboard();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                setLoginError(
-                    error.message ||
-                    "Invalid email or password."
-                );
-
-            } finally {
-
-                showLoading(false);
-
-                if (loginButton) {
-                    loginButton.disabled = false;
-                }
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       AUTH STATE
-    ===================================================== */
-
-    supabaseClient
-        .auth
-        .onAuthStateChange(
-            async (
-                event,
-                session
-            ) => {
-
-                if (session) {
-
-                    showDashboard();
-
-                } else {
-
-                    showLogin();
-
-                }
-
-            }
-        );
-
-
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
-
-    $("logoutButton")
-        ?.addEventListener(
-            "click",
-            async () => {
-
-                const confirmed =
-                    confirm(
-                        "Are you sure you want to logout?"
-                    );
-
-
-                if (!confirmed) {
-                    return;
-                }
-
-
-                await supabaseClient
-                    .auth
-                    .signOut();
-
-
-                showLogin();
-
-            }
-        );
-
-
-    /* =====================================================
        SIDEBAR
     ===================================================== */
 
@@ -367,37 +92,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     const overlay =
         $("adminSidebarOverlay");
 
-    const sidebarToggle =
+    const toggle =
         $("sidebarToggle");
 
 
     function openSidebar() {
 
-        sidebar?.classList.add(
-            "active"
-        );
-
-        overlay?.classList.add(
-            "active"
-        );
+        sidebar?.classList.add("active");
+        overlay?.classList.add("active");
 
     }
 
 
     function closeSidebar() {
 
-        sidebar?.classList.remove(
-            "active"
-        );
-
-        overlay?.classList.remove(
-            "active"
-        );
+        sidebar?.classList.remove("active");
+        overlay?.classList.remove("active");
 
     }
 
 
-    sidebarToggle?.addEventListener(
+    toggle?.addEventListener(
         "click",
         openSidebar
     );
@@ -410,9 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     document
-        .querySelectorAll(
-            ".sidebar-link"
-        )
+        .querySelectorAll(".sidebar-link")
         .forEach(link => {
 
             link.addEventListener(
@@ -424,39 +137,156 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     /* =====================================================
+       MODALS
+    ===================================================== */
+
+    function openModal(modal) {
+
+        if (!modal) {
+            console.error("Modal not found.");
+            return;
+        }
+
+        modal.classList.add("active");
+
+        modal.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        document.body.classList.add(
+            "modal-open"
+        );
+
+    }
+
+
+    function closeModal(modal) {
+
+        if (!modal) return;
+
+        modal.classList.remove("active");
+
+        modal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        document.body.classList.remove(
+            "modal-open"
+        );
+
+    }
+
+
+    document
+        .querySelectorAll("[data-close-modal]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    closeModal(
+                        button.closest(".modal")
+                    );
+
+                }
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(".modal")
+        .forEach(modal => {
+
+            modal.addEventListener(
+                "click",
+                event => {
+
+                    if (
+                        event.target === modal
+                    ) {
+                        closeModal(modal);
+                    }
+
+                }
+            );
+
+        });
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key !== "Escape") {
+                return;
+            }
+
+            document
+                .querySelectorAll(".modal.active")
+                .forEach(modal => {
+                    closeModal(modal);
+                });
+
+        }
+    );
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    $("logoutButton")?.addEventListener(
+        "click",
+        async () => {
+
+            if (
+                !confirm(
+                    "Are you sure you want to logout?"
+                )
+            ) {
+                return;
+            }
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "../index.html";
+
+        }
+    );
+
+
+    /* =====================================================
        DASHBOARD COUNTS
     ===================================================== */
 
-    async function countTable(
-        table
-    ) {
+    async function countTable(table) {
 
         const {
             count,
             error
-        } =
-            await supabaseClient
-                .from(table)
-                .select(
-                    "id",
-                    {
-                        count: "exact",
-                        head: true
-                    }
-                );
-
+        } = await supabaseClient
+            .from(table)
+            .select(
+                "id",
+                {
+                    count: "exact",
+                    head: true
+                }
+            );
 
         if (error) {
-
             console.error(
                 table,
                 error
             );
 
             return 0;
-
         }
-
 
         return count || 0;
 
@@ -469,74 +299,52 @@ document.addEventListener("DOMContentLoaded", async () => {
             notices,
             fixtures,
             members,
-            friendly,
-            gallery
-        ] =
-            await Promise.all([
+            friendly
+        ] = await Promise.all([
 
-                countTable(
-                    "notices"
-                ),
+            countTable("notices"),
 
-                countTable(
-                    "fixtures"
-                ),
+            countTable("fixtures"),
 
-                countTable(
-                    "membership_applications"
-                ),
+            countTable(
+                "membership_applications"
+            ),
 
-                countTable(
-                    "friendly_applications"
-                ),
+            countTable(
+                "friendly_applications"
+            )
 
-                countTable(
-                    "gallery"
-                )
-
-            ]);
+        ]);
 
 
         if ($("noticeCount")) {
-            $("noticeCount")
-                .textContent =
+            $("noticeCount").textContent =
                 notices;
         }
 
 
         if ($("fixtureCount")) {
-            $("fixtureCount")
-                .textContent =
+            $("fixtureCount").textContent =
                 fixtures;
         }
 
 
         if ($("memberCount")) {
-            $("memberCount")
-                .textContent =
+            $("memberCount").textContent =
                 members;
         }
 
 
         if ($("applicationCount")) {
-            $("applicationCount")
-                .textContent =
-                members +
-                friendly;
-        }
-
-
-        if ($("galleryCount")) {
-            $("galleryCount")
-                .textContent =
-                gallery;
+            $("applicationCount").textContent =
+                members + friendly;
         }
 
     }
 
 
     /* =====================================================
-       NOTICE DATA
+       NOTICES
     ===================================================== */
 
     let notices = [];
@@ -547,10 +355,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const list =
             $("noticeList");
 
-
-        if (!list) {
-            return;
-        }
+        if (!list) return;
 
 
         list.innerHTML =
@@ -562,27 +367,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         const {
             data,
             error
-        } =
-            await supabaseClient
-                .from("notices")
-                .select("*")
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                );
+        } = await supabaseClient
+            .from("notices")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
 
 
         if (error) {
 
+            console.error(error);
+
             list.innerHTML =
                 `<div class="empty-state">
                     Unable to load notices.
-                    <br><br>
-                    ${escapeHTML(
-                        error.message
-                    )}
                  </div>`;
 
             return;
@@ -592,7 +394,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         notices =
             data || [];
-
 
         renderNotices();
 
@@ -604,10 +405,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const list =
             $("noticeList");
 
-
-        if (!list) {
-            return;
-        }
+        if (!list) return;
 
 
         if ($("noticeTotalCount")) {
@@ -668,201 +466,129 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         list.innerHTML =
-            notices.map(
-                notice => {
+            notices.map(notice => {
 
-                    const published =
-                        notice.published === true;
+                const published =
+                    notice.published === true;
 
-                    const important =
-                        notice.important === true;
+                const important =
+                    notice.important === true;
 
 
-                    return `
+                return `
 
-                    <article
-                        class="notice-card">
+                <article class="notice-card">
 
-                        <div class="notice-card-main">
+                    <div class="notice-card-main">
 
-                            <div>
+                        <div>
 
-                                <div class="notice-meta">
+                            <div class="notice-meta">
 
-                                    <span class="badge ${
-                                        published
-                                            ? "published"
-                                            : "draft"
-                                    }">
-
-                                        ${
-                                            published
-                                                ? "● Published"
-                                                : "◐ Draft"
-                                        }
-
-                                    </span>
-
+                                <span class="badge ${
+                                    published
+                                        ? "published"
+                                        : "draft"
+                                }">
 
                                     ${
-                                        important
-                                            ? `
-                                            <span class="badge important">
-                                                ★ Important
-                                            </span>
-                                            `
-                                            : ""
+                                        published
+                                            ? "● Published"
+                                            : "◐ Draft"
                                     }
 
-                                </div>
+                                </span>
+
+                                ${
+                                    important
+                                        ? `
+                                        <span class="badge important">
+                                            ★ Important
+                                        </span>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
 
 
-                                <div class="content-date">
-                                    ${formatDate(
-                                        notice.created_at
-                                    )}
-                                </div>
+                            <div class="content-date">
+                                ${formatDate(
+                                    notice.created_at
+                                )}
+                            </div>
 
 
-                                <h3>
-                                    ${escapeHTML(
-                                        notice.title
-                                    )}
-                                </h3>
+                            <h3>
+                                ${escapeHTML(
+                                    notice.title
+                                )}
+                            </h3>
 
 
-                                <div class="notice-card-content">
-                                    ${escapeHTML(
-                                        notice.content
-                                    )}
-                                </div>
-
+                            <div class="notice-card-content">
+                                ${escapeHTML(
+                                    notice.content
+                                )}
                             </div>
 
                         </div>
 
-
-                        <div class="card-actions">
-
-                            <button
-                                type="button"
-                                class="small-button"
-                                data-notice-action="edit"
-                                data-id="${escapeHTML(
-                                    notice.id
-                                )}">
-                                Edit
-                            </button>
+                    </div>
 
 
-                            <button
-                                type="button"
-                                class="small-button"
-                                data-notice-action="publish"
-                                data-id="${escapeHTML(
-                                    notice.id
-                                )}">
+                    <div class="card-actions">
 
-                                ${
-                                    published
-                                        ? "Unpublish"
-                                        : "Publish"
-                                }
-
-                            </button>
+                        <button
+                            class="small-button"
+                            data-notice-action="edit"
+                            data-id="${escapeHTML(notice.id)}"
+                        >
+                            Edit
+                        </button>
 
 
-                            <button
-                                type="button"
-                                class="small-button ${
-                                    important
-                                        ? "active"
-                                        : ""
-                                }"
-                                data-notice-action="important"
-                                data-id="${escapeHTML(
-                                    notice.id
-                                )}">
-
-                                ${
-                                    important
-                                        ? "Remove Important"
-                                        : "Important"
-                                }
-
-                            </button>
+                        <button
+                            class="small-button"
+                            data-notice-action="publish"
+                            data-id="${escapeHTML(notice.id)}"
+                        >
+                            ${
+                                published
+                                    ? "Unpublish"
+                                    : "Publish"
+                            }
+                        </button>
 
 
-                            <button
-                                type="button"
-                                class="small-button danger"
-                                data-notice-action="delete"
-                                data-id="${escapeHTML(
-                                    notice.id
-                                )}">
-                                Delete
-                            </button>
-
-                        </div>
-
-                    </article>
-
-                    `;
-
-                }
-            ).join("");
-
-    }
+                        <button
+                            class="small-button"
+                            data-notice-action="important"
+                            data-id="${escapeHTML(notice.id)}"
+                        >
+                            ${
+                                important
+                                    ? "Remove Important"
+                                    : "Important"
+                            }
+                        </button>
 
 
-    /* =====================================================
-       NOTICE MODAL
-    ===================================================== */
+                        <button
+                            class="small-button danger"
+                            data-notice-action="delete"
+                            data-id="${escapeHTML(notice.id)}"
+                        >
+                            Delete
+                        </button>
 
-    function openModal(
-        modal
-    ) {
+                    </div>
 
-        if (!modal) {
-            return;
-        }
+                </article>
 
-        modal.classList.add(
-            "active"
-        );
+                `;
 
-        modal.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-
-        document.body.classList.add(
-            "modal-open"
-        );
-
-    }
-
-
-    function closeModal(
-        modal
-    ) {
-
-        if (!modal) {
-            return;
-        }
-
-        modal.classList.remove(
-            "active"
-        );
-
-        modal.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-
-        document.body.classList.remove(
-            "modal-open"
-        );
+            }).join("");
 
     }
 
@@ -874,10 +600,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const form =
             $("noticeForm");
 
-        if (!form) {
-            return;
-        }
-
+        if (!form) return;
 
         form.reset();
 
@@ -900,13 +623,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
 
-        if ($("noticeCategory")) {
-            $("noticeCategory").value =
-                notice?.category ||
-                "GENERAL";
-        }
-
-
         if ($("noticePublished")) {
             $("noticePublished").checked =
                 notice
@@ -917,7 +633,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if ($("noticeImportant")) {
             $("noticeImportant").checked =
-                notice?.important === true;
+                notice
+                    ? notice.important === true
+                    : false;
         }
 
 
@@ -942,11 +660,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("newNoticeButton")
         ?.addEventListener(
             "click",
-            () => {
-
-                openNoticeForm();
-
-            }
+            () => openNoticeForm()
         );
 
 
@@ -961,44 +675,32 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const id =
                     $("noticeId")
                         ?.value
-                        .trim() || "";
+                        .trim();
 
 
                 const title =
                     $("noticeTitle")
                         ?.value
-                        .trim() || "";
+                        .trim();
 
 
                 const content =
                     $("noticeContent")
                         ?.value
-                        .trim() || "";
-
-
-                const category =
-                    $("noticeCategory")
-                        ?.value
-                        .trim() ||
-                    "GENERAL";
+                        .trim();
 
 
                 const published =
                     $("noticePublished")
-                        ?.checked ??
-                    true;
+                        ?.checked;
 
 
                 const important =
                     $("noticeImportant")
-                        ?.checked ??
-                    false;
+                        ?.checked;
 
 
-                if (
-                    !title ||
-                    !content
-                ) {
+                if (!title || !content) {
 
                     alert(
                         "Please enter title and content."
@@ -1009,28 +711,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
-                const payload = {
-
-                    title,
-
-                    content,
-
-                    category,
-
-                    published,
-
-                    important,
-
-                    updated_at:
-                        new Date()
-                            .toISOString()
-
-                };
-
-
                 try {
 
                     let response;
+
+
+                    const payload = {
+
+                        title,
+                        content,
+                        published,
+                        important
+
+                    };
 
 
                     if (id) {
@@ -1074,7 +767,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     alert(
                         id
                             ? "Notice updated successfully."
-                            : "Notice published successfully."
+                            : "Notice added successfully."
                     );
 
 
@@ -1088,10 +781,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
 
-    /* =====================================================
-       NOTICE ACTIONS
-    ===================================================== */
-
     $("noticeList")
         ?.addEventListener(
             "click",
@@ -1102,10 +791,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         "[data-notice-action]"
                     );
 
-
-                if (!button) {
-                    return;
-                }
+                if (!button) return;
 
 
                 const id =
@@ -1120,20 +806,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                     );
 
 
-                if (!notice) {
-                    return;
-                }
+                if (!notice) return;
 
 
                 const action =
                     button.dataset.noticeAction;
 
 
-                /* EDIT */
-
-                if (
-                    action === "edit"
-                ) {
+                if (action === "edit") {
 
                     openNoticeForm(
                         notice
@@ -1144,127 +824,89 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
-                /* PUBLISH */
-
-                if (
-                    action === "publish"
-                ) {
-
-                    const published =
-                        notice.published !== true;
-
+                if (action === "publish") {
 
                     const {
                         error
-                    } =
-                        await supabaseClient
-                            .from("notices")
-                            .update({
-                                published,
-                                updated_at:
-                                    new Date()
-                                        .toISOString()
-                            })
-                            .eq(
-                                "id",
-                                id
-                            );
-
-
-                    if (error) {
-
-                        showError(error);
-
-                        return;
-
-                    }
-
-
-                    await loadNotices();
-
-                    return;
-
-                }
-
-
-                /* IMPORTANT */
-
-                if (
-                    action === "important"
-                ) {
-
-                    const important =
-                        notice.important !== true;
-
-
-                    const {
-                        error
-                    } =
-                        await supabaseClient
-                            .from("notices")
-                            .update({
-                                important,
-                                updated_at:
-                                    new Date()
-                                        .toISOString()
-                            })
-                            .eq(
-                                "id",
-                                id
-                            );
-
-
-                    if (error) {
-
-                        showError(error);
-
-                        return;
-
-                    }
-
-
-                    await loadNotices();
-
-                    return;
-
-                }
-
-
-                /* DELETE */
-
-                if (
-                    action === "delete"
-                ) {
-
-                    const confirmed =
-                        confirm(
-                            `Delete "${notice.title}"?`
+                    } = await supabaseClient
+                        .from("notices")
+                        .update({
+                            published:
+                                notice.published !== true
+                        })
+                        .eq(
+                            "id",
+                            id
                         );
 
 
-                    if (!confirmed) {
+                    if (error) {
+                        showError(error);
+                        return;
+                    }
+
+
+                    await loadNotices();
+
+                    return;
+
+                }
+
+
+                if (action === "important") {
+
+                    const {
+                        error
+                    } = await supabaseClient
+                        .from("notices")
+                        .update({
+                            important:
+                                notice.important !== true
+                        })
+                        .eq(
+                            "id",
+                            id
+                        );
+
+
+                    if (error) {
+                        showError(error);
+                        return;
+                    }
+
+
+                    await loadNotices();
+
+                    return;
+
+                }
+
+
+                if (action === "delete") {
+
+                    if (
+                        !confirm(
+                            `Delete "${notice.title}"?`
+                        )
+                    ) {
                         return;
                     }
 
 
                     const {
                         error
-                    } =
-                        await supabaseClient
-                            .from("notices")
-                            .delete()
-                            .eq(
-                                "id",
-                                id
-                            );
+                    } = await supabaseClient
+                        .from("notices")
+                        .delete()
+                        .eq(
+                            "id",
+                            id
+                        );
 
 
                     if (error) {
-
                         showError(error);
-
                         return;
-
                     }
 
 
@@ -1279,52 +921,50 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     /* =====================================================
-       GALLERY
+       FIXTURES
     ===================================================== */
 
-    async function loadGallery() {
+    let fixtures = [];
+
+
+    async function loadFixtures() {
 
         const list =
-            $("galleryList");
+            $("fixtureList");
 
-
-        if (!list) {
-            return;
-        }
+        if (!list) return;
 
 
         list.innerHTML =
             `<div class="loading-state">
-                Loading photos...
+                Loading fixtures...
              </div>`;
 
 
         const {
             data,
             error
-        } =
-            await supabaseClient
-                .storage
-                .from("gallery")
-                .list(
-                    "",
-                    {
-                        limit: 100,
-                        sortBy: {
-                            column:
-                                "created_at",
-                            order:
-                                "desc"
-                        }
-                    }
-                );
+        } = await supabaseClient
+            .from("fixtures")
+            .select("*")
+            .order(
+                "match_date",
+                {
+                    ascending: true
+                }
+            );
 
 
         if (error) {
 
+            console.error(
+                "Fixtures:",
+                error
+            );
+
             list.innerHTML =
                 `<div class="empty-state">
-                    Unable to load gallery.
+                    Unable to load fixtures.
                     <br><br>
                     ${escapeHTML(
                         error.message
@@ -1336,13 +976,838 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
 
-        const files =
-            (data || [])
-                .filter(
-                    file =>
-                        file.name !==
-                        ".emptyFolderPlaceholder"
+        fixtures =
+            data || [];
+
+        renderFixtures();
+
+    }
+
+
+    function renderFixtures() {
+
+        const list =
+            $("fixtureList");
+
+        if (!list) return;
+
+
+        if (!fixtures.length) {
+
+            list.innerHTML =
+                `<div class="empty-state">
+                    No fixtures found.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            fixtures.map(item => {
+
+                const published =
+                    item.published !== false;
+
+
+                return `
+
+                <article class="content-card">
+
+                    <div class="content-card-top">
+
+                        <div>
+
+                            <div class="notice-meta">
+
+                                <span class="badge">
+                                    ${escapeHTML(
+                                        item.type ||
+                                        "MATCH"
+                                    )}
+                                </span>
+
+
+                                <span class="badge ${
+                                    published
+                                        ? "published"
+                                        : "draft"
+                                }">
+
+                                    ${
+                                        published
+                                            ? "Published"
+                                            : "Draft"
+                                    }
+
+                                </span>
+
+                            </div>
+
+
+                            <h3>
+
+                                ${escapeHTML(
+                                    item.home_team ||
+                                    "Home Team"
+                                )}
+
+                                <span>
+                                    VS
+                                </span>
+
+                                ${escapeHTML(
+                                    item.away_team ||
+                                    "Away Team"
+                                )}
+
+                            </h3>
+
+
+                            <p>
+                                ${escapeHTML(
+                                    item.venue ||
+                                    "Venue TBA"
+                                )}
+                            </p>
+
+                        </div>
+
+
+                        <div class="content-date">
+
+                            ${formatDate(
+                                item.match_date
+                            )}
+
+                            ${
+                                item.match_time
+                                    ? `
+                                    <br>
+                                    ${escapeHTML(
+                                        String(
+                                            item.match_time
+                                        ).slice(
+                                            0,
+                                            5
+                                        )
+                                    )}
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-actions">
+
+                        <button
+                            class="small-button"
+                            data-fixture-action="edit"
+                            data-id="${escapeHTML(item.id)}"
+                        >
+                            Edit
+                        </button>
+
+
+                        <button
+                            class="small-button"
+                            data-fixture-action="publish"
+                            data-id="${escapeHTML(item.id)}"
+                        >
+                            ${
+                                published
+                                    ? "Unpublish"
+                                    : "Publish"
+                            }
+                        </button>
+
+
+                        <button
+                            class="small-button danger"
+                            data-fixture-action="delete"
+                            data-id="${escapeHTML(item.id)}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </article>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    /* =====================================================
+       FIXTURE FORM
+    ===================================================== */
+
+    function openFixtureForm(
+        item = null
+    ) {
+
+        const form =
+            $("fixtureForm");
+
+        if (!form) {
+
+            console.error(
+                "fixtureForm not found in admin.html"
+            );
+
+            alert(
+                "Fixture form is missing from admin.html."
+            );
+
+            return;
+
+        }
+
+
+        form.reset();
+
+
+        if ($("fixtureId")) {
+            $("fixtureId").value =
+                item?.id || "";
+        }
+
+
+        if ($("fixtureHome")) {
+            $("fixtureHome").value =
+                item?.home_team || "";
+        }
+
+
+        if ($("fixtureAway")) {
+            $("fixtureAway").value =
+                item?.away_team || "";
+        }
+
+
+        if ($("fixtureDate")) {
+            $("fixtureDate").value =
+                item?.match_date || "";
+        }
+
+
+        if ($("fixtureTime")) {
+            $("fixtureTime").value =
+                item?.match_time
+                    ? String(
+                        item.match_time
+                    ).slice(
+                        0,
+                        5
+                    )
+                    : "";
+        }
+
+
+        if ($("fixtureVenue")) {
+            $("fixtureVenue").value =
+                item?.venue || "";
+        }
+
+
+        if ($("fixtureType")) {
+            $("fixtureType").value =
+                item?.type ||
+                "FRIENDLY MATCH";
+        }
+
+
+        if ($("fixturePublished")) {
+            $("fixturePublished").checked =
+                item
+                    ? item.published !== false
+                    : true;
+        }
+
+
+        const modal =
+            $("fixtureModal");
+
+
+        if (!modal) {
+
+            console.error(
+                "fixtureModal not found in admin.html"
+            );
+
+            alert(
+                "Fixture modal is missing from admin.html."
+            );
+
+            return;
+
+        }
+
+
+        const title =
+            modal.querySelector("h2");
+
+
+        if (title) {
+
+            title.textContent =
+                item
+                    ? "Edit Fixture"
+                    : "Add Fixture";
+
+        }
+
+
+        openModal(modal);
+
+    }
+
+
+    /* =====================================================
+       FIXTURE BUTTON
+    ===================================================== */
+
+    const newFixtureButton =
+        $("newFixtureButton");
+
+
+    if (newFixtureButton) {
+
+        newFixtureButton.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                console.log(
+                    "Add Fixture clicked."
                 );
+
+                openFixtureForm();
+
+            }
+        );
+
+    } else {
+
+        console.warn(
+            "newFixtureButton not found."
+        );
+
+    }
+
+
+    /* =====================================================
+       FIXTURE SAVE
+    ===================================================== */
+
+    $("fixtureForm")
+        ?.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                const id =
+                    $("fixtureId")
+                        ?.value
+                        .trim();
+
+
+                const home =
+                    $("fixtureHome")
+                        ?.value
+                        .trim();
+
+
+                const away =
+                    $("fixtureAway")
+                        ?.value
+                        .trim();
+
+
+                const date =
+                    $("fixtureDate")
+                        ?.value;
+
+
+                const time =
+                    $("fixtureTime")
+                        ?.value ||
+                    null;
+
+
+                const venue =
+                    $("fixtureVenue")
+                        ?.value
+                        .trim() ||
+                    null;
+
+
+                const type =
+                    $("fixtureType")
+                        ?.value ||
+                    "FRIENDLY MATCH";
+
+
+                const published =
+                    $("fixturePublished")
+                        ?.checked !== false;
+
+
+                if (
+                    !home ||
+                    !away ||
+                    !date
+                ) {
+
+                    alert(
+                        "Please enter Home Team, Away Team and Date."
+                    );
+
+                    return;
+
+                }
+
+
+                const payload = {
+
+                    home_team:
+                        home,
+
+                    away_team:
+                        away,
+
+                    match_date:
+                        date,
+
+                    match_time:
+                        time,
+
+                    venue:
+                        venue,
+
+                    type:
+                        type,
+
+                    published:
+                        published
+
+                };
+
+
+                console.log(
+                    "Saving fixture:",
+                    payload
+                );
+
+
+                try {
+
+                    let response;
+
+
+                    if (id) {
+
+                        response =
+                            await supabaseClient
+                                .from("fixtures")
+                                .update(payload)
+                                .eq(
+                                    "id",
+                                    id
+                                );
+
+                    } else {
+
+                        response =
+                            await supabaseClient
+                                .from("fixtures")
+                                .insert([
+                                    payload
+                                ]);
+
+                    }
+
+
+                    if (response.error) {
+
+                        console.error(
+                            "Fixture save error:",
+                            response.error
+                        );
+
+                        throw response.error;
+
+                    }
+
+
+                    closeModal(
+                        $("fixtureModal")
+                    );
+
+
+                    await loadFixtures();
+
+                    await loadDashboardCounts();
+
+
+                    alert(
+                        id
+                            ? "Fixture updated successfully."
+                            : "Fixture added successfully."
+                    );
+
+
+                } catch (error) {
+
+                    showError(error);
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       FIXTURE ACTIONS
+    ===================================================== */
+
+    $("fixtureList")
+        ?.addEventListener(
+            "click",
+            async event => {
+
+                const button =
+                    event.target.closest(
+                        "[data-fixture-action]"
+                    );
+
+
+                if (!button) return;
+
+
+                const id =
+                    button.dataset.id;
+
+
+                const item =
+                    fixtures.find(
+                        row =>
+                            String(row.id) ===
+                            String(id)
+                    );
+
+
+                if (!item) return;
+
+
+                const action =
+                    button.dataset.fixtureAction;
+
+
+                if (action === "edit") {
+
+                    openFixtureForm(
+                        item
+                    );
+
+                    return;
+
+                }
+
+
+                if (action === "publish") {
+
+                    const {
+                        error
+                    } = await supabaseClient
+                        .from("fixtures")
+                        .update({
+                            published:
+                                item.published === false
+                        })
+                        .eq(
+                            "id",
+                            id
+                        );
+
+
+                    if (error) {
+
+                        showError(error);
+
+                        return;
+
+                    }
+
+
+                    await loadFixtures();
+
+                    return;
+
+                }
+
+
+                if (action === "delete") {
+
+                    if (
+                        !confirm(
+                            "Delete this fixture?"
+                        )
+                    ) {
+                        return;
+                    }
+
+
+                    const {
+                        error
+                    } = await supabaseClient
+                        .from("fixtures")
+                        .delete()
+                        .eq(
+                            "id",
+                            id
+                        );
+
+
+                    if (error) {
+
+                        showError(error);
+
+                        return;
+
+                    }
+
+
+                    await loadFixtures();
+
+                    await loadDashboardCounts();
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       TOURNAMENTS
+    ===================================================== */
+
+    let tournaments = [];
+
+
+    async function loadTournaments() {
+
+        const list =
+            $("tournamentList");
+
+        if (!list) return;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("tournaments")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Tournaments:",
+                error
+            );
+
+            list.innerHTML =
+                `<div class="empty-state">
+                    Tournament table is not available.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        tournaments =
+            data || [];
+
+        renderTournaments();
+
+    }
+
+
+    function renderTournaments() {
+
+        const list =
+            $("tournamentList");
+
+        if (!list) return;
+
+
+        if (!tournaments.length) {
+
+            list.innerHTML =
+                `<div class="empty-state">
+                    No tournaments found.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            tournaments.map(item => {
+
+                return `
+
+                <article class="content-card">
+
+                    <div class="content-card-top">
+
+                        <div>
+
+                            <span class="badge">
+                                ${escapeHTML(
+                                    item.status ||
+                                    "UPCOMING"
+                                )}
+                            </span>
+
+
+                            <h3>
+                                ${escapeHTML(
+                                    item.name ||
+                                    item.title ||
+                                    "Tournament"
+                                )}
+                            </h3>
+
+
+                            <p>
+                                ${escapeHTML(
+                                    item.subtitle ||
+                                    item.season ||
+                                    ""
+                                )}
+                            </p>
+
+                        </div>
+
+
+                        <div class="content-date">
+                            ${formatDate(
+                                item.date ||
+                                item.start_date
+                            )}
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-actions">
+
+                        <button
+                            class="small-button"
+                            data-tournament-action="edit"
+                            data-id="${escapeHTML(item.id)}"
+                        >
+                            Edit
+                        </button>
+
+
+                        <button
+                            class="small-button danger"
+                            data-tournament-action="delete"
+                            data-id="${escapeHTML(item.id)}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </article>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    /* =====================================================
+       GALLERY
+    ===================================================== */
+
+    async function loadGallery() {
+
+        const list =
+            $("galleryList");
+
+        if (!list) return;
+
+
+        list.innerHTML =
+            `<div class="loading-state">
+                Loading gallery...
+             </div>`;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .storage
+            .from("gallery")
+            .list(
+                "",
+                {
+                    limit: 100,
+                    sortBy: {
+                        column: "created_at",
+                        order: "desc"
+                    }
+                }
+            );
+
+
+        if (error) {
+
+            console.error(error);
+
+            list.innerHTML =
+                `<div class="empty-state">
+                    Unable to load gallery.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        const files =
+            (data || []).filter(
+                file =>
+                    file.name &&
+                    file.name !==
+                    ".emptyFolderPlaceholder"
+            );
 
 
         if (!files.length) {
@@ -1358,59 +1823,47 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         list.innerHTML =
-            files.map(
-                file => {
+            files.map(file => {
 
-                    const {
-                        data:
-                            publicData
-                    } =
-                        supabaseClient
-                            .storage
-                            .from("gallery")
-                            .getPublicUrl(
-                                file.name
-                            );
+                const {
+                    data: publicData
+                } = supabaseClient
+                    .storage
+                    .from("gallery")
+                    .getPublicUrl(
+                        file.name
+                    );
 
 
-                    return `
+                return `
 
-                    <article
-                        class="gallery-admin-card">
+                <article class="gallery-admin-card">
 
-                        <img
-                            src="${escapeHTML(
-                                publicData.publicUrl
-                            )}"
-                            alt="GSA Gallery"
-                            loading="lazy"
-                        >
+                    <img
+                        src="${escapeHTML(
+                            publicData.publicUrl
+                        )}"
+                        alt="GSA Gallery"
+                    >
 
 
-                        <button
-                            type="button"
-                            class="gallery-delete"
-                            data-gallery-delete="${escapeHTML(
-                                file.name
-                            )}"
-                            aria-label="Delete photo"
-                        >
-                            ×
-                        </button>
+                    <button
+                        class="gallery-delete"
+                        data-gallery-delete="${escapeHTML(
+                            file.name
+                        )}"
+                    >
+                        ×
+                    </button>
 
-                    </article>
+                </article>
 
-                    `;
+                `;
 
-                }
-            ).join("");
+            }).join("");
 
     }
 
-
-    /* =====================================================
-       GALLERY UPLOAD
-    ===================================================== */
 
     $("galleryUpload")
         ?.addEventListener(
@@ -1423,149 +1876,70 @@ document.addEventListener("DOMContentLoaded", async () => {
                     );
 
 
-                if (!files.length) {
-                    return;
-                }
+                if (!files.length) return;
 
 
-                showLoading(true);
+                for (
+                    const file
+                    of files
+                ) {
 
-
-                try {
-
-                    for (
-                        const file
-                        of files
+                    if (
+                        !file.type.startsWith(
+                            "image/"
+                        )
                     ) {
-
-                        if (
-                            !file.type.startsWith(
-                                "image/"
-                            )
-                        ) {
-
-                            continue;
-
-                        }
-
-
-                        const extension =
-                            file.name
-                                .split(".")
-                                .pop()
-                                .toLowerCase();
-
-
-                        const filename =
-                            `${Date.now()}-${crypto.randomUUID()}.${extension}`;
-
-
-                        const {
-                            error
-                        } =
-                            await supabaseClient
-                                .storage
-                                .from("gallery")
-                                .upload(
-                                    filename,
-                                    file,
-                                    {
-                                        cacheControl:
-                                            "3600",
-                                        upsert:
-                                            false
-                                    }
-                                );
-
-
-                        if (error) {
-                            throw error;
-                        }
-
-
-                        const {
-                            data:
-                                publicData
-                        } =
-                            supabaseClient
-                                .storage
-                                .from("gallery")
-                                .getPublicUrl(
-                                    filename
-                                );
-
-
-                        /*
-                         * Save the public URL in gallery table.
-                         */
-
-                        const {
-                            error:
-                                databaseError
-                        } =
-                            await supabaseClient
-                                .from("gallery")
-                                .insert([
-                                    {
-                                        title:
-                                            file.name,
-                                        image_url:
-                                            publicData.publicUrl
-                                    }
-                                ]);
-
-
-                        if (databaseError) {
-
-                            /*
-                             * If database insert fails,
-                             * remove uploaded file.
-                             */
-
-                            await supabaseClient
-                                .storage
-                                .from("gallery")
-                                .remove([
-                                    filename
-                                ]);
-
-                            throw databaseError;
-
-                        }
-
+                        continue;
                     }
 
 
-                    event.target.value = "";
+                    const safeName =
+                        file.name.replace(
+                            /[^a-zA-Z0-9._-]/g,
+                            "-"
+                        );
 
 
-                    await loadGallery();
-
-                    await loadDashboardCounts();
-
-
-                    alert(
-                        "Photo uploaded successfully."
-                    );
+                    const path =
+                        `${Date.now()}-${safeName}`;
 
 
-                } catch (error) {
+                    const {
+                        error
+                    } = await supabaseClient
+                        .storage
+                        .from("gallery")
+                        .upload(
+                            path,
+                            file,
+                            {
+                                cacheControl:
+                                    "3600",
+                                upsert:
+                                    false
+                            }
+                        );
 
-                    showError(error);
 
-                } finally {
+                    if (error) {
 
-                    showLoading(false);
+                        showError(error);
+
+                        break;
+
+                    }
 
                 }
+
+
+                event.target.value =
+                    "";
+
+                await loadGallery();
 
             }
         );
 
-
-    /* =====================================================
-       GALLERY DELETE
-    ===================================================== */
 
     $("galleryList")
         ?.addEventListener(
@@ -1578,13 +1952,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     );
 
 
-                if (!button) {
-                    return;
-                }
-
-
-                const filename =
-                    button.dataset.galleryDelete;
+                if (!button) return;
 
 
                 if (
@@ -1596,186 +1964,800 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
-                try {
-
-                    const {
-                        error
-                    } =
-                        await supabaseClient
-                            .storage
-                            .from("gallery")
-                            .remove([
-                                filename
-                            ]);
+                const {
+                    error
+                } = await supabaseClient
+                    .storage
+                    .from("gallery")
+                    .remove([
+                        button.dataset.galleryDelete
+                    ]);
 
 
-                    if (error) {
-                        throw error;
-                    }
-
-
-                    /*
-                     * Delete matching database row.
-                     */
-
-                    await supabaseClient
-                        .from("gallery")
-                        .delete()
-                        .like(
-                            "image_url",
-                            `%/${filename}`
-                        );
-
-
-                    await loadGallery();
-
-                    await loadDashboardCounts();
-
-
-                } catch (error) {
+                if (error) {
 
                     showError(error);
 
+                    return;
+
                 }
+
+
+                await loadGallery();
 
             }
         );
 
 
     /* =====================================================
-       MODAL CLOSE
+       FRIENDLY APPLICATIONS
     ===================================================== */
 
-    document
-        .querySelectorAll(
-            "[data-close-modal]"
-        )
-        .forEach(button => {
+    let friendlyApplications = [];
 
-            button.addEventListener(
-                "click",
-                () => {
 
-                    closeModal(
-                        button.closest(
-                            ".modal"
-                        )
-                    );
+    async function loadFriendlyApplications() {
 
+        const list =
+            $("friendlyList");
+
+        if (!list) return;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(
+                "friendly_applications"
+            )
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
                 }
             );
 
-        });
+
+        if (error) {
+
+            list.innerHTML =
+                `<div class="empty-state">
+                    Unable to load applications.
+                 </div>`;
+
+            return;
+
+        }
 
 
-    document
-        .querySelectorAll(
-            ".modal"
-        )
-        .forEach(modal => {
+        friendlyApplications =
+            data || [];
 
-            modal.addEventListener(
-                "click",
-                event => {
 
-                    if (
-                        event.target ===
-                        modal
-                    ) {
+        renderFriendlyApplications();
 
-                        closeModal(
-                            modal
+    }
+
+
+    function renderFriendlyApplications() {
+
+        const list =
+            $("friendlyList");
+
+        if (!list) return;
+
+
+        if (!friendlyApplications.length) {
+
+            list.innerHTML =
+                `<div class="empty-state">
+                    No Friendly Match applications.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            friendlyApplications.map(item => {
+
+                return `
+
+                <article class="application-card">
+
+                    <div class="application-top">
+
+                        <div>
+
+                            <h3>
+                                ${escapeHTML(
+                                    item.team_name ||
+                                    "Unknown Team"
+                                )}
+                            </h3>
+
+                            <p>
+                                ${escapeHTML(
+                                    item.contact_person ||
+                                    ""
+                                )}
+                            </p>
+
+                        </div>
+
+
+                        <select
+                            class="status-select"
+                            data-friendly-status
+                            data-id="${escapeHTML(item.id)}"
+                        >
+
+                            ${
+                                [
+                                    "pending",
+                                    "approved",
+                                    "rejected",
+                                    "completed"
+                                ]
+                                .map(
+                                    status => `
+                                    <option
+                                        value="${status}"
+                                        ${
+                                            item.status ===
+                                            status
+                                                ? "selected"
+                                                : ""
+                                        }
+                                    >
+                                        ${status}
+                                    </option>
+                                    `
+                                )
+                                .join("")
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="application-info">
+
+                        <div class="info-box">
+                            <span>PHONE</span>
+                            <strong>
+                                ${escapeHTML(
+                                    item.phone
+                                )}
+                            </strong>
+                        </div>
+
+
+                        <div class="info-box">
+                            <span>DATE</span>
+                            <strong>
+                                ${formatDate(
+                                    item.preferred_date
+                                )}
+                            </strong>
+                        </div>
+
+
+                        <div class="info-box">
+                            <span>TIME</span>
+                            <strong>
+                                ${escapeHTML(
+                                    item.preferred_time ||
+                                    "TBA"
+                                )}
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-actions">
+
+                        <button
+                            class="small-button"
+                            data-view-friendly
+                            data-id="${escapeHTML(item.id)}"
+                        >
+                            View Details
+                        </button>
+
+
+                        <button
+                            class="small-button danger"
+                            data-delete-friendly
+                            data-id="${escapeHTML(item.id)}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </article>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    $("friendlyList")
+        ?.addEventListener(
+            "change",
+            async event => {
+
+                const select =
+                    event.target.closest(
+                        "[data-friendly-status]"
+                    );
+
+
+                if (!select) return;
+
+
+                const {
+                    error
+                } = await supabaseClient
+                    .from(
+                        "friendly_applications"
+                    )
+                    .update({
+                        status:
+                            select.value
+                    })
+                    .eq(
+                        "id",
+                        select.dataset.id
+                    );
+
+
+                if (error) {
+                    showError(error);
+                }
+
+            }
+        );
+
+
+    $("friendlyList")
+        ?.addEventListener(
+            "click",
+            async event => {
+
+                const view =
+                    event.target.closest(
+                        "[data-view-friendly]"
+                    );
+
+
+                if (view) {
+
+                    const item =
+                        friendlyApplications.find(
+                            row =>
+                                String(row.id) ===
+                                String(
+                                    view.dataset.id
+                                )
+                        );
+
+
+                    if (item) {
+
+                        showApplication(
+                            "Friendly Match Application",
+                            item
                         );
 
                     }
 
+                    return;
+
                 }
-            );
-
-        });
 
 
-    document.addEventListener(
-        "keydown",
-        event => {
+                const deleteButton =
+                    event.target.closest(
+                        "[data-delete-friendly]"
+                    );
 
-            if (
-                event.key !==
-                "Escape"
-            ) {
-                return;
+
+                if (!deleteButton) return;
+
+
+                if (
+                    !confirm(
+                        "Delete this application?"
+                    )
+                ) {
+                    return;
+                }
+
+
+                const {
+                    error
+                } = await supabaseClient
+                    .from(
+                        "friendly_applications"
+                    )
+                    .delete()
+                    .eq(
+                        "id",
+                        deleteButton.dataset.id
+                    );
+
+
+                if (error) {
+
+                    showError(error);
+
+                    return;
+
+                }
+
+
+                await loadFriendlyApplications();
+
+                await loadDashboardCounts();
+
             }
-
-
-            document
-                .querySelectorAll(
-                    ".modal.active"
-                )
-                .forEach(
-                    closeModal
-                );
-
-        }
-    );
+        );
 
 
     /* =====================================================
-       DASHBOARD INITIALIZATION
+       MEMBERSHIP APPLICATIONS
     ===================================================== */
 
-    let initialized =
-        false;
+    let membershipApplications = [];
 
 
-    async function initializeDashboard() {
+    async function loadMembershipApplications() {
 
-        if (initialized) {
+        const list =
+            $("membershipList");
+
+        if (!list) return;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(
+                "membership_applications"
+            )
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            list.innerHTML =
+                `<div class="empty-state">
+                    Unable to load membership applications.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        membershipApplications =
+            data || [];
+
+
+        renderMembershipApplications();
+
+    }
+
+
+    function renderMembershipApplications() {
+
+        const list =
+            $("membershipList");
+
+        if (!list) return;
+
+
+        if (!membershipApplications.length) {
+
+            list.innerHTML =
+                `<div class="empty-state">
+                    No membership applications.
+                 </div>`;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            membershipApplications.map(item => {
+
+                return `
+
+                <article class="application-card">
+
+                    <div class="application-top">
+
+                        <div>
+
+                            <h3>
+                                ${escapeHTML(
+                                    item.full_name ||
+                                    "Unknown Applicant"
+                                )}
+                            </h3>
+
+                            <p>
+                                ${escapeHTML(
+                                    item.phone ||
+                                    ""
+                                )}
+                            </p>
+
+                        </div>
+
+
+                        <select
+                            class="status-select"
+                            data-membership-status
+                            data-id="${escapeHTML(item.id)}"
+                        >
+
+                            ${
+                                [
+                                    "pending",
+                                    "approved",
+                                    "rejected",
+                                    "completed"
+                                ]
+                                .map(
+                                    status => `
+                                    <option
+                                        value="${status}"
+                                        ${
+                                            item.status ===
+                                            status
+                                                ? "selected"
+                                                : ""
+                                        }
+                                    >
+                                        ${status}
+                                    </option>
+                                    `
+                                )
+                                .join("")
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="application-info">
+
+                        <div class="info-box">
+
+                            <span>
+                                DATE OF BIRTH
+                            </span>
+
+                            <strong>
+                                ${formatDate(
+                                    item.date_of_birth
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <span>
+                                OCCUPATION
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    item.occupation ||
+                                    "—"
+                                )}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <span>
+                                POSITION / SKILL
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    item.preferred_position ||
+                                    "—"
+                                )}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-actions">
+
+                        <button
+                            class="small-button"
+                            data-view-membership
+                            data-id="${escapeHTML(item.id)}"
+                        >
+                            View Details
+                        </button>
+
+
+                        <button
+                            class="small-button danger"
+                            data-delete-membership
+                            data-id="${escapeHTML(item.id)}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </article>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    $("membershipList")
+        ?.addEventListener(
+            "change",
+            async event => {
+
+                const select =
+                    event.target.closest(
+                        "[data-membership-status]"
+                    );
+
+
+                if (!select) return;
+
+
+                const {
+                    error
+                } = await supabaseClient
+                    .from(
+                        "membership_applications"
+                    )
+                    .update({
+                        status:
+                            select.value
+                    })
+                    .eq(
+                        "id",
+                        select.dataset.id
+                    );
+
+
+                if (error) {
+                    showError(error);
+                }
+
+            }
+        );
+
+
+    $("membershipList")
+        ?.addEventListener(
+            "click",
+            async event => {
+
+                const view =
+                    event.target.closest(
+                        "[data-view-membership]"
+                    );
+
+
+                if (view) {
+
+                    const item =
+                        membershipApplications.find(
+                            row =>
+                                String(row.id) ===
+                                String(
+                                    view.dataset.id
+                                )
+                        );
+
+
+                    if (item) {
+
+                        showApplication(
+                            "Club Membership Application",
+                            item
+                        );
+
+                    }
+
+                    return;
+
+                }
+
+
+                const deleteButton =
+                    event.target.closest(
+                        "[data-delete-membership]"
+                    );
+
+
+                if (!deleteButton) return;
+
+
+                if (
+                    !confirm(
+                        "Delete this membership application?"
+                    )
+                ) {
+                    return;
+                }
+
+
+                const {
+                    error
+                } = await supabaseClient
+                    .from(
+                        "membership_applications"
+                    )
+                    .delete()
+                    .eq(
+                        "id",
+                        deleteButton.dataset.id
+                    );
+
+
+                if (error) {
+
+                    showError(error);
+
+                    return;
+
+                }
+
+
+                await loadMembershipApplications();
+
+                await loadDashboardCounts();
+
+            }
+        );
+
+
+    /* =====================================================
+       APPLICATION DETAILS
+    ===================================================== */
+
+    function showApplication(
+        title,
+        item
+    ) {
+
+        if (!$("applicationModal")) {
             return;
         }
 
 
-        initialized =
-            true;
+        $("applicationModalTitle")
+            .textContent =
+            title;
 
 
-        try {
-
-            await Promise.all([
-
-                loadDashboardCounts(),
-
-                loadNotices(),
-
-                loadGallery()
-
-            ]);
+        const fields =
+            Object.entries(item)
+                .filter(
+                    ([, value]) =>
+                        value !== null &&
+                        value !== undefined &&
+                        value !== ""
+                );
 
 
-            console.log(
-                "GSA Admin CMS initialized."
-            );
+        $("applicationDetails")
+            .innerHTML = `
+
+            <div class="detail-grid">
+
+                ${
+                    fields.map(
+                        ([key, value]) => `
+
+                        <div class="detail-item">
+
+                            <span>
+                                ${escapeHTML(
+                                    key
+                                        .replace(
+                                            /_/g,
+                                            " "
+                                        )
+                                        .toUpperCase()
+                                )}
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(
+                                    value
+                                )}
+                            </strong>
+
+                        </div>
+
+                        `
+                    ).join("")
+                }
+
+            </div>
+
+        `;
 
 
-        } catch (error) {
-
-            console.error(
-                "Dashboard initialization error:",
-                error
-            );
-
-        }
+        openModal(
+            $("applicationModal")
+        );
 
     }
 
 
     /* =====================================================
-       START
+       INITIAL LOAD
     ===================================================== */
 
-    if (session) {
+    console.log(
+        "GSA Admin Dashboard loading..."
+    );
 
-        await initializeDashboard();
 
-    }
+    await Promise.all([
+
+        loadDashboardCounts(),
+
+        loadNotices(),
+
+        loadFixtures(),
+
+        loadTournaments(),
+
+        loadGallery(),
+
+        loadFriendlyApplications(),
+
+        loadMembershipApplications()
+
+    ]);
+
+
+    console.log(
+        "GSA Admin Dashboard initialized successfully."
+    );
 
 });
