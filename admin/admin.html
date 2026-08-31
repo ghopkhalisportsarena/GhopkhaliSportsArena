@@ -6,158 +6,1210 @@
 <meta charset="UTF-8">
 
 <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
 >
 
 <meta
-  name="theme-color"
-  content="#f5f5f7"
+    name="theme-color"
+    content="#f5f5f7"
 >
 
-<title>GSA Admin | Login</title>
+<title>GSA Admin</title>
 
 <link
-  rel="stylesheet"
-  href="admin.css"
+    rel="stylesheet"
+    href="admin.css"
 >
 
 </head>
 
 
-<body class="login-page">
-
-
-<main class="login-shell">
-
-<section class="login-card">
+<body>
 
 
 <!-- =====================================================
-     LOGO
+     LOGIN SCREEN
 ===================================================== -->
 
-<div class="login-logo">
-
-<img
-  src="../gsa.png"
-  alt="Ghopkhali Sports Arena"
+<div
+    id="loginScreen"
+    class="login-page"
 >
+
+    <main class="login-shell">
+
+        <section class="login-card">
+
+            <div class="login-logo">
+
+                <img
+                    src="../gsa.png"
+                    alt="Ghopkhali Sports Arena"
+                >
+
+            </div>
+
+
+            <p class="eyebrow">
+                GHOPKHALI SPORTS ARENA
+            </p>
+
+
+            <h1>
+                Admin
+                <br>
+                <span>Administration.</span>
+            </h1>
+
+
+            <p class="login-subtitle">
+                Secure access to the GSA management panel.
+            </p>
+
+
+            <form
+                id="gsaAdminLoginForm"
+                autocomplete="on"
+            >
+
+                <label>
+
+                    EMAIL ADDRESS
+
+                    <input
+                        type="email"
+                        id="gsaAdminEmail"
+                        name="email"
+                        placeholder="admin@example.com"
+                        autocomplete="username"
+                        required
+                    >
+
+                </label>
+
+
+                <label>
+
+                    PASSWORD
+
+                    <input
+                        type="password"
+                        id="gsaAdminPassword"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </label>
+
+
+                <div
+                    id="gsaAdminError"
+                    class="login-error"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+
+                <button
+                    type="submit"
+                    id="gsaAdminLoginButton"
+                    class="primary-button"
+                >
+                    Login to Admin Panel
+                </button>
+
+
+            </form>
+
+
+            <a
+                href="../index.html"
+                class="back-link"
+            >
+                ← Back to Ghopkhali Sports Arena
+            </a>
+
+
+        </section>
+
+    </main>
 
 </div>
 
 
-<!-- =====================================================
-     TITLE
-===================================================== -->
-
-<p class="eyebrow">
-GHOPKHALI SPORTS ARENA
-</p>
-
-
-<h1>
-Admin
-<br>
-<span>Administration.</span>
-</h1>
-
-
-<p class="login-subtitle">
-Secure access to the GSA management panel.
-</p>
-
-
 
 <!-- =====================================================
-     LOGIN FORM
+     DASHBOARD SCREEN
 ===================================================== -->
-
-<form
-  id="gsaAdminLoginForm"
-  autocomplete="on"
->
-
-
-<label>
-
-EMAIL ADDRESS
-
-<input
-  type="email"
-  id="gsaAdminEmail"
-  name="email"
-  placeholder="admin@example.com"
-  autocomplete="username"
-  required
->
-
-</label>
-
-
-
-<label>
-
-PASSWORD
-
-<input
-  type="password"
-  id="gsaAdminPassword"
-  name="password"
-  placeholder="Enter your password"
-  autocomplete="current-password"
-  required
->
-
-</label>
-
-
-
-<!-- ERROR -->
 
 <div
-  id="gsaAdminError"
-  class="login-error"
-  role="alert"
-  aria-live="polite"
-></div>
-
-
-
-<!-- LOGIN -->
-
-<button
-  type="submit"
-  id="gsaAdminLoginButton"
-  class="primary-button"
+    id="dashboardScreen"
+    hidden
 >
 
-<span>
-Login to Admin Panel
-</span>
 
-</button>
+    <!-- MOBILE SIDEBAR OVERLAY -->
 
-
-</form>
-
+    <div
+        id="adminSidebarOverlay"
+        class="admin-sidebar-overlay"
+    ></div>
 
 
-<!-- BACK TO WEBSITE -->
 
-<a
-  href="../index.html"
-  class="back-link"
+    <!-- =================================================
+         SIDEBAR
+    ================================================= -->
+
+    <aside
+        id="adminSidebar"
+        class="admin-sidebar"
+    >
+
+        <div class="admin-brand">
+
+            <img
+                src="../gsa.png"
+                alt="GSA"
+            >
+
+            <div>
+
+                <strong>
+                    GSA
+                </strong>
+
+                <span>
+                    ADMIN PANEL
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a
+                href="#dashboard"
+                class="sidebar-link"
+                data-section="dashboard"
+            >
+                Dashboard
+            </a>
+
+
+            <a
+                href="#notices"
+                class="sidebar-link"
+                data-section="notices"
+            >
+                Notices
+            </a>
+
+
+            <a
+                href="#fixtures"
+                class="sidebar-link"
+                data-section="fixtures"
+            >
+                Fixtures
+            </a>
+
+
+            <a
+                href="#tournaments"
+                class="sidebar-link"
+                data-section="tournaments"
+            >
+                Tournaments
+            </a>
+
+
+            <a
+                href="#gallery"
+                class="sidebar-link"
+                data-section="gallery"
+            >
+                Gallery
+            </a>
+
+
+            <a
+                href="#applications"
+                class="sidebar-link"
+                data-section="applications"
+            >
+                Applications
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a
+                href="../index.html"
+                class="sidebar-link"
+            >
+                ← View Website
+            </a>
+
+
+            <button
+                type="button"
+                id="logoutButton"
+                class="logout-button"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================= -->
+
+    <main class="admin-main">
+
+
+        <!-- TOPBAR -->
+
+        <header class="admin-topbar">
+
+            <button
+                type="button"
+                id="sidebarToggle"
+                class="sidebar-toggle"
+                aria-label="Open menu"
+            >
+                ☰
+            </button>
+
+
+            <div>
+
+                <p class="eyebrow">
+                    GHOPKHALI SPORTS ARENA
+                </p>
+
+                <h1>
+                    Admin Dashboard
+                </h1>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             DASHBOARD
+        ================================================= -->
+
+        <section
+            id="dashboard"
+            class="admin-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        OVERVIEW
+                    </span>
+
+                    <h2>
+                        Dashboard
+                    </h2>
+
+                    <p>
+                        Manage your GSA website from one place.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+
+                <article class="stat-card">
+
+                    <span>
+                        NOTICES
+                    </span>
+
+                    <strong id="noticeCount">
+                        0
+                    </strong>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <span>
+                        FIXTURES
+                    </span>
+
+                    <strong id="fixtureCount">
+                        0
+                    </strong>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <span>
+                        MEMBERS
+                    </span>
+
+                    <strong id="memberCount">
+                        0
+                    </strong>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <span>
+                        APPLICATIONS
+                    </span>
+
+                    <strong id="applicationCount">
+                        0
+                    </strong>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <span>
+                        GALLERY
+                    </span>
+
+                    <strong id="galleryCount">
+                        0
+                    </strong>
+
+                </article>
+
+
+            </div>
+
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="quick-actions">
+
+                <button
+                    type="button"
+                    class="primary-button"
+                    data-action="new-notice"
+                >
+                    + New Notice
+                </button>
+
+
+                <button
+                    type="button"
+                    class="secondary-button"
+                    data-action="upload-photo"
+                >
+                    + Upload Photo
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NOTICES
+        ================================================= -->
+
+        <section
+            id="notices"
+            class="admin-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        CONTENT
+                    </span>
+
+                    <h2>
+                        Notices
+                    </h2>
+
+                    <p>
+                        Publish and manage website notices.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="newNoticeButton"
+                    class="primary-button"
+                >
+                    + New Notice
+                </button>
+
+            </div>
+
+
+            <div class="notice-stats">
+
+                <div>
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong id="noticeTotalCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Published
+                    </span>
+
+                    <strong id="noticePublishedCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Draft
+                    </span>
+
+                    <strong id="noticeDraftCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Important
+                    </span>
+
+                    <strong id="noticeImportantCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div id="noticeList">
+
+                <div class="loading-state">
+                    Loading notices...
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FIXTURES
+        ================================================= -->
+
+        <section
+            id="fixtures"
+            class="admin-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        MATCHES
+                    </span>
+
+                    <h2>
+                        Fixtures
+                    </h2>
+
+                    <p>
+                        Manage upcoming matches.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="newFixtureButton"
+                    class="primary-button"
+                >
+                    + Add Fixture
+                </button>
+
+            </div>
+
+
+            <div id="fixtureList">
+
+                <div class="empty-state">
+                    Fixture management will appear here.
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             TOURNAMENTS
+        ================================================= -->
+
+        <section
+            id="tournaments"
+            class="admin-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        COMPETITIONS
+                    </span>
+
+                    <h2>
+                        Tournaments
+                    </h2>
+
+                    <p>
+                        Manage GSA tournaments.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="newTournamentButton"
+                    class="primary-button"
+                >
+                    + Add Tournament
+                </button>
+
+            </div>
+
+
+            <div id="tournamentList">
+
+                <div class="empty-state">
+                    Tournament management will appear here.
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             GALLERY
+        ================================================= -->
+
+        <section
+            id="gallery"
+            class="admin-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        MEDIA
+                    </span>
+
+                    <h2>
+                        Gallery
+                    </h2>
+
+                    <p>
+                        Upload photos that appear on the website.
+                    </p>
+
+                </div>
+
+
+                <label
+                    for="galleryUpload"
+                    class="primary-button upload-label"
+                >
+
+                    + Upload Photo
+
+                    <input
+                        type="file"
+                        id="galleryUpload"
+                        accept="image/*"
+                        multiple
+                        hidden
+                    >
+
+                </label>
+
+            </div>
+
+
+            <div
+                id="galleryList"
+                class="gallery-admin-grid"
+            >
+
+                <div class="empty-state">
+                    No photos uploaded yet.
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             APPLICATIONS
+        ================================================= -->
+
+        <section
+            id="applications"
+            class="admin-section"
+        >
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        REQUESTS
+                    </span>
+
+                    <h2>
+                        Applications
+                    </h2>
+
+                    <p>
+                        Manage club and friendly match applications.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="application-tabs">
+
+
+                <div>
+
+                    <h3>
+                        Friendly Match Applications
+                    </h3>
+
+
+                    <div id="friendlyList">
+
+                        <div class="empty-state">
+                            No Friendly Match applications.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Membership Applications
+                    </h3>
+
+
+                    <div id="membershipList">
+
+                        <div class="empty-state">
+                            No membership applications.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     NOTICE MODAL
+===================================================== -->
+
+<div
+    id="noticeModal"
+    class="modal"
+    aria-hidden="true"
 >
 
-← Back to Ghopkhali Sports Arena
+    <div class="modal-box">
 
-</a>
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            ×
+        </button>
 
 
-</section>
+        <h2 id="noticeModalTitle">
+            New Notice
+        </h2>
 
-</main>
+
+        <form id="noticeForm">
+
+            <input
+                type="hidden"
+                id="noticeId"
+            >
+
+
+            <label>
+
+                Title
+
+                <input
+                    type="text"
+                    id="noticeTitle"
+                    placeholder="Notice title"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                Category
+
+                <select id="noticeCategory">
+
+                    <option value="GENERAL">
+                        General
+                    </option>
+
+                    <option value="MATCH">
+                        Match
+                    </option>
+
+                    <option value="TOURNAMENT">
+                        Tournament
+                    </option>
+
+                    <option value="ANNOUNCEMENT">
+                        Announcement
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Content
+
+                <textarea
+                    id="noticeContent"
+                    rows="8"
+                    placeholder="Write notice..."
+                    required
+                ></textarea>
+
+            </label>
+
+
+            <label class="checkbox-label">
+
+                <input
+                    type="checkbox"
+                    id="noticePublished"
+                    checked
+                >
+
+                Publish this notice
+
+            </label>
+
+
+            <label class="checkbox-label">
+
+                <input
+                    type="checkbox"
+                    id="noticeImportant"
+                >
+
+                Mark as important
+
+            </label>
+
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Save Notice
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     FIXTURE MODAL
+===================================================== -->
+
+<div
+    id="fixtureModal"
+    class="modal"
+    aria-hidden="true"
+>
+
+    <div class="modal-box">
+
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            ×
+        </button>
+
+
+        <h2>
+            Add Fixture
+        </h2>
+
+
+        <form id="fixtureForm">
+
+            <input
+                type="hidden"
+                id="fixtureId"
+            >
+
+
+            <label>
+
+                Home Team
+
+                <input
+                    type="text"
+                    id="fixtureHome"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                Away Team
+
+                <input
+                    type="text"
+                    id="fixtureAway"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                Match Date
+
+                <input
+                    type="date"
+                    id="fixtureDate"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                Match Time
+
+                <input
+                    type="time"
+                    id="fixtureTime"
+                >
+
+            </label>
+
+
+            <label>
+
+                Venue
+
+                <input
+                    type="text"
+                    id="fixtureVenue"
+                >
+
+            </label>
+
+
+            <label>
+
+                Type
+
+                <input
+                    type="text"
+                    id="fixtureType"
+                    value="FRIENDLY MATCH"
+                >
+
+            </label>
+
+
+            <label class="checkbox-label">
+
+                <input
+                    type="checkbox"
+                    id="fixturePublished"
+                    checked
+                >
+
+                Publish fixture
+
+            </label>
+
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Save Fixture
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     TOURNAMENT MODAL
+===================================================== -->
+
+<div
+    id="tournamentModal"
+    class="modal"
+    aria-hidden="true"
+>
+
+    <div class="modal-box">
+
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            ×
+        </button>
+
+
+        <h2>
+            Tournament
+        </h2>
+
+
+        <form id="tournamentForm">
+
+            <input
+                type="hidden"
+                id="tournamentId"
+            >
+
+
+            <label>
+
+                Tournament Name
+
+                <input
+                    type="text"
+                    id="tournamentName"
+                    required
+                >
+
+            </label>
+
+
+            <label>
+
+                Subtitle / Season
+
+                <input
+                    type="text"
+                    id="tournamentSubtitle"
+                >
+
+            </label>
+
+
+            <label>
+
+                Date
+
+                <input
+                    type="date"
+                    id="tournamentDate"
+                >
+
+            </label>
+
+
+            <label>
+
+                Status
+
+                <select id="tournamentStatus">
+
+                    <option value="UPCOMING">
+                        Upcoming
+                    </option>
+
+                    <option value="ONGOING">
+                        Ongoing
+                    </option>
+
+                    <option value="COMPLETED">
+                        Completed
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Details
+
+                <textarea
+                    id="tournamentDetails"
+                    rows="6"
+                ></textarea>
+
+            </label>
+
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Save Tournament
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     APPLICATION DETAILS MODAL
+===================================================== -->
+
+<div
+    id="applicationModal"
+    class="modal"
+    aria-hidden="true"
+>
+
+    <div class="modal-box">
+
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            ×
+        </button>
+
+
+        <h2 id="applicationModalTitle">
+            Application
+        </h2>
+
+
+        <div id="applicationDetails"></div>
+
+    </div>
+
+</div>
 
 
 
@@ -166,20 +1218,20 @@ Login to Admin Panel
 ===================================================== -->
 
 <div
-  id="gsaAdminLoading"
-  class="loading-screen"
-  aria-hidden="true"
+    id="gsaAdminLoading"
+    class="loading-screen"
+    hidden
 >
 
-<div class="loading-box">
+    <div class="loading-box">
 
-<div class="spinner"></div>
+        <div class="spinner"></div>
 
-<p>
-Signing in...
-</p>
+        <p>
+            Signing in...
+        </p>
 
-</div>
+    </div>
 
 </div>
 
@@ -190,8 +1242,8 @@ Signing in...
 ===================================================== -->
 
 <script
-src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-</script>
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
 
 <!-- =====================================================
