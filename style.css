@@ -3952,3 +3952,89 @@ font-size:22px;
 }
 
 }
+
+/* ==================================================
+   GSA SUPABASE GALLERY SLIDER
+================================================== */
+
+.gallery-window {
+    overflow: hidden;
+    width: 100%;
+}
+
+.gallery-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: gsaGalleryMove 35s linear infinite;
+}
+
+.gallery-item {
+    position: relative;
+    flex: 0 0 300px;
+    width: 300px;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 15px;
+    background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.75)
+    );
+
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+}
+
+@keyframes gsaGalleryMove {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(
+            calc(-50% - 10px)
+        );
+    }
+
+}
+
+.gallery-track:hover {
+    animation-play-state: paused;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .gallery-track {
+        gap: 12px;
+        animation-duration: 28s;
+    }
+
+    .gallery-item {
+        flex-basis: 240px;
+        width: 240px;
+        height: 180px;
+        border-radius: 14px;
+    }
+
+}
