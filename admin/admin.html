@@ -1,81 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f5f5f7">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#f5f5f7"
+>
+
 <title>GSA Admin | Login</title>
-<link rel="stylesheet" href="admin.css">
+
+<link
+  rel="stylesheet"
+  href="admin.css"
+>
+
 </head>
 
+
 <body class="login-page">
+
 
 <main class="login-shell">
 
 <section class="login-card">
 
+
+<!-- =====================================================
+     LOGO
+===================================================== -->
+
 <div class="login-logo">
-<img src="gsa.png" alt="Ghopkhali Sports Arena">
+
+<img
+  src="../gsa.png"
+  alt="Ghopkhali Sports Arena"
+>
+
 </div>
 
-<p class="eyebrow">GHOPKHALI SPORTS ARENA</p>
 
-<h1>Admin<br><span>Administration.</span></h1>
+<!-- =====================================================
+     TITLE
+===================================================== -->
+
+<p class="eyebrow">
+GHOPKHALI SPORTS ARENA
+</p>
+
+
+<h1>
+Admin
+<br>
+<span>Administration.</span>
+</h1>
+
 
 <p class="login-subtitle">
 Secure access to the GSA management panel.
 </p>
 
-<form id="gsaAdminLoginForm">
+
+
+<!-- =====================================================
+     LOGIN FORM
+===================================================== -->
+
+<form
+  id="gsaAdminLoginForm"
+  autocomplete="on"
+>
+
 
 <label>
+
 EMAIL ADDRESS
+
 <input
-type="email"
-id="gsaAdminEmail"
-placeholder="admin@example.com"
-autocomplete="email"
-required>
+  type="email"
+  id="gsaAdminEmail"
+  name="email"
+  placeholder="admin@example.com"
+  autocomplete="username"
+  required
+>
+
 </label>
+
+
 
 <label>
+
 PASSWORD
+
 <input
-type="password"
-id="gsaAdminPassword"
-placeholder="Enter your password"
-autocomplete="current-password"
-required>
+  type="password"
+  id="gsaAdminPassword"
+  name="password"
+  placeholder="Enter your password"
+  autocomplete="current-password"
+  required
+>
+
 </label>
 
-<div id="gsaAdminError" class="login-error"></div>
+
+
+<!-- ERROR -->
+
+<div
+  id="gsaAdminError"
+  class="login-error"
+  role="alert"
+  aria-live="polite"
+></div>
+
+
+
+<!-- LOGIN -->
 
 <button
-type="submit"
-id="gsaAdminLoginButton"
-class="primary-button">
+  type="submit"
+  id="gsaAdminLoginButton"
+  class="primary-button"
+>
+
+<span>
 Login to Admin Panel
+</span>
+
 </button>
+
 
 </form>
 
-<a href="../index.html" class="back-link">
+
+
+<!-- BACK TO WEBSITE -->
+
+<a
+  href="../index.html"
+  class="back-link"
+>
+
 ← Back to Ghopkhali Sports Arena
+
 </a>
+
 
 </section>
 
 </main>
 
-<div id="gsaAdminLoading" class="loading-screen">
+
+
+<!-- =====================================================
+     LOADING SCREEN
+===================================================== -->
+
+<div
+  id="gsaAdminLoading"
+  class="loading-screen"
+  aria-hidden="true"
+>
+
 <div class="loading-box">
+
 <div class="spinner"></div>
-<p>Signing in...</p>
-</div>
+
+<p>
+Signing in...
+</p>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</div>
+
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script
+src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+
+
+<!-- =====================================================
+     ADMIN JAVASCRIPT
+===================================================== -->
+
 <script src="admin.js"></script>
 
+
 </body>
+
 </html>
