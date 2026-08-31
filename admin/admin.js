@@ -1,7 +1,9 @@
 /* =========================================================
    GHOPKHALI SPORTS ARENA
-   ADMIN DASHBOARD
-   Supabase Management System
+   FINAL ADMIN CMS
+   Login + Session Protection
+   Dashboard + Notices + Fixtures + Gallery
+   Supabase
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -50,11 +52,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function formatDate(value) {
 
-        if (!value) return "No date";
+        if (!value) {
+            return "No date";
+        }
 
-        const date = new Date(value);
+        const date =
+            new Date(value);
 
-        if (Number.isNaN(date.getTime())) {
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
             return "No date";
         }
 
@@ -83,6 +92,294 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     /* =====================================================
+       AUTH ELEMENTS
+    ===================================================== */
+
+    const loginScreen =
+        $("loginScreen");
+
+    const dashboardScreen =
+        $("dashboardScreen");
+
+    const loginForm =
+        $("gsaAdminLoginForm");
+
+    const emailInput =
+        $("gsaAdminEmail");
+
+    const passwordInput =
+        $("gsaAdminPassword");
+
+    const loginButton =
+        $("gsaAdminLoginButton");
+
+    const loginError =
+        $("gsaAdminError");
+
+    const loadingScreen =
+        $("gsaAdminLoading");
+
+
+    /* =====================================================
+       AUTH UI
+    ===================================================== */
+
+    function showLogin() {
+
+        if (loginScreen) {
+            loginScreen.hidden = false;
+        }
+
+        if (dashboardScreen) {
+            dashboardScreen.hidden = true;
+        }
+
+    }
+
+
+    function showDashboard() {
+
+        if (loginScreen) {
+            loginScreen.hidden = true;
+        }
+
+        if (dashboardScreen) {
+            dashboardScreen.hidden = false;
+        }
+
+    }
+
+
+    function showLoading(show) {
+
+        if (!loadingScreen) {
+            return;
+        }
+
+        loadingScreen.hidden =
+            !show;
+
+    }
+
+
+    function setLoginError(message) {
+
+        if (!loginError) {
+            return;
+        }
+
+        loginError.textContent =
+            message || "";
+
+    }
+
+
+    /* =====================================================
+       SESSION PROTECTION
+    ===================================================== */
+
+    const {
+        data: {
+            session: currentSession
+        },
+        error: sessionError
+    } =
+        await supabaseClient
+            .auth
+            .getSession();
+
+
+    if (sessionError) {
+
+        console.error(
+            "Session error:",
+            sessionError
+        );
+
+        showLogin();
+
+    } else if (currentSession) {
+
+        showDashboard();
+
+    } else {
+
+        showLogin();
+
+    }
+
+
+    /* =====================================================
+       LOGIN
+    ===================================================== */
+
+    loginForm?.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            setLoginError("");
+
+            const email =
+                emailInput
+                    ?.value
+                    .trim() || "";
+
+            const password =
+                passwordInput
+                    ?.value || "";
+
+
+            if (!email || !password) {
+
+                setLoginError(
+                    "Please enter your email and password."
+                );
+
+                return;
+
+            }
+
+
+            if (loginButton) {
+                loginButton.disabled = true;
+            }
+
+            showLoading(true);
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .signInWithPassword({
+                            email,
+                            password
+                        });
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                if (!data?.session) {
+
+                    throw new Error(
+                        "Login failed. No active session."
+                    );
+
+                }
+
+
+                showDashboard();
+
+                await initializeDashboard();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Login error:",
+                    error
+                );
+
+                setLoginError(
+                    error.message ||
+                    "Invalid email or password."
+                );
+
+            } finally {
+
+                showLoading(false);
+
+                if (loginButton) {
+                    loginButton.disabled = false;
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       AUTH STATE CHANGE
+    ===================================================== */
+
+    supabaseClient
+        .auth
+        .onAuthStateChange(
+            (event, session) => {
+
+                if (session) {
+
+                    showDashboard();
+
+                    initializeDashboard();
+
+                } else {
+
+                    showLogin();
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    $("logoutButton")
+        ?.addEventListener(
+            "click",
+            async () => {
+
+                const confirmed =
+                    confirm(
+                        "Are you sure you want to logout?"
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                try {
+
+                    await supabaseClient
+                        .auth
+                        .signOut();
+
+                    showLogin();
+
+                    if (emailInput) {
+                        emailInput.value = "";
+                    }
+
+                    if (passwordInput) {
+                        passwordInput.value = "";
+                    }
+
+                } catch (error) {
+
+                    showError(error);
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
        SIDEBAR
     ===================================================== */
 
@@ -92,27 +389,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     const overlay =
         $("adminSidebarOverlay");
 
-    const toggle =
+    const sidebarToggle =
         $("sidebarToggle");
 
 
     function openSidebar() {
 
-        sidebar?.classList.add("active");
-        overlay?.classList.add("active");
+        sidebar?.classList.add(
+            "active"
+        );
+
+        overlay?.classList.add(
+            "active"
+        );
 
     }
 
 
     function closeSidebar() {
 
-        sidebar?.classList.remove("active");
-        overlay?.classList.remove("active");
+        sidebar?.classList.remove(
+            "active"
+        );
+
+        overlay?.classList.remove(
+            "active"
+        );
 
     }
 
 
-    toggle?.addEventListener(
+    sidebarToggle?.addEventListener(
         "click",
         openSidebar
     );
@@ -125,7 +432,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     document
-        .querySelectorAll(".sidebar-link")
+        .querySelectorAll(
+            ".sidebar-link"
+        )
         .forEach(link => {
 
             link.addEventListener(
@@ -143,11 +452,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     function openModal(modal) {
 
         if (!modal) {
-            console.error("Modal not found.");
+            console.error(
+                "Modal not found."
+            );
             return;
         }
 
-        modal.classList.add("active");
+        modal.classList.add(
+            "active"
+        );
 
         modal.setAttribute(
             "aria-hidden",
@@ -163,9 +476,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function closeModal(modal) {
 
-        if (!modal) return;
+        if (!modal) {
+            return;
+        }
 
-        modal.classList.remove("active");
+        modal.classList.remove(
+            "active"
+        );
 
         modal.setAttribute(
             "aria-hidden",
@@ -180,7 +497,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     document
-        .querySelectorAll("[data-close-modal]")
+        .querySelectorAll(
+            "[data-close-modal]"
+        )
         .forEach(button => {
 
             button.addEventListener(
@@ -188,7 +507,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 () => {
 
                     closeModal(
-                        button.closest(".modal")
+                        button.closest(
+                            ".modal"
+                        )
                     );
 
                 }
@@ -198,7 +519,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     document
-        .querySelectorAll(".modal")
+        .querySelectorAll(
+            ".modal"
+        )
         .forEach(modal => {
 
             modal.addEventListener(
@@ -206,9 +529,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 event => {
 
                     if (
-                        event.target === modal
+                        event.target ===
+                        modal
                     ) {
-                        closeModal(modal);
+
+                        closeModal(
+                            modal
+                        );
+
                     }
 
                 }
@@ -221,40 +549,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         "keydown",
         event => {
 
-            if (event.key !== "Escape") {
-                return;
-            }
-
-            document
-                .querySelectorAll(".modal.active")
-                .forEach(modal => {
-                    closeModal(modal);
-                });
-
-        }
-    );
-
-
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
-
-    $("logoutButton")?.addEventListener(
-        "click",
-        async () => {
-
             if (
-                !confirm(
-                    "Are you sure you want to logout?"
-                )
+                event.key !==
+                "Escape"
             ) {
                 return;
             }
 
-            await supabaseClient.auth.signOut();
-
-            window.location.href =
-                "../index.html";
+            document
+                .querySelectorAll(
+                    ".modal.active"
+                )
+                .forEach(
+                    modal =>
+                        closeModal(
+                            modal
+                        )
+                );
 
         }
     );
@@ -264,29 +575,36 @@ document.addEventListener("DOMContentLoaded", async () => {
        DASHBOARD COUNTS
     ===================================================== */
 
-    async function countTable(table) {
+    async function countTable(
+        table
+    ) {
 
         const {
             count,
             error
-        } = await supabaseClient
-            .from(table)
-            .select(
-                "id",
-                {
-                    count: "exact",
-                    head: true
-                }
-            );
+        } =
+            await supabaseClient
+                .from(table)
+                .select(
+                    "id",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                );
+
 
         if (error) {
+
             console.error(
                 table,
                 error
             );
 
             return 0;
+
         }
+
 
         return count || 0;
 
@@ -300,44 +618,62 @@ document.addEventListener("DOMContentLoaded", async () => {
             fixtures,
             members,
             friendly
-        ] = await Promise.all([
+        ] =
+            await Promise.all([
 
-            countTable("notices"),
+                countTable(
+                    "notices"
+                ),
 
-            countTable("fixtures"),
+                countTable(
+                    "fixtures"
+                ),
 
-            countTable(
-                "membership_applications"
-            ),
+                countTable(
+                    "membership_applications"
+                ),
 
-            countTable(
-                "friendly_applications"
-            )
+                countTable(
+                    "friendly_applications"
+                )
 
-        ]);
+            ]);
 
 
         if ($("noticeCount")) {
-            $("noticeCount").textContent =
+
+            $("noticeCount")
+                .textContent =
                 notices;
+
         }
 
 
         if ($("fixtureCount")) {
-            $("fixtureCount").textContent =
+
+            $("fixtureCount")
+                .textContent =
                 fixtures;
+
         }
 
 
         if ($("memberCount")) {
-            $("memberCount").textContent =
+
+            $("memberCount")
+                .textContent =
                 members;
+
         }
 
 
         if ($("applicationCount")) {
-            $("applicationCount").textContent =
-                members + friendly;
+
+            $("applicationCount")
+                .textContent =
+                members +
+                friendly;
+
         }
 
     }
@@ -355,7 +691,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const list =
             $("noticeList");
 
-        if (!list) return;
+        if (!list) {
+            return;
+        }
 
 
         list.innerHTML =
@@ -367,24 +705,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         const {
             data,
             error
-        } = await supabaseClient
-            .from("notices")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
+        } =
+            await supabaseClient
+                .from("notices")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
 
 
         if (error) {
 
-            console.error(error);
+            console.error(
+                "Notices:",
+                error
+            );
 
             list.innerHTML =
                 `<div class="empty-state">
                     Unable to load notices.
+                    <br><br>
+                    ${escapeHTML(
+                        error.message
+                    )}
                  </div>`;
 
             return;
@@ -394,6 +740,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         notices =
             data || [];
+
 
         renderNotices();
 
@@ -405,7 +752,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const list =
             $("noticeList");
 
-        if (!list) return;
+        if (!list) {
+            return;
+        }
 
 
         if ($("noticeTotalCount")) {
@@ -466,132 +815,151 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         list.innerHTML =
-            notices.map(notice => {
+            notices.map(
+                notice => {
 
-                const published =
-                    notice.published === true;
+                    const published =
+                        notice.published === true;
 
-                const important =
-                    notice.important === true;
+                    const important =
+                        notice.important === true;
 
 
-                return `
+                    return `
 
-                <article class="notice-card">
+                    <article class="notice-card">
 
-                    <div class="notice-card-main">
+                        <div class="notice-card-main">
 
-                        <div>
+                            <div>
 
-                            <div class="notice-meta">
+                                <div class="notice-meta">
 
-                                <span class="badge ${
-                                    published
-                                        ? "published"
-                                        : "draft"
-                                }">
+                                    <span class="badge ${
+                                        published
+                                            ? "published"
+                                            : "draft"
+                                    }">
+
+                                        ${
+                                            published
+                                                ? "● Published"
+                                                : "◐ Draft"
+                                        }
+
+                                    </span>
+
 
                                     ${
-                                        published
-                                            ? "● Published"
-                                            : "◐ Draft"
+                                        important
+                                            ? `
+                                            <span class="badge important">
+                                                ★ Important
+                                            </span>
+                                            `
+                                            : ""
                                     }
 
-                                </span>
-
-                                ${
-                                    important
-                                        ? `
-                                        <span class="badge important">
-                                            ★ Important
-                                        </span>
-                                        `
-                                        : ""
-                                }
-
-                            </div>
+                                </div>
 
 
-                            <div class="content-date">
-                                ${formatDate(
-                                    notice.created_at
-                                )}
-                            </div>
+                                <div class="content-date">
+                                    ${formatDate(
+                                        notice.created_at
+                                    )}
+                                </div>
 
 
-                            <h3>
-                                ${escapeHTML(
-                                    notice.title
-                                )}
-                            </h3>
+                                <h3>
+                                    ${escapeHTML(
+                                        notice.title
+                                    )}
+                                </h3>
 
 
-                            <div class="notice-card-content">
-                                ${escapeHTML(
-                                    notice.content
-                                )}
+                                <div class="notice-card-content">
+                                    ${escapeHTML(
+                                        notice.content
+                                    )}
+                                </div>
+
                             </div>
 
                         </div>
 
-                    </div>
+
+                        <div class="card-actions">
+
+                            <button
+                                type="button"
+                                class="small-button"
+                                data-notice-action="edit"
+                                data-id="${escapeHTML(
+                                    notice.id
+                                )}"
+                            >
+                                Edit
+                            </button>
 
 
-                    <div class="card-actions">
-
-                        <button
-                            class="small-button"
-                            data-notice-action="edit"
-                            data-id="${escapeHTML(notice.id)}"
-                        >
-                            Edit
-                        </button>
-
-
-                        <button
-                            class="small-button"
-                            data-notice-action="publish"
-                            data-id="${escapeHTML(notice.id)}"
-                        >
-                            ${
-                                published
-                                    ? "Unpublish"
-                                    : "Publish"
-                            }
-                        </button>
+                            <button
+                                type="button"
+                                class="small-button"
+                                data-notice-action="publish"
+                                data-id="${escapeHTML(
+                                    notice.id
+                                )}"
+                            >
+                                ${
+                                    published
+                                        ? "Unpublish"
+                                        : "Publish"
+                                }
+                            </button>
 
 
-                        <button
-                            class="small-button"
-                            data-notice-action="important"
-                            data-id="${escapeHTML(notice.id)}"
-                        >
-                            ${
-                                important
-                                    ? "Remove Important"
-                                    : "Important"
-                            }
-                        </button>
+                            <button
+                                type="button"
+                                class="small-button"
+                                data-notice-action="important"
+                                data-id="${escapeHTML(
+                                    notice.id
+                                )}"
+                            >
+                                ${
+                                    important
+                                        ? "Remove Important"
+                                        : "Important"
+                                }
+                            </button>
 
 
-                        <button
-                            class="small-button danger"
-                            data-notice-action="delete"
-                            data-id="${escapeHTML(notice.id)}"
-                        >
-                            Delete
-                        </button>
+                            <button
+                                type="button"
+                                class="small-button danger"
+                                data-notice-action="delete"
+                                data-id="${escapeHTML(
+                                    notice.id
+                                )}"
+                            >
+                                Delete
+                            </button>
 
-                    </div>
+                        </div>
 
-                </article>
+                    </article>
 
-                `;
+                    `;
 
-            }).join("");
+                }
+            ).join("");
 
     }
 
+
+    /* =====================================================
+       NOTICE FORM
+    ===================================================== */
 
     function openNoticeForm(
         notice = null
@@ -600,42 +968,62 @@ document.addEventListener("DOMContentLoaded", async () => {
         const form =
             $("noticeForm");
 
-        if (!form) return;
+        if (!form) {
+            return;
+        }
+
 
         form.reset();
 
 
         if ($("noticeId")) {
+
             $("noticeId").value =
                 notice?.id || "";
+
         }
 
 
         if ($("noticeTitle")) {
+
             $("noticeTitle").value =
                 notice?.title || "";
+
         }
 
 
         if ($("noticeContent")) {
+
             $("noticeContent").value =
                 notice?.content || "";
+
+        }
+
+
+        if ($("noticeCategory")) {
+
+            $("noticeCategory").value =
+                notice?.category ||
+                "GENERAL";
+
         }
 
 
         if ($("noticePublished")) {
+
             $("noticePublished").checked =
                 notice
                     ? notice.published === true
                     : true;
+
         }
 
 
         if ($("noticeImportant")) {
+
             $("noticeImportant").checked =
-                notice
-                    ? notice.important === true
-                    : false;
+                notice?.important === true;
+
         }
 
 
@@ -660,9 +1048,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("newNoticeButton")
         ?.addEventListener(
             "click",
-            () => openNoticeForm()
+            () => {
+
+                openNoticeForm();
+
+            }
         );
 
+
+    /* =====================================================
+       NOTICE SAVE
+    ===================================================== */
 
     $("noticeForm")
         ?.addEventListener(
@@ -675,32 +1071,44 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const id =
                     $("noticeId")
                         ?.value
-                        .trim();
+                        .trim() || "";
 
 
                 const title =
                     $("noticeTitle")
                         ?.value
-                        .trim();
+                        .trim() || "";
 
 
                 const content =
                     $("noticeContent")
                         ?.value
-                        .trim();
+                        .trim() || "";
+
+
+                const category =
+                    $("noticeCategory")
+                        ?.value
+                        .trim() ||
+                    "GENERAL";
 
 
                 const published =
                     $("noticePublished")
-                        ?.checked;
+                        ?.checked ??
+                    true;
 
 
                 const important =
                     $("noticeImportant")
-                        ?.checked;
+                        ?.checked ??
+                    false;
 
 
-                if (!title || !content) {
+                if (
+                    !title ||
+                    !content
+                ) {
 
                     alert(
                         "Please enter title and content."
@@ -711,19 +1119,28 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
+                const payload = {
+
+                    title,
+
+                    content,
+
+                    category,
+
+                    published,
+
+                    important,
+
+                    updated_at:
+                        new Date()
+                            .toISOString()
+
+                };
+
+
                 try {
 
                     let response;
-
-
-                    const payload = {
-
-                        title,
-                        content,
-                        published,
-                        important
-
-                    };
 
 
                     if (id) {
@@ -767,7 +1184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     alert(
                         id
                             ? "Notice updated successfully."
-                            : "Notice added successfully."
+                            : "Notice published successfully."
                     );
 
 
@@ -781,6 +1198,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
 
+    /* =====================================================
+       NOTICE ACTIONS
+    ===================================================== */
+
     $("noticeList")
         ?.addEventListener(
             "click",
@@ -791,7 +1212,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                         "[data-notice-action]"
                     );
 
-                if (!button) return;
+
+                if (!button) {
+                    return;
+                }
 
 
                 const id =
@@ -806,14 +1230,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                     );
 
 
-                if (!notice) return;
+                if (!notice) {
+                    return;
+                }
 
 
                 const action =
                     button.dataset.noticeAction;
 
 
-                if (action === "edit") {
+                if (
+                    action ===
+                    "edit"
+                ) {
 
                     openNoticeForm(
                         notice
@@ -824,25 +1253,36 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
-                if (action === "publish") {
+                if (
+                    action ===
+                    "publish"
+                ) {
 
                     const {
                         error
-                    } = await supabaseClient
-                        .from("notices")
-                        .update({
-                            published:
-                                notice.published !== true
-                        })
-                        .eq(
-                            "id",
-                            id
-                        );
+                    } =
+                        await supabaseClient
+                            .from("notices")
+                            .update({
+                                published:
+                                    notice.published !== true,
+
+                                updated_at:
+                                    new Date()
+                                        .toISOString()
+                            })
+                            .eq(
+                                "id",
+                                id
+                            );
 
 
                     if (error) {
+
                         showError(error);
+
                         return;
+
                     }
 
 
@@ -853,25 +1293,36 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
-                if (action === "important") {
+                if (
+                    action ===
+                    "important"
+                ) {
 
                     const {
                         error
-                    } = await supabaseClient
-                        .from("notices")
-                        .update({
-                            important:
-                                notice.important !== true
-                        })
-                        .eq(
-                            "id",
-                            id
-                        );
+                    } =
+                        await supabaseClient
+                            .from("notices")
+                            .update({
+                                important:
+                                    notice.important !== true,
+
+                                updated_at:
+                                    new Date()
+                                        .toISOString()
+                            })
+                            .eq(
+                                "id",
+                                id
+                            );
 
 
                     if (error) {
+
                         showError(error);
+
                         return;
+
                     }
 
 
@@ -882,31 +1333,40 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
-                if (action === "delete") {
+                if (
+                    action ===
+                    "delete"
+                ) {
 
-                    if (
-                        !confirm(
+                    const confirmed =
+                        confirm(
                             `Delete "${notice.title}"?`
-                        )
-                    ) {
+                        );
+
+
+                    if (!confirmed) {
                         return;
                     }
 
 
                     const {
                         error
-                    } = await supabaseClient
-                        .from("notices")
-                        .delete()
-                        .eq(
-                            "id",
-                            id
-                        );
+                    } =
+                        await supabaseClient
+                            .from("notices")
+                            .delete()
+                            .eq(
+                                "id",
+                                id
+                            );
 
 
                     if (error) {
+
                         showError(error);
+
                         return;
+
                     }
 
 
@@ -932,7 +1392,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const list =
             $("fixtureList");
 
-        if (!list) return;
+        if (!list) {
+            return;
+        }
 
 
         list.innerHTML =
@@ -944,15 +1406,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         const {
             data,
             error
-        } = await supabaseClient
-            .from("fixtures")
-            .select("*")
-            .order(
-                "match_date",
-                {
-                    ascending: true
-                }
-            );
+        } =
+            await supabaseClient
+                .from("fixtures")
+                .select("*")
+                .order(
+                    "match_date",
+                    {
+                        ascending: true
+                    }
+                );
 
 
         if (error) {
@@ -979,6 +1442,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         fixtures =
             data || [];
 
+
         renderFixtures();
 
     }
@@ -989,7 +1453,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const list =
             $("fixtureList");
 
-        if (!list) return;
+        if (!list) {
+            return;
+        }
 
 
         if (!fixtures.length) {
@@ -1005,142 +1471,153 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         list.innerHTML =
-            fixtures.map(item => {
+            fixtures.map(
+                item => {
 
-                const published =
-                    item.published !== false;
-
-
-                return `
-
-                <article class="content-card">
-
-                    <div class="content-card-top">
-
-                        <div>
-
-                            <div class="notice-meta">
-
-                                <span class="badge">
-                                    ${escapeHTML(
-                                        item.type ||
-                                        "MATCH"
-                                    )}
-                                </span>
+                    const published =
+                        item.published !== false;
 
 
-                                <span class="badge ${
-                                    published
-                                        ? "published"
-                                        : "draft"
-                                }">
+                    return `
 
-                                    ${
+                    <article class="content-card">
+
+                        <div class="content-card-top">
+
+                            <div>
+
+                                <div class="notice-meta">
+
+                                    <span class="badge">
+                                        ${escapeHTML(
+                                            item.type ||
+                                            "MATCH"
+                                        )}
+                                    </span>
+
+
+                                    <span class="badge ${
                                         published
-                                            ? "Published"
-                                            : "Draft"
-                                    }
+                                            ? "published"
+                                            : "draft"
+                                    }">
 
-                                </span>
+                                        ${
+                                            published
+                                                ? "Published"
+                                                : "Draft"
+                                        }
+
+                                    </span>
+
+                                </div>
+
+
+                                <h3>
+
+                                    ${escapeHTML(
+                                        item.home_team ||
+                                        "Home Team"
+                                    )}
+
+                                    <span>
+                                        VS
+                                    </span>
+
+                                    ${escapeHTML(
+                                        item.away_team ||
+                                        "Away Team"
+                                    )}
+
+                                </h3>
+
+
+                                <p>
+                                    ${escapeHTML(
+                                        item.venue ||
+                                        "Venue TBA"
+                                    )}
+                                </p>
 
                             </div>
 
 
-                            <h3>
+                            <div class="content-date">
 
-                                ${escapeHTML(
-                                    item.home_team ||
-                                    "Home Team"
+                                ${formatDate(
+                                    item.match_date
                                 )}
 
-                                <span>
-                                    VS
-                                </span>
+                                ${
+                                    item.match_time
+                                        ? `
+                                        <br>
+                                        ${escapeHTML(
+                                            String(
+                                                item.match_time
+                                            ).slice(
+                                                0,
+                                                5
+                                            )
+                                        )}
+                                        `
+                                        : ""
+                                }
 
-                                ${escapeHTML(
-                                    item.away_team ||
-                                    "Away Team"
-                                )}
-
-                            </h3>
-
-
-                            <p>
-                                ${escapeHTML(
-                                    item.venue ||
-                                    "Venue TBA"
-                                )}
-                            </p>
+                            </div>
 
                         </div>
 
 
-                        <div class="content-date">
+                        <div class="card-actions">
 
-                            ${formatDate(
-                                item.match_date
-                            )}
+                            <button
+                                type="button"
+                                class="small-button"
+                                data-fixture-action="edit"
+                                data-id="${escapeHTML(
+                                    item.id
+                                )}"
+                            >
+                                Edit
+                            </button>
 
-                            ${
-                                item.match_time
-                                    ? `
-                                    <br>
-                                    ${escapeHTML(
-                                        String(
-                                            item.match_time
-                                        ).slice(
-                                            0,
-                                            5
-                                        )
-                                    )}
-                                    `
-                                    : ""
-                            }
+
+                            <button
+                                type="button"
+                                class="small-button"
+                                data-fixture-action="publish"
+                                data-id="${escapeHTML(
+                                    item.id
+                                )}"
+                            >
+                                ${
+                                    published
+                                        ? "Unpublish"
+                                        : "Publish"
+                                }
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="small-button danger"
+                                data-fixture-action="delete"
+                                data-id="${escapeHTML(
+                                    item.id
+                                )}"
+                            >
+                                Delete
+                            </button>
 
                         </div>
 
-                    </div>
+                    </article>
 
+                    `;
 
-                    <div class="card-actions">
-
-                        <button
-                            class="small-button"
-                            data-fixture-action="edit"
-                            data-id="${escapeHTML(item.id)}"
-                        >
-                            Edit
-                        </button>
-
-
-                        <button
-                            class="small-button"
-                            data-fixture-action="publish"
-                            data-id="${escapeHTML(item.id)}"
-                        >
-                            ${
-                                published
-                                    ? "Unpublish"
-                                    : "Publish"
-                            }
-                        </button>
-
-
-                        <button
-                            class="small-button danger"
-                            data-fixture-action="delete"
-                            data-id="${escapeHTML(item.id)}"
-                        >
-                            Delete
-                        </button>
-
-                    </div>
-
-                </article>
-
-                `;
-
-            }).join("");
+                }
+            ).join("");
 
     }
 
@@ -1156,10 +1633,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const form =
             $("fixtureForm");
 
+
         if (!form) {
 
             console.error(
-                "fixtureForm not found in admin.html"
+                "fixtureForm not found."
             );
 
             alert(
@@ -1175,30 +1653,39 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         if ($("fixtureId")) {
+
             $("fixtureId").value =
                 item?.id || "";
+
         }
 
 
         if ($("fixtureHome")) {
+
             $("fixtureHome").value =
                 item?.home_team || "";
+
         }
 
 
         if ($("fixtureAway")) {
+
             $("fixtureAway").value =
                 item?.away_team || "";
+
         }
 
 
         if ($("fixtureDate")) {
+
             $("fixtureDate").value =
                 item?.match_date || "";
+
         }
 
 
         if ($("fixtureTime")) {
+
             $("fixtureTime").value =
                 item?.match_time
                     ? String(
@@ -1208,27 +1695,34 @@ document.addEventListener("DOMContentLoaded", async () => {
                         5
                     )
                     : "";
+
         }
 
 
         if ($("fixtureVenue")) {
+
             $("fixtureVenue").value =
                 item?.venue || "";
+
         }
 
 
         if ($("fixtureType")) {
+
             $("fixtureType").value =
                 item?.type ||
                 "FRIENDLY MATCH";
+
         }
 
 
         if ($("fixturePublished")) {
+
             $("fixturePublished").checked =
                 item
                     ? item.published !== false
                     : true;
+
         }
 
 
@@ -1239,7 +1733,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!modal) {
 
             console.error(
-                "fixtureModal not found in admin.html"
+                "fixtureModal not found."
             );
 
             alert(
@@ -1265,43 +1759,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
 
-        openModal(modal);
+        openModal(
+            modal
+        );
 
     }
 
 
     /* =====================================================
-       FIXTURE BUTTON
+       ADD FIXTURE BUTTON
     ===================================================== */
 
-    const newFixtureButton =
-        $("newFixtureButton");
-
-
-    if (newFixtureButton) {
-
-        newFixtureButton.addEventListener(
+    $("newFixtureButton")
+        ?.addEventListener(
             "click",
             event => {
 
                 event.preventDefault();
 
-                console.log(
-                    "Add Fixture clicked."
-                );
-
                 openFixtureForm();
 
             }
         );
-
-    } else {
-
-        console.warn(
-            "newFixtureButton not found."
-        );
-
-    }
 
 
     /* =====================================================
@@ -1319,24 +1798,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const id =
                     $("fixtureId")
                         ?.value
-                        .trim();
+                        .trim() || "";
 
 
                 const home =
                     $("fixtureHome")
                         ?.value
-                        .trim();
+                        .trim() || "";
 
 
                 const away =
                     $("fixtureAway")
                         ?.value
-                        .trim();
+                        .trim() || "";
 
 
                 const date =
                     $("fixtureDate")
-                        ?.value;
+                        ?.value || "";
 
 
                 const time =
@@ -1404,12 +1883,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 };
 
 
-                console.log(
-                    "Saving fixture:",
-                    payload
-                );
-
-
                 try {
 
                     let response;
@@ -1439,14 +1912,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
                     if (response.error) {
-
-                        console.error(
-                            "Fixture save error:",
-                            response.error
-                        );
-
                         throw response.error;
-
                     }
 
 
@@ -1492,7 +1958,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     );
 
 
-                if (!button) return;
+                if (!button) {
+                    return;
+                }
 
 
                 const id =
@@ -1507,14 +1975,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                     );
 
 
-                if (!item) return;
+                if (!item) {
+                    return;
+                }
 
 
                 const action =
                     button.dataset.fixtureAction;
 
 
-                if (action === "edit") {
+                if (
+                    action ===
+                    "edit"
+                ) {
 
                     openFixtureForm(
                         item
@@ -1525,20 +1998,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
-                if (action === "publish") {
+                if (
+                    action ===
+                    "publish"
+                ) {
 
                     const {
                         error
-                    } = await supabaseClient
-                        .from("fixtures")
-                        .update({
-                            published:
-                                item.published === false
-                        })
-                        .eq(
-                            "id",
-                            id
-                        );
+                    } =
+                        await supabaseClient
+                            .from("fixtures")
+                            .update({
+                                published:
+                                    item.published === false
+                            })
+                            .eq(
+                                "id",
+                                id
+                            );
 
 
                     if (error) {
@@ -1557,7 +2034,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
-                if (action === "delete") {
+                if (
+                    action ===
+                    "delete"
+                ) {
 
                     if (
                         !confirm(
@@ -1570,13 +2050,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     const {
                         error
-                    } = await supabaseClient
-                        .from("fixtures")
-                        .delete()
-                        .eq(
-                            "id",
-                            id
-                        );
+                    } =
+                        await supabaseClient
+                            .from("fixtures")
+                            .delete()
+                            .eq(
+                                "id",
+                                id
+                            );
 
 
                     if (error) {
@@ -1599,159 +2080,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     /* =====================================================
-       TOURNAMENTS
-    ===================================================== */
-
-    let tournaments = [];
-
-
-    async function loadTournaments() {
-
-        const list =
-            $("tournamentList");
-
-        if (!list) return;
-
-
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from("tournaments")
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
-            );
-
-
-        if (error) {
-
-            console.error(
-                "Tournaments:",
-                error
-            );
-
-            list.innerHTML =
-                `<div class="empty-state">
-                    Tournament table is not available.
-                 </div>`;
-
-            return;
-
-        }
-
-
-        tournaments =
-            data || [];
-
-        renderTournaments();
-
-    }
-
-
-    function renderTournaments() {
-
-        const list =
-            $("tournamentList");
-
-        if (!list) return;
-
-
-        if (!tournaments.length) {
-
-            list.innerHTML =
-                `<div class="empty-state">
-                    No tournaments found.
-                 </div>`;
-
-            return;
-
-        }
-
-
-        list.innerHTML =
-            tournaments.map(item => {
-
-                return `
-
-                <article class="content-card">
-
-                    <div class="content-card-top">
-
-                        <div>
-
-                            <span class="badge">
-                                ${escapeHTML(
-                                    item.status ||
-                                    "UPCOMING"
-                                )}
-                            </span>
-
-
-                            <h3>
-                                ${escapeHTML(
-                                    item.name ||
-                                    item.title ||
-                                    "Tournament"
-                                )}
-                            </h3>
-
-
-                            <p>
-                                ${escapeHTML(
-                                    item.subtitle ||
-                                    item.season ||
-                                    ""
-                                )}
-                            </p>
-
-                        </div>
-
-
-                        <div class="content-date">
-                            ${formatDate(
-                                item.date ||
-                                item.start_date
-                            )}
-                        </div>
-
-                    </div>
-
-
-                    <div class="card-actions">
-
-                        <button
-                            class="small-button"
-                            data-tournament-action="edit"
-                            data-id="${escapeHTML(item.id)}"
-                        >
-                            Edit
-                        </button>
-
-
-                        <button
-                            class="small-button danger"
-                            data-tournament-action="delete"
-                            data-id="${escapeHTML(item.id)}"
-                        >
-                            Delete
-                        </button>
-
-                    </div>
-
-                </article>
-
-                `;
-
-            }).join("");
-
-    }
-
-
-    /* =====================================================
        GALLERY
     ===================================================== */
 
@@ -1760,40 +2088,52 @@ document.addEventListener("DOMContentLoaded", async () => {
         const list =
             $("galleryList");
 
-        if (!list) return;
+        if (!list) {
+            return;
+        }
 
 
         list.innerHTML =
             `<div class="loading-state">
-                Loading gallery...
+                Loading photos...
              </div>`;
 
 
         const {
             data,
             error
-        } = await supabaseClient
-            .storage
-            .from("gallery")
-            .list(
-                "",
-                {
-                    limit: 100,
-                    sortBy: {
-                        column: "created_at",
-                        order: "desc"
+        } =
+            await supabaseClient
+                .storage
+                .from("gallery")
+                .list(
+                    "",
+                    {
+                        limit: 100,
+                        sortBy: {
+                            column:
+                                "created_at",
+                            order:
+                                "desc"
+                        }
                     }
-                }
-            );
+                );
 
 
         if (error) {
 
-            console.error(error);
+            console.error(
+                "Gallery:",
+                error
+            );
 
             list.innerHTML =
                 `<div class="empty-state">
                     Unable to load gallery.
+                    <br><br>
+                    ${escapeHTML(
+                        error.message
+                    )}
                  </div>`;
 
             return;
@@ -1802,12 +2142,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         const files =
-            (data || []).filter(
-                file =>
-                    file.name &&
-                    file.name !==
-                    ".emptyFolderPlaceholder"
-            );
+            (data || [])
+                .filter(
+                    file =>
+                        file.name &&
+                        file.name !==
+                        ".emptyFolderPlaceholder"
+                );
 
 
         if (!files.length) {
@@ -1823,47 +2164,59 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         list.innerHTML =
-            files.map(file => {
+            files.map(
+                file => {
 
-                const {
-                    data: publicData
-                } = supabaseClient
-                    .storage
-                    .from("gallery")
-                    .getPublicUrl(
-                        file.name
-                    );
-
-
-                return `
-
-                <article class="gallery-admin-card">
-
-                    <img
-                        src="${escapeHTML(
-                            publicData.publicUrl
-                        )}"
-                        alt="GSA Gallery"
-                    >
+                    const {
+                        data:
+                            publicData
+                    } =
+                        supabaseClient
+                            .storage
+                            .from("gallery")
+                            .getPublicUrl(
+                                file.name
+                            );
 
 
-                    <button
-                        class="gallery-delete"
-                        data-gallery-delete="${escapeHTML(
-                            file.name
-                        )}"
-                    >
-                        ×
-                    </button>
+                    return `
 
-                </article>
+                    <article
+                        class="gallery-admin-card">
 
-                `;
+                        <img
+                            src="${escapeHTML(
+                                publicData.publicUrl
+                            )}"
+                            alt="GSA Gallery"
+                            loading="lazy"
+                        >
 
-            }).join("");
+
+                        <button
+                            type="button"
+                            class="gallery-delete"
+                            data-gallery-delete="${escapeHTML(
+                                file.name
+                            )}"
+                            aria-label="Delete photo"
+                        >
+                            ×
+                        </button>
+
+                    </article>
+
+                    `;
+
+                }
+            ).join("");
 
     }
 
+
+    /* =====================================================
+       GALLERY UPLOAD
+    ===================================================== */
 
     $("galleryUpload")
         ?.addEventListener(
@@ -1876,70 +2229,103 @@ document.addEventListener("DOMContentLoaded", async () => {
                     );
 
 
-                if (!files.length) return;
-
-
-                for (
-                    const file
-                    of files
-                ) {
-
-                    if (
-                        !file.type.startsWith(
-                            "image/"
-                        )
-                    ) {
-                        continue;
-                    }
-
-
-                    const safeName =
-                        file.name.replace(
-                            /[^a-zA-Z0-9._-]/g,
-                            "-"
-                        );
-
-
-                    const path =
-                        `${Date.now()}-${safeName}`;
-
-
-                    const {
-                        error
-                    } = await supabaseClient
-                        .storage
-                        .from("gallery")
-                        .upload(
-                            path,
-                            file,
-                            {
-                                cacheControl:
-                                    "3600",
-                                upsert:
-                                    false
-                            }
-                        );
-
-
-                    if (error) {
-
-                        showError(error);
-
-                        break;
-
-                    }
-
+                if (!files.length) {
+                    return;
                 }
 
 
-                event.target.value =
-                    "";
+                showLoading(true);
 
-                await loadGallery();
+
+                try {
+
+                    for (
+                        const file
+                        of files
+                    ) {
+
+                        if (
+                            !file.type.startsWith(
+                                "image/"
+                            )
+                        ) {
+
+                            continue;
+
+                        }
+
+
+                        const extension =
+                            file.name
+                                .split(".")
+                                .pop()
+                                .toLowerCase();
+
+
+                        const filename =
+                            `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+
+
+                        const {
+                            error
+                        } =
+                            await supabaseClient
+                                .storage
+                                .from("gallery")
+                                .upload(
+                                    filename,
+                                    file,
+                                    {
+                                        cacheControl:
+                                            "3600",
+                                        upsert:
+                                            false
+                                    }
+                                );
+
+
+                        if (error) {
+                            throw error;
+                        }
+
+
+                        /*
+                         * Gallery database table is optional.
+                         * Storage remains the main image source.
+                         */
+
+                    }
+
+
+                    event.target.value =
+                        "";
+
+
+                    await loadGallery();
+
+
+                    alert(
+                        "Photo uploaded successfully."
+                    );
+
+
+                } catch (error) {
+
+                    showError(error);
+
+                } finally {
+
+                    showLoading(false);
+
+                }
 
             }
         );
 
+
+    /* =====================================================
+       GALLERY DELETE
+    ===================================================== */
 
     $("galleryList")
         ?.addEventListener(
@@ -1952,7 +2338,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                     );
 
 
-                if (!button) return;
+                if (!button) {
+                    return;
+                }
+
+
+                const filename =
+                    button.dataset.galleryDelete;
 
 
                 if (
@@ -1964,800 +2356,96 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
 
 
-                const {
-                    error
-                } = await supabaseClient
-                    .storage
-                    .from("gallery")
-                    .remove([
-                        button.dataset.galleryDelete
-                    ]);
+                try {
+
+                    const {
+                        error
+                    } =
+                        await supabaseClient
+                            .storage
+                            .from("gallery")
+                            .remove([
+                                filename
+                            ]);
 
 
-                if (error) {
+                    if (error) {
+                        throw error;
+                    }
+
+
+                    await loadGallery();
+
+
+                } catch (error) {
 
                     showError(error);
 
-                    return;
-
                 }
-
-
-                await loadGallery();
 
             }
         );
 
 
     /* =====================================================
-       FRIENDLY APPLICATIONS
+       INITIALIZATION
     ===================================================== */
 
-    let friendlyApplications = [];
+    let initialized =
+        false;
 
 
-    async function loadFriendlyApplications() {
+    async function initializeDashboard() {
 
-        const list =
-            $("friendlyList");
+        if (initialized) {
+            return;
+        }
 
-        if (!list) return;
+
+        initialized =
+            true;
 
 
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from(
-                "friendly_applications"
-            )
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
+        try {
+
+            await Promise.all([
+
+                loadDashboardCounts(),
+
+                loadNotices(),
+
+                loadFixtures(),
+
+                loadGallery()
+
+            ]);
+
+
+            console.log(
+                "GSA Admin CMS initialized successfully."
             );
 
 
-        if (error) {
-
-            list.innerHTML =
-                `<div class="empty-state">
-                    Unable to load applications.
-                 </div>`;
-
-            return;
-
-        }
-
-
-        friendlyApplications =
-            data || [];
-
-
-        renderFriendlyApplications();
-
-    }
-
-
-    function renderFriendlyApplications() {
-
-        const list =
-            $("friendlyList");
-
-        if (!list) return;
-
-
-        if (!friendlyApplications.length) {
-
-            list.innerHTML =
-                `<div class="empty-state">
-                    No Friendly Match applications.
-                 </div>`;
-
-            return;
-
-        }
-
-
-        list.innerHTML =
-            friendlyApplications.map(item => {
-
-                return `
-
-                <article class="application-card">
-
-                    <div class="application-top">
-
-                        <div>
-
-                            <h3>
-                                ${escapeHTML(
-                                    item.team_name ||
-                                    "Unknown Team"
-                                )}
-                            </h3>
-
-                            <p>
-                                ${escapeHTML(
-                                    item.contact_person ||
-                                    ""
-                                )}
-                            </p>
-
-                        </div>
-
-
-                        <select
-                            class="status-select"
-                            data-friendly-status
-                            data-id="${escapeHTML(item.id)}"
-                        >
-
-                            ${
-                                [
-                                    "pending",
-                                    "approved",
-                                    "rejected",
-                                    "completed"
-                                ]
-                                .map(
-                                    status => `
-                                    <option
-                                        value="${status}"
-                                        ${
-                                            item.status ===
-                                            status
-                                                ? "selected"
-                                                : ""
-                                        }
-                                    >
-                                        ${status}
-                                    </option>
-                                    `
-                                )
-                                .join("")
-                            }
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="application-info">
-
-                        <div class="info-box">
-                            <span>PHONE</span>
-                            <strong>
-                                ${escapeHTML(
-                                    item.phone
-                                )}
-                            </strong>
-                        </div>
-
-
-                        <div class="info-box">
-                            <span>DATE</span>
-                            <strong>
-                                ${formatDate(
-                                    item.preferred_date
-                                )}
-                            </strong>
-                        </div>
-
-
-                        <div class="info-box">
-                            <span>TIME</span>
-                            <strong>
-                                ${escapeHTML(
-                                    item.preferred_time ||
-                                    "TBA"
-                                )}
-                            </strong>
-                        </div>
-
-                    </div>
-
-
-                    <div class="card-actions">
-
-                        <button
-                            class="small-button"
-                            data-view-friendly
-                            data-id="${escapeHTML(item.id)}"
-                        >
-                            View Details
-                        </button>
-
-
-                        <button
-                            class="small-button danger"
-                            data-delete-friendly
-                            data-id="${escapeHTML(item.id)}"
-                        >
-                            Delete
-                        </button>
-
-                    </div>
-
-                </article>
-
-                `;
-
-            }).join("");
-
-    }
-
-
-    $("friendlyList")
-        ?.addEventListener(
-            "change",
-            async event => {
-
-                const select =
-                    event.target.closest(
-                        "[data-friendly-status]"
-                    );
-
-
-                if (!select) return;
-
-
-                const {
-                    error
-                } = await supabaseClient
-                    .from(
-                        "friendly_applications"
-                    )
-                    .update({
-                        status:
-                            select.value
-                    })
-                    .eq(
-                        "id",
-                        select.dataset.id
-                    );
-
-
-                if (error) {
-                    showError(error);
-                }
-
-            }
-        );
-
-
-    $("friendlyList")
-        ?.addEventListener(
-            "click",
-            async event => {
-
-                const view =
-                    event.target.closest(
-                        "[data-view-friendly]"
-                    );
-
-
-                if (view) {
-
-                    const item =
-                        friendlyApplications.find(
-                            row =>
-                                String(row.id) ===
-                                String(
-                                    view.dataset.id
-                                )
-                        );
-
-
-                    if (item) {
-
-                        showApplication(
-                            "Friendly Match Application",
-                            item
-                        );
-
-                    }
-
-                    return;
-
-                }
-
-
-                const deleteButton =
-                    event.target.closest(
-                        "[data-delete-friendly]"
-                    );
-
-
-                if (!deleteButton) return;
-
-
-                if (
-                    !confirm(
-                        "Delete this application?"
-                    )
-                ) {
-                    return;
-                }
-
-
-                const {
-                    error
-                } = await supabaseClient
-                    .from(
-                        "friendly_applications"
-                    )
-                    .delete()
-                    .eq(
-                        "id",
-                        deleteButton.dataset.id
-                    );
-
-
-                if (error) {
-
-                    showError(error);
-
-                    return;
-
-                }
-
-
-                await loadFriendlyApplications();
-
-                await loadDashboardCounts();
-
-            }
-        );
-
-
-    /* =====================================================
-       MEMBERSHIP APPLICATIONS
-    ===================================================== */
-
-    let membershipApplications = [];
-
-
-    async function loadMembershipApplications() {
-
-        const list =
-            $("membershipList");
-
-        if (!list) return;
-
-
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from(
-                "membership_applications"
-            )
-            .select("*")
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
+        } catch (error) {
+
+            console.error(
+                "Dashboard initialization error:",
+                error
             );
 
-
-        if (error) {
-
-            list.innerHTML =
-                `<div class="empty-state">
-                    Unable to load membership applications.
-                 </div>`;
-
-            return;
-
         }
-
-
-        membershipApplications =
-            data || [];
-
-
-        renderMembershipApplications();
-
-    }
-
-
-    function renderMembershipApplications() {
-
-        const list =
-            $("membershipList");
-
-        if (!list) return;
-
-
-        if (!membershipApplications.length) {
-
-            list.innerHTML =
-                `<div class="empty-state">
-                    No membership applications.
-                 </div>`;
-
-            return;
-
-        }
-
-
-        list.innerHTML =
-            membershipApplications.map(item => {
-
-                return `
-
-                <article class="application-card">
-
-                    <div class="application-top">
-
-                        <div>
-
-                            <h3>
-                                ${escapeHTML(
-                                    item.full_name ||
-                                    "Unknown Applicant"
-                                )}
-                            </h3>
-
-                            <p>
-                                ${escapeHTML(
-                                    item.phone ||
-                                    ""
-                                )}
-                            </p>
-
-                        </div>
-
-
-                        <select
-                            class="status-select"
-                            data-membership-status
-                            data-id="${escapeHTML(item.id)}"
-                        >
-
-                            ${
-                                [
-                                    "pending",
-                                    "approved",
-                                    "rejected",
-                                    "completed"
-                                ]
-                                .map(
-                                    status => `
-                                    <option
-                                        value="${status}"
-                                        ${
-                                            item.status ===
-                                            status
-                                                ? "selected"
-                                                : ""
-                                        }
-                                    >
-                                        ${status}
-                                    </option>
-                                    `
-                                )
-                                .join("")
-                            }
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="application-info">
-
-                        <div class="info-box">
-
-                            <span>
-                                DATE OF BIRTH
-                            </span>
-
-                            <strong>
-                                ${formatDate(
-                                    item.date_of_birth
-                                )}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="info-box">
-
-                            <span>
-                                OCCUPATION
-                            </span>
-
-                            <strong>
-                                ${escapeHTML(
-                                    item.occupation ||
-                                    "—"
-                                )}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="info-box">
-
-                            <span>
-                                POSITION / SKILL
-                            </span>
-
-                            <strong>
-                                ${escapeHTML(
-                                    item.preferred_position ||
-                                    "—"
-                                )}
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="card-actions">
-
-                        <button
-                            class="small-button"
-                            data-view-membership
-                            data-id="${escapeHTML(item.id)}"
-                        >
-                            View Details
-                        </button>
-
-
-                        <button
-                            class="small-button danger"
-                            data-delete-membership
-                            data-id="${escapeHTML(item.id)}"
-                        >
-                            Delete
-                        </button>
-
-                    </div>
-
-                </article>
-
-                `;
-
-            }).join("");
-
-    }
-
-
-    $("membershipList")
-        ?.addEventListener(
-            "change",
-            async event => {
-
-                const select =
-                    event.target.closest(
-                        "[data-membership-status]"
-                    );
-
-
-                if (!select) return;
-
-
-                const {
-                    error
-                } = await supabaseClient
-                    .from(
-                        "membership_applications"
-                    )
-                    .update({
-                        status:
-                            select.value
-                    })
-                    .eq(
-                        "id",
-                        select.dataset.id
-                    );
-
-
-                if (error) {
-                    showError(error);
-                }
-
-            }
-        );
-
-
-    $("membershipList")
-        ?.addEventListener(
-            "click",
-            async event => {
-
-                const view =
-                    event.target.closest(
-                        "[data-view-membership]"
-                    );
-
-
-                if (view) {
-
-                    const item =
-                        membershipApplications.find(
-                            row =>
-                                String(row.id) ===
-                                String(
-                                    view.dataset.id
-                                )
-                        );
-
-
-                    if (item) {
-
-                        showApplication(
-                            "Club Membership Application",
-                            item
-                        );
-
-                    }
-
-                    return;
-
-                }
-
-
-                const deleteButton =
-                    event.target.closest(
-                        "[data-delete-membership]"
-                    );
-
-
-                if (!deleteButton) return;
-
-
-                if (
-                    !confirm(
-                        "Delete this membership application?"
-                    )
-                ) {
-                    return;
-                }
-
-
-                const {
-                    error
-                } = await supabaseClient
-                    .from(
-                        "membership_applications"
-                    )
-                    .delete()
-                    .eq(
-                        "id",
-                        deleteButton.dataset.id
-                    );
-
-
-                if (error) {
-
-                    showError(error);
-
-                    return;
-
-                }
-
-
-                await loadMembershipApplications();
-
-                await loadDashboardCounts();
-
-            }
-        );
-
-
-    /* =====================================================
-       APPLICATION DETAILS
-    ===================================================== */
-
-    function showApplication(
-        title,
-        item
-    ) {
-
-        if (!$("applicationModal")) {
-            return;
-        }
-
-
-        $("applicationModalTitle")
-            .textContent =
-            title;
-
-
-        const fields =
-            Object.entries(item)
-                .filter(
-                    ([, value]) =>
-                        value !== null &&
-                        value !== undefined &&
-                        value !== ""
-                );
-
-
-        $("applicationDetails")
-            .innerHTML = `
-
-            <div class="detail-grid">
-
-                ${
-                    fields.map(
-                        ([key, value]) => `
-
-                        <div class="detail-item">
-
-                            <span>
-                                ${escapeHTML(
-                                    key
-                                        .replace(
-                                            /_/g,
-                                            " "
-                                        )
-                                        .toUpperCase()
-                                )}
-                            </span>
-
-                            <strong>
-                                ${escapeHTML(
-                                    value
-                                )}
-                            </strong>
-
-                        </div>
-
-                        `
-                    ).join("")
-                }
-
-            </div>
-
-        `;
-
-
-        openModal(
-            $("applicationModal")
-        );
 
     }
 
 
     /* =====================================================
-       INITIAL LOAD
+       START
     ===================================================== */
 
-    console.log(
-        "GSA Admin Dashboard loading..."
-    );
+    if (currentSession) {
 
+        await initializeDashboard();
 
-    await Promise.all([
-
-        loadDashboardCounts(),
-
-        loadNotices(),
-
-        loadFixtures(),
-
-        loadTournaments(),
-
-        loadGallery(),
-
-        loadFriendlyApplications(),
-
-        loadMembershipApplications()
-
-    ]);
-
-
-    console.log(
-        "GSA Admin Dashboard initialized successfully."
-    );
+    }
 
 });
