@@ -1,419 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#111111"><meta
+name="description"
+content="Ghopkhali Sports Arena Administration"
+/>
 
-<head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<meta
-  name="theme-color"
-  content="#f5f5f7"
->
-
-<meta
-  name="description"
-  content="Ghopkhali Sports Arena Administration"
->
-
-<title>GSA Admin | Ghopkhali Sports Arena</title>
-
-<link
-  rel="stylesheet"
-  href="style.css"
->
-
-<style>
-
-/* ==================================================
-   GSA ADMIN LOGIN
-================================================== */
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: #f5f5f7;
-}
-
-.gsa-admin-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-
-.gsa-admin-login {
-  width: 100%;
-  max-width: 460px;
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
-  padding: 42px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-}
-
-.gsa-admin-brand {
-  text-align: center;
-  margin-bottom: 34px;
-}
-
-.gsa-admin-logo {
-  width: 86px;
-  height: 86px;
-  margin: 0 auto 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.gsa-admin-logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.gsa-admin-brand small {
-  display: block;
-  font-size: 11px;
-  letter-spacing: 2px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.gsa-admin-brand h1 {
-  margin: 0;
-  font-size: 30px;
-  line-height: 1.1;
-}
-
-.gsa-admin-brand p {
-  margin: 10px 0 0;
-  color: #777;
-  font-size: 14px;
-}
-
-.gsa-admin-form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.gsa-admin-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.gsa-admin-field label {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-.gsa-admin-field input {
-  width: 100%;
-  padding: 15px 16px;
-  border: 1px solid #d9d9d9;
-  background: #fafafa;
-  outline: none;
-  font: inherit;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.gsa-admin-field input:focus {
-  border-color: #111;
-  background: #fff;
-}
-
-.gsa-admin-login-button {
-  width: 100%;
-  border: 0;
-  background: #111;
-  color: #fff;
-  padding: 16px;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.gsa-admin-login-button:hover {
-  opacity: 0.88;
-}
-
-.gsa-admin-login-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.gsa-admin-error {
-  min-height: 20px;
-  color: #c40000;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.gsa-admin-footer {
-  text-align: center;
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 1px solid #eeeeee;
-}
-
-.gsa-admin-footer a {
-  color: #111;
-  text-decoration: none;
-  font-size: 13px;
-}
-
-.gsa-admin-footer a:hover {
-  text-decoration: underline;
-}
-
-
-/* ==================================================
-   LOADING
-================================================== */
-
-.gsa-admin-loading {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(245, 245, 247, 0.94);
-}
-
-.gsa-admin-loading-box {
-  text-align: center;
-}
-
-.gsa-admin-spinner {
-  width: 38px;
-  height: 38px;
-  border: 3px solid #ddd;
-  border-top-color: #111;
-  border-radius: 50%;
-  animation: gsaSpin 0.8s linear infinite;
-  margin: 0 auto 15px;
-}
-
-.gsa-admin-loading-box p {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-@keyframes gsaSpin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-/* ==================================================
-   MOBILE
-================================================== */
-
-@media (max-width: 600px) {
-
-  .gsa-admin-page {
-    padding: 16px;
-  }
-
-  .gsa-admin-login {
-    padding: 30px 22px;
-  }
-
-  .gsa-admin-brand h1 {
-    font-size: 25px;
-  }
-
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<!-- ==================================================
+<title>GSA Admin | Login</title><link rel="stylesheet" href="admin.css"></head><body><!-- ==================================================
      LOGIN PAGE
-================================================== -->
+================================================== --><main class="gsa-login-page">  <section class="gsa-login-card"><!-- BRAND -->
 
-<main class="gsa-admin-page">
+<div class="gsa-login-brand">
 
+  <div class="gsa-login-logo">
+    <img
+      src="gsa.png"
+      alt="Ghopkhali Sports Arena"
+    >
+  </div>
 
-<div class="gsa-admin-login">
+  <span class="gsa-login-kicker">
+    GSA ADMINISTRATION
+  </span>
 
+  <h1>
+    GHOPKHALI
+  </h1>
 
-<!-- BRAND -->
-
-<div class="gsa-admin-brand">
-
-<div class="gsa-admin-logo">
-
-<img
-  src="gsa.png"
-  alt="Ghopkhali Sports Arena"
->
-
-</div>
-
-
-<small>
-GSA ADMINISTRATION
-</small>
-
-
-<h1>
-GHOPKHALI
-</h1>
-
-
-<p>
-SPORTS ARENA • ADMIN PANEL
-</p>
+  <p>
+    SPORTS ARENA
+    <span>•</span>
+    ADMIN PANEL
+  </p>
 
 </div>
 
 
-
-<!-- ==================================================
-     LOGIN FORM
-================================================== -->
+<!-- LOGIN FORM -->
 
 <form
   id="gsaAdminLoginForm"
-  class="gsa-admin-form"
+  class="gsa-login-form"
 >
 
+  <div class="gsa-input-group">
 
-<div class="gsa-admin-field">
+    <label for="gsaAdminEmail">
+      EMAIL ADDRESS
+    </label>
 
-<label for="gsaAdminEmail">
-EMAIL ADDRESS
-</label>
+    <input
+      type="email"
+      id="gsaAdminEmail"
+      name="email"
+      placeholder="admin@example.com"
+      autocomplete="email"
+      required
+    >
 
-<input
-  type="email"
-  id="gsaAdminEmail"
-  autocomplete="email"
-  placeholder="admin@example.com"
-  required
->
-
-</div>
-
-
-
-<div class="gsa-admin-field">
-
-<label for="gsaAdminPassword">
-PASSWORD
-</label>
-
-<input
-  type="password"
-  id="gsaAdminPassword"
-  autocomplete="current-password"
-  placeholder="Enter your password"
-  required
->
-
-</div>
+  </div>
 
 
+  <div class="gsa-input-group">
 
-<div
-  id="gsaAdminError"
-  class="gsa-admin-error"
-  role="alert"
-></div>
+    <div class="gsa-password-label">
+
+      <label for="gsaAdminPassword">
+        PASSWORD
+      </label>
+
+    </div>
+
+    <input
+      type="password"
+      id="gsaAdminPassword"
+      name="password"
+      placeholder="Enter your password"
+      autocomplete="current-password"
+      required
+    >
+
+  </div>
 
 
+  <!-- ERROR -->
 
-<button
-  type="submit"
-  id="gsaAdminLoginButton"
-  class="gsa-admin-login-button"
->
-LOGIN TO ADMIN PANEL
-</button>
+  <div
+    id="gsaAdminError"
+    class="gsa-login-error"
+    role="alert"
+    aria-live="polite"
+  ></div>
 
+
+  <!-- LOGIN BUTTON -->
+
+  <button
+    type="submit"
+    id="gsaAdminLoginButton"
+    class="gsa-login-button"
+  >
+
+    <span class="login-button-text">
+      LOGIN TO ADMIN PANEL
+    </span>
+
+    <span
+      class="login-button-spinner"
+      aria-hidden="true"
+    ></span>
+
+  </button>
 
 </form>
 
 
-
 <!-- FOOTER -->
 
-<div class="gsa-admin-footer">
+<div class="gsa-login-footer">
 
-<a href="index.html">
-← Back to Ghopkhali Sports Arena
-</a>
-
-</div>
-
+  <a href="index.html">
+    <span>←</span>
+    Back to Ghopkhali Sports Arena
+  </a>
 
 </div>
 
-</main>
-
-
-
-<!-- ==================================================
-     LOADING
-================================================== -->
-
-<div
+  </section></main><!-- ==================================================
+     LOGIN LOADING
+================================================== --><div
   id="gsaAdminLoading"
-  class="gsa-admin-loading"
+  class="gsa-loading"
   aria-hidden="true"
->
+>  <div class="gsa-loading-box"><div class="gsa-loading-spinner"></div>
 
-<div class="gsa-admin-loading-box">
+<strong>
+  Signing in
+</strong>
 
-<div class="gsa-admin-spinner"></div>
+<span>
+  Please wait...
+</span>
 
-<p>
-Signing in...
-</p>
-
-</div>
-
-</div>
-
-
-
-<!-- ==================================================
+  </div></div><!-- ==================================================
      SUPABASE
-================================================== -->
-
-<script
-src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
-
-
-
-<!-- ==================================================
-     ADMIN LOGIN SCRIPT
-================================================== -->
-
-<script>
+================================================== --><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 
 "use strict";
 
@@ -430,7 +158,7 @@ const SUPABASE_ANON_KEY =
 
 
 /* ==================================================
-   CREATE CLIENT
+   SUPABASE CLIENT
 ================================================== */
 
 const supabaseClient =
@@ -476,19 +204,49 @@ const loading =
 
 
 /* ==================================================
+   ERROR
+================================================== */
+
+function showLoginError(message) {
+
+  if (!errorBox) return;
+
+  errorBox.textContent =
+    message || "";
+
+  if (message) {
+
+    errorBox.classList.add(
+      "show"
+    );
+
+  } else {
+
+    errorBox.classList.remove(
+      "show"
+    );
+
+  }
+
+}
+
+
+/* ==================================================
    LOADING
 ================================================== */
 
-function setLoading(isLoading) {
+function setLoginLoading(status) {
 
   if (loading) {
 
-    loading.style.display =
-      isLoading ? "flex" : "none";
+    loading.classList.toggle(
+      "show",
+      status
+    );
 
     loading.setAttribute(
       "aria-hidden",
-      isLoading ? "false" : "true"
+      status ? "false" : "true"
     );
 
   }
@@ -497,28 +255,14 @@ function setLoading(isLoading) {
   if (loginButton) {
 
     loginButton.disabled =
-      isLoading;
+      status;
 
-    loginButton.textContent =
-      isLoading
-        ? "SIGNING IN..."
-        : "LOGIN TO ADMIN PANEL";
+    loginButton.classList.toggle(
+      "loading",
+      status
+    );
 
   }
-
-}
-
-
-/* ==================================================
-   ERROR
-================================================== */
-
-function showError(message) {
-
-  if (!errorBox) return;
-
-  errorBox.textContent =
-    message || "";
 
 }
 
@@ -531,19 +275,33 @@ async function checkExistingSession() {
 
   try {
 
-    const result =
+    const {
+      data,
+      error
+    } =
       await supabaseClient.auth.getSession();
 
+
+    if (error) {
+
+      console.error(
+        "Session error:",
+        error
+      );
+
+      return;
+
+    }
+
+
     const session =
-      result?.data?.session;
+      data?.session;
 
 
-    if (session && session.user) {
-
-      /*
-       * User is already logged in.
-       * Send directly to the dashboard.
-       */
+    if (
+      session &&
+      session.user
+    ) {
 
       window.location.replace(
         "admin-dashboard.html"
@@ -576,28 +334,46 @@ if (loginForm) {
       event.preventDefault();
 
 
-      showError("");
+      showLoginError("");
 
 
       const email =
-        emailInput.value.trim();
+        emailInput
+          ?.value
+          .trim();
 
       const password =
-        passwordInput.value;
+        passwordInput
+          ?.value || "";
 
 
-      if (!email || !password) {
+      if (!email) {
 
-        showError(
-          "Please enter your email and password."
+        showLoginError(
+          "Please enter your email address."
         );
+
+        emailInput?.focus();
 
         return;
 
       }
 
 
-      setLoading(true);
+      if (!password) {
+
+        showLoginError(
+          "Please enter your password."
+        );
+
+        passwordInput?.focus();
+
+        return;
+
+      }
+
+
+      setLoginLoading(true);
 
 
       try {
@@ -608,8 +384,13 @@ if (loginForm) {
         } =
           await supabaseClient.auth
             .signInWithPassword({
-              email: email,
-              password: password
+
+              email:
+                email,
+
+              password:
+                password
+
             });
 
 
@@ -620,18 +401,20 @@ if (loginForm) {
         }
 
 
-        if (!data || !data.user) {
+        if (
+          !data ||
+          !data.user
+        ) {
 
           throw new Error(
-            "Login failed. Please try again."
+            "Unable to sign in. Please try again."
           );
 
         }
 
 
         /*
-         * Login successful.
-         * Move to separate dashboard.
+         * Login successful
          */
 
         window.location.replace(
@@ -651,17 +434,48 @@ if (loginForm) {
           "Login failed. Please check your email and password.";
 
 
-        if (error?.message) {
+        if (
+          error &&
+          error.message
+        ) {
 
-          message =
-            error.message;
+          const errorMessage =
+            error.message.toLowerCase();
+
+
+          if (
+            errorMessage.includes(
+              "invalid login credentials"
+            )
+          ) {
+
+            message =
+              "Invalid email or password.";
+
+          } else if (
+            errorMessage.includes(
+              "email not confirmed"
+            )
+          ) {
+
+            message =
+              "Please confirm your email before signing in.";
+
+          } else {
+
+            message =
+              error.message;
+
+          }
 
         }
 
 
-        showError(message);
+        showLoginError(
+          message
+        );
 
-        setLoading(false);
+        setLoginLoading(false);
 
       }
 
@@ -700,8 +514,5 @@ supabaseClient.auth.onAuthStateChange(
 checkExistingSession();
 
 </script>
-
-
 </body>
-
 </html>
