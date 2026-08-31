@@ -545,55 +545,276 @@
         </section>
 
 
+<!-- =================================================
+     FIXTURES
+================================================= -->
 
-        <!-- =================================================
-             FIXTURES
-        ================================================= -->
+<section
+    id="fixtures"
+    class="admin-section"
+>
 
-        <section
-            id="fixtures"
-            class="admin-section"
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                MATCHES
+            </span>
+
+            <h2>
+                Fixtures
+            </h2>
+
+            <p>
+                Manage upcoming matches.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="newFixtureButton"
+            class="primary-button"
         >
+            + Add Fixture
+        </button>
 
-            <div class="section-heading">
+    </div>
 
-                <div>
 
-                    <span class="section-label">
-                        MATCHES
-                    </span>
+    <!-- =============================================
+         FIXTURE LIST
+    ============================================== -->
 
-                    <h2>
-                        Fixtures
-                    </h2>
+    <div id="fixtureList">
 
-                    <p>
-                        Manage upcoming matches.
-                    </p>
+        <div class="loading-state">
+            Loading fixtures...
+        </div>
 
-                </div>
+    </div>
 
+</section>
+
+
+<!-- =================================================
+     FIXTURE MODAL
+================================================= -->
+
+<div
+    id="fixtureModal"
+    class="modal"
+    aria-hidden="true"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="section-label">
+                    MATCH MANAGEMENT
+                </span>
+
+                <h2 id="fixtureModalTitle">
+                    Add Fixture
+                </h2>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="fixtureForm">
+
+            <input
+                type="hidden"
+                id="fixtureId"
+            >
+
+
+            <!-- HOME TEAM -->
+
+            <div class="form-group">
+
+                <label for="fixtureHomeTeam">
+                    Home Team
+                </label>
+
+                <input
+                    type="text"
+                    id="fixtureHomeTeam"
+                    placeholder="Ghopkhali Sports Arena"
+                    required
+                >
+
+            </div>
+
+
+            <!-- AWAY TEAM -->
+
+            <div class="form-group">
+
+                <label for="fixtureAwayTeam">
+                    Away Team
+                </label>
+
+                <input
+                    type="text"
+                    id="fixtureAwayTeam"
+                    placeholder="Opponent Team"
+                    required
+                >
+
+            </div>
+
+
+            <!-- TYPE -->
+
+            <div class="form-group">
+
+                <label for="fixtureType">
+                    Match Type
+                </label>
+
+                <select id="fixtureType">
+
+                    <option value="FRIENDLY MATCH">
+                        FRIENDLY MATCH
+                    </option>
+
+                    <option value="TOURNAMENT">
+                        TOURNAMENT
+                    </option>
+
+                    <option value="LEAGUE">
+                        LEAGUE
+                    </option>
+
+                    <option value="FINAL">
+                        FINAL
+                    </option>
+
+                    <option value="SEMI FINAL">
+                        SEMI FINAL
+                    </option>
+
+                    <option value="FIXTURE">
+                        FIXTURE
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- DATE -->
+
+            <div class="form-group">
+
+                <label for="fixtureDate">
+                    Match Date
+                </label>
+
+                <input
+                    type="date"
+                    id="fixtureDate"
+                    required
+                >
+
+            </div>
+
+
+            <!-- TIME -->
+
+            <div class="form-group">
+
+                <label for="fixtureTime">
+                    Kickoff Time
+                </label>
+
+                <input
+                    type="time"
+                    id="fixtureTime"
+                >
+
+            </div>
+
+
+            <!-- VENUE -->
+
+            <div class="form-group">
+
+                <label for="fixtureVenue">
+                    Venue
+                </label>
+
+                <input
+                    type="text"
+                    id="fixtureVenue"
+                    placeholder="GSA Ground"
+                >
+
+            </div>
+
+
+            <!-- PUBLISHED -->
+
+            <div class="form-check">
+
+                <input
+                    type="checkbox"
+                    id="fixturePublished"
+                    checked
+                >
+
+                <label for="fixturePublished">
+                    Publish this fixture on homepage
+                </label>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="modal-actions">
 
                 <button
                     type="button"
-                    id="newFixtureButton"
+                    class="secondary-button"
+                    data-close-modal
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
                     class="primary-button"
                 >
-                    + Add Fixture
+                    Save Fixture
                 </button>
 
             </div>
 
+        </form>
 
-            <div id="fixtureList">
+    </div>
 
-                <div class="empty-state">
-                    Fixture management will appear here.
-                </div>
-
-            </div>
-
-        </section>
+</div>
 
 
 
