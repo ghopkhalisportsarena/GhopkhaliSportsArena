@@ -2079,6 +2079,653 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
 
+/* =====================================================
+   TOURNAMENTS
+===================================================== */
+
+let tournaments = [];
+
+
+/* =====================================================
+   LOAD TOURNAMENTS
+===================================================== */
+
+async function loadTournaments() {
+
+    const list =
+        $("tournamentList");
+
+    if (!list) {
+        return;
+    }
+
+
+    list.innerHTML = `
+        <div class="loading-state">
+            Loading tournaments...
+        </div>
+    `;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("tournaments")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Tournament loading error:",
+            error
+        );
+
+        list.innerHTML = `
+            <div class="empty-state">
+
+                Unable to load tournaments.
+
+                <br><br>
+
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    tournaments =
+        data || [];
+
+
+    renderTournaments();
+
+}
+
+
+/* =====================================================
+   RENDER TOURNAMENTS
+===================================================== */
+
+function renderTournaments() {
+
+    const list =
+        $("tournamentList");
+
+    if (!list) {
+        return;
+    }
+
+
+    if (!tournaments.length) {
+
+        list.innerHTML = `
+            <div class="empty-state">
+                No tournaments found.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML =
+        tournaments
+            .map(
+                tournament => {
+
+                    const published =
+                        tournament.published === true;
+
+
+                    return `
+
+                    <article class="content-card">
+
+                        <div class="content-card-top">
+
+                            <div>
+
+                                <div class="notice-meta">
+
+                                    <span class="badge">
+                                        ${escapeHTML(
+                                            tournament.status ||
+                                            "UPCOMING"
+                                        )}
+                                    </span>
+
+
+                                    <span class="badge ${
+                                        published
+                                            ? "published"
+                                            : "draft"
+                                    }">
+
+                                        ${
+                                            published
+                                                ? "Published"
+                                                : "Draft"
+                                        }
+
+                                    </span>
+
+                                </div>
+
+
+                                <h3>
+                                    ${escapeHTML(
+                                        tournament.name
+                                    )}
+                                </h3>
+
+
+                                ${
+                                    tournament.season
+                                        ? `
+                                        <p>
+                                            ${escapeHTML(
+                                                tournament.season
+                                            )}
+                                        </p>
+                                        `
+                                        : ""
+                                }
+
+
+                                ${
+                                    tournament.venue
+                                        ? `
+                                        <p>
+                                            ${escapeHTML(
+                                                tournament.venue
+                                            )}
+                                        </p>
+                                        `
+                                        : ""
+                                }
+
+
+                                ${
+                                    tournament.date_details
+                                        ? `
+                                        <p>
+                                            ${escapeHTML(
+                                                tournament.date_details
+                                            )}
+                                        </p>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+
+                            <div class="content-date">
+
+                                ${formatDate(
+                                    tournament.created_at
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-actions">
+
+                            <button
+                                type="button"
+                                class="small-button"
+                                data-tournament-action="edit"
+                                data-id="${escapeHTML(
+                                    tournament.id
+                                )}"
+                            >
+                                Edit
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="small-button"
+                                data-tournament-action="publish"
+                                data-id="${escapeHTML(
+                                    tournament.id
+                                )}"
+                            >
+
+                                ${
+                                    published
+                                        ? "Unpublish"
+                                        : "Publish"
+                                }
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="small-button danger"
+                                data-tournament-action="delete"
+                                data-id="${escapeHTML(
+                                    tournament.id
+                                )}"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* =====================================================
+   OPEN TOURNAMENT FORM
+===================================================== */
+
+function openTournamentForm(
+    tournament = null
+) {
+
+    const form =
+        $("tournamentForm");
+
+    const modal =
+        $("tournamentModal");
+
+
+    if (!form || !modal) {
+
+        alert(
+            "Tournament form is missing."
+        );
+
+        return;
+    }
+
+
+    form.reset();
+
+
+    $("tournamentId").value =
+        tournament?.id || "";
+
+
+    $("tournamentName").value =
+        tournament?.name || "";
+
+
+    $("tournamentSeason").value =
+        tournament?.season || "";
+
+
+    $("tournamentStatus").value =
+        tournament?.status ||
+        "UPCOMING";
+
+
+    $("tournamentVenue").value =
+        tournament?.venue || "";
+
+
+    $("tournamentDate").value =
+        tournament?.date_details || "";
+
+
+    $("tournamentDescription").value =
+        tournament?.description || "";
+
+
+    $("tournamentPublished").checked =
+        tournament
+            ? tournament.published === true
+            : true;
+
+
+    $("tournamentModalTitle")
+        .textContent =
+        tournament
+            ? "Edit Tournament"
+            : "Add Tournament";
+
+
+    openModal(modal);
+
+}
+
+
+/* =====================================================
+   ADD TOURNAMENT
+===================================================== */
+
+$("newTournamentButton")
+    ?.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            openTournamentForm();
+
+        }
+    );
+
+
+/* =====================================================
+   SAVE TOURNAMENT
+===================================================== */
+
+$("tournamentForm")
+    ?.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const id =
+                $("tournamentId")
+                    ?.value
+                    .trim() || "";
+
+
+            const name =
+                $("tournamentName")
+                    ?.value
+                    .trim() || "";
+
+
+            const season =
+                $("tournamentSeason")
+                    ?.value
+                    .trim() || null;
+
+
+            const status =
+                $("tournamentStatus")
+                    ?.value ||
+                "UPCOMING";
+
+
+            const venue =
+                $("tournamentVenue")
+                    ?.value
+                    .trim() || null;
+
+
+            const dateDetails =
+                $("tournamentDate")
+                    ?.value
+                    .trim() || null;
+
+
+            const description =
+                $("tournamentDescription")
+                    ?.value
+                    .trim() || null;
+
+
+            const published =
+                $("tournamentPublished")
+                    ?.checked === true;
+
+
+            if (!name) {
+
+                alert(
+                    "Please enter tournament name."
+                );
+
+                return;
+            }
+
+
+            const payload = {
+
+                name,
+
+                season,
+
+                status,
+
+                venue,
+
+                date_details:
+                    dateDetails,
+
+                description,
+
+                published,
+
+                updated_at:
+                    new Date()
+                        .toISOString()
+
+            };
+
+
+            try {
+
+                let response;
+
+
+                if (id) {
+
+                    response =
+                        await supabaseClient
+                            .from("tournaments")
+                            .update(payload)
+                            .eq(
+                                "id",
+                                id
+                            );
+
+                } else {
+
+                    response =
+                        await supabaseClient
+                            .from("tournaments")
+                            .insert([
+                                payload
+                            ]);
+
+                }
+
+
+                if (response.error) {
+                    throw response.error;
+                }
+
+
+                closeModal(
+                    $("tournamentModal")
+                );
+
+
+                await loadTournaments();
+
+
+                alert(
+                    id
+                        ? "Tournament updated successfully."
+                        : "Tournament added successfully."
+                );
+
+            } catch (error) {
+
+                showError(error);
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   TOURNAMENT ACTIONS
+===================================================== */
+
+$("tournamentList")
+    ?.addEventListener(
+        "click",
+        async event => {
+
+            const button =
+                event.target.closest(
+                    "[data-tournament-action]"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const id =
+                button.dataset.id;
+
+
+            const tournament =
+                tournaments.find(
+                    item =>
+                        String(item.id) ===
+                        String(id)
+                );
+
+
+            if (!tournament) {
+                return;
+            }
+
+
+            const action =
+                button.dataset.tournamentAction;
+
+
+            /* EDIT */
+
+            if (
+                action ===
+                "edit"
+            ) {
+
+                openTournamentForm(
+                    tournament
+                );
+
+                return;
+            }
+
+
+            /* PUBLISH / UNPUBLISH */
+
+            if (
+                action ===
+                "publish"
+            ) {
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("tournaments")
+                        .update({
+
+                            published:
+                                !tournament.published,
+
+                            updated_at:
+                                new Date()
+                                    .toISOString()
+
+                        })
+                        .eq(
+                            "id",
+                            id
+                        );
+
+
+                if (error) {
+
+                    showError(error);
+
+                    return;
+                }
+
+
+                await loadTournaments();
+
+                return;
+            }
+
+
+            /* DELETE */
+
+            if (
+                action ===
+                "delete"
+            ) {
+
+                const confirmed =
+                    confirm(
+                        `Delete "${tournament.name}"?`
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("tournaments")
+                        .delete()
+                        .eq(
+                            "id",
+                            id
+                        );
+
+
+                if (error) {
+
+                    showError(error);
+
+                    return;
+                }
+
+
+                await loadTournaments();
+
+            }
+
+        }
+    );
+
     /* =====================================================
        GALLERY
     ===================================================== */
@@ -2397,45 +3044,46 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function initializeDashboard() {
 
-        if (initialized) {
-            return;
-        }
+    if (initialized) {
+        return;
+    }
 
+    initialized = true;
 
-        initialized =
-            true;
+    try {
 
+        await Promise.all([
 
-        try {
+            loadDashboardCounts(),
 
-            await Promise.all([
+            loadNotices(),
 
-                loadDashboardCounts(),
+            loadFixtures(),
 
-                loadNotices(),
+            loadTournaments(),
 
-                loadFixtures(),
+            loadGallery(),
 
-                loadGallery()
+            loadFriendlyApplications(),
 
-            ]);
+            loadMembershipApplications()
 
+        ]);
 
-            console.log(
-                "GSA Admin CMS initialized successfully."
-            );
+        console.log(
+            "GSA Admin CMS initialized successfully."
+        );
 
+    } catch (error) {
 
-        } catch (error) {
-
-            console.error(
-                "Dashboard initialization error:",
-                error
-            );
-
-        }
+        console.error(
+            "Dashboard initialization error:",
+            error
+        );
 
     }
+
+}
 
 /* =====================================================
    TOURNAMENT CMS
