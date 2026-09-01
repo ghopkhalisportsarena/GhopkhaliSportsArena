@@ -3584,9 +3584,7 @@ $("friendlyList")
    FRIENDLY APPLICATION DETAILS
 ===================================================== */
 
-function openFriendlyApplication(
-    application
-) {
+function openFriendlyApplication(application) {
 
     const modal =
         $("applicationModal");
@@ -3597,7 +3595,6 @@ function openFriendlyApplication(
     const details =
         $("applicationDetails");
 
-
     if (
         !modal ||
         !title ||
@@ -3606,10 +3603,13 @@ function openFriendlyApplication(
         return;
     }
 
-
     const message =
-        application.message ||
-        "";
+        application.message || "";
+
+    const status =
+        String(
+            application.status || "pending"
+        ).toLowerCase();
 
 
     details.innerHTML = `
@@ -3617,21 +3617,12 @@ function openFriendlyApplication(
         <div class="application-detail-card">
 
             <p>
-                <strong>
-                    Application ID
-                </strong>
-                <br>
-                ${escapeHTML(
-                    application.id
-                )}
+                <strong>Application ID</strong><br>
+                ${escapeHTML(application.id)}
             </p>
 
-
             <p>
-                <strong>
-                    Team / Club
-                </strong>
-                <br>
+                <strong>Team / Club</strong><br>
                 ${escapeHTML(
                     application.team_name ||
                     application.club_name ||
@@ -3639,12 +3630,8 @@ function openFriendlyApplication(
                 )}
             </p>
 
-
             <p>
-                <strong>
-                    Contact Person
-                </strong>
-                <br>
+                <strong>Contact Person</strong><br>
                 ${escapeHTML(
                     application.contact_person ||
                     application.full_name ||
@@ -3653,94 +3640,58 @@ function openFriendlyApplication(
                 )}
             </p>
 
-
             <p>
-                <strong>
-                    Phone
-                </strong>
-                <br>
+                <strong>Phone</strong><br>
                 ${escapeHTML(
-                    application.phone ||
-                    "N/A"
+                    application.phone || "N/A"
                 )}
             </p>
 
-
             <p>
-                <strong>
-                    Email
-                </strong>
-                <br>
+                <strong>Email</strong><br>
                 ${escapeHTML(
-                    application.email ||
-                    "N/A"
+                    application.email || "N/A"
                 )}
             </p>
 
-
             <p>
-                <strong>
-                    Sport / Players
-                </strong>
-                <br>
+                <strong>Sport / Players</strong><br>
                 ${escapeHTML(
                     message
                         .split("\n")
-                        .slice(
-                            0,
-                            2
-                        )
+                        .slice(0, 2)
                         .join(" • ")
                 )}
             </p>
 
-
             <p>
-                <strong>
-                    Match Date
-                </strong>
-                <br>
+                <strong>Match Date</strong><br>
                 ${formatDate(
                     application.preferred_date
                 )}
             </p>
 
-
             <p>
-                <strong>
-                    Match Time
-                </strong>
-                <br>
+                <strong>Match Time</strong><br>
                 ${escapeHTML(
                     application.preferred_time
                         ? String(
                             application.preferred_time
-                        ).slice(
-                            0,
-                            5
-                        )
+                        ).slice(0, 5)
                         : "Not specified"
                 )}
             </p>
 
-
             <p>
-                <strong>
-                    Venue
-                </strong>
-                <br>
+                <strong>Venue</strong><br>
                 ${escapeHTML(
                     application.venue ||
                     "Not specified"
                 )}
             </p>
 
-
             <p>
-                <strong>
-                    Message
-                </strong>
-                <br>
+                <strong>Message</strong><br>
                 ${escapeHTML(
                     message ||
                     "No additional message."
@@ -3750,34 +3701,127 @@ function openFriendlyApplication(
                 )}
             </p>
 
-
             <p>
-                <strong>
-                    Status
-                </strong>
-                <br>
-                ${escapeHTML(
-                    String(
-                        application.status ||
-                        "pending"
-                    ).toUpperCase()
-                )}
+                <strong>Status</strong><br>
+
+                <span class="application-status ${status}">
+                    ${escapeHTML(
+                        status.toUpperCase()
+                    )}
+                </span>
+
             </p>
+
+
+            ${
+                status === "pending"
+                    ? `
+                        <div class="application-decision-actions">
+
+                            <button
+                                type="button"
+                                class="small-button approve-button"
+                                data-application-decision="approve"
+                                data-id="${escapeHTML(application.id)}"
+                            >
+                                ✓ Approve Application
+                            </button>
+
+                            <button
+                                type="button"
+                                class="small-button reject-button"
+                                data-application-decision="reject"
+                                data-id="${escapeHTML(application.id)}"
+                            >
+                                ✕ Reject Application
+                            </button>
+
+                        </div>
+                    `
+                    : `
+                        <div class="application-decision-result">
+
+                            ${
+                                status === "approved"
+                                    ? "✓ This application has been approved."
+                                    : "✕ This application has been rejected."
+                            }
+
+                        </div>
+                    `
+            }
 
         </div>
 
     `;
 
-
     title.textContent =
         "Friendly Match Application";
 
-
     openModal(modal);
-
 }
 
+/* =====================================================
+   FRIENDLY APPLICATION — APPROVE / REJECT CLICK
+===================================================== */
 
+document.addEventListener(
+    "click",
+    event => {
+
+        const button =
+            event.target.closest(
+                "[data-application-decision]"
+            );
+
+        if (!button) return;
+
+        const applicationId =
+            button.dataset.id;
+
+        const decision =
+            button.dataset.applicationDecision;
+
+        if (!applicationId || !decision) {
+            return;
+        }
+
+        if (decision === "approve") {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to APPROVE this application?"
+                );
+
+            if (!confirmed) {
+                return;
+            }
+
+            updateFriendlyApplicationStatus(
+                applicationId,
+                "approved"
+            );
+        }
+
+        if (decision === "reject") {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to REJECT this application?"
+                );
+
+            if (!confirmed) {
+                return;
+            }
+
+            updateFriendlyApplicationStatus(
+                applicationId,
+                "rejected"
+            );
+        }
+
+    }
+);
 
     /* =====================================================
        INITIALIZATION
@@ -3907,6 +3951,131 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
  
+/* =====================================================
+   FRIENDLY APPLICATION — APPROVE / REJECT
+===================================================== */
+
+async function updateFriendlyApplicationStatus(
+    applicationId,
+    newStatus
+) {
+
+    if (
+        !applicationId ||
+        !["approved", "rejected"].includes(newStatus)
+    ) {
+        return;
+    }
+
+
+    const button =
+        document.querySelector(
+            `[data-application-decision][data-id="${applicationId}"]`
+        );
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Updating...";
+
+    }
+
+
+    try {
+
+        const { error } =
+            await supabaseClient
+                .from("friendly_applications")
+                .update({
+                    status: newStatus,
+                    updated_at: new Date().toISOString()
+                })
+                .eq("id", applicationId);
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const application =
+            friendlyApplications.find(
+                item =>
+                    String(item.id) ===
+                    String(applicationId)
+            );
+
+
+        if (application) {
+
+            application.status =
+                newStatus;
+
+            application.updated_at =
+                new Date().toISOString();
+
+        }
+
+
+        renderFriendlyApplications();
+
+
+        const updatedApplication =
+            friendlyApplications.find(
+                item =>
+                    String(item.id) ===
+                    String(applicationId)
+            );
+
+
+        if (updatedApplication) {
+
+            openFriendlyApplication(
+                updatedApplication
+            );
+
+        }
+
+
+        alert(
+            newStatus === "approved"
+                ? "Application approved successfully."
+                : "Application rejected successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Application status update error:",
+            error
+        );
+
+
+        alert(
+            "Unable to update application status.\n\n" +
+            error.message
+        );
+
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                newStatus === "approved"
+                    ? "✓ Approve Application"
+                    : "✕ Reject Application";
+
+        }
+
+    }
+
+}
+
    /* =====================================================
        START
     ===================================================== */
