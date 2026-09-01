@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Friendly Match Application | Ghopkhali Sports Arena</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f7;
+            color: #111;
+        }
+
+        .page {
+            width: min(850px, 92%);
+            margin: auto;
+            padding: 30px 0 60px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: #111;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-container {
+            background: #fff;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, .08);
+        }
+
+        .label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #777;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: clamp(32px, 6vw, 52px);
+            line-height: 1.1;
+            margin-bottom: 15px;
+        }
+
+        .intro {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font: inherit;
+            outline: none;
+            background: #fff;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #111;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            width: 100%;
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            background: #111;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-button:hover {
+            opacity: .9;
+        }
+
+        .message {
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 12px;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .success {
+            display: block;
+            background: #eaf7ee;
+            color: #176b35;
+        }
+
+        .error {
+            display: block;
+            background: #fdecec;
+            color: #a11;
+        }
+
+        @media (max-width: 600px) {
+
+            .page {
+                width: 94%;
+                padding-top: 20px;
+            }
+
+            .form-container {
+                padding: 24px 20px;
+                border-radius: 20px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="page">
+
+        <a href="index.html#club-services" class="back-button">
+            ← Back to Club Services
+        </a>
+
+        <section class="form-container">
+
+            <div class="label">
+                GHOPKHALI SPORTS ARENA
+            </div>
+
+            <h1>
+                Friendly Match
+                Application
+            </h1>
+
+            <p class="intro">
+                External clubs and teams can submit an official
+                application to arrange a friendly match with
+                Ghopkhali Sports Arena.
+            </p>
+
+            <form id="friendlyMatchForm">
+
+                <div class="form-group">
+                    <label for="teamName">
+                        Team / Club Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="teamName"
+                        name="teamName"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="contactPerson">
+                        Contact Person *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="contactPerson"
+                        name="contactPerson"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">
+                        Contact Number *
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="sport">
+                        Sport *
+                    </label>
+
+                    <select
+                        id="sport"
+                        name="sport"
+                        required
+                    >
+                        <option value="">
+                            Select Sport
+                        </option>
+
+                        <option value="Football">
+                            Football
+                        </option>
+
+                        <option value="Cricket">
+                            Cricket
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="preferredDate">
+                        Preferred Match Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="preferredDate"
+                        name="preferredDate"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="message">
+                        Additional Information
+                    </label>
+
+                    <textarea
+                        id="message"
+                        name="message"
+                        placeholder="Tell us about your team and match request..."
+                    ></textarea>
+                </div>
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                >
+                    Submit Application
+                </button>
+
+                <div
+                    id="formMessage"
+                    class="message"
+                ></div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <script>
+
+        const form =
+            document.getElementById("friendlyMatchForm");
+
+        const formMessage =
+            document.getElementById("formMessage");
+
+        form.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            formMessage.className =
+                "message success";
+
+            formMessage.textContent =
+                "Your application form is ready. Submission system will be connected next.";
+
+        });
+
+    </script>
+
+</body>
+
+</html>
