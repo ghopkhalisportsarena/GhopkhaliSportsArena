@@ -4529,7 +4529,59 @@ async function updateFriendlyApplicationStatus(
                     "id",
                     application.id
                 );
+        /* =====================================================
+           SEND DECISION EMAILS
+        ===================================================== */
 
+        let emailSent = false;
+        let emailMessage = "";
+
+        try {
+
+            const {
+                data: emailResult,
+                error: emailError
+            } = await supabaseClient.functions.invoke(
+                "send-friendly-application-email",
+                {
+                    body: {
+                        applicationId:
+                            application.id
+                    }
+                }
+            );
+
+            if (emailError) {
+                throw emailError;
+            }
+
+            if (!emailResult?.success) {
+                throw new Error(
+                    emailResult?.error ||
+                    "Email sending failed."
+                );
+            }
+
+            emailSent = true;
+
+            emailMessage =
+                "Applicant and GSA emails sent successfully.";
+
+            console.log(
+                "Decision emails sent:",
+                emailResult
+            );
+
+        } catch (emailError) {
+
+            console.error(
+                "Decision email error:",
+                emailError
+            );
+
+            emailMessage =
+                "Application processed, but email could not be sent.";
+        }
 
         if (pathUpdateError) {
             throw pathUpdateError;
@@ -4579,10 +4631,18 @@ async function updateFriendlyApplicationStatus(
         ============================================= */
 
         alert(
-            newStatus === "approved"
-                ? "Application approved and PDF generated successfully."
-                : "Application rejected and PDF generated successfully."
-        );
+    newStatus === "approved"
+        ? (
+            emailSent
+                ? "Application approved successfully.\n\nPDF generated and both emails sent."
+                : "Application approved successfully.\n\nPDF generated, but email could not be sent."
+          )
+        : (
+            emailSent
+                ? "Application rejected successfully.\n\nPDF generated and both emails sent."
+                : "Application rejected successfully.\n\nPDF generated, but email could not be sent."
+          )
+);
 
 
     } catch (error) {
