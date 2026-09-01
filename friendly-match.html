@@ -537,7 +537,22 @@
 
 
             </form>
-
+<div
+    id="pdfDownloadArea"
+    style="
+        display:none;
+        margin-top:24px;
+        text-align:center;
+    "
+>
+    <button
+        type="button"
+        id="downloadApplicationPDF"
+        class="button button-dark"
+    >
+        Download Application PDF ↓
+    </button>
+</div>
 
         </section>
 
@@ -589,6 +604,7 @@
         // SUBMIT
         // ==================================================
 
+let lastSubmittedApplication = null;
 async function generateApplicationPDF(application) {
 
     const pdfContainer =
@@ -1098,9 +1114,26 @@ if (!savedApplication) {
 }
 
 
+// Save application for PDF download
+lastSubmittedApplication =
+    savedApplication;
+
+
+// Generate PDF automatically
 await generateApplicationPDF(
     savedApplication
 );
+
+
+// Show download button
+const pdfDownloadArea =
+    document.getElementById(
+        "pdfDownloadArea"
+    );
+
+if (pdfDownloadArea) {
+    pdfDownloadArea.style.display = "block";
+}
 
                     // --------------------------------------
                     // SUCCESS
@@ -1151,6 +1184,61 @@ await generateApplicationPDF(
 
             }
         );
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const button =
+            event.target.closest(
+                "#downloadApplicationPDF"
+            );
+
+        if (!button) return;
+
+        if (!lastSubmittedApplication) {
+
+            alert(
+                "Application PDF is not available."
+            );
+
+            return;
+        }
+
+        button.disabled = true;
+
+        button.textContent =
+            "Generating PDF...";
+
+        try {
+
+            await generateApplicationPDF(
+                lastSubmittedApplication
+            );
+
+        } catch (error) {
+
+            console.error(
+                "PDF download error:",
+                error
+            );
+
+            alert(
+                "Unable to generate PDF.\n\n" +
+                error.message
+            );
+
+        } finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Download Application PDF ↓";
+
+        }
+
+    }
+);
 
     </script>
 
