@@ -954,11 +954,64 @@ document.addEventListener(
   "DOMContentLoaded",
   async () => {
 
+    /*
+     * =====================================================
+     * ADMIN AUTHENTICATION GUARD
+     * =====================================================
+     *
+     * Admin authentication will run ONLY
+     * on pages inside /admin/ or admin.html.
+     *
+     * Homepage and public pages will NOT
+     * be redirected to the admin login page.
+     * =====================================================
+     */
+
+    const path =
+      window.location.pathname;
+
+    const isAdminPage =
+      path.includes("/admin/") ||
+      path.endsWith("/admin.html");
+
+
+    /*
+     * =====================================================
+     * PUBLIC PAGE
+     * =====================================================
+     *
+     * If this is not an admin page,
+     * stop here.
+     *
+     * This prevents the homepage from
+     * automatically redirecting to admin.
+     * =====================================================
+     */
+
+    if (!isAdminPage) {
+      return;
+    }
+
+
+    /*
+     * =====================================================
+     * ADMIN SESSION CHECK
+     * =====================================================
+     */
+
     const session =
       await requireAdmin();
 
-    if (!session) return;
+    if (!session) {
+      return;
+    }
 
+
+    /*
+     * =====================================================
+     * LOGOUT BUTTON
+     * =====================================================
+     */
 
     document
       .querySelectorAll(
@@ -974,6 +1027,12 @@ document.addEventListener(
       });
 
 
+    /*
+     * =====================================================
+     * ADMIN SYSTEM INITIALIZATION
+     * =====================================================
+     */
+
     initSidebar();
 
     setActivePage();
@@ -985,6 +1044,13 @@ document.addEventListener(
     loadFriendlyApplications();
 
     loadMembershipApplications();
+
+
+    /*
+     * =====================================================
+     * SYSTEM READY
+     * =====================================================
+     */
 
     console.log(
       "GSA Admin System initialized."
