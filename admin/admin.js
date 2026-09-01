@@ -2434,7 +2434,7 @@ $("newTournamentButton")
 
 
 /* =====================================================
-   SAVE TOURNAMENT
+   SAVE TOURNAMENT + POSTER UPLOAD
 ===================================================== */
 
 $("tournamentForm")
@@ -2444,52 +2444,50 @@ $("tournamentForm")
 
             event.preventDefault();
 
-
             const id =
                 $("tournamentId")
                     ?.value
                     .trim() || "";
-
 
             const name =
                 $("tournamentName")
                     ?.value
                     .trim() || "";
 
-
             const season =
                 $("tournamentSeason")
                     ?.value
                     .trim() || null;
-
 
             const status =
                 $("tournamentStatus")
                     ?.value ||
                 "UPCOMING";
 
-
             const venue =
                 $("tournamentVenue")
                     ?.value
                     .trim() || null;
-
 
             const dateDetails =
                 $("tournamentDate")
                     ?.value
                     .trim() || null;
 
-
             const description =
                 $("tournamentDescription")
                     ?.value
                     .trim() || null;
 
-
             const published =
                 $("tournamentPublished")
                     ?.checked === true;
+
+            const posterInput =
+                $("tournamentPoster");
+
+            const posterFile =
+                posterInput?.files?.[0] || null;
 
 
             if (!name) {
@@ -2502,31 +2500,134 @@ $("tournamentForm")
             }
 
 
-            const payload = {
-
-                name,
-
-                season,
-
-                status,
-
-                venue,
-
-                date_details:
-                    dateDetails,
-
-                description,
-
-                published,
-
-                updated_at:
-                    new Date()
-                        .toISOString()
-
-            };
-
-
             try {
+
+                showLoading(true);
+
+
+                /* =====================================
+                   UPLOAD POSTER
+                ===================================== */
+
+                let imageURL = null;
+
+
+                if (posterFile) {
+
+                    if (
+                        !posterFile.type.startsWith(
+                            "image/"
+                        )
+                    ) {
+
+                        throw new Error(
+                            "Please select a valid image."
+                        );
+
+                    }
+
+
+                    const extension =
+                        posterFile.name
+                            .split(".")
+                            .pop()
+                            .toLowerCase();
+
+
+                    const filename =
+                        `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+
+
+                    const {
+                        error: uploadError
+                    } =
+                        await supabaseClient
+                            .storage
+                            .from(
+                                "tournament-posters"
+                            )
+                            .upload(
+                                filename,
+                                posterFile,
+                                {
+                                    cacheControl:
+                                        "3600",
+
+                                    upsert:
+                                        false
+                                }
+                            );
+
+
+                    if (uploadError) {
+                        throw uploadError;
+                    }
+
+
+                    const {
+                        data:
+                            publicData
+                    } =
+                        supabaseClient
+                            .storage
+                            .from(
+                                "tournament-posters"
+                            )
+                            .getPublicUrl(
+                                filename
+                            );
+
+
+                    imageURL =
+                        publicData.publicUrl;
+
+                }
+
+
+                /* =====================================
+                   DATABASE PAYLOAD
+                ===================================== */
+
+                const payload = {
+
+                    name,
+
+                    season,
+
+                    status,
+
+                    venue,
+
+                    date_details:
+                        dateDetails,
+
+                    description,
+
+                    published,
+
+                    updated_at:
+                        new Date()
+                            .toISOString()
+
+                };
+
+
+                /*
+                 * Only change image_url when
+                 * a new poster was selected.
+                 */
+
+                if (imageURL) {
+
+                    payload.image_url =
+                        imageURL;
+
+                }
+
+
+                /* =====================================
+                   INSERT / UPDATE
+                ===================================== */
 
                 let response;
 
@@ -2559,9 +2660,37 @@ $("tournamentForm")
                 }
 
 
+                /* =====================================
+                   RESET + CLOSE
+                ===================================== */
+
                 closeModal(
                     $("tournamentModal")
                 );
+
+
+                if (posterInput) {
+                    posterInput.value = "";
+                }
+
+
+                if ($("tournamentPosterPreview")) {
+
+                    $("tournamentPosterPreview")
+                        .style.display =
+                        "none";
+
+                }
+
+
+                if (
+                    $("tournamentPosterPreviewImage")
+                ) {
+
+                    $("tournamentPosterPreviewImage")
+                        .src = "";
+
+                }
 
 
                 await loadTournaments();
@@ -2573,15 +2702,24 @@ $("tournamentForm")
                         : "Tournament added successfully."
                 );
 
+
             } catch (error) {
 
+                console.error(
+                    "Tournament save error:",
+                    error
+                );
+
                 showError(error);
+
+            } finally {
+
+                showLoading(false);
 
             }
 
         }
     );
-
 
 /* =====================================================
    TOURNAMENT ACTIONS
@@ -3171,71 +3309,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
-
-/* =====================================================
-   TOURNAMENT POSTER PREVIEW
-===================================================== */
-
-const tournamentPoster =
-    document.getElementById("tournamentPoster");
-
-const tournamentPosterPreview =
-    document.getElementById(
-        "tournamentPosterPreview"
-    );
-
-const tournamentPosterPreviewImage =
-    document.getElementById(
-        "tournamentPosterPreviewImage"
-    );
-
-
-if (tournamentPoster) {
-
-    tournamentPoster.addEventListener(
-        "change",
-        function () {
-
-            const file =
-                this.files && this.files[0];
-
-
-            if (!file) {
-
-                tournamentPosterPreview.style.display =
-                    "none";
-
-                tournamentPosterPreviewImage.src =
-                    "";
-
-                return;
-            }
-
-
-            if (!file.type.startsWith("image/")) {
-
-                alert(
-                    "Please select an image file."
-                );
-
-                this.value = "";
-
-                return;
-            }
-
-
-            const imageURL =
-                URL.createObjectURL(file);
-
-
-            tournamentPosterPreviewImage.src =
-                imageURL;
-
-
-            tournamentPosterPreview.style.display =
-                "block";
-
-        }
-    );
-
-}
