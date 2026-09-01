@@ -3108,7 +3108,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             tournaments.map(tournament => {
 
                 return `
-                    <article class="tournament-card">
+                    <article
+    class="tournament-card"
+    onclick="window.location.href='tournament.html?id=${encodeURIComponent(tournament.id)}'"
+    style="cursor:pointer;"
+>
 
                         <div class="tournament-image">
 
