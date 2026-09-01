@@ -3170,6 +3170,613 @@ $("tournamentList")
 
             }
         );
+/* =====================================================
+   FRIENDLY MATCH APPLICATIONS — STEP 1
+===================================================== */
+
+let friendlyApplications = [];
+
+
+/* =====================================================
+   LOAD FRIENDLY APPLICATIONS
+===================================================== */
+
+async function loadFriendlyApplications() {
+
+    const list =
+        $("friendlyList");
+
+    if (!list) {
+        return;
+    }
+
+    list.innerHTML = `
+        <div class="loading-state">
+            Loading Friendly Match applications...
+        </div>
+    `;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("friendly_applications")
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Friendly applications:",
+            error
+        );
+
+        list.innerHTML = `
+            <div class="empty-state">
+
+                Unable to load applications.
+
+                <br><br>
+
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    friendlyApplications =
+        data || [];
+
+
+    renderFriendlyApplications();
+
+}
+
+
+/* =====================================================
+   RENDER FRIENDLY APPLICATIONS
+===================================================== */
+
+function renderFriendlyApplications() {
+
+    const list =
+        $("friendlyList");
+
+    if (!list) {
+        return;
+    }
+
+
+    if (!friendlyApplications.length) {
+
+        list.innerHTML = `
+            <div class="empty-state">
+                No Friendly Match applications.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML =
+        friendlyApplications
+            .map(
+                application => {
+
+                    const status =
+                        String(
+                            application.status ||
+                            "pending"
+                        ).toLowerCase();
+
+
+                    const message =
+                        application.message ||
+                        "";
+
+
+                    let sport =
+                        "";
+
+                    let players =
+                        "";
+
+
+                    const sportMatch =
+                        message.match(
+                            /Sport:\s*(.+)/i
+                        );
+
+
+                    const playersMatch =
+                        message.match(
+                            /Number of Players:\s*(.+)/i
+                        );
+
+
+                    if (sportMatch) {
+
+                        sport =
+                            sportMatch[1]
+                                .split("\n")[0]
+                                .trim();
+
+                    }
+
+
+                    if (playersMatch) {
+
+                        players =
+                            playersMatch[1]
+                                .split("\n")[0]
+                                .trim();
+
+                    }
+
+
+                    return `
+
+                    <article
+                        class="content-card friendly-application-card"
+                    >
+
+                        <div class="content-card-top">
+
+                            <div>
+
+                                <div class="notice-meta">
+
+                                    <span class="badge">
+
+                                        FRIENDLY MATCH
+
+                                    </span>
+
+
+                                    <span class="badge ${
+                                        status === "approved"
+                                            ? "published"
+                                            : status === "rejected"
+                                                ? "draft"
+                                                : ""
+                                    }">
+
+                                        ${
+                                            status
+                                                .toUpperCase()
+                                        }
+
+                                    </span>
+
+                                </div>
+
+
+                                <h3>
+
+                                    ${escapeHTML(
+                                        application.team_name ||
+                                        application.club_name ||
+                                        "Unknown Team"
+                                    )}
+
+                                </h3>
+
+
+                                <p>
+
+                                    <strong>
+                                        Contact:
+                                    </strong>
+
+                                    ${escapeHTML(
+                                        application.contact_person ||
+                                        application.full_name ||
+                                        application.name ||
+                                        "N/A"
+                                    )}
+
+                                </p>
+
+
+                                <p>
+
+                                    <strong>
+                                        Phone:
+                                    </strong>
+
+                                    ${escapeHTML(
+                                        application.phone ||
+                                        "N/A"
+                                    )}
+
+                                </p>
+
+
+                                <p>
+
+                                    <strong>
+                                        Email:
+                                    </strong>
+
+                                    ${escapeHTML(
+                                        application.email ||
+                                        "N/A"
+                                    )}
+
+                                </p>
+
+
+                                <p>
+
+                                    <strong>
+                                        Sport:
+                                    </strong>
+
+                                    ${escapeHTML(
+                                        sport ||
+                                        "N/A"
+                                    )}
+
+                                    &nbsp; • &nbsp;
+
+                                    <strong>
+                                        Players:
+                                    </strong>
+
+                                    ${escapeHTML(
+                                        players ||
+                                        "N/A"
+                                    )}
+
+                                </p>
+
+
+                                <p>
+
+                                    <strong>
+                                        Match Date:
+                                    </strong>
+
+                                    ${formatDate(
+                                        application.preferred_date
+                                    )}
+
+                                    ${
+                                        application.preferred_time
+                                            ? `
+                                            &nbsp; • &nbsp;
+                                            ${escapeHTML(
+                                                String(
+                                                    application.preferred_time
+                                                ).slice(
+                                                    0,
+                                                    5
+                                                )
+                                            )}
+                                            `
+                                            : ""
+                                    }
+
+                                </p>
+
+
+                                <p>
+
+                                    <strong>
+                                        Venue:
+                                    </strong>
+
+                                    ${escapeHTML(
+                                        application.venue ||
+                                        "Venue not specified"
+                                    )}
+
+                                </p>
+
+
+                            </div>
+
+
+                            <div class="content-date">
+
+                                ${formatDate(
+                                    application.created_at
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-actions">
+
+                            <button
+                                type="button"
+                                class="small-button"
+                                data-friendly-action="view"
+                                data-id="${escapeHTML(
+                                    application.id
+                                )}"
+                            >
+                                View Application
+                            </button>
+
+                        </div>
+
+                    </article>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* =====================================================
+   FRIENDLY APPLICATION VIEW
+===================================================== */
+
+$("friendlyList")
+    ?.addEventListener(
+        "click",
+        event => {
+
+            const button =
+                event.target.closest(
+                    "[data-friendly-action]"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const id =
+                button.dataset.id;
+
+
+            const application =
+                friendlyApplications.find(
+                    item =>
+                        String(item.id) ===
+                        String(id)
+                );
+
+
+            if (!application) {
+                return;
+            }
+
+
+            if (
+                button.dataset.friendlyAction ===
+                "view"
+            ) {
+
+                openFriendlyApplication(
+                    application
+                );
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   FRIENDLY APPLICATION DETAILS
+===================================================== */
+
+function openFriendlyApplication(
+    application
+) {
+
+    const modal =
+        $("applicationModal");
+
+    const title =
+        $("applicationModalTitle");
+
+    const details =
+        $("applicationDetails");
+
+
+    if (
+        !modal ||
+        !title ||
+        !details
+    ) {
+        return;
+    }
+
+
+    const message =
+        application.message ||
+        "";
+
+
+    details.innerHTML = `
+
+        <div class="application-detail-card">
+
+            <p>
+                <strong>
+                    Application ID
+                </strong>
+                <br>
+                ${escapeHTML(
+                    application.id
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Team / Club
+                </strong>
+                <br>
+                ${escapeHTML(
+                    application.team_name ||
+                    application.club_name ||
+                    "N/A"
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Contact Person
+                </strong>
+                <br>
+                ${escapeHTML(
+                    application.contact_person ||
+                    application.full_name ||
+                    application.name ||
+                    "N/A"
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Phone
+                </strong>
+                <br>
+                ${escapeHTML(
+                    application.phone ||
+                    "N/A"
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Email
+                </strong>
+                <br>
+                ${escapeHTML(
+                    application.email ||
+                    "N/A"
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Sport / Players
+                </strong>
+                <br>
+                ${escapeHTML(
+                    message
+                        .split("\n")
+                        .slice(
+                            0,
+                            2
+                        )
+                        .join(" • ")
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Match Date
+                </strong>
+                <br>
+                ${formatDate(
+                    application.preferred_date
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Match Time
+                </strong>
+                <br>
+                ${escapeHTML(
+                    application.preferred_time
+                        ? String(
+                            application.preferred_time
+                        ).slice(
+                            0,
+                            5
+                        )
+                        : "Not specified"
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Venue
+                </strong>
+                <br>
+                ${escapeHTML(
+                    application.venue ||
+                    "Not specified"
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Message
+                </strong>
+                <br>
+                ${escapeHTML(
+                    message ||
+                    "No additional message."
+                ).replace(
+                    /\n/g,
+                    "<br>"
+                )}
+            </p>
+
+
+            <p>
+                <strong>
+                    Status
+                </strong>
+                <br>
+                ${escapeHTML(
+                    String(
+                        application.status ||
+                        "pending"
+                    ).toUpperCase()
+                )}
+            </p>
+
+        </div>
+
+    `;
+
+
+    title.textContent =
+        "Friendly Match Application";
+
+
+    openModal(modal);
+
+}
+
 
 
     /* =====================================================
@@ -3192,17 +3799,19 @@ $("tournamentList")
 
         await Promise.all([
 
-            loadDashboardCounts(),
+    loadDashboardCounts(),
 
-            loadNotices(),
+    loadNotices(),
 
-            loadFixtures(),
+    loadFixtures(),
 
-            loadTournaments(),
+    loadTournaments(),
 
-            loadGallery(),
+    loadGallery(),
 
-        ]);
+    loadFriendlyApplications(),
+
+]);
 
         console.log(
             "GSA Admin CMS initialized successfully."
