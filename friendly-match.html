@@ -383,42 +383,39 @@
 
     <script>
 
-    // ==========================================
-    // SUPABASE
-    // ==========================================
+const SUPABASE_URL =
+    "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-    const SUPABASE_URL =
-        "https://cmygmswzokyrmgdnuszq.supabase.co";
+const SUPABASE_ANON_KEY =
+    "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-    const SUPABASE_ANON_KEY =
-        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        );
+const form =
+    document.getElementById("friendlyMatchForm");
 
+const formMessage =
+    document.getElementById("formMessage");
 
-    // ==========================================
-    // FORM
-    // ==========================================
+form.addEventListener("submit", async function(event) {
 
-    const form =
-        document.getElementById("friendlyMatchForm");
+    event.preventDefault();
 
-    const formMessage =
-        document.getElementById("formMessage");
+    const submitButton =
+        form.querySelector("button[type='submit']");
 
+    submitButton.disabled = true;
+    submitButton.textContent = "Submitting...";
 
-    form.addEventListener("submit", async function(event) {
+    formMessage.className = "message";
+    formMessage.style.display = "block";
+    formMessage.textContent = "Submitting application...";
 
-        event.preventDefault();
-
-
-        // ==========================================
-        // GET FORM VALUES
-        // ==========================================
+    try {
 
         const teamName =
             document.getElementById("teamName").value.trim();
@@ -451,10 +448,6 @@
             document.getElementById("message").value.trim();
 
 
-        // ==========================================
-        // VALIDATION
-        // ==========================================
-
         if (
             !teamName ||
             !contactPerson ||
@@ -463,132 +456,89 @@
             !players ||
             !preferredDate
         ) {
-
-            formMessage.className =
-                "message error";
-
-            formMessage.textContent =
-                "Please fill in all required fields.";
-
-            return;
-
+            throw new Error(
+                "Please fill in all required fields."
+            );
         }
 
 
-        // ==========================================
-        // SUBMIT BUTTON
-        // ==========================================
+        const fullMessage =
+            `Sport: ${sport}\n` +
+            `Number of Players: ${players}\n` +
+            `Additional Message: ${message || "N/A"}`;
 
-        const submitButton =
-            form.querySelector(
-                "button[type='submit']"
+
+        const { data, error } =
+            await supabaseClient
+                .from("friendly_applications")
+                .insert({
+                    team_name: teamName,
+                    contact_person: contactPerson,
+                    phone: phone,
+                    email: email || null,
+                    preferred_date: preferredDate,
+                    preferred_time: preferredTime || null,
+                    venue: venue || null,
+                    message: fullMessage,
+                    status: "pending"
+                })
+                .select();
+
+
+        if (error) {
+            console.error("SUPABASE ERROR:", error);
+            throw new Error(
+                error.message ||
+                "Supabase submission failed."
             );
+        }
 
-        submitButton.disabled = true;
+
+        console.log(
+            "APPLICATION SAVED:",
+            data
+        );
+
+
+        formMessage.className =
+            "message success";
+
+        formMessage.style.display = "block";
+
+        formMessage.textContent =
+            "Application submitted successfully!";
+
+
+        form.reset();
+
+
+    } catch (error) {
+
+        console.error(
+            "FRIENDLY APPLICATION ERROR:",
+            error
+        );
+
+        formMessage.className =
+            "message error";
+
+        formMessage.style.display = "block";
+
+        formMessage.textContent =
+            "Submission failed: " +
+            error.message;
+
+
+    } finally {
+
+        submitButton.disabled = false;
 
         submitButton.textContent =
-            "Submitting...";
+            "Submit Application";
 
+    }
 
-        try {
-
-
-            // ==========================================
-            // CREATE MESSAGE
-            // ==========================================
-
-            const fullMessage =
-                `Sport: ${sport}\n` +
-                `Number of Players: ${players}\n` +
-                `Additional Message: ${message || "N/A"}`;
-
-
-            // ==========================================
-            // SAVE TO SUPABASE
-            // ==========================================
-
-            const { data, error } =
-                await supabaseClient
-                    .from("friendly_applications")
-                    .insert([
-                        {
-                            team_name: teamName,
-
-                            contact_person:
-                                contactPerson,
-
-                            phone: phone,
-
-                            email:
-                                email || null,
-
-                            preferred_date:
-                                preferredDate,
-
-                            preferred_time:
-                                preferredTime || null,
-
-                            venue:
-                                venue || null,
-
-                            message:
-                                fullMessage,
-
-                            status:
-                                "pending"
-                        }
-                    ])
-                    .select();
-
-
-            if (error) {
-                throw error;
-            }
-
-
-            // ==========================================
-            // SUCCESS
-            // ==========================================
-
-            formMessage.className =
-                "message success";
-
-            formMessage.textContent =
-                "Application submitted successfully. Ghopkhali Sports Arena will review your application.";
-
-
-            // Clear form
-            form.reset();
-
-
-        } catch (error) {
-
-
-            console.error(
-                "Friendly application error:",
-                error
-            );
-
-
-            formMessage.className =
-                "message error";
-
-            formMessage.textContent =
-                error.message ||
-                "Unable to submit application. Please try again.";
-
-
-        } finally {
-
-
-            submitButton.disabled = false;
-
-            submitButton.textContent =
-                "Submit Application";
-
-        }
-
-    });
+});
 
 </script>
 
