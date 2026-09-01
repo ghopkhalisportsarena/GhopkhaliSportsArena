@@ -3823,6 +3823,379 @@ document.addEventListener(
     }
 );
 
+/* =====================================================
+   FRIENDLY APPLICATION — ADMIN PDF
+===================================================== */
+
+async function generateAdminApplicationPDF(application) {
+
+    const container =
+        document.getElementById(
+            "adminPdfContainer"
+        );
+
+    const page =
+        document.getElementById(
+            "adminPdfPage"
+        );
+
+    if (!container || !page) {
+        throw new Error(
+            "Admin PDF template not found."
+        );
+    }
+
+
+    const message =
+        application.message || "";
+
+
+    let sport = "N/A";
+    let players = "N/A";
+    let additionalMessage = "N/A";
+
+
+    const sportMatch =
+        message.match(/Sport:\s*(.+)/i);
+
+    const playersMatch =
+        message.match(
+            /Number of Players:\s*(.+)/i
+        );
+
+    const additionalMatch =
+        message.match(
+            /Additional Message:\s*([\s\S]*)/i
+        );
+
+
+    if (sportMatch) {
+
+        sport =
+            sportMatch[1]
+                .split("\n")[0]
+                .trim();
+
+    }
+
+
+    if (playersMatch) {
+
+        players =
+            playersMatch[1]
+                .split("\n")[0]
+                .trim();
+
+    }
+
+
+    if (additionalMatch) {
+
+        additionalMessage =
+            additionalMatch[1].trim() ||
+            "N/A";
+
+    }
+
+
+    const setText = (
+        id,
+        value
+    ) => {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+            element.textContent =
+                value || "—";
+        }
+
+    };
+
+
+    setText(
+        "adminPdfApplicationId",
+        application.id
+    );
+
+
+    setText(
+        "adminPdfCreatedAt",
+        application.created_at
+            ? new Date(
+                application.created_at
+            ).toLocaleDateString(
+                "en-GB",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            )
+            : "—"
+    );
+
+
+    setText(
+        "adminPdfTeamName",
+        application.team_name ||
+        application.club_name
+    );
+
+
+    setText(
+        "adminPdfContactPerson",
+        application.contact_person ||
+        application.full_name ||
+        application.name
+    );
+
+
+    setText(
+        "adminPdfPhone",
+        application.phone
+    );
+
+
+    setText(
+        "adminPdfEmail",
+        application.email
+    );
+
+
+    setText(
+        "adminPdfSport",
+        sport
+    );
+
+
+    setText(
+        "adminPdfPlayers",
+        players
+    );
+
+
+    setText(
+        "adminPdfDate",
+        application.preferred_date
+    );
+
+
+    setText(
+        "adminPdfTime",
+        application.preferred_time
+            ? String(
+                application.preferred_time
+            ).slice(0, 5)
+            : "Not specified"
+    );
+
+
+    setText(
+        "adminPdfVenue",
+        application.venue ||
+        "Not specified"
+    );
+
+
+    setText(
+        "adminPdfMessage",
+        additionalMessage
+    );
+
+
+    const status =
+        String(
+            application.status ||
+            "pending"
+        ).toLowerCase();
+
+
+    const statusElement =
+        document.getElementById(
+            "adminPdfStatus"
+        );
+
+
+    if (statusElement) {
+
+        statusElement.textContent =
+            status === "approved"
+                ? "APPROVED"
+                : status === "rejected"
+                    ? "REJECTED"
+                    : "APPLICATION RECEIVED";
+
+    }
+
+
+    container.style.display =
+        "block";
+
+
+    try {
+
+        const canvas =
+            await html2canvas(
+                page,
+                {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor:
+                        "#ffffff"
+                }
+            );
+
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
+
+        const pdf =
+            new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4",
+                compress: true
+            });
+
+
+        const pageWidth =
+            pdf.internal.pageSize.getWidth();
+
+
+        const imageHeight =
+            canvas.height *
+            pageWidth /
+            canvas.width;
+
+
+        pdf.addImage(
+            canvas.toDataURL(
+                "image/jpeg",
+                0.95
+            ),
+            "JPEG",
+            0,
+            0,
+            pageWidth,
+            imageHeight
+        );
+
+
+        /*
+         * APPROVED / REJECTED SEAL
+         */
+
+        if (
+            status === "approved" ||
+            status === "rejected"
+        ) {
+
+            const approved =
+                status === "approved";
+
+
+            const sealText =
+                approved
+                    ? "APPROVED"
+                    : "REJECTED";
+
+
+            const sealColor =
+                approved
+                    ? [25, 125, 70]
+                    : [185, 45, 45];
+
+
+            const sealX =
+                pageWidth - 42;
+
+
+            const sealY =
+                37;
+
+
+            pdf.setDrawColor(
+                ...sealColor
+            );
+
+
+            pdf.setTextColor(
+                ...sealColor
+            );
+
+
+            pdf.setLineWidth(1.2);
+
+
+            pdf.circle(
+                sealX,
+                sealY,
+                19,
+                "S"
+            );
+
+
+            pdf.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            pdf.setFontSize(10);
+
+
+            pdf.text(
+                sealText,
+                sealX,
+                sealY + 2,
+                {
+                    align: "center"
+                }
+            );
+
+
+            pdf.setFontSize(5);
+
+
+            pdf.text(
+                "GHOPKHALI SPORTS ARENA",
+                sealX,
+                sealY + 8,
+                {
+                    align: "center"
+                }
+            );
+
+        }
+
+
+        /*
+         * Convert PDF to Blob
+         */
+
+        const pdfBlob =
+            pdf.output("blob");
+
+
+        return {
+            pdf,
+            pdfBlob
+        };
+
+
+    } finally {
+
+        container.style.display =
+            "none";
+
+    }
+
+}
+
     /* =====================================================
        INITIALIZATION
     ===================================================== */
@@ -3952,7 +4325,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
  
 /* =====================================================
-   FRIENDLY APPLICATION — APPROVE / REJECT
+   FRIENDLY APPLICATION — APPROVE / REJECT + PDF
 ===================================================== */
 
 async function updateFriendlyApplicationStatus(
@@ -3986,14 +4359,31 @@ async function updateFriendlyApplicationStatus(
 
     try {
 
-        const { error } =
+        /* =============================================
+           1. UPDATE APPLICATION STATUS
+        ============================================= */
+
+        const decidedAt =
+            new Date().toISOString();
+
+
+        const {
+            data: updatedRow,
+            error
+        } =
             await supabaseClient
                 .from("friendly_applications")
                 .update({
                     status: newStatus,
-                    updated_at: new Date().toISOString()
+                    updated_at: decidedAt,
+                    decided_at: decidedAt
                 })
-                .eq("id", applicationId);
+                .eq(
+                    "id",
+                    applicationId
+                )
+                .select("*")
+                .single();
 
 
         if (error) {
@@ -4001,24 +4391,132 @@ async function updateFriendlyApplicationStatus(
         }
 
 
-        const application =
-            friendlyApplications.find(
+        /* =============================================
+           2. UPDATE LOCAL APPLICATION DATA
+        ============================================= */
+
+        const applicationIndex =
+            friendlyApplications.findIndex(
                 item =>
                     String(item.id) ===
                     String(applicationId)
             );
 
 
-        if (application) {
+        if (applicationIndex === -1) {
 
-            application.status =
-                newStatus;
-
-            application.updated_at =
-                new Date().toISOString();
+            throw new Error(
+                "Application not found."
+            );
 
         }
 
+
+        friendlyApplications[
+            applicationIndex
+        ] = updatedRow;
+
+
+        const application =
+            friendlyApplications[
+                applicationIndex
+            ];
+
+
+        /* =============================================
+           3. GENERATE DECISION PDF
+        ============================================= */
+
+        const {
+            pdfBlob
+        } =
+            await generateAdminApplicationPDF(
+                application
+            );
+
+
+        /* =============================================
+           4. UPLOAD PDF TO PRIVATE STORAGE
+        ============================================= */
+
+        const fileName =
+            `${application.id}-${newStatus}.pdf`;
+
+
+        const filePath =
+            `friendly-applications/${fileName}`;
+
+
+        const {
+            error: uploadError
+        } =
+            await supabaseClient
+                .storage
+                .from("friendly-applications")
+                .upload(
+                    filePath,
+                    pdfBlob,
+                    {
+                        contentType:
+                            "application/pdf",
+
+                        upsert: true
+                    }
+                );
+
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+
+        /* =============================================
+           5. SAVE STORAGE PATH IN DATABASE
+        ============================================= */
+
+        const {
+            error: pathUpdateError
+        } =
+            await supabaseClient
+                .from("friendly_applications")
+                .update({
+                    decision_pdf_url:
+                        filePath,
+
+                    decided_at:
+                        decidedAt,
+
+                    updated_at:
+                        decidedAt
+                })
+                .eq(
+                    "id",
+                    application.id
+                );
+
+
+        if (pathUpdateError) {
+            throw pathUpdateError;
+        }
+
+
+        /* =============================================
+           6. UPDATE LOCAL DATA
+        ============================================= */
+
+        application.decision_pdf_url =
+            filePath;
+
+        application.decided_at =
+            decidedAt;
+
+        application.updated_at =
+            decidedAt;
+
+
+        /* =============================================
+           7. REFRESH APPLICATION LIST
+        ============================================= */
 
         renderFriendlyApplications();
 
@@ -4040,10 +4538,14 @@ async function updateFriendlyApplicationStatus(
         }
 
 
+        /* =============================================
+           8. SUCCESS MESSAGE
+        ============================================= */
+
         alert(
             newStatus === "approved"
-                ? "Application approved successfully."
-                : "Application rejected successfully."
+                ? "Application approved and PDF generated successfully."
+                : "Application rejected and PDF generated successfully."
         );
 
 
@@ -4056,7 +4558,7 @@ async function updateFriendlyApplicationStatus(
 
 
         alert(
-            "Unable to update application status.\n\n" +
+            "Unable to process application.\n\n" +
             error.message
         );
 
