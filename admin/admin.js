@@ -3081,7 +3081,86 @@ $("tournamentList")
 
 }
 
-    /* =====================================================
+/* =================================================
+   TOURNAMENT POSTER PREVIEW
+================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const posterInput =
+        document.getElementById("tournamentPoster");
+
+    const preview =
+        document.getElementById(
+            "tournamentPosterPreview"
+        );
+
+    const previewImage =
+        document.getElementById(
+            "tournamentPosterPreviewImage"
+        );
+
+
+    if (
+        !posterInput ||
+        !preview ||
+        !previewImage
+    ) {
+        return;
+    }
+
+
+    posterInput.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                posterInput.files[0];
+
+
+            if (!file) {
+
+                preview.style.display = "none";
+
+                previewImage.src = "";
+
+                return;
+            }
+
+
+            if (!file.type.startsWith("image/")) {
+
+                alert(
+                    "Please select an image file."
+                );
+
+                posterInput.value = "";
+
+                preview.style.display = "none";
+
+                previewImage.src = "";
+
+                return;
+            }
+
+
+            const imageURL =
+                URL.createObjectURL(file);
+
+
+            previewImage.src =
+                imageURL;
+
+
+            preview.style.display =
+                "block";
+
+        }
+    );
+
+});
+ 
+   /* =====================================================
        START
     ===================================================== */
 
