@@ -1984,3 +1984,131 @@ button {
     }
 
 }
+
+/* =====================================================
+   FRIENDLY APPLICATION PDF
+===================================================== */
+
+#adminPdfPage {
+    width: 794px;
+    min-height: 1123px;
+    box-sizing: border-box;
+    padding: 58px;
+    background: #ffffff;
+    color: #111111;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+}
+
+.admin-pdf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.admin-pdf-brand {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.admin-pdf-subtitle {
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #666666;
+}
+
+.admin-pdf-document {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #777777;
+}
+
+.admin-pdf-line {
+    height: 2px;
+    background: #111111;
+    margin: 28px 0;
+}
+
+.admin-pdf-status {
+    display: inline-block;
+    padding: 9px 16px;
+    border: 2px solid #111111;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 30px;
+}
+
+.admin-pdf-section {
+    margin-bottom: 28px;
+}
+
+.admin-pdf-section-title {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.admin-pdf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid #eeeeee;
+    border-left: 1px solid #eeeeee;
+}
+
+.admin-pdf-item {
+    padding: 13px;
+    border-right: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    min-height: 52px;
+    box-sizing: border-box;
+}
+
+.admin-pdf-item span {
+    display: block;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #777777;
+    margin-bottom: 6px;
+}
+
+.admin-pdf-item strong {
+    display: block;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.admin-pdf-message {
+    min-height: 55px;
+    padding: 15px;
+    border: 1px solid #eeeeee;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    box-sizing: border-box;
+}
+
+.admin-pdf-footer {
+    position: absolute;
+    bottom: 58px;
+    left: 58px;
+    right: 58px;
+    padding-top: 15px;
+    border-top: 1px solid #dddddd;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    line-height: 1.5;
+    color: #555555;
+}
+
+.admin-pdf-footer-right {
+    text-align: right;
+}
