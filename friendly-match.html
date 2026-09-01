@@ -589,6 +589,341 @@
         // SUBMIT
         // ==================================================
 
+async function generateApplicationPDF(application) {
+
+    const pdfContainer =
+        document.getElementById("pdfApplication");
+
+    const pdfPage =
+        document.getElementById("pdfPage");
+
+    if (!pdfContainer || !pdfPage) {
+        throw new Error("PDF template not found.");
+    }
+
+
+    const message =
+        application.message || "";
+
+
+    let sport = "N/A";
+    let players = "N/A";
+    let additionalMessage = "N/A";
+
+
+    const sportMatch =
+        message.match(/Sport:\s*(.+)/i);
+
+    const playersMatch =
+        message.match(/Number of Players:\s*(.+)/i);
+
+    const additionalMatch =
+        message.match(
+            /Additional Message:\s*([\s\S]*)/i
+        );
+
+
+    if (sportMatch) {
+        sport =
+            sportMatch[1]
+                .split("\n")[0]
+                .trim();
+    }
+
+
+    if (playersMatch) {
+        players =
+            playersMatch[1]
+                .split("\n")[0]
+                .trim();
+    }
+
+
+    if (additionalMatch) {
+        additionalMessage =
+            additionalMatch[1].trim() ||
+            "N/A";
+    }
+
+
+    document.getElementById(
+        "pdfApplicationId"
+    ).textContent =
+        application.id || "—";
+
+
+    document.getElementById(
+        "pdfCreatedAt"
+    ).textContent =
+        application.created_at
+            ? new Date(
+                application.created_at
+            ).toLocaleDateString(
+                "en-GB",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            )
+            : "—";
+
+
+    document.getElementById(
+        "pdfTeamName"
+    ).textContent =
+        application.team_name ||
+        application.club_name ||
+        "—";
+
+
+    document.getElementById(
+        "pdfContactPerson"
+    ).textContent =
+        application.contact_person ||
+        application.full_name ||
+        application.name ||
+        "—";
+
+
+    document.getElementById(
+        "pdfPhone"
+    ).textContent =
+        application.phone || "—";
+
+
+    document.getElementById(
+        "pdfEmail"
+    ).textContent =
+        application.email || "—";
+
+
+    document.getElementById(
+        "pdfSport"
+    ).textContent =
+        sport;
+
+
+    document.getElementById(
+        "pdfPlayers"
+    ).textContent =
+        players;
+
+
+    document.getElementById(
+        "pdfDate"
+    ).textContent =
+        application.preferred_date || "—";
+
+
+    document.getElementById(
+        "pdfTime"
+    ).textContent =
+        application.preferred_time
+            ? String(
+                application.preferred_time
+            ).slice(0, 5)
+            : "Not specified";
+
+
+    document.getElementById(
+        "pdfVenue"
+    ).textContent =
+        application.venue ||
+        "Not specified";
+
+
+    document.getElementById(
+        "pdfMessage"
+    ).textContent =
+        additionalMessage;
+
+
+    const status =
+        String(
+            application.status ||
+            "pending"
+        ).toLowerCase();
+
+
+    const statusElement =
+        document.getElementById(
+            "pdfStatus"
+        );
+
+
+    statusElement.textContent =
+        status === "approved"
+            ? "APPROVED"
+            : status === "rejected"
+                ? "REJECTED"
+                : "APPLICATION RECEIVED";
+
+
+    /*
+     * Show template temporarily
+     */
+
+    pdfContainer.style.display =
+        "block";
+
+
+    pdfPage.style.position =
+        "relative";
+
+
+    try {
+
+        const canvas =
+            await html2canvas(
+                pdfPage,
+                {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor:
+                        "#ffffff"
+                }
+            );
+
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
+
+        const pdf =
+            new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4",
+                compress: true
+            });
+
+
+        const pageWidth =
+            pdf.internal.pageSize.getWidth();
+
+        const pageHeight =
+            pdf.internal.pageSize.getHeight();
+
+
+        const imageWidth =
+            pageWidth;
+
+
+        const imageHeight =
+            canvas.height *
+            imageWidth /
+            canvas.width;
+
+
+        pdf.addImage(
+            canvas.toDataURL("image/jpeg", 0.95),
+            "JPEG",
+            0,
+            0,
+            imageWidth,
+            imageHeight
+        );
+
+
+        /*
+         * Premium seal
+         */
+
+        if (
+            status === "approved" ||
+            status === "rejected"
+        ) {
+
+            const sealText =
+                status === "approved"
+                    ? "APPROVED"
+                    : "REJECTED";
+
+
+            const sealColor =
+                status === "approved"
+                    ? [25, 125, 70]
+                    : [185, 45, 45];
+
+
+            pdf.setDrawColor(
+                ...sealColor
+            );
+
+            pdf.setTextColor(
+                ...sealColor
+            );
+
+            pdf.setLineWidth(1.2);
+
+
+            const sealX =
+                pageWidth - 42;
+
+            const sealY =
+                37;
+
+
+            pdf.circle(
+                sealX,
+                sealY,
+                19,
+                "S"
+            );
+
+
+            pdf.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            pdf.setFontSize(10);
+
+
+            pdf.text(
+                sealText,
+                sealX,
+                sealY + 2,
+                {
+                    align: "center"
+                }
+            );
+
+
+            pdf.setFontSize(5);
+
+
+            pdf.text(
+                "GHOPKHALI SPORTS ARENA",
+                sealX,
+                sealY + 8,
+                {
+                    align: "center"
+                }
+            );
+
+        }
+
+
+        const filename =
+            `GSA-Friendly-Match-${application.id}.pdf`;
+
+
+        pdf.save(filename);
+
+
+    } finally {
+
+        pdfContainer.style.display =
+            "none";
+
+    }
+
+}
+
         form.addEventListener(
             "submit",
             async function(event) {
@@ -737,6 +1072,35 @@
                         throw error;
                     }
 
+const { data: savedApplication, error: fetchError } =
+    await supabaseClient
+        .from("friendly_applications")
+        .select("*")
+        .eq("team_name", teamName)
+        .eq("contact_person", contactPerson)
+        .eq("phone", phone)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(1)
+        .maybeSingle();
+
+
+if (fetchError) {
+    throw fetchError;
+}
+
+
+if (!savedApplication) {
+    throw new Error(
+        "Application was saved, but could not be retrieved."
+    );
+}
+
+
+await generateApplicationPDF(
+    savedApplication
+);
 
                     // --------------------------------------
                     // SUCCESS
