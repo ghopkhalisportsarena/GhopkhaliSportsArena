@@ -416,7 +416,10 @@
         event.preventDefault();
 
 
-        // Get values
+        // ==========================================
+        // GET FORM VALUES
+        // ==========================================
+
         const teamName =
             document.getElementById("teamName").value.trim();
 
@@ -432,15 +435,34 @@
         const sport =
             document.getElementById("sport").value;
 
+        const players =
+            document.getElementById("players").value;
+
         const preferredDate =
             document.getElementById("preferredDate").value;
+
+        const preferredTime =
+            document.getElementById("preferredTime").value;
+
+        const venue =
+            document.getElementById("venue").value.trim();
 
         const message =
             document.getElementById("message").value.trim();
 
 
-        // Basic validation
-        if (!teamName || !contactPerson || !phone || !sport) {
+        // ==========================================
+        // VALIDATION
+        // ==========================================
+
+        if (
+            !teamName ||
+            !contactPerson ||
+            !phone ||
+            !sport ||
+            !players ||
+            !preferredDate
+        ) {
 
             formMessage.className =
                 "message error";
@@ -449,12 +471,18 @@
                 "Please fill in all required fields.";
 
             return;
+
         }
 
 
-        // Disable button
+        // ==========================================
+        // SUBMIT BUTTON
+        // ==========================================
+
         const submitButton =
-            form.querySelector("button[type='submit']");
+            form.querySelector(
+                "button[type='submit']"
+            );
 
         submitButton.disabled = true;
 
@@ -464,28 +492,50 @@
 
         try {
 
-            // Combine sport + additional information
+
+            // ==========================================
+            // CREATE MESSAGE
+            // ==========================================
+
             const fullMessage =
                 `Sport: ${sport}\n` +
-                `Additional Message: ${message}`;
+                `Number of Players: ${players}\n` +
+                `Additional Message: ${message || "N/A"}`;
 
 
-            // Insert application
+            // ==========================================
+            // SAVE TO SUPABASE
+            // ==========================================
+
             const { data, error } =
                 await supabaseClient
                     .from("friendly_applications")
                     .insert([
                         {
                             team_name: teamName,
-                            contact_person: contactPerson,
+
+                            contact_person:
+                                contactPerson,
+
                             phone: phone,
-                            email: email || null,
+
+                            email:
+                                email || null,
+
                             preferred_date:
-                                preferredDate || null,
-                            preferred_time: null,
-                            venue: null,
-                            message: fullMessage,
-                            status: "pending"
+                                preferredDate,
+
+                            preferred_time:
+                                preferredTime || null,
+
+                            venue:
+                                venue || null,
+
+                            message:
+                                fullMessage,
+
+                            status:
+                                "pending"
                         }
                     ])
                     .select();
@@ -496,7 +546,10 @@
             }
 
 
-            // Success
+            // ==========================================
+            // SUCCESS
+            // ==========================================
+
             formMessage.className =
                 "message success";
 
@@ -504,11 +557,12 @@
                 "Application submitted successfully. Ghopkhali Sports Arena will review your application.";
 
 
-            // Reset form
+            // Clear form
             form.reset();
 
 
         } catch (error) {
+
 
             console.error(
                 "Friendly application error:",
@@ -525,6 +579,7 @@
 
 
         } finally {
+
 
             submitButton.disabled = false;
 
