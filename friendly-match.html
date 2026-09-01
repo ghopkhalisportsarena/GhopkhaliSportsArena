@@ -163,7 +163,133 @@
 
         }
 
+        #pdfPage {
+    width: 794px;
+    min-height: 1123px;
+    box-sizing: border-box;
+    padding: 58px;
+    background: #ffffff;
+    color: #111111;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.pdf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.pdf-brand {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.pdf-subtitle {
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #666666;
+}
+
+.pdf-number {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #777777;
+}
+
+.pdf-line {
+    height: 2px;
+    background: #111111;
+    margin: 28px 0;
+}
+
+.pdf-status {
+    display: inline-block;
+    padding: 9px 16px;
+    border: 2px solid #111111;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 30px;
+}
+
+.pdf-section {
+    margin-bottom: 28px;
+}
+
+.pdf-section-title {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.pdf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid #eeeeee;
+    border-left: 1px solid #eeeeee;
+}
+
+.pdf-item {
+    padding: 13px;
+    border-right: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    min-height: 52px;
+    box-sizing: border-box;
+}
+
+.pdf-item span {
+    display: block;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #777777;
+    margin-bottom: 6px;
+}
+
+.pdf-item strong {
+    display: block;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.pdf-message {
+    min-height: 55px;
+    padding: 15px;
+    border: 1px solid #eeeeee;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    box-sizing: border-box;
+}
+
+.pdf-footer {
+    position: absolute;
+    bottom: 58px;
+    left: 58px;
+    right: 58px;
+    padding-top: 15px;
+    border-top: 1px solid #dddddd;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    line-height: 1.5;
+    color: #555555;
+}
+
+.pdf-footer-right {
+    text-align: right;
+}
+
     </style>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 </head>
 
@@ -663,6 +789,148 @@
         );
 
     </script>
+
+<div id="pdfApplication" style="display:none;">
+
+    <div id="pdfPage">
+
+        <div class="pdf-header">
+            <div>
+                <div class="pdf-brand">
+                    GHOPKHALI SPORTS ARENA
+                </div>
+
+                <div class="pdf-subtitle">
+                    FRIENDLY MATCH APPLICATION
+                </div>
+            </div>
+
+            <div class="pdf-number">
+                APPLICATION
+            </div>
+        </div>
+
+
+        <div class="pdf-line"></div>
+
+
+        <div class="pdf-status" id="pdfStatus">
+            APPLICATION RECEIVED
+        </div>
+
+
+        <div class="pdf-section">
+
+            <div class="pdf-section-title">
+                APPLICATION DETAILS
+            </div>
+
+            <div class="pdf-grid">
+
+                <div class="pdf-item">
+                    <span>Application ID</span>
+                    <strong id="pdfApplicationId">—</strong>
+                </div>
+
+                <div class="pdf-item">
+                    <span>Application Date</span>
+                    <strong id="pdfCreatedAt">—</strong>
+                </div>
+
+                <div class="pdf-item">
+                    <span>Team / Club</span>
+                    <strong id="pdfTeamName">—</strong>
+                </div>
+
+                <div class="pdf-item">
+                    <span>Contact Person</span>
+                    <strong id="pdfContactPerson">—</strong>
+                </div>
+
+                <div class="pdf-item">
+                    <span>Phone</span>
+                    <strong id="pdfPhone">—</strong>
+                </div>
+
+                <div class="pdf-item">
+                    <span>Email</span>
+                    <strong id="pdfEmail">—</strong>
+                </div>
+
+                <div class="pdf-item">
+                    <span>Sport</span>
+                    <strong id="pdfSport">—</strong>
+                </div>
+
+                <div class="pdf-item">
+                    <span>Players</span>
+                    <strong id="pdfPlayers">—</strong>
+                </div>
+
+                <div class="pdf-item">
+                    <span>Preferred Date</span>
+                    <strong id="pdfDate">—</strong>
+                </div>
+
+                <div class="pdf-item">
+                    <span>Preferred Time</span>
+                    <strong id="pdfTime">—</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="pdf-section">
+
+            <div class="pdf-section-title">
+                VENUE
+            </div>
+
+            <div
+                class="pdf-message"
+                id="pdfVenue"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="pdf-section">
+
+            <div class="pdf-section-title">
+                ADDITIONAL MESSAGE
+            </div>
+
+            <div
+                class="pdf-message"
+                id="pdfMessage"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="pdf-footer">
+
+            <div>
+                <strong>Ghopkhali Sports Arena</strong>
+                <br>
+                ghopkhalisportsarena@gmail.com
+            </div>
+
+            <div class="pdf-footer-right">
+                Official Club Document
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 
