@@ -1384,3 +1384,291 @@ button {
     }
 
 }
+
+/* =====================================================
+   TOURNAMENT MODAL — MOBILE & DESKTOP FIX
+===================================================== */
+
+#tournamentModal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    overflow-y: auto;
+}
+
+#tournamentModal.active {
+    display: flex;
+}
+
+
+/* MODAL BOX */
+
+#tournamentModal .modal-content {
+    width: 100%;
+    max-width: 620px;
+
+    max-height: 90vh;
+
+    background: #fff;
+
+    border-radius: 24px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.25);
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+}
+
+
+/* HEADER */
+
+#tournamentModal .modal-header {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+#tournamentModal .modal-header h2 {
+    margin: 6px 0 0;
+
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+
+/* CLOSE */
+
+#tournamentModal .modal-close {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #f1f1f1;
+
+    font-size: 25px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+/* FORM */
+
+#tournamentModal #tournamentForm {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+
+/* FORM GROUP */
+
+#tournamentModal .form-group {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+#tournamentModal .form-group label {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #222;
+}
+
+
+/* INPUT / SELECT / TEXTAREA */
+
+#tournamentModal input[type="text"],
+#tournamentModal select,
+#tournamentModal textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    display: block;
+
+    padding: 13px 15px;
+
+    border: 1px solid #d8d8d8;
+
+    border-radius: 12px;
+
+    background: #fff;
+
+    color: #111;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    outline: none;
+}
+
+#tournamentModal textarea {
+    min-height: 110px;
+
+    resize: vertical;
+}
+
+#tournamentModal input:focus,
+#tournamentModal select:focus,
+#tournamentModal textarea:focus {
+    border-color: #111;
+
+    box-shadow:
+        0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+
+/* TWO COLUMN ROW */
+
+#tournamentModal .form-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 16px;
+
+    width: 100%;
+}
+
+
+/* CHECKBOX */
+
+#tournamentModal .checkbox-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+#tournamentModal .checkbox-row input {
+    width: 18px;
+    height: 18px;
+
+    flex-shrink: 0;
+}
+
+
+/* BUTTON AREA */
+
+#tournamentModal .modal-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    margin-top: 8px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #eee;
+}
+
+
+/* BUTTONS */
+
+#tournamentModal .modal-actions button {
+    min-height: 46px;
+
+    padding: 0 22px;
+
+    border-radius: 12px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    #tournamentModal {
+        align-items: flex-start;
+
+        padding: 15px;
+    }
+
+
+    #tournamentModal .modal-content {
+        margin: 10px 0;
+
+        max-height: calc(100vh - 30px);
+
+        padding: 22px 18px;
+
+        border-radius: 20px;
+    }
+
+
+    #tournamentModal .modal-header {
+        margin-bottom: 20px;
+    }
+
+
+    #tournamentModal .modal-header h2 {
+        font-size: 24px;
+    }
+
+
+    #tournamentModal .form-row {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+
+    #tournamentModal .modal-actions {
+        flex-direction: column-reverse;
+
+        gap: 10px;
+    }
+
+
+    #tournamentModal .modal-actions button {
+        width: 100%;
+    }
+
+}
