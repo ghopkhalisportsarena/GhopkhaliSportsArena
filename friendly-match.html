@@ -294,25 +294,159 @@
 
     <script>
 
-        const form =
-            document.getElementById("friendlyMatchForm");
+    // ==========================================
+    // SUPABASE
+    // ==========================================
 
-        const formMessage =
-            document.getElementById("formMessage");
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-        form.addEventListener("submit", function(event) {
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-            event.preventDefault();
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
 
+
+    // ==========================================
+    // FORM
+    // ==========================================
+
+    const form =
+        document.getElementById("friendlyMatchForm");
+
+    const formMessage =
+        document.getElementById("formMessage");
+
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        // Get values
+        const teamName =
+            document.getElementById("teamName").value.trim();
+
+        const contactPerson =
+            document.getElementById("contactPerson").value.trim();
+
+        const phone =
+            document.getElementById("phone").value.trim();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const sport =
+            document.getElementById("sport").value;
+
+        const preferredDate =
+            document.getElementById("preferredDate").value;
+
+        const message =
+            document.getElementById("message").value.trim();
+
+
+        // Basic validation
+        if (!teamName || !contactPerson || !phone || !sport) {
+
+            formMessage.className =
+                "message error";
+
+            formMessage.textContent =
+                "Please fill in all required fields.";
+
+            return;
+        }
+
+
+        // Disable button
+        const submitButton =
+            form.querySelector("button[type='submit']");
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+            "Submitting...";
+
+
+        try {
+
+            // Combine sport + additional information
+            const fullMessage =
+                `Sport: ${sport}\n` +
+                `Additional Message: ${message}`;
+
+
+            // Insert application
+            const { data, error } =
+                await supabaseClient
+                    .from("friendly_applications")
+                    .insert([
+                        {
+                            team_name: teamName,
+                            contact_person: contactPerson,
+                            phone: phone,
+                            email: email || null,
+                            preferred_date:
+                                preferredDate || null,
+                            preferred_time: null,
+                            venue: null,
+                            message: fullMessage,
+                            status: "pending"
+                        }
+                    ])
+                    .select();
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            // Success
             formMessage.className =
                 "message success";
 
             formMessage.textContent =
-                "Your application form is ready. Submission system will be connected next.";
+                "Application submitted successfully. Ghopkhali Sports Arena will review your application.";
 
-        });
 
-    </script>
+            // Reset form
+            form.reset();
+
+
+        } catch (error) {
+
+            console.error(
+                "Friendly application error:",
+                error
+            );
+
+
+            formMessage.className =
+                "message error";
+
+            formMessage.textContent =
+                error.message ||
+                "Unable to submit application. Please try again.";
+
+
+        } finally {
+
+            submitButton.disabled = false;
+
+            submitButton.textContent =
+                "Submit Application";
+
+        }
+
+    });
+
+</script>
 
 </body>
 
