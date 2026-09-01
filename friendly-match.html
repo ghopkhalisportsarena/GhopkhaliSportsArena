@@ -2,12 +2,24 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Friendly Match Application | Ghopkhali Sports Arena</title>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Friendly Match Application | Ghopkhali Sports Arena
+    </title>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -112,6 +124,11 @@
             opacity: .9;
         }
 
+        .submit-button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
         .message {
             margin-top: 18px;
             padding: 14px;
@@ -120,13 +137,13 @@
             line-height: 1.5;
         }
 
-        .success {
+        .message.success {
             display: block;
             background: #eaf7ee;
             color: #176b35;
         }
 
-        .error {
+        .message.error {
             display: block;
             background: #fdecec;
             color: #a11;
@@ -145,27 +162,38 @@
             }
 
         }
+
     </style>
+
 </head>
+
 
 <body>
 
     <main class="page">
 
-        <a href="index.html#club-services" class="back-button">
+
+        <a
+            href="index.html#club-services"
+            class="back-button"
+        >
             ← Back to Club Services
         </a>
 
+
         <section class="form-container">
+
 
             <div class="label">
                 GHOPKHALI SPORTS ARENA
             </div>
 
+
             <h1>
                 Friendly Match
                 Application
             </h1>
+
 
             <p class="intro">
                 External clubs and teams can submit an official
@@ -173,375 +201,468 @@
                 Ghopkhali Sports Arena.
             </p>
 
+
             <form id="friendlyMatchForm">
 
-    <!-- TEAM / CLUB NAME -->
-    <div class="form-group">
 
-        <label for="teamName">
-            Team / Club Name *
-        </label>
+                <!-- TEAM -->
 
-        <input
-            type="text"
-            id="teamName"
-            name="teamName"
-            placeholder="Enter your team or club name"
-            required
-        >
+                <div class="form-group">
 
-    </div>
+                    <label for="teamName">
+                        Team / Club Name *
+                    </label>
 
+                    <input
+                        type="text"
+                        id="teamName"
+                        required
+                        placeholder="Enter your team or club name"
+                    >
 
-    <!-- CONTACT PERSON -->
-    <div class="form-group">
-
-        <label for="contactPerson">
-            Contact Person *
-        </label>
-
-        <input
-            type="text"
-            id="contactPerson"
-            name="contactPerson"
-            placeholder="Full name"
-            required
-        >
-
-    </div>
+                </div>
 
 
-    <!-- PHONE -->
-    <div class="form-group">
+                <!-- CONTACT PERSON -->
 
-        <label for="phone">
-            Contact Number *
-        </label>
+                <div class="form-group">
 
-        <input
-            type="tel"
-            id="phone"
-            name="phone"
-            placeholder="01XXXXXXXXX"
-            required
-        >
+                    <label for="contactPerson">
+                        Contact Person *
+                    </label>
 
-    </div>
+                    <input
+                        type="text"
+                        id="contactPerson"
+                        required
+                        placeholder="Full name"
+                    >
 
-
-    <!-- EMAIL -->
-    <div class="form-group">
-
-        <label for="email">
-            Email Address
-        </label>
-
-        <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="example@email.com"
-        >
-
-    </div>
+                </div>
 
 
-    <!-- SPORT -->
-    <div class="form-group">
+                <!-- PHONE -->
 
-        <label for="sport">
-            Sport *
-        </label>
+                <div class="form-group">
 
-        <select
-            id="sport"
-            name="sport"
-            required
-        >
+                    <label for="phone">
+                        Contact Number *
+                    </label>
 
-            <option value="">
-                Select Sport
-            </option>
+                    <input
+                        type="tel"
+                        id="phone"
+                        required
+                        placeholder="01XXXXXXXXX"
+                    >
 
-            <option value="Football">
-                Football
-            </option>
-
-            <option value="Cricket">
-                Cricket
-            </option>
-
-        </select>
-
-    </div>
+                </div>
 
 
-    <!-- NUMBER OF PLAYERS -->
-    <div class="form-group">
+                <!-- EMAIL -->
 
-        <label for="players">
-            Number of Players *
-        </label>
+                <div class="form-group">
 
-        <input
-            type="number"
-            id="players"
-            name="players"
-            min="1"
-            placeholder="Enter number of players"
-            required
-        >
+                    <label for="email">
+                        Email Address
+                    </label>
 
-    </div>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="example@email.com"
+                    >
+
+                </div>
 
 
-    <!-- PREFERRED DATE -->
-    <div class="form-group">
+                <!-- SPORT -->
 
-        <label for="preferredDate">
-            Preferred Match Date *
-        </label>
+                <div class="form-group">
 
-        <input
-            type="date"
-            id="preferredDate"
-            name="preferredDate"
-            required
-        >
+                    <label for="sport">
+                        Sport *
+                    </label>
 
-    </div>
+                    <select
+                        id="sport"
+                        required
+                    >
 
+                        <option value="">
+                            Select Sport
+                        </option>
 
-    <!-- PREFERRED TIME -->
-    <div class="form-group">
+                        <option value="Football">
+                            Football
+                        </option>
 
-        <label for="preferredTime">
-            Preferred Match Time
-        </label>
+                        <option value="Cricket">
+                            Cricket
+                        </option>
 
-        <input
-            type="time"
-            id="preferredTime"
-            name="preferredTime"
-        >
+                    </select>
 
-    </div>
+                </div>
 
 
-    <!-- VENUE -->
-    <div class="form-group">
+                <!-- PLAYERS -->
 
-        <label for="venue">
-            Preferred Venue
-        </label>
+                <div class="form-group">
 
-        <input
-            type="text"
-            id="venue"
-            name="venue"
-            placeholder="Example: GSA Ground"
-        >
+                    <label for="players">
+                        Number of Players *
+                    </label>
 
-    </div>
+                    <input
+                        type="number"
+                        id="players"
+                        min="1"
+                        required
+                        placeholder="Enter number of players"
+                    >
 
-
-    <!-- ADDITIONAL MESSAGE -->
-    <div class="form-group">
-
-        <label for="message">
-            Additional Message
-        </label>
-
-        <textarea
-            id="message"
-            name="message"
-            placeholder="Tell us about your team, opponent, match requirements, etc."
-        ></textarea>
-
-    </div>
+                </div>
 
 
-    <!-- SUBMIT -->
-    <button
-        type="submit"
-        class="submit-button"
-    >
-        Submit Application
-    </button>
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                    <label for="preferredDate">
+                        Preferred Match Date *
+                    </label>
+
+                    <input
+                        type="date"
+                        id="preferredDate"
+                        required
+                    >
+
+                </div>
 
 
-    <!-- MESSAGE -->
-    <div
-        id="formMessage"
-        class="message"
-    ></div>
+                <!-- TIME -->
 
-</form>
+                <div class="form-group">
+
+                    <label for="preferredTime">
+                        Preferred Match Time
+                    </label>
+
+                    <input
+                        type="time"
+                        id="preferredTime"
+                    >
+
+                </div>
+
+
+                <!-- VENUE -->
+
+                <div class="form-group">
+
+                    <label for="venue">
+                        Preferred Venue
+                    </label>
+
+                    <input
+                        type="text"
+                        id="venue"
+                        placeholder="Example: GSA Ground"
+                    >
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div class="form-group">
+
+                    <label for="message">
+                        Additional Message
+                    </label>
+
+                    <textarea
+                        id="message"
+                        placeholder="Tell us about your team, opponent, match requirements, etc."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    id="submitButton"
+                    class="submit-button"
+                >
+                    Submit Application
+                </button>
+
+
+                <!-- RESULT -->
+
+                <div
+                    id="formMessage"
+                    class="message"
+                ></div>
+
+
+            </form>
+
+
         </section>
+
 
     </main>
 
+
     <script>
 
-const SUPABASE_URL =
-    "https://cmygmswzokyrmgdnuszq.supabase.co";
+        // ==================================================
+        // SUPABASE CONFIG
+        // ==================================================
 
-const SUPABASE_ANON_KEY =
-    "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
-
-const form =
-    document.getElementById("friendlyMatchForm");
-
-const formMessage =
-    document.getElementById("formMessage");
+        const SUPABASE_ANON_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
 
-// Check form
-if (!form) {
-
-    alert("ERROR: friendlyMatchForm not found!");
-
-} else {
-
-    console.log("FORM FOUND:", form);
-
-    form.addEventListener("submit", async function(event) {
-
-        event.preventDefault();
-
-        alert("1. SUBMIT EVENT WORKING");
-
-
-        try {
-
-            const teamName =
-                document.getElementById("teamName").value.trim();
-
-            const contactPerson =
-                document.getElementById("contactPerson").value.trim();
-
-            const phone =
-                document.getElementById("phone").value.trim();
-
-            const email =
-                document.getElementById("email").value.trim();
-
-            const sport =
-                document.getElementById("sport").value;
-
-            const players =
-                document.getElementById("players").value;
-
-            const preferredDate =
-                document.getElementById("preferredDate").value;
-
-            const preferredTime =
-                document.getElementById("preferredTime").value;
-
-            const venue =
-                document.getElementById("venue").value.trim();
-
-            const message =
-                document.getElementById("message").value.trim();
-
-
-            alert("2. FORM DATA READ");
-
-
-            const fullMessage =
-                `Sport: ${sport}\n` +
-                `Number of Players: ${players}\n` +
-                `Additional Message: ${message || "N/A"}`;
-
-
-            alert("3. SENDING TO SUPABASE");
-
-
-            const { data, error } =
-                await supabaseClient
-                    .from("friendly_applications")
-                    .insert({
-                        team_name: teamName,
-                        contact_person: contactPerson,
-                        phone: phone,
-                        email: email || null,
-                        preferred_date: preferredDate || null,
-                        preferred_time: preferredTime || null,
-                        venue: venue || null,
-                        message: fullMessage,
-                        status: "pending"
-                    })
-                    .select();
-
-
-            if (error) {
-
-                console.error(
-                    "SUPABASE ERROR:",
-                    error
-                );
-
-                alert(
-                    "SUPABASE ERROR:\n\n" +
-                    error.message
-                );
-
-                return;
-            }
-
-
-            console.log(
-                "SUCCESS:",
-                data
-            );
-
-            alert(
-                "4. SUCCESS! Application saved."
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_ANON_KEY
             );
 
 
-            form.reset();
+        // ==================================================
+        // ELEMENTS
+        // ==================================================
+
+        const form =
+            document.getElementById(
+                "friendlyMatchForm"
+            );
+
+        const submitButton =
+            document.getElementById(
+                "submitButton"
+            );
+
+        const formMessage =
+            document.getElementById(
+                "formMessage"
+            );
 
 
-            if (formMessage) {
+        // ==================================================
+        // SUBMIT
+        // ==================================================
+
+        form.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                // ------------------------------------------
+                // GET VALUES
+                // ------------------------------------------
+
+                const teamName =
+                    document.getElementById(
+                        "teamName"
+                    ).value.trim();
+
+                const contactPerson =
+                    document.getElementById(
+                        "contactPerson"
+                    ).value.trim();
+
+                const phone =
+                    document.getElementById(
+                        "phone"
+                    ).value.trim();
+
+                const email =
+                    document.getElementById(
+                        "email"
+                    ).value.trim();
+
+                const sport =
+                    document.getElementById(
+                        "sport"
+                    ).value;
+
+                const players =
+                    document.getElementById(
+                        "players"
+                    ).value;
+
+                const preferredDate =
+                    document.getElementById(
+                        "preferredDate"
+                    ).value;
+
+                const preferredTime =
+                    document.getElementById(
+                        "preferredTime"
+                    ).value;
+
+                const venue =
+                    document.getElementById(
+                        "venue"
+                    ).value.trim();
+
+                const message =
+                    document.getElementById(
+                        "message"
+                    ).value.trim();
+
+
+                // ------------------------------------------
+                // SHOW LOADING
+                // ------------------------------------------
+
+                submitButton.disabled = true;
+
+                submitButton.textContent =
+                    "Submitting...";
+
 
                 formMessage.className =
-                    "message success";
+                    "message";
 
                 formMessage.style.display =
                     "block";
 
                 formMessage.textContent =
-                    "Application submitted successfully.";
+                    "Submitting your application...";
+
+
+                try {
+
+
+                    // --------------------------------------
+                    // COMBINE SPORT INFORMATION
+                    // --------------------------------------
+
+                    const fullMessage =
+                        `Sport: ${sport}\n` +
+                        `Number of Players: ${players}\n` +
+                        `Additional Message: ${
+                            message || "N/A"
+                        }`;
+
+
+                    // --------------------------------------
+                    // INSERT
+                    // --------------------------------------
+
+                    const { error } =
+                        await supabaseClient
+                            .from(
+                                "friendly_applications"
+                            )
+                            .insert({
+
+                                team_name:
+                                    teamName,
+
+                                contact_person:
+                                    contactPerson,
+
+                                phone:
+                                    phone,
+
+                                email:
+                                    email || null,
+
+                                preferred_date:
+                                    preferredDate,
+
+                                preferred_time:
+                                    preferredTime ||
+                                    null,
+
+                                venue:
+                                    venue ||
+                                    null,
+
+                                message:
+                                    fullMessage,
+
+                                status:
+                                    "pending"
+
+                            });
+
+
+                    // --------------------------------------
+                    // SUPABASE ERROR
+                    // --------------------------------------
+
+                    if (error) {
+                        throw error;
+                    }
+
+
+                    // --------------------------------------
+                    // SUCCESS
+                    // --------------------------------------
+
+                    formMessage.className =
+                        "message success";
+
+                    formMessage.textContent =
+                        "Application submitted successfully. Ghopkhali Sports Arena will review your application.";
+
+
+                    // Clear form
+
+                    form.reset();
+
+
+                } catch (error) {
+
+
+                    console.error(
+                        "Friendly Match Application Error:",
+                        error
+                    );
+
+
+                    formMessage.className =
+                        "message error";
+
+                    formMessage.textContent =
+                        "Unable to submit application. " +
+                        (
+                            error.message ||
+                            "Please try again."
+                        );
+
+
+                } finally {
+
+
+                    submitButton.disabled =
+                        false;
+
+                    submitButton.textContent =
+                        "Submit Application";
+
+                }
 
             }
+        );
 
-
-        } catch (error) {
-
-            console.error(
-                "ERROR:",
-                error
-            );
-
-            alert(
-                "JAVASCRIPT ERROR:\n\n" +
-                error.message
-            );
-
-        }
-
-    });
-
-}
-
-</script>
+    </script>
 
 </body>
 
