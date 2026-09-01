@@ -401,144 +401,145 @@ const form =
 const formMessage =
     document.getElementById("formMessage");
 
-form.addEventListener("submit", async function(event) {
-alert("Submit button is working!");
-    event.preventDefault();
 
-    const submitButton =
-        form.querySelector("button[type='submit']");
+// Check form
+if (!form) {
 
-    submitButton.disabled = true;
-    submitButton.textContent = "Submitting...";
+    alert("ERROR: friendlyMatchForm not found!");
 
-    formMessage.className = "message";
-    formMessage.style.display = "block";
-    formMessage.textContent = "Submitting application...";
+} else {
 
-    try {
+    console.log("FORM FOUND:", form);
 
-        const teamName =
-            document.getElementById("teamName").value.trim();
+    form.addEventListener("submit", async function(event) {
 
-        const contactPerson =
-            document.getElementById("contactPerson").value.trim();
+        event.preventDefault();
 
-        const phone =
-            document.getElementById("phone").value.trim();
-
-        const email =
-            document.getElementById("email").value.trim();
-
-        const sport =
-            document.getElementById("sport").value;
-
-        const players =
-            document.getElementById("players").value;
-
-        const preferredDate =
-            document.getElementById("preferredDate").value;
-
-        const preferredTime =
-            document.getElementById("preferredTime").value;
-
-        const venue =
-            document.getElementById("venue").value.trim();
-
-        const message =
-            document.getElementById("message").value.trim();
+        alert("1. SUBMIT EVENT WORKING");
 
 
-        if (
-            !teamName ||
-            !contactPerson ||
-            !phone ||
-            !sport ||
-            !players ||
-            !preferredDate
-        ) {
-            throw new Error(
-                "Please fill in all required fields."
+        try {
+
+            const teamName =
+                document.getElementById("teamName").value.trim();
+
+            const contactPerson =
+                document.getElementById("contactPerson").value.trim();
+
+            const phone =
+                document.getElementById("phone").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const sport =
+                document.getElementById("sport").value;
+
+            const players =
+                document.getElementById("players").value;
+
+            const preferredDate =
+                document.getElementById("preferredDate").value;
+
+            const preferredTime =
+                document.getElementById("preferredTime").value;
+
+            const venue =
+                document.getElementById("venue").value.trim();
+
+            const message =
+                document.getElementById("message").value.trim();
+
+
+            alert("2. FORM DATA READ");
+
+
+            const fullMessage =
+                `Sport: ${sport}\n` +
+                `Number of Players: ${players}\n` +
+                `Additional Message: ${message || "N/A"}`;
+
+
+            alert("3. SENDING TO SUPABASE");
+
+
+            const { data, error } =
+                await supabaseClient
+                    .from("friendly_applications")
+                    .insert({
+                        team_name: teamName,
+                        contact_person: contactPerson,
+                        phone: phone,
+                        email: email || null,
+                        preferred_date: preferredDate || null,
+                        preferred_time: preferredTime || null,
+                        venue: venue || null,
+                        message: fullMessage,
+                        status: "pending"
+                    })
+                    .select();
+
+
+            if (error) {
+
+                console.error(
+                    "SUPABASE ERROR:",
+                    error
+                );
+
+                alert(
+                    "SUPABASE ERROR:\n\n" +
+                    error.message
+                );
+
+                return;
+            }
+
+
+            console.log(
+                "SUCCESS:",
+                data
             );
+
+            alert(
+                "4. SUCCESS! Application saved."
+            );
+
+
+            form.reset();
+
+
+            if (formMessage) {
+
+                formMessage.className =
+                    "message success";
+
+                formMessage.style.display =
+                    "block";
+
+                formMessage.textContent =
+                    "Application submitted successfully.";
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "ERROR:",
+                error
+            );
+
+            alert(
+                "JAVASCRIPT ERROR:\n\n" +
+                error.message
+            );
+
         }
 
+    });
 
-        const fullMessage =
-            `Sport: ${sport}\n` +
-            `Number of Players: ${players}\n` +
-            `Additional Message: ${message || "N/A"}`;
-
-
-        const { data, error } =
-            await supabaseClient
-                .from("friendly_applications")
-                .insert({
-                    team_name: teamName,
-                    contact_person: contactPerson,
-                    phone: phone,
-                    email: email || null,
-                    preferred_date: preferredDate,
-                    preferred_time: preferredTime || null,
-                    venue: venue || null,
-                    message: fullMessage,
-                    status: "pending"
-                })
-                .select();
-
-
-        if (error) {
-            console.error("SUPABASE ERROR:", error);
-            throw new Error(
-                error.message ||
-                "Supabase submission failed."
-            );
-        }
-
-
-        console.log(
-            "APPLICATION SAVED:",
-            data
-        );
-
-
-        formMessage.className =
-            "message success";
-
-        formMessage.style.display = "block";
-
-        formMessage.textContent =
-            "Application submitted successfully!";
-
-
-        form.reset();
-
-
-    } catch (error) {
-
-        console.error(
-            "FRIENDLY APPLICATION ERROR:",
-            error
-        );
-
-        formMessage.className =
-            "message error";
-
-        formMessage.style.display = "block";
-
-        formMessage.textContent =
-            "Submission failed: " +
-            error.message;
-
-
-    } finally {
-
-        submitButton.disabled = false;
-
-        submitButton.textContent =
-            "Submit Application";
-
-    }
-
-});
+}
 
 </script>
 
