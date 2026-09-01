@@ -3738,17 +3738,53 @@ function openFriendlyApplication(application) {
 
                         </div>
                     `
-                    : `
-                        <div class="application-decision-result">
+                : `
+    <div class="application-decision-result">
 
-                            ${
-                                status === "approved"
-                                    ? "✓ This application has been approved."
-                                    : "✕ This application has been rejected."
-                            }
+        ${
+            status === "approved"
+                ? "✓ This application has been approved."
+                : "✕ This application has been rejected."
+        }
 
-                        </div>
-                    `
+
+        ${
+            application.decision_pdf_url
+                ? `
+                    <div
+                        style="
+                            margin-top:16px;
+                        "
+                    >
+
+                        <button
+                            type="button"
+                            class="small-button"
+                            data-download-decision-pdf
+                            data-id="${escapeHTML(
+                                application.id
+                            )}"
+                        >
+                            ↓ Download Decision PDF
+                        </button>
+
+                    </div>
+                `
+                : `
+                    <div
+                        style="
+                            margin-top:12px;
+                            font-size:13px;
+                            opacity:0.7;
+                        "
+                    >
+                        Decision PDF is not available.
+                    </div>
+                `
+        }
+
+    </div>
+`
             }
 
         </div>
@@ -4578,7 +4614,123 @@ async function updateFriendlyApplicationStatus(
 
 }
 
-   /* =====================================================
+/* =====================================================
+   DOWNLOAD FRIENDLY APPLICATION DECISION PDF
+===================================================== */
+
+async function downloadFriendlyApplicationPDF(
+    applicationId
+) {
+
+    if (!applicationId) {
+        return;
+    }
+
+
+    try {
+
+        const application =
+            friendlyApplications.find(
+                item =>
+                    String(item.id) ===
+                    String(applicationId)
+            );
+
+
+        if (!application) {
+
+            throw new Error(
+                "Application not found."
+            );
+
+        }
+
+
+        if (!application.decision_pdf_url) {
+
+            throw new Error(
+                "Decision PDF is not available."
+            );
+
+        }
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .storage
+                .from("friendly-applications")
+                .createSignedUrl(
+                    application.decision_pdf_url,
+                    60 * 10
+                );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (!data?.signedUrl) {
+
+            throw new Error(
+                "Could not create secure PDF link."
+            );
+
+        }
+
+
+        window.open(
+            data.signedUrl,
+            "_blank"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Decision PDF download error:",
+            error
+        );
+
+
+        alert(
+            "Unable to download PDF.\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const button =
+            event.target.closest(
+                "[data-download-decision-pdf]"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        const applicationId =
+            button.dataset.id;
+
+
+        downloadFriendlyApplicationPDF(
+            applicationId
+        );
+
+    }
+);
+
+  /* =====================================================
        START
     ===================================================== */
 
