@@ -175,119 +175,208 @@
 
             <form id="friendlyMatchForm">
 
-                <div class="form-group">
-                    <label for="teamName">
-                        Team / Club Name *
-                    </label>
+    <!-- TEAM / CLUB NAME -->
+    <div class="form-group">
 
-                    <input
-                        type="text"
-                        id="teamName"
-                        name="teamName"
-                        required
-                    >
-                </div>
+        <label for="teamName">
+            Team / Club Name *
+        </label>
 
-                <div class="form-group">
-                    <label for="contactPerson">
-                        Contact Person *
-                    </label>
+        <input
+            type="text"
+            id="teamName"
+            name="teamName"
+            placeholder="Enter your team or club name"
+            required
+        >
 
-                    <input
-                        type="text"
-                        id="contactPerson"
-                        name="contactPerson"
-                        required
-                    >
-                </div>
+    </div>
 
-                <div class="form-group">
-                    <label for="phone">
-                        Contact Number *
-                    </label>
 
-                    <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        required
-                    >
-                </div>
+    <!-- CONTACT PERSON -->
+    <div class="form-group">
 
-                <div class="form-group">
-                    <label for="email">
-                        Email Address
-                    </label>
+        <label for="contactPerson">
+            Contact Person *
+        </label>
 
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                    >
-                </div>
+        <input
+            type="text"
+            id="contactPerson"
+            name="contactPerson"
+            placeholder="Full name"
+            required
+        >
 
-                <div class="form-group">
-                    <label for="sport">
-                        Sport *
-                    </label>
+    </div>
 
-                    <select
-                        id="sport"
-                        name="sport"
-                        required
-                    >
-                        <option value="">
-                            Select Sport
-                        </option>
 
-                        <option value="Football">
-                            Football
-                        </option>
+    <!-- PHONE -->
+    <div class="form-group">
 
-                        <option value="Cricket">
-                            Cricket
-                        </option>
-                    </select>
-                </div>
+        <label for="phone">
+            Contact Number *
+        </label>
 
-                <div class="form-group">
-                    <label for="preferredDate">
-                        Preferred Match Date
-                    </label>
+        <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="01XXXXXXXXX"
+            required
+        >
 
-                    <input
-                        type="date"
-                        id="preferredDate"
-                        name="preferredDate"
-                    >
-                </div>
+    </div>
 
-                <div class="form-group">
-                    <label for="message">
-                        Additional Information
-                    </label>
 
-                    <textarea
-                        id="message"
-                        name="message"
-                        placeholder="Tell us about your team and match request..."
-                    ></textarea>
-                </div>
+    <!-- EMAIL -->
+    <div class="form-group">
 
-                <button
-                    type="submit"
-                    class="submit-button"
-                >
-                    Submit Application
-                </button>
+        <label for="email">
+            Email Address
+        </label>
 
-                <div
-                    id="formMessage"
-                    class="message"
-                ></div>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="example@email.com"
+        >
 
-            </form>
+    </div>
 
+
+    <!-- SPORT -->
+    <div class="form-group">
+
+        <label for="sport">
+            Sport *
+        </label>
+
+        <select
+            id="sport"
+            name="sport"
+            required
+        >
+
+            <option value="">
+                Select Sport
+            </option>
+
+            <option value="Football">
+                Football
+            </option>
+
+            <option value="Cricket">
+                Cricket
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- NUMBER OF PLAYERS -->
+    <div class="form-group">
+
+        <label for="players">
+            Number of Players *
+        </label>
+
+        <input
+            type="number"
+            id="players"
+            name="players"
+            min="1"
+            placeholder="Enter number of players"
+            required
+        >
+
+    </div>
+
+
+    <!-- PREFERRED DATE -->
+    <div class="form-group">
+
+        <label for="preferredDate">
+            Preferred Match Date *
+        </label>
+
+        <input
+            type="date"
+            id="preferredDate"
+            name="preferredDate"
+            required
+        >
+
+    </div>
+
+
+    <!-- PREFERRED TIME -->
+    <div class="form-group">
+
+        <label for="preferredTime">
+            Preferred Match Time
+        </label>
+
+        <input
+            type="time"
+            id="preferredTime"
+            name="preferredTime"
+        >
+
+    </div>
+
+
+    <!-- VENUE -->
+    <div class="form-group">
+
+        <label for="venue">
+            Preferred Venue
+        </label>
+
+        <input
+            type="text"
+            id="venue"
+            name="venue"
+            placeholder="Example: GSA Ground"
+        >
+
+    </div>
+
+
+    <!-- ADDITIONAL MESSAGE -->
+    <div class="form-group">
+
+        <label for="message">
+            Additional Message
+        </label>
+
+        <textarea
+            id="message"
+            name="message"
+            placeholder="Tell us about your team, opponent, match requirements, etc."
+        ></textarea>
+
+    </div>
+
+
+    <!-- SUBMIT -->
+    <button
+        type="submit"
+        class="submit-button"
+    >
+        Submit Application
+    </button>
+
+
+    <!-- MESSAGE -->
+    <div
+        id="formMessage"
+        class="message"
+    ></div>
+
+</form>
         </section>
 
     </main>
