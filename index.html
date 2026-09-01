@@ -2651,12 +2651,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
 
-    const fixtureContainer =
-        document.getElementById("homeFixturesList");
+    /* ==========================================
+       TOURNAMENT GRID
+    ========================================== */
+
+    const tournamentGrid =
+        document.querySelector(".tournament-grid");
 
 
-    if (!fixtureContainer) {
-        console.error("homeFixturesList not found.");
+    if (!tournamentGrid) {
+        console.error(".tournament-grid not found.");
         return;
     }
 
@@ -2678,72 +2682,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     /* ==========================================
-       DATE FORMAT
-    ========================================== */
-
-    function getDateParts(value) {
-
-        const date = new Date(value);
-
-
-        if (Number.isNaN(date.getTime())) {
-
-            return {
-                day: "--",
-                month: "---",
-                year: "----",
-                weekday: ""
-            };
-
-        }
-
-
-        return {
-
-            day:
-                String(
-                    date.getDate()
-                ).padStart(2, "0"),
-
-            month:
-                date
-                    .toLocaleDateString(
-                        "en-US",
-                        {
-                            month: "short"
-                        }
-                    )
-                    .toUpperCase(),
-
-            year:
-                date.getFullYear(),
-
-            weekday:
-                date.toLocaleDateString(
-                    "en-US",
-                    {
-                        weekday: "long"
-                    }
-                )
-
-        };
-
-    }
-
-
-    /* ==========================================
        LOADING
     ========================================== */
 
-    fixtureContainer.innerHTML = `
+    tournamentGrid.innerHTML = `
         <div class="loading-state">
-            Loading fixtures...
+            Loading tournaments...
         </div>
     `;
 
 
     /* ==========================================
-       LOAD FIXTURES
+       LOAD PUBLISHED TOURNAMENTS
     ========================================== */
 
     try {
@@ -2752,15 +2702,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             data,
             error
         } = await supabaseClient
-            .from("fixtures")
+            .from("tournaments")
             .select("*")
             .eq("published", true)
-            .order(
-                "match_date",
-                {
-                    ascending: true
-                }
-            );
+            .order("created_at", {
+                ascending: false
+            });
 
 
         if (error) {
@@ -2768,32 +2715,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
 
-        const fixtures =
-            data || [];
+        const tournaments = data || [];
 
 
         /* ======================================
-           NO FIXTURE
+           NO TOURNAMENT
         ====================================== */
 
-        if (!fixtures.length) {
+        if (!tournaments.length) {
 
-            fixtureContainer.innerHTML = `
+            tournamentGrid.innerHTML = `
                 <div class="coming-soon">
 
-                    <span class="plus">
-                        +
-                    </span>
+                    <span class="plus">+</span>
 
                     <div>
 
                         <strong>
-                            More fixtures coming soon
+                            More tournaments coming soon
                         </strong>
 
                         <p>
-                            Follow the club for match updates
-                            and announcements.
+                            Stay connected with
+                            Ghopkhali Sports Arena.
                         </p>
 
                     </div>
@@ -2806,131 +2750,84 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         /* ======================================
-           RENDER FIXTURES
+           RENDER TOURNAMENTS
         ====================================== */
 
-        fixtureContainer.innerHTML =
-            fixtures.map(fixture => {
-
-                const date =
-                    getDateParts(
-                        fixture.match_date
-                    );
-
-
-                const homeTeam =
-                    fixture.home_team ||
-                    "Ghopkhali Sports Arena";
-
-
-                const awayTeam =
-                    fixture.away_team ||
-                    "Opponent";
-
-
-                const matchType =
-                    fixture.type ||
-                    "FIXTURE";
-
-
-                const venue =
-                    fixture.venue ||
-                    "Venue TBA";
-
-
-                let matchTime = "";
-
-
-                if (fixture.match_time) {
-
-                    matchTime =
-                        String(
-                            fixture.match_time
-                        ).slice(0, 5);
-
-                }
-
+        tournamentGrid.innerHTML =
+            tournaments.map(tournament => {
 
                 return `
-                    <article class="fixture-card">
+                    <article class="tournament-card">
 
-                        <div class="fixture-date">
+                        <div class="tournament-image">
 
-                            <strong>
-                                ${escapeHTML(
-                                    date.day
-                                )}
-                            </strong>
-
-                            <span>
-                                ${escapeHTML(
-                                    date.month
-                                )}
-                                <br>
-                                ${escapeHTML(
-                                    date.year
-                                )}
-                            </span>
+                            <img
+                                src="${escapeHTML(
+                                    tournament.image_url || "gsa.png"
+                                )}"
+                                alt="${escapeHTML(
+                                    tournament.name || "Tournament"
+                                )}"
+                                loading="lazy"
+                            >
 
                         </div>
 
 
-                        <div class="fixture-info">
+                        <div class="tournament-content">
 
-                            <span class="fixture-tag">
+                            <span class="tournament-status">
                                 ${escapeHTML(
-                                    matchType
+                                    tournament.status || "UPCOMING"
                                 )}
                             </span>
 
 
                             <h3>
-
                                 ${escapeHTML(
-                                    homeTeam
+                                    tournament.name ||
+                                    "Tournament"
                                 )}
-
-                                <span>
-                                    VS
-                                </span>
-
-                                ${escapeHTML(
-                                    awayTeam
-                                )}
-
                             </h3>
 
 
                             <p>
-
                                 ${escapeHTML(
-                                    date.weekday
+                                    tournament.description || ""
                                 )}
+                            </p>
 
-                                •
 
-                                ${escapeHTML(
-                                    venue
-                                )}
+                            <div class="tournament-meta">
 
                                 ${
-                                    matchTime
-                                        ? ` • ${escapeHTML(matchTime)}`
+                                    tournament.start_date
+                                        ? `
+                                            <span>
+                                                📅
+                                                ${escapeHTML(
+                                                    tournament.start_date
+                                                )}
+                                            </span>
+                                        `
                                         : ""
                                 }
 
-                            </p>
 
-                        </div>
+                                ${
+                                    tournament.venue
+                                        ? `
+                                            <span>
+                                                📍
+                                                ${escapeHTML(
+                                                    tournament.venue
+                                                )}
+                                            </span>
+                                        `
+                                        : ""
+                                }
 
-
-                        <div class="fixture-logo">
-
-                            <img
-                                src="gsa.png"
-                                alt="Ghopkhali Sports Arena"
-                                loading="lazy"
-                            >
+                            </div>
 
                         </div>
 
@@ -2941,30 +2838,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
         console.log(
-            "Fixtures loaded:",
-            fixtures.length
+            "Published tournaments loaded:",
+            tournaments.length
         );
 
 
     } catch (error) {
 
         console.error(
-            "Fixture loading error:",
+            "Tournament loading error:",
             error
         );
 
 
-        fixtureContainer.innerHTML = `
+        tournamentGrid.innerHTML = `
             <div class="coming-soon">
 
-                <span class="plus">
-                    !
-                </span>
+                <span class="plus">!</span>
 
                 <div>
 
                     <strong>
-                        Unable to load fixtures
+                        Unable to load tournaments
                     </strong>
 
                     <p>
