@@ -1672,3 +1672,315 @@ button {
     }
 
 }
+
+/* =====================================================
+   GSA ADMIN — TOURNAMENTS
+===================================================== */
+
+/* Tournament section */
+#tournaments {
+    width: 100%;
+}
+
+#tournaments .section-heading {
+    margin-bottom: 28px;
+}
+
+/* Tournament list */
+#tournamentList {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* Tournament admin card */
+#tournamentList .content-card {
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    padding: 22px;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+#tournamentList .content-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Top area */
+#tournamentList .content-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Tournament title */
+#tournamentList h3 {
+    margin: 12px 0 8px;
+    color: #111111;
+    font-size: 20px;
+    line-height: 1.35;
+    font-weight: 800;
+}
+
+/* Tournament details */
+#tournamentList .content-card p {
+    margin: 5px 0;
+    color: #666666;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Date */
+#tournamentList .content-date {
+    flex-shrink: 0;
+    color: #777777;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Status badges */
+#tournamentList .notice-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+#tournamentList .badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #f1f1f1;
+    color: #333333;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+#tournamentList .badge.published {
+    background: #111111;
+    color: #ffffff;
+}
+
+#tournamentList .badge.draft {
+    background: #eeeeee;
+    color: #777777;
+}
+
+/* Card buttons */
+#tournamentList .card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+#tournamentList .small-button {
+    min-height: 36px;
+    padding: 7px 13px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    background: #ffffff;
+    color: #222222;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+#tournamentList .small-button:hover {
+    background: #111111;
+    border-color: #111111;
+    color: #ffffff;
+}
+
+#tournamentList .small-button.danger:hover {
+    background: #c62828;
+    border-color: #c62828;
+    color: #ffffff;
+}
+
+/* =====================================================
+   TOURNAMENT MODAL
+===================================================== */
+
+#tournamentModal .modal-content {
+    width: min(680px, calc(100% - 30px));
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 20px;
+}
+
+/* Form groups */
+#tournamentModal .form-group {
+    margin-bottom: 18px;
+}
+
+#tournamentModal label {
+    display: block;
+    margin-bottom: 8px;
+    color: #222222;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Inputs */
+#tournamentModal input[type="text"],
+#tournamentModal textarea,
+#tournamentModal select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #111111;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#tournamentModal textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+#tournamentModal input[type="text"]:focus,
+#tournamentModal textarea:focus,
+#tournamentModal select:focus {
+    border-color: #111111;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+/* File input */
+#tournamentModal input[type="file"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px dashed #cccccc;
+    border-radius: 10px;
+    background: #fafafa;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* =====================================================
+   POSTER PREVIEW
+===================================================== */
+
+#tournamentPosterPreview {
+    overflow: hidden;
+    margin-top: 14px !important;
+    padding: 8px;
+    border: 1px solid #e5e5e5;
+    border-radius: 14px;
+    background: #f7f7f7;
+}
+
+#tournamentPosterPreviewImage {
+    width: 100%;
+    max-height: 320px;
+    object-fit: contain !important;
+    border-radius: 10px;
+    display: block;
+    background: #eeeeee;
+}
+
+/* Checkbox */
+#tournamentModal .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0;
+    cursor: pointer;
+}
+
+#tournamentModal .checkbox-row input {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: #111111;
+}
+
+#tournamentModal .checkbox-row span {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Modal buttons */
+#tournamentModal .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #eeeeee;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    #tournamentList .content-card {
+        padding: 17px;
+        border-radius: 14px;
+    }
+
+    #tournamentList .content-card-top {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    #tournamentList .content-date {
+        order: -1;
+    }
+
+    #tournamentList h3 {
+        font-size: 18px;
+    }
+
+    #tournamentList .card-actions {
+        gap: 7px;
+    }
+
+    #tournamentList .small-button {
+        flex: 1;
+        min-width: 80px;
+    }
+
+    #tournamentModal .modal-content {
+        width: calc(100% - 20px);
+        border-radius: 16px;
+    }
+
+    #tournamentModal .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    #tournamentModal .modal-actions button {
+        width: 100%;
+    }
+
+}
