@@ -3171,3 +3171,71 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
+
+/* =====================================================
+   TOURNAMENT POSTER PREVIEW
+===================================================== */
+
+const tournamentPoster =
+    document.getElementById("tournamentPoster");
+
+const tournamentPosterPreview =
+    document.getElementById(
+        "tournamentPosterPreview"
+    );
+
+const tournamentPosterPreviewImage =
+    document.getElementById(
+        "tournamentPosterPreviewImage"
+    );
+
+
+if (tournamentPoster) {
+
+    tournamentPoster.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files && this.files[0];
+
+
+            if (!file) {
+
+                tournamentPosterPreview.style.display =
+                    "none";
+
+                tournamentPosterPreviewImage.src =
+                    "";
+
+                return;
+            }
+
+
+            if (!file.type.startsWith("image/")) {
+
+                alert(
+                    "Please select an image file."
+                );
+
+                this.value = "";
+
+                return;
+            }
+
+
+            const imageURL =
+                URL.createObjectURL(file);
+
+
+            tournamentPosterPreviewImage.src =
+                imageURL;
+
+
+            tournamentPosterPreview.style.display =
+                "block";
+
+        }
+    );
+
+}
