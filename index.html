@@ -2651,6 +2651,357 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
 
+    const fixtureContainer =
+        document.getElementById("homeFixturesList");
+
+
+    if (!fixtureContainer) {
+        console.error("homeFixturesList not found.");
+        return;
+    }
+
+
+    /* ==========================================
+       ESCAPE HTML
+    ========================================== */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* ==========================================
+       DATE FORMAT
+    ========================================== */
+
+    function getDateParts(value) {
+
+        const date = new Date(value);
+
+
+        if (Number.isNaN(date.getTime())) {
+
+            return {
+                day: "--",
+                month: "---",
+                year: "----",
+                weekday: ""
+            };
+
+        }
+
+
+        return {
+
+            day:
+                String(
+                    date.getDate()
+                ).padStart(2, "0"),
+
+            month:
+                date
+                    .toLocaleDateString(
+                        "en-US",
+                        {
+                            month: "short"
+                        }
+                    )
+                    .toUpperCase(),
+
+            year:
+                date.getFullYear(),
+
+            weekday:
+                date.toLocaleDateString(
+                    "en-US",
+                    {
+                        weekday: "long"
+                    }
+                )
+
+        };
+
+    }
+
+
+    /* ==========================================
+       LOADING
+    ========================================== */
+
+    fixtureContainer.innerHTML = `
+        <div class="loading-state">
+            Loading fixtures...
+        </div>
+    `;
+
+
+    /* ==========================================
+       LOAD FIXTURES
+    ========================================== */
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("fixtures")
+            .select("*")
+            .eq("published", true)
+            .order(
+                "match_date",
+                {
+                    ascending: true
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const fixtures =
+            data || [];
+
+
+        /* ======================================
+           NO FIXTURE
+        ====================================== */
+
+        if (!fixtures.length) {
+
+            fixtureContainer.innerHTML = `
+                <div class="coming-soon">
+
+                    <span class="plus">
+                        +
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            More fixtures coming soon
+                        </strong>
+
+                        <p>
+                            Follow the club for match updates
+                            and announcements.
+                        </p>
+
+                    </div>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /* ======================================
+           RENDER FIXTURES
+        ====================================== */
+
+        fixtureContainer.innerHTML =
+            fixtures.map(fixture => {
+
+                const date =
+                    getDateParts(
+                        fixture.match_date
+                    );
+
+
+                const homeTeam =
+                    fixture.home_team ||
+                    "Ghopkhali Sports Arena";
+
+
+                const awayTeam =
+                    fixture.away_team ||
+                    "Opponent";
+
+
+                const matchType =
+                    fixture.type ||
+                    "FIXTURE";
+
+
+                const venue =
+                    fixture.venue ||
+                    "Venue TBA";
+
+
+                let matchTime = "";
+
+
+                if (fixture.match_time) {
+
+                    matchTime =
+                        String(
+                            fixture.match_time
+                        ).slice(0, 5);
+
+                }
+
+
+                return `
+                    <article class="fixture-card">
+
+                        <div class="fixture-date">
+
+                            <strong>
+                                ${escapeHTML(
+                                    date.day
+                                )}
+                            </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    date.month
+                                )}
+                                <br>
+                                ${escapeHTML(
+                                    date.year
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="fixture-info">
+
+                            <span class="fixture-tag">
+                                ${escapeHTML(
+                                    matchType
+                                )}
+                            </span>
+
+
+                            <h3>
+
+                                ${escapeHTML(
+                                    homeTeam
+                                )}
+
+                                <span>
+                                    VS
+                                </span>
+
+                                ${escapeHTML(
+                                    awayTeam
+                                )}
+
+                            </h3>
+
+
+                            <p>
+
+                                ${escapeHTML(
+                                    date.weekday
+                                )}
+
+                                •
+
+                                ${escapeHTML(
+                                    venue
+                                )}
+
+                                ${
+                                    matchTime
+                                        ? ` • ${escapeHTML(matchTime)}`
+                                        : ""
+                                }
+
+                            </p>
+
+                        </div>
+
+
+                        <div class="fixture-logo">
+
+                            <img
+                                src="gsa.png"
+                                alt="Ghopkhali Sports Arena"
+                                loading="lazy"
+                            >
+
+                        </div>
+
+                    </article>
+                `;
+
+            }).join("");
+
+
+        console.log(
+            "Fixtures loaded:",
+            fixtures.length
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Fixture loading error:",
+            error
+        );
+
+
+        fixtureContainer.innerHTML = `
+            <div class="coming-soon">
+
+                <span class="plus">
+                    !
+                </span>
+
+                <div>
+
+                    <strong>
+                        Unable to load fixtures
+                    </strong>
+
+                    <p>
+                        Please try again later.
+                    </p>
+
+                </div>
+
+            </div>
+        `;
+
+    }
+
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+    if (!window.supabase) {
+        console.error("Supabase library not loaded.");
+        return;
+    }
+
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
     /* ==========================================
        TOURNAMENT GRID
     ========================================== */
