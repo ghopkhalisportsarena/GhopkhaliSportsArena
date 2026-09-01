@@ -3064,10 +3064,6 @@ $("tournamentList")
 
             loadGallery(),
 
-            loadFriendlyApplications(),
-
-            loadMembershipApplications()
-
         ]);
 
         console.log(
