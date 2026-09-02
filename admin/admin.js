@@ -3453,6 +3453,162 @@ function openMembershipApplication(
     application
 ) {
 
+   /* =====================================================
+   MEMBERSHIP APPROVE / REJECT
+===================================================== */
+
+document.addEventListener("click", async (event) => {
+
+    const button =
+        event.target.closest(
+            "[data-membership-decision]"
+        );
+
+    if (!button) {
+        return;
+    }
+
+    const action =
+        button.dataset.membershipDecision;
+
+    const id =
+        button.dataset.id;
+
+    const application =
+        membershipApplications.find(
+            item => item.id === id
+        );
+
+    if (!application) {
+        alert("Application not found.");
+        return;
+    }
+
+    let newStatus = "";
+
+    if (action === "approve") {
+        newStatus = "approved";
+    }
+
+    if (action === "reject") {
+        newStatus = "rejected";
+    }
+
+    if (!newStatus) {
+        return;
+    }
+
+
+    /* Confirmation */
+
+    const confirmMessage =
+        newStatus === "approved"
+            ? "Are you sure you want to approve this membership application?"
+            : "Are you sure you want to reject this membership application?";
+
+    if (!confirm(confirmMessage)) {
+        return;
+    }
+
+
+    try {
+
+        button.disabled = true;
+        button.textContent = "Processing...";
+
+
+        /* Update Supabase */
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("membership_applications")
+            .update({
+                status: newStatus,
+                decided_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            })
+            .eq("id", id)
+            .select()
+            .single();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        /* Update local application */
+
+        const index =
+            membershipApplications.findIndex(
+                item => item.id === id
+            );
+
+        if (index !== -1) {
+
+            membershipApplications[index] =
+                data;
+
+        }
+
+
+        /* Refresh list */
+
+        renderMembershipApplications();
+
+
+        /* Refresh dashboard */
+
+        await loadDashboardCounts();
+
+
+        /* Close modal */
+
+        closeModal(
+            $("applicationModal")
+        );
+
+
+        /* Success message */
+
+        if (newStatus === "approved") {
+
+            alert(
+                "Membership application approved successfully."
+            );
+
+        } else {
+
+            alert(
+                "Membership application rejected successfully."
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Membership decision error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Failed to update membership application."
+        );
+
+        button.disabled = false;
+
+        button.textContent =
+            newStatus === "approved"
+                ? "Approve"
+                : "Reject";
+    }
+
+});
+   
     const modal =
         $("applicationModal");
 
