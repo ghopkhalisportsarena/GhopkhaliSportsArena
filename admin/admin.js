@@ -3838,6 +3838,165 @@ document.addEventListener("click", async (event) => {
 
     openModal(modal);
 }
+
+/* =====================================================
+   MEMBERSHIP APPLICATION PDF
+===================================================== */
+
+async function generateMembershipApplicationPDF(
+    application
+) {
+
+    try {
+
+        const container =
+            $("membershipPdfContainer");
+
+        if (!container) {
+            throw new Error(
+                "Membership PDF container not found."
+            );
+        }
+
+
+        /* Fill PDF data */
+
+        $("membershipPdfStatus").textContent =
+            application.status || "pending";
+
+        $("membershipPdfApplicationId").textContent =
+            application.id || "";
+
+        $("membershipPdfCreatedAt").textContent =
+            formatDate(application.created_at);
+
+        $("membershipPdfFullNameBn").textContent =
+            application.full_name_bn || "";
+
+        $("membershipPdfFullNameEn").textContent =
+            application.full_name_en || "";
+
+        $("membershipPdfFatherName").textContent =
+            application.father_name || "";
+
+        $("membershipPdfMotherName").textContent =
+            application.mother_name || "";
+
+        $("membershipPdfDateOfBirth").textContent =
+            application.date_of_birth || "";
+
+        $("membershipPdfBloodGroup").textContent =
+            application.blood_group || "";
+
+        $("membershipPdfProfession").textContent =
+            application.profession || "";
+
+        $("membershipPdfNid").textContent =
+            application.nid_birth_registration || "";
+
+        $("membershipPdfMobile").textContent =
+            application.mobile_number || "";
+
+        $("membershipPdfAlternativeMobile").textContent =
+            application.alternative_mobile_number || "";
+
+        $("membershipPdfEmail").textContent =
+            application.email || "";
+
+        $("membershipPdfCurrentAddress").textContent =
+            application.current_address || "";
+
+        $("membershipPdfPermanentAddress").textContent =
+            application.permanent_address || "";
+
+        $("membershipPdfSports").textContent =
+            application.sports || "";
+
+        $("membershipPdfOtherSports").textContent =
+            application.other_sports || "";
+
+        $("membershipPdfMessage").textContent =
+            application.message || "";
+
+
+        /*
+         * Check html2pdf
+         */
+
+        if (typeof html2pdf === "undefined") {
+
+            throw new Error(
+                "PDF library is not loaded."
+            );
+
+        }
+
+
+        /* Show container temporarily */
+
+        container.style.display = "block";
+
+
+        /* Generate PDF */
+
+        const options = {
+
+            margin: 10,
+
+            filename:
+                `GSA-Membership-Application-${application.id}.pdf`,
+
+            image: {
+                type: "jpeg",
+                quality: 0.98
+            },
+
+            html2canvas: {
+                scale: 2
+            },
+
+            jsPDF: {
+                unit: "mm",
+                format: "a4",
+                orientation: "portrait"
+            }
+
+        };
+
+
+        await html2pdf()
+            .set(options)
+            .from(container)
+            .save();
+
+
+        /* Hide again */
+
+        container.style.display = "none";
+
+
+    } catch (error) {
+
+        console.error(
+            "Membership PDF error:",
+            error
+        );
+
+        const container =
+            $("membershipPdfContainer");
+
+        if (container) {
+            container.style.display = "none";
+        }
+
+        alert(
+            error.message ||
+            "Failed to generate membership PDF."
+        );
+
+    }
+
+}
    
 /* =====================================================
    FRIENDLY MATCH APPLICATIONS — STEP 1
