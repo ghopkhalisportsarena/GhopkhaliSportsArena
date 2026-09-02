@@ -3170,6 +3170,519 @@ $("tournamentList")
 
             }
         );
+
+   /* =====================================================
+   MEMBERSHIP APPLICATIONS
+===================================================== */
+
+let membershipApplications = [];
+
+
+/* =====================================================
+   LOAD MEMBERSHIP APPLICATIONS
+===================================================== */
+
+async function loadMembershipApplications() {
+
+    const list = $("membershipList");
+
+    if (!list) {
+        return;
+    }
+
+    list.innerHTML = `
+        <div class="empty-state">
+            Loading membership applications...
+        </div>
+    `;
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("membership_applications")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (error) {
+            throw error;
+        }
+
+        membershipApplications = data || [];
+
+        renderMembershipApplications();
+
+    } catch (error) {
+
+        console.error(
+            "Membership applications error:",
+            error
+        );
+
+        list.innerHTML = `
+            <div class="empty-state">
+                Failed to load membership applications.
+            </div>
+        `;
+    }
+}
+
+
+/* =====================================================
+   RENDER MEMBERSHIP APPLICATIONS
+===================================================== */
+
+function renderMembershipApplications() {
+
+    const list = $("membershipList");
+
+    if (!list) {
+        return;
+    }
+
+    if (!membershipApplications.length) {
+
+        list.innerHTML = `
+            <div class="empty-state">
+                No membership applications.
+            </div>
+        `;
+
+        return;
+    }
+
+    list.innerHTML =
+        membershipApplications.map(application => {
+
+            const name =
+                application.full_name_en ||
+                application.full_name_bn ||
+                "Unnamed Applicant";
+
+            const phone =
+                application.mobile_number ||
+                "No phone";
+
+            const sport =
+                application.sports ||
+                "Not specified";
+
+            const status =
+                application.status ||
+                "pending";
+
+            const statusClass =
+                status.toLowerCase();
+
+            return `
+
+                <div class="application-card">
+
+                    <div class="application-card-info">
+
+                        <h4>
+                            ${escapeHTML(name)}
+                        </h4>
+
+                        <p>
+                            <strong>Phone:</strong>
+                            ${escapeHTML(phone)}
+                        </p>
+
+                        <p>
+                            <strong>Sport:</strong>
+                            ${escapeHTML(sport)}
+                        </p>
+
+                        <p>
+                            <strong>Submitted:</strong>
+                            ${formatDate(
+                                application.created_at
+                            )}
+                        </p>
+
+                        <span class="status-badge ${statusClass}">
+                            ${escapeHTML(
+                                status.toUpperCase()
+                            )}
+                        </span>
+
+                    </div>
+
+                    <div class="card-actions">
+
+                        <button
+                            type="button"
+                            class="small-button"
+                            data-membership-action="view"
+                            data-id="${escapeHTML(
+                                application.id
+                            )}"
+                        >
+                            View Application
+                        </button>
+
+                        <button
+                            type="button"
+                            class="small-button danger"
+                            data-membership-action="delete"
+                            data-id="${escapeHTML(
+                                application.id
+                            )}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+}
+
+
+/* =====================================================
+   MEMBERSHIP ACTIONS
+===================================================== */
+
+document.addEventListener("click", async (event) => {
+
+    const button =
+        event.target.closest(
+            "[data-membership-action]"
+        );
+
+    if (!button) {
+        return;
+    }
+
+    const action =
+        button.dataset.membershipAction;
+
+    const id =
+        button.dataset.id;
+
+    const application =
+        membershipApplications.find(
+            item => item.id === id
+        );
+
+    if (!application) {
+        return;
+    }
+
+
+    /* VIEW */
+
+    if (action === "view") {
+
+        openMembershipApplication(
+            application
+        );
+
+        return;
+    }
+
+
+    /* DELETE */
+
+    if (action === "delete") {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this membership application?"
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("membership_applications")
+                .delete()
+                .eq("id", id);
+
+            if (error) {
+                throw error;
+            }
+
+            membershipApplications =
+                membershipApplications.filter(
+                    item => item.id !== id
+                );
+
+            renderMembershipApplications();
+
+            await loadDashboardCounts();
+
+            alert(
+                "Membership application deleted successfully."
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Delete membership error:",
+                error
+            );
+
+            alert(
+                "Failed to delete membership application."
+            );
+        }
+    }
+
+});
+
+
+/* =====================================================
+   OPEN MEMBERSHIP APPLICATION
+===================================================== */
+
+function openMembershipApplication(
+    application
+) {
+
+    const modal =
+        $("applicationModal");
+
+    const title =
+        $("applicationModalTitle");
+
+    const details =
+        $("applicationDetails");
+
+    if (!modal || !title || !details) {
+        return;
+    }
+
+    const status =
+        application.status || "pending";
+
+    title.textContent =
+        "Membership Application";
+
+
+    details.innerHTML = `
+
+        <div class="application-details">
+
+            <div class="detail-group">
+
+                <h3>Personal Information</h3>
+
+                <p>
+                    <strong>Full Name (Bangla):</strong><br>
+                    ${escapeHTML(
+                        application.full_name_bn || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Full Name (English):</strong><br>
+                    ${escapeHTML(
+                        application.full_name_en || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Father's Name:</strong><br>
+                    ${escapeHTML(
+                        application.father_name || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Mother's Name:</strong><br>
+                    ${escapeHTML(
+                        application.mother_name || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Date of Birth:</strong><br>
+                    ${escapeHTML(
+                        application.date_of_birth || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Blood Group:</strong><br>
+                    ${escapeHTML(
+                        application.blood_group || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Profession:</strong><br>
+                    ${escapeHTML(
+                        application.profession || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>NID / Birth Registration:</strong><br>
+                    ${escapeHTML(
+                        application.nid_birth_registration || "—"
+                    )}
+                </p>
+
+            </div>
+
+
+            <div class="detail-group">
+
+                <h3>Contact Information</h3>
+
+                <p>
+                    <strong>Mobile:</strong><br>
+                    ${escapeHTML(
+                        application.mobile_number || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Alternative Mobile:</strong><br>
+                    ${escapeHTML(
+                        application.alternative_mobile_number || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Email:</strong><br>
+                    ${escapeHTML(
+                        application.email || "—"
+                    )}
+                </p>
+
+            </div>
+
+
+            <div class="detail-group">
+
+                <h3>Address</h3>
+
+                <p>
+                    <strong>Current Address:</strong><br>
+                    ${escapeHTML(
+                        application.current_address || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Permanent Address:</strong><br>
+                    ${escapeHTML(
+                        application.permanent_address || "—"
+                    )}
+                </p>
+
+            </div>
+
+
+            <div class="detail-group">
+
+                <h3>Sports Information</h3>
+
+                <p>
+                    <strong>Sports:</strong><br>
+                    ${escapeHTML(
+                        application.sports || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Other Sports:</strong><br>
+                    ${escapeHTML(
+                        application.other_sports || "—"
+                    )}
+                </p>
+
+            </div>
+
+
+            <div class="detail-group">
+
+                <h3>Additional Information</h3>
+
+                <p>
+                    <strong>Message:</strong><br>
+                    ${escapeHTML(
+                        application.message || "—"
+                    )}
+                </p>
+
+                <p>
+                    <strong>Submitted:</strong><br>
+                    ${formatDate(
+                        application.created_at
+                    )}
+                </p>
+
+                <p>
+                    <strong>Status:</strong><br>
+
+                    <span class="status-badge ${status.toLowerCase()}">
+                        ${escapeHTML(
+                            status.toUpperCase()
+                        )}
+                    </span>
+
+                </p>
+
+            </div>
+
+
+            ${
+                status.toLowerCase() === "pending"
+                ? `
+
+                    <div class="card-actions">
+
+                        <button
+                            type="button"
+                            class="small-button"
+                            data-membership-decision="approve"
+                            data-id="${escapeHTML(
+                                application.id
+                            )}"
+                        >
+                            Approve
+                        </button>
+
+                        <button
+                            type="button"
+                            class="small-button danger"
+                            data-membership-decision="reject"
+                            data-id="${escapeHTML(
+                                application.id
+                            )}"
+                        >
+                            Reject
+                        </button>
+
+                    </div>
+
+                `
+                : ""
+            }
+
+        </div>
+
+    `;
+
+    openModal(modal);
+}
+   
 /* =====================================================
    FRIENDLY MATCH APPLICATIONS — STEP 1
 ===================================================== */
@@ -4437,6 +4950,8 @@ async function generateAdminApplicationPDF(application) {
     loadGallery(),
 
     loadFriendlyApplications(),
+
+    loadMembershipApplications(),
 
 ]);
 
