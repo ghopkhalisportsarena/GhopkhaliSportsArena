@@ -200,26 +200,191 @@
            APPLICATION CARD
         ================================================= */
 
-        .application-card {
+     .application-card {
 
-            background: #ffffff;
+    background: #ffffff;
 
-            border: 1px solid #e4e4e7;
+    border: 1px solid #e4e4e7;
 
-            border-radius: 20px;
+    border-radius: 22px;
 
-            padding: clamp(
-                20px,
-                4vw,
-                38px
-            );
+    padding: clamp(
+        20px,
+        4vw,
+        42px
+    );
 
-            box-shadow:
-                0 10px 35px
-                rgba(0, 0, 0, .05);
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, .06);
 
-        }
+}
 
+
+/* =================================================
+   FORM INTRO
+================================================= */
+
+.application-card::before {
+
+    content: "OFFICIAL GSA MEMBERSHIP APPLICATION";
+
+    display: block;
+
+    text-align: center;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    color: #777;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* =================================================
+   SECTION NUMBER
+================================================= */
+
+.form-section {
+
+    position: relative;
+
+    margin-bottom: 38px;
+
+}
+
+
+/* =================================================
+   INPUT HOVER
+================================================= */
+
+input:hover,
+select:hover,
+textarea:hover {
+
+    border-color: #bdbdc2;
+
+}
+
+
+/* =================================================
+   REQUIRED FIELD
+================================================= */
+
+.required {
+
+    color: #d60000;
+
+    font-weight: 800;
+
+}
+
+
+/* =================================================
+   SUBMIT BUTTON
+================================================= */
+
+.submit-button {
+
+    width: 100%;
+
+    border: none;
+
+    background: #111;
+
+    color: #fff;
+
+    padding: 16px 22px;
+
+    border-radius: 12px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    letter-spacing: .2px;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease,
+        box-shadow .15s ease;
+
+}
+
+
+.submit-button:hover {
+
+    opacity: .92;
+
+    box-shadow:
+        0 8px 20px
+        rgba(0, 0, 0, .15);
+
+}
+
+
+.submit-button:active {
+
+    transform: scale(.985);
+
+}
+
+
+/* =================================================
+   FORM ERROR STATE
+================================================= */
+
+input:invalid:not(:placeholder-shown),
+textarea:invalid:not(:placeholder-shown),
+select:invalid {
+
+    border-color: #d9d9dd;
+
+}
+
+
+/* =================================================
+   MOBILE
+================================================= */
+
+@media (max-width: 650px) {
+
+    .application-card {
+
+        border-radius: 17px;
+
+        padding: 20px 15px;
+
+    }
+
+
+    .application-card::before {
+
+        font-size: 8px;
+
+        letter-spacing: 1.4px;
+
+        margin-bottom: 25px;
+
+    }
+
+
+    .form-section {
+
+        margin-bottom: 32px;
+
+    }
+
+}
 
         /* =================================================
            SECTION
