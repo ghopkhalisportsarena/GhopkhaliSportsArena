@@ -1486,6 +1486,230 @@ select:invalid {
 
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+    const form =
+        document.getElementById("membershipApplicationForm");
+
+    const submitButton =
+        document.getElementById("membershipSubmitButton");
+
+    if (!form) {
+        console.error(
+            "Membership application form not found."
+        );
+        return;
+    }
+
+    form.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Submitting...";
+        }
+
+        try {
+
+            const declaration =
+                form.querySelector(
+                    'input[type="checkbox"]'
+                );
+
+            if (
+                declaration &&
+                !declaration.checked
+            ) {
+                alert(
+                    "Please accept the declaration before submitting."
+                );
+
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent =
+                        "Submit Application";
+                }
+
+                return;
+            }
+
+            const formData =
+                new FormData(form);
+
+            const applicationData = {
+
+                full_name_bn:
+                    formData.get("full_name_bn")?.trim() || null,
+
+                full_name_en:
+                    formData.get("full_name_en")?.trim() || null,
+
+                father_name:
+                    formData.get("father_name")?.trim() || null,
+
+                mother_name:
+                    formData.get("mother_name")?.trim() || null,
+
+                date_of_birth:
+                    formData.get("date_of_birth") || null,
+
+                blood_group:
+                    formData.get("blood_group")?.trim() || null,
+
+                profession:
+                    formData.get("profession")?.trim() || null,
+
+                nid_birth_registration:
+                    formData.get("nid_birth_registration")?.trim() || null,
+
+                mobile_number:
+                    formData.get("mobile_number")?.trim() || null,
+
+                alternative_mobile_number:
+                    formData.get("alternative_mobile_number")?.trim() || null,
+
+                email:
+                    formData.get("email")?.trim() || null,
+
+                current_address:
+                    formData.get("current_address")?.trim() || null,
+
+                permanent_address:
+                    formData.get("permanent_address")?.trim() || null,
+
+                sports:
+                    formData.get("sports")?.trim() || null,
+
+                other_sports:
+                    formData.get("other_sports")?.trim() || null,
+
+                message:
+                    formData.get("message")?.trim() || null,
+
+                status: "pending"
+
+            };
+
+            /*
+             * Basic validation
+             */
+
+            if (!applicationData.full_name_bn) {
+                throw new Error(
+                    "Please enter your full name."
+                );
+            }
+
+            if (!applicationData.mobile_number) {
+                throw new Error(
+                    "Please enter your mobile number."
+                );
+            }
+
+            if (!applicationData.current_address) {
+                throw new Error(
+                    "Please enter your current address."
+                );
+            }
+
+            /*
+             * Submit to Supabase
+             */
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from("membership_applications")
+                .insert([applicationData])
+                .select()
+                .single();
+
+            if (error) {
+                console.error(
+                    "Supabase error:",
+                    error
+                );
+
+                throw new Error(
+                    error.message ||
+                    "Failed to submit application."
+                );
+            }
+
+            console.log(
+                "Membership application submitted:",
+                data
+            );
+
+            /*
+             * Success
+             */
+
+            alert(
+                "Your membership application has been submitted successfully."
+            );
+
+            form.reset();
+
+            /*
+             * Optional success message
+             */
+
+            const successMessage =
+                document.getElementById(
+                    "membershipSuccessMessage"
+                );
+
+            if (successMessage) {
+                successMessage.style.display = "block";
+
+                successMessage.textContent =
+                    "Application submitted successfully. Your application is now pending review.";
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Membership submission error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Something went wrong. Please try again."
+            );
+
+        } finally {
+
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent =
+                    "Submit Application";
+            }
+
+        }
+
+    });
+
+});
+</script>
 
 </body>
 
