@@ -3504,18 +3504,30 @@ function renderFriendlyApplications() {
 
                         <div class="card-actions">
 
-                            <button
-                                type="button"
-                                class="small-button"
-                                data-friendly-action="view"
-                                data-id="${escapeHTML(
-                                    application.id
-                                )}"
-                            >
-                                View Application
-                            </button>
+    <button
+        type="button"
+        class="small-button"
+        data-friendly-action="view"
+        data-id="${escapeHTML(
+            application.id
+        )}"
+    >
+        View Application
+    </button>
 
-                        </div>
+
+    <button
+        type="button"
+        class="small-button danger"
+        data-friendly-action="delete"
+        data-id="${escapeHTML(
+            application.id
+        )}"
+    >
+        Delete
+    </button>
+
+</div>
 
                     </article>
 
@@ -3535,7 +3547,7 @@ function renderFriendlyApplications() {
 $("friendlyList")
     ?.addEventListener(
         "click",
-        event => {
+        async event => {
 
             const button =
                 event.target.closest(
@@ -3552,6 +3564,10 @@ $("friendlyList")
                 button.dataset.id;
 
 
+            const action =
+                button.dataset.friendlyAction;
+
+
             const application =
                 friendlyApplications.find(
                     item =>
@@ -3565,14 +3581,172 @@ $("friendlyList")
             }
 
 
+            /* =====================================
+               VIEW APPLICATION
+            ===================================== */
+
             if (
-                button.dataset.friendlyAction ===
+                action ===
                 "view"
             ) {
 
                 openFriendlyApplication(
                     application
                 );
+
+                return;
+            }
+
+
+            /* =====================================
+               DELETE APPLICATION
+            ===================================== */
+
+            if (
+                action ===
+                "delete"
+            ) {
+
+                const teamName =
+                    application.team_name ||
+                    application.club_name ||
+                    "this application";
+
+
+                const confirmed =
+                    confirm(
+                        `Delete "${teamName}"?\n\n` +
+                        `This will permanently delete the Friendly Match application.`
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                try {
+
+                    showLoading(true);
+
+
+                    /* =================================
+                       1. DELETE DECISION PDF
+                    ================================= */
+
+                    if (
+                        application.decision_pdf_url
+                    ) {
+
+                        const {
+                            error:
+                                pdfDeleteError
+                        } =
+                            await supabaseClient
+                                .storage
+                                .from(
+                                    "friendly-applications"
+                                )
+                                .remove([
+                                    application
+                                        .decision_pdf_url
+                                ]);
+
+
+                        if (pdfDeleteError) {
+
+                            console.warn(
+                                "Decision PDF delete warning:",
+                                pdfDeleteError
+                            );
+
+                        }
+
+                    }
+
+
+                    /* =================================
+                       2. DELETE APPLICATION
+                    ================================= */
+
+                    const {
+                        error
+                    } =
+                        await supabaseClient
+                            .from(
+                                "friendly_applications"
+                            )
+                            .delete()
+                            .eq(
+                                "id",
+                                id
+                            );
+
+
+                    if (error) {
+                        throw error;
+                    }
+
+
+                    /* =================================
+                       3. CLOSE MODAL IF OPEN
+                    ================================= */
+
+                    closeModal(
+                        $("applicationModal")
+                    );
+
+
+                    /* =================================
+                       4. REMOVE FROM LOCAL ARRAY
+                    ================================= */
+
+                    friendlyApplications =
+                        friendlyApplications.filter(
+                            item =>
+                                String(item.id) !==
+                                String(id)
+                        );
+
+
+                    /* =================================
+                       5. REFRESH LIST
+                    ================================= */
+
+                    renderFriendlyApplications();
+
+
+                    /* =================================
+                       6. UPDATE DASHBOARD COUNT
+                    ================================= */
+
+                    await loadDashboardCounts();
+
+
+                    alert(
+                        "Friendly Match application deleted successfully."
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Friendly application delete error:",
+                        error
+                    );
+
+
+                    alert(
+                        "Unable to delete application.\n\n" +
+                        error.message
+                    );
+
+
+                } finally {
+
+                    showLoading(false);
+
+                }
 
             }
 
