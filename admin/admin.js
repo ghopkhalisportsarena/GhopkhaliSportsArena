@@ -279,8 +279,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 showDashboard();
 
-                await initializeDashboard();
-
 
             } catch (error) {
 
@@ -308,29 +306,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     );
 
 
-    /* =====================================================
-       AUTH STATE CHANGE
-    ===================================================== */
+ /* =====================================================
+   AUTH STATE CHANGE
+===================================================== */
 
-    supabaseClient
-        .auth
-        .onAuthStateChange(
-            (event, session) => {
+supabaseClient
+    .auth
+    .onAuthStateChange(
+        async (event, session) => {
 
-                if (session) {
+            console.log(
+                "Auth state:",
+                event,
+                session
+            );
 
-                    showDashboard();
+            if (session) {
 
-                    initializeDashboard();
+                showDashboard();
 
-                } else {
-
-                    showLogin();
-
+                // Only initialize after login/session restore
+                if (
+                    event === "SIGNED_IN" ||
+                    event === "INITIAL_SESSION"
+                ) {
+                    await initializeDashboard();
                 }
 
+            } else {
+
+                showLogin();
+
             }
-        );
+
+        }
+    );
 
 
     /* =====================================================
