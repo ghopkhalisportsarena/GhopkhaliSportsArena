@@ -3798,46 +3798,42 @@ document.addEventListener("click", async (event) => {
             </div>
 
 
-            ${
-                status.toLowerCase() === "pending"
-                ? `
+            <div class="card-actions">
 
-                    <div class="card-actions">
+    <button
+        type="button"
+        class="small-button"
+        data-membership-pdf="application"
+        data-id="${escapeHTML(application.id)}"
+    >
+        Download Application PDF
+    </button>
 
-                        <button
-                            type="button"
-                            class="small-button"
-                            data-membership-decision="approve"
-                            data-id="${escapeHTML(
-                                application.id
-                            )}"
-                        >
-                            Approve
-                        </button>
+    ${
+        status.toLowerCase() === "pending"
+        ? `
+            <button
+                type="button"
+                class="small-button"
+                data-membership-decision="approve"
+                data-id="${escapeHTML(application.id)}"
+            >
+                Approve
+            </button>
 
-                        <button
-                            type="button"
-                            class="small-button danger"
-                            data-membership-decision="reject"
-                            data-id="${escapeHTML(
-                                application.id
-                            )}"
-                        >
-                            Reject
-                        </button>
+            <button
+                type="button"
+                class="small-button danger"
+                data-membership-decision="reject"
+                data-id="${escapeHTML(application.id)}"
+            >
+                Reject
+            </button>
+        `
+        : ""
+    }
 
-                    </div>
-
-                `
-                : ""
-            }
-
-        </div>
-
-    `;
-
-    openModal(modal);
-}
+</div>
 
 /* =====================================================
    MEMBERSHIP APPLICATION PDF
@@ -3997,7 +3993,73 @@ async function generateMembershipApplicationPDF(
     }
 
 }
-   
+
+  /* =====================================================
+   MEMBERSHIP APPLICATION PDF BUTTON
+===================================================== */
+
+document.addEventListener("click", async (event) => {
+
+    const button =
+        event.target.closest(
+            "[data-membership-pdf]"
+        );
+
+    if (!button) {
+        return;
+    }
+
+    const id =
+        button.dataset.id;
+
+    const application =
+        membershipApplications.find(
+            item => item.id === id
+        );
+
+    if (!application) {
+
+        alert(
+            "Membership application not found."
+        );
+
+        return;
+    }
+
+    try {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Generating PDF...";
+
+        await generateMembershipApplicationPDF(
+            application
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Membership PDF button error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Failed to generate PDF."
+        );
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Download Application PDF";
+
+    }
+
+});
+
 /* =====================================================
    FRIENDLY MATCH APPLICATIONS — STEP 1
 ===================================================== */
