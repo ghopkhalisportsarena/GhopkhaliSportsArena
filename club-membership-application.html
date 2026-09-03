@@ -1916,611 +1916,11 @@
 </footer>
 
 
-
-<!-- =====================================================
-     SUPABASE
-===================================================== -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-<script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-
-        /* =================================================
-           SUPABASE
-        ================================================= */
-
-        const SUPABASE_URL =
-            "https://cmygmswzokyrmgdnuszq.supabase.co";
-
-
-        const SUPABASE_KEY =
-            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
-
-
-        const supabaseClient =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
-
-
-
-        /* =================================================
-           ELEMENTS
-        ================================================= */
-
-        const form =
-            document.getElementById(
-                "membershipApplicationForm"
-            );
-
-
-        const submitButton =
-            document.getElementById(
-                "membershipSubmitButton"
-            );
-
-
-        const photoInput =
-            document.getElementById(
-                "memberPhoto"
-            );
-
-
-        const photoPreviewImage =
-            document.getElementById(
-                "photoPreviewImage"
-            );
-
-
-        const photoPlaceholder =
-            document.getElementById(
-                "photoPlaceholder"
-            );
-
-
-        const successMessage =
-            document.getElementById(
-                "membershipSuccessMessage"
-            );
-
-
-
-        if (!form) {
-
-            console.error(
-                "Membership application form not found."
-            );
-
-            return;
-
-        }
-
-
-
-        /* =================================================
-           PHOTO PREVIEW
-        ================================================= */
-
-        if (photoInput) {
-
-            photoInput.addEventListener(
-                "change",
-                () => {
-
-                    const file =
-                        photoInput.files?.[0];
-
-
-                    if (!file) {
-
-                        photoPreviewImage.style.display =
-                            "none";
-
-                        photoPlaceholder.style.display =
-                            "block";
-
-                        return;
-
-                    }
-
-
-                    if (file.size > 2 * 1024 * 1024) {
-
-                        alert(
-                            "Photo size must be 2 MB or less."
-                        );
-
-                        photoInput.value = "";
-
-                        photoPreviewImage.style.display =
-                            "none";
-
-                        photoPlaceholder.style.display =
-                            "block";
-
-                        return;
-
-                    }
-
-
-                    const reader =
-                        new FileReader();
-
-
-                    reader.onload =
-                        event => {
-
-                            photoPreviewImage.src =
-                                event.target.result;
-
-                            photoPreviewImage.style.display =
-                                "block";
-
-                            photoPlaceholder.style.display =
-                                "none";
-
-                        };
-
-
-                    reader.readAsDataURL(file);
-
-                }
-            );
-
-        }
-
-
-
-        /* =================================================
-           FORM SUBMIT
-        ================================================= */
-
-        form.addEventListener(
-            "submit",
-            async event => {
-
-                event.preventDefault();
-
-
-                /* =========================================
-                   BUTTON
-                ========================================= */
-
-                if (submitButton) {
-
-                    submitButton.disabled =
-                        true;
-
-                    submitButton.textContent =
-                        "Submitting...";
-
-                }
-
-
-
-                try {
-
-
-                    /* =====================================
-                       DECLARATION
-                    ===================================== */
-
-                    const declaration =
-                        document.getElementById(
-                            "declaration"
-                        );
-
-
-                    if (
-                        !declaration ||
-                        !declaration.checked
-                    ) {
-
-                        throw new Error(
-                            "Please accept the declaration before submitting."
-                        );
-
-                    }
-
-
-
-                    /* =====================================
-                       SPORTS
-                    ===================================== */
-
-                    const selectedSports =
-                        Array.from(
-                            form.querySelectorAll(
-                                'input[name="sports"]:checked'
-                            )
-                        )
-                        .map(
-                            checkbox =>
-                                checkbox.value
-                        );
-
-
-                    if (
-                        selectedSports.length === 0
-                    ) {
-
-                        throw new Error(
-                            "Please select at least one sport."
-                        );
-
-                    }
-
-
-
-                    /* =====================================
-                       FORM DATA
-                    ===================================== */
-
-                    const formData =
-                        new FormData(form);
-
-
-
-                    /* =====================================
-                       APPLICATION DATA
-                    ===================================== */
-
-                    const applicationData = {
-
-                        full_name_bn:
-                            formData
-                                .get("full_name_bn")
-                                ?.trim() || null,
-
-
-                        full_name_en:
-                            formData
-                                .get("full_name_en")
-                                ?.trim() || null,
-
-
-                        father_name:
-                            formData
-                                .get("father_name")
-                                ?.trim() || null,
-
-
-                        mother_name:
-                            formData
-                                .get("mother_name")
-                                ?.trim() || null,
-
-
-                        date_of_birth:
-                            formData.get(
-                                "date_of_birth"
-                            ) || null,
-
-
-                        blood_group:
-                            formData
-                                .get("blood_group")
-                                ?.trim() || null,
-
-
-                        profession:
-                            formData
-                                .get("profession")
-                                ?.trim() || null,
-
-
-                        nid_birth_registration:
-                            formData
-                                .get(
-                                    "nid_birth_registration"
-                                )
-                                ?.trim() || null,
-
-
-                        mobile_number:
-                            formData
-                                .get("mobile_number")
-                                ?.trim() || null,
-
-
-                        alternative_mobile_number:
-                            formData
-                                .get(
-                                    "alternative_mobile_number"
-                                )
-                                ?.trim() || null,
-
-
-                        email:
-                            formData
-                                .get("email")
-                                ?.trim() || null,
-
-
-                        current_address:
-                            formData
-                                .get("current_address")
-                                ?.trim() || null,
-
-
-                        permanent_address:
-                            formData
-                                .get("permanent_address")
-                                ?.trim() || null,
-
-
-                        sports:
-                            selectedSports.join(", "),
-
-
-                        other_sports:
-                            formData
-                                .get("other_sports")
-                                ?.trim() || null,
-
-
-                        sports_skill:
-                            formData
-                                .get("sports_skill")
-                                ?.trim() || null,
-
-
-                        previous_club_experience:
-                            formData
-                                .get(
-                                    "previous_club_experience"
-                                )
-                                ?.trim() || null,
-
-
-                        emergency_contact_name:
-                            formData
-                                .get(
-                                    "emergency_contact_name"
-                                )
-                                ?.trim() || null,
-
-
-                        emergency_contact_relation:
-                            formData
-                                .get(
-                                    "emergency_contact_relation"
-                                )
-                                ?.trim() || null,
-
-
-                        emergency_contact_mobile:
-                            formData
-                                .get(
-                                    "emergency_contact_mobile"
-                                )
-                                ?.trim() || null,
-
-
-                        status:
-                            "pending"
-
-                    };
-
-
-
-                    /* =====================================
-                       BASIC VALIDATION
-                    ===================================== */
-
-                    if (
-                        !applicationData.full_name_bn
-                    ) {
-
-                        throw new Error(
-                            "Please enter your full name in Bangla."
-                        );
-
-                    }
-
-
-                    if (
-                        !applicationData.full_name_en
-                    ) {
-
-                        throw new Error(
-                            "Please enter your full name in English."
-                        );
-
-                    }
-
-
-                    if (
-                        !applicationData.mobile_number
-                    ) {
-
-                        throw new Error(
-                            "Please enter your mobile number."
-                        );
-
-                    }
-
-
-                    if (
-                        !applicationData.current_address
-                    ) {
-
-                        throw new Error(
-                            "Please enter your current address."
-                        );
-
-                    }
-
-
-                    if (
-                        !applicationData.permanent_address
-                    ) {
-
-                        throw new Error(
-                            "Please enter your permanent address."
-                        );
-
-                    }
-
-
-                    if (
-                        !applicationData.emergency_contact_name ||
-                        !applicationData.emergency_contact_relation ||
-                        !applicationData.emergency_contact_mobile
-                    ) {
-
-                        throw new Error(
-                            "Please complete the emergency contact information."
-                        );
-
-                    }
-
-
-
-                    /* =====================================
-                       INSERT
-                    ===================================== */
-
-                    const {
-                        data,
-                        error
-                    } = await supabaseClient
-
-                        .from(
-                            "membership_applications"
-                        )
-
-                        .insert([
-                            applicationData
-                        ])
-
-                        .select()
-
-                        .single();
-
-
-
-                    if (error) {
-
-                        console.error(
-                            "Supabase error:",
-                            error
-                        );
-
-                        throw new Error(
-                            error.message ||
-                            "Failed to submit application."
-                        );
-
-                    }
-
-
-
-                    console.log(
-                        "Membership application submitted:",
-                        data
-                    );
-
-
-
-                    /* =====================================
-                       SUCCESS
-                    ===================================== */
-
-                    if (successMessage) {
-
-                        successMessage.style.display =
-                            "block";
-
-                        successMessage.textContent =
-                            "Application submitted successfully. Your application is now pending review.";
-
-                    }
-
-
-                    alert(
-                        "Your membership application has been submitted successfully."
-                    );
-
-
-                    form.reset();
-
-
-                    /* Reset photo preview */
-
-                    if (photoPreviewImage) {
-
-                        photoPreviewImage.style.display =
-                            "none";
-
-                        photoPreviewImage.src =
-                            "";
-
-                    }
-
-
-                    if (photoPlaceholder) {
-
-                        photoPlaceholder.style.display =
-                            "block";
-
-                    }
-
-
-
-                } catch (error) {
-
-
-                    console.error(
-                        "Membership submission error:",
-                        error
-                    );
-
-
-                    alert(
-                        error?.message ||
-                        "Something went wrong. Please try again."
-                    );
-
-
-                } finally {
-
-
-                    if (submitButton) {
-
-                        submitButton.disabled =
-                            false;
-
-                        submitButton.textContent =
-                            "Submit Membership Application";
-
-                    }
-
-                }
-
-            }
-        );
-
-    }
-
-);
-
-</script>
 
 <script>
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    /* =====================================================
-       SUPABASE
-    ===================================================== */
 
     const SUPABASE_URL =
         "https://cmygmswzokyrmgdnuszq.supabase.co";
@@ -2535,16 +1935,12 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-    /* =====================================================
-       STORAGE
-    ===================================================== */
+    const PHOTO_BUCKET =
+        "membership-photos";
 
-    const PHOTO_BUCKET = "membership-photos";
+    const MAX_PHOTO_SIZE =
+        2 * 1024 * 1024;
 
-
-    /* =====================================================
-       ELEMENTS
-    ===================================================== */
 
     const form =
         document.getElementById(
@@ -2578,11 +1974,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     if (!form) {
-
         console.error(
             "Membership application form not found."
         );
-
         return;
     }
 
@@ -2600,24 +1994,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 const file =
                     photoInput.files?.[0];
 
-
                 if (!file) {
 
-                    if (photoPreviewImage) {
+                    photoPreviewImage.style.display =
+                        "none";
 
-                        photoPreviewImage.style.display =
-                            "none";
+                    photoPreviewImage.src =
+                        "";
 
-                        photoPreviewImage.src = "";
-
-                    }
-
-                    if (photoPlaceholder) {
-
-                        photoPlaceholder.style.display =
-                            "block";
-
-                    }
+                    photoPlaceholder.style.display =
+                        "block";
 
                     return;
                 }
@@ -2640,7 +2026,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         "Only JPG, PNG or WebP photos are allowed."
                     );
 
-                    photoInput.value = "";
+                    photoInput.value =
+                        "";
 
                     return;
                 }
@@ -2648,14 +2035,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (
                     file.size >
-                    2 * 1024 * 1024
+                    MAX_PHOTO_SIZE
                 ) {
 
                     alert(
                         "Photo size must be 2 MB or less."
                     );
 
-                    photoInput.value = "";
+                    photoInput.value =
+                        "";
 
                     return;
                 }
@@ -2668,22 +2056,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 reader.onload =
                     event => {
 
-                        if (photoPreviewImage) {
+                        photoPreviewImage.src =
+                            event.target.result;
 
-                            photoPreviewImage.src =
-                                event.target.result;
+                        photoPreviewImage.style.display =
+                            "block";
 
-                            photoPreviewImage.style.display =
-                                "block";
-
-                        }
-
-                        if (photoPlaceholder) {
-
-                            photoPlaceholder.style.display =
-                                "none";
-
-                        }
+                        photoPlaceholder.style.display =
+                            "none";
 
                     };
 
@@ -2709,7 +2089,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (submitButton) {
 
-                submitButton.disabled = true;
+                submitButton.disabled =
+                    true;
 
                 submitButton.textContent =
                     "Checking Application...";
@@ -2717,14 +2098,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            let uploadedPhotoPath = null;
+            let uploadedPhotoPath =
+                null;
 
 
             try {
 
-                /* =================================================
+                /* =========================================
                    DECLARATION
-                ================================================= */
+                ========================================= */
 
                 const declaration =
                     document.getElementById(
@@ -2744,9 +2126,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
 
-                /* =================================================
+                /* =========================================
                    SPORTS
-                ================================================= */
+                ========================================= */
 
                 const selectedSports =
                     Array.from(
@@ -2771,61 +2153,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
 
-                /* =================================================
+                /* =========================================
                    FORM DATA
-                ================================================= */
+                ========================================= */
 
                 const formData =
                     new FormData(form);
 
 
-                /* =================================================
-                   PHOTO
-                ================================================= */
-
-                const photoFile =
-                    photoInput?.files?.[0] || null;
-
-
-                if (photoFile) {
-
-                    const allowedTypes = [
-                        "image/jpeg",
-                        "image/png",
-                        "image/webp"
-                    ];
-
-
-                    if (
-                        !allowedTypes.includes(
-                            photoFile.type
-                        )
-                    ) {
-
-                        throw new Error(
-                            "Only JPG, PNG or WebP photos are allowed."
-                        );
-
-                    }
-
-
-                    if (
-                        photoFile.size >
-                        2 * 1024 * 1024
-                    ) {
-
-                        throw new Error(
-                            "Photo size must be 2 MB or less."
-                        );
-
-                    }
-
-                }
-
-
-                /* =================================================
+                /* =========================================
                    REQUIRED FIELDS
-                ================================================= */
+                ========================================= */
 
                 const fullNameBn =
                     formData
@@ -2876,47 +2214,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 if (!fullNameBn) {
-
                     throw new Error(
                         "Please enter your full name in Bangla."
                     );
-
                 }
 
 
                 if (!fullNameEn) {
-
                     throw new Error(
                         "Please enter your full name in English."
                     );
-
                 }
 
 
                 if (!mobileNumber) {
-
                     throw new Error(
                         "Please enter your mobile number."
                     );
-
                 }
 
 
                 if (!currentAddress) {
-
                     throw new Error(
                         "Please enter your current address."
                     );
-
                 }
 
 
                 if (!permanentAddress) {
-
                     throw new Error(
                         "Please enter your permanent address."
                     );
-
                 }
 
 
@@ -2933,12 +2261,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
 
-                /* =================================================
+                /* =========================================
+                   PHOTO
+                ========================================= */
+
+                const photoFile =
+                    photoInput?.files?.[0] || null;
+
+
+                let photoURL =
+                    null;
+
+
+                /* =========================================
                    UPLOAD PHOTO
-                ================================================= */
-
-                let photoURL = null;
-
+                ========================================= */
 
                 if (photoFile) {
 
@@ -2946,6 +2283,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         submitButton.textContent =
                             "Uploading Photo...";
+
+                    }
+
+
+                    const allowedTypes = [
+                        "image/jpeg",
+                        "image/png",
+                        "image/webp"
+                    ];
+
+
+                    if (
+                        !allowedTypes.includes(
+                            photoFile.type
+                        )
+                    ) {
+
+                        throw new Error(
+                            "Only JPG, PNG or WebP photos are allowed."
+                        );
+
+                    }
+
+
+                    if (
+                        photoFile.size >
+                        MAX_PHOTO_SIZE
+                    ) {
+
+                        throw new Error(
+                            "Photo size must be 2 MB or less."
+                        );
 
                     }
 
@@ -2959,23 +2328,20 @@ document.addEventListener("DOMContentLoaded", () => {
                         "image/png"
                     ) {
 
-                        extension = "png";
+                        extension =
+                            "png";
 
                     }
-
                     else if (
                         photoFile.type ===
                         "image/webp"
                     ) {
 
-                        extension = "webp";
+                        extension =
+                            "webp";
 
                     }
 
-
-                    /* ---------------------------------------------
-                       UNIQUE FILE NAME
-                    --------------------------------------------- */
 
                     const randomPart =
                         window.crypto &&
@@ -3004,11 +2370,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
 
-                    /* ---------------------------------------------
+                    /* =====================================
                        STORAGE UPLOAD
-                    --------------------------------------------- */
+                    ===================================== */
 
-                    const uploadResult =
+                    const {
+                        error: uploadError
+                    } =
                         await supabaseClient
                             .storage
                             .from(PHOTO_BUCKET)
@@ -3028,33 +2396,28 @@ document.addEventListener("DOMContentLoaded", () => {
                             );
 
 
-                    if (
-                        uploadResult.error
-                    ) {
+                    if (uploadError) {
 
                         console.error(
-                            "SUPABASE STORAGE ERROR:",
-                            uploadResult.error
+                            "PHOTO UPLOAD ERROR:",
+                            uploadError
                         );
 
                         throw new Error(
                             "Photo upload failed: " +
-                            uploadResult.error.message
+                            uploadError.message
                         );
 
                     }
 
 
-                    console.log(
-                        "Photo uploaded successfully."
-                    );
-
-
-                    /* ---------------------------------------------
+                    /* =====================================
                        PUBLIC URL
-                    --------------------------------------------- */
+                    ===================================== */
 
-                    const publicResult =
+                    const {
+                        data: publicUrlData
+                    } =
                         supabaseClient
                             .storage
                             .from(PHOTO_BUCKET)
@@ -3064,9 +2427,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                     photoURL =
-                        publicResult
-                            ?.data
-                            ?.publicUrl || null;
+                        publicUrlData?.publicUrl ||
+                        null;
 
 
                     console.log(
@@ -3086,49 +2448,42 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
 
-                /* =================================================
+                /* =========================================
                    APPLICATION DATA
-                ================================================= */
+                ========================================= */
 
                 const applicationData = {
 
                     full_name_bn:
                         fullNameBn,
 
-
                     full_name_en:
                         fullNameEn,
-
 
                     father_name:
                         formData
                             .get("father_name")
                             ?.trim() || null,
 
-
                     mother_name:
                         formData
                             .get("mother_name")
                             ?.trim() || null,
-
 
                     date_of_birth:
                         formData.get(
                             "date_of_birth"
                         ) || null,
 
-
                     blood_group:
                         formData
                             .get("blood_group")
                             ?.trim() || null,
 
-
                     profession:
                         formData
                             .get("profession")
                             ?.trim() || null,
-
 
                     nid_birth_registration:
                         formData
@@ -3137,10 +2492,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             )
                             ?.trim() || null,
 
-
                     mobile_number:
                         mobileNumber,
-
 
                     alternative_mobile_number:
                         formData
@@ -3149,36 +2502,29 @@ document.addEventListener("DOMContentLoaded", () => {
                             )
                             ?.trim() || null,
 
-
                     email:
                         formData
                             .get("email")
                             ?.trim() || null,
 
-
                     current_address:
                         currentAddress,
-
 
                     permanent_address:
                         permanentAddress,
 
-
                     sports:
                         selectedSports.join(", "),
-
 
                     other_sports:
                         formData
                             .get("other_sports")
                             ?.trim() || null,
 
-
                     sports_skill:
                         formData
                             .get("sports_skill")
                             ?.trim() || null,
-
 
                     previous_club_experience:
                         formData
@@ -3187,56 +2533,41 @@ document.addEventListener("DOMContentLoaded", () => {
                             )
                             ?.trim() || null,
 
-
                     emergency_contact_name:
                         emergencyName,
-
 
                     emergency_contact_relation:
                         emergencyRelation,
 
-
                     emergency_contact_mobile:
                         emergencyMobile,
-
-
-                    /* =========================================
-                       ADDITIONAL MESSAGE
-                    ========================================= */
 
                     message:
                         formData
                             .get("message")
                             ?.trim() || null,
 
-
-                    /* =========================================
-                       PHOTO URL
-                    ========================================= */
+                    /* =====================================
+                       THIS SAVES THE PHOTO URL
+                    ===================================== */
 
                     photo_url:
                         photoURL,
 
-
-                    /* =========================================
-                       STATUS
-                    ========================================= */
-
                     status:
                         "pending"
-
                 };
 
 
                 console.log(
-                    "Application data:",
+                    "FINAL APPLICATION DATA:",
                     applicationData
                 );
 
 
-                /* =================================================
-                   INSERT DATABASE
-                ================================================= */
+                /* =========================================
+                   DATABASE INSERT
+                ========================================= */
 
                 if (submitButton) {
 
@@ -3246,77 +2577,68 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
 
-                const insertResult =
+                const {
+                    data: savedApplication,
+                    error: insertError
+                } =
                     await supabaseClient
                         .from(
                             "membership_applications"
                         )
                         .insert(
-                            [
-                                applicationData
-                            ]
+                            applicationData
                         )
                         .select()
                         .single();
 
 
-                if (
-                    insertResult.error
-                ) {
+                if (insertError) {
 
                     console.error(
                         "DATABASE INSERT ERROR:",
-                        insertResult.error
+                        insertError
                     );
 
-
-                    /* ---------------------------------------------
-                       DELETE PHOTO IF DATABASE INSERT FAILS
-                    --------------------------------------------- */
 
                     if (uploadedPhotoPath) {
 
                         await supabaseClient
                             .storage
                             .from(PHOTO_BUCKET)
-                            .remove(
-                                [
-                                    uploadedPhotoPath
-                                ]
-                            );
+                            .remove([
+                                uploadedPhotoPath
+                            ]);
 
                     }
 
 
                     throw new Error(
-                        insertResult
-                            .error
-                            .message ||
+                        insertError.message ||
                         "Failed to submit application."
                     );
 
                 }
 
 
-                /* =================================================
-                   SUCCESS
-                ================================================= */
-
-                const savedApplication =
-                    insertResult.data;
-
+                /* =========================================
+                   VERIFY
+                ========================================= */
 
                 console.log(
-                    "Application submitted:",
+                    "APPLICATION SAVED:",
                     savedApplication
                 );
 
 
                 console.log(
-                    "PHOTO URL SAVED IN DATABASE:",
+                    "PHOTO URL SAVED:",
                     savedApplication.photo_url
                 );
 
+
+                /* =========================================
+                   SUCCESS
+                ========================================= */
 
                 if (successMessage) {
 
@@ -3333,10 +2655,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Your membership application has been submitted successfully."
                 );
 
-
-                /* =================================================
-                   RESET
-                ================================================= */
 
                 form.reset();
 
@@ -3360,7 +2678,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
 
-            } catch (error) {
+            }
+            catch (error) {
 
                 console.error(
                     "MEMBERSHIP APPLICATION ERROR:",
@@ -3374,8 +2693,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
             }
-
-
             finally {
 
                 if (submitButton) {
