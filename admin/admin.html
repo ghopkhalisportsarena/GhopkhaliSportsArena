@@ -235,6 +235,15 @@
 >
     Tournaments
 </a>
+
+<a
+    href="#rules"
+    class="sidebar-link"
+    data-section="rules"
+>
+    Rules & Regulations
+</a>
+
             <a
                 href="#applications"
                 class="sidebar-link"
@@ -1387,7 +1396,171 @@
 
         </section>
 
+<!-- =================================================
+     RULES & REGULATIONS
+================================================= -->
 
+<section
+    id="rules"
+    class="admin-section"
+>
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                CLUB POLICY
+            </span>
+
+            <h2>
+                Rules & Regulations
+            </h2>
+
+            <p>
+                Manage the official GSA rules, discipline
+                guidelines and regulations.
+            </p>
+
+        </div>
+
+
+        <a
+            href="../rules.html"
+            target="_blank"
+            class="secondary-button"
+        >
+            View Public Page ↗
+        </a>
+
+    </div>
+
+
+    <!-- =============================================
+         RULES EDITOR
+    ============================================== -->
+
+    <div
+        class="rules-admin-card"
+        id="rulesAdminEditor"
+    >
+
+        <div class="rules-admin-header">
+
+            <div>
+
+                <span class="section-label">
+                    OFFICIAL DOCUMENT
+                </span>
+
+                <h3>
+                    Edit Rules & Regulations
+                </h3>
+
+                <p>
+                    Changes saved here will appear
+                    automatically on the public Rules page.
+                </p>
+
+            </div>
+
+
+            <div
+                id="rulesAdminUpdated"
+                class="rules-admin-updated"
+            >
+                Loading...
+            </div>
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <div class="form-group">
+
+            <label for="rulesAdminTitle">
+                Rules Page Title
+            </label>
+
+            <input
+                type="text"
+                id="rulesAdminTitle"
+                placeholder="Rules & Regulations"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="form-group">
+
+            <label for="rulesAdminContent">
+                Rules & Regulations Content
+            </label>
+
+            <textarea
+                id="rulesAdminContent"
+                rows="24"
+                placeholder="Write the complete GSA rules and regulations here..."
+            ></textarea>
+
+            <small>
+                Write the complete GSA rules, discipline
+                guidelines, financial principles and
+                sportsmanship standards here.
+            </small>
+
+        </div>
+
+
+        <!-- ACTION BUTTONS -->
+
+        <div class="rules-admin-actions">
+
+            <button
+                type="button"
+                id="saveRulesButton"
+                class="primary-button"
+            >
+                Save Rules
+            </button>
+
+
+            <button
+                type="button"
+                id="resetRulesButton"
+                class="secondary-button"
+            >
+                Reset
+            </button>
+
+
+            <a
+                href="../rules.html"
+                target="_blank"
+                class="secondary-button"
+            >
+                Preview ↗
+            </a>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div
+            id="rulesAdminStatus"
+            class="rules-admin-status"
+            role="status"
+            aria-live="polite"
+        ></div>
+
+    </div>
+
+</section>
 
         <!-- =================================================
              APPLICATIONS
