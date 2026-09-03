@@ -2516,111 +2516,278 @@ document.addEventListener(
 
 <script>
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-        /* =================================================
-           SUPABASE
-        ================================================= */
+    /* =====================================================
+       SUPABASE
+    ===================================================== */
 
-        const SUPABASE_URL =
-            "https://cmygmswzokyrmgdnuszq.supabase.co";
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-        const SUPABASE_KEY =
-            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+    const SUPABASE_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-        const supabaseClient =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
 
 
-        /* =================================================
-           STORAGE BUCKET
-        ================================================= */
+    /* =====================================================
+       STORAGE
+    ===================================================== */
 
-        const PHOTO_BUCKET =
-            "membership-photos";
-
-
-        /* =================================================
-           ELEMENTS
-        ================================================= */
-
-        const form =
-            document.getElementById(
-                "membershipApplicationForm"
-            );
-
-        const submitButton =
-            document.getElementById(
-                "membershipSubmitButton"
-            );
-
-        const photoInput =
-            document.getElementById(
-                "memberPhoto"
-            );
-
-        const photoPreviewImage =
-            document.getElementById(
-                "photoPreviewImage"
-            );
-
-        const photoPlaceholder =
-            document.getElementById(
-                "photoPlaceholder"
-            );
-
-        const successMessage =
-            document.getElementById(
-                "membershipSuccessMessage"
-            );
+    const PHOTO_BUCKET = "membership-photos";
 
 
-        if (!form) {
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
 
-            console.error(
-                "Membership application form not found."
-            );
+    const form =
+        document.getElementById(
+            "membershipApplicationForm"
+        );
 
-            return;
-        }
+    const submitButton =
+        document.getElementById(
+            "membershipSubmitButton"
+        );
+
+    const photoInput =
+        document.getElementById(
+            "memberPhoto"
+        );
+
+    const photoPreviewImage =
+        document.getElementById(
+            "photoPreviewImage"
+        );
+
+    const photoPlaceholder =
+        document.getElementById(
+            "photoPlaceholder"
+        );
+
+    const successMessage =
+        document.getElementById(
+            "membershipSuccessMessage"
+        );
 
 
-        /* =================================================
-           PHOTO PREVIEW
-        ================================================= */
+    if (!form) {
 
-        if (photoInput) {
+        console.error(
+            "Membership application form not found."
+        );
 
-            photoInput.addEventListener(
-                "change",
-                () => {
-
-                    const file =
-                        photoInput.files?.[0];
+        return;
+    }
 
 
-                    if (!file) {
+    /* =====================================================
+       PHOTO PREVIEW
+    ===================================================== */
+
+    if (photoInput) {
+
+        photoInput.addEventListener(
+            "change",
+            () => {
+
+                const file =
+                    photoInput.files?.[0];
+
+
+                if (!file) {
+
+                    if (photoPreviewImage) {
 
                         photoPreviewImage.style.display =
                             "none";
 
                         photoPreviewImage.src = "";
 
+                    }
+
+                    if (photoPlaceholder) {
+
                         photoPlaceholder.style.display =
                             "block";
 
-                        return;
                     }
 
+                    return;
+                }
 
-                    /* -----------------------------------------
-                       FILE TYPE
-                    ----------------------------------------- */
+
+                const allowedTypes = [
+                    "image/jpeg",
+                    "image/png",
+                    "image/webp"
+                ];
+
+
+                if (
+                    !allowedTypes.includes(
+                        file.type
+                    )
+                ) {
+
+                    alert(
+                        "Only JPG, PNG or WebP photos are allowed."
+                    );
+
+                    photoInput.value = "";
+
+                    return;
+                }
+
+
+                if (
+                    file.size >
+                    2 * 1024 * 1024
+                ) {
+
+                    alert(
+                        "Photo size must be 2 MB or less."
+                    );
+
+                    photoInput.value = "";
+
+                    return;
+                }
+
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    event => {
+
+                        if (photoPreviewImage) {
+
+                            photoPreviewImage.src =
+                                event.target.result;
+
+                            photoPreviewImage.style.display =
+                                "block";
+
+                        }
+
+                        if (photoPlaceholder) {
+
+                            photoPlaceholder.style.display =
+                                "none";
+
+                        }
+
+                    };
+
+
+                reader.readAsDataURL(file);
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       FORM SUBMIT
+    ===================================================== */
+
+    form.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            if (submitButton) {
+
+                submitButton.disabled = true;
+
+                submitButton.textContent =
+                    "Checking Application...";
+
+            }
+
+
+            let uploadedPhotoPath = null;
+
+
+            try {
+
+                /* =================================================
+                   DECLARATION
+                ================================================= */
+
+                const declaration =
+                    document.getElementById(
+                        "declaration"
+                    );
+
+
+                if (
+                    !declaration ||
+                    !declaration.checked
+                ) {
+
+                    throw new Error(
+                        "Please accept the declaration before submitting."
+                    );
+
+                }
+
+
+                /* =================================================
+                   SPORTS
+                ================================================= */
+
+                const selectedSports =
+                    Array.from(
+                        form.querySelectorAll(
+                            'input[name="sports"]:checked'
+                        )
+                    )
+                    .map(
+                        checkbox =>
+                            checkbox.value
+                    );
+
+
+                if (
+                    selectedSports.length === 0
+                ) {
+
+                    throw new Error(
+                        "Please select at least one sport."
+                    );
+
+                }
+
+
+                /* =================================================
+                   FORM DATA
+                ================================================= */
+
+                const formData =
+                    new FormData(form);
+
+
+                /* =================================================
+                   PHOTO
+                ================================================= */
+
+                const photoFile =
+                    photoInput?.files?.[0] || null;
+
+
+                if (photoFile) {
 
                     const allowedTypes = [
                         "image/jpeg",
@@ -2631,377 +2798,222 @@ document.addEventListener(
 
                     if (
                         !allowedTypes.includes(
-                            file.type
+                            photoFile.type
                         )
                     ) {
 
-                        alert(
+                        throw new Error(
                             "Only JPG, PNG or WebP photos are allowed."
                         );
 
-                        photoInput.value = "";
-
-                        photoPreviewImage.style.display =
-                            "none";
-
-                        photoPlaceholder.style.display =
-                            "block";
-
-                        return;
                     }
 
 
-                    /* -----------------------------------------
-                       FILE SIZE
-                    ----------------------------------------- */
-
                     if (
-                        file.size >
+                        photoFile.size >
                         2 * 1024 * 1024
                     ) {
 
-                        alert(
+                        throw new Error(
                             "Photo size must be 2 MB or less."
                         );
 
-                        photoInput.value = "";
-
-                        photoPreviewImage.style.display =
-                            "none";
-
-                        photoPreviewImage.src = "";
-
-                        photoPlaceholder.style.display =
-                            "block";
-
-                        return;
                     }
-
-
-                    /* -----------------------------------------
-                       PREVIEW
-                    ----------------------------------------- */
-
-                    const reader =
-                        new FileReader();
-
-
-                    reader.onload =
-                        event => {
-
-                            photoPreviewImage.src =
-                                event.target.result;
-
-                            photoPreviewImage.style.display =
-                                "block";
-
-                            photoPlaceholder.style.display =
-                                "none";
-
-                        };
-
-
-                    reader.readAsDataURL(file);
-
-                }
-            );
-
-        }
-
-
-        /* =================================================
-           FORM SUBMIT
-        ================================================= */
-
-        form.addEventListener(
-            "submit",
-            async event => {
-
-                event.preventDefault();
-
-
-                if (submitButton) {
-
-                    submitButton.disabled =
-                        true;
-
-                    submitButton.textContent =
-                        "Submitting...";
 
                 }
 
 
-                try {
+                /* =================================================
+                   REQUIRED FIELDS
+                ================================================= */
 
-                    /* =========================================
-                       DECLARATION
-                    ========================================= */
+                const fullNameBn =
+                    formData
+                        .get("full_name_bn")
+                        ?.trim() || null;
 
-                    const declaration =
-                        document.getElementById(
-                            "declaration"
-                        );
+
+                const fullNameEn =
+                    formData
+                        .get("full_name_en")
+                        ?.trim() || null;
+
+
+                const mobileNumber =
+                    formData
+                        .get("mobile_number")
+                        ?.trim() || null;
+
+
+                const currentAddress =
+                    formData
+                        .get("current_address")
+                        ?.trim() || null;
+
+
+                const permanentAddress =
+                    formData
+                        .get("permanent_address")
+                        ?.trim() || null;
+
+
+                const emergencyName =
+                    formData
+                        .get("emergency_contact_name")
+                        ?.trim() || null;
+
+
+                const emergencyRelation =
+                    formData
+                        .get("emergency_contact_relation")
+                        ?.trim() || null;
+
+
+                const emergencyMobile =
+                    formData
+                        .get("emergency_contact_mobile")
+                        ?.trim() || null;
+
+
+                if (!fullNameBn) {
+
+                    throw new Error(
+                        "Please enter your full name in Bangla."
+                    );
+
+                }
+
+
+                if (!fullNameEn) {
+
+                    throw new Error(
+                        "Please enter your full name in English."
+                    );
+
+                }
+
+
+                if (!mobileNumber) {
+
+                    throw new Error(
+                        "Please enter your mobile number."
+                    );
+
+                }
+
+
+                if (!currentAddress) {
+
+                    throw new Error(
+                        "Please enter your current address."
+                    );
+
+                }
+
+
+                if (!permanentAddress) {
+
+                    throw new Error(
+                        "Please enter your permanent address."
+                    );
+
+                }
+
+
+                if (
+                    !emergencyName ||
+                    !emergencyRelation ||
+                    !emergencyMobile
+                ) {
+
+                    throw new Error(
+                        "Please complete the emergency contact information."
+                    );
+
+                }
+
+
+                /* =================================================
+                   UPLOAD PHOTO
+                ================================================= */
+
+                let photoURL = null;
+
+
+                if (photoFile) {
+
+                    if (submitButton) {
+
+                        submitButton.textContent =
+                            "Uploading Photo...";
+
+                    }
+
+
+                    let extension =
+                        "jpg";
 
 
                     if (
-                        !declaration ||
-                        !declaration.checked
+                        photoFile.type ===
+                        "image/png"
                     ) {
 
-                        throw new Error(
-                            "Please accept the declaration before submitting."
-                        );
+                        extension = "png";
 
                     }
 
-
-                    /* =========================================
-                       SPORTS
-                    ========================================= */
-
-                    const selectedSports =
-                        Array.from(
-                            form.querySelectorAll(
-                                'input[name="sports"]:checked'
-                            )
-                        )
-                        .map(
-                            checkbox =>
-                                checkbox.value
-                        );
-
-
-                    if (
-                        selectedSports.length === 0
+                    else if (
+                        photoFile.type ===
+                        "image/webp"
                     ) {
 
-                        throw new Error(
-                            "Please select at least one sport."
-                        );
+                        extension = "webp";
 
                     }
 
 
-                    /* =========================================
-                       FORM DATA
-                    ========================================= */
+                    /* ---------------------------------------------
+                       UNIQUE FILE NAME
+                    --------------------------------------------- */
 
-                    const formData =
-                        new FormData(form);
+                    const randomPart =
+                        window.crypto &&
+                        typeof window.crypto.randomUUID ===
+                        "function"
 
+                            ? window.crypto.randomUUID()
 
-                    /* =========================================
-                       PHOTO FILE
-                    ========================================= */
+                            : Math.random()
+                                  .toString(36)
+                                  .substring(2) +
+                              Date.now();
 
-                    const photoFile =
-                        photoInput?.files?.[0] || null;
 
+                    const fileName =
+                        `${Date.now()}_${randomPart}.${extension}`;
 
-                    /* =========================================
-                       BASIC PHOTO VALIDATION
-                    ========================================= */
 
-                    if (photoFile) {
+                    uploadedPhotoPath =
+                        `applications/${fileName}`;
 
-                        const allowedTypes = [
-                            "image/jpeg",
-                            "image/png",
-                            "image/webp"
-                        ];
 
+                    console.log(
+                        "Uploading photo:",
+                        uploadedPhotoPath
+                    );
 
-                        if (
-                            !allowedTypes.includes(
-                                photoFile.type
-                            )
-                        ) {
 
-                            throw new Error(
-                                "Only JPG, PNG or WebP photos are allowed."
-                            );
+                    /* ---------------------------------------------
+                       STORAGE UPLOAD
+                    --------------------------------------------- */
 
-                        }
-
-
-                        if (
-                            photoFile.size >
-                            2 * 1024 * 1024
-                        ) {
-
-                            throw new Error(
-                                "Photo size must be 2 MB or less."
-                            );
-
-                        }
-
-                    }
-
-
-                    /* =========================================
-                       APPLICATION VALUES
-                    ========================================= */
-
-                    const fullNameBn =
-                        formData
-                            .get("full_name_bn")
-                            ?.trim() || null;
-
-
-                    const fullNameEn =
-                        formData
-                            .get("full_name_en")
-                            ?.trim() || null;
-
-
-                    const mobileNumber =
-                        formData
-                            .get("mobile_number")
-                            ?.trim() || null;
-
-
-                    const currentAddress =
-                        formData
-                            .get("current_address")
-                            ?.trim() || null;
-
-
-                    const permanentAddress =
-                        formData
-                            .get("permanent_address")
-                            ?.trim() || null;
-
-
-                    const emergencyName =
-                        formData
-                            .get("emergency_contact_name")
-                            ?.trim() || null;
-
-
-                    const emergencyRelation =
-                        formData
-                            .get("emergency_contact_relation")
-                            ?.trim() || null;
-
-
-                    const emergencyMobile =
-                        formData
-                            .get("emergency_contact_mobile")
-                            ?.trim() || null;
-
-
-                    /* =========================================
-                       REQUIRED VALIDATION
-                    ========================================= */
-
-                    if (!fullNameBn) {
-
-                        throw new Error(
-                            "Please enter your full name in Bangla."
-                        );
-
-                    }
-
-
-                    if (!fullNameEn) {
-
-                        throw new Error(
-                            "Please enter your full name in English."
-                        );
-
-                    }
-
-
-                    if (!mobileNumber) {
-
-                        throw new Error(
-                            "Please enter your mobile number."
-                        );
-
-                    }
-
-
-                    if (!currentAddress) {
-
-                        throw new Error(
-                            "Please enter your current address."
-                        );
-
-                    }
-
-
-                    if (!permanentAddress) {
-
-                        throw new Error(
-                            "Please enter your permanent address."
-                        );
-
-                    }
-
-
-                    if (
-                        !emergencyName ||
-                        !emergencyRelation ||
-                        !emergencyMobile
-                    ) {
-
-                        throw new Error(
-                            "Please complete the emergency contact information."
-                        );
-
-                    }
-
-
-                    /* =========================================
-                       CREATE UNIQUE FILE NAME
-                    ========================================= */
-
-                    let photoURL = null;
-
-
-                    if (photoFile) {
-
-                        if (submitButton) {
-
-                            submitButton.textContent =
-                                "Uploading Photo...";
-
-                        }
-
-
-                        const fileExtension =
-                            photoFile.name
-                                .split(".")
-                                .pop()
-                                .toLowerCase();
-
-
-                        const uniqueID =
-                            [
-                                Date.now(),
-                                crypto.randomUUID
-                                    ? crypto.randomUUID()
-                                    : Math.random()
-                                          .toString(36)
-                                          .substring(2)
-                            ].join("_");
-
-
-                        const filePath =
-                            `applications/${uniqueID}.${fileExtension}`;
-
-
-                        /* =====================================
-                           UPLOAD PHOTO
-                        ===================================== */
-
-                        const {
-                            error: uploadError
-                        } = await supabaseClient
+                    const uploadResult =
+                        await supabaseClient
                             .storage
                             .from(PHOTO_BUCKET)
                             .upload(
-                                filePath,
+                                uploadedPhotoPath,
                                 photoFile,
                                 {
                                     cacheControl:
@@ -3016,335 +3028,372 @@ document.addEventListener(
                             );
 
 
-                        if (uploadError) {
-
-                            console.error(
-                                "Photo upload error:",
-                                uploadError
-                            );
-
-                            throw new Error(
-                                "Photo upload failed: " +
-                                uploadError.message
-                            );
-
-                        }
-
-
-                        /* =====================================
-                           GET PUBLIC URL
-                        ===================================== */
-
-                        const {
-                            data: publicURLData
-                        } =
-                            supabaseClient
-                                .storage
-                                .from(PHOTO_BUCKET)
-                                .getPublicUrl(
-                                    filePath
-                                );
-
-
-                        photoURL =
-                            publicURLData?.publicUrl ||
-                            null;
-
-
-                        if (!photoURL) {
-
-                            throw new Error(
-                                "Could not create photo URL."
-                            );
-
-                        }
-
-
-                        console.log(
-                            "Photo uploaded:",
-                            photoURL
-                        );
-
-                    }
-
-
-                    /* =========================================
-                       APPLICATION DATA
-                    ========================================= */
-
-                    const applicationData = {
-
-                        full_name_bn:
-                            fullNameBn,
-
-
-                        full_name_en:
-                            fullNameEn,
-
-
-                        father_name:
-                            formData
-                                .get("father_name")
-                                ?.trim() || null,
-
-
-                        mother_name:
-                            formData
-                                .get("mother_name")
-                                ?.trim() || null,
-
-
-                        date_of_birth:
-                            formData.get(
-                                "date_of_birth"
-                            ) || null,
-
-
-                        blood_group:
-                            formData
-                                .get("blood_group")
-                                ?.trim() || null,
-
-
-                        profession:
-                            formData
-                                .get("profession")
-                                ?.trim() || null,
-
-
-                        nid_birth_registration:
-                            formData
-                                .get(
-                                    "nid_birth_registration"
-                                )
-                                ?.trim() || null,
-
-
-                        mobile_number:
-                            mobileNumber,
-
-
-                        alternative_mobile_number:
-                            formData
-                                .get(
-                                    "alternative_mobile_number"
-                                )
-                                ?.trim() || null,
-
-
-                        email:
-                            formData
-                                .get("email")
-                                ?.trim() || null,
-
-
-                        current_address:
-                            currentAddress,
-
-
-                        permanent_address:
-                            permanentAddress,
-
-
-                        sports:
-                            selectedSports.join(", "),
-
-
-                        other_sports:
-                            formData
-                                .get("other_sports")
-                                ?.trim() || null,
-
-
-                        sports_skill:
-                            formData
-                                .get("sports_skill")
-                                ?.trim() || null,
-
-
-                        previous_club_experience:
-                            formData
-                                .get(
-                                    "previous_club_experience"
-                                )
-                                ?.trim() || null,
-
-
-                        emergency_contact_name:
-                            emergencyName,
-
-
-                        emergency_contact_relation:
-                            emergencyRelation,
-
-
-                        emergency_contact_mobile:
-                            emergencyMobile,
-
-
-                        /* =====================================
-                           PHOTO URL
-                        ===================================== */
-
-                        photo_url:
-                            photoURL,
-
-
-                        /* =====================================
-                           STATUS
-                        ===================================== */
-
-                        status:
-                            "pending"
-
-                    };
-
-
-                    /* =========================================
-                       INSERT APPLICATION
-                    ========================================= */
-
-                    if (submitButton) {
-
-                        submitButton.textContent =
-                            "Submitting Application...";
-
-                    }
-
-
-                    const {
-                        data,
-                        error
-                    } = await supabaseClient
-
-                        .from(
-                            "membership_applications"
-                        )
-
-                        .insert([
-                            applicationData
-                        ])
-
-                        .select()
-
-                        .single();
-
-
-                    if (error) {
+                    if (
+                        uploadResult.error
+                    ) {
 
                         console.error(
-                            "Supabase application error:",
-                            error
+                            "SUPABASE STORAGE ERROR:",
+                            uploadResult.error
                         );
-
-
-                        /* -------------------------------------
-                           If database insert fails after photo
-                           upload, keep the error visible.
-                        ------------------------------------- */
 
                         throw new Error(
-                            error.message ||
-                            "Failed to submit application."
+                            "Photo upload failed: " +
+                            uploadResult.error.message
                         );
 
                     }
 
 
-                    /* =========================================
-                       SUCCESS
-                    ========================================= */
+                    console.log(
+                        "Photo uploaded successfully."
+                    );
+
+
+                    /* ---------------------------------------------
+                       PUBLIC URL
+                    --------------------------------------------- */
+
+                    const publicResult =
+                        supabaseClient
+                            .storage
+                            .from(PHOTO_BUCKET)
+                            .getPublicUrl(
+                                uploadedPhotoPath
+                            );
+
+
+                    photoURL =
+                        publicResult
+                            ?.data
+                            ?.publicUrl || null;
+
 
                     console.log(
-                        "Membership application submitted:",
-                        data
+                        "Generated photo URL:",
+                        photoURL
                     );
 
 
-                    console.log(
-                        "Saved photo URL:",
-                        data.photo_url
-                    );
+                    if (!photoURL) {
 
-
-                    if (successMessage) {
-
-                        successMessage.style.display =
-                            "block";
-
-                        successMessage.textContent =
-                            "Application submitted successfully. Your application is now pending review.";
-
-                    }
-
-
-                    alert(
-                        "Your membership application has been submitted successfully."
-                    );
-
-
-                    /* =========================================
-                       RESET FORM
-                    ========================================= */
-
-                    form.reset();
-
-
-                    /* Reset photo preview */
-
-                    if (photoPreviewImage) {
-
-                        photoPreviewImage.style.display =
-                            "none";
-
-                        photoPreviewImage.src =
-                            "";
-
-                    }
-
-
-                    if (photoPlaceholder) {
-
-                        photoPlaceholder.style.display =
-                            "block";
-
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Membership submission error:",
-                        error
-                    );
-
-
-                    alert(
-                        error?.message ||
-                        "Something went wrong. Please try again."
-                    );
-
-
-                } finally {
-
-                    if (submitButton) {
-
-                        submitButton.disabled =
-                            false;
-
-                        submitButton.textContent =
-                            "Submit Membership Application";
+                        throw new Error(
+                            "Photo uploaded, but photo URL could not be generated."
+                        );
 
                     }
 
                 }
 
+
+                /* =================================================
+                   APPLICATION DATA
+                ================================================= */
+
+                const applicationData = {
+
+                    full_name_bn:
+                        fullNameBn,
+
+
+                    full_name_en:
+                        fullNameEn,
+
+
+                    father_name:
+                        formData
+                            .get("father_name")
+                            ?.trim() || null,
+
+
+                    mother_name:
+                        formData
+                            .get("mother_name")
+                            ?.trim() || null,
+
+
+                    date_of_birth:
+                        formData.get(
+                            "date_of_birth"
+                        ) || null,
+
+
+                    blood_group:
+                        formData
+                            .get("blood_group")
+                            ?.trim() || null,
+
+
+                    profession:
+                        formData
+                            .get("profession")
+                            ?.trim() || null,
+
+
+                    nid_birth_registration:
+                        formData
+                            .get(
+                                "nid_birth_registration"
+                            )
+                            ?.trim() || null,
+
+
+                    mobile_number:
+                        mobileNumber,
+
+
+                    alternative_mobile_number:
+                        formData
+                            .get(
+                                "alternative_mobile_number"
+                            )
+                            ?.trim() || null,
+
+
+                    email:
+                        formData
+                            .get("email")
+                            ?.trim() || null,
+
+
+                    current_address:
+                        currentAddress,
+
+
+                    permanent_address:
+                        permanentAddress,
+
+
+                    sports:
+                        selectedSports.join(", "),
+
+
+                    other_sports:
+                        formData
+                            .get("other_sports")
+                            ?.trim() || null,
+
+
+                    sports_skill:
+                        formData
+                            .get("sports_skill")
+                            ?.trim() || null,
+
+
+                    previous_club_experience:
+                        formData
+                            .get(
+                                "previous_club_experience"
+                            )
+                            ?.trim() || null,
+
+
+                    emergency_contact_name:
+                        emergencyName,
+
+
+                    emergency_contact_relation:
+                        emergencyRelation,
+
+
+                    emergency_contact_mobile:
+                        emergencyMobile,
+
+
+                    /* =========================================
+                       ADDITIONAL MESSAGE
+                    ========================================= */
+
+                    message:
+                        formData
+                            .get("message")
+                            ?.trim() || null,
+
+
+                    /* =========================================
+                       PHOTO URL
+                    ========================================= */
+
+                    photo_url:
+                        photoURL,
+
+
+                    /* =========================================
+                       STATUS
+                    ========================================= */
+
+                    status:
+                        "pending"
+
+                };
+
+
+                console.log(
+                    "Application data:",
+                    applicationData
+                );
+
+
+                /* =================================================
+                   INSERT DATABASE
+                ================================================= */
+
+                if (submitButton) {
+
+                    submitButton.textContent =
+                        "Submitting Application...";
+
+                }
+
+
+                const insertResult =
+                    await supabaseClient
+                        .from(
+                            "membership_applications"
+                        )
+                        .insert(
+                            [
+                                applicationData
+                            ]
+                        )
+                        .select()
+                        .single();
+
+
+                if (
+                    insertResult.error
+                ) {
+
+                    console.error(
+                        "DATABASE INSERT ERROR:",
+                        insertResult.error
+                    );
+
+
+                    /* ---------------------------------------------
+                       DELETE PHOTO IF DATABASE INSERT FAILS
+                    --------------------------------------------- */
+
+                    if (uploadedPhotoPath) {
+
+                        await supabaseClient
+                            .storage
+                            .from(PHOTO_BUCKET)
+                            .remove(
+                                [
+                                    uploadedPhotoPath
+                                ]
+                            );
+
+                    }
+
+
+                    throw new Error(
+                        insertResult
+                            .error
+                            .message ||
+                        "Failed to submit application."
+                    );
+
+                }
+
+
+                /* =================================================
+                   SUCCESS
+                ================================================= */
+
+                const savedApplication =
+                    insertResult.data;
+
+
+                console.log(
+                    "Application submitted:",
+                    savedApplication
+                );
+
+
+                console.log(
+                    "PHOTO URL SAVED IN DATABASE:",
+                    savedApplication.photo_url
+                );
+
+
+                if (successMessage) {
+
+                    successMessage.style.display =
+                        "block";
+
+                    successMessage.textContent =
+                        "Application submitted successfully. Your application is now pending review.";
+
+                }
+
+
+                alert(
+                    "Your membership application has been submitted successfully."
+                );
+
+
+                /* =================================================
+                   RESET
+                ================================================= */
+
+                form.reset();
+
+
+                if (photoPreviewImage) {
+
+                    photoPreviewImage.style.display =
+                        "none";
+
+                    photoPreviewImage.src =
+                        "";
+
+                }
+
+
+                if (photoPlaceholder) {
+
+                    photoPlaceholder.style.display =
+                        "block";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "MEMBERSHIP APPLICATION ERROR:",
+                    error
+                );
+
+
+                alert(
+                    error?.message ||
+                    "Something went wrong. Please try again."
+                );
+
             }
-        );
 
-    }
 
-);
+            finally {
+
+                if (submitButton) {
+
+                    submitButton.disabled =
+                        false;
+
+                    submitButton.textContent =
+                        "Submit Membership Application";
+
+                }
+
+            }
+
+        }
+    );
+
+});
 
 </script>
 
