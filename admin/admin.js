@@ -3784,10 +3784,9 @@ document.addEventListener(
     }
 );
 
-
 /* =====================================================
-   MEMBERSHIP APPLICATION PDF
-   GSA — PREMIUM APPLE INSPIRED A4
+   GSA MEMBERSHIP APPLICATION PDF
+   OFFICIAL A4 PAPER FORM
 ===================================================== */
 
 async function generateMembershipApplicationPDF(application) {
@@ -3806,67 +3805,99 @@ async function generateMembershipApplicationPDF(application) {
     }
 
     /* =================================================
-       LOAD PREMIUM PDF FONT
+       LOAD BANGLA + ENGLISH FONT
     ================================================= */
 
-    if (!document.getElementById("gsaPdfFont")) {
+    if (!document.getElementById("gsaMembershipPdfFont")) {
 
-        const fontLink =
+        const link =
             document.createElement("link");
 
-        fontLink.id =
-            "gsaPdfFont";
+        link.id =
+            "gsaMembershipPdfFont";
 
-        fontLink.rel =
+        link.rel =
             "stylesheet";
 
-        fontLink.href =
-            "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap";
+        link.href =
+            "https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap";
 
-        document.head.appendChild(fontLink);
+        document.head.appendChild(link);
     }
 
-    /* =================================================
-       WAIT FOR FONTS
-    ================================================= */
+    /* Wait for font stylesheet */
+    await new Promise(resolve => {
+        setTimeout(resolve, 700);
+    });
 
     try {
 
         if (document.fonts) {
+
+            await Promise.all([
+                document.fonts.load(
+                    "400 14px 'Noto Sans Bengali'"
+                ),
+                document.fonts.load(
+                    "600 14px 'Noto Sans Bengali'"
+                ),
+                document.fonts.load(
+                    "700 14px 'Noto Sans Bengali'"
+                ),
+                document.fonts.load(
+                    "400 14px 'Inter'"
+                ),
+                document.fonts.load(
+                    "600 14px 'Inter'"
+                ),
+                document.fonts.load(
+                    "700 14px 'Inter'"
+                )
+            ]);
+
             await document.fonts.ready;
         }
 
-    } catch (fontError) {
+    } catch (error) {
 
         console.warn(
-            "PDF font loading warning:",
-            fontError
+            "GSA PDF font loading warning:",
+            error
         );
-
     }
 
+
     /* =================================================
-       HELPER
+       HELPERS
     ================================================= */
 
-    const safe = value => {
+    const esc =
+        value => {
 
-        if (
-            value === null ||
-            value === undefined ||
-            value === ""
-        ) {
-            return "—";
-        }
+            if (
+                value === null ||
+                value === undefined ||
+                String(value).trim() === ""
+            ) {
+                return "—";
+            }
 
-        return escapeHTML(
-            String(value)
-        );
-    };
+            if (typeof escapeHTML === "function") {
+                return escapeHTML(String(value));
+            }
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        };
 
 
-    const applicationId =
+    const id =
         application.id || "—";
+
 
     const status =
         String(
@@ -3882,45 +3913,84 @@ async function generateMembershipApplicationPDF(application) {
                 : "PENDING";
 
 
-    const statusClass =
-        status === "approved"
-            ? "approved"
-            : status === "rejected"
-                ? "rejected"
-                : "pending";
+    /* =================================================
+       DATE FORMAT
+    ================================================= */
 
+    let submittedDate = "—";
 
-    const submittedDate =
-        application.created_at
-            ? new Date(
-                application.created_at
-            ).toLocaleDateString(
-                "en-GB",
-                {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric"
-                }
-            )
-            : "—";
+    if (application.created_at) {
 
+        try {
 
-    const submittedTime =
-        application.created_at
-            ? new Date(
-                application.created_at
-            ).toLocaleTimeString(
-                "en-BD",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                }
-            )
-            : "—";
+            submittedDate =
+                new Date(
+                    application.created_at
+                ).toLocaleDateString(
+                    "bn-BD",
+                    {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric"
+                    }
+                );
+
+        } catch {
+
+            submittedDate =
+                String(application.created_at);
+        }
+    }
 
 
     /* =================================================
-       BUILD PREMIUM PDF
+       SPORTS
+    ================================================= */
+
+    const sports =
+        application.sports ||
+        "—";
+
+
+    /* =================================================
+       PHOTO
+    ================================================= */
+
+    const photoHTML =
+        application.photo_url
+            ? `
+                <img
+                    src="${esc(application.photo_url)}"
+                    crossorigin="anonymous"
+                    style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                        display:block;
+                    "
+                >
+              `
+            : `
+                <div
+                    style="
+                        width:100%;
+                        height:100%;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        text-align:center;
+                        font-family:'Noto Sans Bengali',Arial,sans-serif;
+                        font-size:13px;
+                        color:#555;
+                    "
+                >
+                    ছবি
+                </div>
+              `;
+
+
+    /* =================================================
+       BUILD OFFICIAL A4 PAGE
     ================================================= */
 
     container.innerHTML = `
@@ -3929,16 +3999,76 @@ async function generateMembershipApplicationPDF(application) {
             id="gsaMembershipPdfPage"
             style="
                 width:794px;
-                min-height:1123px;
+                height:1123px;
                 box-sizing:border-box;
-                padding:58px 60px 48px 60px;
                 background:#ffffff;
-                color:#1d1d1f;
-                font-family:'Inter','Noto Sans Bengali',Arial,sans-serif;
+                color:#111111;
                 position:relative;
                 overflow:hidden;
+                padding:38px 42px 34px 42px;
+                margin:0;
+                font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
             "
         >
+
+            <!-- =========================================
+                 APPROVAL WATERMARK
+            ========================================== -->
+
+            ${
+                status === "approved"
+                    ? `
+                        <div
+                            style="
+                                position:absolute;
+                                left:50%;
+                                top:50%;
+                                transform:
+                                    translate(-50%,-50%)
+                                    rotate(-28deg);
+                                font-family:Arial,sans-serif;
+                                font-size:105px;
+                                font-weight:700;
+                                letter-spacing:5px;
+                                color:rgba(22,140,70,0.10);
+                                white-space:nowrap;
+                                pointer-events:none;
+                                z-index:0;
+                            "
+                        >
+                            APPROVED
+                        </div>
+                    `
+                    : ""
+            }
+
+            ${
+                status === "rejected"
+                    ? `
+                        <div
+                            style="
+                                position:absolute;
+                                left:50%;
+                                top:50%;
+                                transform:
+                                    translate(-50%,-50%)
+                                    rotate(-28deg);
+                                font-family:Arial,sans-serif;
+                                font-size:105px;
+                                font-weight:700;
+                                letter-spacing:5px;
+                                color:rgba(210,35,35,0.10);
+                                white-space:nowrap;
+                                pointer-events:none;
+                                z-index:0;
+                            "
+                        >
+                            REJECTED
+                        </div>
+                    `
+                    : ""
+            }
+
 
             <!-- =========================================
                  HEADER
@@ -3946,46 +4076,42 @@ async function generateMembershipApplicationPDF(application) {
 
             <div
                 style="
+                    position:relative;
+                    z-index:2;
                     text-align:center;
-                    padding-bottom:28px;
-                    border-bottom:1px solid #e5e5e7;
+                    border-bottom:2px solid #111;
+                    padding-bottom:11px;
                 "
             >
 
                 <div
                     style="
-                        font-size:30px;
+                        font-family:Inter,Arial,sans-serif;
+                        font-size:25px;
                         line-height:1.2;
                         font-weight:700;
-                        letter-spacing:-0.8px;
-                        color:#111111;
+                        letter-spacing:.2px;
                     "
                 >
-                    Ghopkhali Sports Arena
+                    GHOPKHALI SPORTS ARENA
                 </div>
-
 
                 <div
                     style="
-                        margin-top:7px;
-                        font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
-                        font-size:20px;
+                        margin-top:3px;
+                        font-size:19px;
                         line-height:1.5;
-                        font-weight:600;
-                        color:#333336;
+                        font-weight:700;
                     "
                 >
                     ঘোপখালী স্পোর্টস অ্যারিনা
                 </div>
 
-
                 <div
                     style="
-                        margin-top:6px;
-                        font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
-                        font-size:13px;
-                        color:#77777c;
-                        letter-spacing:0.2px;
+                        margin-top:1px;
+                        font-size:11px;
+                        font-weight:500;
                     "
                 >
                     স্থাপিত: ১৯-০৭-২০২৬
@@ -3995,759 +4121,509 @@ async function generateMembershipApplicationPDF(application) {
 
 
             <!-- =========================================
-                 DOCUMENT TITLE
+                 TITLE + PHOTO
             ========================================== -->
 
             <div
                 style="
-                    margin-top:30px;
+                    position:relative;
+                    z-index:2;
                     display:flex;
-                    justify-content:space-between;
                     align-items:flex-start;
-                "
-            >
-
-                <div>
-
-                    <div
-                        style="
-                            font-size:11px;
-                            font-weight:700;
-                            letter-spacing:1.5px;
-                            color:#86868b;
-                            text-transform:uppercase;
-                        "
-                    >
-                        Official Membership Document
-                    </div>
-
-
-                    <div
-                        style="
-                            margin-top:7px;
-                            font-size:25px;
-                            font-weight:700;
-                            letter-spacing:-0.5px;
-                            color:#111111;
-                        "
-                    >
-                        Club Membership Application
-                    </div>
-
-
-                    <div
-                        style="
-                            margin-top:5px;
-                            font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
-                            font-size:14px;
-                            color:#6e6e73;
-                        "
-                    >
-                        ক্লাব সদস্যপদ আবেদনপত্র
-                    </div>
-
-                </div>
-
-
-                <!-- STATUS -->
-
-                <div
-                    style="
-                        text-align:right;
-                        min-width:130px;
-                    "
-                >
-
-                    <div
-                        style="
-                            display:inline-block;
-                            padding:7px 13px;
-                            border-radius:999px;
-                            background:${
-                                status === "approved"
-                                    ? "#e8f7ee"
-                                    : status === "rejected"
-                                        ? "#fdecec"
-                                        : "#f2f2f7"
-                            };
-                            color:${
-                                status === "approved"
-                                    ? "#1f7a45"
-                                    : status === "rejected"
-                                        ? "#c62828"
-                                        : "#55555a"
-                            };
-                            font-size:11px;
-                            font-weight:700;
-                            letter-spacing:1px;
-                        "
-                    >
-                        ${statusText}
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =========================================
-                 APPLICATION META
-            ========================================== -->
-
-            <div
-                style="
-                    margin-top:25px;
-                    display:flex;
-                    gap:12px;
+                    justify-content:space-between;
+                    margin-top:13px;
                 "
             >
 
                 <div
                     style="
                         flex:1;
-                        background:#f7f7f8;
-                        border-radius:14px;
-                        padding:15px 17px;
+                        text-align:center;
+                        padding-top:3px;
                     "
                 >
 
                     <div
                         style="
-                            font-size:10px;
-                            color:#86868b;
-                            font-weight:600;
-                            letter-spacing:.7px;
+                            font-size:21px;
+                            font-weight:700;
+                            text-decoration:underline;
+                            text-underline-offset:4px;
                         "
                     >
-                        APPLICATION ID
+                        সদস্যপদ আবেদন ফরম
                     </div>
 
                     <div
                         style="
                             margin-top:5px;
-                            font-size:12px;
-                            font-weight:600;
-                            color:#1d1d1f;
-                            word-break:break-all;
+                            font-size:10px;
+                            color:#444;
                         "
                     >
-                        ${safe(applicationId)}
+                        (পাসপোর্ট সাইজের ছবি আঠার সাহায্যে যুক্ত করুন)
                     </div>
 
                 </div>
 
+
+                <!-- PHOTO BOX -->
 
                 <div
                     style="
-                        flex:1;
-                        background:#f7f7f8;
-                        border-radius:14px;
-                        padding:15px 17px;
+                        width:88px;
+                        height:108px;
+                        border:1.5px solid #222;
+                        box-sizing:border-box;
+                        flex-shrink:0;
+                        background:#fff;
+                        overflow:hidden;
                     "
                 >
-
-                    <div
-                        style="
-                            font-size:10px;
-                            color:#86868b;
-                            font-weight:600;
-                            letter-spacing:.7px;
-                        "
-                    >
-                        SUBMITTED
-                    </div>
-
-                    <div
-                        style="
-                            margin-top:5px;
-                            font-size:12px;
-                            font-weight:600;
-                            color:#1d1d1f;
-                        "
-                    >
-                        ${safe(submittedDate)}
-                    </div>
-
+                    ${photoHTML}
                 </div>
 
+            </div>
+
+
+            <!-- =========================================
+                 SECTION 1
+            ========================================== -->
+
+            <div
+                style="
+                    position:relative;
+                    z-index:2;
+                    margin-top:12px;
+                "
+            >
 
                 <div
                     style="
-                        flex:1;
-                        background:#f7f7f8;
-                        border-radius:14px;
-                        padding:15px 17px;
+                        font-size:14px;
+                        font-weight:700;
+                        background:#eeeeee;
+                        border:1px solid #777;
+                        padding:4px 8px;
+                    "
+                >
+                    ১. ব্যক্তিগত তথ্য
+                </div>
+
+
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        table-layout:fixed;
+                        border-left:1px solid #777;
+                        border-top:1px solid #777;
+                        font-size:10.5px;
                     "
                 >
 
-                    <div
-                        style="
-                            font-size:10px;
-                            color:#86868b;
-                            font-weight:600;
-                            letter-spacing:.7px;
-                        "
-                    >
-                        TIME
-                    </div>
+                    <tr>
 
-                    <div
-                        style="
-                            margin-top:5px;
-                            font-size:12px;
-                            font-weight:600;
-                            color:#1d1d1f;
-                        "
-                    >
-                        ${safe(submittedTime)}
-                    </div>
+                        <td style="
+                            width:50%;
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                            height:30px;
+                        ">
+                            <b>আবেদনকারীর পূর্ণ নাম (বাংলায়):</b>
+                            ${esc(application.full_name_bn)}
+                        </td>
 
+                        <td style="
+                            width:50%;
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>আবেদনকারীর পূর্ণ নাম (ইংরেজিতে):</b>
+                            <span style="font-family:Inter,Arial,sans-serif;">
+                                ${esc(application.full_name_en)}
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td style="
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>পিতার নাম:</b>
+                            ${esc(application.father_name)}
+                        </td>
+
+                        <td style="
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>মাতার নাম:</b>
+                            ${esc(application.mother_name)}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td style="
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>জন্ম তারিখ:</b>
+                            ${esc(application.date_of_birth)}
+                        </td>
+
+                        <td style="
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>রক্তের গ্রুপ:</b>
+                            ${esc(application.blood_group)}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td style="
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>পেশা:</b>
+                            ${esc(application.profession)}
+                        </td>
+
+                        <td style="
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                            word-break:break-word;
+                        ">
+                            <b>জাতীয় পরিচয়পত্র / জন্ম নিবন্ধন নম্বর:</b>
+                            ${esc(application.nid_birth_registration)}
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <!-- =========================================
+                 SECTION 2
+            ========================================== -->
+
+            <div
+                style="
+                    position:relative;
+                    z-index:2;
+                    margin-top:9px;
+                "
+            >
+
+                <div
+                    style="
+                        font-size:14px;
+                        font-weight:700;
+                        background:#eeeeee;
+                        border:1px solid #777;
+                        padding:4px 8px;
+                    "
+                >
+                    ২. যোগাযোগের তথ্য
                 </div>
 
+
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        table-layout:fixed;
+                        border-left:1px solid #777;
+                        border-top:1px solid #777;
+                        font-size:10.5px;
+                    "
+                >
+
+                    <tr>
+
+                        <td style="
+                            width:50%;
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                            vertical-align:top;
+                            height:39px;
+                        ">
+                            <b>বর্তমান ঠিকানা:</b><br>
+                            ${esc(application.current_address)}
+                        </td>
+
+                        <td style="
+                            width:50%;
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                            vertical-align:top;
+                        ">
+                            <b>স্থায়ী ঠিকানা:</b><br>
+                            ${esc(application.permanent_address)}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td style="
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>মোবাইল নম্বর:</b>
+                            <span style="font-family:Inter,Arial,sans-serif;">
+                                ${esc(application.mobile_number)}
+                            </span>
+                        </td>
+
+                        <td style="
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>বিকল্প মোবাইল নম্বর (যদি থাকে):</b>
+                            <span style="font-family:Inter,Arial,sans-serif;">
+                                ${esc(application.alternative_mobile_number)}
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </table>
+
             </div>
 
 
             <!-- =========================================
-                 SECTION HELPER
+                 SECTION 3
             ========================================== -->
 
             <div
                 style="
-                    margin-top:31px;
-                    margin-bottom:14px;
-                    font-size:15px;
-                    font-weight:700;
-                    color:#111111;
-                    padding-bottom:9px;
-                    border-bottom:1px solid #e5e5e7;
+                    position:relative;
+                    z-index:2;
+                    margin-top:9px;
                 "
             >
-                Personal Information
+
+                <div
+                    style="
+                        font-size:14px;
+                        font-weight:700;
+                        background:#eeeeee;
+                        border:1px solid #777;
+                        padding:4px 8px;
+                    "
+                >
+                    ৩. ক্রীড়া সংক্রান্ত তথ্য
+                </div>
+
+
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        table-layout:fixed;
+                        border-left:1px solid #777;
+                        border-top:1px solid #777;
+                        font-size:10.5px;
+                    "
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="2"
+                            style="
+                                border-right:1px solid #777;
+                                border-bottom:1px solid #777;
+                                padding:6px 7px;
+                            "
+                        >
+
+                            <b>খেলার ধরন:</b>
+
+                            <span style="margin-left:10px;">
+                                ${sports.includes("Cricket") ? "☑" : "☐"} ক্রিকেট
+                            </span>
+
+                            <span style="margin-left:9px;">
+                                ${sports.includes("Football") ? "☑" : "☐"} ফুটবল
+                            </span>
+
+                            <span style="margin-left:9px;">
+                                ${sports.includes("Badminton") ? "☑" : "☐"} ব্যাডমিন্টন
+                            </span>
+
+                            <span style="margin-left:9px;">
+                                ${sports.includes("Volleyball") ? "☑" : "☐"} ভলিবল
+                            </span>
+
+                            <span style="margin-left:9px;">
+                                ${sports.includes("Athletics") ? "☑" : "☐"} অ্যাথলেটিক্স
+                            </span>
+
+                            <span style="margin-left:9px;">
+                                ${sports.includes("Indoor Games") ? "☑" : "☐"} ইনডোর গেমস
+                            </span>
+
+                            <span style="margin-left:9px;">
+                                ${sports.includes("Futsal") ? "☑" : "☐"} ফুটসাল
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td
+                            style="
+                                width:50%;
+                                border-right:1px solid #777;
+                                border-bottom:1px solid #777;
+                                padding:5px 7px;
+                            "
+                        >
+                            <b>অন্যান্য (নাম লিখুন):</b>
+                            ${esc(application.other_sports)}
+                        </td>
+
+                        <td
+                            style="
+                                width:50%;
+                                border-right:1px solid #777;
+                                border-bottom:1px solid #777;
+                                padding:5px 7px;
+                            "
+                        >
+                            <b>খেলার প্রধান দক্ষতা:</b>
+                            ${esc(application.sports_skill)}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td
+                            colspan="2"
+                            style="
+                                border-right:1px solid #777;
+                                border-bottom:1px solid #777;
+                                padding:6px 7px;
+                                min-height:35px;
+                            "
+                        >
+                            <b>পূর্বে অন্য কোনো ক্লাবে খেলার অভিজ্ঞতা:</b><br>
+                            ${esc(application.previous_club_experience)}
+                        </td>
+
+                    </tr>
+
+                </table>
+
             </div>
-
-
-            <!-- PERSONAL INFORMATION -->
-
-            <table
-                style="
-                    width:100%;
-                    border-collapse:collapse;
-                    table-layout:fixed;
-                    font-size:12px;
-                "
-            >
-
-                <tr>
-
-                    <td
-                        style="
-                            width:50%;
-                            padding:9px 14px 9px 0;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            FULL NAME (BANGLA)
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
-                                font-size:13px;
-                                font-weight:600;
-                            "
-                        >
-                            ${safe(application.full_name_bn)}
-                        </div>
-                    </td>
-
-
-                    <td
-                        style="
-                            width:50%;
-                            padding:9px 0 9px 14px;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            FULL NAME (ENGLISH)
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-size:13px;
-                                font-weight:600;
-                            "
-                        >
-                            ${safe(application.full_name_en)}
-                        </div>
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td
-                        style="
-                            padding:9px 14px 9px 0;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            FATHER'S NAME
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-size:13px;
-                                font-weight:600;
-                            "
-                        >
-                            ${safe(application.father_name)}
-                        </div>
-                    </td>
-
-
-                    <td
-                        style="
-                            padding:9px 0 9px 14px;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            MOTHER'S NAME
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-size:13px;
-                                font-weight:600;
-                            "
-                        >
-                            ${safe(application.mother_name)}
-                        </div>
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td
-                        style="
-                            padding:9px 14px 9px 0;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            DATE OF BIRTH
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-size:13px;
-                                font-weight:600;
-                            "
-                        >
-                            ${safe(application.date_of_birth)}
-                        </div>
-                    </td>
-
-
-                    <td
-                        style="
-                            padding:9px 0 9px 14px;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            BLOOD GROUP
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-size:13px;
-                                font-weight:600;
-                            "
-                        >
-                            ${safe(application.blood_group)}
-                        </div>
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td
-                        style="
-                            padding:9px 14px 9px 0;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            PROFESSION
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-size:13px;
-                                font-weight:600;
-                            "
-                        >
-                            ${safe(application.profession)}
-                        </div>
-                    </td>
-
-
-                    <td
-                        style="
-                            padding:9px 0 9px 14px;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            NID / BIRTH REGISTRATION
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-size:13px;
-                                font-weight:600;
-                                word-break:break-word;
-                            "
-                        >
-                            ${safe(
-                                application.nid_birth_registration
-                            )}
-                        </div>
-                    </td>
-
-                </tr>
-
-            </table>
 
 
             <!-- =========================================
-                 CONTACT
+                 SECTION 4
             ========================================== -->
 
             <div
                 style="
-                    margin-top:27px;
-                    margin-bottom:14px;
-                    font-size:15px;
-                    font-weight:700;
-                    color:#111111;
-                    padding-bottom:9px;
-                    border-bottom:1px solid #e5e5e7;
-                "
-            >
-                Contact Information
-            </div>
-
-
-            <table
-                style="
-                    width:100%;
-                    border-collapse:collapse;
-                    table-layout:fixed;
-                    font-size:12px;
+                    position:relative;
+                    z-index:2;
+                    margin-top:9px;
                 "
             >
 
-                <tr>
-
-                    <td
-                        style="
-                            width:33.33%;
-                            padding:9px 12px 9px 0;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            MOBILE
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-weight:600;
-                                font-size:13px;
-                            "
-                        >
-                            ${safe(application.mobile_number)}
-                        </div>
-                    </td>
+                <div
+                    style="
+                        font-size:14px;
+                        font-weight:700;
+                        background:#eeeeee;
+                        border:1px solid #777;
+                        padding:4px 8px;
+                    "
+                >
+                    ৪. জরুরি প্রয়োজনে যোগাযোগের তথ্য
+                </div>
 
 
-                    <td
-                        style="
-                            width:33.33%;
-                            padding:9px 12px;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            ALTERNATIVE MOBILE
-                        </div>
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        table-layout:fixed;
+                        border-left:1px solid #777;
+                        border-top:1px solid #777;
+                        font-size:10.5px;
+                    "
+                >
 
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-weight:600;
-                                font-size:13px;
-                            "
-                        >
-                            ${safe(
-                                application.alternative_mobile_number
-                            )}
-                        </div>
-                    </td>
+                    <tr>
 
+                        <td style="
+                            width:34%;
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>নাম:</b>
+                            ${esc(application.emergency_contact_name)}
+                        </td>
 
-                    <td
-                        style="
-                            width:33.33%;
-                            padding:9px 0 9px 12px;
-                            vertical-align:top;
-                        "
-                    >
-                        <div style="color:#86868b;font-size:10px;">
-                            EMAIL
-                        </div>
+                        <td style="
+                            width:33%;
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>সম্পর্ক:</b>
+                            ${esc(application.emergency_contact_relation)}
+                        </td>
 
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-weight:600;
-                                font-size:12px;
-                                word-break:break-word;
-                            "
-                        >
-                            ${safe(application.email)}
-                        </div>
-                    </td>
+                        <td style="
+                            width:33%;
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:5px 7px;
+                        ">
+                            <b>মোবাইল নম্বর:</b>
+                            ${esc(application.emergency_contact_mobile)}
+                        </td>
 
-                </tr>
+                    </tr>
 
-            </table>
+                </table>
 
-
-            <!-- =========================================
-                 ADDRESS
-            ========================================== -->
-
-            <div
-                style="
-                    margin-top:27px;
-                    margin-bottom:14px;
-                    font-size:15px;
-                    font-weight:700;
-                    color:#111111;
-                    padding-bottom:9px;
-                    border-bottom:1px solid #e5e5e7;
-                "
-            >
-                Address
-            </div>
-
-
-            <table
-                style="
-                    width:100%;
-                    border-collapse:collapse;
-                    table-layout:fixed;
-                    font-size:12px;
-                "
-            >
-
-                <tr>
-
-                    <td
-                        style="
-                            width:50%;
-                            padding:9px 14px 9px 0;
-                            vertical-align:top;
-                        "
-                    >
-
-                        <div style="color:#86868b;font-size:10px;">
-                            CURRENT ADDRESS
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:5px;
-                                font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
-                                font-size:12px;
-                                line-height:1.7;
-                                font-weight:500;
-                            "
-                        >
-                            ${safe(application.current_address)}
-                        </div>
-
-                    </td>
-
-
-                    <td
-                        style="
-                            width:50%;
-                            padding:9px 0 9px 14px;
-                            vertical-align:top;
-                        "
-                    >
-
-                        <div style="color:#86868b;font-size:10px;">
-                            PERMANENT ADDRESS
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:5px;
-                                font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
-                                font-size:12px;
-                                line-height:1.7;
-                                font-weight:500;
-                            "
-                        >
-                            ${safe(application.permanent_address)}
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            </table>
-
-
-            <!-- =========================================
-                 SPORTS
-            ========================================== -->
-
-            <div
-                style="
-                    margin-top:27px;
-                    margin-bottom:14px;
-                    font-size:15px;
-                    font-weight:700;
-                    color:#111111;
-                    padding-bottom:9px;
-                    border-bottom:1px solid #e5e5e7;
-                "
-            >
-                Sports Information
-            </div>
-
-
-            <table
-                style="
-                    width:100%;
-                    border-collapse:collapse;
-                    table-layout:fixed;
-                    font-size:12px;
-                "
-            >
-
-                <tr>
-
-                    <td
-                        style="
-                            width:50%;
-                            padding:9px 14px 9px 0;
-                            vertical-align:top;
-                        "
-                    >
-
-                        <div style="color:#86868b;font-size:10px;">
-                            SPORTS
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-weight:600;
-                                font-size:13px;
-                            "
-                        >
-                            ${safe(application.sports)}
-                        </div>
-
-                    </td>
-
-
-                    <td
-                        style="
-                            width:50%;
-                            padding:9px 0 9px 14px;
-                            vertical-align:top;
-                        "
-                    >
-
-                        <div style="color:#86868b;font-size:10px;">
-                            OTHER SPORTS
-                        </div>
-
-                        <div
-                            style="
-                                margin-top:4px;
-                                font-weight:600;
-                                font-size:13px;
-                            "
-                        >
-                            ${safe(application.other_sports)}
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            </table>
-
-
-            <!-- =========================================
-                 MESSAGE
-            ========================================== -->
-
-            <div
-                style="
-                    margin-top:27px;
-                    margin-bottom:14px;
-                    font-size:15px;
-                    font-weight:700;
-                    color:#111111;
-                    padding-bottom:9px;
-                    border-bottom:1px solid #e5e5e7;
-                "
-            >
-                Additional Message
-            </div>
-
-
-            <div
-                style="
-                    min-height:65px;
-                    background:#f7f7f8;
-                    border-radius:13px;
-                    padding:15px 17px;
-                    box-sizing:border-box;
-                    font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
-                    font-size:12px;
-                    line-height:1.75;
-                    color:#333336;
-                "
-            >
-                ${safe(application.message)}
             </div>
 
 
@@ -4757,79 +4633,75 @@ async function generateMembershipApplicationPDF(application) {
 
             <div
                 style="
-                    margin-top:27px;
-                    padding:17px 18px;
-                    border:1px solid #e5e5e7;
-                    border-radius:14px;
-                    background:#fbfbfc;
+                    position:relative;
+                    z-index:2;
+                    margin-top:10px;
+                    border:1px solid #777;
+                    padding:8px 10px;
                 "
             >
 
                 <div
                     style="
-                        font-size:11px;
+                        font-size:14px;
                         font-weight:700;
-                        letter-spacing:.8px;
-                        color:#86868b;
+                        margin-bottom:5px;
                     "
                 >
-                    DECLARATION
+                    অঙ্গীকারনামা
                 </div>
-
 
                 <div
                     style="
-                        margin-top:8px;
-                        font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
-                        font-size:11px;
-                        line-height:1.75;
-                        color:#55555a;
+                        font-size:10.5px;
+                        line-height:1.65;
+                        text-align:justify;
                     "
                 >
-                    আমি ঘোষণা করছি যে, এই আবেদনপত্রে প্রদত্ত সকল তথ্য
-                    আমার জ্ঞান ও বিশ্বাস অনুযায়ী সঠিক ও সত্য। আমি
-                    ঘোপখালী স্পোর্টস অ্যারিনার নিয়ম, নীতিমালা ও
-                    শৃঙ্খলা বিধি মেনে চলতে সম্মত।
+                    আমি সজ্ঞানে ঘোষণা করছি যে, এই ফরমে প্রদত্ত আমার সকল
+                    তথ্য সম্পূর্ণ সত্য ও নির্ভুল। আমি 'ঘোপখালী স্পোর্টস
+                    অ্যারিনা ক্লাব'-এর একজন গর্বিত সদস্য হিসেবে ক্লাবের
+                    সকল নিয়ম-কানুন ও গঠনতন্ত্র যথাযথভাবে মেনে চলব।
+                    ক্লাবের আয়োজিত ইনডোর বা আউটডোর যেকোনো ক্রীড়া
+                    কার্যক্রমে আমি স্বতঃস্ফূর্তভাবে অংশগ্রহণ করতে আগ্রহী
+                    এবং এমন কোনো কার্যকলাপে জড়িত হব না যা ক্লাবের
+                    সম্মান ক্ষুণ্ন করে।
                 </div>
 
             </div>
 
 
             <!-- =========================================
-                 SIGNATURE
+                 SIGNATURE AREA
             ========================================== -->
 
             <div
                 style="
-                    margin-top:42px;
+                    position:relative;
+                    z-index:2;
                     display:flex;
                     justify-content:space-between;
-                    gap:50px;
+                    margin-top:13px;
                 "
             >
 
                 <div
                     style="
-                        width:45%;
+                        width:30%;
                         text-align:center;
+                        font-size:10px;
                     "
                 >
 
                     <div
                         style="
-                            height:35px;
-                            border-bottom:1px solid #999;
+                            height:27px;
+                            border-bottom:1px solid #333;
                         "
                     ></div>
 
-                    <div
-                        style="
-                            margin-top:7px;
-                            font-size:10px;
-                            color:#777;
-                        "
-                    >
-                        Applicant Signature
+                    <div style="margin-top:3px;">
+                        আবেদনকারীর স্বাক্ষর
                     </div>
 
                 </div>
@@ -4837,29 +4709,181 @@ async function generateMembershipApplicationPDF(application) {
 
                 <div
                     style="
-                        width:45%;
+                        width:30%;
                         text-align:center;
+                        font-size:10px;
                     "
                 >
 
                     <div
                         style="
-                            height:35px;
-                            border-bottom:1px solid #999;
+                            height:27px;
+                            border-bottom:1px solid #333;
                         "
                     ></div>
 
-                    <div
-                        style="
-                            margin-top:7px;
-                            font-size:10px;
-                            color:#777;
-                        "
-                    >
-                        GSA Official
+                    <div style="margin-top:3px;">
+                        তারিখ: ..... / ..... / ২০২৬
                     </div>
 
                 </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 OFFICE USE
+            ========================================== -->
+
+            <div
+                style="
+                    position:relative;
+                    z-index:2;
+                    margin-top:11px;
+                "
+            >
+
+                <div
+                    style="
+                        font-size:13px;
+                        font-weight:700;
+                        border:1px solid #777;
+                        border-bottom:none;
+                        padding:4px 8px;
+                        text-align:center;
+                    "
+                >
+                    (কেবলমাত্র অফিস ব্যবহারের জন্য)
+                </div>
+
+
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        table-layout:fixed;
+                        border:1px solid #777;
+                        font-size:10px;
+                    "
+                >
+
+                    <tr>
+
+                        <td style="
+                            width:50%;
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:6px 7px;
+                        ">
+                            <b>সদস্যপদ নম্বর:</b>
+                            ${esc(application.membership_number)}
+                        </td>
+
+                        <td style="
+                            width:50%;
+                            border-bottom:1px solid #777;
+                            padding:6px 7px;
+                        ">
+                            <b>ফরম জমার তারিখ:</b>
+                            ${submittedDate}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td style="
+                            border-right:1px solid #777;
+                            border-bottom:1px solid #777;
+                            padding:6px 7px;
+                        ">
+                            <b>আবেদনের অবস্থা:</b>
+
+                            <span style="margin-left:10px;">
+                                ${
+                                    status === "approved"
+                                        ? "☑"
+                                        : "☐"
+                                }
+                                অনুমোদিত
+                            </span>
+
+                            <span style="margin-left:15px;">
+                                ${
+                                    status === "rejected"
+                                        ? "☑"
+                                        : "☐"
+                                }
+                                বাতিল
+                            </span>
+
+                        </td>
+
+                        <td style="
+                            border-bottom:1px solid #777;
+                            padding:6px 7px;
+                        ">
+                            <b>Application ID:</b>
+                            <span style="font-family:Inter,Arial,sans-serif;">
+                                ${esc(id)}
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td style="
+                            height:42px;
+                            border-right:1px solid #777;
+                            padding:6px 7px;
+                            vertical-align:bottom;
+                            text-align:center;
+                        ">
+
+                            <div
+                                style="
+                                    width:75%;
+                                    margin:0 auto;
+                                    border-bottom:1px solid #333;
+                                    height:18px;
+                                "
+                            ></div>
+
+                            <div style="margin-top:3px;">
+                                স্বাক্ষর (সাধারণ সম্পাদক)
+                            </div>
+
+                        </td>
+
+
+                        <td style="
+                            height:42px;
+                            padding:6px 7px;
+                            vertical-align:bottom;
+                            text-align:center;
+                        ">
+
+                            <div
+                                style="
+                                    width:75%;
+                                    margin:0 auto;
+                                    border-bottom:1px solid #333;
+                                    height:18px;
+                                "
+                            ></div>
+
+                            <div style="margin-top:3px;">
+                                স্বাক্ষর (সভাপতি)
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </table>
 
             </div>
 
@@ -4871,92 +4895,85 @@ async function generateMembershipApplicationPDF(application) {
             <div
                 style="
                     position:absolute;
-                    left:60px;
-                    right:60px;
-                    bottom:30px;
-                    padding-top:12px;
-                    border-top:1px solid #e5e5e7;
+                    z-index:2;
+                    left:42px;
+                    right:42px;
+                    bottom:17px;
+                    border-top:1px solid #999;
+                    padding-top:5px;
                     display:flex;
                     justify-content:space-between;
-                    align-items:center;
-                    font-size:9px;
-                    color:#86868b;
+                    font-size:8px;
+                    color:#555;
+                    font-family:Inter,Arial,sans-serif;
                 "
             >
 
-                <div>
-                    Ghopkhali Sports Arena
-                </div>
+                <span>
+                    GHOPKHALI SPORTS ARENA
+                </span>
 
-                <div>
-                    Official Membership Application
-                </div>
+                <span>
+                    Membership Application Form
+                </span>
 
-                <div>
+                <span>
                     ${statusText}
-                </div>
+                </span>
 
             </div>
 
         </div>
-
     `;
 
 
     /* =================================================
-       SHOW CONTAINER
+       SHOW OFFSCREEN CONTAINER
     ================================================= */
 
-    container.style.display =
-        "block";
-
-    container.style.position =
-        "fixed";
-
-    container.style.left =
-        "-10000px";
-
-    container.style.top =
-        "0";
-
-    container.style.width =
-        "794px";
-
-    container.style.background =
-        "#ffffff";
-
-    container.style.zIndex =
-        "-1";
+    container.style.display = "block";
+    container.style.position = "fixed";
+    container.style.left = "-10000px";
+    container.style.top = "0";
+    container.style.width = "794px";
+    container.style.height = "1123px";
+    container.style.margin = "0";
+    container.style.padding = "0";
+    container.style.background = "#ffffff";
+    container.style.zIndex = "-9999";
+    container.style.overflow = "hidden";
 
 
     /* =================================================
-       WAIT FOR RENDER
+       WAIT FOR DOM PAINT
     ================================================= */
 
-    await new Promise(
-        resolve =>
-            requestAnimationFrame(
-                () =>
-                    requestAnimationFrame(
-                        resolve
-                    )
-            )
-    );
+    await new Promise(resolve => {
+
+        requestAnimationFrame(() => {
+
+            requestAnimationFrame(() => {
+
+                resolve();
+
+            });
+
+        });
+
+    });
 
 
     /* =================================================
-       CHECK PDF LIBRARY
+       CHECK LIBRARIES
     ================================================= */
 
-    if (
-        typeof html2canvas ===
-        "undefined"
-    ) {
+    if (typeof html2canvas === "undefined") {
+
+        container.style.display = "none";
 
         throw new Error(
             "html2canvas library is not loaded."
         );
-
     }
 
 
@@ -4965,48 +4982,56 @@ async function generateMembershipApplicationPDF(application) {
         !window.jspdf.jsPDF
     ) {
 
+        container.style.display = "none";
+
         throw new Error(
             "jsPDF library is not loaded."
         );
-
     }
 
 
     try {
-
-        /* =============================================
-           CREATE CANVAS
-        ============================================= */
 
         const page =
             document.getElementById(
                 "gsaMembershipPdfPage"
             );
 
+
         if (!page) {
 
             throw new Error(
-                "Membership PDF page could not be created."
+                "PDF page could not be created."
             );
-
         }
 
+
+        /* =============================================
+           CAPTURE EXACT 794 × 1123 PAGE
+        ============================================= */
 
         const canvas =
             await html2canvas(
                 page,
                 {
+                    width:794,
+                    height:1123,
+                    windowWidth:794,
+                    windowHeight:1123,
                     scale:2,
                     useCORS:true,
                     allowTaint:false,
                     backgroundColor:"#ffffff",
-                    logging:false
+                    logging:false,
+                    imageTimeout:15000,
+                    scrollX:0,
+                    scrollY:0
                 }
             );
 
 
         /* =============================================
-           CREATE PDF
+           CREATE A4 PDF
         ============================================= */
 
         const {
@@ -5023,80 +5048,43 @@ async function generateMembershipApplicationPDF(application) {
             });
 
 
-        const pageWidth =
-            pdf.internal.pageSize.getWidth();
-
-        const pageHeight =
-            pdf.internal.pageSize.getHeight();
-
-
-        const imageWidth =
-            pageWidth;
-
-
-        const imageHeight =
-            canvas.height *
-            imageWidth /
-            canvas.width;
-
-
         /* =============================================
-           ONE PAGE
+           EXACT A4 IMAGE
         ============================================= */
 
-        if (
-            imageHeight <=
-            pageHeight
-        ) {
-
-            pdf.addImage(
-                canvas.toDataURL(
-                    "image/jpeg",
-                    0.96
-                ),
-                "JPEG",
-                0,
-                0,
-                imageWidth,
-                imageHeight,
-                undefined,
-                "FAST"
+        const imageData =
+            canvas.toDataURL(
+                "image/jpeg",
+                0.97
             );
 
-        } else {
 
-            /*
-             * Safety fallback for unusually long
-             * addresses/messages.
-             */
-
-            const ratio =
-                pageHeight /
-                imageHeight;
-
-            pdf.addImage(
-                canvas.toDataURL(
-                    "image/jpeg",
-                    0.96
-                ),
-                "JPEG",
-                0,
-                0,
-                imageWidth * ratio,
-                pageHeight,
-                undefined,
-                "FAST"
-            );
-
-        }
+        pdf.addImage(
+            imageData,
+            "JPEG",
+            0,
+            0,
+            210,
+            297,
+            undefined,
+            "FAST"
+        );
 
 
         /* =============================================
            FILE NAME
         ============================================= */
 
+        const safeFileId =
+            String(id)
+                .replace(
+                    /[^a-zA-Z0-9_-]/g,
+                    "-"
+                );
+
+
         const fileName =
-            `GSA-Membership-Application-${applicationId}.pdf`;
+            `GSA-Membership-Application-${safeFileId}.pdf`;
 
 
         /* =============================================
@@ -5108,8 +5096,9 @@ async function generateMembershipApplicationPDF(application) {
 
     } finally {
 
-        container.style.display =
-            "none";
+        container.innerHTML = "";
+
+        container.style.display = "none";
 
     }
 
@@ -5128,6 +5117,7 @@ document.addEventListener(
             event.target.closest(
                 "[data-membership-pdf]"
             );
+
 
         if (!button) {
             return;
@@ -5166,13 +5156,13 @@ document.addEventListener(
         }
 
 
+        const originalText =
+            button.innerHTML;
+
+
         try {
 
-            button.disabled =
-                true;
-
-            const originalText =
-                button.innerHTML;
+            button.disabled = true;
 
             button.innerHTML =
                 "Generating PDF...";
@@ -5205,13 +5195,13 @@ document.addEventListener(
 
 
             button.innerHTML =
+                originalText ||
                 "Download Application PDF";
 
 
         } finally {
 
-            button.disabled =
-                false;
+            button.disabled = false;
 
         }
 
