@@ -31,824 +31,782 @@
 
     <style>
 
-        * {
-            box-sizing: border-box;
-        }
+/* =====================================================
+   GSA RULES & REGULATIONS
+   PREMIUM — CLEAN — EYE COMFORT DESIGN
+===================================================== */
 
+:root {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --surface-soft: #fafafa;
 
-        html {
-            scroll-behavior: smooth;
-        }
+    --text: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-light: #86868b;
 
+    --border: #e5e5e7;
 
-        body {
+    --accent: #0071e3;
+    --accent-soft: #eaf3ff;
 
-            margin: 0;
+    --success: #16803c;
+    --success-soft: #edf8f1;
 
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
-                "Helvetica Neue",
-                Arial,
-                sans-serif;
+    --shadow-small:
+        0 2px 10px rgba(0, 0, 0, 0.04);
 
-            color: #1d1d1f;
+    --shadow:
+        0 12px 35px rgba(0, 0, 0, 0.07);
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #f5f5f7 0%,
-                    #eef4ff 45%,
-                    #f8f0ff 100%
-                );
+    --radius: 24px;
+}
 
-            min-height: 100vh;
 
-        }
+/* =====================================================
+   RESET
+===================================================== */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* =================================================
-           TOP NAV
-        ================================================= */
+html {
+    scroll-behavior: smooth;
+}
 
-        .rules-nav {
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
 
-            position: sticky;
+    background: var(--bg);
+    color: var(--text);
 
-            top: 0;
+    line-height: 1.7;
 
-            z-index: 100;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
 
-            backdrop-filter:
-                blur(22px);
 
-            -webkit-backdrop-filter:
-                blur(22px);
+/* =====================================================
+   PAGE WRAPPER
+===================================================== */
 
-            background:
-                rgba(255,255,255,.78);
+.page {
+    width: 100%;
+    min-height: 100vh;
+}
 
-            border-bottom:
-                1px solid
-                rgba(0,0,0,.07);
 
-        }
+/* =====================================================
+   NAVIGATION
+===================================================== */
 
+.rules-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 
-        .nav-inner {
+    width: 100%;
 
-            width: min(
-                1180px,
-                calc(100% - 32px)
-            );
+    background: rgba(255, 255, 255, 0.92);
 
-            margin: auto;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 
-            min-height: 70px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
 
-            display: flex;
+.rules-nav-inner {
+    width: min(1180px, calc(100% - 40px));
 
-            align-items: center;
+    margin: auto;
 
-            justify-content: space-between;
+    min-height: 72px;
 
-            gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-        }
+    gap: 20px;
+}
 
 
-        .brand {
+/* =====================================================
+   BRAND
+===================================================== */
 
-            display: flex;
+.rules-brand {
+    display: flex;
+    align-items: center;
 
-            align-items: center;
+    gap: 12px;
 
-            gap: 12px;
+    text-decoration: none;
+    color: var(--text);
 
-            text-decoration: none;
+    min-width: 0;
+}
 
-            color: #1d1d1f;
+.rules-brand-mark {
+    width: 42px;
+    height: 42px;
 
-        }
+    flex-shrink: 0;
 
+    border-radius: 12px;
 
-        .brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            width: 42px;
+    background: #1d1d1f;
+    color: #ffffff;
 
-            height: 42px;
+    font-size: 14px;
+    font-weight: 700;
 
-            border-radius: 14px;
+    letter-spacing: -0.3px;
+}
 
-            display: grid;
+.rules-brand-text {
+    display: flex;
+    flex-direction: column;
 
-            place-items: center;
+    line-height: 1.2;
+}
 
-            color: white;
+.rules-brand-title {
+    font-size: 14px;
+    font-weight: 700;
 
-            font-weight: 800;
+    letter-spacing: -0.2px;
+}
 
-            font-size: 16px;
+.rules-brand-subtitle {
+    margin-top: 3px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #0071e3,
-                    #7b2cff,
-                    #ff375f
-                );
+    font-size: 11px;
+    color: var(--text-light);
 
-            box-shadow:
-                0 8px 20px
-                rgba(82,65,220,.25);
+    font-weight: 500;
+}
 
-        }
 
+/* =====================================================
+   BACK BUTTON
+===================================================== */
 
-        .brand-text strong {
+.back-home {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-            display: block;
+    min-height: 40px;
 
-            font-size: 14px;
+    padding: 0 17px;
 
-            letter-spacing: -.2px;
+    border-radius: 999px;
 
-        }
+    background: #1d1d1f;
+    color: #ffffff;
 
+    text-decoration: none;
 
-        .brand-text span {
+    font-size: 13px;
+    font-weight: 600;
 
-            display: block;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
 
-            margin-top: 2px;
+.back-home:hover {
+    background: #000000;
 
-            color: #86868b;
+    transform: translateY(-1px);
 
-            font-size: 11px;
+    box-shadow:
+        0 5px 16px rgba(0, 0, 0, 0.12);
+}
 
-        }
+.back-home:active {
+    transform: scale(0.97);
+}
 
 
-        .back-button {
+/* =====================================================
+   HERO
+===================================================== */
 
-            display: inline-flex;
+.rules-hero {
+    width: min(1180px, calc(100% - 40px));
 
-            align-items: center;
+    margin: 0 auto;
 
-            justify-content: center;
+    padding: 82px 0 54px;
 
-            min-height: 42px;
+    text-align: center;
+}
 
-            padding:
-                0 16px;
+.rules-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-            border-radius: 999px;
+    padding: 7px 13px;
 
-            text-decoration: none;
+    border-radius: 999px;
 
-            color: #1d1d1f;
+    background: var(--accent-soft);
+    color: var(--accent);
 
-            background:
-                rgba(255,255,255,.85);
+    font-size: 11px;
+    font-weight: 700;
 
-            border:
-                1px solid
-                rgba(0,0,0,.08);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
 
-            font-size: 13px;
+.rules-hero h1 {
+    margin-top: 22px;
 
-            font-weight: 600;
+    font-size: clamp(42px, 7vw, 72px);
 
-            transition:
-                .2s ease;
+    line-height: 1.05;
 
-        }
+    letter-spacing: -3px;
 
+    font-weight: 800;
 
-        .back-button:hover {
+    color: var(--text);
+}
 
-            transform:
-                translateY(-1px);
+.rules-hero h1 span {
+    color: var(--accent);
+}
 
-            background:
-                white;
+.rules-hero p {
+    max-width: 650px;
 
-            box-shadow:
-                0 8px 24px
-                rgba(0,0,0,.08);
+    margin: 22px auto 0;
 
-        }
+    color: var(--text-secondary);
 
+    font-size: 17px;
 
-        /* =================================================
-           HERO
-        ================================================= */
+    line-height: 1.65;
+}
 
-        .hero {
 
-            position: relative;
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
 
-            overflow: hidden;
+.rules-main {
+    width: min(940px, calc(100% - 40px));
 
-            padding:
-                82px 0 60px;
+    margin: 0 auto 80px;
+}
 
-        }
 
+/* =====================================================
+   RULES CARD
+===================================================== */
 
-        .hero::before {
+.rules-card {
+    position: relative;
 
-            content: "";
+    background: var(--surface);
 
-            position: absolute;
+    border: 1px solid var(--border);
 
-            width: 420px;
+    border-radius: var(--radius);
 
-            height: 420px;
+    box-shadow: var(--shadow);
 
-            border-radius: 50%;
+    overflow: hidden;
+}
 
-            background:
-                rgba(0,113,227,.12);
 
-            filter:
-                blur(20px);
+/* =====================================================
+   CARD TOP
+===================================================== */
 
-            top: -180px;
+.rules-card-top {
+    padding: 30px 34px;
 
-            right: -100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-        }
+    gap: 20px;
 
+    border-bottom: 1px solid var(--border);
 
-        .hero::after {
+    background: var(--surface-soft);
+}
 
-            content: "";
+.rules-card-title {
+    font-size: 20px;
+    font-weight: 700;
 
-            position: absolute;
+    letter-spacing: -0.5px;
+}
 
-            width: 360px;
+.rules-card-status {
+    display: inline-flex;
+    align-items: center;
 
-            height: 360px;
+    gap: 7px;
 
-            border-radius: 50%;
+    padding: 7px 11px;
 
-            background:
-                rgba(175,82,222,.12);
+    border-radius: 999px;
 
-            filter:
-                blur(30px);
+    background: var(--success-soft);
 
-            bottom: -200px;
+    color: var(--success);
 
-            left: -120px;
+    font-size: 11px;
 
-        }
+    font-weight: 700;
 
+    white-space: nowrap;
+}
 
-        .hero-inner {
+.rules-card-status::before {
+    content: "";
 
-            position: relative;
+    width: 7px;
+    height: 7px;
 
-            z-index: 2;
+    border-radius: 50%;
 
-            width: min(
-                1000px,
-                calc(100% - 32px)
-            );
+    background: var(--success);
+}
 
-            margin: auto;
 
-            text-align: center;
+/* =====================================================
+   RULES CONTENT
+===================================================== */
 
-        }
+#rulesContent {
+    padding: 42px 44px;
 
+    color: #2c2c2e;
 
-        .eyebrow {
+    font-size: 16px;
 
-            display: inline-flex;
+    line-height: 1.9;
 
-            align-items: center;
+    white-space: pre-wrap;
 
-            gap: 8px;
+    overflow-wrap: anywhere;
+}
 
-            padding:
-                7px 12px;
 
-            border-radius: 999px;
+/* =====================================================
+   CONTENT TYPOGRAPHY
+===================================================== */
 
-            background:
-                rgba(255,255,255,.72);
+#rulesContent strong {
+    color: var(--text);
 
-            border:
-                1px solid
-                rgba(0,0,0,.07);
+    font-weight: 700;
+}
 
-            color: #6e6e73;
+#rulesContent b {
+    color: var(--text);
 
-            font-size: 11px;
+    font-weight: 700;
+}
 
-            font-weight: 700;
+#rulesContent h2,
+#rulesContent h3,
+#rulesContent h4 {
+    color: var(--text);
 
-            letter-spacing:
-                .7px;
+    margin-top: 30px;
+    margin-bottom: 12px;
 
-        }
+    line-height: 1.3;
+}
 
+#rulesContent ul,
+#rulesContent ol {
+    margin: 15px 0 15px 25px;
+}
 
-        .eyebrow-dot {
+#rulesContent li {
+    margin: 7px 0;
+}
 
-            width: 7px;
 
-            height: 7px;
+/* =====================================================
+   UPDATED INFO
+===================================================== */
 
-            border-radius: 50%;
+.rules-updated {
+    padding: 20px 34px;
 
-            background:
-                #34c759;
+    border-top: 1px solid var(--border);
 
-            box-shadow:
-                0 0 0 4px
-                rgba(52,199,89,.12);
+    background: #fafafa;
 
-        }
+    color: var(--text-light);
 
+    font-size: 12px;
 
-        .hero h1 {
+    text-align: right;
+}
 
-            margin:
-                22px 0 14px;
 
-            font-size:
-                clamp(
-                    42px,
-                    7vw,
-                    76px
-                );
+/* =====================================================
+   FOOTER
+===================================================== */
 
-            line-height: .98;
+.rules-footer {
+    width: min(940px, calc(100% - 40px));
 
-            letter-spacing:
-                -4px;
+    margin: 0 auto;
 
-            font-weight: 800;
+    padding: 0 0 50px;
 
-            background:
-                linear-gradient(
-                    90deg,
-                    #0071e3,
-                    #7b2cff,
-                    #ff375f
-                );
+    text-align: center;
 
-            -webkit-background-clip: text;
+    color: var(--text-light);
 
-            background-clip: text;
+    font-size: 12px;
+}
 
-            color: transparent;
+.rules-footer strong {
+    color: var(--text-secondary);
 
-        }
+    font-weight: 600;
+}
 
 
-        .hero p {
+/* =====================================================
+   LOADING
+===================================================== */
 
-            max-width: 680px;
+.rules-loading {
+    padding: 60px 30px;
 
-            margin:
-                0 auto;
+    text-align: center;
 
-            color: #6e6e73;
+    color: var(--text-secondary);
 
-            font-size:
-                clamp(
-                    15px,
-                    2vw,
-                    18px
-                );
+    font-size: 14px;
+}
 
-            line-height: 1.6;
+.rules-loading::before {
+    content: "";
 
-        }
+    display: block;
 
+    width: 28px;
+    height: 28px;
 
-        /* =================================================
-           RULES CONTAINER
-        ================================================= */
+    margin: 0 auto 15px;
 
-        .rules-wrap {
+    border: 3px solid #e5e5e7;
 
-            width: min(
-                920px,
-                calc(100% - 32px)
-            );
+    border-top-color: var(--accent);
 
-            margin:
-                0 auto 80px;
+    border-radius: 50%;
 
-        }
+    animation:
+        rulesSpin 0.8s linear infinite;
+}
 
+@keyframes rulesSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 
-        .rules-card {
 
-            position: relative;
+/* =====================================================
+   ERROR
+===================================================== */
 
-            overflow: hidden;
+.rules-error {
+    margin: 30px;
 
-            background:
-                rgba(255,255,255,.88);
+    padding: 18px 20px;
 
-            border:
-                1px solid
-                rgba(0,0,0,.07);
+    border-radius: 14px;
 
-            border-radius: 30px;
+    background: #fff4f4;
 
-            padding:
-                clamp(
-                    24px,
-                    5vw,
-                    54px
-                );
+    border: 1px solid #f1d2d2;
 
-            box-shadow:
-                0 24px 70px
-                rgba(31,38,135,.10);
+    color: #a22;
 
-        }
+    font-size: 14px;
 
+    text-align: center;
+}
 
-        .rules-card::before {
 
-            content: "";
+/* =====================================================
+   SELECTION
+===================================================== */
 
-            position: absolute;
+::selection {
+    background: #dbeaff;
+    color: #1d1d1f;
+}
 
-            left: 0;
 
-            top: 0;
+/* =====================================================
+   FOCUS
+===================================================== */
 
-            width: 100%;
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid rgba(0, 113, 227, 0.25);
 
-            height: 5px;
+    outline-offset: 3px;
+}
 
-            background:
-                linear-gradient(
-                    90deg,
-                    #0071e3,
-                    #7b2cff,
-                    #ff375f,
-                    #ff9f0a
-                );
 
-        }
+/* =====================================================
+   TABLET
+===================================================== */
 
+@media (max-width: 768px) {
 
-        .rules-header {
+    .rules-nav-inner {
+        width: min(100% - 28px, 1180px);
 
-            display: flex;
+        min-height: 64px;
+    }
 
-            align-items: flex-start;
+    .rules-brand-mark {
+        width: 38px;
+        height: 38px;
 
-            justify-content: space-between;
+        border-radius: 11px;
+    }
 
-            gap: 20px;
+    .rules-brand-title {
+        font-size: 13px;
+    }
 
-            padding-bottom: 28px;
+    .rules-brand-subtitle {
+        font-size: 10px;
+    }
 
-            margin-bottom: 28px;
+    .back-home {
+        min-height: 38px;
 
-            border-bottom:
-                1px solid
-                #e5e5ea;
+        padding: 0 14px;
 
-        }
+        font-size: 12px;
+    }
 
+    .rules-hero {
+        width: min(100% - 28px, 1180px);
 
-        .rules-header h2 {
+        padding: 60px 0 38px;
+    }
 
-            margin: 0;
+    .rules-hero h1 {
+        letter-spacing: -2px;
+    }
 
-            font-size:
-                clamp(
-                    25px,
-                    4vw,
-                    36px
-                );
+    .rules-hero p {
+        font-size: 15px;
+    }
 
-            letter-spacing:
-                -1.2px;
+    .rules-main {
+        width: min(100% - 28px, 940px);
 
-        }
+        margin-bottom: 55px;
+    }
 
+    .rules-card-top {
+        padding: 23px 22px;
+    }
 
-        .rules-header p {
+    #rulesContent {
+        padding: 30px 24px;
 
-            margin:
-                8px 0 0;
+        font-size: 15px;
 
-            color: #86868b;
+        line-height: 1.85;
+    }
 
-            font-size: 13px;
+    .rules-updated {
+        padding: 17px 22px;
 
-        }
+        text-align: left;
+    }
 
+    .rules-footer {
+        width: min(100% - 28px, 940px);
 
-        .updated {
+        padding-bottom: 35px;
+    }
+}
 
-            flex-shrink: 0;
 
-            padding:
-                8px 12px;
+/* =====================================================
+   MOBILE
+===================================================== */
 
-            border-radius: 999px;
+@media (max-width: 520px) {
 
-            background:
-                #f5f5f7;
+    .rules-nav-inner {
+        gap: 10px;
+    }
 
-            color: #6e6e73;
+    .rules-brand {
+        gap: 9px;
+    }
 
-            font-size: 11px;
+    .rules-brand-mark {
+        width: 36px;
+        height: 36px;
 
-            font-weight: 600;
+        border-radius: 10px;
 
-        }
+        font-size: 12px;
+    }
 
+    .rules-brand-subtitle {
+        display: none;
+    }
 
-        /* =================================================
-           CONTENT
-        ================================================= */
+    .back-home {
+        padding: 0 12px;
 
-        #rulesContent {
+        font-size: 11px;
+    }
 
-            color: #3a3a3c;
+    .rules-hero {
+        padding: 48px 0 30px;
+    }
 
-            font-size:
-                16px;
+    .rules-eyebrow {
+        font-size: 10px;
 
-            line-height:
-                1.85;
+        padding: 6px 11px;
+    }
 
-            white-space:
-                pre-wrap;
+    .rules-hero h1 {
+        margin-top: 17px;
 
-            word-break:
-                break-word;
+        font-size: 39px;
 
-        }
+        letter-spacing: -1.8px;
+    }
 
+    .rules-hero p {
+        margin-top: 17px;
 
-        #rulesContent h1,
-        #rulesContent h2,
-        #rulesContent h3 {
+        font-size: 14px;
 
-            color: #1d1d1f;
+        line-height: 1.6;
+    }
 
-            line-height: 1.3;
+    .rules-main {
+        width: calc(100% - 22px);
+    }
 
-        }
+    .rules-card {
+        border-radius: 20px;
+    }
 
+    .rules-card-top {
+        padding: 19px 18px;
 
-        #rulesContent h2 {
+        align-items: flex-start;
 
-            margin-top: 34px;
+        flex-direction: column;
 
-        }
+        gap: 11px;
+    }
 
+    .rules-card-title {
+        font-size: 18px;
+    }
 
-        .rule-item {
+    .rules-card-status {
+        font-size: 10px;
+    }
 
-            margin:
-                0 0 18px;
+    #rulesContent {
+        padding: 25px 19px;
 
-            padding:
-                18px 20px;
+        font-size: 14px;
 
-            border-radius: 18px;
+        line-height: 1.8;
+    }
 
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(0,113,227,.055),
-                    rgba(123,44,255,.045)
-                );
+    #rulesContent h2,
+    #rulesContent h3,
+    #rulesContent h4 {
+        margin-top: 24px;
+    }
 
-            border:
-                1px solid
-                rgba(0,113,227,.08);
+    .rules-updated {
+        padding: 15px 18px;
 
-        }
+        font-size: 11px;
+    }
 
+    .rules-footer {
+        width: calc(100% - 22px);
 
-        /* =================================================
-           LOADING
-        ================================================= */
+        font-size: 11px;
+    }
+}
 
-        .loading {
 
-            min-height: 300px;
+/* =====================================================
+   VERY SMALL DEVICES
+===================================================== */
 
-            display: grid;
+@media (max-width: 360px) {
 
-            place-items: center;
+    .rules-brand-title {
+        font-size: 12px;
+    }
 
-            color: #86868b;
+    .back-home {
+        padding: 0 10px;
 
-            font-size: 14px;
+        font-size: 10px;
+    }
 
-        }
+    .rules-hero h1 {
+        font-size: 34px;
+    }
 
+    #rulesContent {
+        padding: 22px 16px;
 
-        .loading-spinner {
+        font-size: 13.5px;
+    }
+}
 
-            width: 28px;
-
-            height: 28px;
-
-            border-radius: 50%;
-
-            border:
-                3px solid
-                #e5e5ea;
-
-            border-top-color:
-                #0071e3;
-
-            animation:
-                spin .8s linear infinite;
-
-            margin-bottom: 12px;
-
-        }
-
-
-        @keyframes spin {
-
-            to {
-                transform:
-                    rotate(360deg);
-            }
-
-        }
-
-
-        /* =================================================
-           ERROR
-        ================================================= */
-
-        .error-state {
-
-            text-align: center;
-
-            padding:
-                60px 20px;
-
-            color: #6e6e73;
-
-        }
-
-
-        .error-state strong {
-
-            display: block;
-
-            margin-bottom: 8px;
-
-            color: #1d1d1f;
-
-            font-size: 18px;
-
-        }
-
-
-        /* =================================================
-           FOOTER
-        ================================================= */
-
-        footer {
-
-            text-align: center;
-
-            padding:
-                0 20px 45px;
-
-            color: #86868b;
-
-            font-size: 12px;
-
-        }
-
-
-        /* =================================================
-           MOBILE
-        ================================================= */
-
-        @media (
-            max-width: 600px
-        ) {
-
-            .nav-inner {
-
-                min-height: 62px;
-
-                width:
-                    calc(100% - 24px);
-
-            }
-
-
-            .brand-mark {
-
-                width: 38px;
-
-                height: 38px;
-
-                border-radius: 12px;
-
-            }
-
-
-            .brand-text span {
-
-                display: none;
-
-            }
-
-
-            .back-button {
-
-                min-height: 38px;
-
-                padding:
-                    0 13px;
-
-            }
-
-
-            .hero {
-
-                padding:
-                    62px 0 42px;
-
-            }
-
-
-            .hero h1 {
-
-                letter-spacing:
-                    -2.5px;
-
-            }
-
-
-            .rules-wrap {
-
-                width:
-                    calc(100% - 20px);
-
-            }
-
-
-            .rules-card {
-
-                border-radius: 22px;
-
-                padding:
-                    24px 18px;
-
-            }
-
-
-            .rules-header {
-
-                flex-direction:
-                    column;
-
-            }
-
-
-            .updated {
-
-                align-self:
-                    flex-start;
-
-            }
-
-
-            #rulesContent {
-
-                font-size:
-                    15px;
-
-                line-height:
-                    1.8;
-
-            }
-
-        }
-
-    </style>
+</style>
 
 </head>
 
