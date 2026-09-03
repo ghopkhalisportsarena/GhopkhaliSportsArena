@@ -5387,6 +5387,79 @@ async function generateMembershipApplicationPDF(application) {
 }
 
 /* =====================================================
+   MEMBERSHIP APPLICATION PDF BUTTON
+===================================================== */
+
+document.addEventListener("click", async (event) => {
+
+    const button =
+        event.target.closest(
+            "[data-membership-pdf]"
+        );
+
+    if (!button) {
+        return;
+    }
+
+    const id =
+        button.dataset.id;
+
+    const application =
+        membershipApplications.find(
+            item =>
+                String(item.id) === String(id)
+        );
+
+    if (!application) {
+
+        alert(
+            "Application data not found."
+        );
+
+        return;
+    }
+
+    const originalText =
+        button.innerHTML;
+
+    button.disabled = true;
+
+    button.innerHTML =
+        "Preparing PDF...";
+
+    try {
+
+        await generateMembershipApplicationPDF(
+            application
+        );
+
+    } catch (error) {
+
+        console.error(
+            "PDF GENERATION ERROR:",
+            error
+        );
+
+        alert(
+            "PDF download failed.\n\n" +
+            (
+                error?.message ||
+                "Unknown error"
+            )
+        );
+
+    } finally {
+
+        button.disabled = false;
+
+        button.innerHTML =
+            originalText;
+
+    }
+
+});
+   
+/* =====================================================
    LOAD FRIENDLY APPLICATIONS
 ===================================================== */
 
