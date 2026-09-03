@@ -261,7 +261,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                             email,
                             password
                         });
-
+               
+console.log("LOGIN DATA:", data);
+console.log("LOGIN ERROR:", error);
 
                 if (error) {
                     throw error;
