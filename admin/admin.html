@@ -539,6 +539,228 @@
 
             </div>
 
+<!-- =================================================
+     NOTICE EDITOR
+================================================= -->
+
+<div
+    id="noticeEditor"
+    class="notice-editor"
+    style="display:none;"
+>
+
+    <div class="notice-editor-header">
+
+        <div>
+            <span class="section-label">
+                NOTICE EDITOR
+            </span>
+
+            <h3 id="noticeEditorTitle">
+                New Notice
+            </h3>
+
+            <p>
+                Create or update a website notice.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            id="closeNoticeEditor"
+            class="secondary-button"
+        >
+            Cancel
+        </button>
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <div class="form-group">
+
+        <label for="noticeTitle">
+            Notice Title
+        </label>
+
+        <input
+            type="text"
+            id="noticeTitle"
+            placeholder="Enter notice title"
+            autocomplete="off"
+        >
+
+    </div>
+
+
+    <!-- CATEGORY -->
+
+    <div class="form-group">
+
+        <label for="noticeCategory">
+            Category
+        </label>
+
+        <select id="noticeCategory">
+
+            <option value="NOTICE">
+                NOTICE
+            </option>
+
+            <option value="TOURNAMENT">
+                TOURNAMENT
+            </option>
+
+            <option value="MATCH">
+                MATCH
+            </option>
+
+            <option value="EVENT">
+                EVENT
+            </option>
+
+            <option value="ANNOUNCEMENT">
+                ANNOUNCEMENT
+            </option>
+
+            <option value="GENERAL">
+                GENERAL
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="form-group">
+
+        <label for="noticeContent">
+            Notice Content
+        </label>
+
+        <textarea
+            id="noticeContent"
+            rows="10"
+            placeholder="Write the full notice here..."
+        ></textarea>
+
+    </div>
+
+
+    <!-- IMAGE -->
+
+    <div class="form-group">
+
+        <label for="noticeImage">
+            Notice Image
+        </label>
+
+        <input
+            type="file"
+            id="noticeImage"
+            accept="image/jpeg,image/png,image/webp"
+        >
+
+        <small>
+            JPG, PNG or WebP image.
+        </small>
+
+    </div>
+
+
+    <!-- IMAGE PREVIEW -->
+
+    <div
+        id="noticeImagePreview"
+        class="notice-image-preview"
+        style="display:none;"
+    >
+
+        <img
+            id="noticePreviewImage"
+            src=""
+            alt="Notice image preview"
+        >
+
+        <button
+            type="button"
+            id="removeNoticeImage"
+            class="secondary-button"
+        >
+            Remove Image
+        </button>
+
+    </div>
+
+
+    <!-- OPTIONS -->
+
+    <div class="notice-options">
+
+        <label class="notice-option">
+
+            <input
+                type="checkbox"
+                id="noticeImportant"
+            >
+
+            <span>
+                <strong>Important Notice</strong>
+                <small>
+                    Show this notice in the important notice ticker.
+                </small>
+            </span>
+
+        </label>
+
+
+        <label class="notice-option">
+
+            <input
+                type="checkbox"
+                id="noticePublished"
+                checked
+            >
+
+            <span>
+                <strong>Publish Notice</strong>
+                <small>
+                    Make this notice visible on the website.
+                </small>
+            </span>
+
+        </label>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="notice-editor-actions">
+
+        <button
+            type="button"
+            id="saveNoticeButton"
+            class="primary-button"
+        >
+            Save Notice
+        </button>
+
+        <button
+            type="button"
+            id="cancelNoticeButton"
+            class="secondary-button"
+        >
+            Cancel
+        </button>
+
+    </div>
+
+</div>
+
         </section>
 
 
