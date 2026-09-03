@@ -12,7 +12,12 @@
 
     <meta
         name="theme-color"
-        content="#f5f5f7"
+        content="#f4f5f7"
+    >
+
+    <meta
+        name="description"
+        content="Official Rules & Regulations of Ghopkhali Sports Arena."
     >
 
     <title>
@@ -31,782 +36,1216 @@
 
     <style>
 
-/* =====================================================
-   GSA RULES & REGULATIONS
-   PREMIUM — CLEAN — EYE COMFORT DESIGN
-===================================================== */
+        /* =================================================
+           ROOT
+        ================================================= */
 
-:root {
-    --bg: #f5f5f7;
-    --surface: #ffffff;
-    --surface-soft: #fafafa;
+        :root {
 
-    --text: #1d1d1f;
-    --text-secondary: #6e6e73;
-    --text-light: #86868b;
+            --background: #f5f5f7;
 
-    --border: #e5e5e7;
+            --white: #ffffff;
 
-    --accent: #0071e3;
-    --accent-soft: #eaf3ff;
+            --text: #1d1d1f;
 
-    --success: #16803c;
-    --success-soft: #edf8f1;
+            --secondary: #6e6e73;
 
-    --shadow-small:
-        0 2px 10px rgba(0, 0, 0, 0.04);
+            --muted: #86868b;
 
-    --shadow:
-        0 12px 35px rgba(0, 0, 0, 0.07);
+            --border: #e5e5e7;
 
-    --radius: 24px;
-}
+            --blue: #1677d2;
 
+            --blue-light: #eef5fc;
 
-/* =====================================================
-   RESET
-===================================================== */
+            --green: #2f7d4a;
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+            --green-light: #eef8f1;
 
-html {
-    scroll-behavior: smooth;
-}
+            --red: #b42323;
 
-body {
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
+            --red-light: #fff5f5;
 
-    background: var(--bg);
-    color: var(--text);
+            --shadow:
+                0 12px 40px rgba(0, 0, 0, 0.055);
 
-    line-height: 1.7;
+            --radius: 24px;
+        }
 
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-}
 
+        /* =================================================
+           RESET
+        ================================================= */
 
-/* =====================================================
-   PAGE WRAPPER
-===================================================== */
+        * {
 
-.page {
-    width: 100%;
-    min-height: 100vh;
-}
+            margin: 0;
 
+            padding: 0;
 
-/* =====================================================
-   NAVIGATION
-===================================================== */
+            box-sizing: border-box;
 
-.rules-nav {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+        }
 
-    width: 100%;
 
-    background: rgba(255, 255, 255, 0.92);
+        html {
 
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+            scroll-behavior: smooth;
 
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
-}
+        }
 
-.rules-nav-inner {
-    width: min(1180px, calc(100% - 40px));
 
-    margin: auto;
+        body {
 
-    min-height: 72px;
+            min-height: 100vh;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+            background:
+                var(--background);
 
-    gap: 20px;
-}
+            color:
+                var(--text);
 
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
 
-/* =====================================================
-   BRAND
-===================================================== */
+            line-height: 1.7;
 
-.rules-brand {
-    display: flex;
-    align-items: center;
+            -webkit-font-smoothing:
+                antialiased;
 
-    gap: 12px;
+            text-rendering:
+                optimizeLegibility;
 
-    text-decoration: none;
-    color: var(--text);
+        }
 
-    min-width: 0;
-}
 
-.rules-brand-mark {
-    width: 42px;
-    height: 42px;
+        a {
 
-    flex-shrink: 0;
+            -webkit-tap-highlight-color:
+                transparent;
 
-    border-radius: 12px;
+        }
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
-    background: #1d1d1f;
-    color: #ffffff;
+        /* =================================================
+           NAVIGATION
+        ================================================= */
 
-    font-size: 14px;
-    font-weight: 700;
+        .rules-nav {
 
-    letter-spacing: -0.3px;
-}
+            position: sticky;
 
-.rules-brand-text {
-    display: flex;
-    flex-direction: column;
+            top: 0;
 
-    line-height: 1.2;
-}
+            z-index: 1000;
 
-.rules-brand-title {
-    font-size: 14px;
-    font-weight: 700;
+            width: 100%;
 
-    letter-spacing: -0.2px;
-}
+            background:
+                rgba(255, 255, 255, 0.94);
 
-.rules-brand-subtitle {
-    margin-top: 3px;
+            backdrop-filter:
+                blur(18px);
 
-    font-size: 11px;
-    color: var(--text-light);
+            -webkit-backdrop-filter:
+                blur(18px);
 
-    font-weight: 500;
-}
+            border-bottom:
+                1px solid rgba(0, 0, 0, 0.07);
 
+        }
 
-/* =====================================================
-   BACK BUTTON
-===================================================== */
 
-.back-home {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+        .nav-inner {
 
-    min-height: 40px;
+            width:
+                min(1180px, calc(100% - 40px));
 
-    padding: 0 17px;
+            min-height:
+                70px;
 
-    border-radius: 999px;
+            margin:
+                0 auto;
 
-    background: #1d1d1f;
-    color: #ffffff;
+            display:
+                flex;
 
-    text-decoration: none;
+            align-items:
+                center;
 
-    font-size: 13px;
-    font-weight: 600;
+            justify-content:
+                space-between;
 
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
-}
+            gap:
+                20px;
 
-.back-home:hover {
-    background: #000000;
+        }
 
-    transform: translateY(-1px);
 
-    box-shadow:
-        0 5px 16px rgba(0, 0, 0, 0.12);
-}
+        /* =================================================
+           BRAND
+        ================================================= */
 
-.back-home:active {
-    transform: scale(0.97);
-}
+        .brand {
 
+            display:
+                flex;
 
-/* =====================================================
-   HERO
-===================================================== */
+            align-items:
+                center;
 
-.rules-hero {
-    width: min(1180px, calc(100% - 40px));
+            gap:
+                12px;
 
-    margin: 0 auto;
+            text-decoration:
+                none;
 
-    padding: 82px 0 54px;
+            color:
+                var(--text);
 
-    text-align: center;
-}
+            min-width:
+                0;
 
-.rules-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+        }
 
-    padding: 7px 13px;
 
-    border-radius: 999px;
+        .brand-mark {
 
-    background: var(--accent-soft);
-    color: var(--accent);
+            width:
+                42px;
 
-    font-size: 11px;
-    font-weight: 700;
+            height:
+                42px;
 
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-}
+            flex-shrink:
+                0;
 
-.rules-hero h1 {
-    margin-top: 22px;
+            display:
+                flex;
 
-    font-size: clamp(42px, 7vw, 72px);
+            align-items:
+                center;
 
-    line-height: 1.05;
+            justify-content:
+                center;
 
-    letter-spacing: -3px;
+            border-radius:
+                12px;
 
-    font-weight: 800;
+            background:
+                #1d1d1f;
 
-    color: var(--text);
-}
+            color:
+                #ffffff;
 
-.rules-hero h1 span {
-    color: var(--accent);
-}
+            font-size:
+                13px;
 
-.rules-hero p {
-    max-width: 650px;
+            font-weight:
+                800;
 
-    margin: 22px auto 0;
+            letter-spacing:
+                -0.3px;
 
-    color: var(--text-secondary);
+        }
 
-    font-size: 17px;
 
-    line-height: 1.65;
-}
+        .brand-text {
 
+            display:
+                flex;
 
-/* =====================================================
-   MAIN CONTENT
-===================================================== */
+            flex-direction:
+                column;
 
-.rules-main {
-    width: min(940px, calc(100% - 40px));
+            min-width:
+                0;
 
-    margin: 0 auto 80px;
-}
+            line-height:
+                1.2;
 
+        }
 
-/* =====================================================
-   RULES CARD
-===================================================== */
 
-.rules-card {
-    position: relative;
+        .brand-text strong {
 
-    background: var(--surface);
+            font-size:
+                14px;
 
-    border: 1px solid var(--border);
+            font-weight:
+                700;
 
-    border-radius: var(--radius);
+            letter-spacing:
+                -0.2px;
 
-    box-shadow: var(--shadow);
+            white-space:
+                nowrap;
 
-    overflow: hidden;
-}
+        }
 
 
-/* =====================================================
-   CARD TOP
-===================================================== */
+        .brand-text span {
 
-.rules-card-top {
-    padding: 30px 34px;
+            margin-top:
+                4px;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+            color:
+                var(--muted);
 
-    gap: 20px;
+            font-size:
+                11px;
 
-    border-bottom: 1px solid var(--border);
+            font-weight:
+                500;
 
-    background: var(--surface-soft);
-}
+            white-space:
+                nowrap;
 
-.rules-card-title {
-    font-size: 20px;
-    font-weight: 700;
+        }
 
-    letter-spacing: -0.5px;
-}
 
-.rules-card-status {
-    display: inline-flex;
-    align-items: center;
+        /* =================================================
+           HOME BUTTON
+        ================================================= */
 
-    gap: 7px;
+        .back-button {
 
-    padding: 7px 11px;
+            display:
+                inline-flex;
 
-    border-radius: 999px;
+            align-items:
+                center;
 
-    background: var(--success-soft);
+            justify-content:
+                center;
 
-    color: var(--success);
+            min-height:
+                40px;
 
-    font-size: 11px;
+            padding:
+                0 17px;
 
-    font-weight: 700;
+            border-radius:
+                999px;
 
-    white-space: nowrap;
-}
+            background:
+                #1d1d1f;
 
-.rules-card-status::before {
-    content: "";
+            color:
+                #ffffff;
 
-    width: 7px;
-    height: 7px;
+            text-decoration:
+                none;
 
-    border-radius: 50%;
+            font-size:
+                13px;
 
-    background: var(--success);
-}
+            font-weight:
+                600;
 
+            transition:
+                0.2s ease;
 
-/* =====================================================
-   RULES CONTENT
-===================================================== */
+        }
 
-#rulesContent {
-    padding: 42px 44px;
 
-    color: #2c2c2e;
+        .back-button:hover {
 
-    font-size: 16px;
+            background:
+                #000000;
 
-    line-height: 1.9;
+            transform:
+                translateY(-1px);
 
-    white-space: pre-wrap;
+        }
 
-    overflow-wrap: anywhere;
-}
 
+        .back-button:active {
 
-/* =====================================================
-   CONTENT TYPOGRAPHY
-===================================================== */
+            transform:
+                scale(0.97);
 
-#rulesContent strong {
-    color: var(--text);
+        }
 
-    font-weight: 700;
-}
 
-#rulesContent b {
-    color: var(--text);
+        /* =================================================
+           HERO
+        ================================================= */
 
-    font-weight: 700;
-}
+        .hero {
 
-#rulesContent h2,
-#rulesContent h3,
-#rulesContent h4 {
-    color: var(--text);
+            width:
+                100%;
 
-    margin-top: 30px;
-    margin-bottom: 12px;
+            background:
+                var(--background);
 
-    line-height: 1.3;
-}
+        }
 
-#rulesContent ul,
-#rulesContent ol {
-    margin: 15px 0 15px 25px;
-}
 
-#rulesContent li {
-    margin: 7px 0;
-}
+        .hero-inner {
 
+            width:
+                min(1180px, calc(100% - 40px));
 
-/* =====================================================
-   UPDATED INFO
-===================================================== */
+            margin:
+                0 auto;
 
-.rules-updated {
-    padding: 20px 34px;
+            padding:
+                78px 0 55px;
 
-    border-top: 1px solid var(--border);
+            text-align:
+                center;
 
-    background: #fafafa;
+        }
 
-    color: var(--text-light);
 
-    font-size: 12px;
+        /* =================================================
+           EYEBROW
+        ================================================= */
 
-    text-align: right;
-}
+        .eyebrow {
 
+            display:
+                inline-flex;
 
-/* =====================================================
-   FOOTER
-===================================================== */
+            align-items:
+                center;
 
-.rules-footer {
-    width: min(940px, calc(100% - 40px));
+            justify-content:
+                center;
 
-    margin: 0 auto;
+            gap:
+                8px;
 
-    padding: 0 0 50px;
+            padding:
+                7px 13px;
 
-    text-align: center;
+            border:
+                1px solid #dce8f5;
 
-    color: var(--text-light);
+            border-radius:
+                999px;
 
-    font-size: 12px;
-}
+            background:
+                var(--blue-light);
 
-.rules-footer strong {
-    color: var(--text-secondary);
+            color:
+                var(--blue);
 
-    font-weight: 600;
-}
+            font-size:
+                10px;
 
+            font-weight:
+                700;
 
-/* =====================================================
-   LOADING
-===================================================== */
+            letter-spacing:
+                0.8px;
 
-.rules-loading {
-    padding: 60px 30px;
+        }
 
-    text-align: center;
 
-    color: var(--text-secondary);
+        .eyebrow-dot {
 
-    font-size: 14px;
-}
+            width:
+                7px;
 
-.rules-loading::before {
-    content: "";
+            height:
+                7px;
 
-    display: block;
+            border-radius:
+                50%;
 
-    width: 28px;
-    height: 28px;
+            background:
+                var(--blue);
 
-    margin: 0 auto 15px;
+        }
 
-    border: 3px solid #e5e5e7;
 
-    border-top-color: var(--accent);
+        /* =================================================
+           HERO TITLE
+        ================================================= */
 
-    border-radius: 50%;
+        .hero h1 {
 
-    animation:
-        rulesSpin 0.8s linear infinite;
-}
+            margin-top:
+                22px;
 
-@keyframes rulesSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
+            color:
+                var(--text);
 
+            font-size:
+                clamp(43px, 7vw, 72px);
 
-/* =====================================================
-   ERROR
-===================================================== */
+            line-height:
+                1.04;
 
-.rules-error {
-    margin: 30px;
+            font-weight:
+                800;
 
-    padding: 18px 20px;
+            letter-spacing:
+                -3px;
 
-    border-radius: 14px;
+        }
 
-    background: #fff4f4;
 
-    border: 1px solid #f1d2d2;
+        .hero p {
 
-    color: #a22;
+            max-width:
+                650px;
 
-    font-size: 14px;
+            margin:
+                22px auto 0;
 
-    text-align: center;
-}
+            color:
+                var(--secondary);
 
+            font-size:
+                17px;
 
-/* =====================================================
-   SELECTION
-===================================================== */
+            line-height:
+                1.65;
 
-::selection {
-    background: #dbeaff;
-    color: #1d1d1f;
-}
+        }
 
 
-/* =====================================================
-   FOCUS
-===================================================== */
+        /* =================================================
+           RULES AREA
+        ================================================= */
 
-a:focus-visible,
-button:focus-visible {
-    outline: 3px solid rgba(0, 113, 227, 0.25);
+        .rules-wrap {
 
-    outline-offset: 3px;
-}
+            width:
+                min(940px, calc(100% - 40px));
 
+            margin:
+                0 auto 75px;
 
-/* =====================================================
-   TABLET
-===================================================== */
+        }
 
-@media (max-width: 768px) {
 
-    .rules-nav-inner {
-        width: min(100% - 28px, 1180px);
+        /* =================================================
+           RULES CARD
+        ================================================= */
 
-        min-height: 64px;
-    }
+        .rules-card {
 
-    .rules-brand-mark {
-        width: 38px;
-        height: 38px;
+            overflow:
+                hidden;
 
-        border-radius: 11px;
-    }
+            background:
+                var(--white);
 
-    .rules-brand-title {
-        font-size: 13px;
-    }
+            border:
+                1px solid var(--border);
 
-    .rules-brand-subtitle {
-        font-size: 10px;
-    }
+            border-radius:
+                var(--radius);
 
-    .back-home {
-        min-height: 38px;
+            box-shadow:
+                var(--shadow);
 
-        padding: 0 14px;
+        }
 
-        font-size: 12px;
-    }
 
-    .rules-hero {
-        width: min(100% - 28px, 1180px);
+        /* =================================================
+           HEADER
+        ================================================= */
 
-        padding: 60px 0 38px;
-    }
+        .rules-header {
 
-    .rules-hero h1 {
-        letter-spacing: -2px;
-    }
+            min-height:
+                96px;
 
-    .rules-hero p {
-        font-size: 15px;
-    }
+            padding:
+                25px 32px;
 
-    .rules-main {
-        width: min(100% - 28px, 940px);
+            display:
+                flex;
 
-        margin-bottom: 55px;
-    }
+            align-items:
+                center;
 
-    .rules-card-top {
-        padding: 23px 22px;
-    }
+            justify-content:
+                space-between;
 
-    #rulesContent {
-        padding: 30px 24px;
+            gap:
+                20px;
 
-        font-size: 15px;
+            background:
+                #fafafa;
 
-        line-height: 1.85;
-    }
+            border-bottom:
+                1px solid var(--border);
 
-    .rules-updated {
-        padding: 17px 22px;
+        }
 
-        text-align: left;
-    }
 
-    .rules-footer {
-        width: min(100% - 28px, 940px);
+        .rules-header h2 {
 
-        padding-bottom: 35px;
-    }
-}
+            color:
+                var(--text);
 
+            font-size:
+                20px;
 
-/* =====================================================
-   MOBILE
-===================================================== */
+            font-weight:
+                700;
 
-@media (max-width: 520px) {
+            line-height:
+                1.3;
 
-    .rules-nav-inner {
-        gap: 10px;
-    }
+            letter-spacing:
+                -0.5px;
 
-    .rules-brand {
-        gap: 9px;
-    }
+        }
 
-    .rules-brand-mark {
-        width: 36px;
-        height: 36px;
 
-        border-radius: 10px;
+        .rules-header p {
 
-        font-size: 12px;
-    }
+            margin-top:
+                4px;
 
-    .rules-brand-subtitle {
-        display: none;
-    }
+            color:
+                var(--muted);
 
-    .back-home {
-        padding: 0 12px;
+            font-size:
+                12px;
 
-        font-size: 11px;
-    }
+        }
 
-    .rules-hero {
-        padding: 48px 0 30px;
-    }
 
-    .rules-eyebrow {
-        font-size: 10px;
+        /* =================================================
+           UPDATED BADGE
+        ================================================= */
 
-        padding: 6px 11px;
-    }
+        .updated {
 
-    .rules-hero h1 {
-        margin-top: 17px;
+            flex-shrink:
+                0;
 
-        font-size: 39px;
+            padding:
+                7px 11px;
 
-        letter-spacing: -1.8px;
-    }
+            border-radius:
+                999px;
 
-    .rules-hero p {
-        margin-top: 17px;
+            background:
+                var(--green-light);
 
-        font-size: 14px;
+            color:
+                var(--green);
 
-        line-height: 1.6;
-    }
+            font-size:
+                11px;
 
-    .rules-main {
-        width: calc(100% - 22px);
-    }
+            font-weight:
+                600;
 
-    .rules-card {
-        border-radius: 20px;
-    }
+            white-space:
+                nowrap;
 
-    .rules-card-top {
-        padding: 19px 18px;
+        }
 
-        align-items: flex-start;
 
-        flex-direction: column;
+        /* =================================================
+           RULES CONTENT
+        ================================================= */
 
-        gap: 11px;
-    }
+        #rulesContent {
 
-    .rules-card-title {
-        font-size: 18px;
-    }
+            min-height:
+                250px;
 
-    .rules-card-status {
-        font-size: 10px;
-    }
+            padding:
+                42px 44px;
 
-    #rulesContent {
-        padding: 25px 19px;
+            background:
+                #ffffff;
 
-        font-size: 14px;
+            color:
+                #2c2c2e;
 
-        line-height: 1.8;
-    }
+            font-size:
+                16px;
 
-    #rulesContent h2,
-    #rulesContent h3,
-    #rulesContent h4 {
-        margin-top: 24px;
-    }
+            line-height:
+                1.9;
 
-    .rules-updated {
-        padding: 15px 18px;
+            overflow-wrap:
+                anywhere;
 
-        font-size: 11px;
-    }
+        }
 
-    .rules-footer {
-        width: calc(100% - 22px);
 
-        font-size: 11px;
-    }
-}
+        /* =================================================
+           LOADING
+        ================================================= */
 
+        .loading {
 
-/* =====================================================
-   VERY SMALL DEVICES
-===================================================== */
+            min-height:
+                180px;
 
-@media (max-width: 360px) {
+            display:
+                flex;
 
-    .rules-brand-title {
-        font-size: 12px;
-    }
+            align-items:
+                center;
 
-    .back-home {
-        padding: 0 10px;
+            justify-content:
+                center;
 
-        font-size: 10px;
-    }
+            color:
+                var(--secondary);
 
-    .rules-hero h1 {
-        font-size: 34px;
-    }
+            font-size:
+                14px;
 
-    #rulesContent {
-        padding: 22px 16px;
+            text-align:
+                center;
 
-        font-size: 13.5px;
-    }
-}
+        }
 
-</style>
+
+        .loading-spinner {
+
+            width:
+                29px;
+
+            height:
+                29px;
+
+            margin:
+                0 auto 14px;
+
+            border:
+                3px solid #e6e7e9;
+
+            border-top-color:
+                var(--blue);
+
+            border-radius:
+                50%;
+
+            animation:
+                rules-spin 0.8s linear infinite;
+
+        }
+
+
+        @keyframes rules-spin {
+
+            to {
+
+                transform:
+                    rotate(360deg);
+
+            }
+
+        }
+
+
+        /* =================================================
+           ERROR
+        ================================================= */
+
+        .error-state {
+
+            padding:
+                25px;
+
+            border:
+                1px solid #ead7d7;
+
+            border-radius:
+                14px;
+
+            background:
+                var(--red-light);
+
+            color:
+                var(--red);
+
+            text-align:
+                center;
+
+            font-size:
+                14px;
+
+        }
+
+
+        .error-state strong {
+
+            display:
+                block;
+
+            margin-bottom:
+                5px;
+
+            font-size:
+                15px;
+
+        }
+
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        footer {
+
+            width:
+                min(940px, calc(100% - 40px));
+
+            margin:
+                0 auto;
+
+            padding:
+                0 0 45px;
+
+            color:
+                var(--muted);
+
+            text-align:
+                center;
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* =================================================
+           SELECTION
+        ================================================= */
+
+        ::selection {
+
+            background:
+                #dcecff;
+
+            color:
+                #1d1d1f;
+
+        }
+
+
+        /* =================================================
+           TABLET
+        ================================================= */
+
+        @media (max-width: 768px) {
+
+            .nav-inner {
+
+                width:
+                    calc(100% - 28px);
+
+                min-height:
+                    64px;
+
+            }
+
+
+            .brand-mark {
+
+                width:
+                    38px;
+
+                height:
+                    38px;
+
+                border-radius:
+                    11px;
+
+            }
+
+
+            .brand-text strong {
+
+                font-size:
+                    13px;
+
+            }
+
+
+            .brand-text span {
+
+                font-size:
+                    10px;
+
+            }
+
+
+            .back-button {
+
+                min-height:
+                    38px;
+
+                padding:
+                    0 14px;
+
+                font-size:
+                    12px;
+
+            }
+
+
+            .hero-inner {
+
+                width:
+                    calc(100% - 28px);
+
+                padding:
+                    58px 0 40px;
+
+            }
+
+
+            .hero h1 {
+
+                letter-spacing:
+                    -2px;
+
+            }
+
+
+            .hero p {
+
+                font-size:
+                    15px;
+
+            }
+
+
+            .rules-wrap {
+
+                width:
+                    calc(100% - 28px);
+
+                margin-bottom:
+                    55px;
+
+            }
+
+
+            .rules-header {
+
+                padding:
+                    23px;
+
+            }
+
+
+            #rulesContent {
+
+                padding:
+                    32px 25px;
+
+                font-size:
+                    15px;
+
+                line-height:
+                    1.85;
+
+            }
+
+
+            footer {
+
+                width:
+                    calc(100% - 28px);
+
+                padding-bottom:
+                    35px;
+
+            }
+
+        }
+
+
+        /* =================================================
+           MOBILE
+        ================================================= */
+
+        @media (max-width: 520px) {
+
+            .nav-inner {
+
+                width:
+                    calc(100% - 22px);
+
+                gap:
+                    10px;
+
+            }
+
+
+            .brand {
+
+                gap:
+                    9px;
+
+            }
+
+
+            .brand-mark {
+
+                width:
+                    36px;
+
+                height:
+                    36px;
+
+                border-radius:
+                    10px;
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .brand-text strong {
+
+                font-size:
+                    12px;
+
+            }
+
+
+            .brand-text span {
+
+                display:
+                    none;
+
+            }
+
+
+            .back-button {
+
+                min-height:
+                    36px;
+
+                padding:
+                    0 12px;
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .hero-inner {
+
+                width:
+                    calc(100% - 22px);
+
+                padding:
+                    47px 0 31px;
+
+            }
+
+
+            .eyebrow {
+
+                padding:
+                    6px 11px;
+
+                font-size:
+                    9px;
+
+            }
+
+
+            .eyebrow-dot {
+
+                width:
+                    6px;
+
+                height:
+                    6px;
+
+            }
+
+
+            .hero h1 {
+
+                margin-top:
+                    17px;
+
+                font-size:
+                    39px;
+
+                letter-spacing:
+                    -1.8px;
+
+            }
+
+
+            .hero p {
+
+                margin-top:
+                    17px;
+
+                font-size:
+                    14px;
+
+                line-height:
+                    1.6;
+
+            }
+
+
+            .rules-wrap {
+
+                width:
+                    calc(100% - 18px);
+
+                margin-bottom:
+                    45px;
+
+            }
+
+
+            .rules-card {
+
+                border-radius:
+                    20px;
+
+            }
+
+
+            .rules-header {
+
+                padding:
+                    19px;
+
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+
+                gap:
+                    10px;
+
+            }
+
+
+            .rules-header h2 {
+
+                font-size:
+                    18px;
+
+            }
+
+
+            .rules-header p {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .updated {
+
+                font-size:
+                    10px;
+
+            }
+
+
+            #rulesContent {
+
+                min-height:
+                    220px;
+
+                padding:
+                    25px 19px;
+
+                font-size:
+                    14px;
+
+                line-height:
+                    1.82;
+
+            }
+
+
+            footer {
+
+                width:
+                    calc(100% - 22px);
+
+                font-size:
+                    11px;
+
+            }
+
+        }
+
+
+        /* =================================================
+           SMALL MOBILE
+        ================================================= */
+
+        @media (max-width: 360px) {
+
+            .brand-text strong {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .back-button {
+
+                padding:
+                    0 10px;
+
+                font-size:
+                    10px;
+
+            }
+
+
+            .hero h1 {
+
+                font-size:
+                    34px;
+
+                letter-spacing:
+                    -1.4px;
+
+            }
+
+
+            #rulesContent {
+
+                padding:
+                    22px 16px;
+
+                font-size:
+                    13.5px;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -822,6 +1261,7 @@ button:focus-visible {
 
         <div class="nav-inner">
 
+
             <a
                 href="index.html"
                 class="brand"
@@ -830,6 +1270,7 @@ button:focus-visible {
                 <div class="brand-mark">
                     GSA
                 </div>
+
 
                 <div class="brand-text">
 
@@ -853,6 +1294,7 @@ button:focus-visible {
                 ← Home
             </a>
 
+
         </div>
 
     </header>
@@ -865,6 +1307,7 @@ button:focus-visible {
     <section class="hero">
 
         <div class="hero-inner">
+
 
             <div class="eyebrow">
 
@@ -888,6 +1331,7 @@ button:focus-visible {
                 and regulations of Ghopkhali Sports Arena.
             </p>
 
+
         </div>
 
     </section>
@@ -899,9 +1343,12 @@ button:focus-visible {
 
     <main class="rules-wrap">
 
+
         <article class="rules-card">
 
+
             <div class="rules-header">
+
 
                 <div>
 
@@ -923,12 +1370,11 @@ button:focus-visible {
                     Loading...
                 </div>
 
+
             </div>
 
 
-            <div
-                id="rulesContent"
-            >
+            <div id="rulesContent">
 
                 <div class="loading">
 
@@ -946,7 +1392,9 @@ button:focus-visible {
 
             </div>
 
+
         </article>
+
 
     </main>
 
@@ -964,10 +1412,15 @@ button:focus-visible {
 
 
     <!-- =================================================
-         SUPABASE SCRIPT
+         SUPABASE
     ================================================= -->
 
     <script>
+
+
+        /* =================================================
+           SUPABASE CONFIG
+        ================================================= */
 
         const SUPABASE_URL =
             "https://cmygmswzokyrmgdnuszq.supabase.co";
@@ -988,29 +1441,32 @@ button:focus-visible {
            ESCAPE HTML
         ================================================= */
 
-        function escapeHTML(
-            value
-        ) {
+        function escapeHTML(value) {
 
             return String(
                 value ?? ""
             )
+
             .replace(
                 /&/g,
                 "&amp;"
             )
+
             .replace(
                 /</g,
                 "&lt;"
             )
+
             .replace(
                 />/g,
                 "&gt;"
             )
+
             .replace(
                 /"/g,
                 "&quot;"
             )
+
             .replace(
                 /'/g,
                 "&#039;"
@@ -1024,6 +1480,7 @@ button:focus-visible {
         ================================================= */
 
         async function loadRules() {
+
 
             const title =
                 document.getElementById(
@@ -1045,42 +1502,62 @@ button:focus-visible {
 
             try {
 
+
                 const {
                     data,
                     error
                 } =
                     await supabaseClient
+
                         .from(
                             "site_rules"
                         )
+
                         .select(
-                            "title, content, updated_at"
+                            "id, title, content, updated_at"
                         )
+
                         .limit(1)
+
                         .single();
 
 
                 if (error) {
+
                     throw error;
+
                 }
 
+
+                /* -----------------------------------------
+                   TITLE
+                ----------------------------------------- */
 
                 if (title) {
 
                     title.textContent =
-                        data.title ||
+                        data?.title ||
                         "Rules & Regulations";
 
                 }
 
 
+                /* -----------------------------------------
+                   CONTENT
+                ----------------------------------------- */
+
                 if (content) {
+
+                    const rulesText =
+                        data?.content ||
+                        "No rules have been published yet.";
+
 
                     content.innerHTML =
                         escapeHTML(
-                            data.content ||
-                            "No rules have been published yet."
+                            rulesText
                         )
+
                         .replace(
                             /\n/g,
                             "<br>"
@@ -1089,30 +1566,51 @@ button:focus-visible {
                 }
 
 
+                /* -----------------------------------------
+                   UPDATED DATE
+                ----------------------------------------- */
+
                 if (updated) {
 
-                    updated.textContent =
-                        data.updated_at
-                            ? "Updated " +
-                              new Date(
-                                  data.updated_at
-                              ).toLocaleDateString(
-                                  "en-GB",
-                                  {
-                                      day:
-                                          "2-digit",
-                                      month:
-                                          "short",
-                                      year:
-                                          "numeric"
-                                  }
-                              )
-                            : "Official";
+
+                    if (data?.updated_at) {
+
+
+                        const formattedDate =
+                            new Date(
+                                data.updated_at
+                            ).toLocaleDateString(
+                                "en-GB",
+                                {
+                                    day:
+                                        "2-digit",
+
+                                    month:
+                                        "short",
+
+                                    year:
+                                        "numeric"
+                                }
+                            );
+
+
+                        updated.textContent =
+                            "Updated " +
+                            formattedDate;
+
+
+                    } else {
+
+                        updated.textContent =
+                            "Official";
+
+                    }
 
                 }
 
 
             } catch (error) {
+
 
                 console.error(
                     "Rules loading error:",
@@ -1140,6 +1638,15 @@ button:focus-visible {
 
                 }
 
+
+                if (updated) {
+
+                    updated.textContent =
+                        "Unavailable";
+
+                }
+
+
             }
 
         }
@@ -1151,10 +1658,16 @@ button:focus-visible {
 
         document.addEventListener(
             "DOMContentLoaded",
-            loadRules
+            function () {
+
+                loadRules();
+
+            }
         );
 
+
     </script>
+
 
 </body>
 
