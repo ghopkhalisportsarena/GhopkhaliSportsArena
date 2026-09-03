@@ -3716,3 +3716,15 @@ img {
     }
 
 }
+
+/* ================================
+   GSA CSS CONNECTION TEST
+================================ */
+
+body {
+    outline: 8px solid red !important;
+}
+
+.admin-sidebar {
+    outline: 8px solid blue !important;
+}
