@@ -20,9 +20,7 @@
         content="Ghopkhali Sports Arena Club Membership Application"
     >
 
-    <title>
-        Club Membership Application | GSA
-    </title>
+    <title>Club Membership Application | GSA</title>
 
 
     <style>
@@ -35,6 +33,7 @@
 
 
         body {
+
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -44,14 +43,16 @@
                 sans-serif;
 
             background: #f5f5f7;
+
             color: #111;
 
             min-height: 100vh;
+
         }
 
 
         /* =================================================
-           PAGE HEADER
+           HEADER
         ================================================= */
 
         .page-header {
@@ -83,6 +84,7 @@
         .header-logo {
 
             width: 58px;
+
             height: 58px;
 
             object-fit: contain;
@@ -105,7 +107,7 @@
 
             display: block;
 
-            margin-top: 3px;
+            margin-top: 4px;
 
             font-size: 11px;
 
@@ -139,7 +141,7 @@
 
 
         /* =================================================
-           TITLE
+           PAGE TITLE
         ================================================= */
 
         .page-title {
@@ -200,199 +202,56 @@
            APPLICATION CARD
         ================================================= */
 
-     .application-card {
+        .application-card {
 
-    background: #ffffff;
+            background: #ffffff;
 
-    border: 1px solid #e4e4e7;
+            border: 1px solid #e4e4e7;
 
-    border-radius: 22px;
+            border-radius: 22px;
 
-    padding: clamp(
-        20px,
-        4vw,
-        42px
-    );
+            padding: clamp(
+                20px,
+                4vw,
+                42px
+            );
 
-    box-shadow:
-        0 15px 45px
-        rgba(0, 0, 0, .06);
+            box-shadow:
+                0 15px 45px
+                rgba(0, 0, 0, .06);
 
-}
+        }
 
 
-/* =================================================
-   FORM INTRO
-================================================= */
+        .application-card::before {
 
-.application-card::before {
+            content:
+                "OFFICIAL GSA MEMBERSHIP APPLICATION";
 
-    content: "OFFICIAL GSA MEMBERSHIP APPLICATION";
+            display: block;
 
-    display: block;
+            text-align: center;
 
-    text-align: center;
+            font-size: 10px;
 
-    font-size: 10px;
+            font-weight: 800;
 
-    font-weight: 800;
+            letter-spacing: 2px;
 
-    letter-spacing: 2px;
+            color: #777;
 
-    color: #777;
+            margin-bottom: 30px;
 
-    margin-bottom: 30px;
+        }
 
-}
-
-
-/* =================================================
-   SECTION NUMBER
-================================================= */
-
-.form-section {
-
-    position: relative;
-
-    margin-bottom: 38px;
-
-}
-
-
-/* =================================================
-   INPUT HOVER
-================================================= */
-
-input:hover,
-select:hover,
-textarea:hover {
-
-    border-color: #bdbdc2;
-
-}
-
-
-/* =================================================
-   REQUIRED FIELD
-================================================= */
-
-.required {
-
-    color: #d60000;
-
-    font-weight: 800;
-
-}
-
-
-/* =================================================
-   SUBMIT BUTTON
-================================================= */
-
-.submit-button {
-
-    width: 100%;
-
-    border: none;
-
-    background: #111;
-
-    color: #fff;
-
-    padding: 16px 22px;
-
-    border-radius: 12px;
-
-    font-family: inherit;
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-    letter-spacing: .2px;
-
-    cursor: pointer;
-
-    transition:
-        transform .15s ease,
-        opacity .15s ease,
-        box-shadow .15s ease;
-
-}
-
-
-.submit-button:hover {
-
-    opacity: .92;
-
-    box-shadow:
-        0 8px 20px
-        rgba(0, 0, 0, .15);
-
-}
-
-
-.submit-button:active {
-
-    transform: scale(.985);
-
-}
-
-
-/* =================================================
-   FORM ERROR STATE
-================================================= */
-
-input:invalid:not(:placeholder-shown),
-textarea:invalid:not(:placeholder-shown),
-select:invalid {
-
-    border-color: #d9d9dd;
-
-}
-
-
-/* =================================================
-   MOBILE
-================================================= */
-
-@media (max-width: 650px) {
-
-    .application-card {
-
-        border-radius: 17px;
-
-        padding: 20px 15px;
-
-    }
-
-
-    .application-card::before {
-
-        font-size: 8px;
-
-        letter-spacing: 1.4px;
-
-        margin-bottom: 25px;
-
-    }
-
-
-    .form-section {
-
-        margin-bottom: 32px;
-
-    }
-
-}
 
         /* =================================================
-           SECTION
+           FORM SECTION
         ================================================= */
 
         .form-section {
 
-            margin-bottom: 35px;
+            margin-bottom: 38px;
 
         }
 
@@ -488,7 +347,9 @@ select:invalid {
 
         .required {
 
-            color: #d00;
+            color: #d00000;
+
+            font-weight: 800;
 
         }
 
@@ -519,6 +380,15 @@ select:invalid {
                 border-color .2s,
                 background .2s,
                 box-shadow .2s;
+
+        }
+
+
+        input:hover,
+        select:hover,
+        textarea:hover {
+
+            border-color: #bdbdc2;
 
         }
 
@@ -558,8 +428,178 @@ select:invalid {
 
 
         /* =================================================
-           CHECKBOX
+           PHOTO UPLOAD
         ================================================= */
+
+        .photo-upload {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+
+        }
+
+
+        .photo-preview {
+
+            width: 130px;
+
+            height: 160px;
+
+            border: 1px dashed #cfcfd4;
+
+            border-radius: 10px;
+
+            background: #fafafa;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+
+            color: #999;
+
+            font-size: 11px;
+
+            text-align: center;
+
+        }
+
+
+        .photo-preview img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: none;
+
+        }
+
+
+        .photo-note {
+
+            font-size: 11px;
+
+            color: #777;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =================================================
+           SPORTS CHECKBOX
+        ================================================= */
+
+        .sports-selection {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 10px;
+
+            margin-top: 5px;
+
+        }
+
+
+        .sport-option {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 11px 12px;
+
+            border: 1px solid #dedee2;
+
+            border-radius: 10px;
+
+            background: #fafafa;
+
+            cursor: pointer;
+
+            transition:
+                border-color .2s,
+                background .2s;
+
+        }
+
+
+        .sport-option:hover {
+
+            border-color: #aaa;
+
+            background: #fff;
+
+        }
+
+
+        .sport-option input {
+
+            width: 17px;
+
+            height: 17px;
+
+            margin: 0;
+
+            flex-shrink: 0;
+
+            box-shadow: none;
+
+        }
+
+
+        .sport-option span {
+
+            font-size: 13px;
+
+            color: #333;
+
+        }
+
+
+        /* =================================================
+           DECLARATION
+        ================================================= */
+
+        .declaration-box {
+
+            padding: 18px;
+
+            border: 1px solid #e4e4e7;
+
+            border-radius: 12px;
+
+            background: #fafafa;
+
+        }
+
+
+        .declaration-text {
+
+            font-size: 13px;
+
+            line-height: 1.8;
+
+            color: #444;
+
+            margin-bottom: 16px;
+
+        }
+
 
         .checkbox-group {
 
@@ -568,8 +608,6 @@ select:invalid {
             align-items: flex-start;
 
             gap: 10px;
-
-            margin-top: 5px;
 
         }
 
@@ -593,13 +631,13 @@ select:invalid {
 
             line-height: 1.6;
 
-            color: #555;
+            color: #444;
 
         }
 
 
         /* =================================================
-           SUBMIT AREA
+           SUBMIT
         ================================================= */
 
         .submit-area {
@@ -623,9 +661,9 @@ select:invalid {
 
             color: #fff;
 
-            padding: 15px 20px;
+            padding: 16px 22px;
 
-            border-radius: 11px;
+            border-radius: 12px;
 
             font-family: inherit;
 
@@ -636,22 +674,65 @@ select:invalid {
             cursor: pointer;
 
             transition:
-                transform .15s,
-                opacity .15s;
+                transform .15s ease,
+                opacity .15s ease,
+                box-shadow .15s ease;
 
         }
 
 
         .submit-button:hover {
 
-            opacity: .9;
+            opacity: .92;
+
+            box-shadow:
+                0 8px 20px
+                rgba(0, 0, 0, .15);
 
         }
 
 
         .submit-button:active {
 
-            transform: scale(.99);
+            transform: scale(.985);
+
+        }
+
+
+        .submit-button:disabled {
+
+            opacity: .6;
+
+            cursor: not-allowed;
+
+            box-shadow: none;
+
+        }
+
+
+        /* =================================================
+           SUCCESS MESSAGE
+        ================================================= */
+
+        .success-message {
+
+            display: none;
+
+            margin-top: 18px;
+
+            padding: 15px;
+
+            border-radius: 11px;
+
+            background: #f0fdf4;
+
+            border: 1px solid #bbf7d0;
+
+            color: #166534;
+
+            font-size: 13px;
+
+            line-height: 1.6;
 
         }
 
@@ -768,6 +849,13 @@ select:invalid {
             }
 
 
+            .sports-selection {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
             .page-title {
 
                 margin-bottom: 22px;
@@ -811,7 +899,6 @@ select:invalid {
             alt="Ghopkhali Sports Arena"
             class="header-logo"
         >
-
 
         <div class="header-text">
 
@@ -862,10 +949,11 @@ select:invalid {
 
 
         <!-- =================================================
-             APPLICATION FORM
+             APPLICATION CARD
         ================================================= -->
 
         <div class="application-card">
+
 
             <form
                 id="membershipApplicationForm"
@@ -874,7 +962,7 @@ select:invalid {
 
 
                 <!-- =================================================
-                     PERSONAL INFORMATION
+                     SECTION 01 — PERSONAL INFORMATION
                 ================================================= -->
 
                 <section class="form-section">
@@ -902,7 +990,10 @@ select:invalid {
                             <label for="fullNameBn">
 
                                 Full Name (Bangla)
-                                <span class="required">*</span>
+
+                                <span class="required">
+                                    *
+                                </span>
 
                             </label>
 
@@ -917,6 +1008,7 @@ select:invalid {
                         </div>
 
 
+
                         <!-- ENGLISH NAME -->
 
                         <div class="form-group">
@@ -924,7 +1016,10 @@ select:invalid {
                             <label for="fullNameEn">
 
                                 Full Name (English)
-                                <span class="required">*</span>
+
+                                <span class="required">
+                                    *
+                                </span>
 
                             </label>
 
@@ -939,13 +1034,19 @@ select:invalid {
                         </div>
 
 
+
                         <!-- FATHER -->
 
                         <div class="form-group">
 
                             <label for="fatherName">
+
                                 Father's Name
-                                <span class="required">*</span>
+
+                                <span class="required">
+                                    *
+                                </span>
+
                             </label>
 
                             <input
@@ -959,13 +1060,19 @@ select:invalid {
                         </div>
 
 
+
                         <!-- MOTHER -->
 
                         <div class="form-group">
 
                             <label for="motherName">
+
                                 Mother's Name
-                                <span class="required">*</span>
+
+                                <span class="required">
+                                    *
+                                </span>
+
                             </label>
 
                             <input
@@ -979,13 +1086,19 @@ select:invalid {
                         </div>
 
 
+
                         <!-- DOB -->
 
                         <div class="form-group">
 
                             <label for="dateOfBirth">
+
                                 Date of Birth
-                                <span class="required">*</span>
+
+                                <span class="required">
+                                    *
+                                </span>
+
                             </label>
 
                             <input
@@ -998,12 +1111,15 @@ select:invalid {
                         </div>
 
 
+
                         <!-- BLOOD -->
 
                         <div class="form-group">
 
                             <label for="bloodGroup">
+
                                 Blood Group
+
                             </label>
 
                             <select
@@ -1015,41 +1131,26 @@ select:invalid {
                                     Select blood group
                                 </option>
 
-                                <option value="A+">
-                                    A+
-                                </option>
+                                <option value="A+">A+</option>
 
-                                <option value="A-">
-                                    A-
-                                </option>
+                                <option value="A-">A-</option>
 
-                                <option value="B+">
-                                    B+
-                                </option>
+                                <option value="B+">B+</option>
 
-                                <option value="B-">
-                                    B-
-                                </option>
+                                <option value="B-">B-</option>
 
-                                <option value="AB+">
-                                    AB+
-                                </option>
+                                <option value="AB+">AB+</option>
 
-                                <option value="AB-">
-                                    AB-
-                                </option>
+                                <option value="AB-">AB-</option>
 
-                                <option value="O+">
-                                    O+
-                                </option>
+                                <option value="O+">O+</option>
 
-                                <option value="O-">
-                                    O-
-                                </option>
+                                <option value="O-">O-</option>
 
                             </select>
 
                         </div>
+
 
 
                         <!-- PROFESSION -->
@@ -1057,7 +1158,9 @@ select:invalid {
                         <div class="form-group">
 
                             <label for="profession">
+
                                 Profession
+
                             </label>
 
                             <input
@@ -1068,6 +1171,7 @@ select:invalid {
                             >
 
                         </div>
+
 
 
                         <!-- NID -->
@@ -1090,6 +1194,55 @@ select:invalid {
                         </div>
 
 
+
+                        <!-- PHOTO -->
+
+                        <div class="form-group">
+
+                            <label for="memberPhoto">
+
+                                Passport Size Photo
+
+                            </label>
+
+                            <div class="photo-upload">
+
+                                <div
+                                    class="photo-preview"
+                                    id="photoPreview"
+                                >
+
+                                    <span id="photoPlaceholder">
+                                        Photo Preview
+                                    </span>
+
+                                    <img
+                                        id="photoPreviewImage"
+                                        alt="Photo Preview"
+                                    >
+
+                                </div>
+
+                                <input
+                                    type="file"
+                                    id="memberPhoto"
+                                    name="member_photo"
+                                    accept="image/jpeg,image/png,image/webp"
+                                >
+
+                                <div class="photo-note">
+
+                                    Passport-size photo.
+                                    JPG, PNG or WebP.
+                                    Maximum 2 MB.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
                     </div>
 
                 </section>
@@ -1097,7 +1250,7 @@ select:invalid {
 
 
                 <!-- =================================================
-                     CONTACT INFORMATION
+                     SECTION 02 — CONTACT INFORMATION
                 ================================================= -->
 
                 <section class="form-section">
@@ -1118,6 +1271,56 @@ select:invalid {
                     <div class="form-grid">
 
 
+                        <!-- CURRENT ADDRESS -->
+
+                        <div class="form-group full">
+
+                            <label for="currentAddress">
+
+                                Current Address
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <textarea
+                                id="currentAddress"
+                                name="current_address"
+                                placeholder="Enter your current address"
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+
+                        <!-- PERMANENT ADDRESS -->
+
+                        <div class="form-group full">
+
+                            <label for="permanentAddress">
+
+                                Permanent Address
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <textarea
+                                id="permanentAddress"
+                                name="permanent_address"
+                                placeholder="Enter your permanent address"
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+
                         <!-- MOBILE -->
 
                         <div class="form-group">
@@ -1125,7 +1328,10 @@ select:invalid {
                             <label for="mobileNumber">
 
                                 Mobile Number
-                                <span class="required">*</span>
+
+                                <span class="required">
+                                    *
+                                </span>
 
                             </label>
 
@@ -1138,6 +1344,7 @@ select:invalid {
                             >
 
                         </div>
+
 
 
                         <!-- ALTERNATIVE -->
@@ -1160,12 +1367,15 @@ select:invalid {
                         </div>
 
 
+
                         <!-- EMAIL -->
 
                         <div class="form-group full">
 
                             <label for="email">
+
                                 Email Address
+
                             </label>
 
                             <input
@@ -1185,7 +1395,7 @@ select:invalid {
 
 
                 <!-- =================================================
-                     ADDRESS
+                     SECTION 03 — SPORTS INFORMATION
                 ================================================= -->
 
                 <section class="form-section">
@@ -1194,72 +1404,6 @@ select:invalid {
 
                         <span>
                             SECTION 03
-                        </span>
-
-                        <h2>
-                            Address
-                        </h2>
-
-                    </div>
-
-
-                    <div class="form-grid">
-
-
-                        <div class="form-group full">
-
-                            <label for="currentAddress">
-
-                                Current Address
-                                <span class="required">*</span>
-
-                            </label>
-
-                            <textarea
-                                id="currentAddress"
-                                name="current_address"
-                                placeholder="Enter your current address"
-                                required
-                            ></textarea>
-
-                        </div>
-
-
-                        <div class="form-group full">
-
-                            <label for="permanentAddress">
-
-                                Permanent Address
-                                <span class="required">*</span>
-
-                            </label>
-
-                            <textarea
-                                id="permanentAddress"
-                                name="permanent_address"
-                                placeholder="Enter your permanent address"
-                                required
-                            ></textarea>
-
-                        </div>
-
-
-                    </div>
-
-                </section>
-
-
-
-                <!-- =================================================
-                     SPORTS INFORMATION
-                ================================================= -->
-
-                <section class="form-section">
-
-                    <div class="section-heading">
-
-                        <span>
-                            SECTION 04
                         </span>
 
                         <h2>
@@ -1272,55 +1416,160 @@ select:invalid {
                     <div class="form-grid">
 
 
-                        <div class="form-group">
+                        <!-- SPORTS CHECKBOX -->
 
-                            <label for="sports">
+                        <div class="form-group full">
 
-                                Main Sport
-                                <span class="required">*</span>
+                            <label>
+
+                                Select Your Sports
+
+                                <span class="required">
+                                    *
+                                </span>
 
                             </label>
 
-                            <select
-                                id="sports"
-                                name="sports"
-                                required
-                            >
 
-                                <option value="">
-                                    Select your sport
-                                </option>
+                            <div class="sports-selection">
 
-                                <option value="Football">
-                                    Football
-                                </option>
 
-                                <option value="Cricket">
-                                    Cricket
-                                </option>
+                                <label class="sport-option">
 
-                                <option value="Badminton">
-                                    Badminton
-                                </option>
+                                    <input
+                                        type="checkbox"
+                                        name="sports"
+                                        value="Cricket"
+                                    >
 
-                                <option value="Futsal">
-                                    Futsal
-                                </option>
+                                    <span>
+                                        Cricket
+                                    </span>
 
-                                <option value="Athletics">
-                                    Athletics
-                                </option>
+                                </label>
 
-                                <option value="Other">
-                                    Other
-                                </option>
 
-                            </select>
+
+                                <label class="sport-option">
+
+                                    <input
+                                        type="checkbox"
+                                        name="sports"
+                                        value="Football"
+                                    >
+
+                                    <span>
+                                        Football
+                                    </span>
+
+                                </label>
+
+
+
+                                <label class="sport-option">
+
+                                    <input
+                                        type="checkbox"
+                                        name="sports"
+                                        value="Badminton"
+                                    >
+
+                                    <span>
+                                        Badminton
+                                    </span>
+
+                                </label>
+
+
+
+                                <label class="sport-option">
+
+                                    <input
+                                        type="checkbox"
+                                        name="sports"
+                                        value="Volleyball"
+                                    >
+
+                                    <span>
+                                        Volleyball
+                                    </span>
+
+                                </label>
+
+
+
+                                <label class="sport-option">
+
+                                    <input
+                                        type="checkbox"
+                                        name="sports"
+                                        value="Athletics"
+                                    >
+
+                                    <span>
+                                        Athletics
+                                    </span>
+
+                                </label>
+
+
+
+                                <label class="sport-option">
+
+                                    <input
+                                        type="checkbox"
+                                        name="sports"
+                                        value="Indoor Games"
+                                    >
+
+                                    <span>
+                                        Indoor Games
+                                    </span>
+
+                                </label>
+
+
+
+                                <label class="sport-option">
+
+                                    <input
+                                        type="checkbox"
+                                        name="sports"
+                                        value="Futsal"
+                                    >
+
+                                    <span>
+                                        Futsal
+                                    </span>
+
+                                </label>
+
+
+
+                                <label class="sport-option">
+
+                                    <input
+                                        type="checkbox"
+                                        name="sports"
+                                        value="Other"
+                                    >
+
+                                    <span>
+                                        Other
+                                    </span>
+
+                                </label>
+
+
+                            </div>
 
                         </div>
 
 
-                        <div class="form-group">
+
+                        <!-- OTHER SPORT -->
+
+                        <div class="form-group full">
 
                             <label for="otherSports">
 
@@ -1332,7 +1581,152 @@ select:invalid {
                                 type="text"
                                 id="otherSports"
                                 name="other_sports"
-                                placeholder="Other sports"
+                                placeholder="If you selected Other, write the sport name"
+                            >
+
+                        </div>
+
+
+
+                        <!-- MAIN SKILL -->
+
+                        <div class="form-group full">
+
+                            <label for="sportsSkill">
+
+                                Main Playing Skill
+
+                            </label>
+
+                            <textarea
+                                id="sportsSkill"
+                                name="sports_skill"
+                                placeholder="Example: Forward, Defender, Goalkeeper, Batsman, Bowler, All-rounder, etc."
+                            ></textarea>
+
+                        </div>
+
+
+
+                        <!-- PREVIOUS CLUB EXPERIENCE -->
+
+                        <div class="form-group full">
+
+                            <label for="previousClubExperience">
+
+                                Previous Club Experience
+
+                            </label>
+
+                            <textarea
+                                id="previousClubExperience"
+                                name="previous_club_experience"
+                                placeholder="Mention any previous club/team experience, if applicable."
+                            ></textarea>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     SECTION 04 — EMERGENCY CONTACT
+                ================================================= -->
+
+                <section class="form-section">
+
+                    <div class="section-heading">
+
+                        <span>
+                            SECTION 04
+                        </span>
+
+                        <h2>
+                            Emergency Contact
+                        </h2>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label for="emergencyContactName">
+
+                                Name
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="emergencyContactName"
+                                name="emergency_contact_name"
+                                placeholder="Emergency contact name"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- RELATION -->
+
+                        <div class="form-group">
+
+                            <label for="emergencyContactRelation">
+
+                                Relation
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="emergencyContactRelation"
+                                name="emergency_contact_relation"
+                                placeholder="Father / Mother / Brother / etc."
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- MOBILE -->
+
+                        <div class="form-group full">
+
+                            <label for="emergencyContactMobile">
+
+                                Mobile Number
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="emergencyContactMobile"
+                                name="emergency_contact_mobile"
+                                placeholder="Emergency contact mobile"
+                                required
                             >
 
                         </div>
@@ -1345,7 +1739,7 @@ select:invalid {
 
 
                 <!-- =================================================
-                     ADDITIONAL INFORMATION
+                     SECTION 05 — ADDITIONAL INFORMATION
                 ================================================= -->
 
                 <section class="form-section">
@@ -1390,7 +1784,7 @@ select:invalid {
 
 
                 <!-- =================================================
-                     DECLARATION
+                     SECTION 06 — DECLARATION
                 ================================================= -->
 
                 <section class="form-section">
@@ -1408,24 +1802,49 @@ select:invalid {
                     </div>
 
 
-                    <div class="checkbox-group">
-
-                        <input
-                            type="checkbox"
-                            id="declaration"
-                            required
-                        >
+                    <div class="declaration-box">
 
 
-                        <label for="declaration">
+                        <p class="declaration-text">
 
-                            I confirm that the information provided
-                            in this application is correct and
-                            complete. I agree to follow the rules,
-                            regulations and discipline of
-                            Ghopkhali Sports Arena.
+                            আমি সজ্ঞানে ঘোষণা করছি যে, এই ফরমে প্রদত্ত
+                            আমার সকল তথ্য সম্পূর্ণ সত্য ও নির্ভুল।
+                            আমি 'ঘোপখালী স্পোর্টস অ্যারিনা ক্লাব'-এর
+                            একজন গর্বিত সদস্য হিসেবে ক্লাবের সকল
+                            নিয়ম-কানুন ও গঠনতন্ত্র যথাযথভাবে মেনে চলব।
+                            ক্লাবের আয়োজিত ইনডোর বা আউটডোর যেকোনো
+                            ক্রীড়া কার্যক্রমে আমি স্বতঃস্ফূর্তভাবে
+                            অংশগ্রহণ করতে আগ্রহী এবং এমন কোনো
+                            কার্যকলাপে জড়িত হব না যা ক্লাবের সম্মান
+                            ক্ষুণ্ন করে।
 
-                        </label>
+                        </p>
+
+
+                        <div class="checkbox-group">
+
+                            <input
+                                type="checkbox"
+                                id="declaration"
+                                name="declaration"
+                                required
+                            >
+
+                            <label for="declaration">
+
+                                I confirm that I have read and accepted
+                                the above declaration and agree to
+                                follow the rules and constitution of
+                                Ghopkhali Sports Arena Club.
+
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+                        </div>
+
 
                     </div>
 
@@ -1444,8 +1863,16 @@ select:invalid {
                         class="submit-button"
                         id="membershipSubmitButton"
                     >
+
                         Submit Membership Application
+
                     </button>
+
+
+                    <div
+                        id="membershipSuccessMessage"
+                        class="success-message"
+                    ></div>
 
                 </div>
 
@@ -1464,7 +1891,9 @@ select:invalid {
                 href="index.html"
                 class="back-link"
             >
+
                 ← Back to Ghopkhali Sports Arena
+
             </a>
 
         </div>
@@ -1486,230 +1915,605 @@ select:invalid {
 
 </footer>
 
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
-document.addEventListener("DOMContentLoaded", () => {
 
-    const SUPABASE_URL =
-        "https://cmygmswzokyrmgdnuszq.supabase.co";
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    const SUPABASE_KEY =
-        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+        /* =================================================
+           SUPABASE
+        ================================================= */
 
-    const form =
-        document.getElementById("membershipApplicationForm");
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-    const submitButton =
-        document.getElementById("membershipSubmitButton");
 
-    if (!form) {
-        console.error(
-            "Membership application form not found."
-        );
-        return;
-    }
+        const SUPABASE_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-    form.addEventListener("submit", async (event) => {
 
-        event.preventDefault();
-
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.textContent = "Submitting...";
-        }
-
-        try {
-
-            const declaration =
-                form.querySelector(
-                    'input[type="checkbox"]'
-                );
-
-            if (
-                declaration &&
-                !declaration.checked
-            ) {
-                alert(
-                    "Please accept the declaration before submitting."
-                );
-
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.textContent =
-                        "Submit Application";
-                }
-
-                return;
-            }
-
-            const formData =
-                new FormData(form);
-
-            const applicationData = {
-
-                full_name_bn:
-                    formData.get("full_name_bn")?.trim() || null,
-
-                full_name_en:
-                    formData.get("full_name_en")?.trim() || null,
-
-                father_name:
-                    formData.get("father_name")?.trim() || null,
-
-                mother_name:
-                    formData.get("mother_name")?.trim() || null,
-
-                date_of_birth:
-                    formData.get("date_of_birth") || null,
-
-                blood_group:
-                    formData.get("blood_group")?.trim() || null,
-
-                profession:
-                    formData.get("profession")?.trim() || null,
-
-                nid_birth_registration:
-                    formData.get("nid_birth_registration")?.trim() || null,
-
-                mobile_number:
-                    formData.get("mobile_number")?.trim() || null,
-
-                alternative_mobile_number:
-                    formData.get("alternative_mobile_number")?.trim() || null,
-
-                email:
-                    formData.get("email")?.trim() || null,
-
-                current_address:
-                    formData.get("current_address")?.trim() || null,
-
-                permanent_address:
-                    formData.get("permanent_address")?.trim() || null,
-
-                sports:
-                    formData.get("sports")?.trim() || null,
-
-                other_sports:
-                    formData.get("other_sports")?.trim() || null,
-
-                message:
-                    formData.get("message")?.trim() || null,
-
-                status: "pending"
-
-            };
-
-            /*
-             * Basic validation
-             */
-
-            if (!applicationData.full_name_bn) {
-                throw new Error(
-                    "Please enter your full name."
-                );
-            }
-
-            if (!applicationData.mobile_number) {
-                throw new Error(
-                    "Please enter your mobile number."
-                );
-            }
-
-            if (!applicationData.current_address) {
-                throw new Error(
-                    "Please enter your current address."
-                );
-            }
-
-            /*
-             * Submit to Supabase
-             */
-
-            const {
-                data,
-                error
-            } = await supabaseClient
-                .from("membership_applications")
-                .insert([applicationData])
-                .select()
-                .single();
-
-            if (error) {
-                console.error(
-                    "Supabase error:",
-                    error
-                );
-
-                throw new Error(
-                    error.message ||
-                    "Failed to submit application."
-                );
-            }
-
-            console.log(
-                "Membership application submitted:",
-                data
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
             );
 
-            /*
-             * Success
-             */
 
-            alert(
-                "Your membership application has been submitted successfully."
+
+        /* =================================================
+           ELEMENTS
+        ================================================= */
+
+        const form =
+            document.getElementById(
+                "membershipApplicationForm"
             );
 
-            form.reset();
 
-            /*
-             * Optional success message
-             */
+        const submitButton =
+            document.getElementById(
+                "membershipSubmitButton"
+            );
 
-            const successMessage =
-                document.getElementById(
-                    "membershipSuccessMessage"
-                );
 
-            if (successMessage) {
-                successMessage.style.display = "block";
+        const photoInput =
+            document.getElementById(
+                "memberPhoto"
+            );
 
-                successMessage.textContent =
-                    "Application submitted successfully. Your application is now pending review.";
-            }
 
-        } catch (error) {
+        const photoPreviewImage =
+            document.getElementById(
+                "photoPreviewImage"
+            );
+
+
+        const photoPlaceholder =
+            document.getElementById(
+                "photoPlaceholder"
+            );
+
+
+        const successMessage =
+            document.getElementById(
+                "membershipSuccessMessage"
+            );
+
+
+
+        if (!form) {
 
             console.error(
-                "Membership submission error:",
-                error
+                "Membership application form not found."
             );
 
-            alert(
-                error.message ||
-                "Something went wrong. Please try again."
-            );
-
-        } finally {
-
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.textContent =
-                    "Submit Application";
-            }
+            return;
 
         }
 
-    });
 
-});
+
+        /* =================================================
+           PHOTO PREVIEW
+        ================================================= */
+
+        if (photoInput) {
+
+            photoInput.addEventListener(
+                "change",
+                () => {
+
+                    const file =
+                        photoInput.files?.[0];
+
+
+                    if (!file) {
+
+                        photoPreviewImage.style.display =
+                            "none";
+
+                        photoPlaceholder.style.display =
+                            "block";
+
+                        return;
+
+                    }
+
+
+                    if (file.size > 2 * 1024 * 1024) {
+
+                        alert(
+                            "Photo size must be 2 MB or less."
+                        );
+
+                        photoInput.value = "";
+
+                        photoPreviewImage.style.display =
+                            "none";
+
+                        photoPlaceholder.style.display =
+                            "block";
+
+                        return;
+
+                    }
+
+
+                    const reader =
+                        new FileReader();
+
+
+                    reader.onload =
+                        event => {
+
+                            photoPreviewImage.src =
+                                event.target.result;
+
+                            photoPreviewImage.style.display =
+                                "block";
+
+                            photoPlaceholder.style.display =
+                                "none";
+
+                        };
+
+
+                    reader.readAsDataURL(file);
+
+                }
+            );
+
+        }
+
+
+
+        /* =================================================
+           FORM SUBMIT
+        ================================================= */
+
+        form.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                /* =========================================
+                   BUTTON
+                ========================================= */
+
+                if (submitButton) {
+
+                    submitButton.disabled =
+                        true;
+
+                    submitButton.textContent =
+                        "Submitting...";
+
+                }
+
+
+
+                try {
+
+
+                    /* =====================================
+                       DECLARATION
+                    ===================================== */
+
+                    const declaration =
+                        document.getElementById(
+                            "declaration"
+                        );
+
+
+                    if (
+                        !declaration ||
+                        !declaration.checked
+                    ) {
+
+                        throw new Error(
+                            "Please accept the declaration before submitting."
+                        );
+
+                    }
+
+
+
+                    /* =====================================
+                       SPORTS
+                    ===================================== */
+
+                    const selectedSports =
+                        Array.from(
+                            form.querySelectorAll(
+                                'input[name="sports"]:checked'
+                            )
+                        )
+                        .map(
+                            checkbox =>
+                                checkbox.value
+                        );
+
+
+                    if (
+                        selectedSports.length === 0
+                    ) {
+
+                        throw new Error(
+                            "Please select at least one sport."
+                        );
+
+                    }
+
+
+
+                    /* =====================================
+                       FORM DATA
+                    ===================================== */
+
+                    const formData =
+                        new FormData(form);
+
+
+
+                    /* =====================================
+                       APPLICATION DATA
+                    ===================================== */
+
+                    const applicationData = {
+
+                        full_name_bn:
+                            formData
+                                .get("full_name_bn")
+                                ?.trim() || null,
+
+
+                        full_name_en:
+                            formData
+                                .get("full_name_en")
+                                ?.trim() || null,
+
+
+                        father_name:
+                            formData
+                                .get("father_name")
+                                ?.trim() || null,
+
+
+                        mother_name:
+                            formData
+                                .get("mother_name")
+                                ?.trim() || null,
+
+
+                        date_of_birth:
+                            formData.get(
+                                "date_of_birth"
+                            ) || null,
+
+
+                        blood_group:
+                            formData
+                                .get("blood_group")
+                                ?.trim() || null,
+
+
+                        profession:
+                            formData
+                                .get("profession")
+                                ?.trim() || null,
+
+
+                        nid_birth_registration:
+                            formData
+                                .get(
+                                    "nid_birth_registration"
+                                )
+                                ?.trim() || null,
+
+
+                        mobile_number:
+                            formData
+                                .get("mobile_number")
+                                ?.trim() || null,
+
+
+                        alternative_mobile_number:
+                            formData
+                                .get(
+                                    "alternative_mobile_number"
+                                )
+                                ?.trim() || null,
+
+
+                        email:
+                            formData
+                                .get("email")
+                                ?.trim() || null,
+
+
+                        current_address:
+                            formData
+                                .get("current_address")
+                                ?.trim() || null,
+
+
+                        permanent_address:
+                            formData
+                                .get("permanent_address")
+                                ?.trim() || null,
+
+
+                        sports:
+                            selectedSports.join(", "),
+
+
+                        other_sports:
+                            formData
+                                .get("other_sports")
+                                ?.trim() || null,
+
+
+                        sports_skill:
+                            formData
+                                .get("sports_skill")
+                                ?.trim() || null,
+
+
+                        previous_club_experience:
+                            formData
+                                .get(
+                                    "previous_club_experience"
+                                )
+                                ?.trim() || null,
+
+
+                        emergency_contact_name:
+                            formData
+                                .get(
+                                    "emergency_contact_name"
+                                )
+                                ?.trim() || null,
+
+
+                        emergency_contact_relation:
+                            formData
+                                .get(
+                                    "emergency_contact_relation"
+                                )
+                                ?.trim() || null,
+
+
+                        emergency_contact_mobile:
+                            formData
+                                .get(
+                                    "emergency_contact_mobile"
+                                )
+                                ?.trim() || null,
+
+
+                        status:
+                            "pending"
+
+                    };
+
+
+
+                    /* =====================================
+                       BASIC VALIDATION
+                    ===================================== */
+
+                    if (
+                        !applicationData.full_name_bn
+                    ) {
+
+                        throw new Error(
+                            "Please enter your full name in Bangla."
+                        );
+
+                    }
+
+
+                    if (
+                        !applicationData.full_name_en
+                    ) {
+
+                        throw new Error(
+                            "Please enter your full name in English."
+                        );
+
+                    }
+
+
+                    if (
+                        !applicationData.mobile_number
+                    ) {
+
+                        throw new Error(
+                            "Please enter your mobile number."
+                        );
+
+                    }
+
+
+                    if (
+                        !applicationData.current_address
+                    ) {
+
+                        throw new Error(
+                            "Please enter your current address."
+                        );
+
+                    }
+
+
+                    if (
+                        !applicationData.permanent_address
+                    ) {
+
+                        throw new Error(
+                            "Please enter your permanent address."
+                        );
+
+                    }
+
+
+                    if (
+                        !applicationData.emergency_contact_name ||
+                        !applicationData.emergency_contact_relation ||
+                        !applicationData.emergency_contact_mobile
+                    ) {
+
+                        throw new Error(
+                            "Please complete the emergency contact information."
+                        );
+
+                    }
+
+
+
+                    /* =====================================
+                       INSERT
+                    ===================================== */
+
+                    const {
+                        data,
+                        error
+                    } = await supabaseClient
+
+                        .from(
+                            "membership_applications"
+                        )
+
+                        .insert([
+                            applicationData
+                        ])
+
+                        .select()
+
+                        .single();
+
+
+
+                    if (error) {
+
+                        console.error(
+                            "Supabase error:",
+                            error
+                        );
+
+                        throw new Error(
+                            error.message ||
+                            "Failed to submit application."
+                        );
+
+                    }
+
+
+
+                    console.log(
+                        "Membership application submitted:",
+                        data
+                    );
+
+
+
+                    /* =====================================
+                       SUCCESS
+                    ===================================== */
+
+                    if (successMessage) {
+
+                        successMessage.style.display =
+                            "block";
+
+                        successMessage.textContent =
+                            "Application submitted successfully. Your application is now pending review.";
+
+                    }
+
+
+                    alert(
+                        "Your membership application has been submitted successfully."
+                    );
+
+
+                    form.reset();
+
+
+                    /* Reset photo preview */
+
+                    if (photoPreviewImage) {
+
+                        photoPreviewImage.style.display =
+                            "none";
+
+                        photoPreviewImage.src =
+                            "";
+
+                    }
+
+
+                    if (photoPlaceholder) {
+
+                        photoPlaceholder.style.display =
+                            "block";
+
+                    }
+
+
+
+                } catch (error) {
+
+
+                    console.error(
+                        "Membership submission error:",
+                        error
+                    );
+
+
+                    alert(
+                        error?.message ||
+                        "Something went wrong. Please try again."
+                    );
+
+
+                } finally {
+
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            false;
+
+                        submitButton.textContent =
+                            "Submit Membership Application";
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+);
+
 </script>
+
 
 </body>
 
