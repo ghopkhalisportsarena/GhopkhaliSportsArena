@@ -208,142 +208,121 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
+/* =====================================================
+   LOGIN
+===================================================== */
 
-    /* =====================================================
-       LOGIN
-    ===================================================== */
+loginForm?.addEventListener(
+    "submit",
+    async event => {
 
-    loginForm?.addEventListener(
-        "submit",
-        async event => {
+        event.preventDefault();
 
-            event.preventDefault();
+        setLoginError("");
 
-            setLoginError("");
+        const email =
+            emailInput?.value.trim() || "";
 
-            const email =
-                emailInput
-                    ?.value
-                    .trim() || "";
+        const password =
+            passwordInput?.value || "";
 
-            const password =
-                passwordInput
-                    ?.value || "";
+        if (!email || !password) {
 
+            setLoginError(
+                "Please enter your email and password."
+            );
 
-            if (!email || !password) {
+            return;
+        }
 
-                setLoginError(
-                    "Please enter your email and password."
-                );
+        if (loginButton) {
+            loginButton.disabled = true;
+        }
 
-                return;
+        showLoading(true);
 
+        try {
+
+            console.log("Starting login...");
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+            console.log("Login response:", data);
+            console.log("Login error:", error);
+
+            if (error) {
+                throw error;
             }
 
+            if (!data || !data.session) {
+                throw new Error(
+                    "Login successful but no session was created."
+                );
+            }
+
+            console.log(
+                "Login successful. Showing dashboard..."
+            );
+
+            showDashboard();
+
+        } catch (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+            setLoginError(
+                error.message ||
+                "Invalid email or password."
+            );
+
+        } finally {
+
+            showLoading(false);
 
             if (loginButton) {
-                loginButton.disabled = true;
-            }
-
-            showLoading(true);
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabaseClient
-                        .auth
-                        .signInWithPassword({
-                            email,
-                            password
-                        });
-               
-console.log("LOGIN DATA:", data);
-console.log("LOGIN ERROR:", error);
-
-                if (error) {
-                    throw error;
-                }
-
-
-                if (!data?.session) {
-
-                    throw new Error(
-                        "Login failed. No active session."
-                    );
-
-                }
-
-
-                showDashboard();
-
-
-            } catch (error) {
-
-                console.error(
-                    "Login error:",
-                    error
-                );
-
-                setLoginError(
-                    error.message ||
-                    "Invalid email or password."
-                );
-
-            } finally {
-
-                showLoading(false);
-
-                if (loginButton) {
-                    loginButton.disabled = false;
-                }
-
+                loginButton.disabled = false;
             }
 
         }
-    );
+
+    }
+);
 
 
- /* =====================================================
+/* =====================================================
    AUTH STATE CHANGE
 ===================================================== */
 
-supabaseClient
-    .auth
-    .onAuthStateChange(
-        async (event, session) => {
+supabaseClient.auth.onAuthStateChange(
+    (event, session) => {
 
-            console.log(
-                "Auth state:",
-                event,
-                session
-            );
+        console.log(
+            "AUTH EVENT:",
+            event
+        );
 
-            if (session) {
+        if (session) {
 
-                showDashboard();
+            showDashboard();
 
-                // Only initialize after login/session restore
-                if (
-                    event === "SIGNED_IN" ||
-                    event === "INITIAL_SESSION"
-                ) {
-                    await initializeDashboard();
-                }
+        } else {
 
-            } else {
-
-                showLogin();
-
-            }
+            showLogin();
 
         }
-    );
 
+    }
+);
 
     /* =====================================================
        LOGOUT
