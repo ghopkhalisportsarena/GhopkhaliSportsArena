@@ -6230,3 +6230,189 @@ footer > p {
     }
 
 }
+
+/* =====================================================
+   GSA — GLOBAL CENTERED LAYOUT FIX
+   MOBILE + DESKTOP
+===================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    min-width: 0;
+}
+
+/* Main page containers */
+main,
+header,
+footer,
+section,
+.section,
+.container,
+.hero,
+.hero-content,
+.hero-card,
+.section-inner {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Center common content wrappers */
+.section,
+.section-inner,
+.hero-content,
+.hero-card,
+.two-column,
+.committee-feature-wrap,
+.gallery-section,
+.leadership-section,
+.contact-section {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Prevent content from touching screen edges */
+.section,
+.committee-feature-wrap,
+.gallery-section,
+.leadership-section,
+.contact-section {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Cards must never push layout sideways */
+.activity-card,
+.fixture-card,
+.tournament-card,
+.gallery-item,
+.form-card,
+.leader-card,
+.social-card,
+.committee-feature-card {
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* Images */
+img,
+video,
+svg {
+    max-width: 100%;
+}
+
+/* Text wrapping */
+h1,
+h2,
+h3,
+h4,
+p,
+span,
+a {
+    overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   COMMITTEE FEATURE — ALWAYS CENTERED
+===================================================== */
+
+.committee-feature-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.committee-feature-card {
+    width: min(100%, 1000px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* =====================================================
+   TWO COLUMN — DESKTOP
+===================================================== */
+
+.two-column {
+    width: min(100%, 1200px);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .section,
+    .committee-feature-wrap,
+    .gallery-section,
+    .leadership-section,
+    .contact-section {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .two-column {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .committee-feature-card {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+}
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .section,
+    .committee-feature-wrap,
+    .gallery-section,
+    .leadership-section,
+    .contact-section {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+}
+
+/* =====================================================
+   PREVENT HORIZONTAL OVERFLOW
+===================================================== */
+
+.section *,
+.committee-feature-wrap *,
+.hero *,
+.two-column * {
+    max-width: 100%;
+}
+
+table {
+    width: 100%;
+    max-width: 100%;
+}
+
+iframe {
+    max-width: 100%;
+}
