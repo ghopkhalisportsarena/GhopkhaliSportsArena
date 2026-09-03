@@ -6272,3 +6272,476 @@ iframe {
     box-sizing: border-box;
     max-width: 100%;
 }
+
+/* =====================================================
+   GSA — PREMIUM COMPONENT FIXES
+   ONLY: COMMITTEE / FRIENDLY MATCH / LEADERSHIP
+===================================================== */
+
+
+/* =====================================================
+   01. COMMITTEE — PREMIUM ANIMATED FEATURE CARD
+===================================================== */
+
+.committee-feature-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px auto 0;
+}
+
+.committee-feature-card {
+    position: relative;
+    width: min(100%, 760px);
+    min-height: 105px;
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    padding: 18px 22px;
+    margin: 0 auto;
+
+    color: inherit;
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.96),
+            rgba(248,249,251,.86)
+        );
+
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 24px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.07),
+        inset 0 1px 0 rgba(255,255,255,.9);
+
+    overflow: hidden;
+
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .45s ease,
+        border-color .45s ease;
+}
+
+
+/* Animated light sweep */
+
+.committee-feature-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+
+    width: 70%;
+    height: 100%;
+
+    background: linear-gradient(
+        100deg,
+        transparent,
+        rgba(255,255,255,.65),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+
+    animation: gsaCommitteeShine 5s ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+
+@keyframes gsaCommitteeShine {
+
+    0% {
+        left: -120%;
+    }
+
+    45%,
+    100% {
+        left: 140%;
+    }
+}
+
+
+/* Hover */
+
+.committee-feature-card:hover {
+    transform: translateY(-6px) scale(1.01);
+
+    border-color: rgba(0,113,227,.20);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.11),
+        0 0 0 1px rgba(0,113,227,.04);
+}
+
+
+/* Premium icon */
+
+.committee-feature-icon {
+    position: relative;
+
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 18px;
+
+    color: #0071e3;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eef6ff,
+            #ffffff
+        );
+
+    border: 1px solid rgba(0,113,227,.12);
+
+    box-shadow:
+        0 8px 22px rgba(0,113,227,.10);
+
+    animation: gsaCommitteeFloat 3.5s ease-in-out infinite;
+}
+
+
+.committee-feature-icon::after {
+    content: "";
+
+    position: absolute;
+    inset: -5px;
+
+    border-radius: 22px;
+
+    border: 1px solid rgba(0,113,227,.10);
+
+    animation: gsaCommitteePulse 3s ease-out infinite;
+}
+
+
+.committee-feature-icon svg {
+    width: 29px;
+    height: 29px;
+
+    position: relative;
+    z-index: 2;
+}
+
+
+@keyframes gsaCommitteeFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+
+@keyframes gsaCommitteePulse {
+
+    0% {
+        transform: scale(.92);
+        opacity: .7;
+    }
+
+    70%,
+    100% {
+        transform: scale(1.12);
+        opacity: 0;
+    }
+}
+
+
+/* Committee title */
+
+.committee-feature-content {
+    position: relative;
+    z-index: 2;
+
+    flex: 1;
+    min-width: 0;
+}
+
+
+.committee-feature-content h2 {
+    margin: 0;
+
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.2;
+
+    letter-spacing: -.02em;
+}
+
+
+/* Hide unnecessary text */
+
+.committee-feature-content p,
+.committee-feature-label {
+    display: none;
+}
+
+
+/* Arrow */
+
+.committee-feature-arrow {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    white-space: nowrap;
+}
+
+
+.committee-feature-arrow span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6e6e73;
+}
+
+
+.committee-feature-arrow strong {
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    color: #0071e3;
+    background: #eef6ff;
+
+    font-size: 18px;
+
+    transition:
+        transform .35s ease,
+        background .35s ease;
+}
+
+
+.committee-feature-card:hover
+.committee-feature-arrow strong {
+    transform: translate(3px,-3px);
+    background: #e3f0ff;
+}
+
+
+/* =====================================================
+   02. FRIENDLY MATCH — PREMIUM CARD
+===================================================== */
+
+/*
+   This styles the existing Friendly Match card.
+   It does NOT change its position in your HTML.
+*/
+
+.friendly-match-card,
+.service-card.friendly-match,
+[data-service="friendly-match"] {
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform .4s cubic-bezier(.2,.8,.2,1),
+        box-shadow .4s ease;
+}
+
+
+.friendly-match-card:hover,
+.service-card.friendly-match:hover,
+[data-service="friendly-match"]:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.10);
+}
+
+
+/* If Friendly Match is inside tournament/fixture area */
+
+.tournament-section .friendly-match-card,
+.fixtures-section .friendly-match-card {
+    margin-top: 24px;
+}
+
+
+/* =====================================================
+   03. CLUB LEADERSHIP — IMAGE SIZE FIX
+===================================================== */
+
+.leader-card {
+    overflow: hidden;
+}
+
+
+/* Leadership image container */
+
+.leader-card img {
+    display: block;
+
+    width: 100%;
+    height: 260px;
+
+    object-fit: cover;
+    object-position: center top;
+
+    border-radius: 18px;
+
+    transition:
+        transform .6s cubic-bezier(.2,.8,.2,1);
+}
+
+
+/* Premium subtle image animation */
+
+.leader-card:hover img {
+    transform: scale(1.035);
+}
+
+
+/* President / Advisor cards */
+
+.leader-card .leader-image,
+.leader-card .leader-photo {
+    width: 100%;
+    height: 260px;
+
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+
+.leader-card .leader-image img,
+.leader-card .leader-photo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center top;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    /* Committee */
+
+    .committee-feature-wrap {
+        margin-top: 22px;
+    }
+
+    .committee-feature-card {
+        width: 100%;
+        min-height: 82px;
+
+        padding: 13px 15px;
+        gap: 13px;
+
+        border-radius: 20px;
+    }
+
+    .committee-feature-icon {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+
+        border-radius: 14px;
+    }
+
+    .committee-feature-icon svg {
+        width: 23px;
+        height: 23px;
+    }
+
+    .committee-feature-content h2 {
+        font-size: 18px;
+    }
+
+    .committee-feature-arrow span {
+        display: none;
+    }
+
+    .committee-feature-arrow strong {
+        width: 31px;
+        height: 31px;
+
+        font-size: 16px;
+    }
+
+
+    /* Leadership */
+
+    .leader-card img,
+    .leader-card .leader-image,
+    .leader-card .leader-photo {
+        height: 220px;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 400px) {
+
+    .committee-feature-card {
+        padding: 12px 13px;
+        gap: 11px;
+    }
+
+    .committee-feature-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+    }
+
+    .committee-feature-content h2 {
+        font-size: 17px;
+    }
+
+    .leader-card img,
+    .leader-card .leader-image,
+    .leader-card .leader-photo {
+        height: 200px;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .committee-feature-card::before,
+    .committee-feature-icon,
+    .committee-feature-icon::after {
+        animation: none;
+    }
+
+    .committee-feature-card,
+    .leader-card img {
+        transition: none;
+    }
+}
