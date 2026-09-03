@@ -2240,8 +2240,6 @@ src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
      MAIN JAVASCRIPT
 ================================================== -->
 
-<script src="script.js"></script>
-
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -2257,27 +2255,65 @@ document.addEventListener("DOMContentLoaded", async () => {
             SUPABASE_ANON_KEY
         );
 
+
     const noticesContainer =
         document.getElementById("home-notices");
 
     const ticker =
         document.getElementById("homeNoticeTicker");
 
-    if (!noticesContainer) return;
+
+    if (!noticesContainer) {
+        return;
+    }
+
+
+    /* =========================================
+       HTML ESCAPE
+    ========================================= */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =========================================
+       LOAD NOTICES
+    ========================================= */
 
     try {
 
-        const { data, error } =
-            await supabaseClient
-                .from("notices")
-                .select("*")
-                .eq("published", true)
-                .order("created_at", {
-                    ascending: false
-                })
-                .limit(6);
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("notices")
+
+            .select("*")
+
+            .eq("published", true)
+
+            .order("created_at", {
+                ascending: false
+            })
+
+            .limit(6);
+
+
+        /* =====================================
+           ERROR
+        ===================================== */
 
         if (error) {
+
             console.error(
                 "Notice loading error:",
                 error
@@ -2285,6 +2321,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             noticesContainer.innerHTML = `
                 <article class="update-card">
+
                     <div class="update-date">
                         NOTICE
                     </div>
@@ -2300,11 +2337,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <p>
                         Please try again later.
                     </p>
+
                 </article>
             `;
 
             return;
         }
+
+
+        /* =====================================
+           NO NOTICES
+        ===================================== */
 
         if (!data || data.length === 0) {
 
@@ -2331,26 +2374,32 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </article>
             `;
 
+
             if (ticker) {
+
                 ticker.innerHTML = `
                     <span class="notice-ticker-item">
                         No important notices at this time.
                     </span>
                 `;
+
             }
 
             return;
         }
+
 
         /* =========================================
            NOTICE CARDS
         ========================================= */
 
         noticesContainer.innerHTML =
+
             data.map(notice => {
 
                 const date =
                     notice.created_at
+
                         ? new Date(
                             notice.created_at
                         ).toLocaleDateString(
@@ -2361,17 +2410,23 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 year: "numeric"
                             }
                         )
+
                         : "";
+
 
                 const title =
                     escapeHTML(
-                        notice.title || "GSA Notice"
+                        notice.title ||
+                        "GSA Notice"
                     );
+
 
                 const content =
                     escapeHTML(
-                        notice.content || ""
+                        notice.content ||
+                        ""
                     );
+
 
                 const category =
                     escapeHTML(
@@ -2379,26 +2434,70 @@ document.addEventListener("DOMContentLoaded", async () => {
                         "NOTICE"
                     );
 
+
+                const noticeId =
+                    encodeURIComponent(
+                        notice.id
+                    );
+
+
+                /* =================================
+                   IMPORTANT BADGE
+                ================================= */
+
+                const importantBadge =
+                    notice.important === true
+
+                        ? `
+                            <span
+                                class="notice-important-badge"
+                            >
+                                IMPORTANT
+                            </span>
+                          `
+
+                        : "";
+
+
                 return `
-                    <article class="update-card">
+
+                    <article
+                        class="update-card"
+                        onclick="window.location.href='notice.html?id=${noticeId}'"
+                        style="cursor:pointer;"
+                    >
 
                         <div class="update-date">
                             ${date}
                         </div>
 
+
                         <div class="update-tag">
                             ${category}
                         </div>
+
+
+                        ${importantBadge}
+
 
                         <h3>
                             ${title}
                         </h3>
 
+
                         <p>
                             ${content}
                         </p>
 
+
+                        <div
+                            class="notice-read-more"
+                        >
+                            Read full notice →
+                        </div>
+
                     </article>
+
                 `;
 
             }).join("");
@@ -2416,27 +2515,50 @@ document.addEventListener("DOMContentLoaded", async () => {
                         notice.important === true
                 );
 
+
             const tickerData =
                 important.length
                     ? important
                     : data;
 
+
             ticker.innerHTML =
-                tickerData
-                    .map(
-                        notice => `
-                            <span
-                                class="notice-ticker-item"
-                            >
-                                ${escapeHTML(
-                                    notice.title ||
-                                    "GSA Notice"
-                                )}
-                            </span>
-                        `
-                    )
-                    .join("");
+
+                tickerData.map(notice => {
+
+                    const noticeId =
+                        encodeURIComponent(
+                            notice.id
+                        );
+
+
+                    return `
+
+                        <span
+                            class="notice-ticker-item"
+                            onclick="window.location.href='notice.html?id=${noticeId}'"
+                            style="cursor:pointer;"
+                        >
+
+                            ${escapeHTML(
+                                notice.title ||
+                                "GSA Notice"
+                            )}
+
+                        </span>
+
+                    `;
+
+                }).join("");
+
         }
+
+
+        console.log(
+            "Published notices loaded:",
+            data.length
+        );
+
 
     } catch (error) {
 
@@ -2444,22 +2566,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             "Unexpected notice error:",
             error
         );
-
-    }
-
-
-    /* =============================================
-       HTML ESCAPE
-    ============================================= */
-
-    function escapeHTML(value) {
-
-        return String(value ?? "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
 
     }
 
