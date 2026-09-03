@@ -3785,7 +3785,8 @@ document.addEventListener(
 );
 
 /* =====================================================
-   MEMBERSHIP APPLICATION PDF — STABLE HD VERSION
+   MEMBERSHIP APPLICATION PDF
+   LOGO + MEMBER PHOTO
 ===================================================== */
 
 async function generateMembershipApplicationPDF(application) {
@@ -3794,54 +3795,161 @@ async function generateMembershipApplicationPDF(application) {
         throw new Error("Application data not found.");
     }
 
-    if (
-        typeof window.jspdf === "undefined" ||
-        typeof window.html2canvas === "undefined"
-    ) {
-        throw new Error(
-            "PDF libraries are not loaded."
-        );
-    }
 
-    const { jsPDF } = window.jspdf;
+    /* =================================================
+       IMAGE LOADER
+    ================================================= */
+
+    function loadImage(src) {
+
+        return new Promise((resolve) => {
+
+            if (!src) {
+                resolve(null);
+                return;
+            }
+
+            const img = new Image();
+
+            img.crossOrigin = "anonymous";
+
+            img.onload = () => {
+                resolve(img);
+            };
+
+            img.onerror = () => {
+
+                console.warn(
+                    "Image failed to load:",
+                    src
+                );
+
+                resolve(null);
+            };
+
+
+            const separator =
+                src.includes("?")
+                    ? "&"
+                    : "?";
+
+
+            img.src =
+                src +
+                separator +
+                "pdf_image=" +
+                Date.now();
+
+        });
+
+    }
 
 
     /* =================================================
-       HELPERS
+       GSA LOGO
+       gsa.png is in repository ROOT
     ================================================= */
 
-    const safe = (value) => {
+    const logoURL =
+        `${window.location.origin}/gsa.png`;
+
+
+    const logoImage =
+        await loadImage(
+            logoURL
+        );
+
+
+    /* =================================================
+       MEMBER PHOTO
+       Supabase Storage:
+       membership-photos
+    ================================================= */
+
+    let memberPhoto = null;
+
+
+    if (
+        application.photo_url &&
+        String(
+            application.photo_url
+        ).trim() !== ""
+    ) {
+
+        memberPhoto =
+            await loadImage(
+                String(
+                    application.photo_url
+                ).trim()
+            );
+
+    }
+
+
+    console.log(
+        "GSA LOGO:",
+        logoImage
+            ? "LOADED"
+            : "NOT LOADED"
+    );
+
+
+    console.log(
+        "MEMBER PHOTO:",
+        memberPhoto
+            ? "LOADED"
+            : "NOT AVAILABLE"
+    );
+
+
+    /* =================================================
+       SAFE VALUE
+    ================================================= */
+
+    const value = (v) => {
 
         if (
-            value === null ||
-            value === undefined ||
-            value === ""
+            v === null ||
+            v === undefined ||
+            String(v).trim() === ""
         ) {
+
             return "—";
+
         }
 
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+        return String(v);
+
     };
 
 
-    const formatDate = (value) => {
+    /* =================================================
+       DATE FORMAT
+    ================================================= */
 
-        if (!value) {
+    const formatDate = (date) => {
+
+        if (!date) {
             return "—";
         }
 
-        const date = new Date(value);
 
-        if (isNaN(date.getTime())) {
-            return safe(value);
+        const d =
+            new Date(date);
+
+
+        if (
+            Number.isNaN(
+                d.getTime()
+            )
+        ) {
+
+            return value(date);
+
         }
 
-        return date.toLocaleDateString(
+
+        return d.toLocaleDateString(
             "en-GB",
             {
                 day: "2-digit",
@@ -3849,152 +3957,110 @@ async function generateMembershipApplicationPDF(application) {
                 year: "numeric"
             }
         );
+
     };
 
 
     /* =================================================
-       IMAGE TO DATA URL
-       Fixes logo/photo not appearing in PDF
+       MEMBER PHOTO HTML
     ================================================= */
 
-    const imageToDataURL = async (src) => {
+    let photoHTML = `
 
-        if (!src) {
-            return null;
-        }
+        <div class="photo-box">
 
-        try {
+            <div class="photo-placeholder">
+                Applicant Photo
+            </div>
 
-            const response =
-                await fetch(
-                    src,
-                    {
-                        mode: "cors",
-                        cache: "no-cache"
-                    }
-                );
+        </div>
 
-            if (!response.ok) {
-                throw new Error(
-                    "Image request failed: " +
-                    response.status
-                );
-            }
-
-            const blob =
-                await response.blob();
-
-            return await new Promise(
-                (resolve, reject) => {
-
-                    const reader =
-                        new FileReader();
-
-                    reader.onload =
-                        () => resolve(
-                            reader.result
-                        );
-
-                    reader.onerror =
-                        () => reject(
-                            new Error(
-                                "Image conversion failed."
-                            )
-                        );
-
-                    reader.readAsDataURL(blob);
-                }
-            );
-
-        } catch (error) {
-
-            console.warn(
-                "Image could not be loaded:",
-                src,
-                error
-            );
-
-            return null;
-        }
-    };
+    `;
 
 
-    /* =================================================
-       LOAD LOGO
-    ================================================= */
+    if (memberPhoto) {
 
-    const logoData =
-        await imageToDataURL(
-            new URL(
-                "gsa.png",
-                window.location.href
-            ).href
-        );
+        photoHTML = `
 
+            <div class="photo-box photo-loaded">
 
-    /* =================================================
-       LOAD MEMBER PHOTO
-    ================================================= */
+                <img
+                    src="${memberPhoto.src}"
+                    crossorigin="anonymous"
+                    alt="Applicant Photo"
+                >
 
-    let photoData = null;
+            </div>
 
-    if (application.photo_url) {
+        `;
 
-        photoData =
-            await imageToDataURL(
-                application.photo_url
-            );
     }
 
 
     /* =================================================
-       DATA
+       LOGO HTML
     ================================================= */
 
-    const applicationId =
-        application.id
-            ? String(application.id)
-            : "N/A";
+    let logoHTML = `
 
-    const status =
-        application.status ||
-        "pending";
+        <div class="logo-placeholder">
+            GSA
+        </div>
 
-    const applicantName =
-        application.full_name_en ||
-        application.full_name_bn ||
-        "Applicant";
+    `;
 
-    const cleanName =
-        String(applicantName)
-            .replace(
-                /[^a-zA-Z0-9\u0980-\u09FF]+/g,
-                "_"
-            )
-            .replace(
-                /^_+|_+$/g,
-                ""
-            );
+
+    if (logoImage) {
+
+        logoHTML = `
+
+            <img
+                class="gsa-logo"
+                src="${logoImage.src}"
+                crossorigin="anonymous"
+                alt="GSA Logo"
+            >
+
+        `;
+
+    }
 
 
     /* =================================================
-       PDF HTML
+       CREATE PDF CONTAINER
     ================================================= */
 
-    const page =
-        document.createElement("div");
+    const wrapper =
+        document.createElement(
+            "div"
+        );
 
 
-    page.style.position = "fixed";
-    page.style.left = "-30000px";
-    page.style.top = "0";
-    page.style.width = "794px";
-    page.style.height = "1123px";
-    page.style.background = "#ffffff";
-    page.style.zIndex = "999999";
+    wrapper.style.position =
+        "fixed";
 
 
-    page.innerHTML = `
+    wrapper.style.left =
+        "-100000px";
+
+
+    wrapper.style.top =
+        "0";
+
+
+    wrapper.style.width =
+        "794px";
+
+
+    wrapper.style.background =
+        "#ffffff";
+
+
+    wrapper.style.zIndex =
+        "-1";
+
+
+    wrapper.innerHTML = `
 
 <style>
 
@@ -4002,613 +4068,759 @@ async function generateMembershipApplicationPDF(application) {
     box-sizing: border-box;
 }
 
+
 .pdf-page {
 
     width: 794px;
-    height: 1123px;
 
-    background: #ffffff;
+    min-height: 1123px;
 
-    color: #111827;
+    padding:
+        42px
+        42px
+        30px;
+
+    background:
+        #ffffff;
+
+    color:
+        #172033;
 
     font-family:
         Arial,
         "Noto Sans Bengali",
+        "Noto Sans",
         sans-serif;
 
-    padding:
-        34px 42px 30px 42px;
+    font-size:
+        11px;
 
-    position: relative;
+    line-height:
+        1.4;
 
-    overflow: hidden;
 }
 
 
-/* =====================================================
-   TOP BAR
-===================================================== */
-
-.top-bar {
-
-    height: 7px;
-
-    width: 100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #007aff,
-            #5856d6,
-            #34c759
-        );
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-}
-
-
-/* =====================================================
+/* =================================================
    HEADER
-===================================================== */
+================================================= */
 
 .header {
 
-    width: 100%;
+    display:
+        flex;
 
-    height: 104px;
+    justify-content:
+        space-between;
 
-    display: flex;
+    align-items:
+        flex-start;
 
-    align-items: center;
+    padding-bottom:
+        20px;
 
     border-bottom:
         1px solid #dfe3e8;
 
-    padding-bottom: 14px;
-
-    margin-bottom: 18px;
 }
 
-.header-text {
 
-    width: calc(100% - 105px);
+.header-left {
+
+    flex:
+        1;
 
 }
+
 
 .club-title {
 
-    font-family:
-        Arial,
-        sans-serif;
+    font-size:
+        25px;
 
-    font-size: 27px;
+    font-weight:
+        800;
 
-    font-weight: 800;
+    letter-spacing:
+        -0.5px;
 
-    color: #111827;
+    margin-bottom:
+        3px;
 
-    line-height: 1.15;
-
-    margin-bottom: 6px;
 }
 
-.club-bangla {
 
-    font-family:
-        "Noto Sans Bengali",
-        Arial,
-        sans-serif;
+.club-title-bn {
 
-    font-size: 18px;
+    font-size:
+        17px;
 
-    font-weight: 700;
+    font-weight:
+        700;
 
-    color: #1f2937;
+    margin-bottom:
+        3px;
 
-    margin-bottom: 4px;
 }
+
 
 .established {
 
-    font-size: 10px;
+    font-size:
+        10px;
 
-    color: #6b7280;
+    color:
+        #697386;
 
-    font-weight: 600;
 }
 
 
-/* =====================================================
-   LOGO
-===================================================== */
+.header-right {
 
-.logo-area {
+    width:
+        90px;
 
-    width: 96px;
+    height:
+        90px;
 
-    height: 96px;
+    display:
+        flex;
 
-    display: flex;
+    align-items:
+        center;
 
-    justify-content: center;
+    justify-content:
+        center;
 
-    align-items: center;
-
-    flex-shrink: 0;
-
-    margin-left: 9px;
-}
-
-.logo {
-
-    width: 88px;
-
-    height: 88px;
-
-    object-fit: contain;
-
-    display: block;
 }
 
 
-/* =====================================================
-   TITLE
-===================================================== */
+.gsa-logo {
+
+    width:
+        82px;
+
+    height:
+        82px;
+
+    object-fit:
+        contain;
+
+}
+
+
+.logo-placeholder {
+
+    width:
+        82px;
+
+    height:
+        82px;
+
+    border:
+        1px solid #d9dde3;
+
+    border-radius:
+        50%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    color:
+        #7a8290;
+
+    font-weight:
+        700;
+
+}
+
+
+/* =================================================
+   DOCUMENT TITLE
+================================================= */
 
 .document-title {
 
-    font-family:
-        Arial,
-        sans-serif;
+    margin-top:
+        20px;
 
-    font-size: 20px;
+    margin-bottom:
+        12px;
 
-    font-weight: 800;
-
-    color: #111827;
-
-    margin-bottom: 3px;
 }
+
+
+.document-title h1 {
+
+    margin:
+        0;
+
+    font-size:
+        20px;
+
+    font-weight:
+        800;
+
+}
+
 
 .document-subtitle {
 
-    font-size: 10px;
+    color:
+        #737b89;
 
-    color: #6b7280;
+    margin-top:
+        3px;
 
-    margin-bottom: 13px;
+    font-size:
+        10px;
+
 }
 
 
-/* =====================================================
+/* =================================================
    META
-===================================================== */
+================================================= */
 
-.meta-row {
+.meta {
 
-    width: 100%;
+    display:
+        flex;
 
-    display: flex;
+    gap:
+        10px;
 
-    gap: 10px;
+    margin-bottom:
+        14px;
 
-    margin-bottom: 13px;
 }
+
 
 .meta-box {
 
-    flex: 1;
+    flex:
+        1;
 
-    min-height: 48px;
+    min-height:
+        48px;
 
     padding:
-        8px 11px;
-
-    background: #f7f9fc;
+        9px 11px;
 
     border:
-        1px solid #e2e6eb;
+        1px solid #dfe3e8;
 
-    border-radius: 9px;
+    border-radius:
+        9px;
+
+    background:
+        #f7f8fa;
+
 }
+
 
 .meta-label {
 
-    font-size: 8px;
+    font-size:
+        8px;
 
-    color: #6b7280;
+    color:
+        #727b89;
 
-    font-weight: 700;
+    font-weight:
+        700;
 
-    text-transform: uppercase;
+    text-transform:
+        uppercase;
 
-    margin-bottom: 4px;
+    margin-bottom:
+        3px;
+
 }
+
 
 .meta-value {
 
-    font-size: 10px;
+    font-size:
+        10px;
 
-    color: #111827;
+    font-weight:
+        700;
 
-    font-weight: 700;
+    word-break:
+        break-word;
+
 }
+
 
 .status {
 
-    display: inline-block;
+    display:
+        inline-block;
 
     padding:
         3px 8px;
 
-    background: #e8f5e9;
+    border-radius:
+        20px;
 
-    color: #188038;
+    background:
+        #e8f6ec;
 
-    border-radius: 20px;
+    color:
+        #228447;
 
-    font-size: 8px;
+    font-size:
+        8px;
 
-    font-weight: 800;
+    font-weight:
+        800;
 
-    text-transform: uppercase;
+    text-transform:
+        uppercase;
+
 }
 
 
-/* =====================================================
+/* =================================================
    SECTION
-===================================================== */
+================================================= */
 
 .section {
-
-    width: 100%;
 
     border:
         1px solid #dfe3e8;
 
-    border-radius: 9px;
+    border-radius:
+        10px;
 
-    margin-bottom: 11px;
+    margin-bottom:
+        11px;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
-    background: #ffffff;
+    background:
+        #ffffff;
+
 }
+
 
 .section-title {
 
-    height: 31px;
+    min-height:
+        38px;
 
-    line-height: 31px;
+    display:
+        flex;
 
-    padding-left: 12px;
+    align-items:
+        center;
 
-    background: #f6f8fb;
+    padding:
+        0 14px;
+
+    background:
+        #f6f8fb;
 
     border-bottom:
-        1px solid #e1e5ea;
+        1px solid #dfe3e8;
 
-    font-size: 10px;
+    font-weight:
+        800;
 
-    font-weight: 800;
+    font-size:
+        11px;
 
-    color: #111827;
-}
-
-.section-title:before {
-
-    content: "";
-
-    display: inline-block;
-
-    width: 4px;
-
-    height: 13px;
-
-    background: #007aff;
-
-    border-radius: 4px;
-
-    margin-right: 7px;
-
-    vertical-align: -2px;
-}
-
-.section-content {
-
-    padding: 11px 12px;
 }
 
 
-/* =====================================================
-   PERSONAL SECTION
-===================================================== */
+.section-title::before {
 
-.personal {
+    content:
+        "";
 
-    display: flex;
+    width:
+        5px;
 
-    width: 100%;
+    height:
+        16px;
+
+    border-radius:
+        4px;
+
+    background:
+        #1683e8;
+
+    margin-right:
+        10px;
+
 }
 
-.photo-container {
 
-    width: 108px;
+.section-body {
 
-    flex-shrink: 0;
+    padding:
+        13px 14px;
 
-    margin-right: 15px;
 }
 
-.member-photo {
 
-    width: 100px;
+/* =================================================
+   PERSONAL INFORMATION
+================================================= */
 
-    height: 125px;
+.personal-layout {
 
-    object-fit: cover;
+    display:
+        flex;
 
-    display: block;
+    gap:
+        18px;
+
+    align-items:
+        flex-start;
+
+}
+
+
+.photo-box {
+
+    width:
+        108px;
+
+    height:
+        145px;
+
+    flex:
+        0 0 108px;
 
     border:
-        1px solid #cfd5dc;
+        1px dashed #cbd1d9;
 
-    border-radius: 8px;
+    border-radius:
+        9px;
 
-    background: #f3f4f6;
-}
+    overflow:
+        hidden;
 
-.photo-empty {
+    background:
+        #fafbfc;
 
-    width: 100px;
+    display:
+        flex;
 
-    height: 125px;
+    align-items:
+        center;
 
-    border:
-        1px dashed #c7ced8;
+    justify-content:
+        center;
 
-    border-radius: 8px;
-
-    background: #f7f9fc;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-    color: #9ca3af;
-
-    font-size: 9px;
-
-    font-weight: 700;
 }
 
 
-/* =====================================================
+.photo-box img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
+
+    display:
+        block;
+
+}
+
+
+.photo-placeholder {
+
+    color:
+        #9aa2ad;
+
+    font-size:
+        10px;
+
+    text-align:
+        center;
+
+}
+
+
+.personal-table {
+
+    flex:
+        1;
+
+    border-collapse:
+        collapse;
+
+    table-layout:
+        fixed;
+
+    width:
+        100%;
+
+}
+
+
+.personal-table td {
+
+    padding:
+        4px 5px;
+
+    vertical-align:
+        top;
+
+}
+
+
+.label {
+
+    color:
+        #6e7785;
+
+    font-size:
+        8px;
+
+    font-weight:
+        700;
+
+    width:
+        18%;
+
+}
+
+
+.data {
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    width:
+        32%;
+
+    word-break:
+        break-word;
+
+}
+
+
+/* =================================================
    DATA TABLE
-===================================================== */
+================================================= */
 
 .data-table {
 
-    width: 100%;
+    width:
+        100%;
 
-    border-collapse: collapse;
+    border-collapse:
+        collapse;
 
-    table-layout: fixed;
+    table-layout:
+        fixed;
+
 }
+
 
 .data-table td {
 
     padding:
-        4px 7px;
+        5px 7px;
 
-    vertical-align: top;
+    vertical-align:
+        top;
 
-    border: none;
+    width:
+        50%;
+
 }
 
-.data-label {
-
-    width: 110px;
-
-    color: #6b7280;
-
-    font-size: 8px;
-
-    font-weight: 600;
-}
-
-.data-value {
-
-    color: #111827;
-
-    font-size: 9.5px;
-
-    font-weight: 700;
-
-    word-wrap: break-word;
-
-    overflow-wrap: break-word;
-
-    line-height: 1.3;
-}
-
-
-/* =====================================================
-   TWO COLUMN TABLE
-===================================================== */
-
-.two-col {
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-    table-layout: fixed;
-}
-
-.two-col td {
-
-    width: 50%;
-
-    vertical-align: top;
-
-    padding:
-        4px 8px;
-}
 
 .field-label {
 
-    font-size: 8px;
+    display:
+        block;
 
-    color: #6b7280;
+    color:
+        #727b87;
 
-    font-weight: 600;
+    font-size:
+        8px;
 
-    margin-bottom: 2px;
+    font-weight:
+        700;
+
+    margin-bottom:
+        2px;
+
 }
+
 
 .field-value {
 
-    font-size: 9.5px;
+    display:
+        block;
 
-    color: #111827;
+    font-size:
+        10px;
 
-    font-weight: 700;
+    font-weight:
+        700;
 
-    line-height: 1.3;
+    word-break:
+        break-word;
 
-    word-break: break-word;
 }
 
 
-/* =====================================================
+/* =================================================
    SPORTS
-===================================================== */
+================================================= */
 
 .sports-box {
-
-    width: 100%;
 
     padding:
         8px 10px;
 
-    background: #f0f7ff;
-
     border:
-        1px solid #d6e8ff;
+        1px solid #d9e8f6;
 
-    border-radius: 7px;
+    background:
+        #eef7ff;
 
-    color: #1e40af;
+    border-radius:
+        8px;
 
-    font-size: 9.5px;
+    font-weight:
+        700;
 
-    font-weight: 700;
+    color:
+        #285b8f;
 
-    line-height: 1.4;
+    margin-bottom:
+        8px;
+
 }
 
 
-/* =====================================================
+/* =================================================
    DECLARATION
-===================================================== */
+================================================= */
 
 .declaration {
 
     padding:
-        9px 10px;
-
-    background: #fafafa;
+        10px;
 
     border:
-        1px solid #e3e6ea;
+        1px solid #dfe3e8;
 
-    border-radius: 7px;
+    border-radius:
+        8px;
 
-    font-size: 8.5px;
+    color:
+        #596273;
 
-    color: #374151;
+    font-size:
+        9px;
 
-    line-height: 1.55;
+    line-height:
+        1.5;
+
+    margin-bottom:
+        17px;
+
 }
 
 
-/* =====================================================
-   SIGNATURE
-===================================================== */
+.signatures {
 
-.signature-row {
+    display:
+        flex;
 
-    display: flex;
+    gap:
+        22px;
 
-    gap: 20px;
-
-    margin-top: 19px;
 }
 
-.signature-box {
 
-    flex: 1;
+.signature {
 
-    text-align: center;
+    flex:
+        1;
 
-    padding-top: 20px;
+    text-align:
+        center;
+
+}
+
+
+.signature-line {
 
     border-top:
-        1px solid #9ca3af;
+        1px solid #aeb5bf;
+
+    margin-bottom:
+        7px;
+
 }
+
 
 .signature-label {
 
-    font-size: 8px;
+    color:
+        #697386;
 
-    color: #6b7280;
+    font-size:
+        8px;
 
-    font-weight: 600;
+    font-weight:
+        700;
+
 }
 
 
-/* =====================================================
+/* =================================================
    FOOTER
-===================================================== */
+================================================= */
 
 .footer {
 
-    position: absolute;
+    margin-top:
+        10px;
 
-    left: 42px;
-
-    right: 42px;
-
-    bottom: 17px;
-
-    height: 22px;
+    padding-top:
+        8px;
 
     border-top:
-        1px solid #e1e5ea;
+        1px solid #dfe3e8;
 
-    padding-top: 6px;
+    display:
+        flex;
 
-    display: flex;
+    justify-content:
+        space-between;
 
-    justify-content: space-between;
-}
+    color:
+        #747c88;
 
-.footer-left,
-.footer-right {
+    font-size:
+        7px;
 
-    font-size: 7px;
-
-    color: #6b7280;
-
-    font-weight: 600;
 }
 
 </style>
@@ -4616,20 +4828,18 @@ async function generateMembershipApplicationPDF(application) {
 
 <div class="pdf-page">
 
-    <div class="top-bar"></div>
-
 
     <!-- HEADER -->
 
     <div class="header">
 
-        <div class="header-text">
+        <div class="header-left">
 
             <div class="club-title">
                 GHOPKHALI SPORTS ARENA
             </div>
 
-            <div class="club-bangla">
+            <div class="club-title-bn">
                 ঘোপখালী স্পোর্টস অ্যারিনা
             </div>
 
@@ -4640,56 +4850,34 @@ async function generateMembershipApplicationPDF(application) {
         </div>
 
 
-        <div class="logo-area">
+        <div class="header-right">
 
-            ${
-                logoData
-                    ? `
-                        <img
-                            src="${logoData}"
-                            class="logo"
-                            alt="GSA Logo"
-                        >
-                      `
-                    : `
-                        <div
-                            style="
-                                width:88px;
-                                height:88px;
-                                border:1px solid #d1d5db;
-                                border-radius:50%;
-                                display:flex;
-                                align-items:center;
-                                justify-content:center;
-                                font-size:11px;
-                                font-weight:800;
-                                color:#6b7280;
-                            "
-                        >
-                            GSA
-                        </div>
-                      `
-            }
+            ${logoHTML}
 
         </div>
 
     </div>
 
 
-    <!-- DOCUMENT TITLE -->
+    <!-- TITLE -->
 
     <div class="document-title">
-        CLUB MEMBERSHIP APPLICATION
-    </div>
 
-    <div class="document-subtitle">
-        Official Club Membership Application Form
+        <h1>
+            CLUB MEMBERSHIP APPLICATION
+        </h1>
+
+        <div class="document-subtitle">
+            Official Club Membership Application Form
+        </div>
+
     </div>
 
 
     <!-- META -->
 
-    <div class="meta-row">
+    <div class="meta">
+
 
         <div class="meta-box">
 
@@ -4698,7 +4886,7 @@ async function generateMembershipApplicationPDF(application) {
             </div>
 
             <div class="meta-value">
-                ${safe(applicationId)}
+                ${value(application.id)}
             </div>
 
         </div>
@@ -4726,432 +4914,523 @@ async function generateMembershipApplicationPDF(application) {
             <div class="meta-value">
 
                 <span class="status">
-                    ${safe(status)}
+                    ${value(application.status)}
                 </span>
 
             </div>
 
         </div>
 
+
     </div>
 
 
-    <!-- PERSONAL INFORMATION -->
+    <!-- =================================================
+         PERSONAL INFORMATION
+    ================================================= -->
 
     <div class="section">
+
 
         <div class="section-title">
             Personal Information
         </div>
 
-        <div class="section-content">
 
-            <div class="personal">
-
-                <div class="photo-container">
-
-                    ${
-                        photoData
-                            ? `
-                                <img
-                                    src="${photoData}"
-                                    class="member-photo"
-                                    alt="Applicant Photo"
-                                >
-                              `
-                            : `
-                                <div class="photo-empty">
-                                    Applicant Photo
-                                </div>
-                              `
-                    }
-
-                </div>
+        <div class="section-body">
 
 
-                <div style="flex:1;">
-
-                    <table class="data-table">
-
-                        <tr>
-
-                            <td class="data-label">
-                                নাম (বাংলা)
-                            </td>
-
-                            <td class="data-value">
-                                ${safe(application.full_name_bn)}
-                            </td>
-
-                            <td class="data-label">
-                                Full Name
-                            </td>
-
-                            <td class="data-value">
-                                ${safe(application.full_name_en)}
-                            </td>
-
-                        </tr>
+            <div class="personal-layout">
 
 
-                        <tr>
-
-                            <td class="data-label">
-                                Father's Name
-                            </td>
-
-                            <td class="data-value">
-                                ${safe(application.father_name)}
-                            </td>
-
-                            <td class="data-label">
-                                Mother's Name
-                            </td>
-
-                            <td class="data-value">
-                                ${safe(application.mother_name)}
-                            </td>
-
-                        </tr>
+                ${photoHTML}
 
 
-                        <tr>
-
-                            <td class="data-label">
-                                Date of Birth
-                            </td>
-
-                            <td class="data-value">
-                                ${formatDate(application.date_of_birth)}
-                            </td>
-
-                            <td class="data-label">
-                                Blood Group
-                            </td>
-
-                            <td class="data-value">
-                                ${safe(application.blood_group)}
-                            </td>
-
-                        </tr>
+                <table class="personal-table">
 
 
-                        <tr>
+                    <tr>
 
-                            <td class="data-label">
-                                Profession
-                            </td>
+                        <td class="label">
+                            নাম (বাংলা)
+                        </td>
 
-                            <td class="data-value">
-                                ${safe(application.profession)}
-                            </td>
+                        <td class="data">
+                            ${value(
+                                application.full_name_bn
+                            )}
+                        </td>
 
-                            <td class="data-label">
-                                NID / Birth Reg.
-                            </td>
 
-                            <td class="data-value">
-                                ${safe(application.nid_birth_registration)}
-                            </td>
+                        <td class="label">
+                            Full Name
+                        </td>
 
-                        </tr>
+                        <td class="data">
+                            ${value(
+                                application.full_name_en
+                            )}
+                        </td>
 
-                    </table>
+                    </tr>
 
-                </div>
+
+                    <tr>
+
+                        <td class="label">
+                            Father's Name
+                        </td>
+
+                        <td class="data">
+                            ${value(
+                                application.father_name
+                            )}
+                        </td>
+
+
+                        <td class="label">
+                            Mother's Name
+                        </td>
+
+                        <td class="data">
+                            ${value(
+                                application.mother_name
+                            )}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td class="label">
+                            Date of Birth
+                        </td>
+
+                        <td class="data">
+                            ${formatDate(
+                                application.date_of_birth
+                            )}
+                        </td>
+
+
+                        <td class="label">
+                            Blood Group
+                        </td>
+
+                        <td class="data">
+                            ${value(
+                                application.blood_group
+                            )}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td class="label">
+                            Profession
+                        </td>
+
+                        <td class="data">
+                            ${value(
+                                application.profession
+                            )}
+                        </td>
+
+
+                        <td class="label">
+                            NID / Birth Reg.
+                        </td>
+
+                        <td class="data">
+                            ${value(
+                                application.nid_birth_registration
+                            )}
+                        </td>
+
+                    </tr>
+
+
+                </table>
+
 
             </div>
 
+
         </div>
+
 
     </div>
 
 
-    <!-- CONTACT -->
+    <!-- =================================================
+         CONTACT INFORMATION
+    ================================================= -->
 
     <div class="section">
+
 
         <div class="section-title">
             Contact Information
         </div>
 
-        <div class="section-content">
 
-            <table class="two-col">
+        <div class="section-body">
+
+
+            <table class="data-table">
+
 
                 <tr>
 
+
                     <td>
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Mobile Number
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.mobile_number)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.mobile_number
+                            )}
+                        </span>
 
                     </td>
 
 
                     <td>
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Alternative Mobile
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.alternative_mobile_number)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.alternative_mobile_number
+                            )}
+                        </span>
 
                     </td>
+
 
                 </tr>
 
 
                 <tr>
 
+
                     <td>
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Email
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.email)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.email
+                            )}
+                        </span>
 
                     </td>
 
 
                     <td>
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Current Address
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.current_address)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.current_address
+                            )}
+                        </span>
 
                     </td>
+
 
                 </tr>
 
 
                 <tr>
+
 
                     <td colspan="2">
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Permanent Address
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.permanent_address)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.permanent_address
+                            )}
+                        </span>
 
                     </td>
 
+
                 </tr>
+
 
             </table>
 
+
         </div>
+
 
     </div>
 
 
-    <!-- SPORTS -->
+    <!-- =================================================
+         SPORTS INFORMATION
+    ================================================= -->
 
     <div class="section">
+
 
         <div class="section-title">
             Sports Information
         </div>
 
-        <div class="section-content">
 
-            <div class="field-label">
+        <div class="section-body">
+
+
+            <span class="field-label">
                 Selected Sports
-            </div>
+            </span>
+
 
             <div class="sports-box">
-                ${safe(application.sports)}
+                ${value(
+                    application.sports
+                )}
             </div>
 
 
-            <table
-                class="two-col"
-                style="margin-top:8px;"
-            >
+            <table class="data-table">
+
 
                 <tr>
 
+
                     <td>
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Other Sports
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.other_sports)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.other_sports
+                            )}
+                        </span>
 
                     </td>
 
 
                     <td>
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Sports Skill
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.sports_skill)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.sports_skill
+                            )}
+                        </span>
 
                     </td>
+
 
                 </tr>
 
 
                 <tr>
+
 
                     <td colspan="2">
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Previous Club Experience
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.previous_club_experience)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.previous_club_experience
+                            )}
+                        </span>
 
                     </td>
 
+
                 </tr>
+
 
             </table>
 
+
         </div>
+
 
     </div>
 
 
-    <!-- EMERGENCY -->
+    <!-- =================================================
+         EMERGENCY CONTACT
+    ================================================= -->
 
     <div class="section">
+
 
         <div class="section-title">
             Emergency Contact
         </div>
 
-        <div class="section-content">
 
-            <table class="two-col">
+        <div class="section-body">
+
+
+            <table class="data-table">
+
 
                 <tr>
 
+
                     <td>
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Name
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.emergency_contact_name)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.emergency_contact_name
+                            )}
+                        </span>
 
                     </td>
 
 
                     <td>
 
-                        <div class="field-label">
+                        <span class="field-label">
                             Relation
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.emergency_contact_relation)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.emergency_contact_relation
+                            )}
+                        </span>
 
                     </td>
+
 
                 </tr>
 
 
                 <tr>
 
-                    <td>
 
-                        <div class="field-label">
+                    <td colspan="2">
+
+                        <span class="field-label">
                             Mobile
-                        </div>
+                        </span>
 
-                        <div class="field-value">
-                            ${safe(application.emergency_contact_mobile)}
-                        </div>
+                        <span class="field-value">
+                            ${value(
+                                application.emergency_contact_mobile
+                            )}
+                        </span>
 
                     </td>
 
 
-                    <td></td>
-
                 </tr>
+
 
             </table>
 
+
         </div>
+
 
     </div>
 
 
-    <!-- DECLARATION -->
+    <!-- =================================================
+         DECLARATION
+    ================================================= -->
 
     <div class="section">
+
 
         <div class="section-title">
             Declaration
         </div>
 
-        <div class="section-content">
+
+        <div class="section-body">
+
 
             <div class="declaration">
 
-                I hereby declare that the information
-                provided in this membership application
-                is true and correct to the best of my
-                knowledge. I agree to follow the rules,
-                regulations and discipline of
-                Ghopkhali Sports Arena.
+                I hereby declare that the information provided in this
+                membership application is true and correct to the best
+                of my knowledge. I agree to follow the rules, regulations
+                and discipline of Ghopkhali Sports Arena.
 
             </div>
 
 
-            <div class="signature-row">
+            <div class="signatures">
 
-                <div class="signature-box">
+
+                <div class="signature">
+
+                    <div class="signature-line"></div>
+
                     <div class="signature-label">
                         Applicant Signature
                     </div>
+
                 </div>
 
-                <div class="signature-box">
+
+                <div class="signature">
+
+                    <div class="signature-line"></div>
+
                     <div class="signature-label">
                         Verified By
                     </div>
+
                 </div>
 
-                <div class="signature-box">
+
+                <div class="signature">
+
+                    <div class="signature-line"></div>
+
                     <div class="signature-label">
                         Authorized Signature
                     </div>
+
                 </div>
+
 
             </div>
 
+
         </div>
+
 
     </div>
 
@@ -5160,32 +5439,69 @@ async function generateMembershipApplicationPDF(application) {
 
     <div class="footer">
 
-        <div class="footer-left">
+        <span>
             GHOPKHALI SPORTS ARENA • Membership Department
-        </div>
+        </span>
 
-        <div class="footer-right">
+
+        <span>
             Official Membership Application
-        </div>
+        </span>
 
     </div>
 
+
 </div>
+
 `;
 
 
-    document.body.appendChild(page);
+    document.body.appendChild(
+        wrapper
+    );
 
 
     /* =================================================
-       WAIT FOR RENDER
+       WAIT FOR IMAGES
     ================================================= */
 
-    await new Promise(
-        resolve =>
-            requestAnimationFrame(
-                () => resolve()
+    const images =
+        Array.from(
+            wrapper.querySelectorAll(
+                "img"
             )
+        );
+
+
+    await Promise.all(
+
+        images.map(
+            img => {
+
+                if (
+                    img.complete
+                ) {
+
+                    return Promise.resolve();
+
+                }
+
+
+                return new Promise(
+                    resolve => {
+
+                        img.onload =
+                            resolve;
+
+                        img.onerror =
+                            resolve;
+
+                    }
+                );
+
+            }
+        )
+
     );
 
 
@@ -5193,94 +5509,173 @@ async function generateMembershipApplicationPDF(application) {
        HTML2CANVAS
     ================================================= */
 
-    let canvas;
+    const canvas =
+        await html2canvas(
 
-    try {
+            wrapper.querySelector(
+                ".pdf-page"
+            ),
 
-        canvas =
-            await html2canvas(
-                page,
-                {
-                    scale: 3,
+            {
 
-                    useCORS: true,
+                scale:
+                    3,
 
-                    allowTaint: false,
+                useCORS:
+                    true,
 
-                    backgroundColor:
-                        "#ffffff",
+                allowTaint:
+                    false,
 
-                    width: 794,
+                backgroundColor:
+                    "#ffffff",
 
-                    height: 1123,
+                logging:
+                    false,
 
-                    windowWidth: 794,
+                imageTimeout:
+                    15000
 
-                    windowHeight: 1123,
+            }
 
-                    logging: false,
+        );
 
-                    imageTimeout: 15000
-                }
-            );
 
-    } finally {
-
-        /*
-         * Remove temporary HTML
-         * after canvas is created.
-         */
-
-        page.remove();
-    }
+    document.body.removeChild(
+        wrapper
+    );
 
 
     /* =================================================
-       CREATE PDF
+       JSPDF
     ================================================= */
 
+    const {
+        jsPDF
+    } = window.jspdf;
+
+
     const pdf =
-        new jsPDF(
-            {
-                orientation: "portrait",
+        new jsPDF({
 
-                unit: "mm",
+            orientation:
+                "portrait",
 
-                format: "a4",
+            unit:
+                "mm",
 
-                compress: true
-            }
-        );
+            format:
+                "a4",
+
+            compress:
+                true
+
+        });
+
+
+    const pageWidth =
+        pdf.internal.pageSize.getWidth();
+
+
+    const pageHeight =
+        pdf.internal.pageSize.getHeight();
 
 
     const imageData =
         canvas.toDataURL(
             "image/jpeg",
-            0.98
+            0.96
         );
 
 
     pdf.addImage(
+
         imageData,
+
         "JPEG",
+
         0,
+
         0,
-        210,
-        297,
+
+        pageWidth,
+
+        pageHeight,
+
         undefined,
+
         "FAST"
+
     );
 
 
     /* =================================================
-       DOWNLOAD
+       FILE NAME
     ================================================= */
 
+    const safeName =
+
+        (
+
+            application.full_name_en ||
+
+            application.full_name_bn ||
+
+            "Member"
+
+        )
+
+        .replace(
+            /[^a-zA-Z0-9_-]/g,
+            "_"
+        );
+
+
     const fileName =
-        `GSA_Membership_Application_${cleanName || "Applicant"}.pdf`;
+
+        `GSA-Membership-Application-${safeName}.pdf`;
 
 
-    pdf.save(fileName);
+    /* =================================================
+       PDF BLOB
+    ================================================= */
+
+    const pdfBlob =
+        pdf.output(
+            "blob"
+        );
+
+
+    /* =================================================
+       DIRECT DOWNLOAD
+    ================================================= */
+
+    if (
+        typeof generateMembershipApplicationPDF.downloadMode
+        === "undefined" ||
+
+        generateMembershipApplicationPDF.downloadMode
+        === true
+    ) {
+
+        pdf.save(
+            fileName
+        );
+
+    }
+
+
+    /* =================================================
+       RETURN
+    ================================================= */
+
+    return {
+
+        pdfBlob,
+
+        fileName
+
+    };
 
 }
 
