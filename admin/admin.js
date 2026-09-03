@@ -3440,174 +3440,11 @@ document.addEventListener("click", async (event) => {
    OPEN MEMBERSHIP APPLICATION
 ===================================================== */
 
-function openMembershipApplication(
-    application
-) {
+function openMembershipApplication(application) {
 
-   /* =====================================================
-   MEMBERSHIP APPROVE / REJECT
-===================================================== */
-
-document.addEventListener("click", async (event) => {
-
-    const button =
-        event.target.closest(
-            "[data-membership-decision]"
-        );
-
-    if (!button) {
-        return;
-    }
-
-    const action =
-        button.dataset.membershipDecision;
-
-    const id =
-        button.dataset.id;
-
-    const application =
-        membershipApplications.find(
-            item => item.id === id
-        );
-
-    if (!application) {
-        alert("Application not found.");
-        return;
-    }
-
-    let newStatus = "";
-
-    if (action === "approve") {
-        newStatus = "approved";
-    }
-
-    if (action === "reject") {
-        newStatus = "rejected";
-    }
-
-    if (!newStatus) {
-        return;
-    }
-
-
-    /* Confirmation */
-
-    const confirmMessage =
-        newStatus === "approved"
-            ? "Are you sure you want to approve this membership application?"
-            : "Are you sure you want to reject this membership application?";
-
-    if (!confirm(confirmMessage)) {
-        return;
-    }
-
-
-    try {
-
-        button.disabled = true;
-        button.textContent = "Processing...";
-
-
-        /* Update Supabase */
-
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from("membership_applications")
-            .update({
-                status: newStatus,
-                decided_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-            })
-            .eq("id", id)
-            .select()
-            .single();
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        /* Update local application */
-
-        const index =
-            membershipApplications.findIndex(
-                item => item.id === id
-            );
-
-        if (index !== -1) {
-
-            membershipApplications[index] =
-                data;
-
-        }
-
-
-        /* Refresh list */
-
-        renderMembershipApplications();
-
-
-        /* Refresh dashboard */
-
-        await loadDashboardCounts();
-
-
-        /* Close modal */
-
-        closeModal(
-            $("applicationModal")
-        );
-
-
-        /* Success message */
-
-        if (newStatus === "approved") {
-
-            alert(
-                "Membership application approved successfully."
-            );
-
-        } else {
-
-            alert(
-                "Membership application rejected successfully."
-            );
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Membership decision error:",
-            error
-        );
-
-        alert(
-            error.message ||
-            "Failed to update membership application."
-        );
-
-        button.disabled = false;
-
-        button.textContent =
-            newStatus === "approved"
-                ? "Approve"
-                : "Reject";
-    }
-
-});
-   
-    const modal =
-        $("applicationModal");
-
-    const title =
-        $("applicationModalTitle");
-
-    const details =
-        $("applicationDetails");
+    const modal = $("applicationModal");
+    const title = $("applicationModalTitle");
+    const details = $("applicationDetails");
 
     if (!modal || !title || !details) {
         return;
@@ -3619,7 +3456,6 @@ document.addEventListener("click", async (event) => {
     title.textContent =
         "Membership Application";
 
-
     details.innerHTML = `
 
         <div class="application-details">
@@ -3630,58 +3466,42 @@ document.addEventListener("click", async (event) => {
 
                 <p>
                     <strong>Full Name (Bangla):</strong><br>
-                    ${escapeHTML(
-                        application.full_name_bn || "—"
-                    )}
+                    ${escapeHTML(application.full_name_bn || "—")}
                 </p>
 
                 <p>
                     <strong>Full Name (English):</strong><br>
-                    ${escapeHTML(
-                        application.full_name_en || "—"
-                    )}
+                    ${escapeHTML(application.full_name_en || "—")}
                 </p>
 
                 <p>
                     <strong>Father's Name:</strong><br>
-                    ${escapeHTML(
-                        application.father_name || "—"
-                    )}
+                    ${escapeHTML(application.father_name || "—")}
                 </p>
 
                 <p>
                     <strong>Mother's Name:</strong><br>
-                    ${escapeHTML(
-                        application.mother_name || "—"
-                    )}
+                    ${escapeHTML(application.mother_name || "—")}
                 </p>
 
                 <p>
                     <strong>Date of Birth:</strong><br>
-                    ${escapeHTML(
-                        application.date_of_birth || "—"
-                    )}
+                    ${escapeHTML(application.date_of_birth || "—")}
                 </p>
 
                 <p>
                     <strong>Blood Group:</strong><br>
-                    ${escapeHTML(
-                        application.blood_group || "—"
-                    )}
+                    ${escapeHTML(application.blood_group || "—")}
                 </p>
 
                 <p>
                     <strong>Profession:</strong><br>
-                    ${escapeHTML(
-                        application.profession || "—"
-                    )}
+                    ${escapeHTML(application.profession || "—")}
                 </p>
 
                 <p>
                     <strong>NID / Birth Registration:</strong><br>
-                    ${escapeHTML(
-                        application.nid_birth_registration || "—"
-                    )}
+                    ${escapeHTML(application.nid_birth_registration || "—")}
                 </p>
 
             </div>
@@ -3693,23 +3513,17 @@ document.addEventListener("click", async (event) => {
 
                 <p>
                     <strong>Mobile:</strong><br>
-                    ${escapeHTML(
-                        application.mobile_number || "—"
-                    )}
+                    ${escapeHTML(application.mobile_number || "—")}
                 </p>
 
                 <p>
                     <strong>Alternative Mobile:</strong><br>
-                    ${escapeHTML(
-                        application.alternative_mobile_number || "—"
-                    )}
+                    ${escapeHTML(application.alternative_mobile_number || "—")}
                 </p>
 
                 <p>
                     <strong>Email:</strong><br>
-                    ${escapeHTML(
-                        application.email || "—"
-                    )}
+                    ${escapeHTML(application.email || "—")}
                 </p>
 
             </div>
@@ -3721,16 +3535,12 @@ document.addEventListener("click", async (event) => {
 
                 <p>
                     <strong>Current Address:</strong><br>
-                    ${escapeHTML(
-                        application.current_address || "—"
-                    )}
+                    ${escapeHTML(application.current_address || "—")}
                 </p>
 
                 <p>
                     <strong>Permanent Address:</strong><br>
-                    ${escapeHTML(
-                        application.permanent_address || "—"
-                    )}
+                    ${escapeHTML(application.permanent_address || "—")}
                 </p>
 
             </div>
@@ -3742,16 +3552,12 @@ document.addEventListener("click", async (event) => {
 
                 <p>
                     <strong>Sports:</strong><br>
-                    ${escapeHTML(
-                        application.sports || "—"
-                    )}
+                    ${escapeHTML(application.sports || "—")}
                 </p>
 
                 <p>
                     <strong>Other Sports:</strong><br>
-                    ${escapeHTML(
-                        application.other_sports || "—"
-                    )}
+                    ${escapeHTML(application.other_sports || "—")}
                 </p>
 
             </div>
@@ -3763,25 +3569,19 @@ document.addEventListener("click", async (event) => {
 
                 <p>
                     <strong>Message:</strong><br>
-                    ${escapeHTML(
-                        application.message || "—"
-                    )}
+                    ${escapeHTML(application.message || "—")}
                 </p>
 
                 <p>
                     <strong>Submitted:</strong><br>
-                    ${formatDate(
-                        application.created_at
-                    )}
+                    ${formatDate(application.created_at)}
                 </p>
 
                 <p>
                     <strong>Status:</strong><br>
 
-                    <span class="status-badge ${status.toLowerCase()}">
-                        ${escapeHTML(
-                            status.toUpperCase()
-                        )}
+                    <span class="status-badge ${escapeHTML(status.toLowerCase())}">
+                        ${escapeHTML(status.toUpperCase())}
                     </span>
 
                 </p>
@@ -3791,40 +3591,199 @@ document.addEventListener("click", async (event) => {
 
             <div class="card-actions">
 
-    <button
-        type="button"
-        class="small-button"
-        data-membership-pdf="application"
-        data-id="${escapeHTML(application.id)}"
-    >
-        Download Application PDF
-    </button>
+                <button
+                    type="button"
+                    class="small-button"
+                    data-membership-pdf="application"
+                    data-id="${escapeHTML(application.id)}">
+                    Download Application PDF
+                </button>
 
-    ${
-        status.toLowerCase() === "pending"
-        ? `
-            <button
-                type="button"
-                class="small-button"
-                data-membership-decision="approve"
-                data-id="${escapeHTML(application.id)}"
-            >
-                Approve
-            </button>
+                ${
+                    status.toLowerCase() === "pending"
+                    ? `
+                        <button
+                            type="button"
+                            class="small-button"
+                            data-membership-decision="approve"
+                            data-id="${escapeHTML(application.id)}">
+                            Approve
+                        </button>
 
-            <button
-                type="button"
-                class="small-button danger"
-                data-membership-decision="reject"
-                data-id="${escapeHTML(application.id)}"
-            >
-                Reject
-            </button>
-        `
-        : ""
+                        <button
+                            type="button"
+                            class="small-button danger"
+                            data-membership-decision="reject"
+                            data-id="${escapeHTML(application.id)}">
+                            Reject
+                        </button>
+                    `
+                    : ""
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    openModal(modal);
+}
+
+
+/* =====================================================
+   MEMBERSHIP APPROVE / REJECT
+===================================================== */
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const button =
+            event.target.closest(
+                "[data-membership-decision]"
+            );
+
+        if (!button) {
+            return;
+        }
+
+        const action =
+            button.dataset.membershipDecision;
+
+        const id =
+            button.dataset.id;
+
+        const application =
+            membershipApplications.find(
+                item => item.id === id
+            );
+
+        if (!application) {
+
+            alert(
+                "Application not found."
+            );
+
+            return;
+        }
+
+
+        let newStatus = "";
+
+        if (action === "approve") {
+            newStatus = "approved";
+        }
+
+        if (action === "reject") {
+            newStatus = "rejected";
+        }
+
+        if (!newStatus) {
+            return;
+        }
+
+
+        const confirmMessage =
+            newStatus === "approved"
+                ? "Are you sure you want to approve this membership application?"
+                : "Are you sure you want to reject this membership application?";
+
+
+        if (!confirm(confirmMessage)) {
+            return;
+        }
+
+
+        try {
+
+            button.disabled = true;
+            button.textContent = "Processing...";
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("membership_applications")
+                    .update({
+                        status: newStatus,
+                        decided_at:
+                            new Date().toISOString(),
+                        updated_at:
+                            new Date().toISOString()
+                    })
+                    .eq("id", id)
+                    .select()
+                    .single();
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            const index =
+                membershipApplications.findIndex(
+                    item => item.id === id
+                );
+
+
+            if (index !== -1) {
+
+                membershipApplications[index] =
+                    data;
+
+            }
+
+
+            renderMembershipApplications();
+
+
+            await loadDashboardCounts();
+
+
+            closeModal(
+                $("applicationModal")
+            );
+
+
+            alert(
+                newStatus === "approved"
+                    ? "Membership application approved successfully."
+                    : "Membership application rejected successfully."
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Membership decision error:",
+                error
+            );
+
+
+            alert(
+                error?.message ||
+                "Failed to update membership application."
+            );
+
+
+            button.disabled = false;
+
+
+            button.textContent =
+                newStatus === "approved"
+                    ? "Approve"
+                    : "Reject";
+
+        }
+
     }
+);
 
-</div>
 
 /* =====================================================
    MEMBERSHIP APPLICATION PDF
@@ -3839,14 +3798,15 @@ async function generateMembershipApplicationPDF(
         const container =
             $("membershipPdfContainer");
 
+
         if (!container) {
+
             throw new Error(
                 "Membership PDF container not found."
             );
+
         }
 
-
-        /* Fill PDF data */
 
         $("membershipPdfStatus").textContent =
             application.status || "pending";
@@ -3855,7 +3815,9 @@ async function generateMembershipApplicationPDF(
             application.id || "";
 
         $("membershipPdfCreatedAt").textContent =
-            formatDate(application.created_at);
+            formatDate(
+                application.created_at
+            );
 
         $("membershipPdfFullNameBn").textContent =
             application.full_name_bn || "";
@@ -3906,11 +3868,10 @@ async function generateMembershipApplicationPDF(
             application.message || "";
 
 
-        /*
-         * Check html2pdf
-         */
-
-        if (typeof html2pdf === "undefined") {
+        if (
+            typeof html2pdf ===
+            "undefined"
+        ) {
 
             throw new Error(
                 "PDF library is not loaded."
@@ -3919,12 +3880,9 @@ async function generateMembershipApplicationPDF(
         }
 
 
-        /* Show container temporarily */
+        container.style.display =
+            "block";
 
-        container.style.display = "block";
-
-
-        /* Generate PDF */
 
         const options = {
 
@@ -3957,9 +3915,8 @@ async function generateMembershipApplicationPDF(
             .save();
 
 
-        /* Hide again */
-
-        container.style.display = "none";
+        container.style.display =
+            "none";
 
 
     } catch (error) {
@@ -3969,22 +3926,27 @@ async function generateMembershipApplicationPDF(
             error
         );
 
+
         const container =
             $("membershipPdfContainer");
 
+
         if (container) {
-            container.style.display = "none";
+
+            container.style.display =
+                "none";
+
         }
 
+
         alert(
-            error.message ||
+            error?.message ||
             "Failed to generate membership PDF."
         );
 
     }
 
 }
-
 
 
 /* =====================================================
