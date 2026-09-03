@@ -2385,3 +2385,337 @@ button {
     }
 
 }
+
+/* =====================================================
+   RULES & REGULATIONS — ADMIN EDITOR
+   Premium Apple-Inspired Design
+===================================================== */
+
+.rules-admin-card {
+    width: 100%;
+    margin-top: 28px;
+    padding: 32px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 24px;
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.05),
+        0 2px 8px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.rules-admin-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.rules-admin-header h3 {
+    margin: 6px 0 8px;
+    font-size: 25px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #1d1d1f;
+}
+
+.rules-admin-header p {
+    margin: 0;
+    max-width: 620px;
+    color: #6e6e73;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   UPDATED BADGE
+===================================================== */
+
+.rules-admin-updated {
+    flex-shrink: 0;
+    padding: 9px 13px;
+    background: #f2f7f3;
+    border: 1px solid #dce9df;
+    border-radius: 999px;
+    color: #287a45;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   FORM GROUP
+===================================================== */
+
+.rules-admin-card .form-group {
+    margin-bottom: 24px;
+}
+
+.rules-admin-card .form-group label {
+    display: block;
+    margin-bottom: 9px;
+    color: #1d1d1f;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   TITLE INPUT
+===================================================== */
+
+#rulesAdminTitle {
+    width: 100%;
+    min-height: 52px;
+    padding: 0 16px;
+    box-sizing: border-box;
+
+    background: #f7f7f8;
+    border: 1px solid #d9d9de;
+    border-radius: 14px;
+
+    color: #1d1d1f;
+    font-family: inherit;
+    font-size: 15px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#rulesAdminTitle:hover {
+    background: #ffffff;
+}
+
+#rulesAdminTitle:focus {
+    background: #ffffff;
+    border-color: #8eaee8;
+    box-shadow: 0 0 0 4px rgba(80, 130, 210, 0.10);
+}
+
+
+/* =====================================================
+   RULES TEXTAREA
+===================================================== */
+
+#rulesAdminContent {
+    display: block;
+
+    width: 100%;
+    min-height: 480px;
+    padding: 18px;
+
+    box-sizing: border-box;
+    resize: vertical;
+
+    background: #f7f7f8;
+    border: 1px solid #d9d9de;
+    border-radius: 16px;
+
+    color: #1d1d1f;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.8;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#rulesAdminContent:hover {
+    background: #ffffff;
+}
+
+#rulesAdminContent:focus {
+    background: #ffffff;
+    border-color: #8eaee8;
+    box-shadow: 0 0 0 4px rgba(80, 130, 210, 0.10);
+}
+
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+#rulesAdminTitle::placeholder,
+#rulesAdminContent::placeholder {
+    color: #9a9aa1;
+}
+
+
+/* =====================================================
+   HELP TEXT
+===================================================== */
+
+.rules-admin-card .form-group small {
+    display: block;
+    margin-top: 9px;
+
+    color: #86868b;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.rules-admin-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin-top: 8px;
+    padding-top: 24px;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+
+/* =====================================================
+   RULES STATUS
+===================================================== */
+
+.rules-admin-status {
+    display: none;
+
+    margin-top: 18px;
+    padding: 13px 15px;
+
+    border-radius: 12px;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.rules-admin-status.success {
+    display: block;
+
+    background: #f2f7f3;
+    border: 1px solid #dce9df;
+    color: #287a45;
+}
+
+.rules-admin-status.error {
+    display: block;
+
+    background: #faf3f3;
+    border: 1px solid #ecdada;
+    color: #b42318;
+}
+
+
+/* =====================================================
+   DISABLED SAVE BUTTON
+===================================================== */
+
+#saveRulesButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .rules-admin-card {
+        padding: 22px;
+        margin-top: 20px;
+        border-radius: 20px;
+    }
+
+
+    .rules-admin-header {
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 22px;
+        padding-bottom: 20px;
+    }
+
+
+    .rules-admin-header h3 {
+        font-size: 21px;
+    }
+
+
+    .rules-admin-updated {
+        align-self: flex-start;
+    }
+
+
+    #rulesAdminTitle {
+        min-height: 50px;
+        font-size: 15px;
+    }
+
+
+    #rulesAdminContent {
+        min-height: 400px;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 1.75;
+    }
+
+
+    .rules-admin-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .rules-admin-actions button,
+    .rules-admin-actions a {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        justify-content: center;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+    .rules-admin-card {
+        padding: 17px;
+        border-radius: 18px;
+    }
+
+
+    .rules-admin-header h3 {
+        font-size: 19px;
+    }
+
+
+    #rulesAdminContent {
+        min-height: 350px;
+        font-size: 14px;
+    }
+
+}
