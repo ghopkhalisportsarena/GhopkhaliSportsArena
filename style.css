@@ -6232,102 +6232,137 @@ footer > p {
 }
 
 /* =====================================================
-   GSA — GLOBAL CENTERED LAYOUT FIX
-   MOBILE + DESKTOP
+   GSA — COMPACT PREMIUM GLOBAL LAYOUT
+   DESKTOP + MOBILE
 ===================================================== */
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
+html {
+    scroll-behavior: smooth;
 }
 
-html,
 body {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
     overflow-x: hidden;
 }
 
-body {
-    min-width: 0;
-}
+/* ===============================
+   GLOBAL CONTAINER
+================================ */
 
-/* Main page containers */
-main,
-header,
-footer,
-section,
 .section,
-.container,
-.hero,
 .hero-content,
-.hero-card,
-.section-inner {
-    width: 100%;
-    max-width: 100%;
-}
-
-/* Center common content wrappers */
-.section,
-.section-inner,
-.hero-content,
-.hero-card,
-.two-column,
-.committee-feature-wrap,
 .gallery-section,
 .leadership-section,
 .contact-section {
+    max-width: 1180px;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* Prevent content from touching screen edges */
-.section,
-.committee-feature-wrap,
-.gallery-section,
-.leadership-section,
-.contact-section {
-    padding-left: 20px;
-    padding-right: 20px;
+/* ===============================
+   SECTION SPACING
+================================ */
+
+.section {
+    padding-top: 64px;
+    padding-bottom: 64px;
 }
 
-/* Cards must never push layout sideways */
+/* ===============================
+   SECTION HEADINGS
+================================ */
+
+.section h1 {
+    font-size: clamp(30px, 4vw, 48px);
+}
+
+.section h2 {
+    font-size: clamp(26px, 3.5vw, 40px);
+}
+
+.section h3 {
+    font-size: clamp(20px, 2.5vw, 28px);
+}
+
+/* ===============================
+   COMMON CARDS
+================================ */
+
 .activity-card,
 .fixture-card,
 .tournament-card,
-.gallery-item,
 .form-card,
 .leader-card,
 .social-card,
 .committee-feature-card {
-    max-width: 100%;
-    min-width: 0;
+    border-radius: 22px;
 }
 
-/* Images */
-img,
-video,
-svg {
-    max-width: 100%;
+/* ===============================
+   ACTIVITY CARDS
+================================ */
+
+.activity-card {
+    padding: 24px;
 }
 
-/* Text wrapping */
-h1,
-h2,
-h3,
-h4,
-p,
-span,
-a {
-    overflow-wrap: anywhere;
+/* ===============================
+   FIXTURE CARDS
+================================ */
+
+.fixture-card {
+    padding: 20px;
 }
 
-/* =====================================================
-   COMMITTEE FEATURE — ALWAYS CENTERED
-===================================================== */
+/* ===============================
+   TOURNAMENT CARDS
+================================ */
+
+.tournament-card {
+    padding: 20px;
+}
+
+/* ===============================
+   GALLERY
+================================ */
+
+.gallery-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.gallery-item {
+    border-radius: 18px;
+}
+
+/* ===============================
+   LEADERSHIP
+================================ */
+
+.leadership-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.leader-card {
+    padding: 22px;
+}
+
+/* ===============================
+   CONTACT
+================================ */
+
+.contact-section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.social-card {
+    padding: 20px;
+}
+
+/* ===============================
+   COMMITTEE
+================================ */
 
 .committee-feature-wrap {
     width: 100%;
@@ -6337,82 +6372,117 @@ a {
 }
 
 .committee-feature-card {
-    width: min(100%, 1000px);
-    margin-left: auto;
-    margin-right: auto;
+    width: min(100%, 720px);
+    min-height: 100px;
+    padding: 18px 22px;
+    margin: 0 auto;
 }
 
-/* =====================================================
-   TWO COLUMN — DESKTOP
-===================================================== */
+/* ===============================
+   HERO
+================================ */
 
-.two-column {
-    width: min(100%, 1200px);
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.hero-content {
+    padding-top: 70px;
+    padding-bottom: 70px;
 }
 
-/* =====================================================
+.hero h1 {
+    font-size: clamp(38px, 6vw, 72px);
+}
+
+.hero-card {
+    max-width: 900px;
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+
+.button {
+    padding: 11px 20px;
+    border-radius: 12px;
+}
+
+/* ===============================
    MOBILE
-===================================================== */
+================================ */
 
 @media (max-width: 768px) {
 
-    .section,
-    .committee-feature-wrap,
+    .section {
+        padding-top: 44px;
+        padding-bottom: 44px;
+    }
+
+    .hero-content {
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
     .gallery-section,
     .leadership-section,
     .contact-section {
-        padding-left: 16px;
-        padding-right: 16px;
+        padding-top: 44px;
+        padding-bottom: 44px;
     }
 
-    .two-column {
-        grid-template-columns: 1fr;
-        width: 100%;
+    .activity-card,
+    .fixture-card,
+    .tournament-card,
+    .form-card,
+    .leader-card,
+    .social-card {
+        padding: 18px;
     }
 
     .committee-feature-card {
         width: 100%;
-        margin-left: auto;
-        margin-right: auto;
+        min-height: 88px;
+        padding: 14px 16px;
+        border-radius: 18px;
     }
-
 }
 
-/* =====================================================
+/* ===============================
    SMALL MOBILE
-===================================================== */
+================================ */
 
 @media (max-width: 480px) {
 
-    .section,
-    .committee-feature-wrap,
-    .gallery-section,
-    .leadership-section,
-    .contact-section {
+    .section {
         padding-left: 14px;
         padding-right: 14px;
     }
 
-}
+    .hero-content {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
 
-/* =====================================================
-   PREVENT HORIZONTAL OVERFLOW
-===================================================== */
+    .hero h1 {
+        font-size: 32px;
+    }
 
-.section *,
-.committee-feature-wrap *,
-.hero *,
-.two-column * {
-    max-width: 100%;
-}
+    .section h2 {
+        font-size: 26px;
+    }
 
-table {
-    width: 100%;
-    max-width: 100%;
-}
+    .section h3 {
+        font-size: 21px;
+    }
 
-iframe {
-    max-width: 100%;
+    .activity-card,
+    .fixture-card,
+    .tournament-card,
+    .form-card,
+    .leader-card,
+    .social-card {
+        padding: 16px;
+        border-radius: 18px;
+    }
 }
