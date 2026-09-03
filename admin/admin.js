@@ -669,29 +669,86 @@ supabaseClient.auth.onAuthStateChange(
 
     }
 
+/* =====================================================
+   NOTICES
+   GSA PREMIUM NOTICE MANAGEMENT
+===================================================== */
 
-    /* =====================================================
-       NOTICES
-    ===================================================== */
-
-    let notices = [];
-
-
-    async function loadNotices() {
-
-        const list =
-            $("noticeList");
-
-        if (!list) {
-            return;
-        }
+let notices = [];
+let editingNoticeId = null;
 
 
-        list.innerHTML =
-            `<div class="loading-state">
-                Loading notices...
-             </div>`;
+/* =====================================================
+   NOTICE ELEMENTS
+===================================================== */
 
+const noticeEditor =
+    $("noticeEditor");
+
+const noticeEditorTitle =
+    $("noticeEditorTitle");
+
+const noticeTitle =
+    $("noticeTitle");
+
+const noticeContent =
+    $("noticeContent");
+
+const noticeCategory =
+    $("noticeCategory");
+
+const noticeImage =
+    $("noticeImage");
+
+const noticeImagePreview =
+    $("noticeImagePreview");
+
+const noticePreviewImage =
+    $("noticePreviewImage");
+
+const removeNoticeImage =
+    $("removeNoticeImage");
+
+const noticeImportant =
+    $("noticeImportant");
+
+const noticePublished =
+    $("noticePublished");
+
+const saveNoticeButton =
+    $("saveNoticeButton");
+
+const closeNoticeEditor =
+    $("closeNoticeEditor");
+
+const cancelNoticeButton =
+    $("cancelNoticeButton");
+
+let currentNoticeImageUrl = "";
+
+
+/* =====================================================
+   LOAD NOTICES
+===================================================== */
+
+async function loadNotices() {
+
+    const list =
+        $("noticeList");
+
+    if (!list) {
+        return;
+    }
+
+
+    list.innerHTML = `
+        <div class="loading-state">
+            Loading notices...
+        </div>
+    `;
+
+
+    try {
 
         const {
             data,
@@ -709,23 +766,7 @@ supabaseClient.auth.onAuthStateChange(
 
 
         if (error) {
-
-            console.error(
-                "Notices:",
-                error
-            );
-
-            list.innerHTML =
-                `<div class="empty-state">
-                    Unable to load notices.
-                    <br><br>
-                    ${escapeHTML(
-                        error.message
-                    )}
-                 </div>`;
-
-            return;
-
+            throw error;
         }
 
 
@@ -735,377 +776,829 @@ supabaseClient.auth.onAuthStateChange(
 
         renderNotices();
 
+
+    } catch (error) {
+
+        console.error(
+            "Notice loading error:",
+            error
+        );
+
+
+        list.innerHTML = `
+            <div class="empty-state">
+                Unable to load notices.
+                <br><br>
+                ${escapeHTML(
+                    error.message
+                )}
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER NOTICES
+===================================================== */
+
+function renderNotices() {
+
+    const list =
+        $("noticeList");
+
+    if (!list) {
+        return;
     }
 
 
-    function renderNotices() {
+    const total =
+        notices.length;
 
-        const list =
-            $("noticeList");
+    const published =
+        notices.filter(
+            item =>
+                item.published === true
+        ).length;
 
-        if (!list) {
-            return;
-        }
+    const draft =
+        notices.filter(
+            item =>
+                item.published !== true
+        ).length;
 
-
-        if ($("noticeTotalCount")) {
-
-            $("noticeTotalCount")
-                .textContent =
-                notices.length;
-
-        }
-
-
-        if ($("noticePublishedCount")) {
-
-            $("noticePublishedCount")
-                .textContent =
-                notices.filter(
-                    item =>
-                        item.published === true
-                ).length;
-
-        }
+    const important =
+        notices.filter(
+            item =>
+                item.important === true
+        ).length;
 
 
-        if ($("noticeDraftCount")) {
+    if ($("noticeTotalCount")) {
 
-            $("noticeDraftCount")
-                .textContent =
-                notices.filter(
-                    item =>
-                        item.published !== true
-                ).length;
+        $("noticeTotalCount")
+            .textContent =
+            total;
 
-        }
+    }
 
 
-        if ($("noticeImportantCount")) {
+    if ($("noticePublishedCount")) {
 
-            $("noticeImportantCount")
-                .textContent =
-                notices.filter(
-                    item =>
-                        item.important === true
-                ).length;
+        $("noticePublishedCount")
+            .textContent =
+            published;
 
-        }
+    }
 
 
-        if (!notices.length) {
+    if ($("noticeDraftCount")) {
 
-            list.innerHTML =
-                `<div class="empty-state">
-                    No notices yet.
-                 </div>`;
+        $("noticeDraftCount")
+            .textContent =
+            draft;
 
-            return;
-
-        }
+    }
 
 
-        list.innerHTML =
-            notices.map(
-                notice => {
+    if ($("noticeImportantCount")) {
 
-                    const published =
-                        notice.published === true;
+        $("noticeImportantCount")
+            .textContent =
+            important;
 
-                    const important =
-                        notice.important === true;
+    }
 
 
-                    return `
+    if (!notices.length) {
 
-                    <article class="notice-card">
+        list.innerHTML = `
+            <div class="empty-state">
+                No notices yet.
+            </div>
+        `;
 
-                        <div class="notice-card-main">
+        return;
 
-                            <div>
+    }
 
-                                <div class="notice-meta">
 
-                                    <span class="badge ${
-                                        published
+    list.innerHTML =
+        notices.map(
+            notice => {
+
+                const isPublished =
+                    notice.published === true;
+
+                const isImportant =
+                    notice.important === true;
+
+
+                const image =
+                    notice.image_url
+                        ? `
+                            <div class="notice-card-image">
+                                <img
+                                    src="${escapeHTML(
+                                        notice.image_url
+                                    )}"
+                                    alt="${escapeHTML(
+                                        notice.title ||
+                                        "Notice"
+                                    )}"
+                                    loading="lazy"
+                                >
+                            </div>
+                          `
+                        : "";
+
+
+                return `
+
+                <article
+                    class="notice-card"
+                >
+
+                    ${image}
+
+
+                    <div
+                        class="notice-card-main"
+                    >
+
+                        <div>
+
+                            <div
+                                class="notice-meta"
+                            >
+
+                                <span
+                                    class="badge ${
+                                        isPublished
                                             ? "published"
                                             : "draft"
-                                    }">
-
-                                        ${
-                                            published
-                                                ? "● Published"
-                                                : "◐ Draft"
-                                        }
-
-                                    </span>
-
-
+                                    }"
+                                >
                                     ${
-                                        important
-                                            ? `
-                                            <span class="badge important">
+                                        isPublished
+                                            ? "● Published"
+                                            : "◐ Draft"
+                                    }
+                                </span>
+
+
+                                ${
+                                    isImportant
+                                        ? `
+                                            <span
+                                                class="badge important"
+                                            >
                                                 ★ Important
                                             </span>
-                                            `
-                                            : ""
-                                    }
+                                          `
+                                        : ""
+                                }
 
-                                </div>
-
-
-                                <div class="content-date">
-                                    ${formatDate(
-                                        notice.created_at
-                                    )}
-                                </div>
+                            </div>
 
 
-                                <h3>
-                                    ${escapeHTML(
-                                        notice.title
-                                    )}
-                                </h3>
+                            <div
+                                class="content-date"
+                            >
+                                ${formatDate(
+                                    notice.created_at
+                                )}
+                            </div>
 
 
-                                <div class="notice-card-content">
-                                    ${escapeHTML(
-                                        notice.content
-                                    )}
-                                </div>
+                            <div
+                                class="notice-category"
+                            >
+                                ${escapeHTML(
+                                    notice.category ||
+                                    "NOTICE"
+                                )}
+                            </div>
 
+
+                            <h3>
+                                ${escapeHTML(
+                                    notice.title ||
+                                    "Untitled Notice"
+                                )}
+                            </h3>
+
+
+                            <div
+                                class="notice-card-content"
+                            >
+                                ${escapeHTML(
+                                    notice.content ||
+                                    ""
+                                )}
                             </div>
 
                         </div>
 
-
-                        <div class="card-actions">
-
-                            <button
-                                type="button"
-                                class="small-button"
-                                data-notice-action="edit"
-                                data-id="${escapeHTML(
-                                    notice.id
-                                )}"
-                            >
-                                Edit
-                            </button>
+                    </div>
 
 
-                            <button
-                                type="button"
-                                class="small-button"
-                                data-notice-action="publish"
-                                data-id="${escapeHTML(
-                                    notice.id
-                                )}"
-                            >
-                                ${
-                                    published
-                                        ? "Unpublish"
-                                        : "Publish"
-                                }
-                            </button>
+                    <div
+                        class="card-actions"
+                    >
+
+                        <button
+                            type="button"
+                            class="small-button"
+                            data-notice-action="edit"
+                            data-id="${escapeHTML(
+                                notice.id
+                            )}"
+                        >
+                            Edit
+                        </button>
 
 
-                            <button
-                                type="button"
-                                class="small-button"
-                                data-notice-action="important"
-                                data-id="${escapeHTML(
-                                    notice.id
-                                )}"
-                            >
-                                ${
-                                    important
-                                        ? "Remove Important"
-                                        : "Important"
-                                }
-                            </button>
+                        <button
+                            type="button"
+                            class="small-button"
+                            data-notice-action="publish"
+                            data-id="${escapeHTML(
+                                notice.id
+                            )}"
+                        >
+                            ${
+                                isPublished
+                                    ? "Unpublish"
+                                    : "Publish"
+                            }
+                        </button>
 
 
-                            <button
-                                type="button"
-                                class="small-button danger"
-                                data-notice-action="delete"
-                                data-id="${escapeHTML(
-                                    notice.id
-                                )}"
-                            >
-                                Delete
-                            </button>
-
-                        </div>
-
-                    </article>
-
-                    `;
-
-                }
-            ).join("");
-
-    }
+                        <button
+                            type="button"
+                            class="small-button"
+                            data-notice-action="important"
+                            data-id="${escapeHTML(
+                                notice.id
+                            )}"
+                        >
+                            ${
+                                isImportant
+                                    ? "Remove Important"
+                                    : "Important"
+                            }
+                        </button>
 
 
-    /* =====================================================
-       NOTICE FORM
-    ===================================================== */
+                        <button
+                            type="button"
+                            class="small-button danger"
+                            data-notice-action="delete"
+                            data-id="${escapeHTML(
+                                notice.id
+                            )}"
+                        >
+                            Delete
+                        </button>
 
-    function openNoticeForm(
-        notice = null
-    ) {
+                    </div>
 
-        const form =
-            $("noticeForm");
+                </article>
 
-        if (!form) {
-            return;
-        }
-
-
-        form.reset();
-
-
-        if ($("noticeId")) {
-
-            $("noticeId").value =
-                notice?.id || "";
-
-        }
-
-
-        if ($("noticeTitle")) {
-
-            $("noticeTitle").value =
-                notice?.title || "";
-
-        }
-
-
-        if ($("noticeContent")) {
-
-            $("noticeContent").value =
-                notice?.content || "";
-
-        }
-
-
-        if ($("noticeCategory")) {
-
-            $("noticeCategory").value =
-                notice?.category ||
-                "GENERAL";
-
-        }
-
-
-        if ($("noticePublished")) {
-
-            $("noticePublished").checked =
-                notice
-                    ? notice.published === true
-                    : true;
-
-        }
-
-
-        if ($("noticeImportant")) {
-
-            $("noticeImportant").checked =
-                notice?.important === true;
-
-        }
-
-
-        if ($("noticeModalTitle")) {
-
-            $("noticeModalTitle")
-                .textContent =
-                notice
-                    ? "Edit Notice"
-                    : "New Notice";
-
-        }
-
-
-        openModal(
-            $("noticeModal")
-        );
-
-    }
-
-
-    $("newNoticeButton")
-        ?.addEventListener(
-            "click",
-            () => {
-
-                openNoticeForm();
+                `;
 
             }
-        );
+        ).join("");
+
+}
 
 
-    /* =====================================================
-       NOTICE SAVE
-    ===================================================== */
+/* =====================================================
+   OPEN NOTICE EDITOR
+===================================================== */
 
-    $("noticeForm")
-        ?.addEventListener(
-            "submit",
-            async event => {
+function openNoticeEditor(
+    notice = null
+) {
 
-                event.preventDefault();
-
-
-                const id =
-                    $("noticeId")
-                        ?.value
-                        .trim() || "";
+    if (!noticeEditor) {
+        return;
+    }
 
 
-                const title =
-                    $("noticeTitle")
-                        ?.value
-                        .trim() || "";
+    editingNoticeId =
+        notice?.id || null;
 
 
-                const content =
-                    $("noticeContent")
-                        ?.value
-                        .trim() || "";
+    if (noticeEditorTitle) {
+
+        noticeEditorTitle
+            .textContent =
+            notice
+                ? "Edit Notice"
+                : "New Notice";
+
+    }
 
 
-                const category =
-                    $("noticeCategory")
-                        ?.value
-                        .trim() ||
-                    "GENERAL";
+    if (noticeTitle) {
+
+        noticeTitle.value =
+            notice?.title || "";
+
+    }
 
 
-                const published =
-                    $("noticePublished")
-                        ?.checked ??
-                    true;
+    if (noticeContent) {
+
+        noticeContent.value =
+            notice?.content || "";
+
+    }
 
 
-                const important =
-                    $("noticeImportant")
-                        ?.checked ??
-                    false;
+    if (noticeCategory) {
+
+        noticeCategory.value =
+            notice?.category ||
+            "NOTICE";
+
+    }
 
 
-                if (
-                    !title ||
-                    !content
-                ) {
+    if (noticeImportant) {
 
-                    alert(
-                        "Please enter title and content."
-                    );
+        noticeImportant.checked =
+            notice?.important === true;
 
-                    return;
+    }
+
+
+    if (noticePublished) {
+
+        noticePublished.checked =
+            notice
+                ? notice.published === true
+                : true;
+
+    }
+
+
+    currentNoticeImageUrl =
+        notice?.image_url || "";
+
+
+    if (noticeImage) {
+
+        noticeImage.value = "";
+
+    }
+
+
+    if (
+        currentNoticeImageUrl &&
+        noticePreviewImage &&
+        noticeImagePreview
+    ) {
+
+        noticePreviewImage.src =
+            currentNoticeImageUrl;
+
+        noticeImagePreview.style.display =
+            "block";
+
+    } else {
+
+        hideNoticeImagePreview();
+
+    }
+
+
+    noticeEditor.style.display =
+        "block";
+
+
+    noticeEditor.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+/* =====================================================
+   CLOSE NOTICE EDITOR
+===================================================== */
+
+function closeNoticeEditorForm() {
+
+    editingNoticeId =
+        null;
+
+    currentNoticeImageUrl =
+        "";
+
+
+    if (noticeTitle) {
+        noticeTitle.value = "";
+    }
+
+
+    if (noticeContent) {
+        noticeContent.value = "";
+    }
+
+
+    if (noticeCategory) {
+        noticeCategory.value = "NOTICE";
+    }
+
+
+    if (noticeImportant) {
+        noticeImportant.checked = false;
+    }
+
+
+    if (noticePublished) {
+        noticePublished.checked = true;
+    }
+
+
+    if (noticeImage) {
+        noticeImage.value = "";
+    }
+
+
+    hideNoticeImagePreview();
+
+
+    if (noticeEditor) {
+
+        noticeEditor.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =====================================================
+   IMAGE PREVIEW
+===================================================== */
+
+function hideNoticeImagePreview() {
+
+    if (noticeImagePreview) {
+
+        noticeImagePreview.style.display =
+            "none";
+
+    }
+
+
+    if (noticePreviewImage) {
+
+        noticePreviewImage.src =
+            "";
+
+    }
+
+}
+
+
+/* =====================================================
+   SELECT IMAGE
+===================================================== */
+
+noticeImage
+    ?.addEventListener(
+        "change",
+        event => {
+
+            const file =
+                event.target.files?.[0];
+
+
+            if (!file) {
+
+                if (!currentNoticeImageUrl) {
+                    hideNoticeImagePreview();
+                }
+
+                return;
+
+            }
+
+
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                alert(
+                    "Please select an image file."
+                );
+
+                noticeImage.value = "";
+
+                return;
+
+            }
+
+
+            const maxSize =
+                6 * 1024 * 1024;
+
+
+            if (file.size > maxSize) {
+
+                alert(
+                    "Image must be smaller than 6 MB."
+                );
+
+                noticeImage.value = "";
+
+                return;
+
+            }
+
+
+            const previewUrl =
+                URL.createObjectURL(
+                    file
+                );
+
+
+            if (noticePreviewImage) {
+
+                noticePreviewImage.src =
+                    previewUrl;
+
+            }
+
+
+            if (noticeImagePreview) {
+
+                noticeImagePreview.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   REMOVE IMAGE
+===================================================== */
+
+removeNoticeImage
+    ?.addEventListener(
+        "click",
+        () => {
+
+            currentNoticeImageUrl =
+                "";
+
+            if (noticeImage) {
+                noticeImage.value = "";
+            }
+
+            hideNoticeImagePreview();
+
+        }
+    );
+
+
+/* =====================================================
+   NEW NOTICE
+===================================================== */
+
+$("newNoticeButton")
+    ?.addEventListener(
+        "click",
+        () => {
+
+            openNoticeEditor();
+
+        }
+    );
+
+
+/* =====================================================
+   CANCEL NOTICE
+===================================================== */
+
+closeNoticeEditor
+    ?.addEventListener(
+        "click",
+        () => {
+
+            closeNoticeEditorForm();
+
+        }
+    );
+
+
+cancelNoticeButton
+    ?.addEventListener(
+        "click",
+        () => {
+
+            closeNoticeEditorForm();
+
+        }
+    );
+
+
+/* =====================================================
+   UPLOAD NOTICE IMAGE
+===================================================== */
+
+async function uploadNoticeImage(
+    file
+) {
+
+    if (!file) {
+        return null;
+    }
+
+
+    const extension =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    const safeExtension =
+        [
+            "jpg",
+            "jpeg",
+            "png",
+            "webp"
+        ].includes(extension)
+            ? extension
+            : "jpg";
+
+
+    const randomPart =
+        Math.random()
+            .toString(36)
+            .substring(2, 10);
+
+
+    const filePath =
+        `notices/${Date.now()}_${randomPart}.${safeExtension}`;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .storage
+            .from("notice-images")
+            .upload(
+                filePath,
+                file,
+                {
+                    cacheControl: "3600",
+                    upsert: false,
+                    contentType:
+                        file.type
+                }
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    const {
+        data: publicData
+    } =
+        supabaseClient
+            .storage
+            .from("notice-images")
+            .getPublicUrl(
+                data.path
+            );
+
+
+    return (
+        publicData?.publicUrl ||
+        null
+    );
+
+}
+
+
+/* =====================================================
+   SAVE NOTICE
+===================================================== */
+
+saveNoticeButton
+    ?.addEventListener(
+        "click",
+        async () => {
+
+            const title =
+                noticeTitle
+                    ?.value
+                    .trim() || "";
+
+
+            const content =
+                noticeContent
+                    ?.value
+                    .trim() || "";
+
+
+            const category =
+                noticeCategory
+                    ?.value
+                    .trim() ||
+                "NOTICE";
+
+
+            const published =
+                noticePublished
+                    ?.checked ??
+                true;
+
+
+            const important =
+                noticeImportant
+                    ?.checked ??
+                false;
+
+
+            const selectedFile =
+                noticeImage
+                    ?.files?.[0] ||
+                null;
+
+
+            if (!title) {
+
+                alert(
+                    "Please enter the notice title."
+                );
+
+                noticeTitle?.focus();
+
+                return;
+
+            }
+
+
+            if (!content) {
+
+                alert(
+                    "Please enter the notice content."
+                );
+
+                noticeContent?.focus();
+
+                return;
+
+            }
+
+
+            try {
+
+                if (saveNoticeButton) {
+
+                    saveNoticeButton.disabled =
+                        true;
+
+                    saveNoticeButton.textContent =
+                        "Saving...";
+
+                }
+
+
+                let imageUrl =
+                    currentNoticeImageUrl ||
+                    null;
+
+
+                /* -------------------------------------
+                   UPLOAD NEW IMAGE
+                ------------------------------------- */
+
+                if (selectedFile) {
+
+                    imageUrl =
+                        await uploadNoticeImage(
+                            selectedFile
+                        );
 
                 }
 
@@ -1118,6 +1611,9 @@ supabaseClient.auth.onAuthStateChange(
 
                     category,
 
+                    image_url:
+                        imageUrl,
+
                     published,
 
                     important,
@@ -1129,125 +1625,172 @@ supabaseClient.auth.onAuthStateChange(
                 };
 
 
-                try {
-
-                    let response;
+                let response;
 
 
-                    if (id) {
+                /* -------------------------------------
+                   UPDATE
+                ------------------------------------- */
 
-                        response =
-                            await supabaseClient
-                                .from("notices")
-                                .update(payload)
-                                .eq(
-                                    "id",
-                                    id
-                                );
+                if (editingNoticeId) {
 
-                    } else {
+                    response =
+                        await supabaseClient
+                            .from("notices")
+                            .update(
+                                payload
+                            )
+                            .eq(
+                                "id",
+                                editingNoticeId
+                            );
 
-                        response =
-                            await supabaseClient
-                                .from("notices")
-                                .insert([
-                                    payload
-                                ]);
+                }
 
-                    }
+                /* -------------------------------------
+                   INSERT
+                ------------------------------------- */
 
+                else {
 
-                    if (response.error) {
-                        throw response.error;
-                    }
+                    response =
+                        await supabaseClient
+                            .from("notices")
+                            .insert([
+                                payload
+                            ]);
 
-
-                    closeModal(
-                        $("noticeModal")
-                    );
+                }
 
 
-                    await loadNotices();
+                if (response.error) {
+
+                    throw response.error;
+
+                }
+
+
+                closeNoticeEditorForm();
+
+
+                await loadNotices();
+
+
+                if (
+                    typeof loadDashboardCounts ===
+                    "function"
+                ) {
 
                     await loadDashboardCounts();
 
-
-                    alert(
-                        id
-                            ? "Notice updated successfully."
-                            : "Notice published successfully."
-                    );
+                }
 
 
-                } catch (error) {
+                alert(
+                    editingNoticeId
+                        ? "Notice updated successfully."
+                        : "Notice created successfully."
+                );
 
-                    showError(error);
+
+            } catch (error) {
+
+                console.error(
+                    "Notice save error:",
+                    error
+                );
+
+
+                showError(error);
+
+
+            } finally {
+
+                if (saveNoticeButton) {
+
+                    saveNoticeButton.disabled =
+                        false;
+
+                    saveNoticeButton.textContent =
+                        "Save Notice";
 
                 }
 
             }
-        );
+
+        }
+    );
 
 
-    /* =====================================================
-       NOTICE ACTIONS
-    ===================================================== */
+/* =====================================================
+   NOTICE ACTIONS
+===================================================== */
 
-    $("noticeList")
-        ?.addEventListener(
-            "click",
-            async event => {
+$("noticeList")
+    ?.addEventListener(
+        "click",
+        async event => {
 
-                const button =
-                    event.target.closest(
-                        "[data-notice-action]"
-                    );
-
-
-                if (!button) {
-                    return;
-                }
+            const button =
+                event.target.closest(
+                    "[data-notice-action]"
+                );
 
 
-                const id =
-                    button.dataset.id;
+            if (!button) {
+                return;
+            }
 
 
-                const notice =
-                    notices.find(
-                        item =>
-                            String(item.id) ===
-                            String(id)
-                    );
+            const id =
+                button.dataset.id;
 
 
-                if (!notice) {
-                    return;
-                }
+            const notice =
+                notices.find(
+                    item =>
+                        String(item.id) ===
+                        String(id)
+                );
 
 
-                const action =
-                    button.dataset.noticeAction;
+            if (!notice) {
+                return;
+            }
 
 
-                if (
-                    action ===
-                    "edit"
-                ) {
-
-                    openNoticeForm(
-                        notice
-                    );
-
-                    return;
-
-                }
+            const action =
+                button.dataset.noticeAction;
 
 
-                if (
-                    action ===
-                    "publish"
-                ) {
+            /* -----------------------------------------
+               EDIT
+            ----------------------------------------- */
+
+            if (
+                action ===
+                "edit"
+            ) {
+
+                openNoticeEditor(
+                    notice
+                );
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               PUBLISH / UNPUBLISH
+            ----------------------------------------- */
+
+            if (
+                action ===
+                "publish"
+            ) {
+
+                try {
 
                     const {
                         error
@@ -1269,25 +1812,35 @@ supabaseClient.auth.onAuthStateChange(
 
 
                     if (error) {
-
-                        showError(error);
-
-                        return;
-
+                        throw error;
                     }
 
 
                     await loadNotices();
 
-                    return;
+
+                } catch (error) {
+
+                    showError(error);
 
                 }
 
 
-                if (
-                    action ===
-                    "important"
-                ) {
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               IMPORTANT
+            ----------------------------------------- */
+
+            if (
+                action ===
+                "important"
+            ) {
+
+                try {
 
                     const {
                         error
@@ -1309,36 +1862,46 @@ supabaseClient.auth.onAuthStateChange(
 
 
                     if (error) {
-
-                        showError(error);
-
-                        return;
-
+                        throw error;
                     }
 
 
                     await loadNotices();
 
-                    return;
+
+                } catch (error) {
+
+                    showError(error);
 
                 }
 
 
-                if (
-                    action ===
-                    "delete"
-                ) {
+                return;
 
-                    const confirmed =
-                        confirm(
-                            `Delete "${notice.title}"?`
-                        );
+            }
 
 
-                    if (!confirmed) {
-                        return;
-                    }
+            /* -----------------------------------------
+               DELETE
+            ----------------------------------------- */
 
+            if (
+                action ===
+                "delete"
+            ) {
+
+                const confirmed =
+                    confirm(
+                        `Delete "${notice.title}"?`
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                try {
 
                     const {
                         error
@@ -1353,23 +1916,33 @@ supabaseClient.auth.onAuthStateChange(
 
 
                     if (error) {
-
-                        showError(error);
-
-                        return;
-
+                        throw error;
                     }
 
 
                     await loadNotices();
 
-                    await loadDashboardCounts();
+
+                    if (
+                        typeof loadDashboardCounts ===
+                        "function"
+                    ) {
+
+                        await loadDashboardCounts();
+
+                    }
+
+
+                } catch (error) {
+
+                    showError(error);
 
                 }
 
             }
-        );
 
+        }
+    );
 
     /* =====================================================
        FIXTURES
