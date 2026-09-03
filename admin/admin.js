@@ -3787,167 +3787,1436 @@ document.addEventListener(
 
 /* =====================================================
    MEMBERSHIP APPLICATION PDF
+   GSA — PREMIUM APPLE INSPIRED A4
 ===================================================== */
 
-async function generateMembershipApplicationPDF(
-    application
-) {
+async function generateMembershipApplicationPDF(application) {
+
+    if (!application) {
+        throw new Error("Application data not found.");
+    }
+
+    const container =
+        document.getElementById("membershipPdfContainer");
+
+    if (!container) {
+        throw new Error(
+            "membershipPdfContainer not found in admin.html"
+        );
+    }
+
+    /* =================================================
+       LOAD PREMIUM PDF FONT
+    ================================================= */
+
+    if (!document.getElementById("gsaPdfFont")) {
+
+        const fontLink =
+            document.createElement("link");
+
+        fontLink.id =
+            "gsaPdfFont";
+
+        fontLink.rel =
+            "stylesheet";
+
+        fontLink.href =
+            "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap";
+
+        document.head.appendChild(fontLink);
+    }
+
+    /* =================================================
+       WAIT FOR FONTS
+    ================================================= */
 
     try {
 
-        const container =
-            $("membershipPdfContainer");
-
-
-        if (!container) {
-
-            throw new Error(
-                "Membership PDF container not found."
-            );
-
+        if (document.fonts) {
+            await document.fonts.ready;
         }
 
+    } catch (fontError) {
 
-        $("membershipPdfStatus").textContent =
-            application.status || "pending";
+        console.warn(
+            "PDF font loading warning:",
+            fontError
+        );
 
-        $("membershipPdfApplicationId").textContent =
-            application.id || "";
+    }
 
-        $("membershipPdfCreatedAt").textContent =
-            formatDate(
-                application.created_at
-            );
+    /* =================================================
+       HELPER
+    ================================================= */
 
-        $("membershipPdfFullNameBn").textContent =
-            application.full_name_bn || "";
-
-        $("membershipPdfFullNameEn").textContent =
-            application.full_name_en || "";
-
-        $("membershipPdfFatherName").textContent =
-            application.father_name || "";
-
-        $("membershipPdfMotherName").textContent =
-            application.mother_name || "";
-
-        $("membershipPdfDateOfBirth").textContent =
-            application.date_of_birth || "";
-
-        $("membershipPdfBloodGroup").textContent =
-            application.blood_group || "";
-
-        $("membershipPdfProfession").textContent =
-            application.profession || "";
-
-        $("membershipPdfNid").textContent =
-            application.nid_birth_registration || "";
-
-        $("membershipPdfMobile").textContent =
-            application.mobile_number || "";
-
-        $("membershipPdfAlternativeMobile").textContent =
-            application.alternative_mobile_number || "";
-
-        $("membershipPdfEmail").textContent =
-            application.email || "";
-
-        $("membershipPdfCurrentAddress").textContent =
-            application.current_address || "";
-
-        $("membershipPdfPermanentAddress").textContent =
-            application.permanent_address || "";
-
-        $("membershipPdfSports").textContent =
-            application.sports || "";
-
-        $("membershipPdfOtherSports").textContent =
-            application.other_sports || "";
-
-        $("membershipPdfMessage").textContent =
-            application.message || "";
-
+    const safe = value => {
 
         if (
-            typeof html2pdf ===
-            "undefined"
+            value === null ||
+            value === undefined ||
+            value === ""
         ) {
+            return "—";
+        }
+
+        return escapeHTML(
+            String(value)
+        );
+    };
+
+
+    const applicationId =
+        application.id || "—";
+
+    const status =
+        String(
+            application.status || "pending"
+        ).toLowerCase();
+
+
+    const statusText =
+        status === "approved"
+            ? "APPROVED"
+            : status === "rejected"
+                ? "REJECTED"
+                : "PENDING";
+
+
+    const statusClass =
+        status === "approved"
+            ? "approved"
+            : status === "rejected"
+                ? "rejected"
+                : "pending";
+
+
+    const submittedDate =
+        application.created_at
+            ? new Date(
+                application.created_at
+            ).toLocaleDateString(
+                "en-GB",
+                {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric"
+                }
+            )
+            : "—";
+
+
+    const submittedTime =
+        application.created_at
+            ? new Date(
+                application.created_at
+            ).toLocaleTimeString(
+                "en-BD",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            )
+            : "—";
+
+
+    /* =================================================
+       BUILD PREMIUM PDF
+    ================================================= */
+
+    container.innerHTML = `
+
+        <div
+            id="gsaMembershipPdfPage"
+            style="
+                width:794px;
+                min-height:1123px;
+                box-sizing:border-box;
+                padding:58px 60px 48px 60px;
+                background:#ffffff;
+                color:#1d1d1f;
+                font-family:'Inter','Noto Sans Bengali',Arial,sans-serif;
+                position:relative;
+                overflow:hidden;
+            "
+        >
+
+            <!-- =========================================
+                 HEADER
+            ========================================== -->
+
+            <div
+                style="
+                    text-align:center;
+                    padding-bottom:28px;
+                    border-bottom:1px solid #e5e5e7;
+                "
+            >
+
+                <div
+                    style="
+                        font-size:30px;
+                        line-height:1.2;
+                        font-weight:700;
+                        letter-spacing:-0.8px;
+                        color:#111111;
+                    "
+                >
+                    Ghopkhali Sports Arena
+                </div>
+
+
+                <div
+                    style="
+                        margin-top:7px;
+                        font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
+                        font-size:20px;
+                        line-height:1.5;
+                        font-weight:600;
+                        color:#333336;
+                    "
+                >
+                    ঘোপখালী স্পোর্টস অ্যারিনা
+                </div>
+
+
+                <div
+                    style="
+                        margin-top:6px;
+                        font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
+                        font-size:13px;
+                        color:#77777c;
+                        letter-spacing:0.2px;
+                    "
+                >
+                    স্থাপিত: ১৯-০৭-২০২৬
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 DOCUMENT TITLE
+            ========================================== -->
+
+            <div
+                style="
+                    margin-top:30px;
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:flex-start;
+                "
+            >
+
+                <div>
+
+                    <div
+                        style="
+                            font-size:11px;
+                            font-weight:700;
+                            letter-spacing:1.5px;
+                            color:#86868b;
+                            text-transform:uppercase;
+                        "
+                    >
+                        Official Membership Document
+                    </div>
+
+
+                    <div
+                        style="
+                            margin-top:7px;
+                            font-size:25px;
+                            font-weight:700;
+                            letter-spacing:-0.5px;
+                            color:#111111;
+                        "
+                    >
+                        Club Membership Application
+                    </div>
+
+
+                    <div
+                        style="
+                            margin-top:5px;
+                            font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
+                            font-size:14px;
+                            color:#6e6e73;
+                        "
+                    >
+                        ক্লাব সদস্যপদ আবেদনপত্র
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div
+                    style="
+                        text-align:right;
+                        min-width:130px;
+                    "
+                >
+
+                    <div
+                        style="
+                            display:inline-block;
+                            padding:7px 13px;
+                            border-radius:999px;
+                            background:${
+                                status === "approved"
+                                    ? "#e8f7ee"
+                                    : status === "rejected"
+                                        ? "#fdecec"
+                                        : "#f2f2f7"
+                            };
+                            color:${
+                                status === "approved"
+                                    ? "#1f7a45"
+                                    : status === "rejected"
+                                        ? "#c62828"
+                                        : "#55555a"
+                            };
+                            font-size:11px;
+                            font-weight:700;
+                            letter-spacing:1px;
+                        "
+                    >
+                        ${statusText}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 APPLICATION META
+            ========================================== -->
+
+            <div
+                style="
+                    margin-top:25px;
+                    display:flex;
+                    gap:12px;
+                "
+            >
+
+                <div
+                    style="
+                        flex:1;
+                        background:#f7f7f8;
+                        border-radius:14px;
+                        padding:15px 17px;
+                    "
+                >
+
+                    <div
+                        style="
+                            font-size:10px;
+                            color:#86868b;
+                            font-weight:600;
+                            letter-spacing:.7px;
+                        "
+                    >
+                        APPLICATION ID
+                    </div>
+
+                    <div
+                        style="
+                            margin-top:5px;
+                            font-size:12px;
+                            font-weight:600;
+                            color:#1d1d1f;
+                            word-break:break-all;
+                        "
+                    >
+                        ${safe(applicationId)}
+                    </div>
+
+                </div>
+
+
+                <div
+                    style="
+                        flex:1;
+                        background:#f7f7f8;
+                        border-radius:14px;
+                        padding:15px 17px;
+                    "
+                >
+
+                    <div
+                        style="
+                            font-size:10px;
+                            color:#86868b;
+                            font-weight:600;
+                            letter-spacing:.7px;
+                        "
+                    >
+                        SUBMITTED
+                    </div>
+
+                    <div
+                        style="
+                            margin-top:5px;
+                            font-size:12px;
+                            font-weight:600;
+                            color:#1d1d1f;
+                        "
+                    >
+                        ${safe(submittedDate)}
+                    </div>
+
+                </div>
+
+
+                <div
+                    style="
+                        flex:1;
+                        background:#f7f7f8;
+                        border-radius:14px;
+                        padding:15px 17px;
+                    "
+                >
+
+                    <div
+                        style="
+                            font-size:10px;
+                            color:#86868b;
+                            font-weight:600;
+                            letter-spacing:.7px;
+                        "
+                    >
+                        TIME
+                    </div>
+
+                    <div
+                        style="
+                            margin-top:5px;
+                            font-size:12px;
+                            font-weight:600;
+                            color:#1d1d1f;
+                        "
+                    >
+                        ${safe(submittedTime)}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 SECTION HELPER
+            ========================================== -->
+
+            <div
+                style="
+                    margin-top:31px;
+                    margin-bottom:14px;
+                    font-size:15px;
+                    font-weight:700;
+                    color:#111111;
+                    padding-bottom:9px;
+                    border-bottom:1px solid #e5e5e7;
+                "
+            >
+                Personal Information
+            </div>
+
+
+            <!-- PERSONAL INFORMATION -->
+
+            <table
+                style="
+                    width:100%;
+                    border-collapse:collapse;
+                    table-layout:fixed;
+                    font-size:12px;
+                "
+            >
+
+                <tr>
+
+                    <td
+                        style="
+                            width:50%;
+                            padding:9px 14px 9px 0;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            FULL NAME (BANGLA)
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
+                                font-size:13px;
+                                font-weight:600;
+                            "
+                        >
+                            ${safe(application.full_name_bn)}
+                        </div>
+                    </td>
+
+
+                    <td
+                        style="
+                            width:50%;
+                            padding:9px 0 9px 14px;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            FULL NAME (ENGLISH)
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-size:13px;
+                                font-weight:600;
+                            "
+                        >
+                            ${safe(application.full_name_en)}
+                        </div>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td
+                        style="
+                            padding:9px 14px 9px 0;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            FATHER'S NAME
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-size:13px;
+                                font-weight:600;
+                            "
+                        >
+                            ${safe(application.father_name)}
+                        </div>
+                    </td>
+
+
+                    <td
+                        style="
+                            padding:9px 0 9px 14px;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            MOTHER'S NAME
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-size:13px;
+                                font-weight:600;
+                            "
+                        >
+                            ${safe(application.mother_name)}
+                        </div>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td
+                        style="
+                            padding:9px 14px 9px 0;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            DATE OF BIRTH
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-size:13px;
+                                font-weight:600;
+                            "
+                        >
+                            ${safe(application.date_of_birth)}
+                        </div>
+                    </td>
+
+
+                    <td
+                        style="
+                            padding:9px 0 9px 14px;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            BLOOD GROUP
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-size:13px;
+                                font-weight:600;
+                            "
+                        >
+                            ${safe(application.blood_group)}
+                        </div>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td
+                        style="
+                            padding:9px 14px 9px 0;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            PROFESSION
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-size:13px;
+                                font-weight:600;
+                            "
+                        >
+                            ${safe(application.profession)}
+                        </div>
+                    </td>
+
+
+                    <td
+                        style="
+                            padding:9px 0 9px 14px;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            NID / BIRTH REGISTRATION
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-size:13px;
+                                font-weight:600;
+                                word-break:break-word;
+                            "
+                        >
+                            ${safe(
+                                application.nid_birth_registration
+                            )}
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+            <!-- =========================================
+                 CONTACT
+            ========================================== -->
+
+            <div
+                style="
+                    margin-top:27px;
+                    margin-bottom:14px;
+                    font-size:15px;
+                    font-weight:700;
+                    color:#111111;
+                    padding-bottom:9px;
+                    border-bottom:1px solid #e5e5e7;
+                "
+            >
+                Contact Information
+            </div>
+
+
+            <table
+                style="
+                    width:100%;
+                    border-collapse:collapse;
+                    table-layout:fixed;
+                    font-size:12px;
+                "
+            >
+
+                <tr>
+
+                    <td
+                        style="
+                            width:33.33%;
+                            padding:9px 12px 9px 0;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            MOBILE
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-weight:600;
+                                font-size:13px;
+                            "
+                        >
+                            ${safe(application.mobile_number)}
+                        </div>
+                    </td>
+
+
+                    <td
+                        style="
+                            width:33.33%;
+                            padding:9px 12px;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            ALTERNATIVE MOBILE
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-weight:600;
+                                font-size:13px;
+                            "
+                        >
+                            ${safe(
+                                application.alternative_mobile_number
+                            )}
+                        </div>
+                    </td>
+
+
+                    <td
+                        style="
+                            width:33.33%;
+                            padding:9px 0 9px 12px;
+                            vertical-align:top;
+                        "
+                    >
+                        <div style="color:#86868b;font-size:10px;">
+                            EMAIL
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-weight:600;
+                                font-size:12px;
+                                word-break:break-word;
+                            "
+                        >
+                            ${safe(application.email)}
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+            <!-- =========================================
+                 ADDRESS
+            ========================================== -->
+
+            <div
+                style="
+                    margin-top:27px;
+                    margin-bottom:14px;
+                    font-size:15px;
+                    font-weight:700;
+                    color:#111111;
+                    padding-bottom:9px;
+                    border-bottom:1px solid #e5e5e7;
+                "
+            >
+                Address
+            </div>
+
+
+            <table
+                style="
+                    width:100%;
+                    border-collapse:collapse;
+                    table-layout:fixed;
+                    font-size:12px;
+                "
+            >
+
+                <tr>
+
+                    <td
+                        style="
+                            width:50%;
+                            padding:9px 14px 9px 0;
+                            vertical-align:top;
+                        "
+                    >
+
+                        <div style="color:#86868b;font-size:10px;">
+                            CURRENT ADDRESS
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:5px;
+                                font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
+                                font-size:12px;
+                                line-height:1.7;
+                                font-weight:500;
+                            "
+                        >
+                            ${safe(application.current_address)}
+                        </div>
+
+                    </td>
+
+
+                    <td
+                        style="
+                            width:50%;
+                            padding:9px 0 9px 14px;
+                            vertical-align:top;
+                        "
+                    >
+
+                        <div style="color:#86868b;font-size:10px;">
+                            PERMANENT ADDRESS
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:5px;
+                                font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
+                                font-size:12px;
+                                line-height:1.7;
+                                font-weight:500;
+                            "
+                        >
+                            ${safe(application.permanent_address)}
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+            <!-- =========================================
+                 SPORTS
+            ========================================== -->
+
+            <div
+                style="
+                    margin-top:27px;
+                    margin-bottom:14px;
+                    font-size:15px;
+                    font-weight:700;
+                    color:#111111;
+                    padding-bottom:9px;
+                    border-bottom:1px solid #e5e5e7;
+                "
+            >
+                Sports Information
+            </div>
+
+
+            <table
+                style="
+                    width:100%;
+                    border-collapse:collapse;
+                    table-layout:fixed;
+                    font-size:12px;
+                "
+            >
+
+                <tr>
+
+                    <td
+                        style="
+                            width:50%;
+                            padding:9px 14px 9px 0;
+                            vertical-align:top;
+                        "
+                    >
+
+                        <div style="color:#86868b;font-size:10px;">
+                            SPORTS
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-weight:600;
+                                font-size:13px;
+                            "
+                        >
+                            ${safe(application.sports)}
+                        </div>
+
+                    </td>
+
+
+                    <td
+                        style="
+                            width:50%;
+                            padding:9px 0 9px 14px;
+                            vertical-align:top;
+                        "
+                    >
+
+                        <div style="color:#86868b;font-size:10px;">
+                            OTHER SPORTS
+                        </div>
+
+                        <div
+                            style="
+                                margin-top:4px;
+                                font-weight:600;
+                                font-size:13px;
+                            "
+                        >
+                            ${safe(application.other_sports)}
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+            <!-- =========================================
+                 MESSAGE
+            ========================================== -->
+
+            <div
+                style="
+                    margin-top:27px;
+                    margin-bottom:14px;
+                    font-size:15px;
+                    font-weight:700;
+                    color:#111111;
+                    padding-bottom:9px;
+                    border-bottom:1px solid #e5e5e7;
+                "
+            >
+                Additional Message
+            </div>
+
+
+            <div
+                style="
+                    min-height:65px;
+                    background:#f7f7f8;
+                    border-radius:13px;
+                    padding:15px 17px;
+                    box-sizing:border-box;
+                    font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
+                    font-size:12px;
+                    line-height:1.75;
+                    color:#333336;
+                "
+            >
+                ${safe(application.message)}
+            </div>
+
+
+            <!-- =========================================
+                 DECLARATION
+            ========================================== -->
+
+            <div
+                style="
+                    margin-top:27px;
+                    padding:17px 18px;
+                    border:1px solid #e5e5e7;
+                    border-radius:14px;
+                    background:#fbfbfc;
+                "
+            >
+
+                <div
+                    style="
+                        font-size:11px;
+                        font-weight:700;
+                        letter-spacing:.8px;
+                        color:#86868b;
+                    "
+                >
+                    DECLARATION
+                </div>
+
+
+                <div
+                    style="
+                        margin-top:8px;
+                        font-family:'Noto Sans Bengali','Inter',Arial,sans-serif;
+                        font-size:11px;
+                        line-height:1.75;
+                        color:#55555a;
+                    "
+                >
+                    আমি ঘোষণা করছি যে, এই আবেদনপত্রে প্রদত্ত সকল তথ্য
+                    আমার জ্ঞান ও বিশ্বাস অনুযায়ী সঠিক ও সত্য। আমি
+                    ঘোপখালী স্পোর্টস অ্যারিনার নিয়ম, নীতিমালা ও
+                    শৃঙ্খলা বিধি মেনে চলতে সম্মত।
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 SIGNATURE
+            ========================================== -->
+
+            <div
+                style="
+                    margin-top:42px;
+                    display:flex;
+                    justify-content:space-between;
+                    gap:50px;
+                "
+            >
+
+                <div
+                    style="
+                        width:45%;
+                        text-align:center;
+                    "
+                >
+
+                    <div
+                        style="
+                            height:35px;
+                            border-bottom:1px solid #999;
+                        "
+                    ></div>
+
+                    <div
+                        style="
+                            margin-top:7px;
+                            font-size:10px;
+                            color:#777;
+                        "
+                    >
+                        Applicant Signature
+                    </div>
+
+                </div>
+
+
+                <div
+                    style="
+                        width:45%;
+                        text-align:center;
+                    "
+                >
+
+                    <div
+                        style="
+                            height:35px;
+                            border-bottom:1px solid #999;
+                        "
+                    ></div>
+
+                    <div
+                        style="
+                            margin-top:7px;
+                            font-size:10px;
+                            color:#777;
+                        "
+                    >
+                        GSA Official
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+                 FOOTER
+            ========================================== -->
+
+            <div
+                style="
+                    position:absolute;
+                    left:60px;
+                    right:60px;
+                    bottom:30px;
+                    padding-top:12px;
+                    border-top:1px solid #e5e5e7;
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    font-size:9px;
+                    color:#86868b;
+                "
+            >
+
+                <div>
+                    Ghopkhali Sports Arena
+                </div>
+
+                <div>
+                    Official Membership Application
+                </div>
+
+                <div>
+                    ${statusText}
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    /* =================================================
+       SHOW CONTAINER
+    ================================================= */
+
+    container.style.display =
+        "block";
+
+    container.style.position =
+        "fixed";
+
+    container.style.left =
+        "-10000px";
+
+    container.style.top =
+        "0";
+
+    container.style.width =
+        "794px";
+
+    container.style.background =
+        "#ffffff";
+
+    container.style.zIndex =
+        "-1";
+
+
+    /* =================================================
+       WAIT FOR RENDER
+    ================================================= */
+
+    await new Promise(
+        resolve =>
+            requestAnimationFrame(
+                () =>
+                    requestAnimationFrame(
+                        resolve
+                    )
+            )
+    );
+
+
+    /* =================================================
+       CHECK PDF LIBRARY
+    ================================================= */
+
+    if (
+        typeof html2canvas ===
+        "undefined"
+    ) {
+
+        throw new Error(
+            "html2canvas library is not loaded."
+        );
+
+    }
+
+
+    if (
+        !window.jspdf ||
+        !window.jspdf.jsPDF
+    ) {
+
+        throw new Error(
+            "jsPDF library is not loaded."
+        );
+
+    }
+
+
+    try {
+
+        /* =============================================
+           CREATE CANVAS
+        ============================================= */
+
+        const page =
+            document.getElementById(
+                "gsaMembershipPdfPage"
+            );
+
+        if (!page) {
 
             throw new Error(
-                "PDF library is not loaded."
+                "Membership PDF page could not be created."
             );
 
         }
 
 
-        container.style.display =
-            "block";
+        const canvas =
+            await html2canvas(
+                page,
+                {
+                    scale:2,
+                    useCORS:true,
+                    allowTaint:false,
+                    backgroundColor:"#ffffff",
+                    logging:false
+                }
+            );
 
 
-        const options = {
+        /* =============================================
+           CREATE PDF
+        ============================================= */
 
-            margin: 10,
-
-            filename:
-                `GSA-Membership-Application-${application.id}.pdf`,
-
-            image: {
-                type: "jpeg",
-                quality: 0.98
-            },
-
-            html2canvas: {
-                scale: 2
-            },
-
-            jsPDF: {
-                unit: "mm",
-                format: "a4",
-                orientation: "portrait"
-            }
-
-        };
+        const {
+            jsPDF
+        } = window.jspdf;
 
 
-        await html2pdf()
-            .set(options)
-            .from(container)
-            .save();
+        const pdf =
+            new jsPDF({
+                orientation:"portrait",
+                unit:"mm",
+                format:"a4",
+                compress:true
+            });
 
+
+        const pageWidth =
+            pdf.internal.pageSize.getWidth();
+
+        const pageHeight =
+            pdf.internal.pageSize.getHeight();
+
+
+        const imageWidth =
+            pageWidth;
+
+
+        const imageHeight =
+            canvas.height *
+            imageWidth /
+            canvas.width;
+
+
+        /* =============================================
+           ONE PAGE
+        ============================================= */
+
+        if (
+            imageHeight <=
+            pageHeight
+        ) {
+
+            pdf.addImage(
+                canvas.toDataURL(
+                    "image/jpeg",
+                    0.96
+                ),
+                "JPEG",
+                0,
+                0,
+                imageWidth,
+                imageHeight,
+                undefined,
+                "FAST"
+            );
+
+        } else {
+
+            /*
+             * Safety fallback for unusually long
+             * addresses/messages.
+             */
+
+            const ratio =
+                pageHeight /
+                imageHeight;
+
+            pdf.addImage(
+                canvas.toDataURL(
+                    "image/jpeg",
+                    0.96
+                ),
+                "JPEG",
+                0,
+                0,
+                imageWidth * ratio,
+                pageHeight,
+                undefined,
+                "FAST"
+            );
+
+        }
+
+
+        /* =============================================
+           FILE NAME
+        ============================================= */
+
+        const fileName =
+            `GSA-Membership-Application-${applicationId}.pdf`;
+
+
+        /* =============================================
+           DOWNLOAD
+        ============================================= */
+
+        pdf.save(fileName);
+
+
+    } finally {
 
         container.style.display =
             "none";
-
-
-    } catch (error) {
-
-        console.error(
-            "Membership PDF error:",
-            error
-        );
-
-
-        const container =
-            $("membershipPdfContainer");
-
-
-        if (container) {
-
-            container.style.display =
-                "none";
-
-        }
-
-
-        alert(
-            error?.message ||
-            "Failed to generate membership PDF."
-        );
 
     }
 
 }
 
+
+/* =====================================================
+   MEMBERSHIP PDF — DOWNLOAD BUTTON
+===================================================== */
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const button =
+            event.target.closest(
+                "[data-membership-pdf]"
+            );
+
+        if (!button) {
+            return;
+        }
+
+
+        const applicationId =
+            button.dataset.id;
+
+
+        if (!applicationId) {
+
+            alert(
+                "Application ID is missing."
+            );
+
+            return;
+        }
+
+
+        const application =
+            membershipApplications.find(
+                item =>
+                    String(item.id) ===
+                    String(applicationId)
+            );
+
+
+        if (!application) {
+
+            alert(
+                "Membership application not found."
+            );
+
+            return;
+        }
+
+
+        try {
+
+            button.disabled =
+                true;
+
+            const originalText =
+                button.innerHTML;
+
+            button.innerHTML =
+                "Generating PDF...";
+
+
+            await generateMembershipApplicationPDF(
+                application
+            );
+
+
+            button.innerHTML =
+                originalText;
+
+
+        } catch (error) {
+
+            console.error(
+                "Membership PDF download error:",
+                error
+            );
+
+
+            alert(
+                "Unable to generate Application PDF.\n\n" +
+                (
+                    error?.message ||
+                    "Unknown error."
+                )
+            );
+
+
+            button.innerHTML =
+                "Download Application PDF";
+
+
+        } finally {
+
+            button.disabled =
+                false;
+
+        }
+
+    }
+);
 
 /* =====================================================
    LOAD FRIENDLY APPLICATIONS
