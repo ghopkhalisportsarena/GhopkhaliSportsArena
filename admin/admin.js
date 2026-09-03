@@ -8571,21 +8571,15 @@ document.addEventListener(
             );
 
 
-             } catch (error) {
+                   } catch (error) {
 
             console.error(
                 "Rules save error:",
                 error
             );
 
-            const errorMessage =
-                error?.message ||
-                error?.details ||
-                error?.hint ||
-                "Unknown error";
-
             showRulesStatus(
-                "Save failed: " + errorMessage,
+                "Unable to save Rules. Please try again.",
                 "error"
             );
 
@@ -8597,6 +8591,9 @@ document.addEventListener(
                 originalButtonText;
 
         }
+
+    }
+
     /* -------------------------------------------------
        RESET RULES
     ------------------------------------------------- */
