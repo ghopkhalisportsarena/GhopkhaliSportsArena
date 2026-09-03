@@ -8125,3 +8125,543 @@ document.addEventListener(
     }
 
 });
+
+/* =====================================================
+   RULES & REGULATIONS MANAGEMENT
+===================================================== */
+
+(function () {
+
+    "use strict";
+
+
+    /* -------------------------------------------------
+       ELEMENTS
+    ------------------------------------------------- */
+
+    const rulesTitle =
+        document.getElementById("rulesAdminTitle");
+
+    const rulesContent =
+        document.getElementById("rulesAdminContent");
+
+    const saveRulesButton =
+        document.getElementById("saveRulesButton");
+
+    const resetRulesButton =
+        document.getElementById("resetRulesButton");
+
+    const rulesUpdated =
+        document.getElementById("rulesAdminUpdated");
+
+    const rulesStatus =
+        document.getElementById("rulesAdminStatus");
+
+
+    /* -------------------------------------------------
+       CHECK ELEMENTS
+    ------------------------------------------------- */
+
+    if (
+        !rulesTitle ||
+        !rulesContent ||
+        !saveRulesButton
+    ) {
+        return;
+    }
+
+
+    /* -------------------------------------------------
+       ORIGINAL DATA
+    ------------------------------------------------- */
+
+    let originalRules = {
+        title: "",
+        content: ""
+    };
+
+
+    /* -------------------------------------------------
+       STATUS MESSAGE
+    ------------------------------------------------- */
+
+    function showRulesStatus(
+        message,
+        type = "success"
+    ) {
+
+        if (!rulesStatus) {
+            return;
+        }
+
+        rulesStatus.textContent = message;
+
+        rulesStatus.className =
+            "rules-admin-status " + type;
+
+    }
+
+
+    /* -------------------------------------------------
+       FORMAT DATE
+    ------------------------------------------------- */
+
+    function formatRulesDate(date) {
+
+        if (!date) {
+            return "Official";
+        }
+
+        return new Date(date).toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    /* -------------------------------------------------
+       LOAD RULES
+    ------------------------------------------------- */
+
+    async function loadAdminRules() {
+
+        try {
+
+            if (rulesUpdated) {
+
+                rulesUpdated.textContent =
+                    "Loading...";
+
+            }
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from("site_rules")
+
+                .select(
+                    "id, title, content, updated_at"
+                )
+
+                .limit(1)
+
+                .maybeSingle();
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            /* -----------------------------------------
+               NO RULES FOUND
+            ----------------------------------------- */
+
+            if (!data) {
+
+                originalRules = {
+                    title: "Rules & Regulations",
+                    content: ""
+                };
+
+
+                rulesTitle.value =
+                    originalRules.title;
+
+                rulesContent.value =
+                    originalRules.content;
+
+
+                if (rulesUpdated) {
+
+                    rulesUpdated.textContent =
+                        "Not saved yet";
+
+                }
+
+                return;
+            }
+
+
+            /* -----------------------------------------
+               SAVE ORIGINAL DATA
+            ----------------------------------------- */
+
+            originalRules = {
+
+                title:
+                    data.title ||
+                    "Rules & Regulations",
+
+                content:
+                    data.content || ""
+
+            };
+
+
+            /* -----------------------------------------
+               PUT DATA INTO EDITOR
+            ----------------------------------------- */
+
+            rulesTitle.value =
+                originalRules.title;
+
+            rulesContent.value =
+                originalRules.content;
+
+
+            /* -----------------------------------------
+               UPDATED DATE
+            ----------------------------------------- */
+
+            if (rulesUpdated) {
+
+                rulesUpdated.textContent =
+                    data.updated_at
+                        ? "Updated " +
+                          formatRulesDate(
+                              data.updated_at
+                          )
+                        : "Official";
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Rules loading error:",
+                error
+            );
+
+
+            showRulesStatus(
+                "Unable to load Rules & Regulations.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /* -------------------------------------------------
+       SAVE RULES
+    ------------------------------------------------- */
+
+    async function saveAdminRules() {
+
+        const title =
+            rulesTitle.value.trim();
+
+        const content =
+            rulesContent.value.trim();
+
+
+        /* -----------------------------------------
+           VALIDATION
+        ----------------------------------------- */
+
+        if (!title) {
+
+            showRulesStatus(
+                "Please enter a Rules Page Title.",
+                "error"
+            );
+
+            rulesTitle.focus();
+
+            return;
+        }
+
+
+        if (!content) {
+
+            showRulesStatus(
+                "Please enter the Rules & Regulations content.",
+                "error"
+            );
+
+            rulesContent.focus();
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           BUTTON LOADING
+        ----------------------------------------- */
+
+        const originalButtonText =
+            saveRulesButton.textContent;
+
+
+        saveRulesButton.disabled = true;
+
+        saveRulesButton.textContent =
+            "Saving...";
+
+
+        showRulesStatus(
+            "Saving Rules & Regulations..."
+        );
+
+
+        try {
+
+            /* -------------------------------------
+               CHECK EXISTING ROW
+            ------------------------------------- */
+
+            const {
+                data: existing,
+                error: findError
+            } = await supabaseClient
+
+                .from("site_rules")
+
+                .select("id")
+
+                .limit(1)
+
+                .maybeSingle();
+
+
+            if (findError) {
+                throw findError;
+            }
+
+
+            let savedData;
+
+
+            /* -------------------------------------
+               UPDATE EXISTING RULES
+            ------------------------------------- */
+
+            if (existing && existing.id) {
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient
+
+                    .from("site_rules")
+
+                    .update({
+
+                        title: title,
+
+                        content: content,
+
+                        updated_at:
+                            new Date().toISOString()
+
+                    })
+
+                    .eq(
+                        "id",
+                        existing.id
+                    )
+
+                    .select(
+                        "id, title, content, updated_at"
+                    )
+
+                    .single();
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                savedData = data;
+
+            }
+
+
+            /* -------------------------------------
+               CREATE RULES IF NONE EXIST
+            ------------------------------------- */
+
+            else {
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient
+
+                    .insert({
+
+                        title: title,
+
+                        content: content,
+
+                        updated_at:
+                            new Date().toISOString()
+
+                    })
+
+                    .select(
+                        "id, title, content, updated_at"
+                    )
+
+                    .single();
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                savedData = data;
+
+            }
+
+
+            /* -------------------------------------
+               UPDATE LOCAL ORIGINAL DATA
+            ------------------------------------- */
+
+            originalRules = {
+
+                title:
+                    savedData.title ||
+                    "Rules & Regulations",
+
+                content:
+                    savedData.content || ""
+
+            };
+
+
+            /* -------------------------------------
+               UPDATE UPDATED DATE
+            ------------------------------------- */
+
+            if (rulesUpdated) {
+
+                rulesUpdated.textContent =
+                    savedData.updated_at
+                        ? "Updated " +
+                          formatRulesDate(
+                              savedData.updated_at
+                          )
+                        : "Saved";
+
+            }
+
+
+            /* -------------------------------------
+               SUCCESS
+            ------------------------------------- */
+
+            showRulesStatus(
+                "✓ Rules & Regulations saved successfully.",
+                "success"
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Rules save error:",
+                error
+            );
+
+
+            showRulesStatus(
+                "Unable to save Rules. Please try again.",
+                "error"
+            );
+
+        } finally {
+
+            saveRulesButton.disabled = false;
+
+            saveRulesButton.textContent =
+                originalButtonText;
+
+        }
+
+    }
+
+
+    /* -------------------------------------------------
+       RESET RULES
+    ------------------------------------------------- */
+
+    function resetAdminRules() {
+
+        rulesTitle.value =
+            originalRules.title ||
+            "Rules & Regulations";
+
+
+        rulesContent.value =
+            originalRules.content || "";
+
+
+        showRulesStatus(
+            "Changes have been reset.",
+            "success"
+        );
+
+    }
+
+
+    /* -------------------------------------------------
+       SAVE BUTTON
+    ------------------------------------------------- */
+
+    saveRulesButton.addEventListener(
+        "click",
+        saveAdminRules
+    );
+
+
+    /* -------------------------------------------------
+       RESET BUTTON
+    ------------------------------------------------- */
+
+    if (resetRulesButton) {
+
+        resetRulesButton.addEventListener(
+            "click",
+            resetAdminRules
+        );
+
+    }
+
+
+    /* -------------------------------------------------
+       LOAD WHEN DOM IS READY
+    ------------------------------------------------- */
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadAdminRules
+        );
+
+    } else {
+
+        loadAdminRules();
+
+    }
+
+
+})();
