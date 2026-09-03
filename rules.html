@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#f5f5f7"
+    >
+
+    <title>
+        Rules & Regulations | Ghopkhali Sports Arena
+    </title>
+
+
+    <!-- =================================================
+         SUPABASE
+    ================================================= -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Helvetica Neue",
+                Arial,
+                sans-serif;
+
+            color: #1d1d1f;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5f5f7 0%,
+                    #eef4ff 45%,
+                    #f8f0ff 100%
+                );
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =================================================
+           TOP NAV
+        ================================================= */
+
+        .rules-nav {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            backdrop-filter:
+                blur(22px);
+
+            -webkit-backdrop-filter:
+                blur(22px);
+
+            background:
+                rgba(255,255,255,.78);
+
+            border-bottom:
+                1px solid
+                rgba(0,0,0,.07);
+
+        }
+
+
+        .nav-inner {
+
+            width: min(
+                1180px,
+                calc(100% - 32px)
+            );
+
+            margin: auto;
+
+            min-height: 70px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none;
+
+            color: #1d1d1f;
+
+        }
+
+
+        .brand-mark {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 14px;
+
+            display: grid;
+
+            place-items: center;
+
+            color: white;
+
+            font-weight: 800;
+
+            font-size: 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0071e3,
+                    #7b2cff,
+                    #ff375f
+                );
+
+            box-shadow:
+                0 8px 20px
+                rgba(82,65,220,.25);
+
+        }
+
+
+        .brand-text strong {
+
+            display: block;
+
+            font-size: 14px;
+
+            letter-spacing: -.2px;
+
+        }
+
+
+        .brand-text span {
+
+            display: block;
+
+            margin-top: 2px;
+
+            color: #86868b;
+
+            font-size: 11px;
+
+        }
+
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 42px;
+
+            padding:
+                0 16px;
+
+            border-radius: 999px;
+
+            text-decoration: none;
+
+            color: #1d1d1f;
+
+            background:
+                rgba(255,255,255,.85);
+
+            border:
+                1px solid
+                rgba(0,0,0,.08);
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        .back-button:hover {
+
+            transform:
+                translateY(-1px);
+
+            background:
+                white;
+
+            box-shadow:
+                0 8px 24px
+                rgba(0,0,0,.08);
+
+        }
+
+
+        /* =================================================
+           HERO
+        ================================================= */
+
+        .hero {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding:
+                82px 0 60px;
+
+        }
+
+
+        .hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 420px;
+
+            height: 420px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(0,113,227,.12);
+
+            filter:
+                blur(20px);
+
+            top: -180px;
+
+            right: -100px;
+
+        }
+
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 360px;
+
+            height: 360px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(175,82,222,.12);
+
+            filter:
+                blur(30px);
+
+            bottom: -200px;
+
+            left: -120px;
+
+        }
+
+
+        .hero-inner {
+
+            position: relative;
+
+            z-index: 2;
+
+            width: min(
+                1000px,
+                calc(100% - 32px)
+            );
+
+            margin: auto;
+
+            text-align: center;
+
+        }
+
+
+        .eyebrow {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                7px 12px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(255,255,255,.72);
+
+            border:
+                1px solid
+                rgba(0,0,0,.07);
+
+            color: #6e6e73;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing:
+                .7px;
+
+        }
+
+
+        .eyebrow-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background:
+                #34c759;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(52,199,89,.12);
+
+        }
+
+
+        .hero h1 {
+
+            margin:
+                22px 0 14px;
+
+            font-size:
+                clamp(
+                    42px,
+                    7vw,
+                    76px
+                );
+
+            line-height: .98;
+
+            letter-spacing:
+                -4px;
+
+            font-weight: 800;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #0071e3,
+                    #7b2cff,
+                    #ff375f
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+
+        }
+
+
+        .hero p {
+
+            max-width: 680px;
+
+            margin:
+                0 auto;
+
+            color: #6e6e73;
+
+            font-size:
+                clamp(
+                    15px,
+                    2vw,
+                    18px
+                );
+
+            line-height: 1.6;
+
+        }
+
+
+        /* =================================================
+           RULES CONTAINER
+        ================================================= */
+
+        .rules-wrap {
+
+            width: min(
+                920px,
+                calc(100% - 32px)
+            );
+
+            margin:
+                0 auto 80px;
+
+        }
+
+
+        .rules-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                rgba(255,255,255,.88);
+
+            border:
+                1px solid
+                rgba(0,0,0,.07);
+
+            border-radius: 30px;
+
+            padding:
+                clamp(
+                    24px,
+                    5vw,
+                    54px
+                );
+
+            box-shadow:
+                0 24px 70px
+                rgba(31,38,135,.10);
+
+        }
+
+
+        .rules-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            top: 0;
+
+            width: 100%;
+
+            height: 5px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #0071e3,
+                    #7b2cff,
+                    #ff375f,
+                    #ff9f0a
+                );
+
+        }
+
+
+        .rules-header {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding-bottom: 28px;
+
+            margin-bottom: 28px;
+
+            border-bottom:
+                1px solid
+                #e5e5ea;
+
+        }
+
+
+        .rules-header h2 {
+
+            margin: 0;
+
+            font-size:
+                clamp(
+                    25px,
+                    4vw,
+                    36px
+                );
+
+            letter-spacing:
+                -1.2px;
+
+        }
+
+
+        .rules-header p {
+
+            margin:
+                8px 0 0;
+
+            color: #86868b;
+
+            font-size: 13px;
+
+        }
+
+
+        .updated {
+
+            flex-shrink: 0;
+
+            padding:
+                8px 12px;
+
+            border-radius: 999px;
+
+            background:
+                #f5f5f7;
+
+            color: #6e6e73;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+        }
+
+
+        /* =================================================
+           CONTENT
+        ================================================= */
+
+        #rulesContent {
+
+            color: #3a3a3c;
+
+            font-size:
+                16px;
+
+            line-height:
+                1.85;
+
+            white-space:
+                pre-wrap;
+
+            word-break:
+                break-word;
+
+        }
+
+
+        #rulesContent h1,
+        #rulesContent h2,
+        #rulesContent h3 {
+
+            color: #1d1d1f;
+
+            line-height: 1.3;
+
+        }
+
+
+        #rulesContent h2 {
+
+            margin-top: 34px;
+
+        }
+
+
+        .rule-item {
+
+            margin:
+                0 0 18px;
+
+            padding:
+                18px 20px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(0,113,227,.055),
+                    rgba(123,44,255,.045)
+                );
+
+            border:
+                1px solid
+                rgba(0,113,227,.08);
+
+        }
+
+
+        /* =================================================
+           LOADING
+        ================================================= */
+
+        .loading {
+
+            min-height: 300px;
+
+            display: grid;
+
+            place-items: center;
+
+            color: #86868b;
+
+            font-size: 14px;
+
+        }
+
+
+        .loading-spinner {
+
+            width: 28px;
+
+            height: 28px;
+
+            border-radius: 50%;
+
+            border:
+                3px solid
+                #e5e5ea;
+
+            border-top-color:
+                #0071e3;
+
+            animation:
+                spin .8s linear infinite;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform:
+                    rotate(360deg);
+            }
+
+        }
+
+
+        /* =================================================
+           ERROR
+        ================================================= */
+
+        .error-state {
+
+            text-align: center;
+
+            padding:
+                60px 20px;
+
+            color: #6e6e73;
+
+        }
+
+
+        .error-state strong {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #1d1d1f;
+
+            font-size: 18px;
+
+        }
+
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        footer {
+
+            text-align: center;
+
+            padding:
+                0 20px 45px;
+
+            color: #86868b;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =================================================
+           MOBILE
+        ================================================= */
+
+        @media (
+            max-width: 600px
+        ) {
+
+            .nav-inner {
+
+                min-height: 62px;
+
+                width:
+                    calc(100% - 24px);
+
+            }
+
+
+            .brand-mark {
+
+                width: 38px;
+
+                height: 38px;
+
+                border-radius: 12px;
+
+            }
+
+
+            .brand-text span {
+
+                display: none;
+
+            }
+
+
+            .back-button {
+
+                min-height: 38px;
+
+                padding:
+                    0 13px;
+
+            }
+
+
+            .hero {
+
+                padding:
+                    62px 0 42px;
+
+            }
+
+
+            .hero h1 {
+
+                letter-spacing:
+                    -2.5px;
+
+            }
+
+
+            .rules-wrap {
+
+                width:
+                    calc(100% - 20px);
+
+            }
+
+
+            .rules-card {
+
+                border-radius: 22px;
+
+                padding:
+                    24px 18px;
+
+            }
+
+
+            .rules-header {
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .updated {
+
+                align-self:
+                    flex-start;
+
+            }
+
+
+            #rulesContent {
+
+                font-size:
+                    15px;
+
+                line-height:
+                    1.8;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =================================================
+         NAVIGATION
+    ================================================= -->
+
+    <header class="rules-nav">
+
+        <div class="nav-inner">
+
+            <a
+                href="index.html"
+                class="brand"
+            >
+
+                <div class="brand-mark">
+                    GSA
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>
+                        Ghopkhali Sports Arena
+                    </strong>
+
+                    <span>
+                        Official Rules & Regulations
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="index.html"
+                class="back-button"
+            >
+                ← Home
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         HERO
+    ================================================= -->
+
+    <section class="hero">
+
+        <div class="hero-inner">
+
+            <div class="eyebrow">
+
+                <span
+                    class="eyebrow-dot"
+                ></span>
+
+                GSA OFFICIAL POLICY
+
+            </div>
+
+
+            <h1>
+                Rules &<br>
+                Regulations
+            </h1>
+
+
+            <p>
+                The official rules, discipline standards
+                and regulations of Ghopkhali Sports Arena.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         RULES CONTENT
+    ================================================= -->
+
+    <main class="rules-wrap">
+
+        <article class="rules-card">
+
+            <div class="rules-header">
+
+                <div>
+
+                    <h2 id="rulesTitle">
+                        Rules & Regulations
+                    </h2>
+
+                    <p>
+                        Ghopkhali Sports Arena
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="updated"
+                    id="rulesUpdated"
+                >
+                    Loading...
+                </div>
+
+            </div>
+
+
+            <div
+                id="rulesContent"
+            >
+
+                <div class="loading">
+
+                    <div>
+
+                        <div
+                            class="loading-spinner"
+                        ></div>
+
+                        Loading rules...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    </main>
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================= -->
+
+    <footer>
+
+        © Ghopkhali Sports Arena —
+        Rules & Regulations
+
+    </footer>
+
+
+    <!-- =================================================
+         SUPABASE SCRIPT
+    ================================================= -->
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+        const SUPABASE_ANON_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_ANON_KEY
+            );
+
+
+        /* =================================================
+           ESCAPE HTML
+        ================================================= */
+
+        function escapeHTML(
+            value
+        ) {
+
+            return String(
+                value ?? ""
+            )
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+        }
+
+
+        /* =================================================
+           LOAD RULES
+        ================================================= */
+
+        async function loadRules() {
+
+            const title =
+                document.getElementById(
+                    "rulesTitle"
+                );
+
+
+            const content =
+                document.getElementById(
+                    "rulesContent"
+                );
+
+
+            const updated =
+                document.getElementById(
+                    "rulesUpdated"
+                );
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from(
+                            "site_rules"
+                        )
+                        .select(
+                            "title, content, updated_at"
+                        )
+                        .limit(1)
+                        .single();
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                if (title) {
+
+                    title.textContent =
+                        data.title ||
+                        "Rules & Regulations";
+
+                }
+
+
+                if (content) {
+
+                    content.innerHTML =
+                        escapeHTML(
+                            data.content ||
+                            "No rules have been published yet."
+                        )
+                        .replace(
+                            /\n/g,
+                            "<br>"
+                        );
+
+                }
+
+
+                if (updated) {
+
+                    updated.textContent =
+                        data.updated_at
+                            ? "Updated " +
+                              new Date(
+                                  data.updated_at
+                              ).toLocaleDateString(
+                                  "en-GB",
+                                  {
+                                      day:
+                                          "2-digit",
+                                      month:
+                                          "short",
+                                      year:
+                                          "numeric"
+                                  }
+                              )
+                            : "Official";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Rules loading error:",
+                    error
+                );
+
+
+                if (content) {
+
+                    content.innerHTML = `
+
+                        <div
+                            class="error-state"
+                        >
+
+                            <strong>
+                                Unable to load rules
+                            </strong>
+
+                            Please try again later.
+
+                        </div>
+
+                    `;
+
+                }
+
+            }
+
+        }
+
+
+        /* =================================================
+           START
+        ================================================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadRules
+        );
+
+    </script>
+
+</body>
+
+</html>
