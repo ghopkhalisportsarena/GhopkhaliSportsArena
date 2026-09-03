@@ -3784,50 +3784,39 @@ document.addEventListener(
     }
 );
 
-
 /* =====================================================
-   GSA MEMBERSHIP APPLICATION PDF
-   APPLE INSPIRED • LIGHTWEIGHT • COLORFUL • A4
-   BANGLA FONT: KALPURUSH
+   MEMBERSHIP APPLICATION PDF — HD VERSION
 ===================================================== */
 
 async function generateMembershipApplicationPDF(application) {
 
     if (!application) {
-        alert("Application data not found.");
-        return;
-    }
-
-    /* -------------------------------------------------
-       LOAD FONTS
-    ------------------------------------------------- */
-
-    const fontLink = document.createElement("link");
-
-    fontLink.rel = "stylesheet";
-    fontLink.href =
-        "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kalpurush&display=swap";
-
-    document.head.appendChild(fontLink);
-
-    try {
-        await document.fonts.load("400 16px Kalpurush");
-        await document.fonts.load("500 16px Kalpurush");
-        await document.fonts.load("600 16px Kalpurush");
-        await document.fonts.load("700 16px Kalpurush");
-        await document.fonts.load("400 16px Inter");
-        await document.fonts.load("600 16px Inter");
-        await document.fonts.load("700 16px Inter");
-    } catch (fontError) {
-        console.warn("Font loading warning:", fontError);
+        throw new Error("Application data not found.");
     }
 
 
-    /* -------------------------------------------------
-       HELPER FUNCTIONS
-    ------------------------------------------------- */
+    /* =================================================
+       CHECK LIBRARIES
+    ================================================= */
 
-    function safe(value) {
+    if (
+        typeof window.jspdf === "undefined" ||
+        typeof window.html2canvas === "undefined"
+    ) {
+        throw new Error(
+            "PDF libraries are not loaded."
+        );
+    }
+
+
+    const { jsPDF } = window.jspdf;
+
+
+    /* =================================================
+       HELPERS
+    ================================================= */
+
+    const safe = value => {
 
         if (
             value === null ||
@@ -3843,115 +3832,68 @@ async function generateMembershipApplicationPDF(application) {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
-    }
+    };
 
 
-    function hasSport(name) {
-
-        const sports =
-            String(application.sports || "")
-                .toLowerCase();
-
-        return sports.includes(name.toLowerCase());
-    }
-
-
-    function checkbox(name) {
-
-        return `
-            <span class="sport-option">
-                <span class="check-box">
-                    ${hasSport(name) ? "✓" : ""}
-                </span>
-                ${safe(name)}
-            </span>
-        `;
-    }
-
-
-    function statusInfo(status) {
-
-        const value =
-            String(status || "pending").toLowerCase();
-
-        if (value === "approved") {
-
-            return {
-                text: "অনুমোদিত",
-                color: "#16A34A",
-                bg: "#DCFCE7",
-                icon: "✓"
-            };
-        }
-
-        if (value === "rejected") {
-
-            return {
-                text: "বাতিল",
-                color: "#DC2626",
-                bg: "#FEE2E2",
-                icon: "×"
-            };
-        }
-
-        return {
-            text: "অপেক্ষমাণ",
-            color: "#D97706",
-            bg: "#FEF3C7",
-            icon: "•"
-        };
-    }
-
-
-    const status =
-        statusInfo(application.status);
-
-
-    /* -------------------------------------------------
-       DATE
-    ------------------------------------------------- */
-
-    function formatDate(value) {
+    const formatDate = value => {
 
         if (!value) {
             return "—";
         }
 
-        try {
+        const date =
+            new Date(value);
 
-            const date =
-                new Date(value);
-
-            if (isNaN(date.getTime())) {
-                return safe(value);
-            }
-
-            return date.toLocaleDateString(
-                "bn-BD",
-                {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                }
-            );
-
-        } catch {
-
+        if (isNaN(date.getTime())) {
             return safe(value);
         }
-    }
+
+        return date.toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            }
+        );
+    };
 
 
-    /* -------------------------------------------------
+    const applicationId =
+        application.id
+            ? String(application.id)
+            : "N/A";
+
+
+    const status =
+        application.status ||
+        "pending";
+
+
+    /* =================================================
+       LOGO
+    ================================================= */
+
+    const logoPath =
+        "gsa.png";
+
+
+    /* =================================================
        PHOTO
-    ------------------------------------------------- */
+    ================================================= */
 
     let photoHTML = `
         <div class="photo-placeholder">
-            <div class="photo-icon">👤</div>
-            <div>ছবি</div>
+            <div class="photo-placeholder-icon">
+                👤
+            </div>
+
+            <div class="photo-placeholder-text">
+                Applicant Photo
+            </div>
         </div>
     `;
+
 
     if (application.photo_url) {
 
@@ -3960,59 +3902,25 @@ async function generateMembershipApplicationPDF(application) {
                 src="${safe(application.photo_url)}"
                 class="applicant-photo"
                 crossorigin="anonymous"
+                alt="Applicant Photo"
             >
         `;
     }
 
 
-    /* -------------------------------------------------
-       APPLICATION DATA
-    ------------------------------------------------- */
-
-    const applicationID =
-        safe(application.id || "—");
-
-    const submittedDate =
-        formatDate(application.created_at);
-
-    const birthDate =
-        formatDate(application.date_of_birth);
-
-    const sportsSkill =
-        safe(application.sports_skill);
-
-    const previousExperience =
-        safe(application.previous_club_experience);
-
-    const otherSports =
-        safe(application.other_sports);
-
-    const emergencyName =
-        safe(application.emergency_contact_name);
-
-    const emergencyRelation =
-        safe(application.emergency_contact_relation);
-
-    const emergencyMobile =
-        safe(application.emergency_contact_mobile);
-
-
-    /* -------------------------------------------------
+    /* =================================================
        CREATE PDF PAGE
-       EXACT A4 RATIO
-    ------------------------------------------------- */
+    ================================================= */
 
     const page =
         document.createElement("div");
 
-    page.id =
-        "gsa-membership-pdf";
 
     page.style.position =
         "fixed";
 
     page.style.left =
-        "-10000px";
+        "-20000px";
 
     page.style.top =
         "0";
@@ -4024,187 +3932,236 @@ async function generateMembershipApplicationPDF(application) {
         "1123px";
 
     page.style.background =
-        "#F5F5F7";
+        "#ffffff";
 
     page.style.zIndex =
-        "-9999";
+        "-999999";
 
-
-    /* -------------------------------------------------
-       PDF HTML
-    ------------------------------------------------- */
 
     page.innerHTML = `
 
         <style>
 
-            #gsa-membership-pdf {
+            @import url(
+                'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap'
+            );
 
+
+            * {
                 box-sizing: border-box;
+            }
+
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                background: #ffffff;
+            }
+
+
+            .pdf-page {
+
+                width: 794px;
+                height: 1123px;
+
+                padding: 42px 46px 36px 46px;
+
+                background: #ffffff;
+
+                color: #111827;
 
                 font-family:
-                    "Kalpurush",
+                    "Noto Sans Bengali",
                     "Inter",
+                    Arial,
                     sans-serif;
-
-                color: #1D1D1F;
-
-                background: #F5F5F7;
-
-                padding: 24px;
-
-                line-height: 1.45;
-
-                overflow: hidden;
-            }
-
-
-            #gsa-membership-pdf * {
-
-                box-sizing: border-box;
-            }
-
-
-            /* -----------------------------------------
-               MAIN SHEET
-            ----------------------------------------- */
-
-            .paper {
-
-                width: 100%;
-
-                height: 100%;
-
-                background: #FFFFFF;
-
-                border-radius: 16px;
-
-                padding: 25px 28px 20px;
 
                 position: relative;
 
                 overflow: hidden;
-
-                border: 1px solid #E5E5EA;
             }
 
 
-            /* -----------------------------------------
+            /* =========================================
                TOP COLOR LINE
-            ----------------------------------------- */
+            ========================================= */
 
             .top-line {
 
                 position: absolute;
 
+                top: 0;
                 left: 0;
 
-                right: 0;
-
-                top: 0;
-
-                height: 5px;
+                width: 100%;
+                height: 8px;
 
                 background:
                     linear-gradient(
                         90deg,
-                        #007AFF 0%,
-                        #5856D6 50%,
-                        #34C759 100%
+                        #007aff 0%,
+                        #5856d6 45%,
+                        #34c759 100%
                     );
             }
 
 
-            /* -----------------------------------------
+            /* =========================================
                HEADER
-            ----------------------------------------- */
+            ========================================= */
 
             .header {
 
-                text-align: center;
+                display: flex;
 
-                padding-top: 7px;
+                justify-content: space-between;
 
-                padding-bottom: 14px;
+                align-items: flex-start;
+
+                padding-top: 14px;
+
+                padding-bottom: 22px;
 
                 border-bottom:
-                    1px solid #E5E5EA;
+                    1px solid #e5e7eb;
             }
 
 
-            .brand {
+            .header-left {
 
-                font-family: Inter, sans-serif;
+                flex: 1;
 
-                font-size: 22px;
+                padding-right: 20px;
+            }
+
+
+            .club-title {
+
+                margin: 0;
+
+                font-family:
+                    "Inter",
+                    Arial,
+                    sans-serif;
+
+                font-size: 28px;
+
+                font-weight: 800;
+
+                letter-spacing: -0.7px;
+
+                color: #111827;
+
+                line-height: 1.15;
+            }
+
+
+            .club-bangla {
+
+                margin-top: 7px;
+
+                font-size: 20px;
 
                 font-weight: 700;
 
-                letter-spacing: 1.4px;
+                color: #1f2937;
 
-                color: #1D1D1F;
-            }
-
-
-            .brand-bn {
-
-                margin-top: 1px;
-
-                font-size: 18px;
-
-                font-weight: 600;
-
-                color: #007AFF;
+                line-height: 1.3;
             }
 
 
             .established {
 
-                margin-top: 1px;
+                margin-top: 6px;
 
-                font-size: 10px;
+                font-size: 12px;
 
-                color: #6E6E73;
+                font-weight: 500;
+
+                color: #6b7280;
             }
 
 
-            .form-title {
+            /* =========================================
+               GSA LOGO
+            ========================================= */
 
-                display: inline-block;
+            .logo-box {
 
-                margin-top: 10px;
+                width: 92px;
 
-                padding:
-                    5px 18px;
+                height: 92px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                flex-shrink: 0;
 
                 border-radius: 20px;
 
-                background: #F0F7FF;
-
-                color: #007AFF;
-
-                font-size: 15px;
-
-                font-weight: 700;
+                background: #f5f5f7;
 
                 border:
-                    1px solid #D6EBFF;
+                    1px solid #e5e7eb;
+
+                overflow: hidden;
             }
 
 
-            .form-note {
+            .club-logo {
 
-                margin-top: 4px;
+                width: 78px;
 
-                font-size: 9px;
+                height: 78px;
 
-                color: #86868B;
+                object-fit: contain;
+
+                display: block;
             }
 
 
-            /* -----------------------------------------
-               TOP META
-            ----------------------------------------- */
+            /* =========================================
+               DOCUMENT TITLE
+            ========================================= */
+
+            .document-title {
+
+                margin-top: 24px;
+
+                font-family:
+                    "Inter",
+                    Arial,
+                    sans-serif;
+
+                font-size: 21px;
+
+                font-weight: 800;
+
+                color: #111827;
+
+                letter-spacing: -0.2px;
+            }
+
+
+            .document-subtitle {
+
+                margin-top: 3px;
+
+                font-size: 12px;
+
+                color: #6b7280;
+
+                font-weight: 500;
+            }
+
+
+            /* =========================================
+               META AREA
+            ========================================= */
 
             .meta-grid {
 
@@ -4213,246 +4170,243 @@ async function generateMembershipApplicationPDF(application) {
                 grid-template-columns:
                     1fr 1fr 1fr;
 
-                gap: 9px;
+                gap: 10px;
 
-                margin-top: 13px;
-
-                margin-bottom: 12px;
+                margin-top: 18px;
             }
 
 
             .meta-card {
 
-                background: #F8F8FA;
+                background: #f8fafc;
 
                 border:
-                    1px solid #E5E5EA;
+                    1px solid #e5e7eb;
 
-                border-radius: 10px;
+                border-radius: 12px;
 
-                padding: 7px 10px;
+                padding: 10px 12px;
             }
 
 
             .meta-label {
 
-                font-size: 8px;
+                font-size: 9px;
 
-                color: #86868B;
+                font-family:
+                    "Inter",
+                    Arial,
+                    sans-serif;
 
-                margin-bottom: 2px;
+                font-weight: 700;
+
+                color: #6b7280;
+
+                text-transform: uppercase;
+
+                letter-spacing: .5px;
             }
 
 
             .meta-value {
 
-                font-family: Inter, sans-serif;
-
-                font-size: 9px;
-
-                font-weight: 600;
-
-                color: #1D1D1F;
-            }
-
-
-            .status-badge {
-
-                display: inline-flex;
-
-                align-items: center;
-
-                gap: 4px;
-
-                padding:
-                    2px 7px;
-
-                border-radius: 20px;
-
-                font-size: 9px;
-
-                font-weight: 600;
-
-                background: ${status.bg};
-
-                color: ${status.color};
-            }
-
-
-            /* -----------------------------------------
-               PHOTO
-            ----------------------------------------- */
-
-            .photo-row {
-
-                position: absolute;
-
-                right: 28px;
-
-                top: 163px;
-
-                width: 105px;
-
-                text-align: center;
-            }
-
-
-            .photo-box {
-
-                width: 105px;
-
-                height: 125px;
-
-                border-radius: 10px;
-
-                overflow: hidden;
-
-                border:
-                    1px solid #D2D2D7;
-
-                background: #F8F8FA;
-
-                display: flex;
-
-                align-items: center;
-
-                justify-content: center;
-            }
-
-
-            .applicant-photo {
-
-                width: 100%;
-
-                height: 100%;
-
-                object-fit: cover;
-            }
-
-
-            .photo-placeholder {
-
-                width: 100%;
-
-                height: 100%;
-
-                display: flex;
-
-                flex-direction: column;
-
-                justify-content: center;
-
-                align-items: center;
-
-                color: #86868B;
-
-                font-size: 11px;
-            }
-
-
-            .photo-icon {
-
-                font-family: Inter, sans-serif;
-
-                font-size: 26px;
-
-                margin-bottom: 3px;
-            }
-
-
-            .photo-note {
-
                 margin-top: 4px;
 
-                font-size: 7px;
-
-                color: #86868B;
-            }
-
-
-            /* -----------------------------------------
-               SECTIONS
-            ----------------------------------------- */
-
-            .section {
-
-                margin-top: 10px;
-
-                border:
-                    1px solid #E5E5EA;
-
-                border-radius: 11px;
-
-                overflow: hidden;
-
-                background: #FFFFFF;
-            }
-
-
-            .section-title {
-
-                height: 29px;
-
-                display: flex;
-
-                align-items: center;
-
-                padding:
-                    0 11px;
+                font-family:
+                    "Inter",
+                    Arial,
+                    sans-serif;
 
                 font-size: 11px;
 
                 font-weight: 700;
 
-                background: #F8F8FA;
-
-                border-bottom:
-                    1px solid #E5E5EA;
+                color: #111827;
             }
 
 
-            .section-title::before {
+            .status {
 
-                content: "";
+                display: inline-block;
+
+                padding:
+                    3px 9px;
+
+                border-radius: 20px;
+
+                font-size: 9px;
+
+                font-weight: 800;
+
+                text-transform: uppercase;
+
+                background: #e8f5e9;
+
+                color: #188038;
+            }
+
+
+            /* =========================================
+               SECTION
+            ========================================= */
+
+            .section {
+
+                margin-top: 18px;
+
+                border:
+                    1px solid #e5e7eb;
+
+                border-radius: 15px;
+
+                overflow: hidden;
+
+                background: #ffffff;
+            }
+
+
+            .section-header {
+
+                padding:
+                    10px 14px;
+
+                background:
+                    linear-gradient(
+                        90deg,
+                        #f5f7ff,
+                        #fafafa
+                    );
+
+                border-bottom:
+                    1px solid #e5e7eb;
+
+                font-size: 12px;
+
+                font-weight: 800;
+
+                color: #111827;
+            }
+
+
+            .section-header span {
+
+                display: inline-block;
+
+                width: 5px;
+
+                height: 16px;
+
+                border-radius: 5px;
+
+                background: #007aff;
+
+                margin-right: 8px;
+
+                vertical-align: -3px;
+            }
+
+
+            .section-body {
+
+                padding: 13px 14px;
+            }
+
+
+            /* =========================================
+               PHOTO + PERSONAL INFO
+            ========================================= */
+
+            .personal-layout {
+
+                display: grid;
+
+                grid-template-columns:
+                    112px 1fr;
+
+                gap: 18px;
+            }
+
+
+            .photo-column {
+
+                display: flex;
+
+                justify-content: center;
+
+                align-items: flex-start;
+            }
+
+
+            .applicant-photo {
+
+                width: 100px;
+
+                height: 125px;
+
+                object-fit: cover;
+
+                border-radius: 10px;
+
+                border:
+                    1px solid #d1d5db;
 
                 display: block;
 
-                width: 4px;
-
-                height: 15px;
-
-                border-radius: 4px;
-
-                margin-right: 7px;
-
-                background: #007AFF;
+                background: #f3f4f6;
             }
 
 
-            .section:nth-of-type(2)
-            .section-title::before {
+            .photo-placeholder {
 
-                background: #5856D6;
+                width: 100px;
+
+                height: 125px;
+
+                border-radius: 10px;
+
+                border:
+                    1px dashed #cbd5e1;
+
+                background: #f8fafc;
+
+                display: flex;
+
+                flex-direction: column;
+
+                align-items: center;
+
+                justify-content: center;
+
+                color: #94a3b8;
+
+                text-align: center;
             }
 
 
-            .section:nth-of-type(3)
-            .section-title::before {
+            .photo-placeholder-icon {
 
-                background: #34C759;
+                font-size: 24px;
+
+                margin-bottom: 6px;
             }
 
 
-            .section:nth-of-type(4)
-            .section-title::before {
+            .photo-placeholder-text {
 
-                background: #FF9500;
+                font-family:
+                    "Inter",
+                    Arial,
+                    sans-serif;
+
+                font-size: 8px;
+
+                font-weight: 700;
             }
 
 
-            /* -----------------------------------------
-               PERSONAL DATA
-            ----------------------------------------- */
+            /* =========================================
+               INFO GRID
+            ========================================= */
 
             .info-grid {
 
@@ -4461,252 +4415,117 @@ async function generateMembershipApplicationPDF(application) {
                 grid-template-columns:
                     1fr 1fr;
 
-                border-left:
-                    1px solid transparent;
+                column-gap: 20px;
+
+                row-gap: 11px;
             }
 
 
             .info-item {
 
-                min-height: 32px;
-
-                padding: 5px 9px;
-
-                border-right:
-                    1px solid #E5E5EA;
-
-                border-bottom:
-                    1px solid #E5E5EA;
-            }
-
-
-            .info-item:nth-child(even) {
-
-                border-right: none;
+                min-width: 0;
             }
 
 
             .info-label {
 
-                font-size: 8px;
+                font-size: 9px;
 
-                color: #86868B;
+                font-weight: 600;
 
-                margin-bottom: 1px;
+                color: #6b7280;
+
+                margin-bottom: 2px;
             }
 
 
             .info-value {
 
-                font-size: 10px;
+                font-size: 11px;
 
-                font-weight: 600;
+                font-weight: 700;
 
-                color: #1D1D1F;
+                color: #111827;
+
+                line-height: 1.35;
 
                 word-break: break-word;
             }
 
 
-            /* -----------------------------------------
-               FULL WIDTH
-            ----------------------------------------- */
+            /* =========================================
+               FULL WIDTH ITEMS
+            ========================================= */
 
-            .full {
+            .full-width {
 
                 grid-column:
                     1 / -1;
-
-                border-right: none;
             }
 
 
-            /* -----------------------------------------
+            /* =========================================
                SPORTS
-            ----------------------------------------- */
+            ========================================= */
 
-            .sports-content {
-
-                padding: 8px 10px;
-            }
-
-
-            .sports-list {
-
-                display: flex;
-
-                flex-wrap: wrap;
-
-                gap: 6px 14px;
-
-                padding-bottom: 6px;
-            }
-
-
-            .sport-option {
-
-                display: inline-flex;
-
-                align-items: center;
-
-                gap: 4px;
-
-                font-size: 9px;
-            }
-
-
-            .check-box {
-
-                width: 12px;
-
-                height: 12px;
-
-                border-radius: 3px;
-
-                border:
-                    1px solid #B8B8BE;
-
-                display: inline-flex;
-
-                align-items: center;
-
-                justify-content: center;
-
-                font-family: Inter, sans-serif;
-
-                font-size: 8px;
-
-                font-weight: 700;
-
-                color: #FFFFFF;
-
-                background:
-                    ${hasSport("Cricket") ? "#34C759" : "#FFFFFF"};
-            }
-
-
-            .sports-line {
-
-                display: grid;
-
-                grid-template-columns:
-                    150px 1fr;
-
-                border-top:
-                    1px solid #E5E5EA;
-
-                padding-top: 6px;
-
-                margin-top: 2px;
-            }
-
-
-            .sports-label {
-
-                font-size: 8px;
-
-                color: #86868B;
-            }
-
-
-            .sports-value {
-
-                font-size: 9px;
-
-                font-weight: 600;
-            }
-
-
-            /* -----------------------------------------
-               EMERGENCY
-            ----------------------------------------- */
-
-            .emergency-grid {
-
-                display: grid;
-
-                grid-template-columns:
-                    1.3fr 1fr 1.3fr;
-            }
-
-
-            .emergency-item {
-
-                padding: 7px 9px;
-
-                border-right:
-                    1px solid #E5E5EA;
-            }
-
-
-            .emergency-item:last-child {
-
-                border-right: none;
-            }
-
-
-            /* -----------------------------------------
-               DECLARATION
-            ----------------------------------------- */
-
-            .declaration {
-
-                margin-top: 11px;
+            .sports-box {
 
                 padding: 10px 12px;
 
-                border-radius: 11px;
-
-                background:
-                    linear-gradient(
-                        135deg,
-                        #F7FAFF,
-                        #FBF9FF
-                    );
+                background: #f0f7ff;
 
                 border:
-                    1px solid #E1E5F0;
-            }
+                    1px solid #dbeafe;
 
-
-            .declaration-title {
+                border-radius: 10px;
 
                 font-size: 11px;
 
                 font-weight: 700;
 
-                color: #5856D6;
+                color: #1e40af;
 
-                margin-bottom: 4px;
+                line-height: 1.5;
             }
 
 
-            .declaration-text {
+            /* =========================================
+               DECLARATION
+            ========================================= */
 
-                font-size: 8.5px;
+            .declaration {
 
-                line-height: 1.6;
+                font-size: 10px;
 
-                color: #3A3A3C;
+                line-height: 1.65;
 
-                text-align: justify;
+                color: #374151;
+
+                background: #fafafa;
+
+                border:
+                    1px solid #e5e7eb;
+
+                border-radius: 10px;
+
+                padding: 11px 13px;
             }
 
 
-            /* -----------------------------------------
+            /* =========================================
                SIGNATURES
-            ----------------------------------------- */
+            ========================================= */
 
             .signature-grid {
 
                 display: grid;
 
                 grid-template-columns:
-                    1fr 1fr;
+                    1fr 1fr 1fr;
 
-                gap: 30px;
+                gap: 20px;
 
-                margin-top: 14px;
+                margin-top: 25px;
             }
 
 
@@ -4714,202 +4533,190 @@ async function generateMembershipApplicationPDF(application) {
 
                 text-align: center;
 
-                padding-top: 19px;
+                padding-top: 25px;
 
                 border-top:
-                    1px solid #1D1D1F;
-
-                font-size: 8px;
+                    1px solid #9ca3af;
             }
 
 
-            .signature-name {
+            .signature-label {
 
                 font-size: 9px;
 
                 font-weight: 600;
 
-                margin-top: 2px;
+                color: #6b7280;
             }
 
 
-            /* -----------------------------------------
-               OFFICE USE
-            ----------------------------------------- */
-
-            .office {
-
-                margin-top: 11px;
-
-                border:
-                    1px solid #D8D8DD;
-
-                border-radius: 10px;
-
-                overflow: hidden;
-            }
-
-
-            .office-title {
-
-                background: #F8F8FA;
-
-                padding: 5px 9px;
-
-                font-size: 9px;
-
-                font-weight: 700;
-
-                color: #6E6E73;
-
-                border-bottom:
-                    1px solid #E5E5EA;
-            }
-
-
-            .office-grid {
-
-                display: grid;
-
-                grid-template-columns:
-                    1fr 1fr;
-
-                padding: 8px;
-
-                gap: 8px;
-            }
-
-
-            .office-item {
-
-                font-size: 8px;
-
-                padding: 4px;
-
-                border-bottom:
-                    1px dashed #D2D2D7;
-            }
-
-
-            /* -----------------------------------------
+            /* =========================================
                FOOTER
-            ----------------------------------------- */
+            ========================================= */
 
             .footer {
 
                 position: absolute;
 
-                left: 28px;
+                left: 46px;
 
-                right: 28px;
+                right: 46px;
 
-                bottom: 13px;
+                bottom: 24px;
 
-                padding-top: 7px;
+                padding-top: 10px;
 
                 border-top:
-                    1px solid #E5E5EA;
+                    1px solid #e5e7eb;
 
                 display: flex;
 
                 justify-content: space-between;
 
-                font-size: 7px;
-
-                color: #86868B;
+                align-items: center;
             }
 
 
-            .footer-brand {
+            .footer-left {
 
-                font-family: Inter, sans-serif;
+                font-family:
+                    "Inter",
+                    Arial,
+                    sans-serif;
+
+                font-size: 8px;
 
                 font-weight: 600;
 
-                letter-spacing: .5px;
+                color: #6b7280;
             }
 
 
-            /* -----------------------------------------
+            .footer-right {
+
+                font-family:
+                    "Inter",
+                    Arial,
+                    sans-serif;
+
+                font-size: 8px;
+
+                font-weight: 700;
+
+                color: #9ca3af;
+            }
+
+
+            /* =========================================
                WATERMARK
-            ----------------------------------------- */
+            ========================================= */
 
             .watermark {
 
                 position: absolute;
 
-                left: 50%;
+                right: -80px;
 
-                top: 52%;
+                bottom: 200px;
 
                 transform:
-                    translate(-50%, -50%)
-                    rotate(-25deg);
+                    rotate(-35deg);
 
-                font-family: Inter, sans-serif;
+                font-family:
+                    "Inter",
+                    Arial,
+                    sans-serif;
 
-                font-size: 68px;
+                font-size: 64px;
 
-                font-weight: 700;
+                font-weight: 800;
 
-                letter-spacing: 4px;
-
-                opacity: .045;
-
-                color: ${status.color};
+                color: rgba(
+                    15,
+                    23,
+                    42,
+                    0.025
+                );
 
                 pointer-events: none;
 
-                white-space: nowrap;
+                user-select: none;
             }
 
         </style>
 
 
-        <div class="paper">
+        <div class="pdf-page">
 
             <div class="top-line"></div>
 
 
-            <!-- HEADER -->
+            <!-- =========================================
+                 HEADER
+            ========================================== -->
 
             <div class="header">
 
-                <div class="brand">
-                    GHOPKHALI SPORTS ARENA
+                <div class="header-left">
+
+                    <div class="club-title">
+                        GHOPKHALI SPORTS ARENA
+                    </div>
+
+                    <div class="club-bangla">
+                        ঘোপখালী স্পোর্টস অ্যারিনা
+                    </div>
+
+                    <div class="established">
+                        স্থাপিত: ১৯-০৭-২০২৬
+                    </div>
+
                 </div>
 
-                <div class="brand-bn">
-                    ঘোপখালী স্পোর্টস অ্যারিনা
-                </div>
 
-                <div class="established">
-                    স্থাপিত: ১৯-০৭-২০২৬
-                </div>
+                <!-- GSA LOGO -->
 
-                <div class="form-title">
-                    সদস্যপদ আবেদন ফরম
-                </div>
+                <div class="logo-box">
 
-                <div class="form-note">
-                    (পাসপোর্ট সাইজের ছবি আঠার সাহায্যে যুক্ত করুন)
+                    <img
+                        src="${logoPath}"
+                        class="club-logo"
+                        crossorigin="anonymous"
+                        alt="GSA Logo"
+                    >
+
                 </div>
 
             </div>
 
 
-            <!-- META -->
+            <!-- =========================================
+                 DOCUMENT TITLE
+            ========================================== -->
+
+            <div class="document-title">
+                CLUB MEMBERSHIP APPLICATION
+            </div>
+
+            <div class="document-subtitle">
+                Club Membership Application Form
+            </div>
+
+
+            <!-- =========================================
+                 META
+            ========================================== -->
 
             <div class="meta-grid">
 
                 <div class="meta-card">
 
                     <div class="meta-label">
-                        আবেদন আইডি
+                        Application ID
                     </div>
 
                     <div class="meta-value">
-                        ${applicationID}
+                        ${safe(applicationId)}
                     </div>
 
                 </div>
@@ -4918,11 +4725,11 @@ async function generateMembershipApplicationPDF(application) {
                 <div class="meta-card">
 
                     <div class="meta-label">
-                        ফরম জমার তারিখ
+                        Submitted
                     </div>
 
                     <div class="meta-value">
-                        ${submittedDate}
+                        ${formatDate(application.created_at)}
                     </div>
 
                 </div>
@@ -4931,14 +4738,14 @@ async function generateMembershipApplicationPDF(application) {
                 <div class="meta-card">
 
                     <div class="meta-label">
-                        আবেদনের অবস্থা
+                        Status
                     </div>
 
-                    <div class="status-badge">
+                    <div class="meta-value">
 
-                        ${status.icon}
-
-                        ${status.text}
+                        <span class="status">
+                            ${safe(status)}
+                        </span>
 
                     </div>
 
@@ -4947,132 +4754,134 @@ async function generateMembershipApplicationPDF(application) {
             </div>
 
 
-            <!-- PHOTO -->
-
-            <div class="photo-row">
-
-                <div class="photo-box">
-
-                    ${photoHTML}
-
-                </div>
-
-                <div class="photo-note">
-                    আবেদনকারীর ছবি
-                </div>
-
-            </div>
-
-
-            <!-- PERSONAL INFORMATION -->
+            <!-- =========================================
+                 PERSONAL INFORMATION
+            ========================================== -->
 
             <div class="section">
 
-                <div class="section-title">
-                    ১. ব্যক্তিগত তথ্য
+                <div class="section-header">
+                    <span></span>
+                    Personal Information
                 </div>
 
-                <div class="info-grid">
 
-                    <div class="info-item">
+                <div class="section-body">
 
-                        <div class="info-label">
-                            আবেদনকারীর পূর্ণ নাম (বাংলায়)
+                    <div class="personal-layout">
+
+                        <div class="photo-column">
+
+                            ${photoHTML}
+
                         </div>
 
-                        <div class="info-value">
-                            ${safe(application.full_name_bn)}
-                        </div>
 
-                    </div>
+                        <div class="info-grid">
 
+                            <div class="info-item">
 
-                    <div class="info-item">
+                                <div class="info-label">
+                                    নাম (বাংলা)
+                                </div>
 
-                        <div class="info-label">
-                            আবেদনকারীর পূর্ণ নাম (ইংরেজিতে)
-                        </div>
+                                <div class="info-value">
+                                    ${safe(application.full_name_bn)}
+                                </div>
 
-                        <div class="info-value">
-                            ${safe(application.full_name_en)}
-                        </div>
-
-                    </div>
+                            </div>
 
 
-                    <div class="info-item">
+                            <div class="info-item">
 
-                        <div class="info-label">
-                            পিতার নাম
-                        </div>
+                                <div class="info-label">
+                                    Full Name
+                                </div>
 
-                        <div class="info-value">
-                            ${safe(application.father_name)}
-                        </div>
+                                <div class="info-value">
+                                    ${safe(application.full_name_en)}
+                                </div>
 
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <div class="info-label">
-                            মাতার নাম
-                        </div>
-
-                        <div class="info-value">
-                            ${safe(application.mother_name)}
-                        </div>
-
-                    </div>
+                            </div>
 
 
-                    <div class="info-item">
+                            <div class="info-item">
 
-                        <div class="info-label">
-                            জন্ম তারিখ
-                        </div>
+                                <div class="info-label">
+                                    Father's Name
+                                </div>
 
-                        <div class="info-value">
-                            ${birthDate}
-                        </div>
+                                <div class="info-value">
+                                    ${safe(application.father_name)}
+                                </div>
 
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <div class="info-label">
-                            রক্তের গ্রুপ
-                        </div>
-
-                        <div class="info-value">
-                            ${safe(application.blood_group)}
-                        </div>
-
-                    </div>
+                            </div>
 
 
-                    <div class="info-item">
+                            <div class="info-item">
 
-                        <div class="info-label">
-                            পেশা
-                        </div>
+                                <div class="info-label">
+                                    Mother's Name
+                                </div>
 
-                        <div class="info-value">
-                            ${safe(application.profession)}
-                        </div>
+                                <div class="info-value">
+                                    ${safe(application.mother_name)}
+                                </div>
 
-                    </div>
+                            </div>
 
 
-                    <div class="info-item">
+                            <div class="info-item">
 
-                        <div class="info-label">
-                            জাতীয় পরিচয়পত্র / জন্ম নিবন্ধন নম্বর
-                        </div>
+                                <div class="info-label">
+                                    Date of Birth
+                                </div>
 
-                        <div class="info-value">
-                            ${safe(application.nid_birth_registration)}
+                                <div class="info-value">
+                                    ${formatDate(application.date_of_birth)}
+                                </div>
+
+                            </div>
+
+
+                            <div class="info-item">
+
+                                <div class="info-label">
+                                    Blood Group
+                                </div>
+
+                                <div class="info-value">
+                                    ${safe(application.blood_group)}
+                                </div>
+
+                            </div>
+
+
+                            <div class="info-item">
+
+                                <div class="info-label">
+                                    Profession
+                                </div>
+
+                                <div class="info-value">
+                                    ${safe(application.profession)}
+                                </div>
+
+                            </div>
+
+
+                            <div class="info-item">
+
+                                <div class="info-label">
+                                    NID / Birth Registration
+                                </div>
+
+                                <div class="info-value">
+                                    ${safe(application.nid_birth_registration)}
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>
@@ -5082,76 +4891,84 @@ async function generateMembershipApplicationPDF(application) {
             </div>
 
 
-            <!-- CONTACT INFORMATION -->
+            <!-- =========================================
+                 CONTACT INFORMATION
+            ========================================== -->
 
             <div class="section">
 
-                <div class="section-title">
-                    ২. যোগাযোগের তথ্য
+                <div class="section-header">
+                    <span></span>
+                    Contact Information
                 </div>
 
-                <div class="info-grid">
 
-                    <div class="info-item full">
+                <div class="section-body">
 
-                        <div class="info-label">
-                            বর্তমান ঠিকানা
+                    <div class="info-grid">
+
+                        <div class="info-item">
+
+                            <div class="info-label">
+                                Mobile Number
+                            </div>
+
+                            <div class="info-value">
+                                ${safe(application.mobile_number)}
+                            </div>
+
                         </div>
 
-                        <div class="info-value">
-                            ${safe(application.current_address)}
+
+                        <div class="info-item">
+
+                            <div class="info-label">
+                                Alternative Mobile
+                            </div>
+
+                            <div class="info-value">
+                                ${safe(application.alternative_mobile_number)}
+                            </div>
+
                         </div>
 
-                    </div>
 
+                        <div class="info-item">
 
-                    <div class="info-item full">
+                            <div class="info-label">
+                                Email
+                            </div>
 
-                        <div class="info-label">
-                            স্থায়ী ঠিকানা
+                            <div class="info-value">
+                                ${safe(application.email)}
+                            </div>
+
                         </div>
 
-                        <div class="info-value">
-                            ${safe(application.permanent_address)}
+
+                        <div class="info-item full-width">
+
+                            <div class="info-label">
+                                Current Address
+                            </div>
+
+                            <div class="info-value">
+                                ${safe(application.current_address)}
+                            </div>
+
                         </div>
 
-                    </div>
 
+                        <div class="info-item full-width">
 
-                    <div class="info-item">
+                            <div class="info-label">
+                                Permanent Address
+                            </div>
 
-                        <div class="info-label">
-                            মোবাইল নম্বর
-                        </div>
+                            <div class="info-value">
+                                ${safe(application.permanent_address)}
+                            </div>
 
-                        <div class="info-value">
-                            ${safe(application.mobile_number)}
-                        </div>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <div class="info-label">
-                            বিকল্প মোবাইল নম্বর
-                        </div>
-
-                        <div class="info-value">
-                            ${safe(application.alternative_mobile_number)}
-                        </div>
-
-                    </div>
-
-
-                    <div class="info-item full">
-
-                        <div class="info-label">
-                            ই-মেইল
-                        </div>
-
-                        <div class="info-value">
-                            ${safe(application.email)}
                         </div>
 
                     </div>
@@ -5161,69 +4978,71 @@ async function generateMembershipApplicationPDF(application) {
             </div>
 
 
-            <!-- SPORTS INFORMATION -->
+            <!-- =========================================
+                 SPORTS INFORMATION
+            ========================================== -->
 
             <div class="section">
 
-                <div class="section-title">
-                    ৩. ক্রীড়া সংক্রান্ত তথ্য
+                <div class="section-header">
+                    <span></span>
+                    Sports Information
                 </div>
 
-                <div class="sports-content">
 
-                    <div class="sports-list">
+                <div class="section-body">
 
-                        ${checkbox("Cricket")}
+                    <div class="info-grid">
 
-                        ${checkbox("Football")}
+                        <div class="info-item full-width">
 
-                        ${checkbox("Badminton")}
+                            <div class="info-label">
+                                Selected Sports
+                            </div>
 
-                        ${checkbox("Volleyball")}
+                            <div class="sports-box">
+                                ${safe(application.sports)}
+                            </div>
 
-                        ${checkbox("Athletics")}
-
-                        ${checkbox("Indoor Games")}
-
-                        ${checkbox("Futsal")}
-
-                    </div>
-
-
-                    <div class="sports-line">
-
-                        <div class="sports-label">
-                            অন্যান্য খেলা
                         </div>
 
-                        <div class="sports-value">
-                            ${otherSports}
+
+                        <div class="info-item">
+
+                            <div class="info-label">
+                                Other Sports
+                            </div>
+
+                            <div class="info-value">
+                                ${safe(application.other_sports)}
+                            </div>
+
                         </div>
 
-                    </div>
 
+                        <div class="info-item">
 
-                    <div class="sports-line">
+                            <div class="info-label">
+                                Sports Skill
+                            </div>
 
-                        <div class="sports-label">
-                            খেলার প্রধান দক্ষতা
+                            <div class="info-value">
+                                ${safe(application.sports_skill)}
+                            </div>
+
                         </div>
 
-                        <div class="sports-value">
-                            ${sportsSkill}
-                        </div>
 
-                    </div>
+                        <div class="info-item full-width">
 
+                            <div class="info-label">
+                                Previous Club Experience
+                            </div>
 
-                    <div class="sports-line">
+                            <div class="info-value">
+                                ${safe(application.previous_club_experience)}
+                            </div>
 
-                        <div class="sports-label">
-                            পূর্বে অন্য কোনো ক্লাবে খেলার অভিজ্ঞতা
-                        </div>
-
-                        <div class="sports-value">
-                            ${previousExperience}
                         </div>
 
                     </div>
@@ -5233,50 +5052,58 @@ async function generateMembershipApplicationPDF(application) {
             </div>
 
 
-            <!-- EMERGENCY -->
+            <!-- =========================================
+                 EMERGENCY CONTACT
+            ========================================== -->
 
             <div class="section">
 
-                <div class="section-title">
-                    ৪. জরুরি প্রয়োজনে যোগাযোগের তথ্য
+                <div class="section-header">
+                    <span></span>
+                    Emergency Contact
                 </div>
 
-                <div class="emergency-grid">
 
-                    <div class="emergency-item">
+                <div class="section-body">
 
-                        <div class="info-label">
-                            নাম
+                    <div class="info-grid">
+
+                        <div class="info-item">
+
+                            <div class="info-label">
+                                Name
+                            </div>
+
+                            <div class="info-value">
+                                ${safe(application.emergency_contact_name)}
+                            </div>
+
                         </div>
 
-                        <div class="info-value">
-                            ${emergencyName}
+
+                        <div class="info-item">
+
+                            <div class="info-label">
+                                Relation
+                            </div>
+
+                            <div class="info-value">
+                                ${safe(application.emergency_contact_relation)}
+                            </div>
+
                         </div>
 
-                    </div>
 
+                        <div class="info-item">
 
-                    <div class="emergency-item">
+                            <div class="info-label">
+                                Mobile
+                            </div>
 
-                        <div class="info-label">
-                            সম্পর্ক
-                        </div>
+                            <div class="info-value">
+                                ${safe(application.emergency_contact_mobile)}
+                            </div>
 
-                        <div class="info-value">
-                            ${emergencyRelation}
-                        </div>
-
-                    </div>
-
-
-                    <div class="emergency-item">
-
-                        <div class="info-label">
-                            মোবাইল নম্বর
-                        </div>
-
-                        <div class="info-value">
-                            ${emergencyMobile}
                         </div>
 
                     </div>
@@ -5286,83 +5113,54 @@ async function generateMembershipApplicationPDF(application) {
             </div>
 
 
-            <!-- DECLARATION -->
+            <!-- =========================================
+                 DECLARATION
+            ========================================== -->
 
-            <div class="declaration">
+            <div class="section">
 
-                <div class="declaration-title">
-                    অঙ্গীকারনামা
-                </div>
-
-                <div class="declaration-text">
-
-                    আমি সজ্ঞানে ঘোষণা করছি যে, এই ফরমে প্রদত্ত আমার সকল তথ্য সম্পূর্ণ সত্য ও নির্ভুল। আমি 'ঘোপখালী স্পোর্টস অ্যারিনা ক্লাব'-এর একজন গর্বিত সদস্য হিসেবে ক্লাবের সকল নিয়ম-কানুন ও গঠনতন্ত্র যথাযথভাবে মেনে চলব। ক্লাবের আয়োজিত ইনডোর বা আউটডোর যেকোনো ক্রীড়া কার্যক্রমে আমি স্বতঃস্ফূর্তভাবে অংশগ্রহণ করতে আগ্রহী এবং এমন কোনো কার্যকলাপে জড়িত হব না যা ক্লাবের সম্মান ক্ষুণ্ন করে।
-
-                </div>
-
-            </div>
-
-
-            <!-- SIGNATURE -->
-
-            <div class="signature-grid">
-
-                <div class="signature">
-
-                    আবেদনকারীর স্বাক্ষর
-
-                    <div class="signature-name">
-                        ${safe(application.full_name_bn)}
-                    </div>
-
+                <div class="section-header">
+                    <span></span>
+                    Declaration
                 </div>
 
 
-                <div class="signature">
+                <div class="section-body">
 
-                    তারিখ
+                    <div class="declaration">
 
-                    <div class="signature-name">
-                        ..... / ..... / ২০২৬
-                    </div>
+                        I hereby declare that the information
+                        provided in this membership application
+                        is true and correct to the best of my
+                        knowledge. I agree to follow the rules,
+                        regulations and discipline of
+                        Ghopkhali Sports Arena.
 
-                </div>
-
-            </div>
-
-
-            <!-- OFFICE -->
-
-            <div class="office">
-
-                <div class="office-title">
-                    (কেবলমাত্র অফিস ব্যবহারের জন্য)
-                </div>
-
-                <div class="office-grid">
-
-                    <div class="office-item">
-                        সদস্যপদ নম্বর:
-                        ______________________
                     </div>
 
 
-                    <div class="office-item">
-                        ফরম জমার তারিখ:
-                        ______________________
-                    </div>
+                    <div class="signature-grid">
+
+                        <div class="signature">
+                            <div class="signature-label">
+                                Applicant Signature
+                            </div>
+                        </div>
 
 
-                    <div class="office-item">
-                        আবেদনের অবস্থা:
-                        □ অনুমোদিত &nbsp;&nbsp;
-                        □ বাতিল
-                    </div>
+                        <div class="signature">
+                            <div class="signature-label">
+                                Verified By
+                            </div>
+                        </div>
 
 
-                    <div class="office-item">
-                        যাচাইকারী:
-                        ______________________
+                        <div class="signature">
+                            <div class="signature-label">
+                                Authorized Signature
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -5370,59 +5168,27 @@ async function generateMembershipApplicationPDF(application) {
             </div>
 
 
-            <!-- SIGNATURES -->
+            <!-- =========================================
+                 WATERMARK
+            ========================================== -->
 
-            <div class="signature-grid">
-
-                <div class="signature">
-
-                    স্বাক্ষর
-
-                    <div class="signature-name">
-                        সাধারণ সম্পাদক
-                    </div>
-
-                </div>
-
-
-                <div class="signature">
-
-                    স্বাক্ষর
-
-                    <div class="signature-name">
-                        সভাপতি
-                    </div>
-
-                </div>
-
+            <div class="watermark">
+                GSA
             </div>
 
 
-            <!-- WATERMARK -->
-
-            ${
-                application.status === "approved"
-                    ? `<div class="watermark">APPROVED</div>`
-                    : application.status === "rejected"
-                        ? `<div class="watermark">REJECTED</div>`
-                        : ""
-            }
-
-
-            <!-- FOOTER -->
+            <!-- =========================================
+                 FOOTER
+            ========================================== -->
 
             <div class="footer">
 
-                <div class="footer-brand">
-                    GHOPKHALI SPORTS ARENA
+                <div class="footer-left">
+                    GHOPKHALI SPORTS ARENA • Membership Department
                 </div>
 
-                <div>
-                    ঘোপখালী স্পোর্টস অ্যারিনা ক্লাব
-                </div>
-
-                <div>
-                    Membership Application
+                <div class="footer-right">
+                    Official Membership Application
                 </div>
 
             </div>
@@ -5434,223 +5200,191 @@ async function generateMembershipApplicationPDF(application) {
     document.body.appendChild(page);
 
 
-    /* -------------------------------------------------
-       WAIT FOR RENDER
-    ------------------------------------------------- */
+    /* =================================================
+       WAIT FOR IMAGES
+    ================================================= */
 
-    await new Promise(resolve => {
-
-        requestAnimationFrame(() => {
-
-            requestAnimationFrame(resolve);
-
-        });
-
-    });
-
-
-    /* -------------------------------------------------
-       CAPTURE A4
-    ------------------------------------------------- */
-
-    try {
-
-        const canvas =
-            await html2canvas(
-                page,
-                {
-                    scale: 2,
-
-                    useCORS: true,
-
-                    allowTaint: false,
-
-                    backgroundColor: "#F5F5F7",
-
-                    width: 794,
-
-                    height: 1123,
-
-                    windowWidth: 794,
-
-                    windowHeight: 1123,
-
-                    logging: false
-                }
-            );
-
-
-        /* ---------------------------------------------
-           CREATE PDF
-        --------------------------------------------- */
-
-        const {
-            jsPDF
-        } = window.jspdf;
-
-
-        const pdf =
-            new jsPDF(
-                {
-                    orientation: "portrait",
-
-                    unit: "mm",
-
-                    format: "a4",
-
-                    compress: true
-                }
-            );
-
-
-        const imageData =
-            canvas.toDataURL(
-                "image/jpeg",
-                0.94
-            );
-
-
-        pdf.addImage(
-            imageData,
-            "JPEG",
-            0,
-            0,
-            210,
-            297,
-            undefined,
-            "FAST"
+    const images =
+        Array.from(
+            page.querySelectorAll("img")
         );
 
 
-        /* ---------------------------------------------
-           FILE NAME
-        --------------------------------------------- */
+    await Promise.all(
 
-        const name =
-            String(
-                application.full_name_en ||
-                application.full_name_bn ||
-                "Member"
-            )
-                .replace(
-                    /[^a-zA-Z0-9-_]/g,
-                    "_"
-                )
-                .substring(0, 50);
+        images.map(
+            image =>
+                new Promise(resolve => {
+
+                    if (image.complete) {
+
+                        resolve();
+
+                        return;
+                    }
 
 
-        const id =
-            String(
-                application.id || "application"
-            )
-                .replace(
-                    /[^a-zA-Z0-9-_]/g,
-                    "_"
-                );
+                    image.onload =
+                        resolve;
+
+                    image.onerror =
+                        resolve;
+
+                })
+        )
+
+    );
 
 
-        pdf.save(
-            `GSA_Membership_Application_${name}_${id}.pdf`
-        );
+    /* =================================================
+       WAIT FOR FONTS
+    ================================================= */
 
-
-    } catch (error) {
-
-        console.error(
-            "PDF generation error:",
-            error
-        );
-
-        alert(
-            "PDF তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।"
-        );
-
-    } finally {
-
-        page.remove();
-
-    }
-}
-
-
-/* =====================================================
-   MEMBERSHIP PDF BUTTON
-===================================================== */
-
-document.addEventListener(
-    "click",
-    async (event) => {
-
-        const button =
-            event.target.closest(
-                "[data-membership-pdf]"
-            );
-
-        if (!button) {
-            return;
-        }
-
-
-        const id =
-            button.dataset.id;
-
-
-        const application =
-            membershipApplications.find(
-                item =>
-                    String(item.id) ===
-                    String(id)
-            );
-
-
-        if (!application) {
-
-            alert(
-                "Application data not found."
-            );
-
-            return;
-        }
-
-
-        /* ---------------------------------------------
-           BUTTON STATE
-        --------------------------------------------- */
-
-        const originalText =
-            button.innerHTML;
-
-
-        button.disabled = true;
-
-        button.innerHTML =
-            "Preparing PDF…";
-
+    if (document.fonts) {
 
         try {
 
-            await generateMembershipApplicationPDF(
-                application
-            );
+            await document.fonts.ready;
 
         } catch (error) {
 
-            console.error(error);
-
-            alert(
-                "PDF download failed."
+            console.warn(
+                "Font loading warning:",
+                error
             );
 
-        } finally {
-
-            button.disabled = false;
-
-            button.innerHTML =
-                originalText;
         }
 
     }
-);
+
+
+    /* =================================================
+       HD HTML2CANVAS
+    ================================================= */
+
+    const canvas =
+        await html2canvas(
+            page,
+            {
+                scale: 4,
+
+                useCORS: true,
+
+                allowTaint: false,
+
+                backgroundColor:
+                    "#ffffff",
+
+                width: 794,
+
+                height: 1123,
+
+                windowWidth: 794,
+
+                windowHeight: 1123,
+
+                logging: false,
+
+                imageTimeout: 30000
+            }
+        );
+
+
+    /* =================================================
+       CREATE HIGH QUALITY PDF
+    ================================================= */
+
+    const pdf =
+        new jsPDF(
+            {
+                orientation: "portrait",
+
+                unit: "mm",
+
+                format: "a4",
+
+                compress: true
+            }
+        );
+
+
+    const pageWidth =
+        210;
+
+    const pageHeight =
+        297;
+
+
+    const imageData =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.98
+        );
+
+
+    pdf.addImage(
+        imageData,
+        "JPEG",
+        0,
+        0,
+        pageWidth,
+        pageHeight,
+        undefined,
+        "FAST"
+    );
+
+
+    /* =================================================
+       FILE NAME
+    ================================================= */
+
+    const applicantName =
+        application.full_name_en ||
+        application.full_name_bn ||
+        "Applicant";
+
+
+    const cleanName =
+        String(applicantName)
+            .replace(
+                /[^a-zA-Z0-9\u0980-\u09FF]+/g,
+                "_"
+            )
+            .replace(
+                /^_+|_+$/g,
+                ""
+            );
+
+
+    const fileName =
+        `GSA_Membership_Application_${cleanName || "Applicant"}.pdf`;
+
+
+    /* =================================================
+       DOWNLOAD
+    ================================================= */
+
+    pdf.save(fileName);
+
+
+    /* =================================================
+       CLEANUP
+    ================================================= */
+
+    setTimeout(
+        () => {
+
+            if (page) {
+
+                page.remove();
+
+            }
+
+        },
+        1000
+    );
+
+}
 
 /* =====================================================
    LOAD FRIENDLY APPLICATIONS
