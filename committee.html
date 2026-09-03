@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#f5f5f7"
+    >
+
+    <meta
+        name="description"
+        content="GHOPKHALI SPORTS ARENA Board of Directors and Committee."
+    >
+
+    <title>
+        Board Committee | Ghopkhali Sports Arena
+    </title>
+
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Helvetica Neue",
+                Arial,
+                sans-serif;
+
+            background: #f5f5f7;
+
+            color: #1d1d1f;
+
+            line-height: 1.5;
+
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .committee-page {
+
+            width: 100%;
+
+            min-height: 100vh;
+
+            padding:
+                40px
+                24px
+                80px;
+
+        }
+
+
+        .committee-container {
+
+            width: 100%;
+
+            max-width: 1180px;
+
+            margin: 0 auto;
+
+        }
+
+
+        /* =====================================================
+           TOP NAV
+        ===================================================== */
+
+        .committee-nav {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 70px;
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 2px;
+
+        }
+
+
+        .brand-name {
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.08em;
+
+        }
+
+
+        .brand-bangla {
+
+            font-size: 12px;
+
+            color: #6e6e73;
+
+        }
+
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                10px
+                16px;
+
+            background: rgba(
+                255,
+                255,
+                255,
+                0.75
+            );
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.08
+                );
+
+            border-radius: 999px;
+
+            color: #1d1d1f;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease;
+
+        }
+
+
+        .back-button:hover {
+
+            transform:
+                translateY(-2px);
+
+            background: #ffffff;
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .committee-hero {
+
+            position: relative;
+
+            padding:
+                72px
+                60px;
+
+            margin-bottom: 70px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff 0%,
+                    #f8f9fb 100%
+                );
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+
+            border-radius: 34px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 24px 70px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+
+        }
+
+
+        .committee-hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 260px;
+
+            height: 260px;
+
+            right: -100px;
+
+            top: -100px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(
+                    0,
+                    113,
+                    227,
+                    0.06
+                );
+
+        }
+
+
+        .committee-eyebrow {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            padding:
+                7px
+                12px;
+
+            margin-bottom: 20px;
+
+            background:
+                rgba(
+                    0,
+                    113,
+                    227,
+                    0.08
+                );
+
+            color: #0066cc;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing:
+                0.12em;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .committee-hero h1 {
+
+            position: relative;
+
+            font-size:
+                clamp(
+                    38px,
+                    6vw,
+                    72px
+                );
+
+            line-height: 0.98;
+
+            letter-spacing:
+                -0.055em;
+
+            font-weight: 750;
+
+            max-width: 850px;
+
+        }
+
+
+        .committee-hero-bangla {
+
+            position: relative;
+
+            margin-top: 18px;
+
+            font-size:
+                clamp(
+                    17px,
+                    2vw,
+                    22px
+                );
+
+            color: #6e6e73;
+
+        }
+
+
+        .committee-meta {
+
+            position: relative;
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            margin-top: 34px;
+
+        }
+
+
+        .meta-item {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                11px
+                15px;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.07
+                );
+
+            border-radius: 14px;
+
+            font-size: 13px;
+
+            color: #424245;
+
+        }
+
+
+        .meta-item strong {
+
+            color: #1d1d1f;
+
+        }
+
+
+        /* =====================================================
+           SECTION
+        ===================================================== */
+
+        .committee-section {
+
+            margin-bottom: 72px;
+
+        }
+
+
+        .section-heading {
+
+            display: flex;
+
+            align-items: flex-end;
+
+            justify-content: space-between;
+
+            gap: 30px;
+
+            margin-bottom: 28px;
+
+        }
+
+
+        .section-number {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #86868b;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing:
+                0.14em;
+
+        }
+
+
+        .section-heading h2 {
+
+            font-size:
+                clamp(
+                    26px,
+                    4vw,
+                    38px
+                );
+
+            letter-spacing:
+                -0.035em;
+
+            line-height: 1.1;
+
+        }
+
+
+        .section-heading p {
+
+            max-width: 420px;
+
+            color: #6e6e73;
+
+            font-size: 14px;
+
+            text-align: right;
+
+        }
+
+
+        /* =====================================================
+           EXECUTIVE GRID
+        ===================================================== */
+
+        .executive-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap: 16px;
+
+        }
+
+
+        .director-card {
+
+            position: relative;
+
+            padding: 28px;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.07
+                );
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.035
+                );
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+
+        }
+
+
+        .director-card:hover {
+
+            transform:
+                translateY(-4px);
+
+            box-shadow:
+                0 18px 45px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.08
+                );
+
+        }
+
+
+        .director-card.featured {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #f3f7fb
+                );
+
+            border-color:
+                rgba(
+                    0,
+                    113,
+                    227,
+                    0.12
+                );
+
+        }
+
+
+        .card-index {
+
+            position: absolute;
+
+            top: 22px;
+
+            right: 24px;
+
+            font-size: 11px;
+
+            color: #a1a1a6;
+
+            font-weight: 600;
+
+        }
+
+
+        .card-label {
+
+            display: inline-block;
+
+            margin-bottom: 18px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing:
+                0.12em;
+
+            text-transform: uppercase;
+
+            color: #0066cc;
+
+        }
+
+
+        .director-card h3 {
+
+            font-size:
+                clamp(
+                    20px,
+                    3vw,
+                    25px
+                );
+
+            letter-spacing:
+                -0.025em;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .director-role {
+
+            color: #6e6e73;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =====================================================
+           SPORTS OPERATIONS
+        ===================================================== */
+
+        .sports-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap: 16px;
+
+        }
+
+
+        .sports-card {
+
+            padding: 25px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.88
+                );
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.07
+                );
+
+            border-radius: 20px;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+
+        }
+
+
+        .sports-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+
+        }
+
+
+        .sports-card-number {
+
+            display: inline-flex;
+
+            width: 34px;
+
+            height: 34px;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-bottom: 20px;
+
+            background: #f5f5f7;
+
+            border-radius: 50%;
+
+            color: #6e6e73;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .sports-card h3 {
+
+            font-size: 19px;
+
+            letter-spacing:
+                -0.02em;
+
+            margin-bottom: 6px;
+
+        }
+
+
+        .sports-card p {
+
+            color: #6e6e73;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =====================================================
+           BOARD MEMBERS
+        ===================================================== */
+
+        .board-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    4,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap: 12px;
+
+        }
+
+
+        .board-member {
+
+            padding:
+                20px
+                18px;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+
+            border-radius: 17px;
+
+            min-height: 92px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease;
+
+        }
+
+
+        .board-member:hover {
+
+            transform:
+                translateY(-2px);
+
+            border-color:
+                rgba(
+                    0,
+                    113,
+                    227,
+                    0.18
+                );
+
+        }
+
+
+        .board-member-number {
+
+            color: #a1a1a6;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .board-member-name {
+
+            font-size: 14px;
+
+            font-weight: 650;
+
+            letter-spacing:
+                -0.01em;
+
+        }
+
+
+        .board-member-role {
+
+            margin-top: 4px;
+
+            color: #86868b;
+
+            font-size: 11px;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .committee-footer {
+
+            padding-top: 35px;
+
+            border-top:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.08
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            color: #86868b;
+
+            font-size: 12px;
+
+        }
+
+
+        .footer-title {
+
+            color: #1d1d1f;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (
+            max-width: 900px
+        ) {
+
+            .committee-page {
+
+                padding:
+                    25px
+                    18px
+                    60px;
+
+            }
+
+
+            .committee-nav {
+
+                margin-bottom: 45px;
+
+            }
+
+
+            .committee-hero {
+
+                padding:
+                    48px
+                    35px;
+
+                border-radius: 27px;
+
+                margin-bottom: 55px;
+
+            }
+
+
+            .board-grid {
+
+                grid-template-columns:
+                    repeat(
+                        3,
+                        minmax(
+                            0,
+                            1fr
+                        )
+                    );
+
+            }
+
+        }
+
+
+        @media (
+            max-width: 700px
+        ) {
+
+            .committee-page {
+
+                padding:
+                    18px
+                    14px
+                    45px;
+
+            }
+
+
+            .committee-nav {
+
+                margin-bottom: 35px;
+
+            }
+
+
+            .brand-name {
+
+                font-size: 13px;
+
+            }
+
+
+            .brand-bangla {
+
+                font-size: 10px;
+
+            }
+
+
+            .back-button {
+
+                padding:
+                    8px
+                    12px;
+
+                font-size: 12px;
+
+            }
+
+
+            .committee-hero {
+
+                padding:
+                    38px
+                    25px;
+
+                border-radius: 23px;
+
+            }
+
+
+            .committee-hero h1 {
+
+                font-size:
+                    43px;
+
+            }
+
+
+            .committee-meta {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+            }
+
+
+            .section-heading {
+
+                display: block;
+
+            }
+
+
+            .section-heading p {
+
+                margin-top: 10px;
+
+                text-align: left;
+
+            }
+
+
+            .executive-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .sports-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .board-grid {
+
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(
+                            0,
+                            1fr
+                        )
+                    );
+
+            }
+
+
+            .board-member {
+
+                min-height: 82px;
+
+                padding:
+                    17px
+                    15px;
+
+            }
+
+
+            .board-member-name {
+
+                font-size: 13px;
+
+            }
+
+
+            .committee-footer {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+            }
+
+        }
+
+
+        @media (
+            max-width: 380px
+        ) {
+
+            .committee-hero h1 {
+
+                font-size: 37px;
+
+            }
+
+
+            .board-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           PRINT
+        ===================================================== */
+
+        @media print {
+
+            body {
+
+                background: #ffffff;
+
+            }
+
+
+            .committee-page {
+
+                padding: 0;
+
+            }
+
+
+            .committee-nav {
+
+                display: none;
+
+            }
+
+
+            .committee-hero,
+            .director-card,
+            .sports-card,
+            .board-member {
+
+                box-shadow: none;
+
+                break-inside: avoid;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<main class="committee-page">
+
+    <div class="committee-container">
+
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================= -->
+
+        <nav class="committee-nav">
+
+            <div class="brand">
+
+                <div class="brand-name">
+                    GHOPKHALI SPORTS ARENA
+                </div>
+
+                <div class="brand-bangla">
+                    ঘোপখালী স্পোর্টস অ্যারিনা
+                </div>
+
+            </div>
+
+
+            <a
+                href="index.html"
+                class="back-button"
+            >
+                ← Back to Home
+            </a>
+
+        </nav>
+
+
+        <!-- =================================================
+             HERO
+        ================================================= -->
+
+        <header class="committee-hero">
+
+            <span class="committee-eyebrow">
+                Official Governance
+            </span>
+
+
+            <h1>
+                Board of
+                Directors
+            </h1>
+
+
+            <p class="committee-hero-bangla">
+                পরিচালনা পর্ষদ ও বোর্ড কমিটি
+            </p>
+
+
+            <div class="committee-meta">
+
+                <div class="meta-item">
+
+                    <strong>
+                        Term
+                    </strong>
+
+                    <span>
+                        Until Eid-ul-Fitr 2027
+                    </span>
+
+                </div>
+
+
+                <div class="meta-item">
+
+                    <strong>
+                        Members
+                    </strong>
+
+                    <span>
+                        27 Directors
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             EXECUTIVE COMMITTEE
+        ================================================= -->
+
+        <section class="committee-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-number">
+                        01 / EXECUTIVE COMMITTEE
+                    </span>
+
+                    <h2>
+                        Executive Leadership
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    The core leadership responsible for
+                    governance, strategy, finance and
+                    corporate direction.
+                </p>
+
+            </div>
+
+
+            <div class="executive-grid">
+
+
+                <article class="director-card featured">
+
+                    <span class="card-index">
+                        01
+                    </span>
+
+                    <span class="card-label">
+                        Executive Committee
+                    </span>
+
+                    <h3>
+                        Al Amin
+                    </h3>
+
+                    <p class="director-role">
+                        President of the Board
+                    </p>
+
+                </article>
+
+
+                <article class="director-card featured">
+
+                    <span class="card-index">
+                        02
+                    </span>
+
+                    <span class="card-label">
+                        Executive Committee
+                    </span>
+
+                    <h3>
+                        Bone Amin
+                    </h3>
+
+                    <p class="director-role">
+                        Chief Executive Director
+                    </p>
+
+                </article>
+
+
+                <article class="director-card">
+
+                    <span class="card-index">
+                        03
+                    </span>
+
+                    <span class="card-label">
+                        Executive Committee
+                    </span>
+
+                    <h3>
+                        Shahadat Fatih
+                    </h3>
+
+                    <p class="director-role">
+                        Director of Digital &amp;
+                        Corporate Affairs
+                    </p>
+
+                </article>
+
+
+                <article class="director-card">
+
+                    <span class="card-index">
+                        04
+                    </span>
+
+                    <span class="card-label">
+                        Executive Committee
+                    </span>
+
+                    <h3>
+                        Sogir Ahmed
+                    </h3>
+
+                    <p class="director-role">
+                        Director of Finance &amp;
+                        Commercials
+                    </p>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SPORTS OPERATIONS
+        ================================================= -->
+
+        <section class="committee-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-number">
+                        02 / SPORTS OPERATIONS
+                    </span>
+
+                    <h2>
+                        Sports Operations
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    Directors responsible for sports
+                    operations and athletic activities
+                    across Ghopkhali Sports Arena.
+                </p>
+
+            </div>
+
+
+            <div class="sports-grid">
+
+
+                <article class="sports-card">
+
+                    <div class="sports-card-number">
+                        05
+                    </div>
+
+                    <h3>
+                        Hasib Howlader Sayem
+                    </h3>
+
+                    <p>
+                        Director of Sports Operations
+                    </p>
+
+                </article>
+
+
+                <article class="sports-card">
+
+                    <div class="sports-card-number">
+                        06
+                    </div>
+
+                    <h3>
+                        Musa Jomaddar
+                    </h3>
+
+                    <p>
+                        Director of Sports Operations
+                    </p>
+
+                </article>
+
+
+                <article class="sports-card">
+
+                    <div class="sports-card-number">
+                        07
+                    </div>
+
+                    <h3>
+                        Mizan Gazi
+                    </h3>
+
+                    <p>
+                        Director of Sports Operations
+                    </p>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             BOARD MEMBERS
+        ================================================= -->
+
+        <section class="committee-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-number">
+                        03 / BOARD MEMBERS
+                    </span>
+
+                    <h2>
+                        Directors
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    Board members serving as directors of
+                    Ghopkhali Sports Arena.
+                </p>
+
+            </div>
+
+
+            <div class="board-grid">
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        08
+                    </span>
+
+                    <span class="board-member-name">
+                        Imran Hossain Raj
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        09
+                    </span>
+
+                    <span class="board-member-name">
+                        Hasan Mahmud
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        10
+                    </span>
+
+                    <span class="board-member-name">
+                        Hasan Ali
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        11
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Nahid
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        12
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. H M Imran
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        13
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Sabbir Rahman
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        14
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Rakib Jomaddar
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        15
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Foysal Ahmed
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        16
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Ismail Hossain
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        17
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Raju Ahmed Nobi
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        18
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Ripon
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        19
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Omar Faruq
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        20
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Jahid Jomaddar
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        21
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Labu Jomaddar
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        22
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Tawsif Ahmed
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        23
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Shahriar Rasel
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        24
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Yusuf
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        25
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Rabbi Jomaddar
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        26
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Yeasin Molla
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+                <article class="board-member">
+
+                    <span class="board-member-number">
+                        27
+                    </span>
+
+                    <span class="board-member-name">
+                        Md. Tanvir
+                    </span>
+
+                    <span class="board-member-role">
+                        Board Director
+                    </span>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================= -->
+
+        <footer class="committee-footer">
+
+            <div>
+
+                <span class="footer-title">
+                    GHOPKHALI SPORTS ARENA
+                </span>
+
+                <br>
+
+                Board of Directors
+
+            </div>
+
+
+            <div>
+                Official Committee Structure
+            </div>
+
+        </footer>
+
+
+    </div>
+
+</main>
+
+
+</body>
+
+</html>
