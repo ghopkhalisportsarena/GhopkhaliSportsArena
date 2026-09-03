@@ -3,892 +3,600 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#f5f5f7"
+>
+
+<meta
+    name="description"
+    content="Ghopkhali Sports Arena Club Membership Application"
+>
+
+<title>Club Membership Application | GSA</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    background: #f5f5f7;
+    color: #111;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+.page-header {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e7;
+    padding: 22px 20px;
+}
+
+.header-inner {
+    max-width: 1000px;
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+}
+
+.header-text strong {
+    display: block;
+    font-size: 18px;
+    letter-spacing: .4px;
+}
+
+.header-text span {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #777;
+}
+
+/* MAIN */
+
+.page-wrapper {
+    width: 100%;
+    padding: 35px 16px 60px;
+}
+
+.application-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* TITLE */
+
+.page-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+.eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #777;
+    margin-bottom: 8px;
+}
 
-    <meta
-        name="theme-color"
-        content="#f5f5f7"
-    >
+.page-title h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.15;
+    letter-spacing: -1px;
+}
 
-    <meta
-        name="description"
-        content="Ghopkhali Sports Arena Club Membership Application"
-    >
+.page-title p {
+    max-width: 600px;
+    margin: 12px auto 0;
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+}
 
-    <title>Club Membership Application | GSA</title>
+/* CARD */
 
+.application-card {
+    background: #fff;
+    border: 1px solid #e4e4e7;
+    border-radius: 22px;
 
-    <style>
+    padding: clamp(20px, 4vw, 42px);
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, .06);
+}
 
+.application-card::before {
+    content:
+        "OFFICIAL GSA MEMBERSHIP APPLICATION";
 
-        body {
+    display: block;
 
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Arial,
-                sans-serif;
+    text-align: center;
 
-            background: #f5f5f7;
+    font-size: 10px;
+    font-weight: 800;
 
-            color: #111;
+    letter-spacing: 2px;
 
-            min-height: 100vh;
+    color: #777;
 
-        }
+    margin-bottom: 30px;
+}
 
+/* SECTIONS */
 
-        /* =================================================
-           HEADER
-        ================================================= */
+.form-section {
+    margin-bottom: 38px;
+}
 
-        .page-header {
+.form-section:last-child {
+    margin-bottom: 0;
+}
 
-            background: #ffffff;
+.section-heading {
+    padding-bottom: 13px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid #ededee;
+}
 
-            border-bottom: 1px solid #e5e5e7;
+.section-heading span {
+    display: block;
 
-            padding: 22px 20px;
+    font-size: 10px;
+    font-weight: 700;
 
-        }
+    letter-spacing: 1.8px;
 
+    color: #777;
 
-        .header-inner {
+    margin-bottom: 5px;
+}
 
-            max-width: 1000px;
+.section-heading h2 {
+    font-size: 20px;
+    letter-spacing: -.3px;
+}
 
-            margin: auto;
+/* FORM */
 
-            display: flex;
+.form-grid {
+    display: grid;
 
-            align-items: center;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
-            gap: 15px;
+    gap: 20px;
+}
 
-        }
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
+.form-group.full {
+    grid-column: 1 / -1;
+}
 
-        .header-logo {
+.form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
+}
 
-            width: 58px;
+.required {
+    color: #d00000;
+    font-weight: 800;
+}
 
-            height: 58px;
+input,
+select,
+textarea {
+    width: 100%;
 
-            object-fit: contain;
+    border: 1px solid #d9d9dd;
 
-        }
+    background: #fafafa;
 
+    color: #111;
 
-        .header-text strong {
+    border-radius: 10px;
 
-            display: block;
+    padding: 13px 14px;
 
-            font-size: 18px;
+    font-family: inherit;
 
-            letter-spacing: .4px;
+    font-size: 14px;
 
-        }
+    outline: none;
 
+    transition:
+        border-color .2s,
+        background .2s,
+        box-shadow .2s;
+}
 
-        .header-text span {
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: #bdbdc2;
+}
 
-            display: block;
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #111;
 
-            margin-top: 4px;
+    background: #fff;
 
-            font-size: 11px;
+    box-shadow:
+        0 0 0 3px
+        rgba(0, 0, 0, .06);
+}
 
-            letter-spacing: 1.5px;
+textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.5;
+}
 
-            color: #777;
+input::placeholder,
+textarea::placeholder {
+    color: #999;
+}
 
-        }
+/* PHOTO */
 
+.photo-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-        /* =================================================
-           MAIN
-        ================================================= */
+.photo-preview {
+    width: 130px;
+    height: 160px;
 
-        .page-wrapper {
+    border: 1px dashed #cfcfd4;
 
-            width: 100%;
+    border-radius: 10px;
 
-            padding: 35px 16px 60px;
+    background: #fafafa;
 
-        }
+    display: flex;
 
+    align-items: center;
+    justify-content: center;
 
-        .application-container {
+    overflow: hidden;
 
-            max-width: 900px;
+    color: #999;
 
-            margin: auto;
+    font-size: 11px;
 
-        }
+    text-align: center;
+}
 
+.photo-preview img {
+    width: 100%;
+    height: 100%;
 
-        /* =================================================
-           PAGE TITLE
-        ================================================= */
+    object-fit: cover;
 
-        .page-title {
+    display: none;
+}
 
-            text-align: center;
+.photo-note {
+    font-size: 11px;
+    color: #777;
+    line-height: 1.5;
+}
 
-            margin-bottom: 30px;
+/* SPORTS */
 
-        }
+.sports-selection {
+    display: grid;
 
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
-        .eyebrow {
+    gap: 10px;
 
-            font-size: 11px;
+    margin-top: 5px;
+}
 
-            font-weight: 700;
+.sport-option {
+    display: flex;
 
-            letter-spacing: 2px;
+    align-items: center;
 
-            color: #777;
+    gap: 9px;
 
-            margin-bottom: 8px;
+    padding: 11px 12px;
 
-        }
+    border: 1px solid #dedee2;
 
+    border-radius: 10px;
 
-        .page-title h1 {
+    background: #fafafa;
 
-            font-size: clamp(
-                28px,
-                5vw,
-                42px
-            );
+    cursor: pointer;
 
-            line-height: 1.15;
+    transition:
+        border-color .2s,
+        background .2s;
+}
 
-            letter-spacing: -1px;
+.sport-option:hover {
+    border-color: #aaa;
+    background: #fff;
+}
 
-        }
+.sport-option input {
+    width: 17px;
+    height: 17px;
 
+    margin: 0;
 
-        .page-title p {
+    flex-shrink: 0;
 
-            max-width: 600px;
+    box-shadow: none;
+}
 
-            margin: 12px auto 0;
+.sport-option span {
+    font-size: 13px;
+    color: #333;
+}
 
-            color: #666;
+/* DECLARATION */
 
-            font-size: 15px;
+.declaration-box {
+    padding: 18px;
 
-            line-height: 1.6;
+    border: 1px solid #e4e4e7;
 
-        }
+    border-radius: 12px;
 
+    background: #fafafa;
+}
 
-        /* =================================================
-           APPLICATION CARD
-        ================================================= */
+.declaration-text {
+    font-size: 13px;
 
-        .application-card {
+    line-height: 1.8;
 
-            background: #ffffff;
+    color: #444;
 
-            border: 1px solid #e4e4e7;
+    margin-bottom: 16px;
+}
 
-            border-radius: 22px;
+.checkbox-group {
+    display: flex;
 
-            padding: clamp(
-                20px,
-                4vw,
-                42px
-            );
+    align-items: flex-start;
 
-            box-shadow:
-                0 15px 45px
-                rgba(0, 0, 0, .06);
+    gap: 10px;
+}
 
-        }
+.checkbox-group input {
+    width: 18px;
+    height: 18px;
 
+    margin-top: 2px;
 
-        .application-card::before {
+    flex-shrink: 0;
+}
 
-            content:
-                "OFFICIAL GSA MEMBERSHIP APPLICATION";
+.checkbox-group label {
+    font-size: 13px;
 
-            display: block;
+    line-height: 1.6;
 
-            text-align: center;
+    color: #444;
+}
 
-            font-size: 10px;
+/* SUBMIT */
 
-            font-weight: 800;
+.submit-area {
+    margin-top: 35px;
 
-            letter-spacing: 2px;
+    padding-top: 25px;
 
-            color: #777;
+    border-top: 1px solid #ededee;
+}
 
-            margin-bottom: 30px;
+.submit-button {
+    width: 100%;
 
-        }
+    border: none;
 
+    background: #111;
 
-        /* =================================================
-           FORM SECTION
-        ================================================= */
+    color: #fff;
 
-        .form-section {
+    padding: 16px 22px;
 
-            margin-bottom: 38px;
+    border-radius: 12px;
 
-        }
+    font-family: inherit;
 
+    font-size: 14px;
 
-        .form-section:last-child {
+    font-weight: 700;
 
-            margin-bottom: 0;
+    cursor: pointer;
 
-        }
+    transition:
+        transform .15s ease,
+        opacity .15s ease,
+        box-shadow .15s ease;
+}
 
+.submit-button:hover {
+    opacity: .92;
 
-        .section-heading {
+    box-shadow:
+        0 8px 20px
+        rgba(0, 0, 0, .15);
+}
 
-            padding-bottom: 13px;
+.submit-button:active {
+    transform: scale(.985);
+}
 
-            margin-bottom: 22px;
+.submit-button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
 
-            border-bottom: 1px solid #ededee;
+/* SUCCESS */
 
-        }
+.success-message {
+    display: none;
 
+    margin-top: 18px;
 
-        .section-heading span {
+    padding: 15px;
 
-            display: block;
+    border-radius: 11px;
 
-            font-size: 10px;
+    background: #f0fdf4;
 
-            font-weight: 700;
+    border: 1px solid #bbf7d0;
 
-            letter-spacing: 1.8px;
+    color: #166534;
 
-            color: #777;
+    font-size: 13px;
 
-            margin-bottom: 5px;
+    line-height: 1.6;
+}
 
-        }
+/* BACK */
 
+.back-link-wrapper {
+    text-align: center;
+    margin-top: 25px;
+}
 
-        .section-heading h2 {
+.back-link {
+    color: #333;
 
-            font-size: 20px;
+    text-decoration: none;
 
-            letter-spacing: -.3px;
+    font-size: 13px;
 
-        }
+    font-weight: 600;
+}
 
+.back-link:hover {
+    text-decoration: underline;
+}
 
-        /* =================================================
-           FORM GRID
-        ================================================= */
+/* FOOTER */
 
-        .form-grid {
+.page-footer {
+    text-align: center;
 
-            display: grid;
+    padding: 25px 15px;
 
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+    color: #888;
 
-            gap: 20px;
+    font-size: 11px;
+}
 
-        }
+/* MOBILE */
 
+@media (max-width: 650px) {
 
-        .form-group {
+    .page-header {
+        padding: 17px 15px;
+    }
 
-            display: flex;
+    .header-logo {
+        width: 48px;
+        height: 48px;
+    }
 
-            flex-direction: column;
+    .header-text strong {
+        font-size: 15px;
+    }
 
-            gap: 8px;
+    .page-wrapper {
+        padding:
+            25px 12px 45px;
+    }
 
-        }
+    .application-card {
+        border-radius: 16px;
+        padding: 20px 16px;
+    }
 
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 17px;
+    }
 
-        .form-group.full {
+    .form-group.full {
+        grid-column: auto;
+    }
 
-            grid-column: 1 / -1;
+    .sports-selection {
+        grid-template-columns: 1fr;
+    }
 
-        }
+    .page-title {
+        margin-bottom: 22px;
+    }
 
+    .page-title p {
+        font-size: 13px;
+    }
 
-        .form-group label {
+    .section-heading h2 {
+        font-size: 18px;
+    }
 
-            font-size: 12px;
+}
 
-            font-weight: 700;
-
-            color: #333;
-
-        }
-
-
-        .required {
-
-            color: #d00000;
-
-            font-weight: 800;
-
-        }
-
-
-        input,
-        select,
-        textarea {
-
-            width: 100%;
-
-            border: 1px solid #d9d9dd;
-
-            background: #fafafa;
-
-            color: #111;
-
-            border-radius: 10px;
-
-            padding: 13px 14px;
-
-            font-family: inherit;
-
-            font-size: 14px;
-
-            outline: none;
-
-            transition:
-                border-color .2s,
-                background .2s,
-                box-shadow .2s;
-
-        }
-
-
-        input:hover,
-        select:hover,
-        textarea:hover {
-
-            border-color: #bdbdc2;
-
-        }
-
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-
-            border-color: #111;
-
-            background: #ffffff;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(0, 0, 0, .06);
-
-        }
-
-
-        textarea {
-
-            min-height: 110px;
-
-            resize: vertical;
-
-            line-height: 1.5;
-
-        }
-
-
-        input::placeholder,
-        textarea::placeholder {
-
-            color: #999;
-
-        }
-
-
-        /* =================================================
-           PHOTO UPLOAD
-        ================================================= */
-
-        .photo-upload {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 10px;
-
-        }
-
-
-        .photo-preview {
-
-            width: 130px;
-
-            height: 160px;
-
-            border: 1px dashed #cfcfd4;
-
-            border-radius: 10px;
-
-            background: #fafafa;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            overflow: hidden;
-
-            color: #999;
-
-            font-size: 11px;
-
-            text-align: center;
-
-        }
-
-
-        .photo-preview img {
-
-            width: 100%;
-
-            height: 100%;
-
-            object-fit: cover;
-
-            display: none;
-
-        }
-
-
-        .photo-note {
-
-            font-size: 11px;
-
-            color: #777;
-
-            line-height: 1.5;
-
-        }
-
-
-        /* =================================================
-           SPORTS CHECKBOX
-        ================================================= */
-
-        .sports-selection {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-
-            gap: 10px;
-
-            margin-top: 5px;
-
-        }
-
-
-        .sport-option {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 9px;
-
-            padding: 11px 12px;
-
-            border: 1px solid #dedee2;
-
-            border-radius: 10px;
-
-            background: #fafafa;
-
-            cursor: pointer;
-
-            transition:
-                border-color .2s,
-                background .2s;
-
-        }
-
-
-        .sport-option:hover {
-
-            border-color: #aaa;
-
-            background: #fff;
-
-        }
-
-
-        .sport-option input {
-
-            width: 17px;
-
-            height: 17px;
-
-            margin: 0;
-
-            flex-shrink: 0;
-
-            box-shadow: none;
-
-        }
-
-
-        .sport-option span {
-
-            font-size: 13px;
-
-            color: #333;
-
-        }
-
-
-        /* =================================================
-           DECLARATION
-        ================================================= */
-
-        .declaration-box {
-
-            padding: 18px;
-
-            border: 1px solid #e4e4e7;
-
-            border-radius: 12px;
-
-            background: #fafafa;
-
-        }
-
-
-        .declaration-text {
-
-            font-size: 13px;
-
-            line-height: 1.8;
-
-            color: #444;
-
-            margin-bottom: 16px;
-
-        }
-
-
-        .checkbox-group {
-
-            display: flex;
-
-            align-items: flex-start;
-
-            gap: 10px;
-
-        }
-
-
-        .checkbox-group input {
-
-            width: 18px;
-
-            height: 18px;
-
-            margin-top: 2px;
-
-            flex-shrink: 0;
-
-        }
-
-
-        .checkbox-group label {
-
-            font-size: 13px;
-
-            line-height: 1.6;
-
-            color: #444;
-
-        }
-
-
-        /* =================================================
-           SUBMIT
-        ================================================= */
-
-        .submit-area {
-
-            margin-top: 35px;
-
-            padding-top: 25px;
-
-            border-top: 1px solid #ededee;
-
-        }
-
-
-        .submit-button {
-
-            width: 100%;
-
-            border: none;
-
-            background: #111;
-
-            color: #fff;
-
-            padding: 16px 22px;
-
-            border-radius: 12px;
-
-            font-family: inherit;
-
-            font-size: 14px;
-
-            font-weight: 700;
-
-            cursor: pointer;
-
-            transition:
-                transform .15s ease,
-                opacity .15s ease,
-                box-shadow .15s ease;
-
-        }
-
-
-        .submit-button:hover {
-
-            opacity: .92;
-
-            box-shadow:
-                0 8px 20px
-                rgba(0, 0, 0, .15);
-
-        }
-
-
-        .submit-button:active {
-
-            transform: scale(.985);
-
-        }
-
-
-        .submit-button:disabled {
-
-            opacity: .6;
-
-            cursor: not-allowed;
-
-            box-shadow: none;
-
-        }
-
-
-        /* =================================================
-           SUCCESS MESSAGE
-        ================================================= */
-
-        .success-message {
-
-            display: none;
-
-            margin-top: 18px;
-
-            padding: 15px;
-
-            border-radius: 11px;
-
-            background: #f0fdf4;
-
-            border: 1px solid #bbf7d0;
-
-            color: #166534;
-
-            font-size: 13px;
-
-            line-height: 1.6;
-
-        }
-
-
-        /* =================================================
-           BACK LINK
-        ================================================= */
-
-        .back-link-wrapper {
-
-            text-align: center;
-
-            margin-top: 25px;
-
-        }
-
-
-        .back-link {
-
-            color: #333;
-
-            text-decoration: none;
-
-            font-size: 13px;
-
-            font-weight: 600;
-
-        }
-
-
-        .back-link:hover {
-
-            text-decoration: underline;
-
-        }
-
-
-        /* =================================================
-           FOOTER
-        ================================================= */
-
-        .page-footer {
-
-            text-align: center;
-
-            padding: 25px 15px;
-
-            color: #888;
-
-            font-size: 11px;
-
-        }
-
-
-        /* =================================================
-           MOBILE
-        ================================================= */
-
-        @media (max-width: 650px) {
-
-            .page-header {
-
-                padding: 17px 15px;
-
-            }
-
-
-            .header-logo {
-
-                width: 48px;
-
-                height: 48px;
-
-            }
-
-
-            .header-text strong {
-
-                font-size: 15px;
-
-            }
-
-
-            .page-wrapper {
-
-                padding:
-                    25px 12px 45px;
-
-            }
-
-
-            .application-card {
-
-                border-radius: 16px;
-
-                padding: 20px 16px;
-
-            }
-
-
-            .form-grid {
-
-                grid-template-columns: 1fr;
-
-                gap: 17px;
-
-            }
-
-
-            .form-group.full {
-
-                grid-column: auto;
-
-            }
-
-
-            .sports-selection {
-
-                grid-template-columns: 1fr;
-
-            }
-
-
-            .page-title {
-
-                margin-bottom: 22px;
-
-            }
-
-
-            .page-title p {
-
-                font-size: 13px;
-
-            }
-
-
-            .section-heading h2 {
-
-                font-size: 18px;
-
-            }
-
-        }
-
-    </style>
+</style>
 
 </head>
 
-
 <body>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
+<!-- HEADER -->
 
 <header class="page-header">
 
@@ -917,1372 +625,853 @@
 </header>
 
 
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
+<!-- MAIN -->
 
 <main class="page-wrapper">
 
-    <div class="application-container">
+<div class="application-container">
 
+<div class="page-title">
 
-        <!-- PAGE TITLE -->
-
-        <div class="page-title">
-
-            <div class="eyebrow">
-                GSA MEMBERSHIP
-            </div>
-
-            <h1>
-                Club Membership Application
-            </h1>
-
-            <p>
-                Become a member of Ghopkhali Sports Arena
-                and be part of our sporting community.
-            </p>
-
-        </div>
-
-
-
-        <!-- =================================================
-             APPLICATION CARD
-        ================================================= -->
-
-        <div class="application-card">
-
-
-            <form
-                id="membershipApplicationForm"
-                autocomplete="on"
-            >
-
-
-                <!-- =================================================
-                     SECTION 01 — PERSONAL INFORMATION
-                ================================================= -->
-
-                <section class="form-section">
-
-                    <div class="section-heading">
-
-                        <span>
-                            SECTION 01
-                        </span>
-
-                        <h2>
-                            Personal Information
-                        </h2>
-
-                    </div>
-
-
-                    <div class="form-grid">
-
-
-                        <!-- BANGLA NAME -->
-
-                        <div class="form-group">
-
-                            <label for="fullNameBn">
-
-                                Full Name (Bangla)
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <input
-                                type="text"
-                                id="fullNameBn"
-                                name="full_name_bn"
-                                placeholder="পূর্ণ নাম"
-                                required
-                            >
-
-                        </div>
-
-
-
-                        <!-- ENGLISH NAME -->
-
-                        <div class="form-group">
-
-                            <label for="fullNameEn">
-
-                                Full Name (English)
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <input
-                                type="text"
-                                id="fullNameEn"
-                                name="full_name_en"
-                                placeholder="Full Name"
-                                required
-                            >
-
-                        </div>
-
-
-
-                        <!-- FATHER -->
-
-                        <div class="form-group">
-
-                            <label for="fatherName">
-
-                                Father's Name
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <input
-                                type="text"
-                                id="fatherName"
-                                name="father_name"
-                                placeholder="Father's name"
-                                required
-                            >
-
-                        </div>
-
-
-
-                        <!-- MOTHER -->
-
-                        <div class="form-group">
-
-                            <label for="motherName">
-
-                                Mother's Name
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <input
-                                type="text"
-                                id="motherName"
-                                name="mother_name"
-                                placeholder="Mother's name"
-                                required
-                            >
-
-                        </div>
-
-
-
-                        <!-- DOB -->
-
-                        <div class="form-group">
-
-                            <label for="dateOfBirth">
-
-                                Date of Birth
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <input
-                                type="date"
-                                id="dateOfBirth"
-                                name="date_of_birth"
-                                required
-                            >
-
-                        </div>
-
-
-
-                        <!-- BLOOD -->
-
-                        <div class="form-group">
-
-                            <label for="bloodGroup">
-
-                                Blood Group
-
-                            </label>
-
-                            <select
-                                id="bloodGroup"
-                                name="blood_group"
-                            >
-
-                                <option value="">
-                                    Select blood group
-                                </option>
-
-                                <option value="A+">A+</option>
-
-                                <option value="A-">A-</option>
-
-                                <option value="B+">B+</option>
-
-                                <option value="B-">B-</option>
-
-                                <option value="AB+">AB+</option>
-
-                                <option value="AB-">AB-</option>
-
-                                <option value="O+">O+</option>
-
-                                <option value="O-">O-</option>
-
-                            </select>
-
-                        </div>
-
-
-
-                        <!-- PROFESSION -->
-
-                        <div class="form-group">
-
-                            <label for="profession">
-
-                                Profession
-
-                            </label>
-
-                            <input
-                                type="text"
-                                id="profession"
-                                name="profession"
-                                placeholder="Student / Service / Business"
-                            >
-
-                        </div>
-
-
-
-                        <!-- NID -->
-
-                        <div class="form-group">
-
-                            <label for="nidBirthRegistration">
-
-                                NID / Birth Registration
-
-                            </label>
-
-                            <input
-                                type="text"
-                                id="nidBirthRegistration"
-                                name="nid_birth_registration"
-                                placeholder="NID or Birth Registration No."
-                            >
-
-                        </div>
-
-
-
-                        <!-- PHOTO -->
-
-                        <div class="form-group">
-
-                            <label for="memberPhoto">
-
-                                Passport Size Photo
-
-                            </label>
-
-                            <div class="photo-upload">
-
-                                <div
-                                    class="photo-preview"
-                                    id="photoPreview"
-                                >
-
-                                    <span id="photoPlaceholder">
-                                        Photo Preview
-                                    </span>
-
-                                    <img
-                                        id="photoPreviewImage"
-                                        alt="Photo Preview"
-                                    >
-
-                                </div>
-
-                                <input
-                                    type="file"
-                                    id="memberPhoto"
-                                    name="member_photo"
-                                    accept="image/jpeg,image/png,image/webp"
-                                >
-
-                                <div class="photo-note">
-
-                                    Passport-size photo.
-                                    JPG, PNG or WebP.
-                                    Maximum 2 MB.
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                </section>
-
-
-
-                <!-- =================================================
-                     SECTION 02 — CONTACT INFORMATION
-                ================================================= -->
-
-                <section class="form-section">
-
-                    <div class="section-heading">
-
-                        <span>
-                            SECTION 02
-                        </span>
-
-                        <h2>
-                            Contact Information
-                        </h2>
-
-                    </div>
-
-
-                    <div class="form-grid">
-
-
-                        <!-- CURRENT ADDRESS -->
-
-                        <div class="form-group full">
-
-                            <label for="currentAddress">
-
-                                Current Address
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <textarea
-                                id="currentAddress"
-                                name="current_address"
-                                placeholder="Enter your current address"
-                                required
-                            ></textarea>
-
-                        </div>
-
-
-
-                        <!-- PERMANENT ADDRESS -->
-
-                        <div class="form-group full">
-
-                            <label for="permanentAddress">
-
-                                Permanent Address
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <textarea
-                                id="permanentAddress"
-                                name="permanent_address"
-                                placeholder="Enter your permanent address"
-                                required
-                            ></textarea>
-
-                        </div>
-
-
-
-                        <!-- MOBILE -->
-
-                        <div class="form-group">
-
-                            <label for="mobileNumber">
-
-                                Mobile Number
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <input
-                                type="tel"
-                                id="mobileNumber"
-                                name="mobile_number"
-                                placeholder="01XXXXXXXXX"
-                                required
-                            >
-
-                        </div>
-
-
-
-                        <!-- ALTERNATIVE -->
-
-                        <div class="form-group">
-
-                            <label for="alternativeMobile">
-
-                                Alternative Mobile
-
-                            </label>
-
-                            <input
-                                type="tel"
-                                id="alternativeMobile"
-                                name="alternative_mobile_number"
-                                placeholder="Alternative number"
-                            >
-
-                        </div>
-
-
-
-                        <!-- EMAIL -->
-
-                        <div class="form-group full">
-
-                            <label for="email">
-
-                                Email Address
-
-                            </label>
-
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="example@email.com"
-                            >
-
-                        </div>
-
-
-                    </div>
-
-                </section>
-
-
-
-                <!-- =================================================
-                     SECTION 03 — SPORTS INFORMATION
-                ================================================= -->
-
-                <section class="form-section">
-
-                    <div class="section-heading">
-
-                        <span>
-                            SECTION 03
-                        </span>
-
-                        <h2>
-                            Sports Information
-                        </h2>
-
-                    </div>
-
-
-                    <div class="form-grid">
-
-
-                        <!-- SPORTS CHECKBOX -->
-
-                        <div class="form-group full">
-
-                            <label>
-
-                                Select Your Sports
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-
-                            <div class="sports-selection">
-
-
-                                <label class="sport-option">
-
-                                    <input
-                                        type="checkbox"
-                                        name="sports"
-                                        value="Cricket"
-                                    >
-
-                                    <span>
-                                        Cricket
-                                    </span>
-
-                                </label>
-
-
-
-                                <label class="sport-option">
-
-                                    <input
-                                        type="checkbox"
-                                        name="sports"
-                                        value="Football"
-                                    >
-
-                                    <span>
-                                        Football
-                                    </span>
-
-                                </label>
-
-
-
-                                <label class="sport-option">
-
-                                    <input
-                                        type="checkbox"
-                                        name="sports"
-                                        value="Badminton"
-                                    >
-
-                                    <span>
-                                        Badminton
-                                    </span>
-
-                                </label>
-
-
-
-                                <label class="sport-option">
-
-                                    <input
-                                        type="checkbox"
-                                        name="sports"
-                                        value="Volleyball"
-                                    >
-
-                                    <span>
-                                        Volleyball
-                                    </span>
-
-                                </label>
-
-
-
-                                <label class="sport-option">
-
-                                    <input
-                                        type="checkbox"
-                                        name="sports"
-                                        value="Athletics"
-                                    >
-
-                                    <span>
-                                        Athletics
-                                    </span>
-
-                                </label>
-
-
-
-                                <label class="sport-option">
-
-                                    <input
-                                        type="checkbox"
-                                        name="sports"
-                                        value="Indoor Games"
-                                    >
-
-                                    <span>
-                                        Indoor Games
-                                    </span>
-
-                                </label>
-
-
-
-                                <label class="sport-option">
-
-                                    <input
-                                        type="checkbox"
-                                        name="sports"
-                                        value="Futsal"
-                                    >
-
-                                    <span>
-                                        Futsal
-                                    </span>
-
-                                </label>
-
-
-
-                                <label class="sport-option">
-
-                                    <input
-                                        type="checkbox"
-                                        name="sports"
-                                        value="Other"
-                                    >
-
-                                    <span>
-                                        Other
-                                    </span>
-
-                                </label>
-
-
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- OTHER SPORT -->
-
-                        <div class="form-group full">
-
-                            <label for="otherSports">
-
-                                Other Sports
-
-                            </label>
-
-                            <input
-                                type="text"
-                                id="otherSports"
-                                name="other_sports"
-                                placeholder="If you selected Other, write the sport name"
-                            >
-
-                        </div>
-
-
-
-                        <!-- MAIN SKILL -->
-
-                        <div class="form-group full">
-
-                            <label for="sportsSkill">
-
-                                Main Playing Skill
-
-                            </label>
-
-                            <textarea
-                                id="sportsSkill"
-                                name="sports_skill"
-                                placeholder="Example: Forward, Defender, Goalkeeper, Batsman, Bowler, All-rounder, etc."
-                            ></textarea>
-
-                        </div>
-
-
-
-                        <!-- PREVIOUS CLUB EXPERIENCE -->
-
-                        <div class="form-group full">
-
-                            <label for="previousClubExperience">
-
-                                Previous Club Experience
-
-                            </label>
-
-                            <textarea
-                                id="previousClubExperience"
-                                name="previous_club_experience"
-                                placeholder="Mention any previous club/team experience, if applicable."
-                            ></textarea>
-
-                        </div>
-
-
-                    </div>
-
-                </section>
-
-
-
-                <!-- =================================================
-                     SECTION 04 — EMERGENCY CONTACT
-                ================================================= -->
-
-                <section class="form-section">
-
-                    <div class="section-heading">
-
-                        <span>
-                            SECTION 04
-                        </span>
-
-                        <h2>
-                            Emergency Contact
-                        </h2>
-
-                    </div>
-
-
-                    <div class="form-grid">
-
-
-                        <!-- NAME -->
-
-                        <div class="form-group">
-
-                            <label for="emergencyContactName">
-
-                                Name
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <input
-                                type="text"
-                                id="emergencyContactName"
-                                name="emergency_contact_name"
-                                placeholder="Emergency contact name"
-                                required
-                            >
-
-                        </div>
-
-
-
-                        <!-- RELATION -->
-
-                        <div class="form-group">
-
-                            <label for="emergencyContactRelation">
-
-                                Relation
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <input
-                                type="text"
-                                id="emergencyContactRelation"
-                                name="emergency_contact_relation"
-                                placeholder="Father / Mother / Brother / etc."
-                                required
-                            >
-
-                        </div>
-
-
-
-                        <!-- MOBILE -->
-
-                        <div class="form-group full">
-
-                            <label for="emergencyContactMobile">
-
-                                Mobile Number
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                            <input
-                                type="tel"
-                                id="emergencyContactMobile"
-                                name="emergency_contact_mobile"
-                                placeholder="Emergency contact mobile"
-                                required
-                            >
-
-                        </div>
-
-
-                    </div>
-
-                </section>
-
-
-
-                <!-- =================================================
-                     SECTION 05 — ADDITIONAL INFORMATION
-                ================================================= -->
-
-                <section class="form-section">
-
-                    <div class="section-heading">
-
-                        <span>
-                            SECTION 05
-                        </span>
-
-                        <h2>
-                            Additional Information
-                        </h2>
-
-                    </div>
-
-
-                    <div class="form-grid">
-
-
-                        <div class="form-group full">
-
-                            <label for="message">
-
-                                Additional Message
-
-                            </label>
-
-                            <textarea
-                                id="message"
-                                name="message"
-                                placeholder="Anything else you would like to tell GSA..."
-                            ></textarea>
-
-                        </div>
-
-
-                    </div>
-
-                </section>
-
-
-
-                <!-- =================================================
-                     SECTION 06 — DECLARATION
-                ================================================= -->
-
-                <section class="form-section">
-
-                    <div class="section-heading">
-
-                        <span>
-                            SECTION 06
-                        </span>
-
-                        <h2>
-                            Declaration
-                        </h2>
-
-                    </div>
-
-
-                    <div class="declaration-box">
-
-
-                        <p class="declaration-text">
-
-                            আমি সজ্ঞানে ঘোষণা করছি যে, এই ফরমে প্রদত্ত
-                            আমার সকল তথ্য সম্পূর্ণ সত্য ও নির্ভুল।
-                            আমি 'ঘোপখালী স্পোর্টস অ্যারিনা ক্লাব'-এর
-                            একজন গর্বিত সদস্য হিসেবে ক্লাবের সকল
-                            নিয়ম-কানুন ও গঠনতন্ত্র যথাযথভাবে মেনে চলব।
-                            ক্লাবের আয়োজিত ইনডোর বা আউটডোর যেকোনো
-                            ক্রীড়া কার্যক্রমে আমি স্বতঃস্ফূর্তভাবে
-                            অংশগ্রহণ করতে আগ্রহী এবং এমন কোনো
-                            কার্যকলাপে জড়িত হব না যা ক্লাবের সম্মান
-                            ক্ষুণ্ন করে।
-
-                        </p>
-
-
-                        <div class="checkbox-group">
-
-                            <input
-                                type="checkbox"
-                                id="declaration"
-                                name="declaration"
-                                required
-                            >
-
-                            <label for="declaration">
-
-                                I confirm that I have read and accepted
-                                the above declaration and agree to
-                                follow the rules and constitution of
-                                Ghopkhali Sports Arena Club.
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-                        </div>
-
-
-                    </div>
-
-                </section>
-
-
-
-                <!-- =================================================
-                     SUBMIT
-                ================================================= -->
-
-                <div class="submit-area">
-
-                    <button
-                        type="submit"
-                        class="submit-button"
-                        id="membershipSubmitButton"
-                    >
-
-                        Submit Membership Application
-
-                    </button>
-
-
-                    <div
-                        id="membershipSuccessMessage"
-                        class="success-message"
-                    ></div>
-
-                </div>
-
-
-            </form>
-
-        </div>
-
-
-
-        <!-- BACK -->
-
-        <div class="back-link-wrapper">
-
-            <a
-                href="index.html"
-                class="back-link"
-            >
-
-                ← Back to Ghopkhali Sports Arena
-
-            </a>
-
-        </div>
-
-
+    <div class="eyebrow">
+        GSA MEMBERSHIP
     </div>
+
+    <h1>
+        Club Membership Application
+    </h1>
+
+    <p>
+        Become a member of Ghopkhali Sports Arena
+        and be part of our sporting community.
+    </p>
+
+</div>
+
+
+<div class="application-card">
+
+<form
+    id="membershipApplicationForm"
+    autocomplete="on"
+>
+
+<!-- SECTION 01 -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+    <span>SECTION 01</span>
+
+    <h2>
+        Personal Information
+    </h2>
+
+</div>
+
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label for="fullNameBn">
+    Full Name (Bangla)
+    <span class="required">*</span>
+</label>
+
+<input
+    type="text"
+    id="fullNameBn"
+    name="full_name_bn"
+    placeholder="পূর্ণ নাম"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="fullNameEn">
+    Full Name (English)
+    <span class="required">*</span>
+</label>
+
+<input
+    type="text"
+    id="fullNameEn"
+    name="full_name_en"
+    placeholder="Full Name"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="fatherName">
+    Father's Name
+    <span class="required">*</span>
+</label>
+
+<input
+    type="text"
+    id="fatherName"
+    name="father_name"
+    placeholder="Father's name"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="motherName">
+    Mother's Name
+    <span class="required">*</span>
+</label>
+
+<input
+    type="text"
+    id="motherName"
+    name="mother_name"
+    placeholder="Mother's name"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="dateOfBirth">
+    Date of Birth
+    <span class="required">*</span>
+</label>
+
+<input
+    type="date"
+    id="dateOfBirth"
+    name="date_of_birth"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="bloodGroup">
+    Blood Group
+</label>
+
+<select
+    id="bloodGroup"
+    name="blood_group"
+>
+
+<option value="">
+    Select blood group
+</option>
+
+<option value="A+">A+</option>
+<option value="A-">A-</option>
+<option value="B+">B+</option>
+<option value="B-">B-</option>
+<option value="AB+">AB+</option>
+<option value="AB-">AB-</option>
+<option value="O+">O+</option>
+<option value="O-">O-</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="profession">
+    Profession
+</label>
+
+<input
+    type="text"
+    id="profession"
+    name="profession"
+    placeholder="Student / Service / Business"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="nidBirthRegistration">
+    NID / Birth Registration
+</label>
+
+<input
+    type="text"
+    id="nidBirthRegistration"
+    name="nid_birth_registration"
+    placeholder="NID or Birth Registration No."
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="memberPhoto">
+    Passport Size Photo
+</label>
+
+<div class="photo-upload">
+
+<div
+    class="photo-preview"
+    id="photoPreview"
+>
+
+<span id="photoPlaceholder">
+    Photo Preview
+</span>
+
+<img
+    id="photoPreviewImage"
+    alt="Photo Preview"
+>
+
+</div>
+
+
+<input
+    type="file"
+    id="memberPhoto"
+    name="member_photo"
+    accept="image/jpeg,image/png,image/webp"
+>
+
+
+<div class="photo-note">
+
+Passport-size photo.
+JPG, PNG or WebP.
+Maximum 2 MB.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SECTION 02 -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+<span>SECTION 02</span>
+
+<h2>
+    Contact Information
+</h2>
+
+</div>
+
+
+<div class="form-grid">
+
+<div class="form-group full">
+
+<label for="currentAddress">
+    Current Address
+    <span class="required">*</span>
+</label>
+
+<textarea
+    id="currentAddress"
+    name="current_address"
+    placeholder="Enter your current address"
+    required
+></textarea>
+
+</div>
+
+
+<div class="form-group full">
+
+<label for="permanentAddress">
+    Permanent Address
+    <span class="required">*</span>
+</label>
+
+<textarea
+    id="permanentAddress"
+    name="permanent_address"
+    placeholder="Enter your permanent address"
+    required
+></textarea>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="mobileNumber">
+    Mobile Number
+    <span class="required">*</span>
+</label>
+
+<input
+    type="tel"
+    id="mobileNumber"
+    name="mobile_number"
+    placeholder="01XXXXXXXXX"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="alternativeMobile">
+    Alternative Mobile
+</label>
+
+<input
+    type="tel"
+    id="alternativeMobile"
+    name="alternative_mobile_number"
+    placeholder="Alternative number"
+>
+
+</div>
+
+
+<div class="form-group full">
+
+<label for="email">
+    Email Address
+</label>
+
+<input
+    type="email"
+    id="email"
+    name="email"
+    placeholder="example@email.com"
+>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SECTION 03 -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+<span>SECTION 03</span>
+
+<h2>
+    Sports Information
+</h2>
+
+</div>
+
+
+<div class="form-grid">
+
+<div class="form-group full">
+
+<label>
+    Select Your Sports
+    <span class="required">*</span>
+</label>
+
+
+<div class="sports-selection">
+
+<label class="sport-option">
+<input
+    type="checkbox"
+    name="sports"
+    value="Cricket"
+>
+<span>Cricket</span>
+</label>
+
+
+<label class="sport-option">
+<input
+    type="checkbox"
+    name="sports"
+    value="Football"
+>
+<span>Football</span>
+</label>
+
+
+<label class="sport-option">
+<input
+    type="checkbox"
+    name="sports"
+    value="Badminton"
+>
+<span>Badminton</span>
+</label>
+
+
+<label class="sport-option">
+<input
+    type="checkbox"
+    name="sports"
+    value="Volleyball"
+>
+<span>Volleyball</span>
+</label>
+
+
+<label class="sport-option">
+<input
+    type="checkbox"
+    name="sports"
+    value="Athletics"
+>
+<span>Athletics</span>
+</label>
+
+
+<label class="sport-option">
+<input
+    type="checkbox"
+    name="sports"
+    value="Indoor Games"
+>
+<span>Indoor Games</span>
+</label>
+
+
+<label class="sport-option">
+<input
+    type="checkbox"
+    name="sports"
+    value="Futsal"
+>
+<span>Futsal</span>
+</label>
+
+
+<label class="sport-option">
+<input
+    type="checkbox"
+    name="sports"
+    value="Other"
+>
+<span>Other</span>
+</label>
+
+</div>
+
+</div>
+
+
+<div class="form-group full">
+
+<label for="otherSports">
+    Other Sports
+</label>
+
+<input
+    type="text"
+    id="otherSports"
+    name="other_sports"
+    placeholder="If you selected Other, write the sport name"
+>
+
+</div>
+
+
+<div class="form-group full">
+
+<label for="sportsSkill">
+    Main Playing Skill
+</label>
+
+<textarea
+    id="sportsSkill"
+    name="sports_skill"
+    placeholder="Example: Forward, Defender, Goalkeeper, Batsman, Bowler, All-rounder, etc."
+></textarea>
+
+</div>
+
+
+<div class="form-group full">
+
+<label for="previousClubExperience">
+    Previous Club Experience
+</label>
+
+<textarea
+    id="previousClubExperience"
+    name="previous_club_experience"
+    placeholder="Mention any previous club/team experience, if applicable."
+></textarea>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SECTION 04 -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+<span>SECTION 04</span>
+
+<h2>
+    Emergency Contact
+</h2>
+
+</div>
+
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label for="emergencyContactName">
+    Name
+    <span class="required">*</span>
+</label>
+
+<input
+    type="text"
+    id="emergencyContactName"
+    name="emergency_contact_name"
+    placeholder="Emergency contact name"
+    required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="emergencyContactRelation">
+    Relation
+    <span class="required">*</span>
+</label>
+
+<input
+    type="text"
+    id="emergencyContactRelation"
+    name="emergency_contact_relation"
+    placeholder="Father / Mother / Brother / etc."
+    required
+>
+
+</div>
+
+
+<div class="form-group full">
+
+<label for="emergencyContactMobile">
+    Mobile Number
+    <span class="required">*</span>
+</label>
+
+<input
+    type="tel"
+    id="emergencyContactMobile"
+    name="emergency_contact_mobile"
+    placeholder="Emergency contact mobile"
+    required
+>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SECTION 05 -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+<span>SECTION 05</span>
+
+<h2>
+    Additional Information
+</h2>
+
+</div>
+
+
+<div class="form-grid">
+
+<div class="form-group full">
+
+<label for="message">
+    Additional Message
+</label>
+
+<textarea
+    id="message"
+    name="message"
+    placeholder="Anything else you would like to tell GSA..."
+></textarea>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SECTION 06 -->
+
+<section class="form-section">
+
+<div class="section-heading">
+
+<span>SECTION 06</span>
+
+<h2>
+    Declaration
+</h2>
+
+</div>
+
+
+<div class="declaration-box">
+
+<p class="declaration-text">
+
+আমি সজ্ঞানে ঘোষণা করছি যে, এই ফরমে প্রদত্ত
+আমার সকল তথ্য সম্পূর্ণ সত্য ও নির্ভুল।
+আমি 'ঘোপখালী স্পোর্টস অ্যারিনা ক্লাব'-এর
+একজন গর্বিত সদস্য হিসেবে ক্লাবের সকল
+নিয়ম-কানুন ও গঠনতন্ত্র যথাযথভাবে মেনে চলব।
+ক্লাবের আয়োজিত ইনডোর বা আউটডোর যেকোনো
+ক্রীড়া কার্যক্রমে আমি স্বতঃস্ফূর্তভাবে
+অংশগ্রহণ করতে আগ্রহী এবং এমন কোনো
+কার্যকলাপে জড়িত হব না যা ক্লাবের সম্মান
+ক্ষুণ্ন করে।
+
+</p>
+
+
+<div class="checkbox-group">
+
+<input
+    type="checkbox"
+    id="declaration"
+    name="declaration"
+    required
+>
+
+<label for="declaration">
+
+I confirm that I have read and accepted
+the above declaration and agree to
+follow the rules and constitution of
+Ghopkhali Sports Arena Club.
+
+<span class="required">*</span>
+
+</label>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SUBMIT -->
+
+<div class="submit-area">
+
+<button
+    type="submit"
+    class="submit-button"
+    id="membershipSubmitButton"
+>
+
+Submit Membership Application
+
+</button>
+
+
+<div
+    id="membershipSuccessMessage"
+    class="success-message"
+></div>
+
+</div>
+
+</form>
+
+</div>
+
+
+<div class="back-link-wrapper">
+
+<a
+    href="index.html"
+    class="back-link"
+>
+
+← Back to Ghopkhali Sports Arena
+
+</a>
+
+</div>
+
+</div>
 
 </main>
 
 
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
 <footer class="page-footer">
 
-    © Ghopkhali Sports Arena • Official Club Membership
+© Ghopkhali Sports Arena • Official Club Membership
 
 </footer>
 
 
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    const SUPABASE_URL =
-        "https://cmygmswzokyrmgdnuszq.supabase.co";
+        /* =====================================================
+           SUPABASE CONFIGURATION
+        ===================================================== */
 
-    const SUPABASE_KEY =
-        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+        const SUPABASE_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
+        const PHOTO_BUCKET =
+            "membership-photos";
 
-    const PHOTO_BUCKET =
-        "membership-photos";
-
-    const MAX_PHOTO_SIZE =
-        2 * 1024 * 1024;
-
-
-    const form =
-        document.getElementById(
-            "membershipApplicationForm"
-        );
-
-    const submitButton =
-        document.getElementById(
-            "membershipSubmitButton"
-        );
-
-    const photoInput =
-        document.getElementById(
-            "memberPhoto"
-        );
-
-    const photoPreviewImage =
-        document.getElementById(
-            "photoPreviewImage"
-        );
-
-    const photoPlaceholder =
-        document.getElementById(
-            "photoPlaceholder"
-        );
-
-    const successMessage =
-        document.getElementById(
-            "membershipSuccessMessage"
-        );
+        const MAX_PHOTO_SIZE =
+            2 * 1024 * 1024;
 
 
-    if (!form) {
-        console.error(
-            "Membership application form not found."
-        );
-        return;
-    }
+        /* =====================================================
+           SUPABASE CLIENT
+        ===================================================== */
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
 
 
-    /* =====================================================
-       PHOTO PREVIEW
-    ===================================================== */
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
 
-    if (photoInput) {
+        const form =
+            document.getElementById(
+                "membershipApplicationForm"
+            );
 
-        photoInput.addEventListener(
-            "change",
-            () => {
+        const submitButton =
+            document.getElementById(
+                "membershipSubmitButton"
+            );
 
-                const file =
-                    photoInput.files?.[0];
+        const photoInput =
+            document.getElementById(
+                "memberPhoto"
+            );
 
-                if (!file) {
+        const photoPreviewImage =
+            document.getElementById(
+                "photoPreviewImage"
+            );
 
-                    photoPreviewImage.style.display =
-                        "none";
+        const photoPlaceholder =
+            document.getElementById(
+                "photoPlaceholder"
+            );
 
-                    photoPreviewImage.src =
-                        "";
-
-                    photoPlaceholder.style.display =
-                        "block";
-
-                    return;
-                }
-
-
-                const allowedTypes = [
-                    "image/jpeg",
-                    "image/png",
-                    "image/webp"
-                ];
-
-
-                if (
-                    !allowedTypes.includes(
-                        file.type
-                    )
-                ) {
-
-                    alert(
-                        "Only JPG, PNG or WebP photos are allowed."
-                    );
-
-                    photoInput.value =
-                        "";
-
-                    return;
-                }
+        const successMessage =
+            document.getElementById(
+                "membershipSuccessMessage"
+            );
 
 
-                if (
-                    file.size >
-                    MAX_PHOTO_SIZE
-                ) {
+        if (!form) {
 
-                    alert(
-                        "Photo size must be 2 MB or less."
-                    );
+            console.error(
+                "Membership application form not found."
+            );
 
-                    photoInput.value =
-                        "";
+            return;
 
-                    return;
-                }
+        }
 
 
-                const reader =
-                    new FileReader();
+        /* =====================================================
+           PHOTO PREVIEW
+        ===================================================== */
 
+        if (photoInput) {
 
-                reader.onload =
-                    event => {
+            photoInput.addEventListener(
+                "change",
+                () => {
 
-                        photoPreviewImage.src =
-                            event.target.result;
+                    const file =
+                        photoInput.files?.[0];
+
+                    if (!file) {
 
                         photoPreviewImage.style.display =
-                            "block";
-
-                        photoPlaceholder.style.display =
                             "none";
 
-                    };
+                        photoPreviewImage.src =
+                            "";
 
+                        photoPlaceholder.style.display =
+                            "block";
 
-                reader.readAsDataURL(file);
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       FORM SUBMIT
-    ===================================================== */
-
-    form.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-
-            if (submitButton) {
-
-                submitButton.disabled =
-                    true;
-
-                submitButton.textContent =
-                    "Checking Application...";
-
-            }
-
-
-            let uploadedPhotoPath =
-                null;
-
-
-            try {
-
-                /* =========================================
-                   DECLARATION
-                ========================================= */
-
-                const declaration =
-                    document.getElementById(
-                        "declaration"
-                    );
-
-
-                if (
-                    !declaration ||
-                    !declaration.checked
-                ) {
-
-                    throw new Error(
-                        "Please accept the declaration before submitting."
-                    );
-
-                }
-
-
-                /* =========================================
-                   SPORTS
-                ========================================= */
-
-                const selectedSports =
-                    Array.from(
-                        form.querySelectorAll(
-                            'input[name="sports"]:checked'
-                        )
-                    )
-                    .map(
-                        checkbox =>
-                            checkbox.value
-                    );
-
-
-                if (
-                    selectedSports.length === 0
-                ) {
-
-                    throw new Error(
-                        "Please select at least one sport."
-                    );
-
-                }
-
-
-                /* =========================================
-                   FORM DATA
-                ========================================= */
-
-                const formData =
-                    new FormData(form);
-
-
-                /* =========================================
-                   REQUIRED FIELDS
-                ========================================= */
-
-                const fullNameBn =
-                    formData
-                        .get("full_name_bn")
-                        ?.trim() || null;
-
-
-                const fullNameEn =
-                    formData
-                        .get("full_name_en")
-                        ?.trim() || null;
-
-
-                const mobileNumber =
-                    formData
-                        .get("mobile_number")
-                        ?.trim() || null;
-
-
-                const currentAddress =
-                    formData
-                        .get("current_address")
-                        ?.trim() || null;
-
-
-                const permanentAddress =
-                    formData
-                        .get("permanent_address")
-                        ?.trim() || null;
-
-
-                const emergencyName =
-                    formData
-                        .get("emergency_contact_name")
-                        ?.trim() || null;
-
-
-                const emergencyRelation =
-                    formData
-                        .get("emergency_contact_relation")
-                        ?.trim() || null;
-
-
-                const emergencyMobile =
-                    formData
-                        .get("emergency_contact_mobile")
-                        ?.trim() || null;
-
-
-                if (!fullNameBn) {
-                    throw new Error(
-                        "Please enter your full name in Bangla."
-                    );
-                }
-
-
-                if (!fullNameEn) {
-                    throw new Error(
-                        "Please enter your full name in English."
-                    );
-                }
-
-
-                if (!mobileNumber) {
-                    throw new Error(
-                        "Please enter your mobile number."
-                    );
-                }
-
-
-                if (!currentAddress) {
-                    throw new Error(
-                        "Please enter your current address."
-                    );
-                }
-
-
-                if (!permanentAddress) {
-                    throw new Error(
-                        "Please enter your permanent address."
-                    );
-                }
-
-
-                if (
-                    !emergencyName ||
-                    !emergencyRelation ||
-                    !emergencyMobile
-                ) {
-
-                    throw new Error(
-                        "Please complete the emergency contact information."
-                    );
-
-                }
-
-
-                /* =========================================
-                   PHOTO
-                ========================================= */
-
-                const photoFile =
-                    photoInput?.files?.[0] || null;
-
-
-                let photoURL =
-                    null;
-
-
-                /* =========================================
-                   UPLOAD PHOTO
-                ========================================= */
-
-                if (photoFile) {
-
-                    if (submitButton) {
-
-                        submitButton.textContent =
-                            "Uploading Photo...";
+                        return;
 
                     }
 
@@ -2296,421 +1485,811 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     if (
                         !allowedTypes.includes(
-                            photoFile.type
+                            file.type
                         )
                     ) {
 
-                        throw new Error(
+                        alert(
                             "Only JPG, PNG or WebP photos are allowed."
                         );
 
+                        photoInput.value =
+                            "";
+
+                        return;
+
                     }
 
 
                     if (
-                        photoFile.size >
+                        file.size >
                         MAX_PHOTO_SIZE
                     ) {
 
-                        throw new Error(
+                        alert(
                             "Photo size must be 2 MB or less."
                         );
 
+                        photoInput.value =
+                            "";
+
+                        return;
+
                     }
 
 
-                    let extension =
-                        "jpg";
+                    const reader =
+                        new FileReader();
+
+
+                    reader.onload =
+                        event => {
+
+                            photoPreviewImage.src =
+                                event.target.result;
+
+                            photoPreviewImage.style.display =
+                                "block";
+
+                            photoPlaceholder.style.display =
+                                "none";
+
+                        };
+
+
+                    reader.readAsDataURL(file);
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           SUBMIT
+        ===================================================== */
+
+        form.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                if (
+                    submitButton &&
+                    submitButton.disabled
+                ) {
+
+                    return;
+
+                }
+
+
+                let uploadedPhotoPath =
+                    null;
+
+
+                try {
+
+                    /* =========================================
+                       BUTTON
+                    ========================================= */
+
+                    if (submitButton) {
+
+                        submitButton.disabled =
+                            true;
+
+                        submitButton.textContent =
+                            "Checking Application...";
+
+                    }
+
+
+                    /* =========================================
+                       DECLARATION
+                    ========================================= */
+
+                    const declaration =
+                        document.getElementById(
+                            "declaration"
+                        );
 
 
                     if (
-                        photoFile.type ===
-                        "image/png"
+                        !declaration ||
+                        !declaration.checked
                     ) {
-
-                        extension =
-                            "png";
-
-                    }
-                    else if (
-                        photoFile.type ===
-                        "image/webp"
-                    ) {
-
-                        extension =
-                            "webp";
-
-                    }
-
-
-                    const randomPart =
-                        window.crypto &&
-                        typeof window.crypto.randomUUID ===
-                        "function"
-
-                            ? window.crypto.randomUUID()
-
-                            : Math.random()
-                                  .toString(36)
-                                  .substring(2) +
-                              Date.now();
-
-
-                    const fileName =
-                        `${Date.now()}_${randomPart}.${extension}`;
-
-
-                    uploadedPhotoPath =
-                        `applications/${fileName}`;
-
-
-                    console.log(
-                        "Uploading photo:",
-                        uploadedPhotoPath
-                    );
-
-
-                    /* =====================================
-                       STORAGE UPLOAD
-                    ===================================== */
-
-                    const {
-                        error: uploadError
-                    } =
-                        await supabaseClient
-                            .storage
-                            .from(PHOTO_BUCKET)
-                            .upload(
-                                uploadedPhotoPath,
-                                photoFile,
-                                {
-                                    cacheControl:
-                                        "3600",
-
-                                    contentType:
-                                        photoFile.type,
-
-                                    upsert:
-                                        false
-                                }
-                            );
-
-
-                    if (uploadError) {
-
-                        console.error(
-                            "PHOTO UPLOAD ERROR:",
-                            uploadError
-                        );
 
                         throw new Error(
-                            "Photo upload failed: " +
-                            uploadError.message
+                            "Please accept the declaration before submitting."
                         );
 
                     }
 
 
-                    /* =====================================
-                       PUBLIC URL
-                    ===================================== */
+                    /* =========================================
+                       SPORTS
+                    ========================================= */
 
-                    const {
-                        data: publicUrlData
-                    } =
-                        supabaseClient
-                            .storage
-                            .from(PHOTO_BUCKET)
-                            .getPublicUrl(
-                                uploadedPhotoPath
-                            );
+                    const selectedSports =
+                        Array.from(
+                            form.querySelectorAll(
+                                'input[name="sports"]:checked'
+                            )
+                        ).map(
+                            checkbox =>
+                                checkbox.value
+                        );
 
 
-                    photoURL =
-                        publicUrlData?.publicUrl ||
+                    if (
+                        selectedSports.length === 0
+                    ) {
+
+                        throw new Error(
+                            "Please select at least one sport."
+                        );
+
+                    }
+
+
+                    /* =========================================
+                       FORM DATA
+                    ========================================= */
+
+                    const formData =
+                        new FormData(form);
+
+
+                    const getText =
+                        name => {
+
+                            const value =
+                                formData.get(name);
+
+                            return typeof value ===
+                                "string" &&
+                                value.trim()
+                                ? value.trim()
+                                : null;
+
+                        };
+
+
+                    const fullNameBn =
+                        getText(
+                            "full_name_bn"
+                        );
+
+                    const fullNameEn =
+                        getText(
+                            "full_name_en"
+                        );
+
+                    const fatherName =
+                        getText(
+                            "father_name"
+                        );
+
+                    const motherName =
+                        getText(
+                            "mother_name"
+                        );
+
+                    const mobileNumber =
+                        getText(
+                            "mobile_number"
+                        );
+
+                    const currentAddress =
+                        getText(
+                            "current_address"
+                        );
+
+                    const permanentAddress =
+                        getText(
+                            "permanent_address"
+                        );
+
+                    const emergencyName =
+                        getText(
+                            "emergency_contact_name"
+                        );
+
+                    const emergencyRelation =
+                        getText(
+                            "emergency_contact_relation"
+                        );
+
+                    const emergencyMobile =
+                        getText(
+                            "emergency_contact_mobile"
+                        );
+
+
+                    /* =========================================
+                       REQUIRED FIELD CHECK
+                    ========================================= */
+
+                    if (!fullNameBn) {
+
+                        throw new Error(
+                            "Please enter your full name in Bangla."
+                        );
+
+                    }
+
+
+                    if (!fullNameEn) {
+
+                        throw new Error(
+                            "Please enter your full name in English."
+                        );
+
+                    }
+
+
+                    if (!fatherName) {
+
+                        throw new Error(
+                            "Please enter Father's Name."
+                        );
+
+                    }
+
+
+                    if (!motherName) {
+
+                        throw new Error(
+                            "Please enter Mother's Name."
+                        );
+
+                    }
+
+
+                    if (!mobileNumber) {
+
+                        throw new Error(
+                            "Please enter your mobile number."
+                        );
+
+                    }
+
+
+                    if (!currentAddress) {
+
+                        throw new Error(
+                            "Please enter your current address."
+                        );
+
+                    }
+
+
+                    if (!permanentAddress) {
+
+                        throw new Error(
+                            "Please enter your permanent address."
+                        );
+
+                    }
+
+
+                    if (!emergencyName) {
+
+                        throw new Error(
+                            "Please enter emergency contact name."
+                        );
+
+                    }
+
+
+                    if (!emergencyRelation) {
+
+                        throw new Error(
+                            "Please enter emergency contact relation."
+                        );
+
+                    }
+
+
+                    if (!emergencyMobile) {
+
+                        throw new Error(
+                            "Please enter emergency contact mobile."
+                        );
+
+                    }
+
+
+                    /* =========================================
+                       PHOTO
+                    ========================================= */
+
+                    const photoFile =
+                        photoInput?.files?.[0] ||
                         null;
 
 
+                    let photoURL =
+                        null;
+
+
+                    /* =========================================
+                       PHOTO UPLOAD
+                    ========================================= */
+
+                    if (photoFile) {
+
+                        if (submitButton) {
+
+                            submitButton.textContent =
+                                "Uploading Photo...";
+
+                        }
+
+
+                        const allowedTypes = [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp"
+                        ];
+
+
+                        if (
+                            !allowedTypes.includes(
+                                photoFile.type
+                            )
+                        ) {
+
+                            throw new Error(
+                                "Only JPG, PNG or WebP photos are allowed."
+                            );
+
+                        }
+
+
+                        if (
+                            photoFile.size >
+                            MAX_PHOTO_SIZE
+                        ) {
+
+                            throw new Error(
+                                "Photo size must be 2 MB or less."
+                            );
+
+                        }
+
+
+                        let extension =
+                            "jpg";
+
+
+                        if (
+                            photoFile.type ===
+                            "image/png"
+                        ) {
+
+                            extension =
+                                "png";
+
+                        }
+                        else if (
+                            photoFile.type ===
+                            "image/webp"
+                        ) {
+
+                            extension =
+                                "webp";
+
+                        }
+
+
+                        const randomPart =
+                            (
+                                window.crypto &&
+                                typeof window.crypto.randomUUID ===
+                                "function"
+                            )
+                                ? window.crypto.randomUUID()
+                                : Math.random()
+                                      .toString(36)
+                                      .substring(2) +
+                                  Date.now();
+
+
+                        const fileName =
+                            Date.now() +
+                            "_" +
+                            randomPart +
+                            "." +
+                            extension;
+
+
+                        uploadedPhotoPath =
+                            "applications/" +
+                            fileName;
+
+
+                        console.log(
+                            "Uploading photo:",
+                            uploadedPhotoPath
+                        );
+
+
+                        const uploadResult =
+                            await supabaseClient
+                                .storage
+                                .from(
+                                    PHOTO_BUCKET
+                                )
+                                .upload(
+                                    uploadedPhotoPath,
+                                    photoFile,
+                                    {
+                                        cacheControl:
+                                            "3600",
+
+                                        contentType:
+                                            photoFile.type,
+
+                                        upsert:
+                                            false
+                                    }
+                                );
+
+
+                        const uploadError =
+                            uploadResult.error;
+
+
+                        if (uploadError) {
+
+                            console.error(
+                                "PHOTO UPLOAD ERROR:",
+                                uploadError
+                            );
+
+
+                            throw new Error(
+                                "Photo upload failed: " +
+                                uploadError.message
+                            );
+
+                        }
+
+
+                        console.log(
+                            "Photo uploaded successfully:",
+                            uploadedPhotoPath
+                        );
+
+
+                        /* =====================================
+                           PUBLIC URL
+                        ===================================== */
+
+                        const publicUrlResult =
+                            supabaseClient
+                                .storage
+                                .from(
+                                    PHOTO_BUCKET
+                                )
+                                .getPublicUrl(
+                                    uploadedPhotoPath
+                                );
+
+
+                        photoURL =
+                            publicUrlResult
+                                ?.data
+                                ?.publicUrl ||
+                            null;
+
+
+                        console.log(
+                            "Generated photo URL:",
+                            photoURL
+                        );
+
+
+                        if (!photoURL) {
+
+                            throw new Error(
+                                "Photo uploaded, but photo URL could not be generated."
+                            );
+
+                        }
+
+                    }
+
+
+                    /* =========================================
+                       APPLICATION DATA
+                    ========================================= */
+
+                    const applicationData = {
+
+                        full_name_bn:
+                            fullNameBn,
+
+                        full_name_en:
+                            fullNameEn,
+
+                        father_name:
+                            fatherName,
+
+                        mother_name:
+                            motherName,
+
+                        date_of_birth:
+                            formData.get(
+                                "date_of_birth"
+                            ) || null,
+
+                        blood_group:
+                            getText(
+                                "blood_group"
+                            ),
+
+                        profession:
+                            getText(
+                                "profession"
+                            ),
+
+                        nid_birth_registration:
+                            getText(
+                                "nid_birth_registration"
+                            ),
+
+                        mobile_number:
+                            mobileNumber,
+
+                        alternative_mobile_number:
+                            getText(
+                                "alternative_mobile_number"
+                            ),
+
+                        email:
+                            getText(
+                                "email"
+                            ),
+
+                        current_address:
+                            currentAddress,
+
+                        permanent_address:
+                            permanentAddress,
+
+                        sports:
+                            selectedSports.join(
+                                ", "
+                            ),
+
+                        other_sports:
+                            getText(
+                                "other_sports"
+                            ),
+
+                        sports_skill:
+                            getText(
+                                "sports_skill"
+                            ),
+
+                        previous_club_experience:
+                            getText(
+                                "previous_club_experience"
+                            ),
+
+                        emergency_contact_name:
+                            emergencyName,
+
+                        emergency_contact_relation:
+                            emergencyRelation,
+
+                        emergency_contact_mobile:
+                            emergencyMobile,
+
+                        message:
+                            getText(
+                                "message"
+                            ),
+
+                        photo_url:
+                            photoURL,
+
+                        status:
+                            "pending"
+
+                    };
+
+
                     console.log(
-                        "Generated photo URL:",
-                        photoURL
+                        "FINAL APPLICATION DATA:",
+                        applicationData
                     );
 
 
-                    if (!photoURL) {
+                    /* =========================================
+                       DATABASE
+                    ========================================= */
+
+                    if (submitButton) {
+
+                        submitButton.textContent =
+                            "Submitting Application...";
+
+                    }
+
+
+                    const insertResult =
+                        await supabaseClient
+                            .from(
+                                "membership_applications"
+                            )
+                            .insert(
+                                applicationData
+                            )
+                            .select()
+                            .single();
+
+
+                    const savedApplication =
+                        insertResult.data;
+
+                    const insertError =
+                        insertResult.error;
+
+
+                    if (insertError) {
+
+                        console.error(
+                            "DATABASE INSERT ERROR:",
+                            insertError
+                        );
+
+
+                        /* ================================
+                           CLEANUP UPLOADED PHOTO
+                        ================================= */
+
+                        if (
+                            uploadedPhotoPath
+                        ) {
+
+                            const cleanupResult =
+                                await supabaseClient
+                                    .storage
+                                    .from(
+                                        PHOTO_BUCKET
+                                    )
+                                    .remove([
+                                        uploadedPhotoPath
+                                    ]);
+
+
+                            if (
+                                cleanupResult.error
+                            ) {
+
+                                console.warn(
+                                    "Photo cleanup failed:",
+                                    cleanupResult.error
+                                );
+
+                            }
+
+                        }
+
 
                         throw new Error(
-                            "Photo uploaded, but photo URL could not be generated."
+                            insertError.message ||
+                            "Failed to submit application."
                         );
 
                     }
 
-                }
 
+                    /* =========================================
+                       SUCCESS VERIFICATION
+                    ========================================= */
 
-                /* =========================================
-                   APPLICATION DATA
-                ========================================= */
-
-                const applicationData = {
-
-                    full_name_bn:
-                        fullNameBn,
-
-                    full_name_en:
-                        fullNameEn,
-
-                    father_name:
-                        formData
-                            .get("father_name")
-                            ?.trim() || null,
-
-                    mother_name:
-                        formData
-                            .get("mother_name")
-                            ?.trim() || null,
-
-                    date_of_birth:
-                        formData.get(
-                            "date_of_birth"
-                        ) || null,
-
-                    blood_group:
-                        formData
-                            .get("blood_group")
-                            ?.trim() || null,
-
-                    profession:
-                        formData
-                            .get("profession")
-                            ?.trim() || null,
-
-                    nid_birth_registration:
-                        formData
-                            .get(
-                                "nid_birth_registration"
-                            )
-                            ?.trim() || null,
-
-                    mobile_number:
-                        mobileNumber,
-
-                    alternative_mobile_number:
-                        formData
-                            .get(
-                                "alternative_mobile_number"
-                            )
-                            ?.trim() || null,
-
-                    email:
-                        formData
-                            .get("email")
-                            ?.trim() || null,
-
-                    current_address:
-                        currentAddress,
-
-                    permanent_address:
-                        permanentAddress,
-
-                    sports:
-                        selectedSports.join(", "),
-
-                    other_sports:
-                        formData
-                            .get("other_sports")
-                            ?.trim() || null,
-
-                    sports_skill:
-                        formData
-                            .get("sports_skill")
-                            ?.trim() || null,
-
-                    previous_club_experience:
-                        formData
-                            .get(
-                                "previous_club_experience"
-                            )
-                            ?.trim() || null,
-
-                    emergency_contact_name:
-                        emergencyName,
-
-                    emergency_contact_relation:
-                        emergencyRelation,
-
-                    emergency_contact_mobile:
-                        emergencyMobile,
-
-                    message:
-                        formData
-                            .get("message")
-                            ?.trim() || null,
-
-                    /* =====================================
-                       THIS SAVES THE PHOTO URL
-                    ===================================== */
-
-                    photo_url:
-                        photoURL,
-
-                    status:
-                        "pending"
-                };
-
-
-                console.log(
-                    "FINAL APPLICATION DATA:",
-                    applicationData
-                );
-
-
-                /* =========================================
-                   DATABASE INSERT
-                ========================================= */
-
-                if (submitButton) {
-
-                    submitButton.textContent =
-                        "Submitting Application...";
-
-                }
-
-
-                const {
-                    data: savedApplication,
-                    error: insertError
-                } =
-                    await supabaseClient
-                        .from(
-                            "membership_applications"
-                        )
-                        .insert(
-                            applicationData
-                        )
-                        .select()
-                        .single();
-
-
-                if (insertError) {
-
-                    console.error(
-                        "DATABASE INSERT ERROR:",
-                        insertError
+                    console.log(
+                        "APPLICATION SAVED:",
+                        savedApplication
                     );
 
 
-                    if (uploadedPhotoPath) {
+                    console.log(
+                        "PHOTO URL SAVED:",
+                        savedApplication?.photo_url
+                    );
 
-                        await supabaseClient
-                            .storage
-                            .from(PHOTO_BUCKET)
-                            .remove([
-                                uploadedPhotoPath
-                            ]);
+
+                    /* =========================================
+                       SUCCESS MESSAGE
+                    ========================================= */
+
+                    if (successMessage) {
+
+                        successMessage.style.display =
+                            "block";
+
+                        successMessage.textContent =
+                            "Application submitted successfully. Your application is now pending review.";
 
                     }
 
 
-                    throw new Error(
-                        insertError.message ||
-                        "Failed to submit application."
+                    alert(
+                        "Your membership application has been submitted successfully."
+                    );
+
+
+                    /* =========================================
+                       RESET FORM
+                    ========================================= */
+
+                    form.reset();
+
+
+                    if (photoPreviewImage) {
+
+                        photoPreviewImage.style.display =
+                            "none";
+
+                        photoPreviewImage.src =
+                            "";
+
+                    }
+
+
+                    if (photoPlaceholder) {
+
+                        photoPlaceholder.style.display =
+                            "block";
+
+                    }
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "MEMBERSHIP APPLICATION ERROR:",
+                        error
+                    );
+
+
+                    const errorMessage =
+                        error?.message ||
+                        "Something went wrong. Please try again.";
+
+
+                    alert(
+                        errorMessage
                     );
 
                 }
+                finally {
 
+                    if (submitButton) {
 
-                /* =========================================
-                   VERIFY
-                ========================================= */
+                        submitButton.disabled =
+                            false;
 
-                console.log(
-                    "APPLICATION SAVED:",
-                    savedApplication
-                );
+                        submitButton.textContent =
+                            "Submit Membership Application";
 
-
-                console.log(
-                    "PHOTO URL SAVED:",
-                    savedApplication.photo_url
-                );
-
-
-                /* =========================================
-                   SUCCESS
-                ========================================= */
-
-                if (successMessage) {
-
-                    successMessage.style.display =
-                        "block";
-
-                    successMessage.textContent =
-                        "Application submitted successfully. Your application is now pending review.";
-
-                }
-
-
-                alert(
-                    "Your membership application has been submitted successfully."
-                );
-
-
-                form.reset();
-
-
-                if (photoPreviewImage) {
-
-                    photoPreviewImage.style.display =
-                        "none";
-
-                    photoPreviewImage.src =
-                        "";
-
-                }
-
-
-                if (photoPlaceholder) {
-
-                    photoPlaceholder.style.display =
-                        "block";
-
-                }
-
-
-            }
-            catch (error) {
-
-                console.error(
-                    "MEMBERSHIP APPLICATION ERROR:",
-                    error
-                );
-
-
-                alert(
-                    error?.message ||
-                    "Something went wrong. Please try again."
-                );
-
-            }
-            finally {
-
-                if (submitButton) {
-
-                    submitButton.disabled =
-                        false;
-
-                    submitButton.textContent =
-                        "Submit Membership Application";
+                    }
 
                 }
 
             }
+        );
 
-        }
-    );
-
-});
+    }
+);
 
 </script>
 
