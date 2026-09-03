@@ -6232,257 +6232,43 @@ footer > p {
 }
 
 /* =====================================================
-   GSA — COMPACT PREMIUM GLOBAL LAYOUT
-   DESKTOP + MOBILE
+   GSA — FINAL LAYOUT SAFETY FIX
+   DO NOT CHANGE EXISTING DESIGN
 ===================================================== */
 
-html {
-    scroll-behavior: smooth;
-}
-
+html,
 body {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
     overflow-x: hidden;
 }
 
-/* ===============================
-   GLOBAL CONTAINER
-================================ */
+/* Prevent accidental oversized elements */
+img,
+video,
+iframe {
+    max-width: 100%;
+}
 
+/* Keep all existing containers in their original layout */
+.container,
 .section,
-.hero-content,
-.gallery-section,
-.leadership-section,
-.contact-section {
-    max-width: 1180px;
-    margin-left: auto;
-    margin-right: auto;
+.section-inner,
+.hero-content {
+    box-sizing: border-box;
 }
 
-/* ===============================
-   SECTION SPACING
-================================ */
-
-.section {
-    padding-top: 64px;
-    padding-bottom: 64px;
-}
-
-/* ===============================
-   SECTION HEADINGS
-================================ */
-
-.section h1 {
-    font-size: clamp(30px, 4vw, 48px);
-}
-
-.section h2 {
-    font-size: clamp(26px, 3.5vw, 40px);
-}
-
-.section h3 {
-    font-size: clamp(20px, 2.5vw, 28px);
-}
-
-/* ===============================
-   COMMON CARDS
-================================ */
-
-.activity-card,
-.fixture-card,
-.tournament-card,
-.form-card,
-.leader-card,
-.social-card,
-.committee-feature-card {
-    border-radius: 22px;
-}
-
-/* ===============================
-   ACTIVITY CARDS
-================================ */
-
-.activity-card {
-    padding: 24px;
-}
-
-/* ===============================
-   FIXTURE CARDS
-================================ */
-
-.fixture-card {
-    padding: 20px;
-}
-
-/* ===============================
-   TOURNAMENT CARDS
-================================ */
-
-.tournament-card {
-    padding: 20px;
-}
-
-/* ===============================
-   GALLERY
-================================ */
-
-.gallery-section {
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-
-.gallery-item {
-    border-radius: 18px;
-}
-
-/* ===============================
-   LEADERSHIP
-================================ */
-
-.leadership-section {
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-
-.leader-card {
-    padding: 22px;
-}
-
-/* ===============================
-   CONTACT
-================================ */
-
-.contact-section {
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-
-.social-card {
-    padding: 20px;
-}
-
-/* ===============================
-   COMMITTEE
-================================ */
-
+/* Committee only — centered safely */
 .committee-feature-wrap {
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    box-sizing: border-box;
 }
 
 .committee-feature-card {
-    width: min(100%, 720px);
-    min-height: 100px;
-    padding: 18px 22px;
-    margin: 0 auto;
-}
-
-/* ===============================
-   HERO
-================================ */
-
-.hero-content {
-    padding-top: 70px;
-    padding-bottom: 70px;
-}
-
-.hero h1 {
-    font-size: clamp(38px, 6vw, 72px);
-}
-
-.hero-card {
-    max-width: 900px;
-}
-
-/* ===============================
-   BUTTONS
-================================ */
-
-.button {
-    padding: 11px 20px;
-    border-radius: 12px;
-}
-
-/* ===============================
-   MOBILE
-================================ */
-
-@media (max-width: 768px) {
-
-    .section {
-        padding-top: 44px;
-        padding-bottom: 44px;
-    }
-
-    .hero-content {
-        padding-top: 48px;
-        padding-bottom: 48px;
-    }
-
-    .hero h1 {
-        font-size: 36px;
-    }
-
-    .gallery-section,
-    .leadership-section,
-    .contact-section {
-        padding-top: 44px;
-        padding-bottom: 44px;
-    }
-
-    .activity-card,
-    .fixture-card,
-    .tournament-card,
-    .form-card,
-    .leader-card,
-    .social-card {
-        padding: 18px;
-    }
-
-    .committee-feature-card {
-        width: 100%;
-        min-height: 88px;
-        padding: 14px 16px;
-        border-radius: 18px;
-    }
-}
-
-/* ===============================
-   SMALL MOBILE
-================================ */
-
-@media (max-width: 480px) {
-
-    .section {
-        padding-left: 14px;
-        padding-right: 14px;
-    }
-
-    .hero-content {
-        padding-left: 14px;
-        padding-right: 14px;
-    }
-
-    .hero h1 {
-        font-size: 32px;
-    }
-
-    .section h2 {
-        font-size: 26px;
-    }
-
-    .section h3 {
-        font-size: 21px;
-    }
-
-    .activity-card,
-    .fixture-card,
-    .tournament-card,
-    .form-card,
-    .leader-card,
-    .social-card {
-        padding: 16px;
-        border-radius: 18px;
-    }
+    box-sizing: border-box;
+    max-width: 100%;
 }
