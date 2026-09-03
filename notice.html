@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-    name="theme-color"
-    content="#f5f5f7"
->
+<meta name="theme-color" content="#f5f5f7">
 
 <title>Notice | Ghopkhali Sports Arena</title>
 
@@ -21,21 +15,18 @@
 
 <style>
 
+/* =====================================================
+   RESET
+===================================================== */
+
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-:root {
-    --bg: #f5f5f7;
-    --card: rgba(255,255,255,.78);
-    --text: #1d1d1f;
-    --secondary: #6e6e73;
-    --border: rgba(0,0,0,.08);
-    --blue: #0071e3;
-    --shadow:
-        0 20px 60px rgba(0,0,0,.08);
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -49,25 +40,18 @@ body {
         Arial,
         sans-serif;
 
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(0,113,227,.08),
-            transparent 35%
-        ),
-        var(--bg);
+    background: #f5f5f7;
 
-    color: var(--text);
-
-    min-height: 100vh;
+    color: #1d1d1f;
 
     -webkit-font-smoothing: antialiased;
+
 }
 
 
-/* ===============================
+/* =====================================================
    NAVBAR
-================================ */
+===================================================== */
 
 .navbar {
 
@@ -75,7 +59,7 @@ body {
 
     top: 0;
 
-    z-index: 100;
+    z-index: 1000;
 
     height: 64px;
 
@@ -88,33 +72,36 @@ body {
     padding: 0 6%;
 
     background:
-        rgba(245,245,247,.78);
+        rgba(245,245,247,0.78);
 
     backdrop-filter:
-        blur(20px);
+        blur(24px);
 
     -webkit-backdrop-filter:
-        blur(20px);
+        blur(24px);
 
     border-bottom:
-        1px solid var(--border);
+        1px solid rgba(0,0,0,0.08);
+
 }
+
 
 .brand {
 
-    font-size: 18px;
+    font-size: 17px;
 
     font-weight: 700;
 
-    letter-spacing: -.4px;
+    letter-spacing: -0.4px;
 
 }
 
-.back-btn {
+
+.home-link {
 
     text-decoration: none;
 
-    color: var(--blue);
+    color: #0071e3;
 
     font-size: 15px;
 
@@ -123,75 +110,84 @@ body {
 }
 
 
-/* ===============================
-   MAIN
-================================ */
+/* =====================================================
+   PAGE
+===================================================== */
 
 .page {
 
-    width: min(
-        100% - 32px,
-        900px
-    );
+    width:
+        min(100% - 32px, 920px);
 
-    margin: 0 auto;
+    margin:
+        0 auto;
 
     padding:
-        55px 0 80px;
+        60px 0 80px;
+
 }
 
 
-/* ===============================
+/* =====================================================
    HEADER
-================================ */
+===================================================== */
 
 .page-header {
 
     text-align: center;
 
     margin-bottom: 45px;
+
 }
+
 
 .eyebrow {
 
-    color: var(--blue);
+    display: inline-block;
+
+    color: #0071e3;
 
     font-size: 13px;
 
     font-weight: 700;
 
-    letter-spacing: .8px;
+    letter-spacing: 1px;
 
     text-transform: uppercase;
 
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+
 }
+
 
 .page-header h1 {
 
     font-size:
-        clamp(34px, 7vw, 58px);
+        clamp(40px, 7vw, 64px);
 
-    line-height: 1.05;
+    line-height: 1;
 
-    letter-spacing: -2.5px;
+    letter-spacing: -3px;
 
     font-weight: 750;
+
 }
+
 
 .page-header p {
 
-    margin-top: 14px;
+    margin-top: 15px;
 
-    color: var(--secondary);
+    color: #6e6e73;
 
     font-size: 16px;
+
 }
 
 
-/* ===============================
+/* =====================================================
    LOADING
-================================ */
+===================================================== */
 
 .loading {
 
@@ -199,28 +195,31 @@ body {
 
     padding: 80px 20px;
 
-    color: var(--secondary);
+    color: #6e6e73;
+
+    font-size: 16px;
+
 }
 
 
-/* ===============================
+/* =====================================================
    NOTICE CARD
-================================ */
+===================================================== */
 
 .notice-card {
 
     background:
-        var(--card);
+        rgba(255,255,255,0.82);
 
     border:
-        1px solid var(--border);
+        1px solid rgba(0,0,0,0.07);
 
-    border-radius: 30px;
+    border-radius: 32px;
 
     overflow: hidden;
 
     box-shadow:
-        var(--shadow);
+        0 25px 70px rgba(0,0,0,0.08);
 
     backdrop-filter:
         blur(25px);
@@ -231,183 +230,384 @@ body {
 }
 
 
-/* ===============================
-   IMAGE
-================================ */
+/* =====================================================
+   NOTICE IMAGE
+===================================================== */
 
-.notice-image {
+.notice-image-wrapper {
 
     width: 100%;
 
-    max-height: 560px;
-
-    object-fit: cover;
-
-    display: block;
-
     background: #e9e9eb;
+
 }
 
 
-/* ===============================
+.notice-image {
+
+    display: block;
+
+    width: 100%;
+
+    max-height: 580px;
+
+    object-fit: cover;
+
+}
+
+
+/* =====================================================
    CONTENT
-================================ */
+===================================================== */
 
 .notice-content {
 
     padding:
-        clamp(25px, 5vw, 55px);
+        clamp(28px, 6vw, 60px);
+
 }
 
-.notice-date {
 
-    color: var(--blue);
+.meta-row {
 
-    font-size: 14px;
+    display: flex;
 
-    font-weight: 650;
+    align-items: center;
 
-    margin-bottom: 15px;
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    margin-bottom: 20px;
+
 }
+
+
+/* =====================================================
+   BADGES
+===================================================== */
+
+.category-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 30px;
+
+    padding:
+        6px 13px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(0,113,227,0.09);
+
+    color: #0071e3;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+    letter-spacing: .5px;
+
+}
+
+
+.important-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 30px;
+
+    padding:
+        6px 13px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,59,48,0.10);
+
+    color: #ff3b30;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+}
+
+
+.date-badge {
+
+    color: #6e6e73;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
 
 .notice-title {
 
     font-size:
-        clamp(28px, 5vw, 46px);
+        clamp(30px, 5vw, 48px);
 
-    line-height: 1.08;
+    line-height: 1.1;
 
-    letter-spacing: -1.5px;
+    letter-spacing: -1.8px;
 
-    margin-bottom: 28px;
+    font-weight: 750;
+
+    margin-bottom: 30px;
+
 }
+
+
+/* =====================================================
+   DIVIDER
+===================================================== */
+
+.divider {
+
+    width: 100%;
+
+    height: 1px;
+
+    background:
+        rgba(0,0,0,0.08);
+
+    margin-bottom: 30px;
+
+}
+
+
+/* =====================================================
+   NOTICE CONTENT
+===================================================== */
 
 .notice-text {
 
     color: #3a3a3c;
 
-    font-size: 17px;
+    font-size:
+        clamp(16px, 2vw, 18px);
 
-    line-height: 1.85;
+    line-height: 1.9;
 
     white-space: pre-wrap;
 
     word-break: break-word;
+
 }
 
 
-/* ===============================
-   ERROR
-================================ */
-
-.error-box {
-
-    background: #fff;
-
-    border:
-        1px solid rgba(255,59,48,.15);
-
-    border-radius: 24px;
-
-    padding: 40px 25px;
-
-    text-align: center;
-
-    box-shadow: var(--shadow);
-}
-
-.error-box h2 {
-
-    font-size: 25px;
-
-    margin-bottom: 10px;
-}
-
-.error-box p {
-
-    color: var(--secondary);
-
-    margin-bottom: 25px;
-}
-
-.home-btn {
-
-    display: inline-block;
-
-    background: var(--blue);
-
-    color: #fff;
-
-    text-decoration: none;
-
-    padding:
-        12px 22px;
-
-    border-radius: 999px;
-
-    font-weight: 650;
-}
-
-
-/* ===============================
+/* =====================================================
    FOOTER
-================================ */
+===================================================== */
 
-.footer {
+.notice-footer {
 
-    text-align: center;
+    margin-top: 45px;
 
-    color: var(--secondary);
+    padding-top: 25px;
+
+    border-top:
+        1px solid rgba(0,0,0,0.07);
+
+    color: #6e6e73;
 
     font-size: 13px;
 
-    margin-top: 45px;
 }
 
 
-/* ===============================
+/* =====================================================
+   ERROR
+===================================================== */
+
+.error-box {
+
+    background:
+        rgba(255,255,255,0.9);
+
+    border:
+        1px solid rgba(0,0,0,0.07);
+
+    border-radius: 28px;
+
+    padding: 55px 25px;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.07);
+
+}
+
+
+.error-box h2 {
+
+    font-size: 28px;
+
+    letter-spacing: -1px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.error-box p {
+
+    color: #6e6e73;
+
+    margin-bottom: 25px;
+
+}
+
+
+.back-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 44px;
+
+    padding:
+        0 22px;
+
+    border-radius: 999px;
+
+    background: #0071e3;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 650;
+
+}
+
+
+/* =====================================================
    MOBILE
-================================ */
+===================================================== */
 
 @media (max-width: 600px) {
 
     .navbar {
-        padding: 0 20px;
+
+        padding:
+            0 20px;
+
     }
+
 
     .brand {
-        font-size: 16px;
+
+        font-size: 15px;
+
     }
+
+
+    .home-link {
+
+        font-size: 14px;
+
+    }
+
 
     .page {
-        width: min(
-            100% - 20px,
-            900px
-        );
 
-        padding-top: 35px;
+        width:
+            calc(100% - 20px);
+
+        padding:
+            38px 0 60px;
+
     }
+
 
     .page-header {
+
         margin-bottom: 30px;
+
     }
+
 
     .page-header h1 {
-        letter-spacing: -1.5px;
+
+        letter-spacing: -2px;
+
     }
+
 
     .notice-card {
-        border-radius: 22px;
+
+        border-radius: 24px;
+
     }
+
 
     .notice-content {
-        padding: 25px 21px 32px;
+
+        padding:
+            25px 21px 30px;
+
     }
 
-    .notice-text {
-        font-size: 16px;
-        line-height: 1.75;
+
+    .notice-title {
+
+        font-size: 29px;
+
+        letter-spacing: -1.2px;
+
     }
+
+
+    .notice-text {
+
+        font-size: 16px;
+
+        line-height: 1.8;
+
+    }
+
+
+    .notice-image {
+
+        max-height: 420px;
+
+    }
+
+}
+
+
+/* =====================================================
+   IMAGE ERROR
+===================================================== */
+
+.image-error {
+
+    display: none;
+
+    padding: 50px 20px;
+
+    text-align: center;
+
+    color: #6e6e73;
 
 }
 
@@ -419,6 +619,10 @@ body {
 <body>
 
 
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
 <header class="navbar">
 
     <div class="brand">
@@ -427,7 +631,7 @@ body {
 
     <a
         href="index.html"
-        class="back-btn"
+        class="home-link"
     >
         ← Home
     </a>
@@ -435,8 +639,14 @@ body {
 </header>
 
 
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
 <main class="page">
 
+
+    <!-- PAGE HEADER -->
 
     <section class="page-header">
 
@@ -455,6 +665,8 @@ body {
     </section>
 
 
+    <!-- NOTICE -->
+
     <div id="noticeContainer">
 
         <div class="loading">
@@ -464,25 +676,18 @@ body {
     </div>
 
 
-    <div class="footer">
-
-        © Ghopkhali Sports Arena
-
-    </div>
-
-
 </main>
 
 
 <script>
 
-
-/* ==========================================
-   SUPABASE
-========================================== */
+/* =====================================================
+   SUPABASE CONFIG
+===================================================== */
 
 const SUPABASE_URL =
     "https://cmygmswzokyrmgdnuszq.supabase.co";
+
 
 const SUPABASE_KEY =
     "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
@@ -495,9 +700,9 @@ const supabaseClient =
     );
 
 
-/* ==========================================
-   ELEMENTS
-========================================== */
+/* =====================================================
+   ELEMENT
+===================================================== */
 
 const noticeContainer =
     document.getElementById(
@@ -505,27 +710,32 @@ const noticeContainer =
     );
 
 
-/* ==========================================
-   NOTICE ID
-========================================== */
+/* =====================================================
+   GET NOTICE ID
+===================================================== */
 
 const params =
     new URLSearchParams(
         window.location.search
     );
 
+
 const noticeId =
     params.get("id");
 
 
-/* ==========================================
+/* =====================================================
    FORMAT DATE
-========================================== */
+===================================================== */
 
 function formatDate(date) {
 
+    if (!date) {
+        return "";
+    }
+
     return new Date(date).toLocaleDateString(
-        "en-BD",
+        "bn-BD",
         {
             day: "numeric",
             month: "long",
@@ -536,20 +746,37 @@ function formatDate(date) {
 }
 
 
-/* ==========================================
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
    LOAD NOTICE
-========================================== */
+===================================================== */
 
 async function loadNotice() {
 
     if (!noticeId) {
 
         showError(
-            "Notice not found",
-            "No notice ID was provided."
+            "নোটিশ পাওয়া যায়নি",
+            "এই নোটিশের কোনো ID পাওয়া যায়নি।"
         );
 
         return;
+
     }
 
 
@@ -558,36 +785,43 @@ async function loadNotice() {
         const {
             data,
             error
-        } =
-            await supabaseClient
+        } = await supabaseClient
 
-                .from("notices")
+            .from("notices")
 
-                .select(`
-                    id,
-                    title,
-                    content,
-                    image_url,
-                    created_at
-                `)
+            .select(`
+                id,
+                title,
+                content,
+                category,
+                image_url,
+                published,
+                created_at,
+                updated_at,
+                important
+            `)
 
-                .eq("id", noticeId)
+            .eq("id", noticeId)
 
-                .eq("published", true)
+            .eq("published", true)
 
-                .single();
+            .single();
 
 
-        if (error) {
+        if (error || !data) {
 
-            console.error(error);
+            console.error(
+                "Notice error:",
+                error
+            );
 
             showError(
-                "Notice unavailable",
-                "This notice could not be found."
+                "নোটিশ পাওয়া যায়নি",
+                "এই নোটিশটি বর্তমানে প্রকাশিত নয় অথবা পাওয়া যায়নি।"
             );
 
             return;
+
         }
 
 
@@ -599,8 +833,8 @@ async function loadNotice() {
         console.error(error);
 
         showError(
-            "Something went wrong",
-            "Please try again later."
+            "সমস্যা হয়েছে",
+            "নোটিশটি লোড করা সম্ভব হয়নি।"
         );
 
     }
@@ -608,21 +842,45 @@ async function loadNotice() {
 }
 
 
-/* ==========================================
-   RENDER
-========================================== */
+/* =====================================================
+   RENDER NOTICE
+===================================================== */
 
 function renderNotice(notice) {
+
+
+    const category =
+        notice.category
+            ? escapeHTML(
+                notice.category
+                    .replace(/_/g, " ")
+            )
+            : "NOTICE";
+
+
+    const importantBadge =
+        notice.important
+            ? `
+                <span class="important-badge">
+                    ★ Important Notice
+                </span>
+              `
+            : "";
+
 
     const imageHTML =
         notice.image_url
             ? `
-                <img
-                    class="notice-image"
-                    src="${escapeAttribute(notice.image_url)}"
-                    alt="${escapeAttribute(notice.title)}"
-                    loading="lazy"
-                >
+                <div class="notice-image-wrapper">
+
+                    <img
+                        class="notice-image"
+                        src="${escapeHTML(notice.image_url)}"
+                        alt="${escapeHTML(notice.title)}"
+                        onerror="this.parentElement.style.display='none';"
+                    >
+
+                </div>
               `
             : "";
 
@@ -635,23 +893,52 @@ function renderNotice(notice) {
 
             <div class="notice-content">
 
-                <div class="notice-date">
+                <div class="meta-row">
 
-                    ${formatDate(notice.created_at)}
+                    <span class="category-badge">
+
+                        ${category}
+
+                    </span>
+
+                    ${importantBadge}
+
+                    <span class="date-badge">
+
+                        ${formatDate(
+                            notice.created_at
+                        )}
+
+                    </span>
 
                 </div>
 
+
                 <h2 class="notice-title">
 
-                    ${escapeHTML(notice.title)}
+                    ${escapeHTML(
+                        notice.title
+                    )}
 
                 </h2>
+
+
+                <div class="divider"></div>
+
 
                 <div class="notice-text">
 
                     ${escapeHTML(
                         notice.content || ""
                     )}
+
+                </div>
+
+
+                <div class="notice-footer">
+
+                    Ghopkhali Sports Arena
+                    · Official Notice
 
                 </div>
 
@@ -663,15 +950,14 @@ function renderNotice(notice) {
 
 
     document.title =
-        notice.title +
-        " | Ghopkhali Sports Arena";
+        `${notice.title} | Ghopkhali Sports Arena`;
 
 }
 
 
-/* ==========================================
+/* =====================================================
    ERROR
-========================================== */
+===================================================== */
 
 function showError(title, message) {
 
@@ -689,9 +975,9 @@ function showError(title, message) {
 
             <a
                 href="index.html"
-                class="home-btn"
+                class="back-button"
             >
-                Back to Home
+                ← হোমপেজে ফিরে যান
             </a>
 
         </div>
@@ -701,32 +987,9 @@ function showError(title, message) {
 }
 
 
-/* ==========================================
-   SECURITY HELPERS
-========================================== */
-
-function escapeHTML(value) {
-
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-function escapeAttribute(value) {
-
-    return escapeHTML(value);
-
-}
-
-
-/* ==========================================
+/* =====================================================
    START
-========================================== */
+===================================================== */
 
 loadNotice();
 
