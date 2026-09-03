@@ -4644,3 +4644,432 @@ font-size:22px;
 
 }
 
+/* =====================================================
+   COMMITTEE — PREMIUM FEATURE CARD
+===================================================== */
+
+.committee-section {
+    position: relative;
+}
+
+.committee-feature-wrap {
+    width: 100%;
+    margin-top: 28px;
+}
+
+.committee-feature-card {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    width: 100%;
+    min-height: 190px;
+
+    padding: 38px 42px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f8f9fb 100%
+        );
+
+    border: 1px solid rgba(0, 0, 0, 0.07);
+
+    border-radius: 28px;
+
+    text-decoration: none;
+    color: #1d1d1f;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.045);
+
+    transition:
+        transform 0.45s cubic-bezier(.2,.8,.2,1),
+        box-shadow 0.45s ease,
+        border-color 0.45s ease;
+}
+
+
+/* =====================================================
+   SOFT BACKGROUND GLOW
+===================================================== */
+
+.committee-feature-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    right: -80px;
+    top: -90px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 113, 227, 0.055);
+
+    filter: blur(4px);
+
+    transition:
+        transform 0.6s ease,
+        opacity 0.6s ease;
+}
+
+
+/* =====================================================
+   HOVER
+===================================================== */
+
+.committee-feature-card:hover {
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        rgba(0, 113, 227, 0.18);
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.09);
+}
+
+.committee-feature-card:hover::before {
+
+    transform:
+        scale(1.45);
+
+    opacity: 0.9;
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.committee-feature-icon {
+
+    position: relative;
+    z-index: 2;
+
+    flex: 0 0 auto;
+
+    width: 72px;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background: #f1f3f5;
+
+    color: #0071e3;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, 0.045);
+
+    transition:
+        transform 0.45s cubic-bezier(.2,.8,.2,1),
+        background 0.45s ease;
+}
+
+.committee-feature-icon svg {
+
+    width: 34px;
+    height: 34px;
+
+    transition:
+        transform 0.45s cubic-bezier(.2,.8,.2,1);
+}
+
+.committee-feature-card:hover
+.committee-feature-icon {
+
+    transform:
+        translateY(-3px)
+        scale(1.05);
+
+    background:
+        #eaf3ff;
+}
+
+.committee-feature-card:hover
+.committee-feature-icon svg {
+
+    transform:
+        scale(1.08);
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.committee-feature-content {
+
+    position: relative;
+    z-index: 2;
+
+    flex: 1;
+}
+
+.committee-feature-label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+
+    color: #86868b;
+}
+
+.committee-feature-content h2 {
+
+    margin: 0;
+
+    font-size: clamp(25px, 3vw, 36px);
+
+    line-height: 1.1;
+
+    letter-spacing: -0.035em;
+
+    font-weight: 700;
+
+    color: #1d1d1f;
+}
+
+.committee-feature-content p {
+
+    margin: 10px 0 0;
+
+    max-width: 520px;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    color: #6e6e73;
+}
+
+
+/* =====================================================
+   VIEW BUTTON
+===================================================== */
+
+.committee-feature-arrow {
+
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    flex-shrink: 0;
+
+    padding:
+        13px 17px
+        13px 19px;
+
+    border-radius: 999px;
+
+    background: #1d1d1f;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition:
+        transform 0.4s cubic-bezier(.2,.8,.2,1),
+        background 0.35s ease;
+}
+
+.committee-feature-arrow strong {
+
+    font-size: 18px;
+    line-height: 1;
+
+    font-weight: 500;
+
+    transition:
+        transform 0.4s cubic-bezier(.2,.8,.2,1);
+}
+
+.committee-feature-card:hover
+.committee-feature-arrow {
+
+    transform:
+        translateX(4px);
+
+    background:
+        #0071e3;
+}
+
+.committee-feature-card:hover
+.committee-feature-arrow strong {
+
+    transform:
+        translate(3px, -2px);
+}
+
+
+/* =====================================================
+   SUBTLE FLOAT ANIMATION
+===================================================== */
+
+@keyframes committeeCardFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+.committee-feature-card {
+
+    animation:
+        committeeCardFloat 5s ease-in-out infinite;
+}
+
+.committee-feature-card:hover {
+
+    animation: none;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .committee-feature-card {
+
+        min-height: auto;
+
+        padding: 26px 22px;
+
+        gap: 18px;
+
+        border-radius: 24px;
+
+        flex-wrap: wrap;
+    }
+
+    .committee-feature-icon {
+
+        width: 58px;
+        height: 58px;
+
+        border-radius: 18px;
+    }
+
+    .committee-feature-icon svg {
+
+        width: 28px;
+        height: 28px;
+    }
+
+    .committee-feature-content {
+
+        min-width: 0;
+        flex: 1;
+    }
+
+    .committee-feature-content h2 {
+
+        font-size: 25px;
+    }
+
+    .committee-feature-content p {
+
+        font-size: 13px;
+
+        margin-top: 7px;
+    }
+
+    .committee-feature-arrow {
+
+        width: 100%;
+
+        justify-content: center;
+
+        margin-top: 5px;
+
+        padding: 13px 16px;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+    .committee-feature-card {
+
+        padding: 22px 18px;
+
+        gap: 15px;
+    }
+
+    .committee-feature-icon {
+
+        width: 54px;
+        height: 54px;
+
+        border-radius: 16px;
+    }
+
+    .committee-feature-content h2 {
+
+        font-size: 22px;
+    }
+
+    .committee-feature-content p {
+
+        font-size: 12.5px;
+    }
+
+    .committee-feature-label {
+
+        font-size: 9px;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .committee-feature-card {
+
+        animation: none;
+        transition: none;
+    }
+
+    .committee-feature-card:hover {
+
+        transform: none;
+    }
+}
