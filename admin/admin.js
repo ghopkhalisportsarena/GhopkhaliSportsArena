@@ -3985,77 +3985,6 @@ async function generateMembershipApplicationPDF(
 
 }
 
-  /* =====================================================
-   MEMBERSHIP APPLICATION PDF BUTTON
-===================================================== */
-
-document.addEventListener("click", async (event) => {
-
-    const button =
-        event.target.closest(
-            "[data-membership-pdf]"
-        );
-
-    if (!button) {
-        return;
-    }
-
-    const id =
-        button.dataset.id;
-
-    const application =
-        membershipApplications.find(
-            item => item.id === id
-        );
-
-    if (!application) {
-
-        alert(
-            "Membership application not found."
-        );
-
-        return;
-    }
-
-    try {
-
-        button.disabled = true;
-
-        button.textContent =
-            "Generating PDF...";
-
-        await generateMembershipApplicationPDF(
-            application
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Membership PDF button error:",
-            error
-        );
-
-        alert(
-            error.message ||
-            "Failed to generate PDF."
-        );
-
-    } finally {
-
-        button.disabled = false;
-
-        button.textContent =
-            "Download Application PDF";
-
-    }
-
-});
-
-/* =====================================================
-   FRIENDLY MATCH APPLICATIONS — STEP 1
-===================================================== */
-
-let friendlyApplications = [];
 
 
 /* =====================================================
@@ -5846,6 +5775,72 @@ document.addEventListener(
 
     }
 );
+
+/* =====================================================
+   MEMBERSHIP APPLICATION PDF BUTTON
+===================================================== */
+
+document.addEventListener("click", async (event) => {
+
+    const button =
+        event.target.closest(
+            "[data-membership-pdf]"
+        );
+
+    if (!button) {
+        return;
+    }
+
+    const id =
+        button.dataset.id;
+
+    const application =
+        membershipApplications.find(
+            item => item.id === id
+        );
+
+    if (!application) {
+
+        alert(
+            "Membership application not found."
+        );
+
+        return;
+    }
+
+    try {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Generating PDF...";
+
+        await generateMembershipApplicationPDF(
+            application
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Membership PDF button error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Failed to generate PDF."
+        );
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Download Application PDF";
+
+    }
+
+});
 
   /* =====================================================
        START
