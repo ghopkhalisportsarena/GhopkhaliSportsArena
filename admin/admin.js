@@ -8114,18 +8114,6 @@ document.addEventListener(
     }
 );
 
-  /* =====================================================
-       START
-    ===================================================== */
-
-    if (currentSession) {
-
-        await initializeDashboard();
-
-    }
-
-});
-
 /* =====================================================
    RULES & REGULATIONS MANAGEMENT
 ===================================================== */
@@ -8182,7 +8170,7 @@ document.addEventListener(
 
 
     /* -------------------------------------------------
-       STATUS MESSAGE
+       STATUS
     ------------------------------------------------- */
 
     function showRulesStatus(
@@ -8194,7 +8182,8 @@ document.addEventListener(
             return;
         }
 
-        rulesStatus.textContent = message;
+        rulesStatus.textContent =
+            message;
 
         rulesStatus.className =
             "rules-admin-status " + type;
@@ -8203,7 +8192,7 @@ document.addEventListener(
 
 
     /* -------------------------------------------------
-       FORMAT DATE
+       DATE FORMAT
     ------------------------------------------------- */
 
     function formatRulesDate(date) {
@@ -8244,15 +8233,11 @@ document.addEventListener(
                 data,
                 error
             } = await supabaseClient
-
                 .from("site_rules")
-
                 .select(
                     "id, title, content, updated_at"
                 )
-
                 .limit(1)
-
                 .maybeSingle();
 
 
@@ -8261,15 +8246,13 @@ document.addEventListener(
             }
 
 
-            /* -----------------------------------------
-               NO RULES FOUND
-            ----------------------------------------- */
-
             if (!data) {
 
                 originalRules = {
-                    title: "Rules & Regulations",
-                    content: ""
+                    title:
+                        "Rules & Regulations",
+                    content:
+                        ""
                 };
 
 
@@ -8291,10 +8274,6 @@ document.addEventListener(
             }
 
 
-            /* -----------------------------------------
-               SAVE ORIGINAL DATA
-            ----------------------------------------- */
-
             originalRules = {
 
                 title:
@@ -8307,20 +8286,12 @@ document.addEventListener(
             };
 
 
-            /* -----------------------------------------
-               PUT DATA INTO EDITOR
-            ----------------------------------------- */
-
             rulesTitle.value =
                 originalRules.title;
 
             rulesContent.value =
                 originalRules.content;
 
-
-            /* -----------------------------------------
-               UPDATED DATE
-            ----------------------------------------- */
 
             if (rulesUpdated) {
 
@@ -8334,14 +8305,12 @@ document.addEventListener(
 
             }
 
-
         } catch (error) {
 
             console.error(
                 "Rules loading error:",
                 error
             );
-
 
             showRulesStatus(
                 "Unable to load Rules & Regulations.",
@@ -8365,10 +8334,6 @@ document.addEventListener(
         const content =
             rulesContent.value.trim();
 
-
-        /* -----------------------------------------
-           VALIDATION
-        ----------------------------------------- */
 
         if (!title) {
 
@@ -8396,15 +8361,12 @@ document.addEventListener(
         }
 
 
-        /* -----------------------------------------
-           BUTTON LOADING
-        ----------------------------------------- */
-
         const originalButtonText =
             saveRulesButton.textContent;
 
 
-        saveRulesButton.disabled = true;
+        saveRulesButton.disabled =
+            true;
 
         saveRulesButton.textContent =
             "Saving...";
@@ -8417,21 +8379,17 @@ document.addEventListener(
 
         try {
 
-            /* -------------------------------------
-               CHECK EXISTING ROW
-            ------------------------------------- */
+            /* -----------------------------------------
+               FIND EXISTING RULES
+            ----------------------------------------- */
 
             const {
                 data: existing,
                 error: findError
             } = await supabaseClient
-
                 .from("site_rules")
-
                 .select("id")
-
                 .limit(1)
-
                 .maybeSingle();
 
 
@@ -8443,39 +8401,39 @@ document.addEventListener(
             let savedData;
 
 
-            /* -------------------------------------
-               UPDATE EXISTING RULES
-            ------------------------------------- */
+            /* -----------------------------------------
+               UPDATE
+            ----------------------------------------- */
 
-            if (existing && existing.id) {
+            if (
+                existing &&
+                existing.id
+            ) {
 
                 const {
                     data,
                     error
                 } = await supabaseClient
-
                     .from("site_rules")
-
                     .update({
 
-                        title: title,
+                        title:
+                            title,
 
-                        content: content,
+                        content:
+                            content,
 
                         updated_at:
                             new Date().toISOString()
 
                     })
-
                     .eq(
                         "id",
                         existing.id
                     )
-
                     .select(
                         "id, title, content, updated_at"
                     )
-
                     .single();
 
 
@@ -8484,14 +8442,15 @@ document.addEventListener(
                 }
 
 
-                savedData = data;
+                savedData =
+                    data;
 
             }
 
 
-            /* -------------------------------------
-               CREATE RULES IF NONE EXIST
-            ------------------------------------- */
+            /* -----------------------------------------
+               INSERT
+            ----------------------------------------- */
 
             else {
 
@@ -8499,22 +8458,22 @@ document.addEventListener(
                     data,
                     error
                 } = await supabaseClient
-
+                    .from("site_rules")
                     .insert({
 
-                        title: title,
+                        title:
+                            title,
 
-                        content: content,
+                        content:
+                            content,
 
                         updated_at:
                             new Date().toISOString()
 
                     })
-
                     .select(
                         "id, title, content, updated_at"
                     )
-
                     .single();
 
 
@@ -8523,14 +8482,15 @@ document.addEventListener(
                 }
 
 
-                savedData = data;
+                savedData =
+                    data;
 
             }
 
 
-            /* -------------------------------------
-               UPDATE LOCAL ORIGINAL DATA
-            ------------------------------------- */
+            /* -----------------------------------------
+               UPDATE LOCAL DATA
+            ----------------------------------------- */
 
             originalRules = {
 
@@ -8544,9 +8504,9 @@ document.addEventListener(
             };
 
 
-            /* -------------------------------------
-               UPDATE UPDATED DATE
-            ------------------------------------- */
+            /* -----------------------------------------
+               UPDATE DATE
+            ----------------------------------------- */
 
             if (rulesUpdated) {
 
@@ -8561,9 +8521,9 @@ document.addEventListener(
             }
 
 
-            /* -------------------------------------
+            /* -----------------------------------------
                SUCCESS
-            ------------------------------------- */
+            ----------------------------------------- */
 
             showRulesStatus(
                 "✓ Rules & Regulations saved successfully.",
@@ -8571,21 +8531,24 @@ document.addEventListener(
             );
 
 
-                   } catch (error) {
+        } catch (error) {
 
             console.error(
                 "Rules save error:",
                 error
             );
 
+
             showRulesStatus(
                 "Unable to save Rules. Please try again.",
                 "error"
             );
 
+
         } finally {
 
-            saveRulesButton.disabled = false;
+            saveRulesButton.disabled =
+                false;
 
             saveRulesButton.textContent =
                 originalButtonText;
@@ -8594,8 +8557,9 @@ document.addEventListener(
 
     }
 
+
     /* -------------------------------------------------
-       RESET RULES
+       RESET
     ------------------------------------------------- */
 
     function resetAdminRules() {
@@ -8606,7 +8570,8 @@ document.addEventListener(
 
 
         rulesContent.value =
-            originalRules.content || "";
+            originalRules.content ||
+            "";
 
 
         showRulesStatus(
@@ -8642,24 +8607,22 @@ document.addEventListener(
 
 
     /* -------------------------------------------------
-       LOAD WHEN DOM IS READY
+       LOAD
     ------------------------------------------------- */
 
-    if (
-        document.readyState ===
-        "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            loadAdminRules
-        );
-
-    } else {
-
-        loadAdminRules();
-
-    }
+    loadAdminRules();
 
 
 })();
+
+  /* =====================================================
+       START
+    ===================================================== */
+
+    if (currentSession) {
+
+        await initializeDashboard();
+
+    }
+
+});
