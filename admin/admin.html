@@ -241,13 +241,23 @@
     Rules & Regulations
 </a>
 
-            <a
-                href="#applications"
-                class="sidebar-link"
-                data-section="applications"
-            >
-                Applications
-            </a>
+
+<a
+    href="#activities"
+    class="sidebar-link"
+    data-section="activities"
+>
+    Activities
+</a>
+
+
+<a
+    href="#applications"
+    class="sidebar-link"
+    data-section="applications"
+>
+    Applications
+</a>
 
         </nav>
 
@@ -1638,6 +1648,293 @@
     </div>
 
 </section>
+
+<!-- =================================================
+     ACTIVITIES
+================================================= -->
+
+<section
+    id="activities"
+    class="admin-section"
+>
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                THE ARENA
+            </span>
+
+            <h2>
+                Activities
+            </h2>
+
+            <p>
+                Manage GSA activities, descriptions and photos.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="newActivityButton"
+            class="primary-button"
+        >
+            + Add Activity
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         ACTIVITY LIST
+    ================================================= -->
+
+    <div
+        id="activityList"
+        class="activity-admin-grid"
+    >
+
+        <div class="loading-state">
+            Loading activities...
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =================================================
+     ACTIVITY MODAL
+================================================= -->
+
+<div
+    id="activityModal"
+    class="modal"
+    aria-hidden="true"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="section-label">
+                    ACTIVITY MANAGEMENT
+                </span>
+
+                <h2 id="activityModalTitle">
+                    Add Activity
+                </h2>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="activityForm">
+
+            <input
+                type="hidden"
+                id="activityId"
+            >
+
+
+            <!-- =========================================
+                 NUMBER
+            ========================================== -->
+
+            <div class="form-group">
+
+                <label for="activityNumber">
+                    Activity Number
+                </label>
+
+                <input
+                    type="text"
+                    id="activityNumber"
+                    placeholder="01"
+                    maxlength="10"
+                    required
+                >
+
+                <small>
+                    Example: 01, 02, 03
+                </small>
+
+            </div>
+
+
+            <!-- =========================================
+                 CATEGORY
+            ========================================== -->
+
+            <div class="form-group">
+
+                <label for="activityCategory">
+                    Category
+                </label>
+
+                <input
+                    type="text"
+                    id="activityCategory"
+                    placeholder="SPORTS"
+                    required
+                >
+
+                <small>
+                    Example: SPORTS, FITNESS, COMMUNITY
+                </small>
+
+            </div>
+
+
+            <!-- =========================================
+                 TITLE
+            ========================================== -->
+
+            <div class="form-group">
+
+                <label for="activityTitle">
+                    Activity Title
+                </label>
+
+                <input
+                    type="text"
+                    id="activityTitle"
+                    placeholder="Football & Mini Football"
+                    required
+                >
+
+            </div>
+
+
+            <!-- =========================================
+                 DESCRIPTION
+            ========================================== -->
+
+            <div class="form-group">
+
+                <label for="activityDescription">
+                    Description
+                </label>
+
+                <textarea
+                    id="activityDescription"
+                    rows="6"
+                    placeholder="Write activity description..."
+                ></textarea>
+
+            </div>
+
+
+            <!-- =========================================
+                 PHOTO
+            ========================================== -->
+
+            <div class="form-group">
+
+                <label for="activityImage">
+                    Activity Photo
+                </label>
+
+                <input
+                    type="file"
+                    id="activityImage"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+
+                <small>
+                    JPG, PNG or WebP image.
+                </small>
+
+            </div>
+
+
+            <!-- =========================================
+                 IMAGE PREVIEW
+            ========================================== -->
+
+            <div
+                id="activityImagePreview"
+                class="activity-image-preview"
+                style="display:none;"
+            >
+
+                <img
+                    id="activityPreviewImage"
+                    src=""
+                    alt="Activity photo preview"
+                >
+
+                <button
+                    type="button"
+                    id="removeActivityImage"
+                    class="secondary-button"
+                >
+                    Remove Photo
+                </button>
+
+            </div>
+
+
+            <!-- =========================================
+                 ACTIONS
+            ========================================== -->
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-button"
+                    data-close-modal
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                    id="saveActivityButton"
+                >
+                    Save Activity
+                </button>
+
+            </div>
+
+
+            <!-- =========================================
+                 STATUS
+            ========================================== -->
+
+            <div
+                id="activityFormStatus"
+                class="form-status"
+                role="status"
+                aria-live="polite"
+            ></div>
+
+        </form>
+
+    </div>
+
+</div>
 
         <!-- =================================================
              APPLICATIONS
