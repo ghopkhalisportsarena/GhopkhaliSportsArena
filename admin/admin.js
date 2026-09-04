@@ -8146,6 +8146,26 @@ document.addEventListener(
         document.getElementById("rulesAdminStatus");
 
 
+    /* Feature Card */
+
+    const featureCard =
+        document.getElementById("rulesFeatureCard");
+
+    const featureTitle =
+        document.getElementById("rulesFeatureTitle");
+
+    const featurePreview =
+        document.getElementById("rulesFeaturePreview");
+
+    const featureUpdated =
+        document.getElementById("rulesFeatureUpdated");
+
+    const editFeatureButton =
+        document.getElementById(
+            "editRulesFeatureButton"
+        );
+
+
     /* -------------------------------------------------
        CHECK ELEMENTS
     ------------------------------------------------- */
@@ -8164,9 +8184,52 @@ document.addEventListener(
     ------------------------------------------------- */
 
     let originalRules = {
+
         title: "",
-        content: ""
+
+        content: "",
+
+        updated_at: null
+
     };
+
+
+    /* -------------------------------------------------
+       ESCAPE HTML
+    ------------------------------------------------- */
+
+    function escapeHTML(value) {
+
+        return String(
+            value ?? ""
+        )
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+    }
 
 
     /* -------------------------------------------------
@@ -8186,7 +8249,8 @@ document.addEventListener(
             message;
 
         rulesStatus.className =
-            "rules-admin-status " + type;
+            "rules-admin-status " +
+            type;
 
     }
 
@@ -8201,14 +8265,88 @@ document.addEventListener(
             return "Official";
         }
 
-        return new Date(date).toLocaleDateString(
+        const parsedDate =
+            new Date(date);
+
+        if (
+            Number.isNaN(
+                parsedDate.getTime()
+            )
+        ) {
+            return "Official";
+        }
+
+        return parsedDate.toLocaleDateString(
             "en-GB",
             {
                 day: "2-digit",
+
                 month: "short",
+
                 year: "numeric"
             }
         );
+
+    }
+
+
+    /* -------------------------------------------------
+       UPDATE FEATURE CARD
+    ------------------------------------------------- */
+
+    function updateRulesFeatureCard(
+        title,
+        content,
+        updatedAt
+    ) {
+
+        if (featureTitle) {
+
+            featureTitle.textContent =
+                title ||
+                "Rules & Regulations";
+
+        }
+
+
+        if (featurePreview) {
+
+            const cleanContent =
+                String(
+                    content || ""
+                ).trim();
+
+
+            if (cleanContent) {
+
+                featurePreview.textContent =
+                    cleanContent;
+
+            } else {
+
+                featurePreview.textContent =
+                    "No Rules & Regulations content has been published yet.";
+
+            }
+
+        }
+
+
+        const dateText =
+            updatedAt
+                ? "Updated " +
+                  formatRulesDate(
+                      updatedAt
+                  )
+                : "Not saved yet";
+
+
+        if (featureUpdated) {
+
+            featureUpdated.textContent =
+                dateText;
+
+        }
 
     }
 
@@ -8229,15 +8367,27 @@ document.addEventListener(
             }
 
 
+            if (featurePreview) {
+
+                featurePreview.textContent =
+                    "Loading Rules & Regulations...";
+
+            }
+
+
             const {
                 data,
                 error
             } = await supabaseClient
+
                 .from("site_rules")
+
                 .select(
                     "id, title, content, updated_at"
                 )
+
                 .limit(1)
+
                 .maybeSingle();
 
 
@@ -8246,13 +8396,23 @@ document.addEventListener(
             }
 
 
+            /* -----------------------------------------
+               NO DATA
+            ----------------------------------------- */
+
             if (!data) {
 
                 originalRules = {
+
                     title:
                         "Rules & Regulations",
+
                     content:
-                        ""
+                        "",
+
+                    updated_at:
+                        null
+
                 };
 
 
@@ -8261,6 +8421,13 @@ document.addEventListener(
 
                 rulesContent.value =
                     originalRules.content;
+
+
+                updateRulesFeatureCard(
+                    originalRules.title,
+                    originalRules.content,
+                    null
+                );
 
 
                 if (rulesUpdated) {
@@ -8274,6 +8441,10 @@ document.addEventListener(
             }
 
 
+            /* -----------------------------------------
+               DATA
+            ----------------------------------------- */
+
             originalRules = {
 
                 title:
@@ -8281,7 +8452,11 @@ document.addEventListener(
                     "Rules & Regulations",
 
                 content:
-                    data.content || ""
+                    data.content || "",
+
+                updated_at:
+                    data.updated_at ||
+                    null
 
             };
 
@@ -8289,21 +8464,32 @@ document.addEventListener(
             rulesTitle.value =
                 originalRules.title;
 
+
             rulesContent.value =
                 originalRules.content;
+
+
+            updateRulesFeatureCard(
+                originalRules.title,
+                originalRules.content,
+                originalRules.updated_at
+            );
 
 
             if (rulesUpdated) {
 
                 rulesUpdated.textContent =
                     data.updated_at
+
                         ? "Updated " +
                           formatRulesDate(
                               data.updated_at
                           )
+
                         : "Official";
 
             }
+
 
         } catch (error) {
 
@@ -8311,6 +8497,14 @@ document.addEventListener(
                 "Rules loading error:",
                 error
             );
+
+
+            updateRulesFeatureCard(
+                "Rules & Regulations",
+                "Unable to load Rules & Regulations.",
+                null
+            );
+
 
             showRulesStatus(
                 "Unable to load Rules & Regulations.",
@@ -8387,9 +8581,13 @@ document.addEventListener(
                 data: existing,
                 error: findError
             } = await supabaseClient
+
                 .from("site_rules")
+
                 .select("id")
+
                 .limit(1)
+
                 .maybeSingle();
 
 
@@ -8414,7 +8612,9 @@ document.addEventListener(
                     data,
                     error
                 } = await supabaseClient
+
                     .from("site_rules")
+
                     .update({
 
                         title:
@@ -8427,13 +8627,16 @@ document.addEventListener(
                             new Date().toISOString()
 
                     })
+
                     .eq(
                         "id",
                         existing.id
                     )
+
                     .select(
                         "id, title, content, updated_at"
                     )
+
                     .single();
 
 
@@ -8458,7 +8661,9 @@ document.addEventListener(
                     data,
                     error
                 } = await supabaseClient
+
                     .from("site_rules")
+
                     .insert({
 
                         title:
@@ -8471,9 +8676,11 @@ document.addEventListener(
                             new Date().toISOString()
 
                     })
+
                     .select(
                         "id, title, content, updated_at"
                     )
+
                     .single();
 
 
@@ -8499,26 +8706,50 @@ document.addEventListener(
                     "Rules & Regulations",
 
                 content:
-                    savedData.content || ""
+                    savedData.content || "",
+
+                updated_at:
+                    savedData.updated_at ||
+                    null
 
             };
 
 
             /* -----------------------------------------
-               UPDATE DATE
+               UPDATE EDITOR DATE
             ----------------------------------------- */
 
             if (rulesUpdated) {
 
                 rulesUpdated.textContent =
                     savedData.updated_at
+
                         ? "Updated " +
                           formatRulesDate(
                               savedData.updated_at
                           )
+
                         : "Saved";
 
             }
+
+
+            /* -----------------------------------------
+               UPDATE FEATURE CARD
+            ----------------------------------------- */
+
+            updateRulesFeatureCard(
+
+                savedData.title ||
+                "Rules & Regulations",
+
+                savedData.content ||
+                "",
+
+                savedData.updated_at ||
+                null
+
+            );
 
 
             /* -----------------------------------------
@@ -8574,9 +8805,68 @@ document.addEventListener(
             "";
 
 
+        updateRulesFeatureCard(
+
+            originalRules.title ||
+            "Rules & Regulations",
+
+            originalRules.content ||
+            "",
+
+            originalRules.updated_at ||
+            null
+
+        );
+
+
         showRulesStatus(
             "Changes have been reset.",
             "success"
+        );
+
+    }
+
+
+    /* -------------------------------------------------
+       EDIT FEATURE CARD
+    ------------------------------------------------- */
+
+    if (editFeatureButton) {
+
+        editFeatureButton.addEventListener(
+            "click",
+            function () {
+
+                const editor =
+                    document.getElementById(
+                        "rulesAdminEditor"
+                    );
+
+
+                if (!editor) {
+                    return;
+                }
+
+
+                editor.scrollIntoView({
+
+                    behavior: "smooth",
+
+                    block: "start"
+
+                });
+
+
+                setTimeout(
+                    function () {
+
+                        rulesTitle.focus();
+
+                    },
+                    350
+                );
+
+            }
         );
 
     }
