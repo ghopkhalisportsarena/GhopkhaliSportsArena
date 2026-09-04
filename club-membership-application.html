@@ -2141,6 +2141,98 @@ document.addEventListener(
                     const insertError =
                         insertResult.error;
 
+/* =========================================
+   MEMBERSHIP APPLICATION EMAIL
+========================================= */
+
+if (savedApplication) {
+
+    try {
+
+        const applicantEmail =
+            getText("email");
+
+        if (applicantEmail) {
+
+            if (submitButton) {
+
+                submitButton.textContent =
+                    "Sending Confirmation Email...";
+
+            }
+
+            const emailResult =
+                await supabaseClient.functions.invoke(
+                    "send-membership-application-email",
+                    {
+                        body: {
+
+                            type:
+                                "membership_application",
+
+                            applicationId:
+                                savedApplication.id,
+
+                            fullNameBn:
+                                fullNameBn || "",
+
+                            fullNameEn:
+                                fullNameEn || "",
+
+                            mobileNumber:
+                                mobileNumber || "",
+
+                            email:
+                                applicantEmail,
+
+                            sports:
+                                selectedSports.join(", "),
+
+                            status:
+                                "pending"
+
+                        }
+                    }
+                );
+
+
+            if (emailResult.error) {
+
+                console.error(
+                    "MEMBERSHIP EMAIL ERROR:",
+                    emailResult.error
+                );
+
+            }
+            else {
+
+                console.log(
+                    "MEMBERSHIP EMAIL SENT:",
+                    emailResult.data
+                );
+
+            }
+
+        }
+        else {
+
+            console.log(
+                "No email address provided. Email skipped."
+            );
+
+        }
+
+    }
+    catch (emailError) {
+
+        console.error(
+            "MEMBERSHIP EMAIL EXCEPTION:",
+            emailError
+        );
+
+    }
+
+}
 
                     if (insertError) {
 
