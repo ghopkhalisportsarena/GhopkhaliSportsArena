@@ -14,9 +14,26 @@
         Friendly Match Application | Ghopkhali Sports Arena
     </title>
 
-    <!-- Supabase -->
+
+    <!-- ==================================================
+         SUPABASE
+    ================================================== -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+    <!-- ==================================================
+         PDF LIBRARIES
+    ================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+
+    <!-- ==================================================
+         STYLE
+    ================================================== -->
 
     <style>
 
@@ -26,305 +43,711 @@
             padding: 0;
         }
 
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f7;
-            color: #111;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                #f5f5f7;
+
+            color:
+                #111;
         }
+
 
         .page {
-            width: min(850px, 92%);
-            margin: auto;
-            padding: 30px 0 60px;
+
+            width:
+                min(850px, 92%);
+
+            margin:
+                auto;
+
+            padding:
+                30px 0 60px;
         }
+
 
         .back-button {
-            display: inline-block;
-            margin-bottom: 25px;
-            color: #111;
-            text-decoration: none;
-            font-weight: 600;
+
+            display:
+                inline-block;
+
+            margin-bottom:
+                25px;
+
+            color:
+                #111;
+
+            text-decoration:
+                none;
+
+            font-weight:
+                600;
         }
+
 
         .form-container {
-            background: #fff;
-            border-radius: 24px;
-            padding: 35px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, .08);
+
+            background:
+                #fff;
+
+            border-radius:
+                24px;
+
+            padding:
+                35px;
+
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, .08);
         }
+
 
         .label {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #777;
-            margin-bottom: 12px;
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                1px;
+
+            color:
+                #777;
+
+            margin-bottom:
+                12px;
         }
+
 
         h1 {
-            font-size: clamp(32px, 6vw, 52px);
-            line-height: 1.1;
-            margin-bottom: 15px;
+
+            font-size:
+                clamp(32px, 6vw, 52px);
+
+            line-height:
+                1.1;
+
+            margin-bottom:
+                15px;
         }
+
 
         .intro {
-            color: #666;
-            line-height: 1.7;
-            margin-bottom: 30px;
+
+            color:
+                #666;
+
+            line-height:
+                1.7;
+
+            margin-bottom:
+                30px;
         }
+
 
         .form-group {
-            margin-bottom: 20px;
+
+            margin-bottom:
+                20px;
         }
 
+
         label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 8px;
+
+            display:
+                block;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+
+            margin-bottom:
+                8px;
         }
+
 
         input,
         textarea,
         select {
-            width: 100%;
-            padding: 14px 15px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font: inherit;
-            outline: none;
-            background: #fff;
+
+            width:
+                100%;
+
+            padding:
+                14px 15px;
+
+            border:
+                1px solid #ddd;
+
+            border-radius:
+                12px;
+
+            font:
+                inherit;
+
+            outline:
+                none;
+
+            background:
+                #fff;
         }
+
 
         input:focus,
         textarea:focus,
         select:focus {
-            border-color: #111;
+
+            border-color:
+                #111;
         }
+
 
         textarea {
-            min-height: 120px;
-            resize: vertical;
+
+            min-height:
+                120px;
+
+            resize:
+                vertical;
         }
+
 
         .submit-button {
-            width: 100%;
-            border: none;
-            border-radius: 14px;
-            padding: 16px;
-            background: #111;
-            color: #fff;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
+
+            width:
+                100%;
+
+            border:
+                none;
+
+            border-radius:
+                14px;
+
+            padding:
+                16px;
+
+            background:
+                #111;
+
+            color:
+                #fff;
+
+            font-size:
+                15px;
+
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
+
+            margin-top:
+                10px;
         }
+
 
         .submit-button:hover {
-            opacity: .9;
+
+            opacity:
+                .9;
         }
+
 
         .submit-button:disabled {
-            opacity: .6;
-            cursor: not-allowed;
+
+            opacity:
+                .6;
+
+            cursor:
+                not-allowed;
         }
+
 
         .message {
-            margin-top: 18px;
-            padding: 14px;
-            border-radius: 12px;
-            display: none;
-            line-height: 1.5;
+
+            margin-top:
+                18px;
+
+            padding:
+                14px;
+
+            border-radius:
+                12px;
+
+            display:
+                none;
+
+            line-height:
+                1.5;
         }
+
 
         .message.success {
-            display: block;
-            background: #eaf7ee;
-            color: #176b35;
+
+            display:
+                block;
+
+            background:
+                #eaf7ee;
+
+            color:
+                #176b35;
         }
 
+
         .message.error {
-            display: block;
-            background: #fdecec;
-            color: #a11;
+
+            display:
+                block;
+
+            background:
+                #fdecec;
+
+            color:
+                #a11;
         }
+
+
+        #pdfDownloadArea {
+
+            display:
+                none;
+
+            margin-top:
+                24px;
+
+            text-align:
+                center;
+        }
+
+
+        #downloadApplicationPDF {
+
+            width:
+                100%;
+
+            border:
+                none;
+
+            border-radius:
+                14px;
+
+            padding:
+                16px;
+
+            background:
+                #111;
+
+            color:
+                #fff;
+
+            font-size:
+                15px;
+
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
+        }
+
+
+        #downloadApplicationPDF:hover {
+
+            opacity:
+                .9;
+        }
+
+
+        #downloadApplicationPDF:disabled {
+
+            opacity:
+                .6;
+
+            cursor:
+                not-allowed;
+        }
+
+
+        /* ==================================================
+           PDF TEMPLATE
+        ================================================== */
+
+        #pdfPage {
+
+            width:
+                794px;
+
+            min-height:
+                1123px;
+
+            box-sizing:
+                border-box;
+
+            padding:
+                58px;
+
+            background:
+                #ffffff;
+
+            color:
+                #111111;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+
+        .pdf-header {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                flex-start;
+        }
+
+
+        .pdf-brand {
+
+            font-size:
+                25px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1.5px;
+        }
+
+
+        .pdf-subtitle {
+
+            margin-top:
+                8px;
+
+            font-size:
+                12px;
+
+            letter-spacing:
+                2px;
+
+            color:
+                #666666;
+        }
+
+
+        .pdf-number {
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                1.5px;
+
+            color:
+                #777777;
+        }
+
+
+        .pdf-line {
+
+            height:
+                2px;
+
+            background:
+                #111111;
+
+            margin:
+                28px 0;
+        }
+
+
+        .pdf-status {
+
+            display:
+                inline-block;
+
+            padding:
+                9px 16px;
+
+            border:
+                2px solid #111111;
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1.5px;
+
+            margin-bottom:
+                30px;
+        }
+
+
+        .pdf-section {
+
+            margin-bottom:
+                28px;
+        }
+
+
+        .pdf-section-title {
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1.5px;
+
+            margin-bottom:
+                14px;
+
+            padding-bottom:
+                8px;
+
+            border-bottom:
+                1px solid #dddddd;
+        }
+
+
+        .pdf-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            border-top:
+                1px solid #eeeeee;
+
+            border-left:
+                1px solid #eeeeee;
+        }
+
+
+        .pdf-item {
+
+            padding:
+                13px;
+
+            border-right:
+                1px solid #eeeeee;
+
+            border-bottom:
+                1px solid #eeeeee;
+
+            min-height:
+                52px;
+
+            box-sizing:
+                border-box;
+        }
+
+
+        .pdf-item span {
+
+            display:
+                block;
+
+            font-size:
+                9px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1px;
+
+            color:
+                #777777;
+
+            margin-bottom:
+                6px;
+        }
+
+
+        .pdf-item strong {
+
+            display:
+                block;
+
+            font-size:
+                13px;
+
+            line-height:
+                1.4;
+        }
+
+
+        .pdf-message {
+
+            min-height:
+                55px;
+
+            padding:
+                15px;
+
+            border:
+                1px solid #eeeeee;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.6;
+
+            white-space:
+                pre-wrap;
+
+            box-sizing:
+                border-box;
+        }
+
+
+        .pdf-footer {
+
+            position:
+                absolute;
+
+            bottom:
+                58px;
+
+            left:
+                58px;
+
+            right:
+                58px;
+
+            padding-top:
+                15px;
+
+            border-top:
+                1px solid #dddddd;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            font-size:
+                9px;
+
+            line-height:
+                1.5;
+
+            color:
+                #555555;
+        }
+
+
+        .pdf-footer-right {
+
+            text-align:
+                right;
+        }
+
 
         @media (max-width: 600px) {
 
             .page {
-                width: 94%;
-                padding-top: 20px;
+
+                width:
+                    94%;
+
+                padding-top:
+                    20px;
             }
 
+
             .form-container {
-                padding: 24px 20px;
-                border-radius: 20px;
+
+                padding:
+                    24px 20px;
+
+                border-radius:
+                    20px;
             }
 
         }
 
-        #pdfPage {
-    width: 794px;
-    min-height: 1123px;
-    box-sizing: border-box;
-    padding: 58px;
-    background: #ffffff;
-    color: #111111;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.pdf-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.pdf-brand {
-    font-size: 25px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-}
-
-.pdf-subtitle {
-    margin-top: 8px;
-    font-size: 12px;
-    letter-spacing: 2px;
-    color: #666666;
-}
-
-.pdf-number {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #777777;
-}
-
-.pdf-line {
-    height: 2px;
-    background: #111111;
-    margin: 28px 0;
-}
-
-.pdf-status {
-    display: inline-block;
-    padding: 9px 16px;
-    border: 2px solid #111111;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    margin-bottom: 30px;
-}
-
-.pdf-section {
-    margin-bottom: 28px;
-}
-
-.pdf-section-title {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    margin-bottom: 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #dddddd;
-}
-
-.pdf-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-top: 1px solid #eeeeee;
-    border-left: 1px solid #eeeeee;
-}
-
-.pdf-item {
-    padding: 13px;
-    border-right: 1px solid #eeeeee;
-    border-bottom: 1px solid #eeeeee;
-    min-height: 52px;
-    box-sizing: border-box;
-}
-
-.pdf-item span {
-    display: block;
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #777777;
-    margin-bottom: 6px;
-}
-
-.pdf-item strong {
-    display: block;
-    font-size: 13px;
-    line-height: 1.4;
-}
-
-.pdf-message {
-    min-height: 55px;
-    padding: 15px;
-    border: 1px solid #eeeeee;
-    font-size: 12px;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    box-sizing: border-box;
-}
-
-.pdf-footer {
-    position: absolute;
-    bottom: 58px;
-    left: 58px;
-    right: 58px;
-    padding-top: 15px;
-    border-top: 1px solid #dddddd;
-    display: flex;
-    justify-content: space-between;
-    font-size: 9px;
-    line-height: 1.5;
-    color: #555555;
-}
-
-.pdf-footer-right {
-    text-align: right;
-}
-
     </style>
-
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 </head>
 
 
 <body>
 
+
     <main class="page">
 
+
+        <!-- ==================================================
+             BACK BUTTON
+        ================================================== -->
 
         <a
             href="index.html#club-services"
             class="back-button"
         >
+
             ← Back to Club Services
+
         </a>
 
+
+        <!-- ==================================================
+             FORM
+        ================================================== -->
 
         <section class="form-container">
 
 
             <div class="label">
+
                 GHOPKHALI SPORTS ARENA
+
             </div>
 
 
             <h1>
+
                 Friendly Match
                 Application
+
             </h1>
 
 
             <p class="intro">
+
                 External clubs and teams can submit an official
                 application to arrange a friendly match with
                 Ghopkhali Sports Arena.
+
             </p>
 
 
@@ -336,7 +759,9 @@
                 <div class="form-group">
 
                     <label for="teamName">
+
                         Team / Club Name *
+
                     </label>
 
                     <input
@@ -354,7 +779,9 @@
                 <div class="form-group">
 
                     <label for="contactPerson">
+
                         Contact Person *
+
                     </label>
 
                     <input
@@ -372,7 +799,9 @@
                 <div class="form-group">
 
                     <label for="phone">
+
                         Contact Number *
+
                     </label>
 
                     <input
@@ -390,7 +819,9 @@
                 <div class="form-group">
 
                     <label for="email">
+
                         Email Address
+
                     </label>
 
                     <input
@@ -407,7 +838,9 @@
                 <div class="form-group">
 
                     <label for="sport">
+
                         Sport *
+
                     </label>
 
                     <select
@@ -416,15 +849,21 @@
                     >
 
                         <option value="">
+
                             Select Sport
+
                         </option>
 
                         <option value="Football">
+
                             Football
+
                         </option>
 
                         <option value="Cricket">
+
                             Cricket
+
                         </option>
 
                     </select>
@@ -437,7 +876,9 @@
                 <div class="form-group">
 
                     <label for="players">
+
                         Number of Players *
+
                     </label>
 
                     <input
@@ -456,7 +897,9 @@
                 <div class="form-group">
 
                     <label for="preferredDate">
+
                         Preferred Match Date *
+
                     </label>
 
                     <input
@@ -473,7 +916,9 @@
                 <div class="form-group">
 
                     <label for="preferredTime">
+
                         Preferred Match Time
+
                     </label>
 
                     <input
@@ -489,7 +934,9 @@
                 <div class="form-group">
 
                     <label for="venue">
+
                         Preferred Venue
+
                     </label>
 
                     <input
@@ -506,7 +953,9 @@
                 <div class="form-group">
 
                     <label for="message">
+
                         Additional Message
+
                     </label>
 
                     <textarea
@@ -524,7 +973,9 @@
                     id="submitButton"
                     class="submit-button"
                 >
+
                     Submit Application
+
                 </button>
 
 
@@ -537,22 +988,25 @@
 
 
             </form>
-<div
-    id="pdfDownloadArea"
-    style="
-        display:none;
-        margin-top:24px;
-        text-align:center;
-    "
->
-    <button
-        type="button"
-        id="downloadApplicationPDF"
-        class="button button-dark"
-    >
-        Download Application PDF ↓
-    </button>
-</div>
+
+
+            <!-- ==================================================
+                 PDF DOWNLOAD
+            ================================================== -->
+
+            <div id="pdfDownloadArea">
+
+                <button
+                    type="button"
+                    id="downloadApplicationPDF"
+                >
+
+                    Download Application PDF ↓
+
+                </button>
+
+            </div>
+
 
         </section>
 
@@ -560,18 +1014,314 @@
     </main>
 
 
+    <!-- ======================================================
+         HIDDEN PDF TEMPLATE
+    ======================================================= -->
+
+    <div
+        id="pdfApplication"
+        style="display:none;"
+    >
+
+        <div id="pdfPage">
+
+
+            <!-- PDF HEADER -->
+
+            <div class="pdf-header">
+
+                <div>
+
+                    <div class="pdf-brand">
+
+                        GHOPKHALI SPORTS ARENA
+
+                    </div>
+
+
+                    <div class="pdf-subtitle">
+
+                        FRIENDLY MATCH APPLICATION
+
+                    </div>
+
+                </div>
+
+
+                <div class="pdf-number">
+
+                    APPLICATION
+
+                </div>
+
+            </div>
+
+
+            <div class="pdf-line"></div>
+
+
+            <!-- STATUS -->
+
+            <div
+                class="pdf-status"
+                id="pdfStatus"
+            >
+
+                APPLICATION RECEIVED
+
+            </div>
+
+
+            <!-- APPLICATION DETAILS -->
+
+            <div class="pdf-section">
+
+                <div class="pdf-section-title">
+
+                    APPLICATION DETAILS
+
+                </div>
+
+
+                <div class="pdf-grid">
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Application ID
+                        </span>
+
+                        <strong id="pdfApplicationId">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Application Date
+                        </span>
+
+                        <strong id="pdfCreatedAt">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Team / Club
+                        </span>
+
+                        <strong id="pdfTeamName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Contact Person
+                        </span>
+
+                        <strong id="pdfContactPerson">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Phone
+                        </span>
+
+                        <strong id="pdfPhone">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Email
+                        </span>
+
+                        <strong id="pdfEmail">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Sport
+                        </span>
+
+                        <strong id="pdfSport">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Players
+                        </span>
+
+                        <strong id="pdfPlayers">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Preferred Date
+                        </span>
+
+                        <strong id="pdfDate">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pdf-item">
+
+                        <span>
+                            Preferred Time
+                        </span>
+
+                        <strong id="pdfTime">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- VENUE -->
+
+            <div class="pdf-section">
+
+                <div class="pdf-section-title">
+
+                    VENUE
+
+                </div>
+
+
+                <div
+                    class="pdf-message"
+                    id="pdfVenue"
+                >
+
+                    —
+
+                </div>
+
+            </div>
+
+
+            <!-- ADDITIONAL MESSAGE -->
+
+            <div class="pdf-section">
+
+                <div class="pdf-section-title">
+
+                    ADDITIONAL MESSAGE
+
+                </div>
+
+
+                <div
+                    class="pdf-message"
+                    id="pdfMessage"
+                >
+
+                    —
+
+                </div>
+
+            </div>
+
+
+            <!-- PDF FOOTER -->
+
+            <div class="pdf-footer">
+
+                <div>
+
+                    <strong>
+                        Ghopkhali Sports Arena
+                    </strong>
+
+                    <br>
+
+                    ghopkhalisportsarena@gmail.com
+
+                </div>
+
+
+                <div class="pdf-footer-right">
+
+                    Official Club Document
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         JAVASCRIPT
+    ======================================================= -->
+
     <script>
 
-        // ==================================================
-        // SUPABASE CONFIG
-        // ==================================================
+        "use strict";
+
+
+        /* ==================================================
+           SUPABASE CONFIG
+        ================================================== */
 
         const SUPABASE_URL =
             "https://cmygmswzokyrmgdnuszq.supabase.co";
 
+
         const SUPABASE_ANON_KEY =
             "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
+
+        /* ==================================================
+           SUPABASE CLIENT
+        ================================================== */
 
         const supabaseClient =
             window.supabase.createClient(
@@ -580,19 +1330,21 @@
             );
 
 
-        // ==================================================
-        // ELEMENTS
-        // ==================================================
+        /* ==================================================
+           ELEMENTS
+        ================================================== */
 
         const form =
             document.getElementById(
                 "friendlyMatchForm"
             );
 
+
         const submitButton =
             document.getElementById(
                 "submitButton"
             );
+
 
         const formMessage =
             document.getElementById(
@@ -600,345 +1352,552 @@
             );
 
 
-        // ==================================================
-        // SUBMIT
-        // ==================================================
-
-let lastSubmittedApplication = null;
-async function generateApplicationPDF(application) {
-
-    const pdfContainer =
-        document.getElementById("pdfApplication");
-
-    const pdfPage =
-        document.getElementById("pdfPage");
-
-    if (!pdfContainer || !pdfPage) {
-        throw new Error("PDF template not found.");
-    }
-
-
-    const message =
-        application.message || "";
-
-
-    let sport = "N/A";
-    let players = "N/A";
-    let additionalMessage = "N/A";
-
-
-    const sportMatch =
-        message.match(/Sport:\s*(.+)/i);
-
-    const playersMatch =
-        message.match(/Number of Players:\s*(.+)/i);
-
-    const additionalMatch =
-        message.match(
-            /Additional Message:\s*([\s\S]*)/i
-        );
-
-
-    if (sportMatch) {
-        sport =
-            sportMatch[1]
-                .split("\n")[0]
-                .trim();
-    }
-
-
-    if (playersMatch) {
-        players =
-            playersMatch[1]
-                .split("\n")[0]
-                .trim();
-    }
-
-
-    if (additionalMatch) {
-        additionalMessage =
-            additionalMatch[1].trim() ||
-            "N/A";
-    }
-
-
-    document.getElementById(
-        "pdfApplicationId"
-    ).textContent =
-        application.id || "—";
-
-
-    document.getElementById(
-        "pdfCreatedAt"
-    ).textContent =
-        application.created_at
-            ? new Date(
-                application.created_at
-            ).toLocaleDateString(
-                "en-GB",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                }
-            )
-            : "—";
-
-
-    document.getElementById(
-        "pdfTeamName"
-    ).textContent =
-        application.team_name ||
-        application.club_name ||
-        "—";
-
-
-    document.getElementById(
-        "pdfContactPerson"
-    ).textContent =
-        application.contact_person ||
-        application.full_name ||
-        application.name ||
-        "—";
-
-
-    document.getElementById(
-        "pdfPhone"
-    ).textContent =
-        application.phone || "—";
-
-
-    document.getElementById(
-        "pdfEmail"
-    ).textContent =
-        application.email || "—";
-
-
-    document.getElementById(
-        "pdfSport"
-    ).textContent =
-        sport;
-
-
-    document.getElementById(
-        "pdfPlayers"
-    ).textContent =
-        players;
-
-
-    document.getElementById(
-        "pdfDate"
-    ).textContent =
-        application.preferred_date || "—";
-
-
-    document.getElementById(
-        "pdfTime"
-    ).textContent =
-        application.preferred_time
-            ? String(
-                application.preferred_time
-            ).slice(0, 5)
-            : "Not specified";
-
-
-    document.getElementById(
-        "pdfVenue"
-    ).textContent =
-        application.venue ||
-        "Not specified";
-
-
-    document.getElementById(
-        "pdfMessage"
-    ).textContent =
-        additionalMessage;
-
-
-    const status =
-        String(
-            application.status ||
-            "pending"
-        ).toLowerCase();
-
-
-    const statusElement =
-        document.getElementById(
-            "pdfStatus"
-        );
-
-
-    statusElement.textContent =
-        status === "approved"
-            ? "APPROVED"
-            : status === "rejected"
-                ? "REJECTED"
-                : "APPLICATION RECEIVED";
-
-
-    /*
-     * Show template temporarily
-     */
-
-    pdfContainer.style.display =
-        "block";
-
-
-    pdfPage.style.position =
-        "relative";
-
-
-    try {
-
-        const canvas =
-            await html2canvas(
-                pdfPage,
-                {
-                    scale: 2,
-                    useCORS: true,
-                    backgroundColor:
-                        "#ffffff"
-                }
+        const pdfDownloadArea =
+            document.getElementById(
+                "pdfDownloadArea"
             );
 
 
-        const {
-            jsPDF
-        } = window.jspdf;
+        const downloadApplicationPDF =
+            document.getElementById(
+                "downloadApplicationPDF"
+            );
 
 
-        const pdf =
-            new jsPDF({
-                orientation: "portrait",
-                unit: "mm",
-                format: "a4",
-                compress: true
-            });
+        /* ==================================================
+           LAST APPLICATION
+        ================================================== */
+
+        let lastSubmittedApplication =
+            null;
 
 
-        const pageWidth =
-            pdf.internal.pageSize.getWidth();
+        /* ==================================================
+           GENERATE PDF
+        ================================================== */
 
-        const pageHeight =
-            pdf.internal.pageSize.getHeight();
-
-
-        const imageWidth =
-            pageWidth;
-
-
-        const imageHeight =
-            canvas.height *
-            imageWidth /
-            canvas.width;
-
-
-        pdf.addImage(
-            canvas.toDataURL("image/jpeg", 0.95),
-            "JPEG",
-            0,
-            0,
-            imageWidth,
-            imageHeight
-        );
-
-
-        /*
-         * Premium seal
-         */
-
-        if (
-            status === "approved" ||
-            status === "rejected"
+        async function generateApplicationPDF(
+            application
         ) {
 
-            const sealText =
+            const pdfContainer =
+                document.getElementById(
+                    "pdfApplication"
+                );
+
+
+            const pdfPage =
+                document.getElementById(
+                    "pdfPage"
+                );
+
+
+            if (
+                !pdfContainer ||
+                !pdfPage
+            ) {
+
+                throw new Error(
+                    "PDF template not found."
+                );
+
+            }
+
+
+            const message =
+                application.message || "";
+
+
+            let sport =
+                "N/A";
+
+
+            let players =
+                "N/A";
+
+
+            let additionalMessage =
+                "N/A";
+
+
+            /* ==========================================
+               PARSE SPORT
+            ========================================== */
+
+            const sportMatch =
+                message.match(
+                    /Sport:\s*(.+)/i
+                );
+
+
+            if (sportMatch) {
+
+                sport =
+                    sportMatch[1]
+                        .split("\n")[0]
+                        .trim();
+
+            }
+
+
+            /* ==========================================
+               PARSE PLAYERS
+            ========================================== */
+
+            const playersMatch =
+                message.match(
+                    /Number of Players:\s*(.+)/i
+                );
+
+
+            if (playersMatch) {
+
+                players =
+                    playersMatch[1]
+                        .split("\n")[0]
+                        .trim();
+
+            }
+
+
+            /* ==========================================
+               PARSE ADDITIONAL MESSAGE
+            ========================================== */
+
+            const additionalMatch =
+                message.match(
+                    /Additional Message:\s*([\s\S]*)/i
+                );
+
+
+            if (additionalMatch) {
+
+                additionalMessage =
+                    additionalMatch[1].trim() ||
+                    "N/A";
+
+            }
+
+
+            /* ==========================================
+               APPLICATION ID
+            ========================================== */
+
+            document.getElementById(
+                "pdfApplicationId"
+            ).textContent =
+                application.id || "—";
+
+
+            /* ==========================================
+               CREATED DATE
+            ========================================== */
+
+            document.getElementById(
+                "pdfCreatedAt"
+            ).textContent =
+
+                application.created_at
+
+                    ? new Date(
+                        application.created_at
+                    ).toLocaleDateString(
+                        "en-GB",
+                        {
+                            day:
+                                "2-digit",
+
+                            month:
+                                "short",
+
+                            year:
+                                "numeric"
+                        }
+                    )
+
+                    : "—";
+
+
+            /* ==========================================
+               TEAM
+            ========================================== */
+
+            document.getElementById(
+                "pdfTeamName"
+            ).textContent =
+
+                application.team_name ||
+                application.club_name ||
+                "—";
+
+
+            /* ==========================================
+               CONTACT PERSON
+            ========================================== */
+
+            document.getElementById(
+                "pdfContactPerson"
+            ).textContent =
+
+                application.contact_person ||
+                application.full_name ||
+                application.name ||
+                "—";
+
+
+            /* ==========================================
+               PHONE
+            ========================================== */
+
+            document.getElementById(
+                "pdfPhone"
+            ).textContent =
+
+                application.phone ||
+                "—";
+
+
+            /* ==========================================
+               EMAIL
+            ========================================== */
+
+            document.getElementById(
+                "pdfEmail"
+            ).textContent =
+
+                application.email ||
+                "—";
+
+
+            /* ==========================================
+               SPORT
+            ========================================== */
+
+            document.getElementById(
+                "pdfSport"
+            ).textContent =
+                sport;
+
+
+            /* ==========================================
+               PLAYERS
+            ========================================== */
+
+            document.getElementById(
+                "pdfPlayers"
+            ).textContent =
+                players;
+
+
+            /* ==========================================
+               DATE
+            ========================================== */
+
+            document.getElementById(
+                "pdfDate"
+            ).textContent =
+
+                application.preferred_date ||
+                "—";
+
+
+            /* ==========================================
+               TIME
+            ========================================== */
+
+            document.getElementById(
+                "pdfTime"
+            ).textContent =
+
+                application.preferred_time
+
+                    ? String(
+                        application.preferred_time
+                    ).slice(0, 5)
+
+                    : "Not specified";
+
+
+            /* ==========================================
+               VENUE
+            ========================================== */
+
+            document.getElementById(
+                "pdfVenue"
+            ).textContent =
+
+                application.venue ||
+                "Not specified";
+
+
+            /* ==========================================
+               MESSAGE
+            ========================================== */
+
+            document.getElementById(
+                "pdfMessage"
+            ).textContent =
+                additionalMessage;
+
+
+            /* ==========================================
+               STATUS
+            ========================================== */
+
+            const status =
+                String(
+                    application.status ||
+                    "pending"
+                ).toLowerCase();
+
+
+            const statusElement =
+                document.getElementById(
+                    "pdfStatus"
+                );
+
+
+            statusElement.textContent =
+
                 status === "approved"
+
                     ? "APPROVED"
-                    : "REJECTED";
+
+                    : status === "rejected"
+
+                        ? "REJECTED"
+
+                        : "APPLICATION RECEIVED";
 
 
-            const sealColor =
-                status === "approved"
-                    ? [25, 125, 70]
-                    : [185, 45, 45];
+            /* ==========================================
+               SHOW PDF TEMPLATE
+            ========================================== */
+
+            pdfContainer.style.display =
+                "block";
 
 
-            pdf.setDrawColor(
-                ...sealColor
-            );
-
-            pdf.setTextColor(
-                ...sealColor
-            );
-
-            pdf.setLineWidth(1.2);
+            pdfPage.style.position =
+                "relative";
 
 
-            const sealX =
-                pageWidth - 42;
+            try {
 
-            const sealY =
-                37;
+                /* ======================================
+                   HTML TO CANVAS
+                ====================================== */
 
+                const canvas =
+                    await html2canvas(
+                        pdfPage,
+                        {
+                            scale:
+                                2,
 
-            pdf.circle(
-                sealX,
-                sealY,
-                19,
-                "S"
-            );
+                            useCORS:
+                                true,
 
-
-            pdf.setFont(
-                "helvetica",
-                "bold"
-            );
-
-
-            pdf.setFontSize(10);
+                            backgroundColor:
+                                "#ffffff"
+                        }
+                    );
 
 
-            pdf.text(
-                sealText,
-                sealX,
-                sealY + 2,
-                {
-                    align: "center"
+                /* ======================================
+                   JSPDF
+                ====================================== */
+
+                const {
+                    jsPDF
+                } = window.jspdf;
+
+
+                const pdf =
+                    new jsPDF(
+                        {
+                            orientation:
+                                "portrait",
+
+                            unit:
+                                "mm",
+
+                            format:
+                                "a4",
+
+                            compress:
+                                true
+                        }
+                    );
+
+
+                const pageWidth =
+                    pdf.internal.pageSize.getWidth();
+
+
+                const imageWidth =
+                    pageWidth;
+
+
+                const imageHeight =
+
+                    canvas.height *
+                    imageWidth /
+                    canvas.width;
+
+
+                /* ======================================
+                   ADD PDF IMAGE
+                ====================================== */
+
+                pdf.addImage(
+
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.95
+                    ),
+
+                    "JPEG",
+
+                    0,
+
+                    0,
+
+                    imageWidth,
+
+                    imageHeight
+
+                );
+
+
+                /* ======================================
+                   APPROVED / REJECTED SEAL
+                ====================================== */
+
+                if (
+                    status === "approved" ||
+                    status === "rejected"
+                ) {
+
+                    const sealText =
+
+                        status === "approved"
+
+                            ? "APPROVED"
+
+                            : "REJECTED";
+
+
+                    const sealColor =
+
+                        status === "approved"
+
+                            ? [25, 125, 70]
+
+                            : [185, 45, 45];
+
+
+                    pdf.setDrawColor(
+                        ...sealColor
+                    );
+
+
+                    pdf.setTextColor(
+                        ...sealColor
+                    );
+
+
+                    pdf.setLineWidth(
+                        1.2
+                    );
+
+
+                    const sealX =
+                        pdf.internal.pageSize.getWidth()
+                        - 42;
+
+
+                    const sealY =
+                        37;
+
+
+                    pdf.circle(
+                        sealX,
+                        sealY,
+                        19,
+                        "S"
+                    );
+
+
+                    pdf.setFont(
+                        "helvetica",
+                        "bold"
+                    );
+
+
+                    pdf.setFontSize(
+                        10
+                    );
+
+
+                    pdf.text(
+                        sealText,
+                        sealX,
+                        sealY + 2,
+                        {
+                            align:
+                                "center"
+                        }
+                    );
+
+
+                    pdf.setFontSize(
+                        5
+                    );
+
+
+                    pdf.text(
+                        "GHOPKHALI SPORTS ARENA",
+                        sealX,
+                        sealY + 8,
+                        {
+                            align:
+                                "center"
+                        }
+                    );
+
                 }
-            );
 
 
-            pdf.setFontSize(5);
+                /* ======================================
+                   DOWNLOAD
+                ====================================== */
+
+                const filename =
+
+                    `GSA-Friendly-Match-${application.id}.pdf`;
 
 
-            pdf.text(
-                "GHOPKHALI SPORTS ARENA",
-                sealX,
-                sealY + 8,
-                {
-                    align: "center"
-                }
-            );
+                pdf.save(
+                    filename
+                );
+
+            }
+
+
+            finally {
+
+                pdfContainer.style.display =
+                    "none";
+
+            }
 
         }
 
 
-        const filename =
-            `GSA-Friendly-Match-${application.id}.pdf`;
-
-
-        pdf.save(filename);
-
-
-    } finally {
-
-        pdfContainer.style.display =
-            "none";
-
-    }
-
-}
+        /* ==================================================
+           FORM SUBMIT
+        ================================================== */
 
         form.addEventListener(
             "submit",
@@ -947,54 +1906,63 @@ async function generateApplicationPDF(application) {
                 event.preventDefault();
 
 
-                // ------------------------------------------
-                // GET VALUES
-                // ------------------------------------------
+                /* ==========================================
+                   GET FORM VALUES
+                ========================================== */
 
                 const teamName =
                     document.getElementById(
                         "teamName"
                     ).value.trim();
 
+
                 const contactPerson =
                     document.getElementById(
                         "contactPerson"
                     ).value.trim();
+
 
                 const phone =
                     document.getElementById(
                         "phone"
                     ).value.trim();
 
+
                 const email =
                     document.getElementById(
                         "email"
                     ).value.trim();
+
 
                 const sport =
                     document.getElementById(
                         "sport"
                     ).value;
 
+
                 const players =
                     document.getElementById(
                         "players"
                     ).value;
+
 
                 const preferredDate =
                     document.getElementById(
                         "preferredDate"
                     ).value;
 
+
                 const preferredTime =
                     document.getElementById(
                         "preferredTime"
                     ).value;
 
+
                 const venue =
                     document.getElementById(
                         "venue"
                     ).value.trim();
+
 
                 const message =
                     document.getElementById(
@@ -1002,11 +1970,13 @@ async function generateApplicationPDF(application) {
                     ).value.trim();
 
 
-                // ------------------------------------------
-                // SHOW LOADING
-                // ------------------------------------------
+                /* ==========================================
+                   LOADING
+                ========================================== */
 
-                submitButton.disabled = true;
+                submitButton.disabled =
+                    true;
+
 
                 submitButton.textContent =
                     "Submitting...";
@@ -1015,8 +1985,10 @@ async function generateApplicationPDF(application) {
                 formMessage.className =
                     "message";
 
+
                 formMessage.style.display =
                     "block";
+
 
                 formMessage.textContent =
                     "Submitting your application...";
@@ -1025,23 +1997,29 @@ async function generateApplicationPDF(application) {
                 try {
 
 
-                    // --------------------------------------
-                    // COMBINE SPORT INFORMATION
-                    // --------------------------------------
+                    /* ======================================
+                       COMBINE MESSAGE
+                    ====================================== */
 
                     const fullMessage =
+
                         `Sport: ${sport}\n` +
+
                         `Number of Players: ${players}\n` +
+
                         `Additional Message: ${
                             message || "N/A"
                         }`;
 
 
-                    // --------------------------------------
-                    // INSERT
-                    // --------------------------------------
+                    /* ======================================
+                       INSERT APPLICATION
+                    ====================================== */
 
-                    const { error } =
+                    const {
+                        error
+                    } =
+
                         await supabaseClient
                             .from(
                                 "friendly_applications"
@@ -1058,7 +2036,8 @@ async function generateApplicationPDF(application) {
                                     phone,
 
                                 email:
-                                    email || null,
+                                    email ||
+                                    null,
 
                                 preferred_date:
                                     preferredDate,
@@ -1080,163 +2059,271 @@ async function generateApplicationPDF(application) {
                             });
 
 
-                    // --------------------------------------
-                    // SUPABASE ERROR
-                    // --------------------------------------
+                    /* ======================================
+                       CHECK INSERT
+                    ====================================== */
 
                     if (error) {
+
                         throw error;
+
                     }
 
-const { data: savedApplication, error: fetchError } =
-    await supabaseClient
-        .from("friendly_applications")
-        .select("*")
-        .eq("team_name", teamName)
-        .eq("contact_person", contactPerson)
-        .eq("phone", phone)
-        .order("created_at", {
-            ascending: false
-        })
-        .limit(1)
-        .maybeSingle();
+
+                    /* ======================================
+                       GET SAVED APPLICATION
+                    ====================================== */
+
+                    const {
+                        data:
+                            savedApplication,
+
+                        error:
+                            fetchError
+
+                    } =
+
+                        await supabaseClient
+
+                            .from(
+                                "friendly_applications"
+                            )
+
+                            .select("*")
+
+                            .eq(
+                                "team_name",
+                                teamName
+                            )
+
+                            .eq(
+                                "contact_person",
+                                contactPerson
+                            )
+
+                            .eq(
+                                "phone",
+                                phone
+                            )
+
+                            .order(
+                                "created_at",
+                                {
+                                    ascending:
+                                        false
+                                }
+                            )
+
+                            .limit(1)
+
+                            .maybeSingle();
 
 
-if (fetchError) {
-    throw fetchError;
-}
+                    /* ======================================
+                       FETCH ERROR
+                    ====================================== */
+
+                    if (fetchError) {
+
+                        throw fetchError;
+
+                    }
 
 
-if (!savedApplication) {
-    throw new Error(
-        "Application was saved, but could not be retrieved."
-    );
-}
+                    if (!savedApplication) {
 
-// ==================================================
-// SEND FRIENDLY MATCH EMAIL
-// ==================================================
+                        throw new Error(
+                            "Application was saved, but could not be retrieved."
+                        );
 
-const {
-    data: emailResult,
-    error: emailError
-} =
-    await supabaseClient
-        .functions
-        .invoke(
-            "send-friendly-match-email",
-            {
-                body: {
-
-                    type:
-                        "friendly_match",
-
-                    applicationId:
-                        savedApplication.id,
-
-                    teamName:
-                        teamName,
-
-                    contactPerson:
-                        contactPerson,
-
-                    phone:
-                        phone,
-
-                    email:
-                        email || "",
-
-                    sport:
-                        sport,
-
-                    players:
-                        players,
-
-                    preferredDate:
-                        preferredDate,
-
-                    preferredTime:
-                        preferredTime || "",
-
-                    venue:
-                        venue || "",
-
-                    message:
-                        message || ""
-
-                }
-            }
-        );
+                    }
 
 
-// ==================================================
-// EMAIL RESULT
-// ==================================================
+                    /* ======================================
+                       SEND EMAIL
+                       NON-BLOCKING
+                    ====================================== */
 
-if (emailError) {
+                    try {
 
-    console.error(
-        "Friendly Match Email Error:",
-        emailError
-    );
-
-} else if (
-    !emailResult ||
-    emailResult.success !== true
-) {
-
-    console.error(
-        "Friendly Match Email Failed:",
-        emailResult
-    );
-
-} else {
-
-    console.log(
-        "Friendly Match email sent successfully."
-    );
-
-}
-
-// Save application for PDF download
-lastSubmittedApplication =
-    savedApplication;
+                        console.log(
+                            "Sending Friendly Match email..."
+                        );
 
 
-// Generate PDF automatically
-await generateApplicationPDF(
-    savedApplication
-);
+                        const {
+                            data:
+                                emailResult,
+
+                            error:
+                                emailError
+
+                        } =
+
+                            await supabaseClient
+                                .functions
+                                .invoke(
+
+                                    "send-friendly-match-email",
+
+                                    {
+
+                                        body: {
+
+                                            type:
+                                                "friendly_match",
+
+                                            applicationId:
+                                                savedApplication.id,
+
+                                            teamName:
+                                                teamName,
+
+                                            contactPerson:
+                                                contactPerson,
+
+                                            phone:
+                                                phone,
+
+                                            email:
+                                                email ||
+                                                "",
+
+                                            sport:
+                                                sport,
+
+                                            players:
+                                                players,
+
+                                            preferredDate:
+                                                preferredDate,
+
+                                            preferredTime:
+                                                preferredTime ||
+                                                "",
+
+                                            venue:
+                                                venue ||
+                                                "",
+
+                                            message:
+                                                message ||
+                                                ""
+
+                                        }
+
+                                    }
+
+                                );
 
 
-// Show download button
-const pdfDownloadArea =
-    document.getElementById(
-        "pdfDownloadArea"
-    );
+                        /* ==================================
+                           EMAIL ERROR
+                        ================================== */
 
-if (pdfDownloadArea) {
-    pdfDownloadArea.style.display = "block";
-}
+                        if (emailError) {
 
-                    // --------------------------------------
-                    // SUCCESS
-                    // --------------------------------------
+                            console.error(
+                                "Friendly Match Email Error:",
+                                emailError
+                            );
+
+                        }
+
+
+                        else if (
+                            !emailResult ||
+                            emailResult.success !== true
+                        ) {
+
+                            console.error(
+                                "Friendly Match Email Failed:",
+                                emailResult
+                            );
+
+                        }
+
+
+                        else {
+
+                            console.log(
+                                "Friendly Match email sent successfully."
+                            );
+
+                        }
+
+                    }
+
+
+                    catch (emailException) {
+
+                        /*
+                         * IMPORTANT:
+                         * Email failure will NOT
+                         * cancel application.
+                         */
+
+                        console.error(
+                            "Friendly Match Email Exception:",
+                            emailException
+                        );
+
+                    }
+
+
+                    /* ======================================
+                       SAVE FOR PDF
+                    ====================================== */
+
+                    lastSubmittedApplication =
+                        savedApplication;
+
+
+                    /* ======================================
+                       GENERATE PDF
+                    ====================================== */
+
+                    await generateApplicationPDF(
+                        savedApplication
+                    );
+
+
+                    /* ======================================
+                       SHOW DOWNLOAD BUTTON
+                    ====================================== */
+
+                    if (
+                        pdfDownloadArea
+                    ) {
+
+                        pdfDownloadArea.style.display =
+                            "block";
+
+                    }
+
+
+                    /* ======================================
+                       SUCCESS
+                    ====================================== */
 
                     formMessage.className =
                         "message success";
+
 
                     formMessage.textContent =
                         "Application submitted successfully. Ghopkhali Sports Arena will review your application.";
 
 
-                    // Clear form
+                    /* ======================================
+                       RESET FORM
+                    ====================================== */
 
                     form.reset();
 
+                }
 
-                } catch (error) {
 
+                catch (error) {
 
                     console.error(
                         "Friendly Match Application Error:",
@@ -1247,19 +2334,28 @@ if (pdfDownloadArea) {
                     formMessage.className =
                         "message error";
 
+
+                    formMessage.style.display =
+                        "block";
+
+
                     formMessage.textContent =
+
                         "Unable to submit application. " +
+
                         (
-                            error.message ||
+                            error?.message ||
                             "Please try again."
                         );
 
+                }
 
-                } finally {
 
+                finally {
 
                     submitButton.disabled =
                         false;
+
 
                     submitButton.textContent =
                         "Submit Application";
@@ -1269,204 +2365,93 @@ if (pdfDownloadArea) {
             }
         );
 
-document.addEventListener(
-    "click",
-    async event => {
 
-        const button =
-            event.target.closest(
-                "#downloadApplicationPDF"
-            );
+        /* ==================================================
+           DOWNLOAD PDF BUTTON
+        ================================================== */
 
-        if (!button) return;
+        downloadApplicationPDF.addEventListener(
+            "click",
+            async function() {
 
-        if (!lastSubmittedApplication) {
+                if (
+                    !lastSubmittedApplication
+                ) {
 
-            alert(
-                "Application PDF is not available."
-            );
+                    alert(
+                        "Application PDF is not available."
+                    );
 
-            return;
-        }
+                    return;
 
-        button.disabled = true;
+                }
 
-        button.textContent =
-            "Generating PDF...";
 
-        try {
+                downloadApplicationPDF.disabled =
+                    true;
 
-            await generateApplicationPDF(
-                lastSubmittedApplication
-            );
 
-        } catch (error) {
+                downloadApplicationPDF.textContent =
+                    "Generating PDF...";
 
-            console.error(
-                "PDF download error:",
-                error
-            );
 
-            alert(
-                "Unable to generate PDF.\n\n" +
-                error.message
-            );
+                try {
 
-        } finally {
+                    await generateApplicationPDF(
+                        lastSubmittedApplication
+                    );
 
-            button.disabled = false;
+                }
 
-            button.textContent =
-                "Download Application PDF ↓";
 
-        }
+                catch (error) {
 
-    }
-);
+                    console.error(
+                        "PDF download error:",
+                        error
+                    );
+
+
+                    alert(
+
+                        "Unable to generate PDF.\n\n" +
+
+                        (
+                            error?.message ||
+                            "Unknown error."
+                        )
+
+                    );
+
+                }
+
+
+                finally {
+
+                    downloadApplicationPDF.disabled =
+                        false;
+
+
+                    downloadApplicationPDF.textContent =
+                        "Download Application PDF ↓";
+
+                }
+
+            }
+        );
+
+
+        /* ==================================================
+           INITIAL CHECK
+        ================================================== */
+
+        console.log(
+            "Ghopkhali Sports Arena Friendly Match Application loaded."
+        );
+
 
     </script>
 
-<div id="pdfApplication" style="display:none;">
-
-    <div id="pdfPage">
-
-        <div class="pdf-header">
-            <div>
-                <div class="pdf-brand">
-                    GHOPKHALI SPORTS ARENA
-                </div>
-
-                <div class="pdf-subtitle">
-                    FRIENDLY MATCH APPLICATION
-                </div>
-            </div>
-
-            <div class="pdf-number">
-                APPLICATION
-            </div>
-        </div>
-
-
-        <div class="pdf-line"></div>
-
-
-        <div class="pdf-status" id="pdfStatus">
-            APPLICATION RECEIVED
-        </div>
-
-
-        <div class="pdf-section">
-
-            <div class="pdf-section-title">
-                APPLICATION DETAILS
-            </div>
-
-            <div class="pdf-grid">
-
-                <div class="pdf-item">
-                    <span>Application ID</span>
-                    <strong id="pdfApplicationId">—</strong>
-                </div>
-
-                <div class="pdf-item">
-                    <span>Application Date</span>
-                    <strong id="pdfCreatedAt">—</strong>
-                </div>
-
-                <div class="pdf-item">
-                    <span>Team / Club</span>
-                    <strong id="pdfTeamName">—</strong>
-                </div>
-
-                <div class="pdf-item">
-                    <span>Contact Person</span>
-                    <strong id="pdfContactPerson">—</strong>
-                </div>
-
-                <div class="pdf-item">
-                    <span>Phone</span>
-                    <strong id="pdfPhone">—</strong>
-                </div>
-
-                <div class="pdf-item">
-                    <span>Email</span>
-                    <strong id="pdfEmail">—</strong>
-                </div>
-
-                <div class="pdf-item">
-                    <span>Sport</span>
-                    <strong id="pdfSport">—</strong>
-                </div>
-
-                <div class="pdf-item">
-                    <span>Players</span>
-                    <strong id="pdfPlayers">—</strong>
-                </div>
-
-                <div class="pdf-item">
-                    <span>Preferred Date</span>
-                    <strong id="pdfDate">—</strong>
-                </div>
-
-                <div class="pdf-item">
-                    <span>Preferred Time</span>
-                    <strong id="pdfTime">—</strong>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="pdf-section">
-
-            <div class="pdf-section-title">
-                VENUE
-            </div>
-
-            <div
-                class="pdf-message"
-                id="pdfVenue"
-            >
-                —
-            </div>
-
-        </div>
-
-
-        <div class="pdf-section">
-
-            <div class="pdf-section-title">
-                ADDITIONAL MESSAGE
-            </div>
-
-            <div
-                class="pdf-message"
-                id="pdfMessage"
-            >
-                —
-            </div>
-
-        </div>
-
-
-        <div class="pdf-footer">
-
-            <div>
-                <strong>Ghopkhali Sports Arena</strong>
-                <br>
-                ghopkhalisportsarena@gmail.com
-            </div>
-
-            <div class="pdf-footer-right">
-                Official Club Document
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
 
 </body>
 
