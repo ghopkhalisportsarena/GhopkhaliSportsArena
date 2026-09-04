@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#f5f5f7"
+    >
+
+    <title>অভিযোগ বক্স — Ghopkhali Sports Arena</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: #111111;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #f7f7f9 0%,
+                    #ffffff 55%,
+                    #f4f4f6 100%
+                );
+
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+
+        /* =================================================
+           HEADER
+        ================================================= */
+
+        .complaint-header {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            padding:
+                12px 16px;
+
+        }
+
+
+        .complaint-navbar {
+
+            width:
+                min(
+                    100%,
+                    980px
+                );
+
+            min-height: 60px;
+
+            margin: auto;
+
+            padding:
+                8px 10px 8px 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background:
+                rgba(255,255,255,.78);
+
+            border:
+                1px solid
+                rgba(0,0,0,.06);
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 8px 35px
+                rgba(0,0,0,.07);
+
+            backdrop-filter:
+                blur(24px)
+                saturate(180%);
+
+            -webkit-backdrop-filter:
+                blur(24px)
+                saturate(180%);
+
+        }
+
+
+        /* =================================================
+           BRAND
+        ================================================= */
+
+        .complaint-brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            text-decoration: none;
+
+            color: #111111;
+
+        }
+
+
+        .complaint-logo {
+
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+
+            border-radius: 12px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,.07);
+
+        }
+
+
+        .complaint-logo img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+        }
+
+
+        .complaint-brand-text {
+
+            display: flex;
+
+            flex-direction: column;
+
+            line-height: 1;
+
+        }
+
+
+        .complaint-brand-text strong {
+
+            font-size: 12px;
+
+            font-weight: 750;
+
+            letter-spacing:
+                -.02em;
+
+        }
+
+
+        .complaint-brand-text span {
+
+            margin-top: 4px;
+
+            color: #777777;
+
+            font-size: 8px;
+
+            font-weight: 650;
+
+            letter-spacing:
+                .12em;
+
+        }
+
+
+        /* =================================================
+           HOME BUTTON
+        ================================================= */
+
+        .home-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 38px;
+
+            padding:
+                0 15px;
+
+            color: #ffffff;
+
+            background: #111111;
+
+            border-radius: 999px;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: 650;
+
+            transition:
+                transform .2s ease,
+                background .2s ease;
+
+        }
+
+
+        .home-button:hover {
+
+            background: #000000;
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        /* =================================================
+           MAIN
+        ================================================= */
+
+        main {
+
+            width: 100%;
+
+            padding:
+                55px 18px 80px;
+
+        }
+
+
+        .complaint-container {
+
+            width:
+                min(
+                    100%,
+                    760px
+                );
+
+            margin: auto;
+
+        }
+
+
+        /* =================================================
+           HERO
+        ================================================= */
+
+        .complaint-hero {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .complaint-label {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                7px 12px;
+
+            color: #666666;
+
+            background:
+                rgba(255,255,255,.75);
+
+            border:
+                1px solid
+                rgba(0,0,0,.06);
+
+            border-radius: 999px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing:
+                .08em;
+
+        }
+
+
+        .complaint-hero h1 {
+
+            margin:
+                16px 0 10px;
+
+            font-size:
+                clamp(
+                    34px,
+                    7vw,
+                    58px
+                );
+
+            line-height:
+                .98;
+
+            letter-spacing:
+                -.055em;
+
+            font-weight: 800;
+
+        }
+
+
+        .complaint-hero p {
+
+            max-width: 570px;
+
+            margin:
+                0 auto;
+
+            color: #707070;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =================================================
+           FORM CARD
+        ================================================= */
+
+        .complaint-card {
+
+            padding:
+                clamp(
+                    20px,
+                    4vw,
+                    34px
+                );
+
+            background:
+                rgba(255,255,255,.86);
+
+            border:
+                1px solid
+                rgba(0,0,0,.06);
+
+            border-radius: 28px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.08);
+
+            backdrop-filter:
+                blur(25px)
+                saturate(180%);
+
+            -webkit-backdrop-filter:
+                blur(25px)
+                saturate(180%);
+
+        }
+
+
+        /* =================================================
+           FORM
+        ================================================= */
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 18px;
+
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+        }
+
+
+        .form-group.full {
+
+            grid-column:
+                1 / -1;
+
+        }
+
+
+        label {
+
+            color: #333333;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+        }
+
+
+        .required {
+
+            color: #777777;
+
+        }
+
+
+        input,
+        select,
+        textarea {
+
+            width: 100%;
+
+            border:
+                1px solid
+                rgba(0,0,0,.10);
+
+            outline: none;
+
+            color: #111111;
+
+            background:
+                rgba(247,247,249,.90);
+
+            border-radius: 14px;
+
+            font-family: inherit;
+
+            font-size: 13px;
+
+            transition:
+                border-color .2s ease,
+                box-shadow .2s ease,
+                background .2s ease;
+
+        }
+
+
+        input,
+        select {
+
+            min-height: 48px;
+
+            padding:
+                0 14px;
+
+        }
+
+
+        textarea {
+
+            min-height: 170px;
+
+            padding:
+                14px;
+
+            resize: vertical;
+
+            line-height: 1.6;
+
+        }
+
+
+        input::placeholder,
+        textarea::placeholder {
+
+            color: #a0a0a0;
+
+        }
+
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+
+            background: #ffffff;
+
+            border-color:
+                rgba(0,0,0,.28);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(0,0,0,.045);
+
+        }
+
+
+        /* =================================================
+           SUBMIT BUTTON
+        ================================================= */
+
+        .submit-area {
+
+            margin-top: 22px;
+
+        }
+
+
+        .submit-button {
+
+            width: 100%;
+
+            min-height: 52px;
+
+            border: 0;
+
+            border-radius: 999px;
+
+            color: #ffffff;
+
+            background: #111111;
+
+            font-family: inherit;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 20px
+                rgba(0,0,0,.12);
+
+            transition:
+                transform .2s ease,
+                background .2s ease,
+                box-shadow .2s ease;
+
+        }
+
+
+        .submit-button:hover {
+
+            background: #000000;
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(0,0,0,.15);
+
+        }
+
+
+        .submit-button:active {
+
+            transform:
+                scale(.985);
+
+        }
+
+
+        .submit-button:disabled {
+
+            opacity: .55;
+
+            cursor: not-allowed;
+
+            transform: none;
+
+        }
+
+
+        /* =================================================
+           NOTICE
+        ================================================= */
+
+        .privacy-note {
+
+            margin-top: 18px;
+
+            color: #858585;
+
+            text-align: center;
+
+            font-size: 10px;
+
+            line-height: 1.6;
+
+        }
+
+
+        /* =================================================
+           SUCCESS / ERROR MESSAGE
+        ================================================= */
+
+        .form-message {
+
+            display: none;
+
+            margin-top: 18px;
+
+            padding:
+                13px 15px;
+
+            border-radius: 14px;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+        }
+
+
+        .form-message.show {
+
+            display: block;
+
+        }
+
+
+        .form-message.success {
+
+            background:
+                rgba(230,246,235,.90);
+
+            color:
+                #236b3a;
+
+            border:
+                1px solid
+                rgba(35,107,58,.10);
+
+        }
+
+
+        .form-message.error {
+
+            background:
+                rgba(250,235,235,.90);
+
+            color:
+                #8a3030;
+
+            border:
+                1px solid
+                rgba(138,48,48,.10);
+
+        }
+
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        .complaint-footer {
+
+            margin-top: 30px;
+
+            text-align: center;
+
+            color: #888888;
+
+            font-size: 10px;
+
+        }
+
+
+        /* =================================================
+           MOBILE
+        ================================================= */
+
+        @media (max-width: 650px) {
+
+            .complaint-header {
+
+                padding:
+                    9px 10px;
+
+            }
+
+
+            .complaint-navbar {
+
+                border-radius:
+                    18px;
+
+            }
+
+
+            main {
+
+                padding:
+                    42px 12px 60px;
+
+            }
+
+
+            .form-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .form-group.full {
+
+                grid-column:
+                    auto;
+
+            }
+
+
+            .complaint-card {
+
+                border-radius:
+                    23px;
+
+            }
+
+
+            .complaint-brand-text strong {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .home-button {
+
+                min-height:
+                    36px;
+
+                padding:
+                    0 13px;
+
+                font-size:
+                    11px;
+
+            }
+
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+
+<header class="complaint-header">
+
+    <nav class="complaint-navbar">
+
+
+        <a
+            href="index.html"
+            class="complaint-brand"
+        >
+
+            <div class="complaint-logo">
+
+                <img
+                    src="gsa.png"
+                    alt="Ghopkhali Sports Arena Logo"
+                >
+
+            </div>
+
+
+            <div class="complaint-brand-text">
+
+                <strong>
+                    GHOPKHALI
+                </strong>
+
+                <span>
+                    SPORTS ARENA
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="index.html"
+            class="home-button"
+        >
+            ← Home
+        </a>
+
+
+    </nav>
+
+</header>
+
+
+
+<!-- ==================================================
+     MAIN
+================================================== -->
+
+<main>
+
+    <div class="complaint-container">
+
+
+        <!-- HERO -->
+
+        <section class="complaint-hero">
+
+            <span class="complaint-label">
+                GHOPKHALI SPORTS ARENA
+            </span>
+
+
+            <h1>
+                অভিযোগ বক্স
+            </h1>
+
+
+            <p>
+                Ghopkhali Sports Arena-এর কার্যক্রম,
+                ব্যবস্থাপনা বা যেকোনো বিষয়ে আপনার
+                মতামত, অভিযোগ বা পরামর্শ আমাদের জানান।
+            </p>
+
+        </section>
+
+
+
+        <!-- FORM CARD -->
+
+        <section class="complaint-card">
+
+
+            <form
+                id="complaintForm"
+                novalidate
+            >
+
+
+                <div class="form-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            নাম
+                            <span class="required">
+                                *
+                            </span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="আপনার নাম লিখুন"
+                            autocomplete="name"
+                            maxlength="100"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            মোবাইল নম্বর
+                            <span class="required">
+                                *
+                            </span>
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="01XXXXXXXXX"
+                            autocomplete="tel"
+                            maxlength="20"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="form-group full">
+
+                        <label for="category">
+                            অভিযোগের ধরন
+                            <span class="required">
+                                *
+                            </span>
+                        </label>
+
+                        <select
+                            id="category"
+                            name="category"
+                            required
+                        >
+
+                            <option
+                                value=""
+                                selected
+                                disabled
+                            >
+                                অভিযোগের ধরন নির্বাচন করুন
+                            </option>
+
+                            <option value="ক্লাব ব্যবস্থাপনা">
+                                ক্লাব ব্যবস্থাপনা
+                            </option>
+
+                            <option value="খেলাধুলা">
+                                খেলাধুলা
+                            </option>
+
+                            <option value="সদস্যতা">
+                                সদস্যতা
+                            </option>
+
+                            <option value="টুর্নামেন্ট">
+                                টুর্নামেন্ট
+                            </option>
+
+                            <option value="ওয়েবসাইট">
+                                ওয়েবসাইট
+                            </option>
+
+                            <option value="অন্যান্য">
+                                অন্যান্য
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="form-group full">
+
+                        <label for="subject">
+                            বিষয়
+                            <span class="required">
+                                *
+                            </span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="subject"
+                            name="subject"
+                            placeholder="অভিযোগের বিষয় লিখুন"
+                            maxlength="180"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- MESSAGE -->
+
+                    <div class="form-group full">
+
+                        <label for="message">
+                            বিস্তারিত অভিযোগ
+                            <span class="required">
+                                *
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="message"
+                            name="message"
+                            placeholder="আপনার অভিযোগ বিস্তারিত লিখুন..."
+                            maxlength="3000"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="formMessage"
+                    class="form-message"
+                    role="alert"
+                ></div>
+
+
+
+                <!-- SUBMIT -->
+
+                <div class="submit-area">
+
+                    <button
+                        type="submit"
+                        class="submit-button"
+                        id="submitButton"
+                    >
+                        অভিযোগ জমা দিন
+                    </button>
+
+                </div>
+
+
+                <div class="privacy-note">
+
+                    আপনার দেওয়া তথ্য শুধুমাত্র অভিযোগটি
+                    পর্যালোচনার উদ্দেশ্যে ব্যবহার করা হবে।
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+
+
+        <div class="complaint-footer">
+
+            Ghopkhali Sports Arena
+            <br>
+            Official Complaint Box
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- ==================================================
+     FORM SCRIPT
+================================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const form =
+            document.getElementById(
+                "complaintForm"
+            );
+
+        const button =
+            document.getElementById(
+                "submitButton"
+            );
+
+        const message =
+            document.getElementById(
+                "formMessage"
+            );
+
+
+        /* ==========================================
+           CURRENT STEP
+        ========================================== */
+
+        form.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                /* ==============================
+                   VALIDATION
+                ============================== */
+
+                if (!form.checkValidity()) {
+
+                    form.reportValidity();
+
+                    return;
+
+                }
+
+
+                /* ==============================
+                   DATA
+                ============================== */
+
+                const complaint = {
+
+                    name:
+                        document
+                            .getElementById("name")
+                            .value
+                            .trim(),
+
+                    phone:
+                        document
+                            .getElementById("phone")
+                            .value
+                            .trim(),
+
+                    category:
+                        document
+                            .getElementById("category")
+                            .value,
+
+                    subject:
+                        document
+                            .getElementById("subject")
+                            .value
+                            .trim(),
+
+                    message:
+                        document
+                            .getElementById("message")
+                            .value
+                            .trim()
+
+                };
+
+
+                console.log(
+                    "Complaint ready:",
+                    complaint
+                );
+
+
+                /* ==============================
+                   TEMPORARY STEP
+                ============================== */
+
+                message.className =
+                    "form-message show success";
+
+                message.textContent =
+                    "ফর্মটি সফলভাবে প্রস্তুত হয়েছে। " +
+                    "পরবর্তী ধাপে নিরাপদভাবে " +
+                    "ইমেইল পাঠানোর ব্যবস্থা যুক্ত করা হবে।";
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "পরবর্তী ধাপের জন্য প্রস্তুত";
+
+
+            }
+
+        );
+
+    }
+
+);
+
+</script>
+
+
+</body>
+
+</html>
