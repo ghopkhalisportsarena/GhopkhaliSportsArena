@@ -3765,6 +3765,241 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 </script>
 
+<!-- ==================================================
+     PREMIUM NAVBAR
+================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* ==========================================
+       ELEMENTS
+    ========================================== */
+
+    const menuToggle =
+        document.getElementById(
+            "premiumMenuToggle"
+        );
+
+    const navPanel =
+        document.getElementById(
+            "premiumNavPanel"
+        );
+
+    const navClose =
+        document.getElementById(
+            "premiumNavClose"
+        );
+
+
+    /* ==========================================
+       CHECK
+    ========================================== */
+
+    if (
+        !menuToggle ||
+        !navPanel ||
+        !navClose
+    ) {
+
+        console.error(
+            "Premium Navbar elements not found."
+        );
+
+        return;
+    }
+
+
+    /* ==========================================
+       OPEN MENU
+    ========================================== */
+
+    function openMenu() {
+
+        navPanel.classList.add("active");
+
+        navPanel.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        menuToggle.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        document.body.classList.add(
+            "premium-menu-open"
+        );
+
+    }
+
+
+    /* ==========================================
+       CLOSE MENU
+    ========================================== */
+
+    function closeMenu() {
+
+        navPanel.classList.remove(
+            "active"
+        );
+
+        navPanel.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        menuToggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        document.body.classList.remove(
+            "premium-menu-open"
+        );
+
+    }
+
+
+    /* ==========================================
+       TOGGLE
+    ========================================== */
+
+    menuToggle.addEventListener(
+        "click",
+        (event) => {
+
+            event.stopPropagation();
+
+            const isOpen =
+                navPanel.classList.contains(
+                    "active"
+                );
+
+            if (isOpen) {
+
+                closeMenu();
+
+            } else {
+
+                openMenu();
+
+            }
+
+        }
+    );
+
+
+    /* ==========================================
+       CLOSE BUTTON
+    ========================================== */
+
+    navClose.addEventListener(
+        "click",
+        (event) => {
+
+            event.stopPropagation();
+
+            closeMenu();
+
+        }
+    );
+
+
+    /* ==========================================
+       CLICK OUTSIDE
+    ========================================== */
+
+    document.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+                !navPanel.contains(event.target) &&
+                !menuToggle.contains(event.target)
+            ) {
+
+                closeMenu();
+
+            }
+
+        }
+    );
+
+
+    /* ==========================================
+       MENU LINK CLICK
+    ========================================== */
+
+    const menuLinks =
+        navPanel.querySelectorAll(
+            ".premium-nav-item"
+        );
+
+
+    menuLinks.forEach((link) => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                closeMenu();
+
+            }
+        );
+
+    });
+
+
+    /* ==========================================
+       ESC KEY
+    ========================================== */
+
+    document.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeMenu();
+
+            }
+
+        }
+    );
+
+
+    /* ==========================================
+       PREVENT BODY SCROLL
+       ONLY WHILE MENU IS OPEN
+    ========================================== */
+
+    const style =
+        document.createElement("style");
+
+    style.textContent = `
+
+        body.premium-menu-open {
+            overflow: hidden;
+        }
+
+    `;
+
+    document.head.appendChild(style);
+
+
+    console.log(
+        "Premium Navbar initialized."
+    );
+
+});
+
+</script>
+
 </body>
 
 </html>
