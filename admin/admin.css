@@ -1,52 +1,49 @@
 /* =========================================================
-   GHOPKHALI SPORTS ARENA
-   ADMIN PANEL — APPLE INSPIRED PREMIUM UI
-   Complete Replacement CSS
+   GSA ADMIN — COMPLETE APPLE INSPIRED ADMIN CSS
+   Ghopkhali Sports Arena
 ========================================================= */
 
 /* =========================================================
-   01. ROOT
+   ROOT
 ========================================================= */
 
 :root {
     --bg: #f5f5f7;
     --surface: #ffffff;
-    --surface-soft: #fbfbfd;
+    --surface-soft: #fafafa;
 
     --text: #1d1d1f;
-    --text-soft: #424245;
-    --muted: #6e6e73;
-
-    --line: rgba(0, 0, 0, 0.08);
-    --line-strong: rgba(0, 0, 0, 0.13);
-
-    --black: #1d1d1f;
-    --black-soft: #2c2c2e;
+    --text-secondary: #6e6e73;
+    --text-muted: #86868b;
 
     --blue: #0071e3;
-    --blue-dark: #0066cc;
+    --blue-hover: #0077ed;
 
     --green: #34c759;
-    --orange: #ff9500;
     --red: #ff3b30;
+    --orange: #ff9500;
 
-    --shadow-xs:
-        0 2px 8px rgba(0, 0, 0, 0.04);
+    --black: #1d1d1f;
+    --white: #ffffff;
+
+    --border: rgba(0, 0, 0, 0.08);
+    --border-dark: rgba(255, 255, 255, 0.08);
 
     --shadow-sm:
-        0 6px 20px rgba(0, 0, 0, 0.06);
+        0 2px 8px rgba(0, 0, 0, 0.05);
 
     --shadow:
-        0 12px 35px rgba(0, 0, 0, 0.08);
+        0 10px 30px rgba(0, 0, 0, 0.07);
 
     --shadow-lg:
-        0 22px 60px rgba(0, 0, 0, 0.13);
+        0 20px 60px rgba(0, 0, 0, 0.12);
 
-    --radius-sm: 12px;
-    --radius: 18px;
-    --radius-lg: 22px;
+    --radius-sm: 10px;
+    --radius: 16px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
 
-    --sidebar-width: 260px;
+    --sidebar-width: 255px;
 
     --font:
         -apple-system,
@@ -60,23 +57,21 @@
 
 
 /* =========================================================
-   02. RESET
+   RESET
 ========================================================= */
 
-*,
-*::before,
-*::after {
+* {
     box-sizing: border-box;
 }
 
 html {
-    min-height: 100%;
     scroll-behavior: smooth;
-    overflow-x: hidden;
 }
 
 body {
     margin: 0;
+    padding: 0;
+
     min-height: 100vh;
 
     background: var(--bg);
@@ -84,12 +79,10 @@ body {
 
     font-family: var(--font);
     font-size: 15px;
-    line-height: 1.55;
+    line-height: 1.5;
 
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-
-    overflow-x: hidden;
 }
 
 button,
@@ -105,6 +98,7 @@ button {
 
 img {
     max-width: 100%;
+    display: block;
 }
 
 a {
@@ -112,14 +106,43 @@ a {
     text-decoration: none;
 }
 
-[hidden] {
-    display: none !important;
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.28);
 }
 
 
 /* =========================================================
-   03. GLOBAL ANIMATIONS
+   ANIMATIONS
 ========================================================= */
+
+@keyframes gsaFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
 
 @keyframes gsaFadeUp {
     from {
@@ -133,16 +156,6 @@ a {
     }
 }
 
-@keyframes gsaFadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
 @keyframes gsaScaleIn {
     from {
         opacity: 0;
@@ -152,18 +165,6 @@ a {
     to {
         opacity: 1;
         transform: scale(1);
-    }
-}
-
-@keyframes gsaModalIn {
-    from {
-        opacity: 0;
-        transform: translateY(16px) scale(0.97);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
     }
 }
 
@@ -186,7 +187,7 @@ a {
     }
 
     50% {
-        transform: translateY(-4px);
+        transform: translateY(-3px);
     }
 }
 
@@ -207,19 +208,9 @@ a {
     }
 }
 
-@keyframes gsaOverlayIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
 
 /* =========================================================
-   04. LOGIN PAGE
+   LOGIN PAGE
 ========================================================= */
 
 .login-page {
@@ -233,9 +224,14 @@ a {
 
     background:
         radial-gradient(
-            circle at 50% 0%,
-            rgba(255,255,255,0.95),
-            transparent 42%
+            circle at top left,
+            rgba(0, 113, 227, 0.08),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(52, 199, 89, 0.06),
+            transparent 30%
         ),
         var(--bg);
 }
@@ -243,93 +239,60 @@ a {
 .login-shell {
     width: 100%;
     max-width: 430px;
-
-    animation:
-        gsaFadeUp
-        0.65s
-        cubic-bezier(.22,1,.36,1)
-        both;
 }
 
 .login-card {
-    position: relative;
+    width: 100%;
 
-    background: rgba(255,255,255,0.92);
+    padding: 42px 36px 34px;
 
-    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.92);
 
-    border-radius: 28px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
 
-    padding: 38px;
+    border-radius: 26px;
 
-    box-shadow: var(--shadow-lg);
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.10);
 
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 
-    overflow: hidden;
-}
-
-.login-card::before {
-    content: "";
-
-    position: absolute;
-
-    width: 180px;
-    height: 180px;
-
-    top: -100px;
-    right: -80px;
-
-    border-radius: 50%;
-
-    background: rgba(0,113,227,0.06);
-
-    pointer-events: none;
+    animation:
+        gsaScaleIn
+        0.55s
+        cubic-bezier(.22, 1, .36, 1)
+        both;
 }
 
 .login-logo {
-    width: 78px;
-    height: 78px;
+    width: 76px;
+    height: 76px;
 
-    margin: 0 auto 20px;
+    margin: 0 auto 22px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 20px;
 
-    border-radius: 22px;
+    object-fit: contain;
 
-    background: #fff;
-
-    border: 1px solid var(--line);
-
-    box-shadow: var(--shadow-sm);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.10);
 
     animation: gsaFloat 4s ease-in-out infinite;
 }
 
-.login-logo img {
-    width: 58px;
-    height: 58px;
-
-    object-fit: contain;
-
-    display: block;
-}
-
-.eyebrow {
-    margin: 0 0 6px;
+.login-card .eyebrow {
+    margin: 0 0 7px;
 
     text-align: center;
+
+    color: var(--blue);
 
     font-size: 12px;
     font-weight: 700;
 
-    letter-spacing: 0.14em;
+    letter-spacing: 0.11em;
     text-transform: uppercase;
-
-    color: var(--muted);
 }
 
 .login-card h1 {
@@ -337,65 +300,55 @@ a {
 
     text-align: center;
 
-    font-size: clamp(26px, 5vw, 34px);
-    line-height: 1.12;
+    color: var(--text);
+
+    font-size: 30px;
+    font-weight: 700;
 
     letter-spacing: -0.035em;
 }
 
 .login-subtitle {
-    margin: 9px 0 28px;
+    margin: 8px 0 28px;
 
     text-align: center;
 
-    color: var(--muted);
+    color: var(--text-secondary);
 
     font-size: 14px;
 }
 
 
 /* =========================================================
-   05. FORM ELEMENTS
+   FORMS
 ========================================================= */
 
-.login-card label,
-.form-group label,
-.modal-box label,
-.modal-content label {
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
     display: block;
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
-    color: var(--text-soft);
+    color: var(--text);
 
     font-size: 13px;
     font-weight: 600;
 }
 
-.login-card input,
 .form-group input,
 .form-group textarea,
 .form-group select,
-.modal-box input,
-.modal-box textarea,
-.modal-box select,
-.modal-content input,
-.modal-content textarea,
-.modal-content select,
-#noticeContent,
-#rulesAdminContent {
+.login-card input {
     width: 100%;
 
-    min-height: 46px;
-
-    padding: 11px 13px;
-
-    border: 1px solid var(--line-strong);
+    border: 1px solid rgba(0, 0, 0, 0.12);
 
     border-radius: 12px;
 
     background: #fff;
-
     color: var(--text);
 
     outline: none;
@@ -403,52 +356,38 @@ a {
     transition:
         border-color .2s ease,
         box-shadow .2s ease,
-        background .2s ease,
-        transform .2s ease;
+        background .2s ease;
 }
 
-.login-card input:hover,
-.form-group input:hover,
-.form-group textarea:hover,
-.form-group select:hover,
-.modal-box input:hover,
-.modal-box textarea:hover,
-.modal-box select:hover,
-.modal-content input:hover,
-.modal-content textarea:hover,
-.modal-content select:hover {
-    border-color: rgba(0,0,0,0.2);
+.form-group input,
+.form-group select,
+.login-card input {
+    min-height: 46px;
+    padding: 0 13px;
 }
 
-.login-card input:focus,
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus,
-.modal-box input:focus,
-.modal-box textarea:focus,
-.modal-box select:focus,
-.modal-content input:focus,
-.modal-content textarea:focus,
-.modal-content select:focus,
-#noticeContent:focus,
-#rulesAdminContent:focus {
-    border-color: rgba(0,113,227,0.65);
+.form-group textarea {
+    min-height: 130px;
+    padding: 12px 13px;
 
-    box-shadow:
-        0 0 0 4px rgba(0,113,227,0.10);
-}
-
-textarea {
     resize: vertical;
 }
 
-.form-group {
-    margin-bottom: 18px;
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.login-card input:focus {
+    border-color: rgba(0, 113, 227, 0.65);
+
+    box-shadow:
+        0 0 0 4px rgba(0, 113, 227, 0.10);
 }
 
 .form-row {
     display: grid;
+
     grid-template-columns: repeat(2, minmax(0, 1fr));
+
     gap: 16px;
 }
 
@@ -458,12 +397,11 @@ textarea {
     align-items: center;
     gap: 9px;
 
-    margin: 14px 0;
+    margin: 12px 0;
 }
 
 .form-check input,
-.checkbox-row input,
-.notice-option input {
+.checkbox-row input {
     width: 17px;
     height: 17px;
 
@@ -471,182 +409,99 @@ textarea {
 }
 
 .form-check label,
-.checkbox-row label,
-.notice-option label {
+.checkbox-row label {
     margin: 0;
 
-    cursor: pointer;
+    color: var(--text-secondary);
+
+    font-size: 13px;
 }
 
 
 /* =========================================================
-   06. LOGIN BUTTON
+   LOGIN BUTTON
 ========================================================= */
 
-#loginScreen .primary-button,
+.login-card .primary-button,
 #gsaAdminLoginButton {
     width: 100%;
 
     min-height: 48px;
 
-    margin-top: 6px;
-}
+    margin-top: 5px;
 
-
-/* =========================================================
-   07. BUTTON SYSTEM
-========================================================= */
-
-.primary-button,
-.secondary-button,
-.small-button,
-.logout-button,
-.sidebar-link,
-.sidebar-toggle,
-.modal-close,
-.gallery-delete {
-    -webkit-tap-highlight-color: transparent;
-}
-
-.primary-button,
-.secondary-button,
-.small-button {
     border: 0;
-
-    border-radius: 12px;
-
-    transition:
-        transform .18s ease,
-        box-shadow .18s ease,
-        background .18s ease,
-        opacity .18s ease;
-}
-
-.primary-button {
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    min-height: 44px;
-
-    padding: 10px 17px;
+    border-radius: 13px;
 
     background: var(--black);
     color: #fff;
 
     font-weight: 650;
 
-    box-shadow:
-        0 5px 14px rgba(0,0,0,0.12);
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        box-shadow .18s ease;
 }
 
-.primary-button:hover {
+.login-card .primary-button:hover,
+#gsaAdminLoginButton:hover {
     background: #000;
 
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 
     box-shadow:
-        0 9px 22px rgba(0,0,0,0.16);
+        0 10px 24px rgba(0, 0, 0, 0.15);
 }
 
-.primary-button:active,
-.secondary-button:active,
-.small-button:active {
-    transform: scale(.97);
+.login-card .primary-button:active,
+#gsaAdminLoginButton:active {
+    transform: scale(0.985);
 }
 
-.secondary-button {
-    display: inline-flex;
+#gsaAdminError {
+    margin-top: 13px;
 
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    min-height: 42px;
-
-    padding: 9px 15px;
-
-    background: #fff;
-
-    color: var(--text);
-
-    border: 1px solid var(--line-strong);
-
-    font-weight: 600;
-}
-
-.secondary-button:hover {
-    background: var(--surface-soft);
-
-    transform: translateY(-1px);
-
-    box-shadow: var(--shadow-xs);
-}
-
-.small-button {
-    min-height: 34px;
-
-    padding: 7px 11px;
-
-    background: #f2f2f4;
-
-    color: var(--text);
-
-    font-size: 12px;
-    font-weight: 650;
-}
-
-.small-button:hover {
-    background: #e8e8eb;
-
-    transform: translateY(-1px);
-}
-
-.small-button.active {
-    background: rgba(0,113,227,0.10);
-    color: var(--blue);
-}
-
-.small-button.danger {
-    background: rgba(255,59,48,0.09);
     color: var(--red);
-}
 
-.small-button.danger:hover {
-    background: rgba(255,59,48,0.14);
+    font-size: 13px;
+    text-align: center;
 }
 
 .back-link {
     display: block;
 
-    margin-top: 20px;
+    margin-top: 22px;
 
-    text-align: center;
-
-    color: var(--muted);
+    color: var(--text-secondary);
 
     font-size: 13px;
+
+    text-align: center;
 
     transition: color .2s ease;
 }
 
 .back-link:hover {
-    color: var(--text);
+    color: var(--blue);
 }
 
 
 /* =========================================================
-   08. SIDEBAR
+   DASHBOARD SCREEN
+========================================================= */
+
+#dashboardScreen {
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   SIDEBAR
 ========================================================= */
 
 .admin-sidebar {
     position: fixed;
-
-    z-index: 1000;
 
     top: 0;
     left: 0;
@@ -654,76 +509,75 @@ textarea {
 
     width: var(--sidebar-width);
 
-    padding: 18px 14px;
+    z-index: 1000;
 
     display: flex;
     flex-direction: column;
+
+    padding: 18px 14px;
+
+    overflow-y: auto;
 
     background:
         linear-gradient(
             180deg,
             #1d1d1f 0%,
-            #18181a 100%
+            #171719 100%
         );
 
     color: #fff;
 
-    border-right: 1px solid rgba(255,255,255,0.06);
+    border-right:
+        1px solid rgba(255, 255, 255, 0.06);
 
     box-shadow:
-        10px 0 35px rgba(0,0,0,0.08);
+        10px 0 35px rgba(0, 0, 0, 0.08);
 
     animation:
         gsaSidebarIn
         .45s
-        cubic-bezier(.22,1,.36,1)
+        cubic-bezier(.22, 1, .36, 1)
         both;
 }
 
 .admin-brand {
     display: flex;
-
     align-items: center;
 
     gap: 11px;
 
     padding: 8px 8px 20px;
 
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 8px;
 
-    margin-bottom: 12px;
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.07);
 }
 
 .admin-brand img {
     width: 42px;
     height: 42px;
 
-    object-fit: contain;
+    flex: 0 0 42px;
 
-    flex: 0 0 auto;
+    object-fit: contain;
 
     border-radius: 11px;
 
     background: #fff;
 
     padding: 4px;
-
-    box-shadow:
-        0 4px 15px rgba(0,0,0,0.18);
-
-    transition:
-        transform .25s ease;
-}
-
-.admin-brand:hover img {
-    transform: rotate(-3deg) scale(1.04);
 }
 
 .admin-brand strong {
     display: block;
 
-    font-size: 14px;
-    line-height: 1.2;
+    color: #fff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.15;
 }
 
 .admin-brand span {
@@ -731,39 +585,34 @@ textarea {
 
     margin-top: 3px;
 
-    color: rgba(255,255,255,0.58);
+    color: rgba(255, 255, 255, 0.52);
 
-    font-size: 11px;
+    font-size: 10px;
 }
 
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
 
-    gap: 4px;
-
-    overflow-y: auto;
-
-    padding-right: 2px;
-}
+/* =========================================================
+   SIDEBAR LINKS
+========================================================= */
 
 .sidebar-link {
     position: relative;
 
     display: flex;
-
     align-items: center;
 
     min-height: 43px;
 
-    padding: 10px 12px;
+    margin: 3px 0;
 
-    border-radius: 12px;
+    padding: 0 12px;
 
-    color: rgba(255,255,255,0.68);
+    border-radius: 11px;
+
+    color: rgba(255, 255, 255, 0.68);
 
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 550;
 
     transition:
         background .2s ease,
@@ -771,7 +620,21 @@ textarea {
         transform .2s ease;
 }
 
-.sidebar-link::before {
+.sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.07);
+
+    color: #fff;
+
+    transform: translateX(2px);
+}
+
+.sidebar-link.active {
+    background: rgba(255, 255, 255, 0.10);
+
+    color: #fff;
+}
+
+.sidebar-link.active::before {
     content: "";
 
     position: absolute;
@@ -782,101 +645,119 @@ textarea {
 
     width: 3px;
 
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 5px 5px 0;
 
     background: var(--blue);
-
-    opacity: 0;
-
-    transform: scaleY(.4);
-
-    transition:
-        opacity .2s ease,
-        transform .2s ease;
-}
-
-.sidebar-link:hover {
-    color: #fff;
-
-    background: rgba(255,255,255,0.07);
-
-    transform: translateX(2px);
-}
-
-.sidebar-link.active {
-    color: #fff;
-
-    background: rgba(255,255,255,0.10);
-}
-
-.sidebar-link.active::before {
-    opacity: 1;
-
-    transform: scaleY(1);
 }
 
 .sidebar-bottom {
     margin-top: auto;
 
-    padding-top: 12px;
+    padding-top: 14px;
 
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top:
+        1px solid rgba(255, 255, 255, 0.07);
 }
 
 .logout-button {
     width: 100%;
 
-    min-height: 42px;
+    min-height: 43px;
+
+    padding: 0 12px;
 
     border: 0;
 
-    border-radius: 12px;
+    border-radius: 11px;
 
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.06);
 
-    color: rgba(255,255,255,0.72);
+    color: rgba(255, 255, 255, 0.72);
+
+    text-align: left;
 
     font-size: 13px;
-    font-weight: 650;
+    font-weight: 600;
 
     transition:
         background .2s ease,
-        color .2s ease,
-        transform .2s ease;
+        color .2s ease;
 }
 
 .logout-button:hover {
-    background: rgba(255,59,48,0.15);
+    background: rgba(255, 59, 48, 0.14);
 
-    color: #fff;
-
-    transform: translateY(-1px);
-}
-
-.admin-sidebar-overlay {
-    display: none;
-
-    position: fixed;
-
-    z-index: 990;
-
-    inset: 0;
-
-    background: rgba(0,0,0,0.42);
-
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-}
-
-.admin-sidebar-overlay.active {
-    display: block;
-
-    animation: gsaOverlayIn .2s ease both;
+    color: #ff6b63;
 }
 
 
 /* =========================================================
-   09. MAIN CONTENT
+   SIDEBAR TOGGLE
+========================================================= */
+
+.sidebar-toggle {
+    display: none;
+
+    width: 40px;
+    height: 40px;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    background: #fff;
+
+    color: var(--text);
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.sidebar-toggle:hover {
+    transform: translateY(-1px);
+
+    box-shadow: var(--shadow);
+}
+
+.sidebar-toggle:active {
+    transform: scale(.96);
+}
+
+
+/* =========================================================
+   SIDEBAR OVERLAY
+========================================================= */
+
+.admin-sidebar-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 999;
+
+    display: none;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    animation: gsaFadeIn .2s ease both;
+}
+
+.admin-sidebar-overlay.active {
+    display: block;
+}
+
+
+/* =========================================================
+   MAIN AREA
 ========================================================= */
 
 .admin-main {
@@ -884,7 +765,10 @@ textarea {
 
     margin-left: var(--sidebar-width);
 
-    padding: 24px 28px 60px;
+    padding:
+        24px
+        28px
+        60px;
 
     min-width: 0;
 }
@@ -899,84 +783,77 @@ textarea {
     margin-right: auto;
 }
 
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
 .admin-topbar {
     min-height: 58px;
 
     display: flex;
-
     align-items: center;
-    justify-content: space-between;
 
-    gap: 16px;
+    gap: 14px;
 
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 }
 
 .admin-topbar h1 {
     margin: 0;
 
-    font-size: clamp(24px, 3vw, 32px);
-
-    line-height: 1.15;
+    font-size: 28px;
+    font-weight: 700;
 
     letter-spacing: -0.035em;
 }
 
-.sidebar-toggle {
-    display: none;
+.admin-topbar p {
+    margin: 3px 0 0;
 
-    width: 42px;
-    height: 42px;
+    color: var(--text-secondary);
 
-    border: 1px solid var(--line);
-
-    border-radius: 12px;
-
-    background: #fff;
-
-    color: var(--text);
-
-    box-shadow: var(--shadow-xs);
-}
-
-.sidebar-toggle:hover {
-    transform: translateY(-1px);
-
-    box-shadow: var(--shadow-sm);
+    font-size: 13px;
 }
 
 
 /* =========================================================
-   10. SECTIONS
+   SECTIONS
 ========================================================= */
 
 .admin-section {
-    margin-bottom: 34px;
-
     animation:
         gsaFadeUp
-        .5s
-        cubic-bezier(.22,1,.36,1)
+        .45s
+        cubic-bezier(.22, 1, .36, 1)
         both;
+}
+
+.admin-section:not(.active) {
+    animation: none;
 }
 
 .section-heading {
     display: flex;
-
     align-items: flex-end;
     justify-content: space-between;
 
-    gap: 16px;
+    gap: 20px;
 
-    margin-bottom: 17px;
+    margin-bottom: 20px;
+}
+
+.section-heading > div {
+    min-width: 0;
 }
 
 .section-heading h2 {
     margin: 0;
 
-    font-size: 22px;
+    color: var(--text);
 
-    line-height: 1.2;
+    font-size: 23px;
+    font-weight: 700;
 
     letter-spacing: -0.025em;
 }
@@ -984,30 +861,131 @@ textarea {
 .section-heading p {
     margin: 5px 0 0;
 
-    color: var(--muted);
+    color: var(--text-secondary);
 
     font-size: 13px;
 }
 
 .section-label {
-    display: block;
+    display: inline-block;
 
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 
-    color: var(--muted);
+    color: var(--blue);
 
     font-size: 11px;
-
     font-weight: 700;
 
-    letter-spacing: .11em;
-
+    letter-spacing: .1em;
     text-transform: uppercase;
 }
 
 
 /* =========================================================
-   11. STATS
+   BUTTONS
+========================================================= */
+
+.primary-button,
+.secondary-button,
+.small-button {
+    border: 0;
+
+    font-weight: 600;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        background .18s ease,
+        color .18s ease;
+}
+
+.primary-button {
+    min-height: 43px;
+
+    padding: 0 16px;
+
+    border-radius: 12px;
+
+    background: var(--black);
+
+    color: #fff;
+}
+
+.primary-button:hover {
+    background: #000;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 9px 22px rgba(0, 0, 0, 0.14);
+}
+
+.secondary-button {
+    min-height: 43px;
+
+    padding: 0 16px;
+
+    border-radius: 12px;
+
+    background: #fff;
+
+    color: var(--text);
+
+    border: 1px solid var(--border);
+}
+
+.secondary-button:hover {
+    background: #f0f0f2;
+
+    transform: translateY(-1px);
+}
+
+.small-button {
+    min-height: 34px;
+
+    padding: 0 11px;
+
+    border-radius: 9px;
+
+    background: #f2f2f7;
+
+    color: var(--text);
+
+    font-size: 12px;
+}
+
+.small-button:hover {
+    transform: translateY(-1px);
+
+    background: #e8e8ed;
+}
+
+.small-button.active {
+    background: rgba(0, 113, 227, 0.10);
+
+    color: var(--blue);
+}
+
+.small-button.danger {
+    background: rgba(255, 59, 48, 0.09);
+
+    color: var(--red);
+}
+
+.small-button.danger:hover {
+    background: rgba(255, 59, 48, 0.14);
+}
+
+.card-actions {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+
+/* =========================================================
+   DASHBOARD STATS
 ========================================================= */
 
 .stats-grid {
@@ -1018,7 +996,7 @@ textarea {
 
     gap: 14px;
 
-    margin-bottom: 22px;
+    margin-bottom: 26px;
 }
 
 .stat-card {
@@ -1026,48 +1004,40 @@ textarea {
 
     min-width: 0;
 
-    padding: 20px;
+    padding: 19px;
 
     background: var(--surface);
 
-    border: 1px solid var(--line);
+    border:
+        1px solid var(--border);
 
-    border-radius: var(--radius);
+    border-radius: 18px;
 
-    box-shadow: var(--shadow-xs);
+    box-shadow: var(--shadow-sm);
 
     overflow: hidden;
 
     animation:
         gsaFadeUp
-        .5s
-        cubic-bezier(.22,1,.36,1)
+        .45s
+        cubic-bezier(.22, 1, .36, 1)
         both;
-
-    transition:
-        transform .22s ease,
-        box-shadow .22s ease,
-        border-color .22s ease;
-}
-
-.stat-card:nth-child(1) {
-    animation-delay: .04s;
 }
 
 .stat-card:nth-child(2) {
-    animation-delay: .08s;
+    animation-delay: .04s;
 }
 
 .stat-card:nth-child(3) {
-    animation-delay: .12s;
+    animation-delay: .08s;
 }
 
 .stat-card:nth-child(4) {
-    animation-delay: .16s;
+    animation-delay: .12s;
 }
 
 .stat-card:nth-child(5) {
-    animation-delay: .20s;
+    animation-delay: .16s;
 }
 
 .stat-card::after {
@@ -1075,31 +1045,24 @@ textarea {
 
     position: absolute;
 
-    width: 90px;
-    height: 90px;
+    right: -20px;
+    top: -20px;
 
-    right: -40px;
-    bottom: -45px;
+    width: 70px;
+    height: 70px;
 
     border-radius: 50%;
 
-    background: rgba(0,0,0,0.025);
-
-    pointer-events: none;
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-
-    box-shadow: var(--shadow);
-
-    border-color: rgba(0,0,0,0.12);
+    background:
+        rgba(0, 113, 227, 0.045);
 }
 
 .stat-card span {
     display: block;
 
-    color: var(--muted);
+    margin-bottom: 8px;
+
+    color: var(--text-secondary);
 
     font-size: 12px;
     font-weight: 600;
@@ -1108,33 +1071,42 @@ textarea {
 .stat-card strong {
     display: block;
 
-    margin-top: 5px;
+    color: var(--text);
 
-    font-size: 30px;
-
-    line-height: 1;
+    font-size: 29px;
+    font-weight: 700;
 
     letter-spacing: -0.04em;
 }
 
 
 /* =========================================================
-   12. QUICK ACTIONS
+   QUICK ACTIONS
 ========================================================= */
 
 .quick-actions {
     display: flex;
-
     flex-wrap: wrap;
 
     gap: 10px;
 
-    margin-bottom: 28px;
+    margin-bottom: 30px;
+
+    padding: 18px;
+
+    background: #fff;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 18px;
+
+    box-shadow: var(--shadow-sm);
 }
 
 
 /* =========================================================
-   13. CONTENT CARDS
+   CONTENT CARDS
 ========================================================= */
 
 .notice-card,
@@ -1142,188 +1114,195 @@ textarea {
 .application-card {
     position: relative;
 
+    margin-bottom: 12px;
+
+    padding: 18px;
+
     background: var(--surface);
 
-    border: 1px solid var(--line);
+    border:
+        1px solid var(--border);
 
-    border-radius: var(--radius);
+    border-radius: 18px;
 
-    box-shadow: var(--shadow-xs);
-
-    overflow: hidden;
-
-    animation:
-        gsaFadeUp
-        .45s
-        cubic-bezier(.22,1,.36,1)
-        both;
+    box-shadow: var(--shadow-sm);
 
     transition:
         transform .22s ease,
         box-shadow .22s ease,
         border-color .22s ease;
+
+    animation:
+        gsaFadeUp
+        .38s
+        cubic-bezier(.22, 1, .36, 1)
+        both;
 }
 
 .notice-card:hover,
 .content-card:hover,
 .application-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 
     box-shadow: var(--shadow);
 
-    border-color: rgba(0,0,0,0.12);
+    border-color:
+        rgba(0, 0, 0, 0.11);
 }
 
-.notice-card-main,
+.notice-card-main {
+    min-width: 0;
+}
+
 .content-card-top,
 .application-top {
-    padding: 18px 19px;
-}
-
-.notice-card-main,
-.content-card-top {
     display: flex;
-
     align-items: flex-start;
-
     justify-content: space-between;
 
-    gap: 18px;
+    gap: 15px;
 }
 
 .notice-card h3,
 .content-card h3,
 .application-card h3 {
-    margin: 0;
+    margin: 0 0 6px;
+
+    color: var(--text);
 
     font-size: 16px;
-
-    line-height: 1.3;
+    font-weight: 650;
 
     letter-spacing: -0.015em;
 }
 
+.notice-card p,
+.content-card p,
+.application-card p {
+    margin: 0;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+}
+
 .notice-meta {
     display: flex;
-
     flex-wrap: wrap;
 
     align-items: center;
 
     gap: 7px;
 
-    margin-top: 9px;
+    margin-top: 10px;
 
-    color: var(--muted);
+    color: var(--text-muted);
 
-    font-size: 12px;
+    font-size: 11px;
 }
+
+.content-date {
+    color: var(--text-muted);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
 
 .badge {
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
 
     min-height: 25px;
 
-    padding: 4px 8px;
+    padding: 0 9px;
 
     border-radius: 999px;
 
-    background: #f1f1f3;
+    background: #f2f2f7;
 
-    color: var(--text-soft);
+    color: var(--text-secondary);
 
-    font-size: 11px;
-
+    font-size: 10px;
     font-weight: 700;
 }
 
 .badge.published {
-    background: rgba(52,199,89,0.11);
+    background: rgba(52, 199, 89, 0.11);
 
-    color: #18843b;
+    color: #248a3d;
 }
 
 .badge.draft {
-    background: rgba(255,149,0,0.11);
+    background: rgba(142, 142, 147, 0.12);
 
-    color: #a15b00;
+    color: var(--text-secondary);
 }
 
 .badge.important {
-    background: rgba(255,59,48,0.10);
+    background: rgba(255, 149, 0, 0.12);
 
-    color: #c52b23;
-}
-
-.content-date {
-    color: var(--muted);
-
-    font-size: 12px;
-}
-
-.card-actions {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    align-items: center;
-
-    justify-content: flex-end;
-
-    gap: 7px;
+    color: #b56b00;
 }
 
 
 /* =========================================================
-   14. NOTICE
+   NOTICE IMAGE
 ========================================================= */
-
-.notice-list,
-#noticeList,
-#fixtureList,
-#tournamentList,
-#galleryList,
-#friendlyList,
-#membershipList {
-    display: grid;
-
-    gap: 13px;
-}
 
 .notice-card-image {
     width: 100%;
 
-    max-height: 250px;
+    max-height: 230px;
+
+    margin-bottom: 14px;
+
+    overflow: hidden;
+
+    border-radius: 13px;
+
+    background: #f2f2f7;
+}
+
+.notice-card-image img {
+    width: 100%;
+    height: 230px;
 
     object-fit: cover;
 
-    display: block;
+    transition: transform .35s ease;
+}
 
-    background: #f1f1f3;
+.notice-card:hover .notice-card-image img {
+    transform: scale(1.025);
 }
 
 .notice-card-content {
-    padding: 18px 19px;
+    min-width: 0;
 }
 
 .notice-category {
     display: inline-block;
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
     color: var(--blue);
 
-    font-size: 11px;
-
+    font-size: 10px;
     font-weight: 700;
 
     text-transform: uppercase;
-
     letter-spacing: .07em;
 }
+
+
+/* =========================================================
+   NOTICE STATS
+========================================================= */
 
 .notice-stats {
     display: grid;
@@ -1333,155 +1312,127 @@ textarea {
 
     gap: 12px;
 
-    margin: 0 0 20px;
+    margin-bottom: 18px;
 }
 
 .notice-stats > div {
     padding: 15px;
 
-    border: 1px solid var(--line);
+    background: #fff;
+
+    border:
+        1px solid var(--border);
 
     border-radius: 15px;
 
-    background: #fff;
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease;
-}
-
-.notice-stats > div:hover {
-    transform: translateY(-2px);
-
-    box-shadow: var(--shadow-xs);
+    box-shadow: var(--shadow-sm);
 }
 
 .notice-stats strong {
     display: block;
 
-    font-size: 22px;
+    margin-bottom: 2px;
 
-    letter-spacing: -0.03em;
+    font-size: 23px;
 }
 
 .notice-stats span {
-    color: var(--muted);
+    color: var(--text-secondary);
 
     font-size: 11px;
 }
 
+
+/* =========================================================
+   NOTICE EDITOR
+========================================================= */
+
 .notice-editor {
-    margin-top: 20px;
+    margin-top: 18px;
+
+    padding: 22px;
 
     background: #fff;
 
-    border: 1px solid var(--line);
+    border:
+        1px solid var(--border);
 
-    border-radius: var(--radius-lg);
+    border-radius: 20px;
 
     box-shadow: var(--shadow);
-
-    overflow: hidden;
-
-    animation: gsaScaleIn .28s ease both;
 }
 
 .notice-editor-header {
     display: flex;
-
     align-items: center;
     justify-content: space-between;
 
-    gap: 15px;
+    gap: 12px;
 
-    padding: 17px 19px;
-
-    border-bottom: 1px solid var(--line);
-
-    background: var(--surface-soft);
+    margin-bottom: 20px;
 }
 
 .notice-editor-header h3 {
     margin: 0;
 
-    font-size: 17px;
-}
-
-.notice-editor > form,
-.notice-editor > div:not(.notice-editor-header) {
-    padding: 20px;
+    font-size: 19px;
 }
 
 .notice-editor-actions {
     display: flex;
-
-    flex-wrap: wrap;
-
-    justify-content: flex-end;
-
-    gap: 9px;
-
-    padding-top: 8px;
+    gap: 8px;
 }
 
 .notice-option {
     display: flex;
-
     align-items: center;
 
-    gap: 8px;
+    gap: 9px;
 
-    padding: 10px 0;
+    margin: 10px 0;
 }
 
-#noticeImagePreview,
-#noticePosterPreview {
-    margin-top: 12px;
+.notice-option input {
+    accent-color: var(--blue);
 }
 
-#noticePreviewImage,
-#tournamentPosterPreviewImage {
-    display: block;
+.notice-editor img {
+    max-width: 260px;
 
-    max-width: 100%;
+    margin-top: 10px;
 
-    max-height: 240px;
-
-    border-radius: 13px;
-
-    border: 1px solid var(--line);
-
-    object-fit: contain;
-
-    background: #f5f5f7;
+    border-radius: 12px;
 }
 
 
 /* =========================================================
-   15. FIXTURE CARDS
+   FIXTURE CARDS
 ========================================================= */
 
 .admin-fixture-card {
     display: grid;
 
     grid-template-columns:
-        120px minmax(0, 1fr) auto;
+        120px
+        minmax(0, 1fr)
+        auto;
 
     align-items: center;
 
     gap: 18px;
 
-    padding: 17px 19px;
+    margin-bottom: 12px;
+
+    padding: 18px;
 
     background: #fff;
 
-    border: 1px solid var(--line);
+    border:
+        1px solid var(--border);
 
-    border-radius: var(--radius);
+    border-radius: 18px;
 
-    box-shadow: var(--shadow-xs);
-
-    animation: gsaFadeUp .45s ease both;
+    box-shadow: var(--shadow-sm);
 
     transition:
         transform .22s ease,
@@ -1489,21 +1440,16 @@ textarea {
 }
 
 .admin-fixture-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 
     box-shadow: var(--shadow);
 }
 
 .admin-fixture-date {
-    padding-right: 18px;
+    color: var(--blue);
 
-    border-right: 1px solid var(--line);
-
-    color: var(--muted);
-
-    font-size: 12px;
-
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
 }
 
 .admin-fixture-info {
@@ -1513,97 +1459,116 @@ textarea {
 .admin-fixture-info strong {
     display: block;
 
-    font-size: 15px;
+    margin-bottom: 4px;
 
-    line-height: 1.35;
+    font-size: 15px;
 }
 
-.admin-fixture-tag {
+.admin-fixture-info span {
+    color: var(--text-secondary);
+
+    font-size: 12px;
+}
+
+.admin-fixture-tag,
+.admin-fixture-status {
     display: inline-flex;
+    align-items: center;
 
-    margin-top: 7px;
+    min-height: 24px;
 
-    padding: 4px 8px;
+    padding: 0 8px;
+
+    margin-right: 5px;
 
     border-radius: 999px;
 
-    background: #f1f1f3;
+    background: #f2f2f7;
 
-    color: var(--muted);
+    color: var(--text-secondary);
 
     font-size: 10px;
-
-    font-weight: 700;
+    font-weight: 650;
 }
 
 .admin-fixture-status {
-    display: inline-flex;
+    background: rgba(52, 199, 89, 0.10);
 
-    margin-top: 6px;
-
-    color: var(--green);
-
-    font-size: 11px;
-
-    font-weight: 700;
+    color: #248a3d;
 }
 
 .admin-fixture-actions {
     display: flex;
-
     flex-wrap: wrap;
 
-    justify-content: flex-end;
-
-    gap: 7px;
+    gap: 6px;
 }
 
 
 /* =========================================================
-   16. TOURNAMENT CARDS
+   TOURNAMENT CARDS
 ========================================================= */
 
+.tournament-card,
 .admin-tournament-card {
     background: #fff;
 
-    border: 1px solid var(--line);
+    border:
+        1px solid var(--border);
 
-    border-radius: var(--radius);
+    border-radius: 18px;
 
-    padding: 18px;
+    overflow: hidden;
 
-    box-shadow: var(--shadow-xs);
-
-    animation: gsaFadeUp .45s ease both;
+    box-shadow: var(--shadow-sm);
 
     transition:
         transform .22s ease,
         box-shadow .22s ease;
 }
 
+.tournament-card:hover,
 .admin-tournament-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 
     box-shadow: var(--shadow);
 }
 
-.admin-tournament-card h3 {
-    margin: 0;
+.tournament-card img,
+.admin-tournament-card img {
+    width: 100%;
 
-    font-size: 17px;
+    aspect-ratio: 16 / 9;
+
+    object-fit: cover;
+
+    background: #f2f2f7;
 }
 
+.tournament-card-content,
+.admin-tournament-card-content {
+    padding: 17px;
+}
+
+.tournament-card h3,
+.admin-tournament-card h3 {
+    margin: 0 0 5px;
+
+    font-size: 16px;
+}
+
+.tournament-card p,
 .admin-tournament-card p {
-    margin: 6px 0;
+    margin: 0;
 
-    color: var(--muted);
+    color: var(--text-secondary);
 
-    font-size: 13px;
+    font-size: 12px;
 }
 
 
 /* =========================================================
-   17. GALLERY
+   GALLERY
 ========================================================= */
 
 .gallery-admin-grid {
@@ -1622,71 +1587,45 @@ textarea {
 
     overflow: hidden;
 
+    background: #fff;
+
+    border:
+        1px solid var(--border);
+
     border-radius: 17px;
 
-    background: #e9e9eb;
+    box-shadow: var(--shadow-sm);
 
-    border: 1px solid var(--line);
-
-    box-shadow: var(--shadow-xs);
-
-    animation: gsaScaleIn .45s ease both;
+    animation:
+        gsaScaleIn
+        .35s
+        cubic-bezier(.22, 1, .36, 1)
+        both;
 }
 
 .gallery-admin-card img {
     width: 100%;
     height: 100%;
 
-    display: block;
-
     object-fit: cover;
 
-    transition:
-        transform .45s cubic-bezier(.22,1,.36,1);
+    transition: transform .4s ease;
 }
 
 .gallery-admin-card:hover img {
-    transform: scale(1.06);
-}
-
-.gallery-admin-card::after {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        linear-gradient(
-            to top,
-            rgba(0,0,0,0.35),
-            transparent 45%
-        );
-
-    opacity: 0;
-
-    transition: opacity .25s ease;
-
-    pointer-events: none;
-}
-
-.gallery-admin-card:hover::after {
-    opacity: 1;
+    transform: scale(1.05);
 }
 
 .gallery-delete {
     position: absolute;
 
-    z-index: 2;
-
     top: 9px;
     right: 9px;
 
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
@@ -1694,255 +1633,232 @@ textarea {
 
     border-radius: 50%;
 
-    background: rgba(255,255,255,0.90);
+    background: rgba(0, 0, 0, 0.68);
 
-    color: var(--red);
+    color: #fff;
 
-    box-shadow: var(--shadow-sm);
-
-    opacity: 0;
-
-    transform: translateY(-5px);
+    backdrop-filter: blur(8px);
 
     transition:
-        opacity .2s ease,
-        transform .2s ease,
-        background .2s ease;
-}
-
-.gallery-admin-card:hover .gallery-delete {
-    opacity: 1;
-
-    transform: translateY(0);
+        background .2s ease,
+        transform .2s ease;
 }
 
 .gallery-delete:hover {
-    background: #fff;
+    background: var(--red);
 
     transform: scale(1.05);
 }
 
 .upload-label {
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
 
     min-height: 43px;
 
-    padding: 9px 15px;
+    padding: 0 16px;
 
     border-radius: 12px;
 
-    background: #fff;
+    background: var(--black);
 
-    border: 1px dashed rgba(0,0,0,0.18);
+    color: #fff;
 
-    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
 
     cursor: pointer;
 
-    font-size: 13px;
-    font-weight: 650;
-
     transition:
-        background .2s ease,
-        border-color .2s ease,
-        transform .2s ease;
+        transform .18s ease,
+        box-shadow .18s ease;
 }
 
 .upload-label:hover {
-    background: #f8f8fa;
-
-    border-color: rgba(0,0,0,0.3);
-
     transform: translateY(-1px);
+
+    box-shadow:
+        0 9px 22px rgba(0, 0, 0, 0.14);
 }
 
 
 /* =========================================================
-   18. RULES ADMIN
+   RULES ADMIN
 ========================================================= */
 
 .rules-admin-card {
+    padding: 24px;
+
     background: #fff;
 
-    border: 1px solid var(--line);
+    border:
+        1px solid var(--border);
 
-    border-radius: var(--radius-lg);
+    border-radius: 20px;
 
     box-shadow: var(--shadow-sm);
-
-    overflow: hidden;
 }
 
 .rules-admin-header {
     display: flex;
-
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
 
     gap: 15px;
 
-    padding: 18px 20px;
-
-    border-bottom: 1px solid var(--line);
-
-    background: var(--surface-soft);
+    margin-bottom: 20px;
 }
 
 .rules-admin-header h3 {
     margin: 0;
 
-    font-size: 17px;
+    font-size: 20px;
+}
+
+#rulesAdminUpdated {
+    color: var(--text-muted);
+
+    font-size: 11px;
 }
 
 #rulesAdminTitle {
-    min-height: 48px;
-
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 650;
 }
 
 #rulesAdminContent {
-    min-height: 380px;
-
-    line-height: 1.75;
+    min-height: 300px;
 }
 
 .rules-admin-actions {
     display: flex;
-
     flex-wrap: wrap;
 
-    justify-content: flex-end;
+    gap: 8px;
 
-    gap: 9px;
-
-    padding: 16px 20px;
-
-    border-top: 1px solid var(--line);
+    margin-top: 15px;
 }
 
 #rulesAdminStatus {
-    margin-top: 9px;
+    margin-top: 10px;
 
-    color: var(--muted);
+    color: var(--text-secondary);
 
     font-size: 12px;
 }
 
 
 /* =========================================================
-   19. APPLICATIONS
+   APPLICATION TABS
 ========================================================= */
 
 .application-tabs {
     display: flex;
 
-    flex-wrap: wrap;
-
     gap: 7px;
 
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 
     padding: 5px;
 
     width: fit-content;
 
-    max-width: 100%;
+    background: #e9e9ee;
 
-    border: 1px solid var(--line);
-
-    border-radius: 14px;
-
-    background: #fff;
-
-    box-shadow: var(--shadow-xs);
+    border-radius: 12px;
 }
 
 .application-tabs button {
-    min-height: 36px;
+    min-height: 35px;
 
-    padding: 7px 13px;
+    padding: 0 13px;
 
     border: 0;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
     background: transparent;
 
-    color: var(--muted);
+    color: var(--text-secondary);
 
     font-size: 12px;
-    font-weight: 650;
-
-    transition:
-        background .2s ease,
-        color .2s ease,
-        transform .2s ease;
-}
-
-.application-tabs button:hover {
-    color: var(--text);
-
-    background: #f3f3f5;
+    font-weight: 600;
 }
 
 .application-tabs button.active {
-    background: var(--black);
-
-    color: #fff;
-}
-
-.application-card {
-    padding: 18px 19px;
-}
-
-.application-top {
-    padding: 0;
-}
-
-.application-card p {
-    margin: 5px 0;
-
-    color: var(--muted);
-
-    font-size: 13px;
-}
-
-.application-card select {
-    min-height: 38px;
-
-    padding: 7px 10px;
-
-    border: 1px solid var(--line-strong);
-
-    border-radius: 10px;
-
     background: #fff;
 
-    outline: none;
-}
-
-.application-card select:focus {
-    border-color: rgba(0,113,227,0.55);
+    color: var(--text);
 
     box-shadow:
-        0 0 0 3px rgba(0,113,227,0.09);
+        0 2px 7px rgba(0, 0, 0, 0.07);
 }
 
 
 /* =========================================================
-   20. MODALS
+   APPLICATION DETAILS
+========================================================= */
+
+.application-card {
+    cursor: pointer;
+}
+
+.application-card strong {
+    color: var(--text);
+}
+
+.application-card small {
+    color: var(--text-muted);
+
+    font-size: 11px;
+}
+
+#applicationDetails {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+}
+
+#applicationDetails > div {
+    padding: 14px;
+
+    background: #f7f7f9;
+
+    border-radius: 13px;
+}
+
+#applicationDetails strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 11px;
+
+    color: var(--text-secondary);
+}
+
+#applicationDetails span,
+#applicationDetails p {
+    color: var(--text);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   MODALS
 ========================================================= */
 
 .modal {
     position: fixed;
 
-    z-index: 2000;
-
     inset: 0;
+
+    z-index: 2000;
 
     display: none;
 
@@ -1951,317 +1867,253 @@ textarea {
 
     padding: 20px;
 
-    background: rgba(0,0,0,0.48);
+    background:
+        rgba(0, 0, 0, 0.38);
 
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-
-    overflow-y: auto;
 }
 
 .modal.active {
     display: flex;
 
-    animation: gsaOverlayIn .22s ease both;
+    animation: gsaFadeIn .2s ease both;
 }
 
-.modal-box,
-.modal-content {
+.modal-content,
+.modal-box {
     position: relative;
 
     width: 100%;
 
     max-width: 720px;
-
     max-height: calc(100vh - 40px);
 
     overflow-y: auto;
 
+    padding: 25px;
+
     background: #fff;
 
-    border: 1px solid rgba(0,0,0,0.08);
+    border:
+        1px solid rgba(0, 0, 0, 0.08);
 
     border-radius: 22px;
 
     box-shadow: var(--shadow-lg);
 
     animation:
-        gsaModalIn
-        .28s
-        cubic-bezier(.22,1,.36,1)
+        gsaScaleIn
+        .25s
+        cubic-bezier(.22, 1, .36, 1)
         both;
 }
 
 .modal-header {
-    position: sticky;
-
-    top: 0;
-
-    z-index: 3;
-
     display: flex;
-
     align-items: center;
     justify-content: space-between;
 
     gap: 15px;
 
-    padding: 17px 19px;
-
-    background: rgba(255,255,255,0.94);
-
-    border-bottom: 1px solid var(--line);
-
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    margin-bottom: 20px;
 }
 
 .modal-header h2,
 .modal-header h3 {
     margin: 0;
 
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 700;
 
-    letter-spacing: -0.02em;
-}
-
-.modal-box > form,
-.modal-content > form {
-    padding: 20px;
+    letter-spacing: -0.025em;
 }
 
 .modal-close {
     width: 34px;
     height: 34px;
 
-    flex: 0 0 auto;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
+    flex: 0 0 34px;
 
     border: 0;
 
     border-radius: 50%;
 
-    background: #f1f1f3;
+    background: #f2f2f7;
 
-    color: var(--text);
+    color: var(--text-secondary);
 
     font-size: 18px;
 
     transition:
-        transform .2s ease,
-        background .2s ease;
+        background .18s ease,
+        transform .18s ease;
 }
 
 .modal-close:hover {
-    background: #e6e6e8;
+    background: #e5e5ea;
 
-    transform: rotate(4deg) scale(1.05);
+    transform: rotate(4deg);
 }
 
 .modal-actions {
     display: flex;
+    justify-content: flex-end;
 
     flex-wrap: wrap;
 
-    justify-content: flex-end;
+    gap: 8px;
 
-    gap: 9px;
+    margin-top: 22px;
 
-    padding-top: 8px;
+    padding-top: 18px;
+
+    border-top:
+        1px solid var(--border);
 }
 
 
 /* =========================================================
-   21. MODAL BOX FOR APPLICATION DETAILS
+   IMAGE PREVIEWS
 ========================================================= */
 
-#applicationDetails {
-    padding: 20px;
+#noticeImagePreview,
+#tournamentPosterPreview {
+    margin-top: 12px;
+
+    padding: 10px;
+
+    background: #f5f5f7;
+
+    border-radius: 13px;
 }
 
-#applicationDetails img {
-    max-width: 180px;
+#noticePreviewImage {
+    width: 100%;
 
-    max-height: 220px;
+    max-height: 240px;
 
-    display: block;
+    object-fit: cover;
 
-    margin: 0 auto 18px;
+    border-radius: 9px;
+}
+
+#tournamentPosterPreviewImage {
+    width: 100%;
+
+    max-height: 320px;
 
     object-fit: contain;
 
-    border-radius: 15px;
-
-    border: 1px solid var(--line);
-
-    background: #f5f5f7;
-}
-
-#applicationDetails p {
-    margin: 7px 0;
-
-    color: var(--text-soft);
-
-    font-size: 13px;
-}
-
-#applicationDetails strong {
-    color: var(--text);
+    border-radius: 9px;
 }
 
 
 /* =========================================================
-   22. LOADING
+   LOADING STATE
 ========================================================= */
 
-.loading-screen,
-#gsaAdminLoading {
-    position: fixed;
+.loading-state,
+.empty-state {
+    padding: 40px 20px;
 
-    z-index: 5000;
+    color: var(--text-secondary);
+
+    text-align: center;
+
+    font-size: 13px;
+
+    animation: gsaFadeIn .3s ease both;
+}
+
+.empty-state {
+    background: #fff;
+
+    border:
+        1px dashed rgba(0, 0, 0, 0.12);
+
+    border-radius: 17px;
+}
+
+
+/* =========================================================
+   FULL SCREEN LOADING
+========================================================= */
+
+.loading-screen {
+    position: fixed;
 
     inset: 0;
 
-    display: flex;
+    z-index: 5000;
 
+    display: flex;
     align-items: center;
     justify-content: center;
 
-    background: rgba(245,245,247,0.92);
+    background:
+        rgba(245, 245, 247, 0.88);
 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
     animation: gsaFadeIn .2s ease both;
 }
 
 .loading-box {
-    min-width: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    padding: 22px;
+    gap: 13px;
 
-    text-align: center;
+    padding: 25px;
 
     background: #fff;
-
-    border: 1px solid var(--line);
 
     border-radius: 18px;
 
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-lg);
 
-    animation: gsaScaleIn .25s ease both;
+    font-size: 13px;
 }
 
 .spinner {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
 
-    margin: 0 auto 12px;
+    border:
+        3px solid #e5e5ea;
 
-    border: 3px solid #e5e5e7;
-
-    border-top-color: var(--black);
+    border-top-color: var(--blue);
 
     border-radius: 50%;
 
-    animation: gsaSpin .75s linear infinite;
-}
-
-.loading-box p {
-    margin: 0;
-
-    color: var(--muted);
-
-    font-size: 12px;
+    animation:
+        gsaSpin
+        .75s
+        linear
+        infinite;
 }
 
 
 /* =========================================================
-   23. EMPTY / LOADING STATES
-========================================================= */
-
-.empty-state,
-.loading-state {
-    padding: 34px 20px;
-
-    text-align: center;
-
-    color: var(--muted);
-
-    background: #fff;
-
-    border: 1px dashed rgba(0,0,0,0.13);
-
-    border-radius: var(--radius);
-
-    animation: gsaFadeIn .35s ease both;
-}
-
-.empty-state strong {
-    display: block;
-
-    margin-bottom: 4px;
-
-    color: var(--text);
-}
-
-
-/* =========================================================
-   24. SCROLLBARS
-========================================================= */
-
-* {
-    scrollbar-width: thin;
-
-    scrollbar-color:
-        rgba(0,0,0,0.20)
-        transparent;
-}
-
-*::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-*::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.18);
-
-    border-radius: 999px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-    background: rgba(0,0,0,0.28);
-}
-
-
-/* =========================================================
-   25. PDF — ADMIN DOCUMENT
-   Keep PDF layout stable
+   PDF CONTAINER
 ========================================================= */
 
 #adminPdfContainer,
 #membershipPdfContainer {
-    position: fixed;
+    position: absolute;
 
     left: -99999px;
 
     top: 0;
-
-    pointer-events: none;
 }
 
 #adminPdfPage {
-    width: 794px;
+    position: relative;
 
+    width: 794px;
     min-height: 1123px;
 
     padding: 58px;
@@ -2274,27 +2126,16 @@ textarea {
         Arial,
         Helvetica,
         sans-serif;
-
-    position: relative;
 }
 
 .admin-pdf-header {
-    display: flex;
+    text-align: center;
 
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 20px;
-
-    padding-bottom: 18px;
-
-    border-bottom: 2px solid #111;
+    margin-bottom: 28px;
 }
 
 .admin-pdf-brand {
-    font-size: 24px;
-
+    font-size: 25px;
     font-weight: 700;
 }
 
@@ -2303,55 +2144,41 @@ textarea {
 
     color: #555;
 
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .admin-pdf-document {
-    margin-top: 30px;
+    margin-top: 25px;
+
+    padding-top: 18px;
+
+    border-top:
+        1px solid #ddd;
 }
 
 .admin-pdf-line {
-    display: flex;
+    height: 1px;
 
-    gap: 10px;
+    margin: 14px 0;
 
-    padding: 8px 0;
+    background: #e5e5e5;
+}
 
-    border-bottom: 1px solid #ddd;
+.admin-pdf-status {
+    margin: 12px 0;
 
     font-size: 12px;
 }
 
-.admin-pdf-line strong {
-    min-width: 150px;
-}
-
-.admin-pdf-status {
-    display: inline-block;
-
-    padding: 4px 8px;
-
-    border-radius: 4px;
-
-    font-size: 10px;
-
-    font-weight: 700;
-}
-
 .admin-pdf-section {
-    margin-top: 24px;
+    margin-top: 22px;
 }
 
 .admin-pdf-section-title {
-    margin: 0 0 12px;
+    margin-bottom: 12px;
 
-    font-size: 15px;
-
+    font-size: 14px;
     font-weight: 700;
-
-    border-bottom: 1px solid #222;
-
-    padding-bottom: 6px;
 }
 
 .admin-pdf-grid {
@@ -2366,15 +2193,28 @@ textarea {
 .admin-pdf-item {
     padding: 9px;
 
-    border: 1px solid #ddd;
+    background: #fafafa;
 
+    border:
+        1px solid #eee;
+
+    border-radius: 7px;
+}
+
+.admin-pdf-item strong {
+    display: block;
+
+    margin-bottom: 2px;
+
+    font-size: 9px;
+}
+
+.admin-pdf-item span {
     font-size: 11px;
 }
 
 .admin-pdf-message {
-    padding: 12px;
-
-    border: 1px solid #ddd;
+    margin-top: 15px;
 
     font-size: 11px;
 
@@ -2389,16 +2229,16 @@ textarea {
     bottom: 58px;
 
     display: flex;
-
     justify-content: space-between;
 
     padding-top: 10px;
 
-    border-top: 1px solid #ddd;
+    border-top:
+        1px solid #ddd;
 
-    color: #555;
+    color: #777;
 
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .admin-pdf-footer-right {
@@ -2407,10 +2247,26 @@ textarea {
 
 
 /* =========================================================
-   26. MOBILE SIDEBAR
+   DESKTOP LARGE
 ========================================================= */
 
-@media (max-width: 1000px) {
+@media (min-width: 1200px) {
+
+    .stats-grid {
+        gap: 16px;
+    }
+
+    .stat-card {
+        padding: 21px;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
 
     .stats-grid {
         grid-template-columns:
@@ -2424,45 +2280,38 @@ textarea {
 
     .admin-fixture-card {
         grid-template-columns:
-            100px minmax(0, 1fr);
+            100px
+            minmax(0, 1fr);
     }
 
     .admin-fixture-actions {
         grid-column: 1 / -1;
 
-        justify-content: flex-start;
-
-        padding-top: 4px;
+        justify-content: flex-end;
     }
 }
 
 
 /* =========================================================
-   27. TABLET / MOBILE
+   MOBILE SIDEBAR
 ========================================================= */
 
 @media (max-width: 800px) {
 
     .admin-sidebar {
-        transform: translateX(-105%);
+        transform: translateX(-110%);
 
         transition:
-            transform .28s
-            cubic-bezier(.22,1,.36,1);
+            transform
+            .28s
+            cubic-bezier(.22, 1, .36, 1);
 
         box-shadow:
-            18px 0 45px rgba(0,0,0,0.18);
+            18px 0 45px rgba(0, 0, 0, 0.18);
     }
 
     .admin-sidebar.active {
         transform: translateX(0);
-    }
-
-    .sidebar-toggle {
-        display: flex;
-
-        align-items: center;
-        justify-content: center;
     }
 
     .admin-main {
@@ -2474,42 +2323,56 @@ textarea {
             50px;
     }
 
+    .sidebar-toggle {
+        display: flex;
+    }
+
     .admin-topbar {
-        margin-bottom: 20px;
+        min-height: 48px;
+
+        margin-bottom: 18px;
     }
 
     .admin-topbar h1 {
-        font-size: 25px;
+        font-size: 22px;
     }
 
-    .stats-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        gap: 11px;
-    }
-
-    .stat-card {
-        padding: 16px;
-    }
-
-    .stat-card strong {
-        font-size: 25px;
+    .admin-topbar p {
+        display: none;
     }
 
     .section-heading {
         align-items: flex-start;
 
         flex-direction: column;
+
+        gap: 12px;
     }
 
-    .section-heading > * {
-        max-width: 100%;
+    .section-heading h2 {
+        font-size: 21px;
+    }
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-card strong {
+        font-size: 25px;
     }
 
     .notice-stats {
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
     }
 
     .gallery-admin-grid {
@@ -2519,45 +2382,48 @@ textarea {
         gap: 10px;
     }
 
-    .modal {
-        padding: 12px;
-    }
-
-    .modal-box,
-    .modal-content {
-        max-height: calc(100vh - 24px);
-
-        border-radius: 19px;
-    }
-
     .form-row {
         grid-template-columns: 1fr;
     }
 
-    .admin-fixture-card {
+    #applicationDetails {
         grid-template-columns: 1fr;
-
-        gap: 10px;
     }
 
-    .admin-fixture-date {
-        padding-right: 0;
+    .admin-fixture-card {
+        grid-template-columns:
+            1fr 1fr;
 
-        padding-bottom: 9px;
-
-        border-right: 0;
-
-        border-bottom: 1px solid var(--line);
+        gap: 12px;
     }
 
     .admin-fixture-actions {
-        grid-column: auto;
+        grid-column: 1 / -1;
+
+        justify-content: flex-start;
+    }
+
+    .modal {
+        padding: 12px;
+    }
+
+    .modal-content,
+    .modal-box {
+        max-height: calc(100vh - 24px);
+
+        padding: 19px;
+
+        border-radius: 18px;
+    }
+
+    .quick-actions {
+        padding: 14px;
     }
 }
 
 
 /* =========================================================
-   28. SMALL MOBILE
+   SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 560px) {
@@ -2567,165 +2433,147 @@ textarea {
     }
 
     .login-card {
-        padding: 27px 20px;
+        padding: 32px 22px 27px;
 
         border-radius: 22px;
+    }
+
+    .login-card h1 {
+        font-size: 26px;
     }
 
     .login-logo {
         width: 68px;
         height: 68px;
-
-        border-radius: 19px;
-    }
-
-    .login-logo img {
-        width: 51px;
-        height: 51px;
     }
 
     .admin-main {
         padding:
             13px
-            12px
-            42px;
+            11px
+            40px;
     }
 
     .admin-topbar {
-        min-height: 50px;
-
         gap: 10px;
     }
 
     .admin-topbar h1 {
-        font-size: 22px;
-    }
-
-    .sidebar-toggle {
-        width: 40px;
-        height: 40px;
+        font-size: 20px;
     }
 
     .stats-grid {
-        gap: 9px;
+        gap: 8px;
     }
 
     .stat-card {
-        padding: 14px;
+        padding: 13px;
 
         border-radius: 15px;
+    }
+
+    .stat-card span {
+        font-size: 10px;
     }
 
     .stat-card strong {
         font-size: 22px;
     }
 
-    .section-heading h2 {
-        font-size: 20px;
+    .notice-card,
+    .content-card,
+    .application-card {
+        padding: 14px;
+
+        border-radius: 15px;
     }
 
-    .quick-actions {
-        display: grid;
-
-        grid-template-columns: 1fr;
-
-        width: 100%;
-    }
-
-    .quick-actions button {
-        width: 100%;
-    }
-
-    .notice-card-main,
     .content-card-top,
     .application-top {
         flex-direction: column;
     }
 
     .card-actions {
-        justify-content: flex-start;
-
         width: 100%;
     }
 
-    .notice-stats {
-        gap: 8px;
+    .small-button {
+        flex: 0 0 auto;
+    }
+
+    .notice-editor {
+        padding: 15px;
+
+        border-radius: 16px;
     }
 
     .notice-stats > div {
         padding: 12px;
+
+        border-radius: 13px;
     }
 
     .notice-stats strong {
-        font-size: 19px;
+        font-size: 20px;
+    }
+
+    .admin-fixture-card {
+        grid-template-columns: 1fr;
+
+        padding: 14px;
+
+        border-radius: 15px;
+    }
+
+    .admin-fixture-actions {
+        grid-column: auto;
+
+        width: 100%;
+    }
+
+    .admin-fixture-actions .small-button {
+        flex: 1;
+    }
+
+    .gallery-admin-grid {
+        gap: 8px;
+    }
+
+    .rules-admin-card {
+        padding: 16px;
+
+        border-radius: 16px;
+    }
+
+    .rules-admin-header {
+        flex-direction: column;
     }
 
     .application-tabs {
         width: 100%;
-
-        overflow-x: auto;
-
-        white-space: nowrap;
     }
 
     .application-tabs button {
-        flex: 0 0 auto;
+        flex: 1;
     }
 
-    .modal {
-        padding: 8px;
-    }
-
-    .modal-box,
-    .modal-content {
-        max-height: calc(100vh - 16px);
-
-        border-radius: 17px;
-    }
-
-    .modal-header {
-        padding: 14px 15px;
-    }
-
-    .modal-box > form,
-    .modal-content > form {
-        padding: 15px;
+    .modal-header h2,
+    .modal-header h3 {
+        font-size: 18px;
     }
 
     .modal-actions {
-        flex-direction: column-reverse;
+        flex-direction: column;
     }
 
     .modal-actions button {
         width: 100%;
     }
-
-    .notice-editor-header {
-        align-items: flex-start;
-
-        flex-direction: column;
-    }
-
-    .notice-editor-actions,
-    .rules-admin-actions {
-        flex-direction: column;
-    }
-
-    .notice-editor-actions button,
-    .rules-admin-actions button {
-        width: 100%;
-    }
-
-    .gallery-delete {
-        opacity: 1;
-
-        transform: none;
-    }
 }
 
 
 /* =========================================================
-   29. VERY SMALL SCREEN
+   VERY SMALL DEVICES
 ========================================================= */
 
 @media (max-width: 380px) {
@@ -2734,18 +2582,34 @@ textarea {
         grid-template-columns: 1fr;
     }
 
-    .gallery-admin-grid {
+    .notice-stats {
         grid-template-columns: 1fr;
     }
 
     .login-card {
-        padding: 24px 17px;
+        padding-left: 18px;
+        padding-right: 18px;
     }
 }
 
 
 /* =========================================================
-   30. ACCESSIBILITY / REDUCED MOTION
+   ACCESSIBILITY
+========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid rgba(0, 113, 227, 0.25);
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
 ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
@@ -2764,33 +2628,14 @@ textarea {
 
 
 /* =========================================================
-   31. FOCUS VISIBILITY
+   IMPORTANT SIDEBAR SAFETY
+   DO NOT ADD transform:none HERE
 ========================================================= */
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-    outline: 3px solid rgba(0,113,227,0.28);
-
-    outline-offset: 2px;
-}
-
-/* =========================================================
-   SIDEBAR FIX — DO NOT REMOVE
-========================================================= */
-
-/* Desktop */
-.admin-sidebar {
-    transform: none;
-}
-
-/* Mobile — sidebar hidden by default */
 @media (max-width: 800px) {
 
     .admin-sidebar {
-        transform: translateX(-105%);
+        transform: translateX(-110%);
     }
 
     .admin-sidebar.active {
@@ -2805,7 +2650,3 @@ select:focus-visible {
         display: block;
     }
 }
-
-/* =========================================================
-   END OF GSA ADMIN CSS
-========================================================= */
