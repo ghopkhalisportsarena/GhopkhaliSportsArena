@@ -2777,6 +2777,34 @@ select:focus-visible {
     outline-offset: 2px;
 }
 
+/* =========================================================
+   SIDEBAR FIX — DO NOT REMOVE
+========================================================= */
+
+/* Desktop */
+.admin-sidebar {
+    transform: none;
+}
+
+/* Mobile — sidebar hidden by default */
+@media (max-width: 800px) {
+
+    .admin-sidebar {
+        transform: translateX(-105%);
+    }
+
+    .admin-sidebar.active {
+        transform: translateX(0);
+    }
+
+    .admin-sidebar-overlay {
+        display: none;
+    }
+
+    .admin-sidebar-overlay.active {
+        display: block;
+    }
+}
 
 /* =========================================================
    END OF GSA ADMIN CSS
