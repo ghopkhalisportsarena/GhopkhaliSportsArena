@@ -8914,7 +8914,10 @@ document.addEventListener(
 
 let activities = [];
 let editingActivityId = null;
+
 let currentActivityImageUrl = "";
+let originalActivityImageUrl = "";
+let activityImageRemoved = false;
 
 
 /* =========================================================
@@ -9020,7 +9023,8 @@ async function loadActivities() {
                 Unable to load activities.
                 <br><br>
                 ${escapeHTML(
-                    error.message
+                    error.message ||
+                    "Unknown error"
                 )}
             </div>
         `;
@@ -9084,13 +9088,11 @@ function renderActivities() {
 
 
                 return `
-
                     <article
                         class="activity-admin-card"
                     >
 
                         ${image}
-
 
                         <div class="activity-admin-content">
 
@@ -9159,7 +9161,6 @@ function renderActivities() {
                         </div>
 
                     </article>
-
                 `;
 
             })
@@ -9183,6 +9184,18 @@ function openActivityModal(
 
     editingActivityId =
         activity?.id || null;
+
+
+    originalActivityImageUrl =
+        activity?.image_url || "";
+
+
+    currentActivityImageUrl =
+        activity?.image_url || "";
+
+
+    activityImageRemoved =
+        false;
 
 
     if (activityModalTitle) {
@@ -9235,13 +9248,10 @@ function openActivityModal(
     }
 
 
-    currentActivityImageUrl =
-        activity?.image_url || "";
-
-
     if (activityImage) {
 
-        activityImage.value = "";
+        activityImage.value =
+            "";
 
     }
 
@@ -9287,6 +9297,12 @@ function closeActivityModal() {
     currentActivityImageUrl =
         "";
 
+    originalActivityImageUrl =
+        "";
+
+    activityImageRemoved =
+        false;
+
 
     if (activityForm) {
 
@@ -9297,14 +9313,16 @@ function closeActivityModal() {
 
     if (activityId) {
 
-        activityId.value = "";
+        activityId.value =
+            "";
 
     }
 
 
     if (activityImage) {
 
-        activityImage.value = "";
+        activityImage.value =
+            "";
 
     }
 
@@ -9359,8 +9377,10 @@ function setActivityStatus(
         return;
     }
 
+
     activityFormStatus.textContent =
         message || "";
+
 
     activityFormStatus.style.color =
         isError
@@ -9384,13 +9404,32 @@ async function uploadActivityImage(
 
 
     if (
-        !file.type.startsWith(
-            "image/"
-        )
+        !file.type ||
+        !file.type.startsWith("image/")
     ) {
 
         throw new Error(
             "Please select a valid image file."
+        );
+
+    }
+
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+
+    if (
+        !allowedTypes.includes(
+            file.type
+        )
+    ) {
+
+        throw new Error(
+            "Only JPG, PNG or WebP images are allowed."
         );
 
     }
@@ -9456,13 +9495,100 @@ async function uploadActivityImage(
             );
 
 
+    const publicUrl =
+        data?.publicUrl || "";
+
+
+    if (!publicUrl) {
+
+        /*
+         * If Supabase did not return
+         * a public URL, remove the
+         * uploaded file immediately.
+         */
+
+        await supabaseClient
+            .storage
+            .from("activities")
+            .remove([
+                filePath
+            ]);
+
+        throw new Error(
+            "Unable to generate activity image URL."
+        );
+
+    }
+
+
     return {
+
         url:
-            data?.publicUrl || "",
+            publicUrl,
 
         path:
             filePath
+
     };
+
+}
+
+
+/* =========================================================
+   GET STORAGE PATH FROM PUBLIC URL
+========================================================= */
+
+function getActivityStoragePath(
+    imageUrl
+) {
+
+    if (!imageUrl) {
+        return "";
+    }
+
+
+    const marker =
+        "/storage/v1/object/public/activities/";
+
+
+    const index =
+        imageUrl.indexOf(
+            marker
+        );
+
+
+    if (index === -1) {
+        return "";
+    }
+
+
+    const path =
+        imageUrl.substring(
+            index + marker.length
+        );
+
+
+    if (!path) {
+        return "";
+    }
+
+
+    try {
+
+        return decodeURIComponent(
+            path
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to decode activity image path:",
+            error
+        );
+
+        return path;
+
+    }
 
 }
 
@@ -9476,38 +9602,29 @@ async function deleteActivityStorageImage(
 ) {
 
     if (!imageUrl) {
-        return;
+        return true;
+    }
+
+
+    const filePath =
+        getActivityStoragePath(
+            imageUrl
+        );
+
+
+    if (!filePath) {
+
+        console.warn(
+            "Activity image path could not be determined:",
+            imageUrl
+        );
+
+        return false;
+
     }
 
 
     try {
-
-        const marker =
-            "/storage/v1/object/public/activities/";
-
-        const index =
-            imageUrl.indexOf(
-                marker
-            );
-
-
-        if (index === -1) {
-            return;
-        }
-
-
-        const filePath =
-            decodeURIComponent(
-                imageUrl.substring(
-                    index + marker.length
-                )
-            );
-
-
-        if (!filePath) {
-            return;
-        }
-
 
         const {
             error
@@ -9527,7 +9644,12 @@ async function deleteActivityStorageImage(
                 error
             );
 
+            return false;
+
         }
+
+
+        return true;
 
     } catch (error) {
 
@@ -9535,6 +9657,8 @@ async function deleteActivityStorageImage(
             "Could not delete activity image:",
             error
         );
+
+        return false;
 
     }
 
@@ -9559,11 +9683,14 @@ async function saveActivity() {
     const number =
         activityNumber.value.trim();
 
+
     const category =
         activityCategory.value.trim();
 
+
     const title =
         activityTitle.value.trim();
+
 
     const description =
         activityDescription?.value.trim() || "";
@@ -9583,6 +9710,10 @@ async function saveActivity() {
         return;
 
     }
+
+
+    let uploadedNewImage =
+        null;
 
 
     try {
@@ -9607,9 +9738,21 @@ async function saveActivity() {
             currentActivityImageUrl;
 
 
-        /*
-         * Upload new image if selected
-         */
+        /* -------------------------------------------------
+           REMOVE CURRENT IMAGE
+        ------------------------------------------------- */
+
+        if (activityImageRemoved) {
+
+            imageUrl =
+                "";
+
+        }
+
+
+        /* -------------------------------------------------
+           UPLOAD NEW IMAGE
+        ------------------------------------------------- */
 
         const selectedFile =
             activityImage?.files?.[0];
@@ -9622,31 +9765,14 @@ async function saveActivity() {
             );
 
 
-            const uploaded =
+            uploadedNewImage =
                 await uploadActivityImage(
                     selectedFile
                 );
 
 
             imageUrl =
-                uploaded.url;
-
-
-            /*
-             * Delete old image after
-             * successful new upload
-             */
-
-            if (
-                currentActivityImageUrl &&
-                currentActivityImageUrl !== imageUrl
-            ) {
-
-                await deleteActivityStorageImage(
-                    currentActivityImageUrl
-                );
-
-            }
+                uploadedNewImage.url;
 
         }
 
@@ -9671,6 +9797,15 @@ async function saveActivity() {
         };
 
 
+        setActivityStatus(
+            "Saving activity data..."
+        );
+
+
+        /* -------------------------------------------------
+           UPDATE EXISTING ACTIVITY
+        ------------------------------------------------- */
+
         if (editingActivityId) {
 
             const {
@@ -9686,10 +9821,64 @@ async function saveActivity() {
 
 
             if (error) {
+
+                /*
+                 * Database update failed.
+                 * Remove newly uploaded image
+                 * so it does not become orphaned.
+                 */
+
+                if (
+                    uploadedNewImage?.path
+                ) {
+
+                    await supabaseClient
+                        .storage
+                        .from("activities")
+                        .remove([
+                            uploadedNewImage.path
+                        ]);
+
+                }
+
                 throw error;
+
             }
 
-        } else {
+
+            /* -------------------------------------------------
+               DELETE OLD IMAGE AFTER DATABASE SUCCESS
+            ------------------------------------------------- */
+
+            if (
+                originalActivityImageUrl &&
+                (
+                    activityImageRemoved ||
+                    selectedFile
+                )
+            ) {
+
+                if (
+                    originalActivityImageUrl !==
+                    imageUrl
+                ) {
+
+                    await deleteActivityStorageImage(
+                        originalActivityImageUrl
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        /* -------------------------------------------------
+           CREATE NEW ACTIVITY
+        ------------------------------------------------- */
+
+        else {
 
             const {
                 error
@@ -9702,20 +9891,56 @@ async function saveActivity() {
 
 
             if (error) {
+
+                /*
+                 * Database insert failed.
+                 * Remove uploaded image.
+                 */
+
+                if (
+                    uploadedNewImage?.path
+                ) {
+
+                    await supabaseClient
+                        .storage
+                        .from("activities")
+                        .remove([
+                            uploadedNewImage.path
+                        ]);
+
+                }
+
                 throw error;
+
             }
 
         }
 
 
+        setActivityStatus(
+            "Activity saved successfully."
+        );
+
+
         await loadActivities();
+
+
+        /*
+         * Keep ID before closing because
+         * closeActivityModal resets it.
+         */
+
+        const wasEditing =
+            Boolean(
+                editingActivityId
+            );
 
 
         closeActivityModal();
 
 
         alert(
-            editingActivityId
+            wasEditing
                 ? "Activity updated successfully."
                 : "Activity added successfully."
         );
@@ -9730,7 +9955,7 @@ async function saveActivity() {
 
 
         setActivityStatus(
-            error.message ||
+            error?.message ||
             "Unable to save activity.",
             true
         );
@@ -9787,7 +10012,7 @@ async function deleteActivity(
     try {
 
         /*
-         * Delete database record first
+         * Delete database record
          */
 
         const {
@@ -9811,7 +10036,9 @@ async function deleteActivity(
          * Delete Storage image
          */
 
-        if (activity.image_url) {
+        if (
+            activity.image_url
+        ) {
 
             await deleteActivityStorageImage(
                 activity.image_url
@@ -9837,7 +10064,7 @@ async function deleteActivity(
 
 
         alert(
-            error.message ||
+            error?.message ||
             "Unable to delete activity."
         );
 
@@ -9877,6 +10104,30 @@ activityForm?.addEventListener(
 
 
 /* =========================================================
+   CLOSE ACTIVITY MODAL
+========================================================= */
+
+activityModal
+    ?.querySelectorAll(
+        "[data-close-modal]"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    closeActivityModal();
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
    REMOVE IMAGE
 ========================================================= */
 
@@ -9884,8 +10135,19 @@ removeActivityImage?.addEventListener(
     "click",
     () => {
 
+        /*
+         * Mark current image as removed.
+         * Actual Storage deletion happens
+         * only after database update succeeds.
+         */
+
+        activityImageRemoved =
+            true;
+
+
         currentActivityImageUrl =
             "";
+
 
         if (activityImage) {
 
@@ -9893,6 +10155,7 @@ removeActivityImage?.addEventListener(
                 "";
 
         }
+
 
         hideActivityImagePreview();
 
@@ -9915,7 +10178,8 @@ activityImage?.addEventListener(
         if (!file) {
 
             if (
-                currentActivityImageUrl
+                currentActivityImageUrl &&
+                !activityImageRemoved
             ) {
 
                 if (
@@ -9940,6 +10204,29 @@ activityImage?.addEventListener(
             return;
 
         }
+
+
+        if (
+            !file.type.startsWith(
+                "image/"
+            )
+        ) {
+
+            setActivityStatus(
+                "Please select a valid image file.",
+                true
+            );
+
+            activityImage.value =
+                "";
+
+            return;
+
+        }
+
+
+        activityImageRemoved =
+            false;
 
 
         const objectUrl =
@@ -9989,6 +10276,7 @@ activityList?.addEventListener(
         const action =
             button.dataset.activityAction;
 
+
         const id =
             button.dataset.id;
 
@@ -10027,25 +10315,24 @@ activityList?.addEventListener(
 
 
 /* =========================================================
-   LOAD ACTIVITIES AFTER ADMIN INIT
+   LOAD ACTIVITIES
 ========================================================= */
 
 if (currentSession) {
 
-    loadActivities();
+    await loadActivities();
 
 }
 
-});
 
-  /* =====================================================
-       START
-    ===================================================== */
+/* =====================================================
+   START
+===================================================== */
 
-    if (currentSession) {
+if (currentSession) {
 
-        await initializeDashboard();
+    await initializeDashboard();
 
-    }
+}
 
 });
