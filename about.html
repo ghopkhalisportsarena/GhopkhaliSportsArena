@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="ঘোপখালী স্পোর্টস অ্যারিনা — খেলাধুলার মাধ্যমে একটি সুস্থ, শৃঙ্খলাপূর্ণ ও মাদকমুক্ত প্রজন্ম গড়ার প্রত্যয়।"
+    >
+
+    <title>
+        আমাদের সম্পর্কে | ঘোপখালী স্পোর্টস অ্যারিনা
+    </title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            font-family:
+                "Noto Sans Bengali",
+                "Hind Siliguri",
+                system-ui,
+                sans-serif;
+
+            color: #f5f7fa;
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at 15% 15%,
+                    rgba(67, 97, 238, 0.22),
+                    transparent 32%
+                ),
+
+                radial-gradient(
+                    circle at 85% 80%,
+                    rgba(0, 210, 170, 0.16),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #07090d,
+                    #10151d 48%,
+                    #080b10
+                );
+
+            overflow-x: hidden;
+        }
+
+
+        /* =================================================
+           BACKGROUND ANIMATION
+        ================================================= */
+
+        .background-orb {
+
+            position: fixed;
+
+            width: 320px;
+            height: 320px;
+
+            border-radius: 50%;
+
+            filter: blur(90px);
+
+            pointer-events: none;
+
+            opacity: 0.16;
+
+            z-index: 0;
+
+            animation:
+                floatingOrb 12s ease-in-out infinite;
+        }
+
+        .orb-one {
+
+            top: -100px;
+            left: -100px;
+
+            background: #5474ff;
+        }
+
+        .orb-two {
+
+            right: -120px;
+            bottom: -100px;
+
+            background: #00c9a7;
+
+            animation-delay: -5s;
+        }
+
+        @keyframes floatingOrb {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(35px, -25px);
+            }
+        }
+
+
+        /* =================================================
+           PAGE
+        ================================================= */
+
+        .about-page {
+
+            position: relative;
+
+            z-index: 2;
+
+            width: min(1100px, calc(100% - 32px));
+
+            margin: auto;
+
+            padding:
+                70px 0
+                90px;
+        }
+
+
+        /* =================================================
+           HEADER
+        ================================================= */
+
+        .about-header {
+
+            text-align: center;
+
+            margin-bottom: 55px;
+
+            animation:
+                pageReveal 0.9s ease both;
+        }
+
+        .about-label {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                8px 15px;
+
+            margin-bottom: 18px;
+
+            border-radius: 999px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.4px;
+
+            color: #dce3ff;
+
+            background:
+                rgba(255,255,255,0.07);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.12);
+
+            backdrop-filter:
+                blur(15px);
+        }
+
+        .about-label::before {
+
+            content: "";
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #65e6c5;
+
+            box-shadow:
+                0 0 15px #65e6c5;
+        }
+
+        .about-header h1 {
+
+            font-size:
+                clamp(34px, 6vw, 62px);
+
+            line-height: 1.15;
+
+            font-weight: 850;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 17px;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff,
+                    #cdd7ff,
+                    #a6ffe9
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .about-header p {
+
+            max-width: 700px;
+
+            margin: auto;
+
+            font-size: 16px;
+
+            line-height: 1.8;
+
+            color:
+                rgba(255,255,255,0.62);
+        }
+
+
+        /* =================================================
+           MAIN CARD
+        ================================================= */
+
+        .about-card {
+
+            position: relative;
+
+            padding:
+                clamp(28px, 5vw, 55px);
+
+            border-radius: 32px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.09),
+                    rgba(255,255,255,0.035)
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,0.12);
+
+            box-shadow:
+                0 30px 90px
+                rgba(0,0,0,0.35),
+
+                inset 0 1px 0
+                rgba(255,255,255,0.08);
+
+            backdrop-filter:
+                blur(25px);
+
+            -webkit-backdrop-filter:
+                blur(25px);
+
+            overflow: hidden;
+
+            animation:
+                cardReveal 1s 0.15s ease both;
+        }
+
+
+        /* =================================================
+           SHINE
+        ================================================= */
+
+        .about-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            top: -300px;
+            right: -200px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(110,135,255,0.15),
+                    transparent 65%
+                );
+
+            pointer-events: none;
+        }
+
+
+        /* =================================================
+           SECTIONS
+        ================================================= */
+
+        .about-section {
+
+            position: relative;
+
+            margin-bottom: 45px;
+
+            animation:
+                sectionReveal
+                0.8s ease both;
+        }
+
+        .about-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-section h2 {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 18px;
+
+            font-size:
+                clamp(22px, 4vw, 31px);
+
+            font-weight: 800;
+
+            color: #ffffff;
+        }
+
+        .about-section h2::before {
+
+            content: "";
+
+            width: 5px;
+
+            height: 28px;
+
+            border-radius: 99px;
+
+            background:
+                linear-gradient(
+                    #7188ff,
+                    #62dfc2
+                );
+
+            box-shadow:
+                0 0 18px
+                rgba(100,140,255,0.5);
+        }
+
+        .about-section p {
+
+            color:
+                rgba(255,255,255,0.72);
+
+            font-size: 16px;
+
+            line-height: 2;
+
+            margin-bottom: 16px;
+        }
+
+
+        /* =================================================
+           GOALS
+        ================================================= */
+
+        .goal-list {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 14px;
+
+            list-style: none;
+
+            margin-top: 25px;
+        }
+
+        .goal-item {
+
+            position: relative;
+
+            padding: 20px 20px 20px 52px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.07);
+
+            color:
+                rgba(255,255,255,0.74);
+
+            line-height: 1.7;
+
+            transition:
+                transform 0.35s ease,
+                background 0.35s ease,
+                border-color 0.35s ease;
+        }
+
+        .goal-item:hover {
+
+            transform:
+                translateY(-5px);
+
+            background:
+                rgba(255,255,255,0.075);
+
+            border-color:
+                rgba(130,155,255,0.25);
+        }
+
+        .goal-item::before {
+
+            content: "✓";
+
+            position: absolute;
+
+            left: 18px;
+            top: 18px;
+
+            width: 25px;
+            height: 25px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            color: #07100d;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8ca0ff,
+                    #68e2c3
+                );
+
+            box-shadow:
+                0 5px 18px
+                rgba(100,200,180,0.2);
+        }
+
+
+        /* =================================================
+           FUTURE PLAN
+        ================================================= */
+
+        .future-box {
+
+            padding: 25px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(100,125,255,0.09),
+                    rgba(75,220,190,0.06)
+                );
+
+            border:
+                1px solid
+                rgba(130,150,255,0.13);
+        }
+
+
+        /* =================================================
+           BELIEF QUOTE
+        ================================================= */
+
+        .belief-box {
+
+            position: relative;
+
+            padding:
+                38px 30px;
+
+            text-align: center;
+
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.07),
+                    rgba(255,255,255,0.025)
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,0.10);
+        }
+
+        .belief-icon {
+
+            font-size: 34px;
+
+            margin-bottom: 15px;
+
+            opacity: 0.85;
+        }
+
+        .belief-box blockquote {
+
+            font-size:
+                clamp(21px, 4vw, 31px);
+
+            line-height: 1.65;
+
+            font-weight: 700;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #bfcaff,
+                    #9affdf
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        /* =================================================
+           FINAL STATEMENT
+        ================================================= */
+
+        .final-statement {
+
+            margin-top: 35px;
+
+            padding: 25px;
+
+            text-align: center;
+
+            color:
+                rgba(255,255,255,0.65);
+
+            font-size: 15px;
+
+            line-height: 1.9;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.08);
+        }
+
+
+        /* =================================================
+           BACK BUTTON
+        ================================================= */
+
+        .back-home {
+
+            display: flex;
+
+            justify-content: center;
+
+            margin-top: 35px;
+        }
+
+        .back-home a {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding:
+                13px 22px;
+
+            border-radius: 999px;
+
+            color: #ffffff;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            background:
+                rgba(255,255,255,0.07);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.12);
+
+            transition:
+                transform 0.3s ease,
+                background 0.3s ease;
+        }
+
+        .back-home a:hover {
+
+            transform:
+                translateY(-3px);
+
+            background:
+                rgba(255,255,255,0.12);
+        }
+
+
+        /* =================================================
+           ANIMATIONS
+        ================================================= */
+
+        @keyframes pageReveal {
+
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardReveal {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(35px)
+                    scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+        @keyframes sectionReveal {
+
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        /* =================================================
+           RESPONSIVE
+        ================================================= */
+
+        @media (max-width: 720px) {
+
+            .about-page {
+
+                width:
+                    min(
+                        100% - 24px,
+                        1100px
+                    );
+
+                padding:
+                    45px 0
+                    60px;
+            }
+
+            .about-header {
+
+                margin-bottom: 35px;
+            }
+
+            .about-header h1 {
+
+                font-size: 36px;
+
+                letter-spacing: -0.8px;
+            }
+
+            .about-header p {
+
+                font-size: 14px;
+            }
+
+            .about-card {
+
+                border-radius: 25px;
+
+                padding:
+                    28px 20px;
+            }
+
+            .about-section {
+
+                margin-bottom: 36px;
+            }
+
+            .about-section p {
+
+                font-size: 15px;
+
+                line-height: 1.9;
+            }
+
+            .goal-list {
+
+                grid-template-columns: 1fr;
+
+                gap: 11px;
+            }
+
+            .goal-item {
+
+                font-size: 14px;
+
+                padding:
+                    17px 17px 17px 47px;
+            }
+
+            .belief-box {
+
+                padding:
+                    30px 18px;
+            }
+
+            .belief-box blockquote {
+
+                font-size: 20px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- Animated Background -->
+
+    <div class="background-orb orb-one"></div>
+    <div class="background-orb orb-two"></div>
+
+
+    <main class="about-page">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================= -->
+
+        <header class="about-header">
+
+            <span class="about-label">
+                আমাদের পরিচয়
+            </span>
+
+            <h1>
+                ঘোপখালী স্পোর্টস অ্যারিনা
+            </h1>
+
+            <p>
+                খেলাধুলার মাধ্যমে একটি সুস্থ,
+                শৃঙ্খলাপূর্ণ, নিরাপদ ও মাদকমুক্ত
+                প্রজন্ম গড়ে তোলার প্রত্যয়।
+            </p>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================= -->
+
+        <article class="about-card">
+
+
+            <!-- INTRODUCTION -->
+
+            <section class="about-section">
+
+                <h2>
+                    ঘোপখালী স্পোর্টস অ্যারিনা
+                </h2>
+
+                <p>
+                    ঘোপখালী স্পোর্টস অ্যারিনা (GSA) একটি
+                    ক্রীড়াভিত্তিক সংগঠন। খেলাধুলার মাধ্যমে
+                    একটি মাদকমুক্ত, সুস্থ, নিরাপদ ও সুন্দর
+                    সমাজ গড়ে তোলাই আমাদের মূল লক্ষ্য।
+                </p>
+
+                <p>
+                    শিশু, কিশোর ও তরুণদের অসামাজিক কার্যকলাপ,
+                    কিশোর অপরাধ ও বিভিন্ন ক্ষতিকর আসক্তি থেকে
+                    দূরে রেখে নিয়মিত খেলাধুলায় সম্পৃক্ত করা
+                    আমাদের অন্যতম প্রধান উদ্দেশ্য। বিশেষ করে
+                    অতিরিক্ত মোবাইল গেম ও স্ক্রিননির্ভরতা থেকে
+                    তরুণ প্রজন্মকে মাঠমুখী করে একটি সুস্থ ও
+                    সক্রিয় জীবনধারায় ফিরিয়ে আনতে আমরা কাজ
+                    করতে চাই।
+                </p>
+
+            </section>
+
+
+            <!-- GOALS -->
+
+            <section class="about-section">
+
+                <h2>
+                    আমাদের লক্ষ্য ও উদ্দেশ্য
+                </h2>
+
+                <ul class="goal-list">
+
+                    <li class="goal-item">
+                        মাদকমুক্ত ও সুন্দর সমাজ গঠনে ভূমিকা রাখা।
+                    </li>
+
+                    <li class="goal-item">
+                        শিশু-কিশোর ও তরুণদের কিশোর অপরাধ ও
+                        অসামাজিক কার্যকলাপ থেকে দূরে রাখা।
+                    </li>
+
+                    <li class="goal-item">
+                        মোবাইল গেমসহ বিভিন্ন ক্ষতিকর আসক্তি
+                        থেকে তরুণ প্রজন্মকে দূরে রেখে
+                        খেলাধুলায় উৎসাহিত করা।
+                    </li>
+
+                    <li class="goal-item">
+                        ফুটবল, ক্রিকেটসহ বিভিন্ন খেলায়
+                        প্রশিক্ষণ ও প্রতিযোগিতার সুযোগ তৈরি করা।
+                    </li>
+
+                    <li class="goal-item">
+                        স্থানীয় প্রতিভাবান খেলোয়াড়দের খুঁজে বের
+                        করে তাদের বিকাশে সহযোগিতা করা।
+                    </li>
+
+                    <li class="goal-item">
+                        শৃঙ্খলা, সততা, সম্মান, বন্ধুত্ব ও
+                        দলীয় ঐক্যের চর্চা করা।
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+            <!-- FUTURE PLAN -->
+
+            <section class="about-section">
+
+                <h2>
+                    আমাদের ভবিষ্যৎ পরিকল্পনা
+                </h2>
+
+                <div class="future-box">
+
+                    <p>
+                        আমাদের দীর্ঘমেয়াদি লক্ষ্য হলো তরুণ ও
+                        যুবসমাজকে সংগঠিত করে ইউনিয়ন পর্যায়
+                        থেকে শুরু করে ধাপে ধাপে উপজেলা,
+                        জেলা ও বিভাগীয় পর্যায়ে GSA-এর ক্রীড়া
+                        কার্যক্রম ও প্রতিযোগিতামূলক দলকে
+                        এগিয়ে নেওয়া এবং প্রতিভাবান খেলোয়াড়দের
+                        বৃহত্তর পর্যায়ে সুযোগ তৈরি করা।
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- BELIEF -->
+
+            <section class="about-section">
+
+                <h2>
+                    আমাদের বিশ্বাস
+                </h2>
+
+                <div class="belief-box">
+
+                    <div class="belief-icon">
+                        ⚽
+                    </div>
+
+                    <blockquote>
+                        “মাঠ হোক তরুণদের ঠিকানা,
+                        খেলাধুলা হোক সুস্থ জীবনের অনুপ্রেরণা।”
+                    </blockquote>
+
+                </div>
+
+            </section>
+
+
+            <!-- FINAL -->
+
+            <section class="about-section">
+
+                <div class="final-statement">
+
+                    ঘোপখালী স্পোর্টস অ্যারিনা—খেলাধুলার মাধ্যমে
+                    একটি সুস্থ, শৃঙ্খলাপূর্ণ ও মাদকমুক্ত
+                    প্রজন্ম গড়ার প্রত্যয়।
+
+                </div>
+
+            </section>
+
+
+        </article>
+
+
+        <!-- BACK -->
+
+        <div class="back-home">
+
+            <a href="index.html">
+
+                <span>←</span>
+
+                হোমপেজে ফিরে যান
+
+            </a>
+
+        </div>
+
+
+    </main>
+
+</body>
+
+</html>
