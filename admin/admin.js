@@ -3773,9 +3773,91 @@ async function loadMembershipApplications() {
             });
 
         if (error) {
-            throw error;
+    throw error;
+}
+       
+/* =========================================
+   MEMBERSHIP STATUS EMAIL
+========================================= */
+
+try {
+
+    if (data?.email) {
+
+        const emailResult =
+            await supabaseClient.functions.invoke(
+                "send-membership-status-email",
+                {
+                    body: {
+
+                        type:
+                            "membership_status",
+
+                        applicationId:
+                            data.id,
+
+                        fullNameBn:
+                            data.full_name_bn || "",
+
+                        fullNameEn:
+                            data.full_name_en || "",
+
+                        mobileNumber:
+                            data.mobile_number || "",
+
+                        email:
+                            data.email || "",
+
+                        sports:
+                            data.sports || "",
+
+                        status:
+                            newStatus
+
+                    }
+                }
+            );
+
+
+        if (emailResult.error) {
+
+            console.error(
+                "Membership status email error:",
+                emailResult.error
+            );
+
+        } else {
+
+            console.log(
+                "Membership status email sent:",
+                emailResult.data
+            );
+
         }
 
+    } else {
+
+        console.log(
+            "No applicant email found. Status email skipped."
+        );
+
+    }
+
+}
+catch (emailError) {
+
+    /*
+     * Status update has already succeeded.
+     * Email failure must not undo the status.
+     */
+
+    console.error(
+        "Membership status email exception:",
+        emailError
+    );
+
+}
+       
         membershipApplications = data || [];
 
         renderMembershipApplications();
