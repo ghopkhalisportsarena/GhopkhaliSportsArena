@@ -1120,11 +1120,30 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
+    "use strict";
+
+
+    /* =========================================
+       SUPABASE CONFIG
+    ========================================= */
+
     const SUPABASE_URL =
         "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-    const SUPABASE_ANON_KEY =
+    const SUPABASE_KEY =
         "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    /* =========================================
+       ELEMENTS
+    ========================================= */
 
     const form =
         document.getElementById("complaintForm");
@@ -1136,49 +1155,45 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("formMessage");
 
 
-    /* =========================================
-       CHECK SUPABASE
-    ========================================= */
-
-    if (!window.supabase) {
+    if (
+        !form ||
+        !submitButton ||
+        !formMessage
+    ) {
 
         console.error(
-            "Supabase library not loaded."
+            "Complaint form elements not found."
         );
 
-        if (formMessage) {
-            formMessage.textContent =
-                "Supabase সংযোগ পাওয়া যায়নি।";
-        }
-
         return;
+
     }
 
 
     /* =========================================
-       SUPABASE CLIENT
+       MESSAGE
     ========================================= */
 
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        );
+    function showMessage(
+        message,
+        type
+    ) {
+
+        formMessage.textContent =
+            message;
+
+        formMessage.className =
+            "form-message " + type;
+
+        formMessage.style.display =
+            "block";
+
+    }
 
 
     /* =========================================
-       FORM
+       SUBMIT
     ========================================= */
-
-    if (!form) {
-
-        console.error(
-            "Complaint form not found."
-        );
-
-        return;
-    }
-
 
     form.addEventListener(
         "submit",
@@ -1187,44 +1202,44 @@ document.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
 
 
-            /* =====================================
+            /* ================================
                GET VALUES
-            ===================================== */
+            ================================= */
 
             const name =
                 document
                     .getElementById("name")
-                    ?.value
+                    .value
                     .trim();
 
             const phone =
                 document
                     .getElementById("phone")
-                    ?.value
+                    .value
                     .trim();
 
             const category =
                 document
                     .getElementById("category")
-                    ?.value
+                    .value
                     .trim();
 
             const subject =
                 document
                     .getElementById("subject")
-                    ?.value
+                    .value
                     .trim();
 
             const message =
                 document
                     .getElementById("message")
-                    ?.value
+                    .value
                     .trim();
 
 
-            /* =====================================
+            /* ================================
                VALIDATION
-            ===================================== */
+            ================================= */
 
             if (
                 !name ||
@@ -1235,171 +1250,142 @@ document.addEventListener("DOMContentLoaded", () => {
             ) {
 
                 showMessage(
-                    "দয়া করে সবগুলো তথ্য পূরণ করুন।",
+                    "অনুগ্রহ করে সবগুলো তথ্য পূরণ করুন।",
                     "error"
                 );
 
                 return;
+
             }
 
 
-            if (message.length < 10) {
-
-                showMessage(
-                    "অভিযোগের বিস্তারিত একটু লিখুন।",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            /* =====================================
+            /* ================================
                BUTTON LOADING
-            ===================================== */
+            ================================= */
 
-            const originalText =
-                submitButton
-                    ? submitButton.textContent
-                    : "অভিযোগ জমা দিন";
+            const originalButtonText =
+                submitButton.innerHTML;
 
+            submitButton.disabled =
+                true;
 
-            if (submitButton) {
-
-                submitButton.disabled = true;
-
-                submitButton.textContent =
-                    "জমা দেওয়া হচ্ছে...";
-            }
+            submitButton.innerHTML =
+                "অভিযোগ পাঠানো হচ্ছে...";
 
 
-            clearMessage();
+            formMessage.style.display =
+                "none";
 
 
             try {
 
-                /* =================================
+                /* ============================
                    STEP 1
-                   SAVE TO SUPABASE
-                ================================= */
+                   SAVE COMPLAINT
+                ============================ */
 
                 const {
-                    data: complaint,
-                    error: insertError
-                } = await supabaseClient
-
-                    .from("complaints")
-
-                    .insert([
-                        {
-                            name: name,
-                            phone: phone,
-                            category: category,
-                            subject: subject,
-                            message: message,
-                            status: "new"
-                        }
-                    ])
-
-                    .select()
-                    .single();
+                    data: complaintData,
+                    error: complaintError
+                } =
+                    await supabaseClient
+                        .from("complaints")
+                        .insert([
+                            {
+                                name,
+                                phone,
+                                category,
+                                subject,
+                                message,
+                                status: "new"
+                            }
+                        ])
+                        .select()
+                        .single();
 
 
-                if (insertError) {
+                if (complaintError) {
 
                     console.error(
-                        "Complaint insert error:",
-                        insertError
+                        "Supabase Error:",
+                        complaintError
                     );
 
                     throw new Error(
                         "অভিযোগ সংরক্ষণ করা যায়নি।"
                     );
+
                 }
 
 
-                /* =================================
+                /* ============================
                    STEP 2
                    SEND EMAIL
-                ================================= */
-
-                if (submitButton) {
-
-                    submitButton.textContent =
-                        "ইমেইল পাঠানো হচ্ছে...";
-                }
-
+                ============================ */
 
                 const {
-                    data: emailResult,
+                    data: emailData,
                     error: emailError
-                } = await supabaseClient.functions.invoke(
-                    "send-complaint-email",
-                    {
-                        body: {
-                            name: name,
-                            phone: phone,
-                            category: category,
-                            subject: subject,
-                            message: message,
-                            complaint_id:
-                                complaint?.id || null
-                        }
-                    }
-                );
+                } =
+                    await supabaseClient
+                        .functions
+                        .invoke(
+                            "send-complaint-email",
+                            {
+                                body: {
+                                    name,
+                                    phone,
+                                    category,
+                                    subject,
+                                    message
+                                }
+                            }
+                        );
 
-
-                /* =================================
-                   EMAIL ERROR
-                ================================= */
 
                 if (emailError) {
 
                     console.error(
-                        "Email function error:",
+                        "Email Function Error:",
                         emailError
                     );
-
 
                     showMessage(
                         "অভিযোগটি সফলভাবে সংরক্ষণ হয়েছে। তবে ইমেইল পাঠাতে সমস্যা হয়েছে।",
                         "warning"
                     );
 
-                    form.reset();
-
                     return;
+
                 }
 
 
                 if (
-                    !emailResult ||
-                    emailResult.success !== true
+                    !emailData ||
+                    emailData.success !== true
                 ) {
 
                     console.error(
-                        "Email result:",
-                        emailResult
+                        "Email Error:",
+                        emailData
                     );
 
-
                     showMessage(
-                        "অভিযোগটি সংরক্ষণ হয়েছে, কিন্তু ইমেইল পাঠানো যায়নি।",
+                        "অভিযোগটি সংরক্ষণ হয়েছে। তবে ইমেইল পাঠানো যায়নি।",
                         "warning"
                     );
 
-                    form.reset();
-
                     return;
+
                 }
 
 
-                /* =================================
-                   EVERYTHING SUCCESSFUL
-                ================================= */
+                /* ============================
+                   SUCCESS
+                ============================ */
 
                 showMessage(
-                    "আপনার অভিযোগ সফলভাবে জমা হয়েছে। ধন্যবাদ।",
+                    "আপনার অভিযোগ সফলভাবে পাঠানো হয়েছে। ধন্যবাদ।",
                     "success"
                 );
 
@@ -1410,27 +1396,25 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch (error) {
 
                 console.error(
-                    "Complaint submission error:",
+                    "Complaint Submit Error:",
                     error
                 );
 
 
                 showMessage(
                     error.message ||
-                    "অভিযোগ জমা দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+                    "দুঃখিত, অভিযোগ পাঠানো যায়নি। আবার চেষ্টা করুন।",
                     "error"
                 );
 
 
             } finally {
 
-                if (submitButton) {
+                submitButton.disabled =
+                    false;
 
-                    submitButton.disabled = false;
-
-                    submitButton.textContent =
-                        originalText;
-                }
+                submitButton.innerHTML =
+                    originalButtonText;
 
             }
 
@@ -1438,40 +1422,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /* =========================================
-       MESSAGE HELPER
-    ========================================= */
-
-    function showMessage(
-        text,
-        type
-    ) {
-
-        if (!formMessage) {
-            return;
-        }
-
-        formMessage.textContent = text;
-
-        formMessage.className =
-            "form-message " + type;
-
-        formMessage.style.display =
-            "block";
-    }
-
-
-    function clearMessage() {
-
-        if (!formMessage) {
-            return;
-        }
-
-        formMessage.textContent = "";
-
-        formMessage.style.display =
-            "none";
-    }
+    console.log(
+        "GSA Complaint System initialized."
+    );
 
 });
 </script>
