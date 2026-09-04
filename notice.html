@@ -3,1332 +3,1156 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
-        content="ঘোপখালী স্পোর্টস অ্যারিনার অফিসিয়াল নোটিশ"
-    >
+<meta
+    name="description"
+    content="ঘোপখালী স্পোর্টস অ্যারিনার অফিসিয়াল নোটিশ"
+>
 
-    <title>
-        Official Notice | Ghopkhali Sports Arena
-    </title>
+<title>Official Notice | Ghopkhali Sports Arena</title>
 
 
-    <!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-    ></script>
 
+<style>
 
-    <style>
+/* =====================================================
+   RESET
+===================================================== */
 
-        /* =================================================
-           RESET
-        ================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+html {
+    scroll-behavior: smooth;
+}
 
+body {
 
-        html {
-            scroll-behavior: smooth;
-        }
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        sans-serif;
 
+    background:
+        linear-gradient(
+            135deg,
+            #f5f7fa 0%,
+            #eef1f5 45%,
+            #ffffff 100%
+        );
 
-        body {
+    color: #111827;
 
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
-                "Segoe UI",
-                sans-serif;
+    min-height: 100vh;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #f5f7fa 0%,
-                    #eef1f5 45%,
-                    #ffffff 100%
-                );
+    overflow-x: hidden;
+}
 
-            color: #111827;
+body.modal-open {
+    overflow: hidden;
+}
 
-            min-height: 100vh;
 
-            overflow-x: hidden;
-        }
+/* =====================================================
+   BACKGROUND
+===================================================== */
 
+body::before {
 
-        body.modal-open {
-            overflow: hidden;
-        }
+    content: "";
 
+    position: fixed;
 
-        /* =================================================
-           BACKGROUND
-        ================================================= */
+    width: 420px;
+    height: 420px;
 
-        body::before {
+    top: -180px;
+    right: -150px;
 
-            content: "";
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,122,255,.12),
+            transparent 70%
+        );
 
-            position: fixed;
+    filter: blur(20px);
 
-            width: 420px;
-            height: 420px;
+    pointer-events: none;
 
-            top: -180px;
-            right: -150px;
+    z-index: -1;
+}
 
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(0, 122, 255, 0.12),
-                    transparent 70%
-                );
+body::after {
 
-            filter: blur(20px);
+    content: "";
 
-            pointer-events: none;
+    position: fixed;
 
-            z-index: -1;
-        }
+    width: 380px;
+    height: 380px;
 
+    bottom: -180px;
+    left: -150px;
 
-        body::after {
+    background:
+        radial-gradient(
+            circle,
+            rgba(88,86,214,.10),
+            transparent 70%
+        );
 
-            content: "";
+    filter: blur(25px);
 
-            position: fixed;
+    pointer-events: none;
 
-            width: 380px;
-            height: 380px;
+    z-index: -1;
+}
 
-            bottom: -180px;
-            left: -150px;
 
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(88, 86, 214, 0.10),
-                    transparent 70%
-                );
+/* =====================================================
+   HEADER
+===================================================== */
 
-            filter: blur(25px);
+.notice-header {
 
-            pointer-events: none;
+    position: sticky;
 
-            z-index: -1;
-        }
+    top: 0;
 
+    z-index: 100;
 
-        /* =================================================
-           HEADER
-        ================================================= */
+    background:
+        rgba(255,255,255,.78);
 
-        .notice-header {
+    backdrop-filter:
+        blur(24px);
 
-            position: sticky;
+    -webkit-backdrop-filter:
+        blur(24px);
 
-            top: 0;
+    border-bottom:
+        1px solid rgba(0,0,0,.07);
 
-            z-index: 100;
+    padding: 16px 22px;
+}
 
-            background:
-                rgba(255,255,255,0.78);
+.notice-header-inner {
 
-            backdrop-filter:
-                blur(24px);
+    max-width: 1180px;
 
-            -webkit-backdrop-filter:
-                blur(24px);
+    margin: auto;
 
-            border-bottom:
-                1px solid rgba(0,0,0,0.07);
+    display: flex;
 
-            padding:
-                16px 22px;
-        }
+    align-items: center;
 
+    justify-content: space-between;
 
-        .notice-header-inner {
+    gap: 20px;
+}
 
-            max-width: 1180px;
+.brand {
 
-            margin: auto;
+    text-decoration: none;
 
-            display: flex;
+    color: #111827;
 
-            align-items: center;
+    display: flex;
 
-            justify-content: space-between;
+    align-items: center;
 
-            gap: 20px;
-        }
+    gap: 12px;
+}
 
+.brand-icon {
 
-        .brand {
+    width: 42px;
+    height: 42px;
 
-            text-decoration: none;
+    border-radius: 13px;
 
-            color: #111827;
+    display: grid;
 
-            display: flex;
+    place-items: center;
 
-            align-items: center;
+    background:
+        linear-gradient(
+            145deg,
+            #111827,
+            #374151
+        );
 
-            gap: 12px;
-        }
+    color: white;
 
+    font-size: 20px;
 
-        .brand-icon {
+    box-shadow:
+        0 8px 24px
+        rgba(0,0,0,.15);
+}
 
-            width: 42px;
-            height: 42px;
+.brand-text strong {
 
-            border-radius: 13px;
+    display: block;
 
-            display: grid;
+    font-size: 15px;
 
-            place-items: center;
+    letter-spacing: -.3px;
+}
 
-            background:
-                linear-gradient(
-                    145deg,
-                    #111827,
-                    #374151
-                );
+.brand-text span {
 
-            color: white;
+    display: block;
 
-            font-size: 20px;
+    font-size: 11px;
 
-            box-shadow:
-                0 8px 24px
-                rgba(0,0,0,0.15);
-        }
+    color: #6b7280;
 
+    margin-top: 2px;
+}
 
-        .brand-text strong {
+.home-button {
 
-            display: block;
+    text-decoration: none;
 
-            font-size: 15px;
+    color: #111827;
 
-            letter-spacing: -0.3px;
-        }
+    padding: 10px 16px;
 
+    border-radius: 999px;
 
-        .brand-text span {
+    background:
+        rgba(255,255,255,.85);
 
-            display: block;
+    border:
+        1px solid rgba(0,0,0,.08);
 
-            font-size: 11px;
+    font-size: 13px;
 
-            color: #6b7280;
+    font-weight: 600;
 
-            margin-top: 2px;
-        }
+    transition: .25s ease;
+}
 
+.home-button:hover {
 
-        .home-button {
+    transform:
+        translateY(-2px);
 
-            text-decoration: none;
+    box-shadow:
+        0 10px 25px
+        rgba(0,0,0,.08);
+}
 
-            color: #111827;
 
-            padding:
-                10px 16px;
+/* =====================================================
+   HERO
+===================================================== */
 
-            border-radius: 999px;
+.notice-hero {
 
-            background:
-                rgba(255,255,255,0.85);
+    max-width: 1180px;
 
-            border:
-                1px solid rgba(0,0,0,0.08);
+    margin: auto;
 
-            font-size: 13px;
+    padding:
+        80px 22px 55px;
+}
 
-            font-weight: 600;
+.notice-eyebrow {
 
-            transition:
-                0.25s ease;
-        }
+    display: inline-flex;
 
+    align-items: center;
 
-        .home-button:hover {
+    gap: 9px;
 
-            transform:
-                translateY(-2px);
+    font-size: 11px;
 
-            box-shadow:
-                0 10px 25px
-                rgba(0,0,0,0.08);
-        }
+    font-weight: 700;
 
+    letter-spacing: 1.7px;
 
-        /* =================================================
-           HERO
-        ================================================= */
+    color: #007aff;
 
-        .notice-hero {
+    text-transform: uppercase;
 
-            max-width: 1180px;
+    margin-bottom: 18px;
+}
 
-            margin: auto;
+.notice-eyebrow::before {
 
-            padding:
-                80px 22px 55px;
-        }
+    content: "";
 
+    width: 28px;
+    height: 2px;
 
-        .notice-eyebrow {
+    background: #007aff;
 
-            display: inline-flex;
+    border-radius: 20px;
+}
 
-            align-items: center;
+.notice-hero h1 {
 
-            gap: 9px;
+    font-size:
+        clamp(42px,7vw,82px);
 
-            font-size: 11px;
+    line-height: .98;
 
-            font-weight: 700;
+    letter-spacing: -4px;
 
-            letter-spacing: 1.7px;
+    max-width: 820px;
 
-            color: #007aff;
+    font-weight: 750;
+}
 
-            text-transform: uppercase;
+.notice-hero h1 span {
 
-            margin-bottom: 18px;
-        }
+    background:
+        linear-gradient(
+            90deg,
+            #007aff,
+            #5856d6,
+            #af52de
+        );
 
+    -webkit-background-clip: text;
 
-        .notice-eyebrow::before {
+    background-clip: text;
 
-            content: "";
+    color: transparent;
+}
 
-            width: 28px;
-            height: 2px;
+.notice-hero p {
 
-            background: #007aff;
+    max-width: 650px;
 
-            border-radius: 20px;
-        }
+    margin-top: 24px;
 
+    color: #6b7280;
 
-        .notice-hero h1 {
+    font-size: 17px;
 
-            font-size:
-                clamp(42px, 7vw, 82px);
+    line-height: 1.7;
+}
 
-            line-height: 0.98;
 
-            letter-spacing:
-                -4px;
+/* =====================================================
+   MAIN
+===================================================== */
 
-            max-width: 820px;
+.notice-main {
 
-            font-weight: 750;
+    max-width: 1180px;
 
-            color: #111827;
-        }
+    margin: auto;
 
+    padding:
+        0 22px 100px;
+}
 
-        .notice-hero h1 span {
+.notice-toolbar {
 
-            background:
-                linear-gradient(
-                    90deg,
-                    #007aff,
-                    #5856d6,
-                    #af52de
-                );
+    display: flex;
 
-            -webkit-background-clip:
-                text;
+    align-items: center;
 
-            background-clip:
-                text;
+    justify-content: space-between;
 
-            color: transparent;
-        }
+    margin-bottom: 25px;
+}
 
+.notice-count {
 
-        .notice-hero p {
+    font-size: 13px;
 
-            max-width: 650px;
+    color: #6b7280;
+}
 
-            margin-top: 24px;
+.notice-count strong {
+    color: #111827;
+}
 
-            color: #6b7280;
+.notice-grid {
 
-            font-size: 17px;
+    display: grid;
 
-            line-height: 1.7;
-        }
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
 
+    gap: 20px;
+}
 
-        /* =================================================
-           NOTICE AREA
-        ================================================= */
 
-        .notice-main {
+/* =====================================================
+   NOTICE CARD
+===================================================== */
 
-            max-width: 1180px;
+.notice-card {
 
-            margin: auto;
+    position: relative;
 
-            padding:
-                0 22px 100px;
-        }
+    overflow: hidden;
 
+    padding: 27px;
 
-        .notice-toolbar {
+    min-height: 250px;
 
-            display: flex;
+    border-radius: 28px;
 
-            align-items: center;
+    background:
+        rgba(255,255,255,.72);
 
-            justify-content: space-between;
+    border:
+        1px solid rgba(255,255,255,.9);
 
-            gap: 15px;
+    box-shadow:
+        0 18px 55px
+        rgba(17,24,39,.07);
 
-            margin-bottom: 25px;
-        }
+    backdrop-filter:
+        blur(25px);
 
+    -webkit-backdrop-filter:
+        blur(25px);
 
-        .notice-count {
+    cursor: pointer;
 
-            font-size: 13px;
+    opacity: 0;
 
-            color: #6b7280;
-        }
+    transform:
+        translateY(25px);
 
+    animation:
+        noticeReveal
+        .65s
+        cubic-bezier(.2,.8,.2,1)
+        forwards;
 
-        .notice-count strong {
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+}
 
-            color: #111827;
-        }
+.notice-card:hover {
 
+    transform:
+        translateY(-7px);
 
-        .notice-grid {
+    box-shadow:
+        0 25px 65px
+        rgba(17,24,39,.12);
+}
 
-            display: grid;
+.notice-card:active {
 
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+    transform:
+        scale(.985);
+}
 
-            gap: 20px;
-        }
+.notice-card::before {
 
+    content: "";
 
-        /* =================================================
-           NOTICE CARD
-        ================================================= */
+    position: absolute;
 
-        .notice-card {
+    width: 180px;
+    height: 180px;
 
-            position: relative;
+    right: -90px;
+    top: -90px;
 
-            overflow: hidden;
+    border-radius: 50%;
 
-            padding: 27px;
+    background:
+        rgba(0,122,255,.07);
 
-            min-height: 250px;
+    pointer-events: none;
+}
 
-            border-radius: 28px;
+.notice-card.important {
 
-            background:
-                rgba(255,255,255,0.72);
+    border:
+        1px solid rgba(255,59,48,.20);
+}
 
-            border:
-                1px solid
-                rgba(255,255,255,0.9);
+.notice-card.important::before {
 
-            box-shadow:
-                0 18px 55px
-                rgba(17,24,39,0.07);
+    background:
+        rgba(255,59,48,.07);
+}
 
-            backdrop-filter:
-                blur(25px);
 
-            -webkit-backdrop-filter:
-                blur(25px);
+/* =====================================================
+   CARD TOP
+===================================================== */
 
-            opacity: 0;
+.notice-card-top {
 
-            transform:
-                translateY(25px);
+    display: flex;
 
-            animation:
-                noticeReveal
-                0.65s
-                cubic-bezier(.2,.8,.2,1)
-                forwards;
+    align-items: center;
 
-            transition:
-                transform .3s ease,
-                box-shadow .3s ease;
+    justify-content: space-between;
 
-            cursor: pointer;
+    gap: 12px;
 
-            user-select: none;
-        }
+    margin-bottom: 25px;
+}
 
+.notice-badge {
 
-        .notice-card:hover {
+    display: inline-flex;
 
-            transform:
-                translateY(-7px);
+    align-items: center;
 
-            box-shadow:
-                0 25px 65px
-                rgba(17,24,39,0.12);
-        }
+    gap: 7px;
 
+    padding:
+        7px 11px;
 
-        .notice-card:active {
+    border-radius: 999px;
 
-            transform:
-                scale(0.985);
-        }
+    background:
+        rgba(0,122,255,.09);
 
+    color: #007aff;
 
-        .notice-card::before {
+    font-size: 10px;
 
-            content: "";
+    font-weight: 750;
 
-            position: absolute;
+    letter-spacing: 1px;
+}
 
-            width: 180px;
-            height: 180px;
+.notice-card.important .notice-badge {
 
-            right: -90px;
-            top: -90px;
+    background:
+        rgba(255,59,48,.09);
 
-            border-radius: 50%;
+    color: #ff3b30;
+}
 
-            background:
-                rgba(0,122,255,0.07);
+.notice-date {
 
-            pointer-events: none;
-        }
+    font-size: 11px;
 
+    color: #8a8f98;
 
-        .notice-card.important {
+    font-weight: 600;
+}
 
-            border:
-                1px solid
-                rgba(255,59,48,0.20);
-        }
 
+/* =====================================================
+   ICON
+===================================================== */
 
-        .notice-card.important::before {
+.notice-icon {
 
-            background:
-                rgba(255,59,48,0.07);
-        }
+    width: 50px;
+    height: 50px;
 
+    border-radius: 16px;
 
-        .notice-card-top {
+    display: grid;
 
-            display: flex;
+    place-items: center;
 
-            align-items: center;
+    background:
+        linear-gradient(
+            145deg,
+            #f2f4f7,
+            #ffffff
+        );
 
-            justify-content: space-between;
+    border:
+        1px solid rgba(0,0,0,.05);
 
-            gap: 12px;
+    font-size: 23px;
 
-            margin-bottom: 25px;
-        }
+    margin-bottom: 20px;
 
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,.06);
+}
 
-        .notice-badge {
 
-            display: inline-flex;
+/* =====================================================
+   CARD CONTENT
+===================================================== */
 
-            align-items: center;
+.notice-card h2 {
 
-            gap: 7px;
+    font-size: 23px;
 
-            padding:
-                7px 11px;
+    line-height: 1.25;
 
-            border-radius: 999px;
+    letter-spacing: -.7px;
 
-            background:
-                rgba(0,122,255,0.09);
+    margin-bottom: 12px;
+}
 
-            color: #007aff;
+.notice-description {
 
-            font-size: 10px;
+    color: #6b7280;
 
-            font-weight: 750;
+    line-height: 1.7;
 
-            letter-spacing: 1px;
-        }
+    font-size: 14px;
 
+    white-space: pre-line;
 
-        .important .notice-badge {
+    display: -webkit-box;
 
-            background:
-                rgba(255,59,48,0.09);
+    -webkit-line-clamp: 4;
 
-            color: #ff3b30;
-        }
+    -webkit-box-orient: vertical;
 
+    overflow: hidden;
+}
 
-        .notice-date {
+.notice-read-more {
 
-            font-size: 11px;
+    margin-top: 18px;
 
-            color: #8a8f98;
+    color: #007aff;
 
-            font-weight: 600;
-        }
+    font-size: 12px;
 
+    font-weight: 700;
 
-        .notice-icon {
+    display: inline-flex;
 
-            width: 50px;
-            height: 50px;
+    align-items: center;
 
-            border-radius: 16px;
+    gap: 7px;
+}
 
-            display: grid;
+.notice-read-more span {
 
-            place-items: center;
+    transition: .25s ease;
+}
 
-            background:
-                linear-gradient(
-                    145deg,
-                    #f2f4f7,
-                    #ffffff
-                );
+.notice-card:hover
+.notice-read-more span {
 
-            border:
-                1px solid
-                rgba(0,0,0,0.05);
+    transform:
+        translateX(5px);
+}
 
-            font-size: 23px;
 
-            margin-bottom: 20px;
+/* =====================================================
+   FULL NOTICE MODAL
+===================================================== */
 
-            box-shadow:
-                0 8px 20px
-                rgba(0,0,0,0.06);
-        }
+.notice-modal {
 
+    position: fixed;
 
-        .notice-card h2 {
+    inset: 0;
 
-            font-size: 23px;
+    z-index: 9999;
 
-            line-height: 1.25;
+    display: flex;
 
-            letter-spacing: -0.7px;
+    align-items: center;
 
-            margin-bottom: 12px;
-        }
+    justify-content: center;
 
+    padding: 20px;
 
-        .notice-description {
+    background:
+        rgba(15,23,42,.58);
 
-            color: #6b7280;
+    backdrop-filter:
+        blur(18px);
 
-            line-height: 1.7;
+    -webkit-backdrop-filter:
+        blur(18px);
 
-            font-size: 14px;
+    opacity: 0;
 
-            white-space: pre-line;
+    visibility: hidden;
 
-            display: -webkit-box;
+    pointer-events: none;
 
-            -webkit-line-clamp: 4;
+    transition:
+        opacity .3s ease,
+        visibility .3s ease;
+}
 
-            -webkit-box-orient: vertical;
+.notice-modal.active {
 
-            overflow: hidden;
-        }
+    opacity: 1;
 
+    visibility: visible;
 
-        .notice-read-more {
+    pointer-events: auto;
+}
 
-            margin-top: 18px;
+.notice-modal-box {
 
-            display: inline-flex;
+    width: min(760px,100%);
 
-            align-items: center;
+    max-height:
+        calc(100vh - 40px);
 
-            gap: 7px;
+    overflow-y: auto;
 
-            color: #007aff;
+    position: relative;
 
-            font-size: 12px;
+    border-radius: 30px;
 
-            font-weight: 700;
-        }
+    background:
+        rgba(255,255,255,.96);
 
+    box-shadow:
+        0 35px 100px
+        rgba(0,0,0,.25);
 
-        .notice-read-more span {
+    transform:
+        translateY(25px)
+        scale(.97);
 
-            transition:
-                transform .25s ease;
-        }
+    transition:
+        transform .35s
+        cubic-bezier(.2,.8,.2,1);
+}
 
+.notice-modal.active
+.notice-modal-box {
 
-        .notice-card:hover
-        .notice-read-more span {
+    transform:
+        translateY(0)
+        scale(1);
+}
 
-            transform:
-                translateX(4px);
-        }
+.notice-modal-close {
 
+    position: sticky;
 
-        .notice-image {
+    float: right;
 
-            width: 100%;
+    top: 16px;
 
-            max-height: 300px;
+    margin:
+        16px 16px 0 0;
 
-            object-fit: cover;
+    z-index: 5;
 
-            border-radius: 18px;
+    width: 42px;
+    height: 42px;
 
-            margin-top: 20px;
+    border: none;
 
-            display: block;
-        }
+    border-radius: 50%;
 
+    background:
+        rgba(17,24,39,.08);
 
-        .notice-attachment {
+    color: #111827;
 
-            display: inline-flex;
+    font-size: 26px;
 
-            align-items: center;
+    cursor: pointer;
 
-            gap: 8px;
+    display: grid;
 
-            margin-top: 20px;
+    place-items: center;
 
-            padding:
-                10px 15px;
+    transition: .25s ease;
+}
 
-            border-radius: 999px;
+.notice-modal-close:hover {
 
-            text-decoration: none;
+    background:
+        rgba(17,24,39,.15);
 
-            color: white;
+    transform:
+        rotate(90deg);
+}
 
-            background: #111827;
+.notice-modal-content {
 
-            font-size: 12px;
+    padding:
+        35px 40px 40px;
 
-            font-weight: 650;
+    clear: both;
+}
 
-            transition: .25s ease;
-        }
+.modal-badge {
 
+    display: inline-flex;
 
-        .notice-attachment:hover {
+    padding:
+        8px 12px;
 
-            transform:
-                translateY(-2px);
+    border-radius: 999px;
 
-            box-shadow:
-                0 10px 25px
-                rgba(0,0,0,0.15);
-        }
+    background:
+        rgba(0,122,255,.09);
 
+    color: #007aff;
 
-        /* =================================================
-           FULL NOTICE MODAL
-        ================================================= */
+    font-size: 10px;
 
-        .notice-modal {
+    font-weight: 750;
 
-            position: fixed;
+    letter-spacing: 1px;
 
-            inset: 0;
+    margin-bottom: 16px;
+}
 
-            z-index: 9999;
+.modal-badge.important {
 
-            display: flex;
+    background:
+        rgba(255,59,48,.10);
 
-            align-items: center;
+    color: #ff3b30;
+}
 
-            justify-content: center;
+.modal-date {
 
-            padding: 20px;
+    font-size: 12px;
 
-            background:
-                rgba(15,23,42,0.55);
+    color: #8a8f98;
 
-            backdrop-filter:
-                blur(18px);
+    font-weight: 600;
 
-            -webkit-backdrop-filter:
-                blur(18px);
+    margin-bottom: 14px;
+}
 
-            opacity: 0;
+.notice-modal-content h2 {
 
-            visibility: hidden;
+    font-size:
+        clamp(28px,5vw,44px);
 
-            pointer-events: none;
+    line-height: 1.15;
 
-            transition:
-                opacity .3s ease,
-                visibility .3s ease;
-        }
+    letter-spacing: -1.5px;
 
+    margin-bottom: 23px;
 
-        .notice-modal.active {
+    padding-right: 20px;
+}
 
-            opacity: 1;
+.modal-divider {
 
-            visibility: visible;
+    height: 1px;
 
-            pointer-events: auto;
-        }
+    background:
+        rgba(0,0,0,.08);
 
+    margin-bottom: 25px;
+}
 
-        .notice-modal-box {
+.modal-description {
 
-            position: relative;
+    font-size: 16px;
 
-            width: min(760px, 100%);
+    line-height: 1.95;
 
-            max-height:
-                calc(100vh - 40px);
+    color: #374151;
 
-            overflow-y: auto;
+    white-space: pre-line;
 
-            border-radius: 32px;
+    word-break: break-word;
+}
 
-            background:
-                rgba(255,255,255,0.94);
+.modal-image {
 
-            border:
-                1px solid
-                rgba(255,255,255,0.95);
+    width: 100%;
 
-            box-shadow:
-                0 35px 100px
-                rgba(0,0,0,0.25);
+    max-height: 600px;
 
-            transform:
-                translateY(25px)
-                scale(.97);
+    object-fit: contain;
 
-            transition:
-                transform .35s
-                cubic-bezier(.2,.8,.2,1);
+    display: block;
 
-            scrollbar-width: thin;
-        }
+    margin-top: 28px;
 
+    border-radius: 20px;
 
-        .notice-modal.active
-        .notice-modal-box {
+    background: #f3f4f6;
+}
 
-            transform:
-                translateY(0)
-                scale(1);
-        }
+.modal-attachment {
 
+    display: inline-flex;
 
-        .notice-modal-close {
+    align-items: center;
 
-            position: absolute;
+    gap: 8px;
 
-            top: 18px;
-            right: 18px;
+    margin-top: 28px;
 
-            z-index: 5;
+    padding:
+        13px 19px;
 
-            width: 42px;
-            height: 42px;
+    border-radius: 999px;
 
-            border: 0;
+    background:
+        #111827;
 
-            border-radius: 50%;
+    color: white;
 
-            display: grid;
+    text-decoration: none;
 
-            place-items: center;
+    font-size: 13px;
 
-            background:
-                rgba(17,24,39,0.08);
+    font-weight: 700;
+}
 
-            color: #111827;
 
-            font-size: 25px;
+/* =====================================================
+   LOADING / ERROR
+===================================================== */
 
-            line-height: 1;
+.notice-loading {
 
-            cursor: pointer;
+    grid-column: 1 / -1;
 
-            transition:
-                .25s ease;
-        }
+    min-height: 300px;
 
+    display: flex;
 
-        .notice-modal-close:hover {
+    flex-direction: column;
 
-            background:
-                rgba(17,24,39,0.14);
+    align-items: center;
 
-            transform:
-                rotate(90deg);
-        }
+    justify-content: center;
 
+    gap: 15px;
 
-        .notice-modal-content {
+    color: #8a8f98;
 
-            padding:
-                38px;
-        }
+    font-size: 13px;
+}
 
+.loader {
 
-        .modal-badge {
+    width: 38px;
+    height: 38px;
 
-            display: inline-flex;
+    border-radius: 50%;
 
-            align-items: center;
+    border:
+        3px solid
+        rgba(0,122,255,.12);
 
-            gap: 7px;
+    border-top-color:
+        #007aff;
 
-            padding:
-                8px 12px;
+    animation:
+        spin .8s linear infinite;
+}
 
-            border-radius: 999px;
+.notice-message {
 
-            background:
-                rgba(0,122,255,0.09);
+    grid-column: 1 / -1;
 
-            color: #007aff;
+    padding: 60px 20px;
 
-            font-size: 10px;
+    text-align: center;
 
-            font-weight: 750;
+    color: #6b7280;
+}
 
-            letter-spacing: 1px;
 
-            margin-bottom: 18px;
-        }
+/* =====================================================
+   FOOTER
+===================================================== */
 
+.notice-footer {
 
-        .modal-badge.important {
+    text-align: center;
 
-            background:
-                rgba(255,59,48,0.10);
+    padding:
+        35px 20px 45px;
 
-            color: #ff3b30;
-        }
+    color: #9ca3af;
 
+    font-size: 12px;
+}
 
-        .modal-date {
+.notice-footer strong {
+    color: #6b7280;
+}
 
-            color: #8a8f98;
 
-            font-size: 12px;
+/* =====================================================
+   ANIMATION
+===================================================== */
 
-            font-weight: 600;
+@keyframes noticeReveal {
 
-            margin-bottom: 14px;
-        }
+    to {
 
+        opacity: 1;
 
-        .notice-modal-content h2 {
+        transform:
+            translateY(0);
+    }
+}
 
-            font-size:
-                clamp(28px, 5vw, 42px);
+@keyframes spin {
 
-            line-height: 1.15;
+    to {
+        transform:
+            rotate(360deg);
+    }
+}
 
-            letter-spacing: -1.5px;
 
-            color: #111827;
+/* =====================================================
+   MOBILE
+===================================================== */
 
-            margin-bottom: 22px;
+@media(max-width:760px) {
 
-            padding-right: 35px;
-        }
+    .notice-header {
+        padding: 13px 15px;
+    }
 
+    .brand-icon {
 
-        .modal-divider {
+        width: 38px;
+        height: 38px;
 
-            width: 100%;
+        border-radius: 11px;
+    }
 
-            height: 1px;
+    .brand-text span {
+        display: none;
+    }
 
-            background:
-                rgba(0,0,0,0.07);
+    .home-button {
 
-            margin-bottom: 24px;
-        }
+        padding:
+            9px 13px;
 
+        font-size: 12px;
+    }
 
-        .modal-description {
+    .notice-hero {
 
-            color: #374151;
+        padding:
+            55px 17px 40px;
+    }
 
-            font-size: 16px;
+    .notice-hero h1 {
 
-            line-height: 1.9;
+        font-size:
+            clamp(42px,14vw,62px);
 
-            white-space: pre-line;
+        letter-spacing:
+            -2.5px;
+    }
 
-            word-break: break-word;
-        }
+    .notice-hero p {
 
+        font-size: 15px;
+    }
 
-        .modal-image {
+    .notice-main {
 
-            display: block;
+        padding:
+            0 15px 70px;
+    }
 
-            width: 100%;
+    .notice-grid {
 
-            max-height: 500px;
+        grid-template-columns: 1fr;
 
-            object-fit: contain;
+        gap: 15px;
+    }
 
-            border-radius: 22px;
+    .notice-card {
 
-            margin-top: 25px;
+        padding: 22px;
 
-            background:
-                #f3f4f6;
-        }
+        border-radius: 23px;
+    }
 
+    .notice-card h2 {
+        font-size: 21px;
+    }
 
-        .modal-attachment {
+    .notice-modal {
 
-            display: inline-flex;
+        padding: 10px;
+    }
 
-            align-items: center;
+    .notice-modal-box {
 
-            justify-content: center;
+        max-height:
+            calc(100vh - 20px);
 
-            gap: 9px;
+        border-radius: 24px;
+    }
 
-            margin-top: 28px;
+    .notice-modal-content {
 
-            padding:
-                13px 19px;
+        padding:
+            28px 20px 30px;
+    }
 
-            border-radius: 999px;
+    .notice-modal-close {
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #111827,
-                    #374151
-                );
+        width: 38px;
+        height: 38px;
 
-            color: white;
+        margin:
+            12px 12px 0 0;
 
-            text-decoration: none;
+        font-size: 22px;
+    }
 
-            font-size: 13px;
+    .notice-modal-content h2 {
 
-            font-weight: 700;
+        font-size: 28px;
+    }
 
-            box-shadow:
-                0 10px 25px
-                rgba(17,24,39,0.16);
+    .modal-description {
 
-            transition:
-                .25s ease;
-        }
+        font-size: 15px;
 
+        line-height: 1.85;
+    }
+}
 
-        .modal-attachment:hover {
 
-            transform:
-                translateY(-2px);
+@media(prefers-reduced-motion:reduce) {
 
-            box-shadow:
-                0 15px 35px
-                rgba(17,24,39,0.22);
-        }
+    *,
+    *::before,
+    *::after {
 
+        animation-duration:
+            .01ms !important;
 
-        /* =================================================
-           LOADING
-        ================================================= */
+        animation-iteration-count:
+            1 !important;
 
-        .notice-loading {
+        transition-duration:
+            .01ms !important;
+    }
+}
 
-            grid-column: 1 / -1;
-
-            min-height: 300px;
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 15px;
-
-            color: #8a8f98;
-
-            font-size: 13px;
-        }
-
-
-        .loader {
-
-            width: 38px;
-            height: 38px;
-
-            border-radius: 50%;
-
-            border:
-                3px solid
-                rgba(0,122,255,0.12);
-
-            border-top-color:
-                #007aff;
-
-            animation:
-                spin .8s linear infinite;
-        }
-
-
-        .notice-message {
-
-            grid-column: 1 / -1;
-
-            padding: 60px 20px;
-
-            text-align: center;
-
-            color: #6b7280;
-        }
-
-
-        /* =================================================
-           FOOTER
-        ================================================= */
-
-        .notice-footer {
-
-            text-align: center;
-
-            padding:
-                35px 20px 45px;
-
-            color: #9ca3af;
-
-            font-size: 12px;
-        }
-
-
-        .notice-footer strong {
-
-            color: #6b7280;
-        }
-
-
-        /* =================================================
-           ANIMATION
-        ================================================= */
-
-        @keyframes noticeReveal {
-
-            to {
-
-                opacity: 1;
-
-                transform:
-                    translateY(0);
-            }
-        }
-
-
-        @keyframes spin {
-
-            to {
-                transform:
-                    rotate(360deg);
-            }
-        }
-
-
-        /* =================================================
-           MOBILE
-        ================================================= */
-
-        @media (max-width: 760px) {
-
-            .notice-header {
-                padding: 13px 15px;
-            }
-
-
-            .brand-icon {
-                width: 38px;
-                height: 38px;
-                border-radius: 11px;
-            }
-
-
-            .brand-text span {
-                display: none;
-            }
-
-
-            .home-button {
-                padding: 9px 13px;
-                font-size: 12px;
-            }
-
-
-            .notice-hero {
-                padding:
-                    55px 17px 40px;
-            }
-
-
-            .notice-hero h1 {
-
-                font-size:
-                    clamp(42px, 14vw, 62px);
-
-                letter-spacing:
-                    -2.5px;
-            }
-
-
-            .notice-hero p {
-                font-size: 15px;
-            }
-
-
-            .notice-main {
-                padding:
-                    0 15px 70px;
-            }
-
-
-            .notice-grid {
-
-                grid-template-columns:
-                    1fr;
-
-                gap: 15px;
-            }
-
-
-            .notice-card {
-
-                padding: 22px;
-
-                border-radius: 23px;
-            }
-
-
-            .notice-card h2 {
-                font-size: 21px;
-            }
-
-
-            .notice-modal {
-
-                padding: 10px;
-            }
-
-
-            .notice-modal-box {
-
-                max-height:
-                    calc(100vh - 20px);
-
-                border-radius: 25px;
-            }
-
-
-            .notice-modal-content {
-
-                padding:
-                    30px 21px 28px;
-            }
-
-
-            .notice-modal-close {
-
-                top: 12px;
-                right: 12px;
-
-                width: 38px;
-                height: 38px;
-
-                font-size: 22px;
-            }
-
-
-            .notice-modal-content h2 {
-
-                font-size: 28px;
-
-                padding-right: 35px;
-            }
-
-
-            .modal-description {
-
-                font-size: 15px;
-
-                line-height: 1.85;
-            }
-
-
-            .modal-image {
-
-                border-radius: 17px;
-            }
-
-        }
-
-
-        @media (prefers-reduced-motion: reduce) {
-
-            *,
-            *::before,
-            *::after {
-
-                animation-duration:
-                    0.01ms !important;
-
-                animation-iteration-count:
-                    1 !important;
-
-                transition-duration:
-                    0.01ms !important;
-            }
-
-        }
-
-    </style>
+</style>
 
 </head>
 
@@ -1336,984 +1160,879 @@
 <body>
 
 
-    <!-- =================================================
-         HEADER
-    ================================================= -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
-    <header class="notice-header">
+<header class="notice-header">
 
-        <div class="notice-header-inner">
+    <div class="notice-header-inner">
 
-
-            <a
-                href="index.html"
-                class="brand"
-            >
-
-                <div class="brand-icon">
-                    📢
-                </div>
-
-                <div class="brand-text">
-
-                    <strong>
-                        Ghopkhali Sports Arena
-                    </strong>
-
-                    <span>
-                        Official Notice
-                    </span>
-
-                </div>
-
-            </a>
-
-
-            <a
-                href="index.html"
-                class="home-button"
-            >
-                ← Home
-            </a>
-
-        </div>
-
-    </header>
-
-
-
-    <!-- =================================================
-         HERO
-    ================================================= -->
-
-    <section class="notice-hero">
-
-        <div class="notice-eyebrow">
-            GHOPKHALI SPORTS ARENA
-        </div>
-
-
-        <h1>
-            Official
-            <span>Notice.</span>
-        </h1>
-
-
-        <p>
-            ঘোপখালী স্পোর্টস অ্যারিনার সকল
-            অফিসিয়াল নোটিশ, ঘোষণা এবং গুরুত্বপূর্ণ
-            তথ্য এখানে প্রকাশ করা হবে।
-        </p>
-
-    </section>
-
-
-
-    <!-- =================================================
-         MAIN
-    ================================================= -->
-
-    <main class="notice-main">
-
-
-        <div class="notice-toolbar">
-
-            <div class="notice-count">
-                মোট নোটিশ:
-                <strong id="noticeCount">—</strong>
-            </div>
-
-        </div>
-
-
-        <div
-            id="noticeGrid"
-            class="notice-grid"
+        <a
+            href="index.html"
+            class="brand"
         >
 
-            <div class="notice-loading">
+            <div class="brand-icon">
+                📢
+            </div>
 
-                <div class="loader"></div>
+            <div class="brand-text">
+
+                <strong>
+                    Ghopkhali Sports Arena
+                </strong>
 
                 <span>
-                    নোটিশ লোড হচ্ছে...
+                    Official Notice
                 </span>
 
             </div>
 
-        </div>
-
-    </main>
+        </a>
 
 
-
-    <!-- =================================================
-         FULL NOTICE MODAL
-    ================================================= -->
-
-    <div
-        id="noticeModal"
-        class="notice-modal"
-        aria-hidden="true"
-    >
-
-        <div
-            class="notice-modal-box"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modalNoticeTitle"
+        <a
+            href="index.html"
+            class="home-button"
         >
+            ← Home
+        </a>
 
-            <button
-                type="button"
-                id="closeNoticeModal"
-                class="notice-modal-close"
-                aria-label="নোটিশ বন্ধ করুন"
-            >
-                ×
-            </button>
+    </div>
+
+</header>
 
 
-            <div class="notice-modal-content">
+<!-- =====================================================
+     HERO
+===================================================== -->
 
-                <div
-                    id="modalNoticeBadge"
-                    class="modal-badge"
-                >
-                    📢 OFFICIAL NOTICE
-                </div>
+<section class="notice-hero">
 
+    <div class="notice-eyebrow">
+        GHOPKHALI SPORTS ARENA
+    </div>
 
-                <div
-                    id="modalNoticeDate"
-                    class="modal-date"
-                >
-                </div>
+    <h1>
+        Official
+        <span>Notice.</span>
+    </h1>
 
+    <p>
+        ঘোপখালী স্পোর্টস অ্যারিনার সকল
+        অফিসিয়াল নোটিশ, ঘোষণা এবং গুরুত্বপূর্ণ
+        তথ্য এখানে প্রকাশ করা হবে।
+    </p>
 
-                <h2 id="modalNoticeTitle">
-                    অফিসিয়াল নোটিশ
-                </h2>
-
-
-                <div class="modal-divider"></div>
-
-
-                <div
-                    id="modalNoticeDescription"
-                    class="modal-description"
-                >
-                </div>
+</section>
 
 
-                <img
-                    id="modalNoticeImage"
-                    class="modal-image"
-                    src=""
-                    alt=""
-                    style="display:none;"
-                >
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
+<main class="notice-main">
 
-                <a
-                    id="modalNoticeAttachment"
-                    class="modal-attachment"
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style="display:none;"
-                >
-                    📄 নোটিশের সংযুক্ত ফাইল দেখুন
-                </a>
+    <div class="notice-toolbar">
 
-            </div>
+        <div class="notice-count">
+
+            মোট নোটিশ:
+
+            <strong id="noticeCount">
+                —
+            </strong>
 
         </div>
 
     </div>
 
 
+    <div
+        id="noticeGrid"
+        class="notice-grid"
+    >
 
-    <!-- =================================================
-         FOOTER
-    ================================================= -->
+        <div class="notice-loading">
 
-    <footer class="notice-footer">
+            <div class="loader"></div>
 
-        © <span id="year"></span>
+            <span>
+                নোটিশ লোড হচ্ছে...
+            </span>
 
-        <strong>
-            Ghopkhali Sports Arena
-        </strong>
+        </div>
 
-        — Official Notice
+    </div>
 
-    </footer>
-
-
-
-    <!-- =================================================
-         JAVASCRIPT
-    ================================================= -->
-
-    <script>
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            async () => {
+</main>
 
 
-                /* =========================================
-                   YEAR
-                ========================================= */
+<!-- =====================================================
+     FULL NOTICE MODAL
+===================================================== -->
 
-                document.getElementById(
-                    "year"
-                ).textContent =
-                    new Date().getFullYear();
+<div
+    id="noticeModal"
+    class="notice-modal"
+    aria-hidden="true"
+>
+
+    <div
+        class="notice-modal-box"
+        role="dialog"
+        aria-modal="true"
+    >
+
+        <button
+            id="closeNoticeModal"
+            class="notice-modal-close"
+            type="button"
+            aria-label="বন্ধ করুন"
+        >
+            ×
+        </button>
 
 
+        <div class="notice-modal-content">
 
-                /* =========================================
-                   SUPABASE
-                ========================================= */
-
-                const SUPABASE_URL =
-                    "https://cmygmswzokyrmgdnuszq.supabase.co";
-
-
-                const SUPABASE_ANON_KEY =
-                    "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+            <div
+                id="modalBadge"
+                class="modal-badge"
+            >
+                📢 OFFICIAL NOTICE
+            </div>
 
 
-                if (!window.supabase) {
+            <div
+                id="modalDate"
+                class="modal-date"
+            >
+            </div>
 
-                    console.error(
-                        "Supabase library not loaded."
-                    );
 
-                    return;
+            <h2 id="modalTitle">
+            </h2>
+
+
+            <div class="modal-divider"></div>
+
+
+            <div
+                id="modalDescription"
+                class="modal-description"
+            >
+            </div>
+
+
+            <img
+                id="modalImage"
+                class="modal-image"
+                style="display:none;"
+                alt=""
+            >
+
+
+            <a
+                id="modalAttachment"
+                class="modal-attachment"
+                style="display:none;"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                📄 সংযুক্ত ফাইল দেখুন
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="notice-footer">
+
+    ©
+    <span id="year"></span>
+
+    <strong>
+        Ghopkhali Sports Arena
+    </strong>
+
+    — Official Notice
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+
+        /* =================================================
+           YEAR
+        ================================================= */
+
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+
+
+        /* =================================================
+           SUPABASE
+        ================================================= */
+
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+        const SUPABASE_ANON_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+        if (!window.supabase) {
+
+            console.error(
+                "Supabase library not loaded."
+            );
+
+            return;
+        }
+
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_ANON_KEY
+            );
+
+
+        /* =================================================
+           ELEMENTS
+        ================================================= */
+
+        const grid =
+            document.getElementById(
+                "noticeGrid"
+            );
+
+        const count =
+            document.getElementById(
+                "noticeCount"
+            );
+
+        const modal =
+            document.getElementById(
+                "noticeModal"
+            );
+
+        const modalBox =
+            document.querySelector(
+                ".notice-modal-box"
+            );
+
+        const closeButton =
+            document.getElementById(
+                "closeNoticeModal"
+            );
+
+        const modalBadge =
+            document.getElementById(
+                "modalBadge"
+            );
+
+        const modalDate =
+            document.getElementById(
+                "modalDate"
+            );
+
+        const modalTitle =
+            document.getElementById(
+                "modalTitle"
+            );
+
+        const modalDescription =
+            document.getElementById(
+                "modalDescription"
+            );
+
+        const modalImage =
+            document.getElementById(
+                "modalImage"
+            );
+
+        const modalAttachment =
+            document.getElementById(
+                "modalAttachment"
+            );
+
+
+        /* =================================================
+           DATE FORMAT
+        ================================================= */
+
+        function formatDate(value) {
+
+            if (!value) {
+                return "";
+            }
+
+            const date =
+                new Date(value);
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return value;
+
+            }
+
+            return date.toLocaleDateString(
+                "bn-BD",
+                {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
                 }
+            );
+        }
 
 
-                const supabaseClient =
-                    window.supabase.createClient(
-                        SUPABASE_URL,
-                        SUPABASE_ANON_KEY
-                    );
+        /* =================================================
+           OPEN NOTICE
+        ================================================= */
+
+        function openNotice(notice) {
+
+            if (!notice) {
+                return;
+            }
 
 
+            /* Badge */
 
-                /* =========================================
-                   ELEMENTS
-                ========================================= */
+            if (notice.important) {
 
-                const grid =
-                    document.getElementById(
-                        "noticeGrid"
-                    );
+                modalBadge.textContent =
+                    "⚠ IMPORTANT NOTICE";
 
+                modalBadge.classList.add(
+                    "important"
+                );
 
-                const count =
-                    document.getElementById(
-                        "noticeCount"
-                    );
+            } else {
 
-
-                const modal =
-                    document.getElementById(
-                        "noticeModal"
-                    );
-
-
-                const modalBox =
-                    document.querySelector(
-                        ".notice-modal-box"
-                    );
-
-
-                const closeModalButton =
-                    document.getElementById(
-                        "closeNoticeModal"
-                    );
-
-
-                const modalBadge =
-                    document.getElementById(
-                        "modalNoticeBadge"
-                    );
-
-
-                const modalDate =
-                    document.getElementById(
-                        "modalNoticeDate"
-                    );
-
-
-                const modalTitle =
-                    document.getElementById(
-                        "modalNoticeTitle"
-                    );
-
-
-                const modalDescription =
-                    document.getElementById(
-                        "modalNoticeDescription"
-                    );
-
-
-                const modalImage =
-                    document.getElementById(
-                        "modalNoticeImage"
-                    );
-
-
-                const modalAttachment =
-                    document.getElementById(
-                        "modalNoticeAttachment"
-                    );
-
-
-
-                /* =========================================
-                   ESCAPE HTML
-                ========================================= */
-
-                function escapeHTML(value) {
-
-                    return String(value ?? "")
-                        .replace(
-                            /&/g,
-                            "&amp;"
-                        )
-                        .replace(
-                            /</g,
-                            "&lt;"
-                        )
-                        .replace(
-                            />/g,
-                            "&gt;"
-                        )
-                        .replace(
-                            /"/g,
-                            "&quot;"
-                        )
-                        .replace(
-                            /'/g,
-                            "&#039;"
-                        );
-
-                }
-
-
-
-                /* =========================================
-                   FORMAT DATE
-                ========================================= */
-
-                function formatDate(dateValue) {
-
-                    if (!dateValue) {
-                        return "";
-                    }
-
-                    const date =
-                        new Date(dateValue);
-
-                    if (
-                        Number.isNaN(
-                            date.getTime()
-                        )
-                    ) {
-
-                        return escapeHTML(
-                            dateValue
-                        );
-
-                    }
-
-                    return date.toLocaleDateString(
-                        "bn-BD",
-                        {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric"
-                        }
-                    );
-
-                }
-
-
-
-                /* =========================================
-                   OPEN MODAL
-                ========================================= */
-
-                function openNoticeModal(notice) {
-
-                    if (!notice) {
-                        return;
-                    }
-
-
-                    const title =
-                        notice.title ||
-                        "অফিসিয়াল নোটিশ";
-
-
-                    const description =
-                        notice.description ||
-                        "এই নোটিশের কোনো বিস্তারিত তথ্য দেওয়া হয়নি।";
-
-
-                    const category =
+                modalBadge.textContent =
+                    "📢 " +
+                    (
                         notice.category ||
-                        "OFFICIAL NOTICE";
-
-
-                    const date =
-                        formatDate(
-                            notice.notice_date
-                        );
-
-
-                    /* -------------------------------------
-                       BADGE
-                    ------------------------------------- */
-
-                    if (notice.important) {
-
-                        modalBadge.textContent =
-                            "⚠ IMPORTANT NOTICE";
-
-                        modalBadge.classList.add(
-                            "important"
-                        );
-
-                    } else {
-
-                        modalBadge.textContent =
-                            "📢 " +
-                            category;
-
-                        modalBadge.classList.remove(
-                            "important"
-                        );
-
-                    }
-
-
-                    /* -------------------------------------
-                       DATE
-                    ------------------------------------- */
-
-                    modalDate.textContent =
-                        date;
-
-
-                    /* -------------------------------------
-                       TITLE
-                    ------------------------------------- */
-
-                    modalTitle.textContent =
-                        title;
-
-
-                    /* -------------------------------------
-                       DESCRIPTION
-                    ------------------------------------- */
-
-                    modalDescription.textContent =
-                        description;
-
-
-                    /* -------------------------------------
-                       IMAGE
-                    ------------------------------------- */
-
-                    if (notice.image_url) {
-
-                        modalImage.src =
-                            notice.image_url;
-
-                        modalImage.alt =
-                            title;
-
-                        modalImage.style.display =
-                            "block";
-
-                    } else {
-
-                        modalImage.removeAttribute(
-                            "src"
-                        );
-
-                        modalImage.style.display =
-                            "none";
-
-                    }
-
-
-                    /* -------------------------------------
-                       ATTACHMENT
-                    ------------------------------------- */
-
-                    if (notice.attachment_url) {
-
-                        modalAttachment.href =
-                            notice.attachment_url;
-
-                        modalAttachment.style.display =
-                            "inline-flex";
-
-                    } else {
-
-                        modalAttachment.removeAttribute(
-                            "href"
-                        );
-
-                        modalAttachment.style.display =
-                            "none";
-
-                    }
-
-
-                    /* -------------------------------------
-                       SHOW
-                    ------------------------------------- */
-
-                    modal.classList.add(
-                        "active"
+                        "OFFICIAL NOTICE"
                     );
 
-                    modal.setAttribute(
-                        "aria-hidden",
-                        "false"
-                    );
-
-                    document.body.classList.add(
-                        "modal-open"
-                    );
+                modalBadge.classList.remove(
+                    "important"
+                );
+            }
 
 
-                    /*
-                       Scroll modal to top
-                    */
+            /* Date */
 
-                    modalBox.scrollTop = 0;
-
-                }
-
-
-
-                /* =========================================
-                   CLOSE MODAL
-                ========================================= */
-
-                function closeNoticeModal() {
-
-                    modal.classList.remove(
-                        "active"
-                    );
-
-                    modal.setAttribute(
-                        "aria-hidden",
-                        "true"
-                    );
-
-                    document.body.classList.remove(
-                        "modal-open"
-                    );
-
-                }
-
-
-
-                /* =========================================
-                   CLOSE BUTTON
-                ========================================= */
-
-                closeModalButton.addEventListener(
-                    "click",
-                    closeNoticeModal
+            modalDate.textContent =
+                formatDate(
+                    notice.notice_date
                 );
 
 
+            /* Title */
 
-                /* =========================================
-                   CLICK OUTSIDE MODAL
-                ========================================= */
+            modalTitle.textContent =
+                notice.title ||
+                "অফিসিয়াল নোটিশ";
 
-                modal.addEventListener(
-                    "click",
-                    (event) => {
 
-                        if (
-                            event.target === modal
-                        ) {
+            /* Full Description */
 
-                            closeNoticeModal();
+            modalDescription.textContent =
+                notice.description ||
+                "এই নোটিশের কোনো বিস্তারিত তথ্য দেওয়া হয়নি।";
 
-                        }
 
-                    }
+            /* Image */
+
+            if (notice.image_url) {
+
+                modalImage.src =
+                    notice.image_url;
+
+                modalImage.alt =
+                    notice.title ||
+                    "Notice";
+
+                modalImage.style.display =
+                    "block";
+
+            } else {
+
+                modalImage.removeAttribute(
+                    "src"
                 );
 
+                modalImage.style.display =
+                    "none";
+            }
 
 
-                /* =========================================
-                   ESCAPE KEY
-                ========================================= */
+            /* Attachment */
 
-                document.addEventListener(
-                    "keydown",
-                    (event) => {
+            if (notice.attachment_url) {
 
-                        if (
-                            event.key === "Escape" &&
-                            modal.classList.contains(
-                                "active"
-                            )
-                        ) {
+                modalAttachment.href =
+                    notice.attachment_url;
 
-                            closeNoticeModal();
+                modalAttachment.style.display =
+                    "inline-flex";
 
-                        }
+            } else {
 
-                    }
+                modalAttachment.removeAttribute(
+                    "href"
                 );
 
+                modalAttachment.style.display =
+                    "none";
+            }
 
 
-                /* =========================================
-                   LOAD NOTICES
-                ========================================= */
+            /* Show Modal */
 
-                try {
+            modal.classList.add(
+                "active"
+            );
 
-                    const {
-                        data,
-                        error
-                    } =
-                        await supabaseClient
-                            .from("notices")
-                            .select("*")
-                            .eq(
-                                "published",
-                                true
-                            )
-                            .order(
-                                "notice_date",
-                                {
-                                    ascending:
-                                        false
-                                }
-                            )
-                            .order(
-                                "created_at",
-                                {
-                                    ascending:
-                                        false
-                                }
-                            );
+            modal.setAttribute(
+                "aria-hidden",
+                "false"
+            );
 
+            document.body.classList.add(
+                "modal-open"
+            );
 
-                    /* =====================================
-                       ERROR
-                    ===================================== */
 
-                    if (error) {
+            modalBox.scrollTop = 0;
+        }
 
-                        console.error(
-                            "Notice loading error:",
-                            error
-                        );
 
-                        count.textContent =
-                            "0";
+        /* =================================================
+           CLOSE NOTICE
+        ================================================= */
 
+        function closeNotice() {
 
-                        grid.innerHTML = `
+            modal.classList.remove(
+                "active"
+            );
 
-                            <div
-                                class="notice-message"
-                            >
+            modal.setAttribute(
+                "aria-hidden",
+                "true"
+            );
 
-                                নোটিশ লোড করা যাচ্ছে না।
+            document.body.classList.remove(
+                "modal-open"
+            );
+        }
 
-                                <br>
 
-                                <small>
-                                    Please try again later.
-                                </small>
+        /* =================================================
+           CLOSE BUTTON
+        ================================================= */
 
-                            </div>
+        closeButton.addEventListener(
+            "click",
+            closeNotice
+        );
 
-                        `;
 
-                        return;
-                    }
+        /* =================================================
+           CLICK OUTSIDE
+        ================================================= */
 
+        modal.addEventListener(
+            "click",
+            function (event) {
 
-                    const notices =
-                        data || [];
+                if (
+                    event.target === modal
+                ) {
 
-
-                    count.textContent =
-                        notices.length;
-
-
-
-                    /* =====================================
-                       EMPTY
-                    ===================================== */
-
-                    if (!notices.length) {
-
-                        grid.innerHTML = `
-
-                            <div
-                                class="notice-message"
-                            >
-
-                                📢
-
-                                <br><br>
-
-                                এখনো কোনো অফিসিয়াল
-                                নোটিশ প্রকাশ করা হয়নি।
-
-                            </div>
-
-                        `;
-
-                        return;
-                    }
-
-
-
-                    /* =====================================
-                       RENDER
-                    ===================================== */
-
-                    grid.innerHTML =
-
-                        notices
-                            .map(
-                                (
-                                    notice,
-                                    index
-                                ) => {
-
-
-                                    const title =
-                                        escapeHTML(
-                                            notice.title
-                                        );
-
-
-                                    const description =
-                                        escapeHTML(
-                                            notice.description
-                                        );
-
-
-                                    const category =
-                                        escapeHTML(
-                                            notice.category ||
-                                            "OFFICIAL NOTICE"
-                                        );
-
-
-                                    const date =
-                                        formatDate(
-                                            notice.notice_date
-                                        );
-
-
-                                    return `
-
-                                        <article
-                                            class="
-                                                notice-card
-                                                ${notice.important
-                                                    ? "important"
-                                                    : ""}
-                                            "
-                                            data-notice-index="${index}"
-                                            tabindex="0"
-                                            role="button"
-                                            aria-label="সম্পূর্ণ নোটিশ দেখুন: ${title}"
-                                            style="
-                                                animation-delay:
-                                                ${index * 90}ms;
-                                            "
-                                        >
-
-                                            <div
-                                                class="
-                                                    notice-card-top
-                                                "
-                                            >
-
-                                                <span
-                                                    class="
-                                                        notice-badge
-                                                    "
-                                                >
-                                                    ${notice.important
-                                                        ? "⚠ IMPORTANT"
-                                                        : "📢 " + category}
-                                                </span>
-
-
-                                                <span
-                                                    class="
-                                                        notice-date
-                                                    "
-                                                >
-                                                    ${date}
-                                                </span>
-
-                                            </div>
-
-
-                                            <div
-                                                class="
-                                                    notice-icon
-                                                "
-                                            >
-                                                ${notice.important
-                                                    ? "⚠️"
-                                                    : "📢"}
-                                            </div>
-
-
-                                            <h2>
-                                                ${title}
-                                            </h2>
-
-
-                                            ${
-                                                description
-                                                    ? `
-                                                        <div
-                                                            class="
-                                                                notice-description
-                                                            "
-                                                        >
-                                                            ${description}
-                                                        </div>
-                                                      `
-                                                    : ""
-                                            }
-
-
-                                            <div
-                                                class="
-                                                    notice-read-more
-                                                "
-                                            >
-                                                সম্পূর্ণ নোটিশ দেখুন
-                                                <span>
-                                                    →
-                                                </span>
-                                            </div>
-
-                                        </article>
-
-                                    `;
-
-                                }
-                            )
-                            .join("");
-
-
-                    /* =====================================
-                       CARD CLICK
-                    ===================================== */
-
-                    const cards =
-                        grid.querySelectorAll(
-                            ".notice-card"
-                        );
-
-
-                    cards.forEach(
-                        (card) => {
-
-                            const index =
-                                Number(
-                                    card.dataset.noticeIndex
-                                );
-
-
-                            card.addEventListener(
-                                "click",
-                                () => {
-
-                                    openNoticeModal(
-                                        notices[index]
-                                    );
-
-                                }
-                            );
-
-
-                            /* Keyboard support */
-
-                            card.addEventListener(
-                                "keydown",
-                                (event) => {
-
-                                    if (
-                                        event.key === "Enter" ||
-                                        event.key === " "
-                                    ) {
-
-                                        event.preventDefault();
-
-                                        openNoticeModal(
-                                            notices[index]
-                                        );
-
-                                    }
-
-                                }
-                            );
-
-                        }
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Unexpected notice error:",
-                        error
-                    );
-
-
-                    count.textContent =
-                        "0";
-
-
-                    grid.innerHTML = `
-
-                        <div
-                            class="notice-message"
-                        >
-                            নোটিশ লোড করা যাচ্ছে না।
-                        </div>
-
-                    `;
+                    closeNotice();
 
                 }
 
             }
         );
 
-    </script>
+
+        /* =================================================
+           ESCAPE
+        ================================================= */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape" &&
+                    modal.classList.contains(
+                        "active"
+                    )
+                ) {
+
+                    closeNotice();
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           LOAD NOTICES
+        ================================================= */
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("notices")
+                    .select("*")
+                    .eq(
+                        "published",
+                        true
+                    )
+                    .order(
+                        "notice_date",
+                        {
+                            ascending: false
+                        }
+                    )
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    );
+
+
+            /* =================================================
+               ERROR
+            ================================================= */
+
+            if (error) {
+
+                console.error(
+                    "Notice loading error:",
+                    error
+                );
+
+                count.textContent =
+                    "0";
+
+                grid.innerHTML = `
+
+                    <div class="notice-message">
+
+                        নোটিশ লোড করা যাচ্ছে না।
+
+                        <br><br>
+
+                        অনুগ্রহ করে কিছুক্ষণ পরে
+                        আবার চেষ্টা করুন।
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            const notices =
+                data || [];
+
+
+            count.textContent =
+                notices.length;
+
+
+            /* =================================================
+               EMPTY
+            ================================================= */
+
+            if (!notices.length) {
+
+                grid.innerHTML = `
+
+                    <div class="notice-message">
+
+                        📢
+
+                        <br><br>
+
+                        এখনো কোনো অফিসিয়াল
+                        নোটিশ প্রকাশ করা হয়নি।
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            /* =================================================
+               RENDER CARDS
+            ================================================= */
+
+            grid.innerHTML =
+
+                notices
+                    .map(
+                        function (
+                            notice,
+                            index
+                        ) {
+
+                            const title =
+                                String(
+                                    notice.title ||
+                                    "অফিসিয়াল নোটিশ"
+                                );
+
+                            const description =
+                                String(
+                                    notice.description ||
+                                    ""
+                                );
+
+                            const category =
+                                String(
+                                    notice.category ||
+                                    "OFFICIAL NOTICE"
+                                );
+
+                            const date =
+                                formatDate(
+                                    notice.notice_date
+                                );
+
+
+                            return `
+
+                                <article
+                                    class="
+                                        notice-card
+                                        ${notice.important
+                                            ? "important"
+                                            : ""}
+                                    "
+                                    data-notice-index="${index}"
+                                    tabindex="0"
+                                    role="button"
+                                    aria-label="সম্পূর্ণ নোটিশ দেখুন"
+                                    style="
+                                        animation-delay:
+                                        ${index * 90}ms;
+                                    "
+                                >
+
+                                    <div
+                                        class="
+                                            notice-card-top
+                                        "
+                                    >
+
+                                        <span
+                                            class="
+                                                notice-badge
+                                            "
+                                        >
+
+                                            ${
+                                                notice.important
+                                                    ? "⚠ IMPORTANT"
+                                                    : "📢 " +
+                                                      category
+                                            }
+
+                                        </span>
+
+
+                                        <span
+                                            class="
+                                                notice-date
+                                            "
+                                        >
+                                            ${date}
+                                        </span>
+
+                                    </div>
+
+
+                                    <div
+                                        class="
+                                            notice-icon
+                                        "
+                                    >
+                                        ${
+                                            notice.important
+                                                ? "⚠️"
+                                                : "📢"
+                                        }
+                                    </div>
+
+
+                                    <h2>
+                                        ${title}
+                                    </h2>
+
+
+                                    ${
+                                        description
+                                            ? `
+                                                <div
+                                                    class="
+                                                        notice-description
+                                                    "
+                                                >
+                                                    ${description}
+                                                </div>
+                                              `
+                                            : ""
+                                    }
+
+
+                                    <div
+                                        class="
+                                            notice-read-more
+                                        "
+                                    >
+
+                                        সম্পূর্ণ নোটিশ দেখুন
+
+                                        <span>
+                                            →
+                                        </span>
+
+                                    </div>
+
+                                </article>
+
+                            `;
+
+                        }
+                    )
+                    .join("");
+
+
+            /* =================================================
+               CARD CLICK
+            ================================================= */
+
+            const cards =
+                grid.querySelectorAll(
+                    ".notice-card"
+                );
+
+
+            cards.forEach(
+                function (card) {
+
+                    const index =
+                        Number(
+                            card.dataset.noticeIndex
+                        );
+
+
+                    card.addEventListener(
+                        "click",
+                        function () {
+
+                            openNotice(
+                                notices[index]
+                            );
+
+                        }
+                    );
+
+
+                    card.addEventListener(
+                        "keydown",
+                        function (event) {
+
+                            if (
+                                event.key === "Enter" ||
+                                event.key === " "
+                            ) {
+
+                                event.preventDefault();
+
+                                openNotice(
+                                    notices[index]
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Unexpected notice error:",
+                error
+            );
+
+            count.textContent =
+                "0";
+
+            grid.innerHTML = `
+
+                <div class="notice-message">
+
+                    নোটিশ লোড করা যাচ্ছে না।
+
+                </div>
+
+            `;
+
+        }
+
+    }
+);
+
+</script>
 
 
 </body>
