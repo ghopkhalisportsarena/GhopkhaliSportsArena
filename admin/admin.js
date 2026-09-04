@@ -7853,64 +7853,172 @@ async function updateFriendlyApplicationStatus(
                     "id",
                     application.id
                 );
-        /* =====================================================
-           SEND DECISION EMAILS
-        ===================================================== */
+  /* =====================================================
+   SEND APPROVED / REJECTED STATUS EMAIL
+===================================================== */
 
-        let emailSent = false;
-        let emailMessage = "";
+let emailSent = false;
 
-        try {
 
-            const {
-                data: emailResult,
-                error: emailError
-            } = await supabaseClient.functions.invoke(
-                "send-friendly-application-email",
-                {
-                    body: {
-                        applicationId:
-                            application.id
-                    }
+/* -----------------------------------------------------
+   EXTRACT APPLICATION DETAILS
+----------------------------------------------------- */
+
+const applicationMessage =
+    String(
+        application.message || ""
+    );
+
+
+const sportMatch =
+    applicationMessage.match(
+        /Sport:\s*(.+)/i
+    );
+
+
+const playersMatch =
+    applicationMessage.match(
+        /Number of Players:\s*(.+)/i
+    );
+
+
+const additionalMessageMatch =
+    applicationMessage.match(
+        /Additional Message:\s*([\s\S]*)/i
+    );
+
+
+const sport =
+    sportMatch
+        ? sportMatch[1]
+            .split("\n")[0]
+            .trim()
+        : "";
+
+
+const players =
+    playersMatch
+        ? playersMatch[1]
+            .split("\n")[0]
+            .trim()
+        : "";
+
+
+const additionalMessage =
+    additionalMessageMatch
+        ? additionalMessageMatch[1].trim()
+        : "";
+
+
+/* -----------------------------------------------------
+   SEND STATUS EMAIL
+----------------------------------------------------- */
+
+try {
+
+    const {
+        data: emailResult,
+        error: emailError
+    } =
+        await supabaseClient.functions.invoke(
+            "send-friendly-match-status-email",
+            {
+                body: {
+
+                    type:
+                        "friendly_match_status",
+
+                    applicationId:
+                        application.id,
+
+                    teamName:
+                        application.team_name ||
+                        application.club_name ||
+                        "",
+
+                    contactPerson:
+                        application.contact_person ||
+                        application.full_name ||
+                        application.name ||
+                        "",
+
+                    phone:
+                        application.phone ||
+                        "",
+
+                    email:
+                        application.email ||
+                        "",
+
+                    sport:
+                        sport,
+
+                    players:
+                        players,
+
+                    preferredDate:
+                        application.preferred_date ||
+                        "",
+
+                    preferredTime:
+                        application.preferred_time ||
+                        "",
+
+                    venue:
+                        application.venue ||
+                        "",
+
+                    message:
+                        additionalMessage,
+
+                    status:
+                        newStatus
                 }
-            );
-
-            if (emailError) {
-                throw emailError;
             }
+        );
 
-            if (!emailResult?.success) {
-                throw new Error(
-                    emailResult?.error ||
-                    "Email sending failed."
-                );
-            }
 
-            emailSent = true;
+    if (emailError) {
+        throw emailError;
+    }
 
-            emailMessage =
-                "Applicant and GSA emails sent successfully.";
 
-            console.log(
-                "Decision emails sent:",
-                emailResult
-            );
+    if (!emailResult?.success) {
 
-        } catch (emailError) {
+        throw new Error(
+            emailResult?.error ||
+            "Email sending failed."
+        );
 
-            console.error(
-                "Decision email error:",
-                emailError
-            );
+    }
 
-            emailMessage =
-                "Application processed, but email could not be sent.";
-        }
 
-        if (pathUpdateError) {
-            throw pathUpdateError;
-        }
+    emailSent = true;
 
+
+    console.log(
+        "Friendly Match status email sent:",
+        emailResult
+    );
+
+
+} catch (emailError) {
+
+    console.error(
+        "Friendly Match status email error:",
+        emailError
+    );
+
+}
+
+
+/* -----------------------------------------------------
+   CHECK PDF PATH UPDATE
+----------------------------------------------------- */
+
+if (pathUpdateError) {
+    throw pathUpdateError;
+}
 
         /* =============================================
            6. UPDATE LOCAL DATA
