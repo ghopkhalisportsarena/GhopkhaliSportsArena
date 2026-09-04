@@ -2155,16 +2155,6 @@ All rights reserved.
 </footer>
 
 
-
-<!-- ==================================================
-     SUPABASE JS LIBRARY
-================================================== -->
-
-<script
-src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-></script>
-
-
 <!-- ==================================================
      MAIN JAVASCRIPT
 ================================================== -->
@@ -3261,6 +3251,359 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 });
+</script>
+
+<!-- ==================================================
+     HOMEPAGE ACTIVITIES
+================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    /* ==========================================
+       SUPABASE
+    ========================================== */
+
+    if (!window.supabase) {
+
+        console.error(
+            "Supabase library not loaded."
+        );
+
+        return;
+    }
+
+
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
+    /* ==========================================
+       ACTIVITY GRID
+    ========================================== */
+
+    const grid =
+        document.getElementById(
+            "homeActivitiesGrid"
+        );
+
+
+    if (!grid) {
+
+        console.error(
+            "homeActivitiesGrid not found."
+        );
+
+        return;
+    }
+
+
+    /* ==========================================
+       ESCAPE HTML
+    ========================================== */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* ==========================================
+       LOADING
+    ========================================== */
+
+    grid.innerHTML = `
+
+        <div class="premium-activity-loading">
+
+            <div class="loading-pulse"></div>
+
+            <span>
+                Loading activities...
+            </span>
+
+        </div>
+
+    `;
+
+
+    /* ==========================================
+       LOAD ACTIVITIES
+    ========================================== */
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("activities")
+
+            .select("*")
+
+            .order("number", {
+                ascending: true
+            });
+
+
+        /* ======================================
+           ERROR
+        ====================================== */
+
+        if (error) {
+
+            console.error(
+                "Activities loading error:",
+                error
+            );
+
+            grid.innerHTML = `
+
+                <div class="premium-activity-message">
+
+                    Unable to load activities.
+
+                    <br>
+
+                    <small>
+                        Please try again later.
+                    </small>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        const activities =
+            data || [];
+
+
+        /* ======================================
+           EMPTY
+        ====================================== */
+
+        if (!activities.length) {
+
+            grid.innerHTML = `
+
+                <div class="premium-activity-message">
+
+                    No activities available yet.
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        /* ======================================
+           RENDER ACTIVITIES
+        ====================================== */
+
+        grid.innerHTML =
+
+            activities
+                .map((activity, index) => {
+
+                    const number =
+                        escapeHTML(
+                            activity.number
+                        );
+
+
+                    const category =
+                        escapeHTML(
+                            activity.category
+                        );
+
+
+                    const title =
+                        escapeHTML(
+                            activity.title
+                        );
+
+
+                    const description =
+                        escapeHTML(
+                            activity.description
+                        );
+
+
+                    /* ==========================
+                       IMAGE
+                    ========================== */
+
+                    const image =
+                        activity.image_url
+                            ? `
+
+                                <div
+                                    class="premium-activity-image"
+                                >
+
+                                    <img
+                                        src="${escapeHTML(
+                                            activity.image_url
+                                        )}"
+                                        alt="${title}"
+                                        loading="lazy"
+                                    >
+
+                                </div>
+
+                              `
+                            : "";
+
+
+                    /* ==========================
+                       ICON
+                    ========================== */
+
+                    const icon =
+                        index === 0
+                            ? "⚡"
+                            : index === 1
+                                ? "◉"
+                                : index === 2
+                                    ? "✦"
+                                    : "✧";
+
+
+                    /* ==========================
+                       CARD
+                    ========================== */
+
+                    return `
+
+                        <article
+                            class="premium-activity-card"
+                        >
+
+                            ${image}
+
+
+                            <!-- TOP -->
+
+                            <div
+                                class="premium-activity-top"
+                            >
+
+                                <span
+                                    class="premium-activity-number"
+                                >
+                                    ${number}
+                                </span>
+
+
+                                <span
+                                    class="premium-activity-category"
+                                >
+                                    ${category}
+                                </span>
+
+                            </div>
+
+
+                            <!-- ICON -->
+
+                            <div
+                                class="premium-activity-icon"
+                            >
+                                ${icon}
+                            </div>
+
+
+                            <!-- TITLE -->
+
+                            <h3>
+                                ${title}
+                            </h3>
+
+
+                            <!-- DESCRIPTION -->
+
+                            <p>
+                                ${description}
+                            </p>
+
+
+                            <!-- ARROW -->
+
+                            <span
+                                class="premium-activity-arrow"
+                            >
+                                ↗
+                            </span>
+
+                        </article>
+
+                    `;
+
+                })
+
+                .join("");
+
+
+        console.log(
+            "Activities loaded:",
+            activities.length
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected Activities error:",
+            error
+        );
+
+
+        grid.innerHTML = `
+
+            <div
+                class="premium-activity-message"
+            >
+
+                Unable to load activities.
+
+                <br>
+
+                <small>
+                    Please try again later.
+                </small>
+
+            </div>
+
+        `;
+
+    }
+
+});
+
 </script>
 
 </body>
