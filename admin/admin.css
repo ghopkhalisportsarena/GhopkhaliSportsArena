@@ -2650,3 +2650,33 @@ select:focus-visible {
         display: block;
     }
 }
+
+/* =========================================================
+   FIX — HIDDEN ELEMENTS / LOGIN LOADING SCREEN
+========================================================= */
+
+[hidden] {
+    display: none !important;
+}
+
+#gsaAdminLoading[hidden] {
+    display: none !important;
+}
+
+#gsaAdminLoading {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(245, 245, 247, 0.90);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+#gsaAdminLoading:not([hidden]) {
+    display: flex;
+}
