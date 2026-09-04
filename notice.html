@@ -71,6 +71,11 @@
         }
 
 
+        body.modal-open {
+            overflow: hidden;
+        }
+
+
         /* =================================================
            BACKGROUND
         ================================================= */
@@ -478,6 +483,10 @@
             transition:
                 transform .3s ease,
                 box-shadow .3s ease;
+
+            cursor: pointer;
+
+            user-select: none;
         }
 
 
@@ -489,6 +498,13 @@
             box-shadow:
                 0 25px 65px
                 rgba(17,24,39,0.12);
+        }
+
+
+        .notice-card:active {
+
+            transform:
+                scale(0.985);
         }
 
 
@@ -508,6 +524,8 @@
 
             background:
                 rgba(0,122,255,0.07);
+
+            pointer-events: none;
         }
 
 
@@ -638,6 +656,47 @@
             font-size: 14px;
 
             white-space: pre-line;
+
+            display: -webkit-box;
+
+            -webkit-line-clamp: 4;
+
+            -webkit-box-orient: vertical;
+
+            overflow: hidden;
+        }
+
+
+        .notice-read-more {
+
+            margin-top: 18px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #007aff;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .notice-read-more span {
+
+            transition:
+                transform .25s ease;
+        }
+
+
+        .notice-card:hover
+        .notice-read-more span {
+
+            transform:
+                translateX(4px);
         }
 
 
@@ -694,6 +753,319 @@
             box-shadow:
                 0 10px 25px
                 rgba(0,0,0,0.15);
+        }
+
+
+        /* =================================================
+           FULL NOTICE MODAL
+        ================================================= */
+
+        .notice-modal {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 9999;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(15,23,42,0.55);
+
+            backdrop-filter:
+                blur(18px);
+
+            -webkit-backdrop-filter:
+                blur(18px);
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            pointer-events: none;
+
+            transition:
+                opacity .3s ease,
+                visibility .3s ease;
+        }
+
+
+        .notice-modal.active {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            pointer-events: auto;
+        }
+
+
+        .notice-modal-box {
+
+            position: relative;
+
+            width: min(760px, 100%);
+
+            max-height:
+                calc(100vh - 40px);
+
+            overflow-y: auto;
+
+            border-radius: 32px;
+
+            background:
+                rgba(255,255,255,0.94);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.95);
+
+            box-shadow:
+                0 35px 100px
+                rgba(0,0,0,0.25);
+
+            transform:
+                translateY(25px)
+                scale(.97);
+
+            transition:
+                transform .35s
+                cubic-bezier(.2,.8,.2,1);
+
+            scrollbar-width: thin;
+        }
+
+
+        .notice-modal.active
+        .notice-modal-box {
+
+            transform:
+                translateY(0)
+                scale(1);
+        }
+
+
+        .notice-modal-close {
+
+            position: absolute;
+
+            top: 18px;
+            right: 18px;
+
+            z-index: 5;
+
+            width: 42px;
+            height: 42px;
+
+            border: 0;
+
+            border-radius: 50%;
+
+            display: grid;
+
+            place-items: center;
+
+            background:
+                rgba(17,24,39,0.08);
+
+            color: #111827;
+
+            font-size: 25px;
+
+            line-height: 1;
+
+            cursor: pointer;
+
+            transition:
+                .25s ease;
+        }
+
+
+        .notice-modal-close:hover {
+
+            background:
+                rgba(17,24,39,0.14);
+
+            transform:
+                rotate(90deg);
+        }
+
+
+        .notice-modal-content {
+
+            padding:
+                38px;
+        }
+
+
+        .modal-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                8px 12px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(0,122,255,0.09);
+
+            color: #007aff;
+
+            font-size: 10px;
+
+            font-weight: 750;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .modal-badge.important {
+
+            background:
+                rgba(255,59,48,0.10);
+
+            color: #ff3b30;
+        }
+
+
+        .modal-date {
+
+            color: #8a8f98;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            margin-bottom: 14px;
+        }
+
+
+        .notice-modal-content h2 {
+
+            font-size:
+                clamp(28px, 5vw, 42px);
+
+            line-height: 1.15;
+
+            letter-spacing: -1.5px;
+
+            color: #111827;
+
+            margin-bottom: 22px;
+
+            padding-right: 35px;
+        }
+
+
+        .modal-divider {
+
+            width: 100%;
+
+            height: 1px;
+
+            background:
+                rgba(0,0,0,0.07);
+
+            margin-bottom: 24px;
+        }
+
+
+        .modal-description {
+
+            color: #374151;
+
+            font-size: 16px;
+
+            line-height: 1.9;
+
+            white-space: pre-line;
+
+            word-break: break-word;
+        }
+
+
+        .modal-image {
+
+            display: block;
+
+            width: 100%;
+
+            max-height: 500px;
+
+            object-fit: contain;
+
+            border-radius: 22px;
+
+            margin-top: 25px;
+
+            background:
+                #f3f4f6;
+        }
+
+
+        .modal-attachment {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 9px;
+
+            margin-top: 28px;
+
+            padding:
+                13px 19px;
+
+            border-radius: 999px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #111827,
+                    #374151
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 10px 25px
+                rgba(17,24,39,0.16);
+
+            transition:
+                .25s ease;
+        }
+
+
+        .modal-attachment:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 15px 35px
+                rgba(17,24,39,0.22);
         }
 
 
@@ -879,6 +1251,62 @@
                 font-size: 21px;
             }
 
+
+            .notice-modal {
+
+                padding: 10px;
+            }
+
+
+            .notice-modal-box {
+
+                max-height:
+                    calc(100vh - 20px);
+
+                border-radius: 25px;
+            }
+
+
+            .notice-modal-content {
+
+                padding:
+                    30px 21px 28px;
+            }
+
+
+            .notice-modal-close {
+
+                top: 12px;
+                right: 12px;
+
+                width: 38px;
+                height: 38px;
+
+                font-size: 22px;
+            }
+
+
+            .notice-modal-content h2 {
+
+                font-size: 28px;
+
+                padding-right: 35px;
+            }
+
+
+            .modal-description {
+
+                font-size: 15px;
+
+                line-height: 1.85;
+            }
+
+
+            .modal-image {
+
+                border-radius: 17px;
+            }
+
         }
 
 
@@ -1020,6 +1448,93 @@
 
 
     <!-- =================================================
+         FULL NOTICE MODAL
+    ================================================= -->
+
+    <div
+        id="noticeModal"
+        class="notice-modal"
+        aria-hidden="true"
+    >
+
+        <div
+            class="notice-modal-box"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalNoticeTitle"
+        >
+
+            <button
+                type="button"
+                id="closeNoticeModal"
+                class="notice-modal-close"
+                aria-label="নোটিশ বন্ধ করুন"
+            >
+                ×
+            </button>
+
+
+            <div class="notice-modal-content">
+
+                <div
+                    id="modalNoticeBadge"
+                    class="modal-badge"
+                >
+                    📢 OFFICIAL NOTICE
+                </div>
+
+
+                <div
+                    id="modalNoticeDate"
+                    class="modal-date"
+                >
+                </div>
+
+
+                <h2 id="modalNoticeTitle">
+                    অফিসিয়াল নোটিশ
+                </h2>
+
+
+                <div class="modal-divider"></div>
+
+
+                <div
+                    id="modalNoticeDescription"
+                    class="modal-description"
+                >
+                </div>
+
+
+                <img
+                    id="modalNoticeImage"
+                    class="modal-image"
+                    src=""
+                    alt=""
+                    style="display:none;"
+                >
+
+
+                <a
+                    id="modalNoticeAttachment"
+                    class="modal-attachment"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="display:none;"
+                >
+                    📄 নোটিশের সংযুক্ত ফাইল দেখুন
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
          FOOTER
     ================================================= -->
 
@@ -1105,6 +1620,60 @@
                     );
 
 
+                const modal =
+                    document.getElementById(
+                        "noticeModal"
+                    );
+
+
+                const modalBox =
+                    document.querySelector(
+                        ".notice-modal-box"
+                    );
+
+
+                const closeModalButton =
+                    document.getElementById(
+                        "closeNoticeModal"
+                    );
+
+
+                const modalBadge =
+                    document.getElementById(
+                        "modalNoticeBadge"
+                    );
+
+
+                const modalDate =
+                    document.getElementById(
+                        "modalNoticeDate"
+                    );
+
+
+                const modalTitle =
+                    document.getElementById(
+                        "modalNoticeTitle"
+                    );
+
+
+                const modalDescription =
+                    document.getElementById(
+                        "modalNoticeDescription"
+                    );
+
+
+                const modalImage =
+                    document.getElementById(
+                        "modalNoticeImage"
+                    );
+
+
+                const modalAttachment =
+                    document.getElementById(
+                        "modalNoticeAttachment"
+                    );
+
+
 
                 /* =========================================
                    ESCAPE HTML
@@ -1156,9 +1725,11 @@
                             date.getTime()
                         )
                     ) {
+
                         return escapeHTML(
                             dateValue
                         );
+
                     }
 
                     return date.toLocaleDateString(
@@ -1171,6 +1742,246 @@
                     );
 
                 }
+
+
+
+                /* =========================================
+                   OPEN MODAL
+                ========================================= */
+
+                function openNoticeModal(notice) {
+
+                    if (!notice) {
+                        return;
+                    }
+
+
+                    const title =
+                        notice.title ||
+                        "অফিসিয়াল নোটিশ";
+
+
+                    const description =
+                        notice.description ||
+                        "এই নোটিশের কোনো বিস্তারিত তথ্য দেওয়া হয়নি।";
+
+
+                    const category =
+                        notice.category ||
+                        "OFFICIAL NOTICE";
+
+
+                    const date =
+                        formatDate(
+                            notice.notice_date
+                        );
+
+
+                    /* -------------------------------------
+                       BADGE
+                    ------------------------------------- */
+
+                    if (notice.important) {
+
+                        modalBadge.textContent =
+                            "⚠ IMPORTANT NOTICE";
+
+                        modalBadge.classList.add(
+                            "important"
+                        );
+
+                    } else {
+
+                        modalBadge.textContent =
+                            "📢 " +
+                            category;
+
+                        modalBadge.classList.remove(
+                            "important"
+                        );
+
+                    }
+
+
+                    /* -------------------------------------
+                       DATE
+                    ------------------------------------- */
+
+                    modalDate.textContent =
+                        date;
+
+
+                    /* -------------------------------------
+                       TITLE
+                    ------------------------------------- */
+
+                    modalTitle.textContent =
+                        title;
+
+
+                    /* -------------------------------------
+                       DESCRIPTION
+                    ------------------------------------- */
+
+                    modalDescription.textContent =
+                        description;
+
+
+                    /* -------------------------------------
+                       IMAGE
+                    ------------------------------------- */
+
+                    if (notice.image_url) {
+
+                        modalImage.src =
+                            notice.image_url;
+
+                        modalImage.alt =
+                            title;
+
+                        modalImage.style.display =
+                            "block";
+
+                    } else {
+
+                        modalImage.removeAttribute(
+                            "src"
+                        );
+
+                        modalImage.style.display =
+                            "none";
+
+                    }
+
+
+                    /* -------------------------------------
+                       ATTACHMENT
+                    ------------------------------------- */
+
+                    if (notice.attachment_url) {
+
+                        modalAttachment.href =
+                            notice.attachment_url;
+
+                        modalAttachment.style.display =
+                            "inline-flex";
+
+                    } else {
+
+                        modalAttachment.removeAttribute(
+                            "href"
+                        );
+
+                        modalAttachment.style.display =
+                            "none";
+
+                    }
+
+
+                    /* -------------------------------------
+                       SHOW
+                    ------------------------------------- */
+
+                    modal.classList.add(
+                        "active"
+                    );
+
+                    modal.setAttribute(
+                        "aria-hidden",
+                        "false"
+                    );
+
+                    document.body.classList.add(
+                        "modal-open"
+                    );
+
+
+                    /*
+                       Scroll modal to top
+                    */
+
+                    modalBox.scrollTop = 0;
+
+                }
+
+
+
+                /* =========================================
+                   CLOSE MODAL
+                ========================================= */
+
+                function closeNoticeModal() {
+
+                    modal.classList.remove(
+                        "active"
+                    );
+
+                    modal.setAttribute(
+                        "aria-hidden",
+                        "true"
+                    );
+
+                    document.body.classList.remove(
+                        "modal-open"
+                    );
+
+                }
+
+
+
+                /* =========================================
+                   CLOSE BUTTON
+                ========================================= */
+
+                closeModalButton.addEventListener(
+                    "click",
+                    closeNoticeModal
+                );
+
+
+
+                /* =========================================
+                   CLICK OUTSIDE MODAL
+                ========================================= */
+
+                modal.addEventListener(
+                    "click",
+                    (event) => {
+
+                        if (
+                            event.target === modal
+                        ) {
+
+                            closeNoticeModal();
+
+                        }
+
+                    }
+                );
+
+
+
+                /* =========================================
+                   ESCAPE KEY
+                ========================================= */
+
+                document.addEventListener(
+                    "keydown",
+                    (event) => {
+
+                        if (
+                            event.key === "Escape" &&
+                            modal.classList.contains(
+                                "active"
+                            )
+                        ) {
+
+                            closeNoticeModal();
+
+                        }
+
+                    }
+                );
 
 
 
@@ -1218,7 +2029,9 @@
                             error
                         );
 
-                        count.textContent = "0";
+                        count.textContent =
+                            "0";
+
 
                         grid.innerHTML = `
 
@@ -1318,43 +2131,6 @@
                                         );
 
 
-                                    const image =
-                                        notice.image_url
-                                            ? `
-
-                                                <img
-                                                    class="notice-image"
-                                                    src="${escapeHTML(
-                                                        notice.image_url
-                                                    )}"
-                                                    alt="${title}"
-                                                    loading="lazy"
-                                                >
-
-                                              `
-                                            : "";
-
-
-                                    const attachment =
-                                        notice.attachment_url
-                                            ? `
-
-                                                <a
-                                                    class="notice-attachment"
-                                                    href="${escapeHTML(
-                                                        notice.attachment_url
-                                                    )}"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    📄
-                                                    View Attachment
-                                                </a>
-
-                                              `
-                                            : "";
-
-
                                     return `
 
                                         <article
@@ -1364,6 +2140,10 @@
                                                     ? "important"
                                                     : ""}
                                             "
+                                            data-notice-index="${index}"
+                                            tabindex="0"
+                                            role="button"
+                                            aria-label="সম্পূর্ণ নোটিশ দেখুন: ${title}"
                                             style="
                                                 animation-delay:
                                                 ${index * 90}ms;
@@ -1383,8 +2163,7 @@
                                                 >
                                                     ${notice.important
                                                         ? "⚠ IMPORTANT"
-                                                        : "📢 "
-                                                        + category}
+                                                        : "📢 " + category}
                                                 </span>
 
 
@@ -1430,10 +2209,16 @@
                                             }
 
 
-                                            ${image}
-
-
-                                            ${attachment}
+                                            <div
+                                                class="
+                                                    notice-read-more
+                                                "
+                                            >
+                                                সম্পূর্ণ নোটিশ দেখুন
+                                                <span>
+                                                    →
+                                                </span>
+                                            </div>
 
                                         </article>
 
@@ -1444,12 +2229,74 @@
                             .join("");
 
 
+                    /* =====================================
+                       CARD CLICK
+                    ===================================== */
+
+                    const cards =
+                        grid.querySelectorAll(
+                            ".notice-card"
+                        );
+
+
+                    cards.forEach(
+                        (card) => {
+
+                            const index =
+                                Number(
+                                    card.dataset.noticeIndex
+                                );
+
+
+                            card.addEventListener(
+                                "click",
+                                () => {
+
+                                    openNoticeModal(
+                                        notices[index]
+                                    );
+
+                                }
+                            );
+
+
+                            /* Keyboard support */
+
+                            card.addEventListener(
+                                "keydown",
+                                (event) => {
+
+                                    if (
+                                        event.key === "Enter" ||
+                                        event.key === " "
+                                    ) {
+
+                                        event.preventDefault();
+
+                                        openNoticeModal(
+                                            notices[index]
+                                        );
+
+                                    }
+
+                                }
+                            );
+
+                        }
+                    );
+
+
                 } catch (error) {
 
                     console.error(
                         "Unexpected notice error:",
                         error
                     );
+
+
+                    count.textContent =
+                        "0";
+
 
                     grid.innerHTML = `
 
