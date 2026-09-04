@@ -2652,31 +2652,46 @@ select:focus-visible {
 }
 
 /* =========================================================
-   FIX — HIDDEN ELEMENTS / LOGIN LOADING SCREEN
+   GSA ADMIN — LOGIN LOADING FIX
+   DO NOT REMOVE
 ========================================================= */
 
+/* HTML hidden attribute must ALWAYS hide the element */
 [hidden] {
     display: none !important;
 }
 
+/* Login loading screen */
+#gsaAdminLoading {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 999999 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: rgba(245, 245, 247, 0.92) !important;
+
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* Only show loading screen when JS removes hidden */
+#gsaAdminLoading:not([hidden]) {
+    display: flex !important;
+}
+
+/* When hidden, NEVER show it */
 #gsaAdminLoading[hidden] {
     display: none !important;
 }
 
-#gsaAdminLoading {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-
-    align-items: center;
-    justify-content: center;
-
-    background: rgba(245, 245, 247, 0.90);
-
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+/* Login screen must remain normal */
+#loginScreen {
+    min-height: 100vh;
 }
 
-#gsaAdminLoading:not([hidden]) {
-    display: flex;
+/* Dashboard hidden state */
+#dashboardScreen[hidden] {
+    display: none !important;
 }
