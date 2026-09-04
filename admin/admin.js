@@ -8905,6 +8905,1137 @@ document.addEventListener(
 
 })();
 
+/* =========================================================
+   ACTIVITIES MANAGEMENT
+   GHOPKHALI SPORTS ARENA
+   Supabase Table: activities
+   Supabase Storage Bucket: activities
+========================================================= */
+
+let activities = [];
+let editingActivityId = null;
+let currentActivityImageUrl = "";
+
+
+/* =========================================================
+   ACTIVITY ELEMENTS
+========================================================= */
+
+const activityList =
+    $("activityList");
+
+const activityModal =
+    $("activityModal");
+
+const activityForm =
+    $("activityForm");
+
+const activityModalTitle =
+    $("activityModalTitle");
+
+const activityId =
+    $("activityId");
+
+const activityNumber =
+    $("activityNumber");
+
+const activityCategory =
+    $("activityCategory");
+
+const activityTitle =
+    $("activityTitle");
+
+const activityDescription =
+    $("activityDescription");
+
+const activityImage =
+    $("activityImage");
+
+const activityImagePreview =
+    $("activityImagePreview");
+
+const activityPreviewImage =
+    $("activityPreviewImage");
+
+const removeActivityImage =
+    $("removeActivityImage");
+
+const newActivityButton =
+    $("newActivityButton");
+
+const saveActivityButton =
+    $("saveActivityButton");
+
+const activityFormStatus =
+    $("activityFormStatus");
+
+
+/* =========================================================
+   LOAD ACTIVITIES
+========================================================= */
+
+async function loadActivities() {
+
+    if (!activityList) {
+        return;
+    }
+
+    activityList.innerHTML = `
+        <div class="loading-state">
+            Loading activities...
+        </div>
+    `;
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("activities")
+                .select("*")
+                .order("number", {
+                    ascending: true
+                });
+
+        if (error) {
+            throw error;
+        }
+
+        activities =
+            data || [];
+
+        renderActivities();
+
+    } catch (error) {
+
+        console.error(
+            "Activities loading error:",
+            error
+        );
+
+        activityList.innerHTML = `
+            <div class="empty-state">
+                Unable to load activities.
+                <br><br>
+                ${escapeHTML(
+                    error.message
+                )}
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER ACTIVITIES
+========================================================= */
+
+function renderActivities() {
+
+    if (!activityList) {
+        return;
+    }
+
+    if (!activities.length) {
+
+        activityList.innerHTML = `
+            <div class="empty-state">
+                No activities added yet.
+                <br><br>
+                Click "Add Activity" to create your first activity.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    activityList.innerHTML =
+        activities
+            .map(activity => {
+
+                const image =
+                    activity.image_url
+                        ? `
+                            <div class="activity-admin-image">
+                                <img
+                                    src="${escapeHTML(
+                                        activity.image_url
+                                    )}"
+                                    alt="${escapeHTML(
+                                        activity.title ||
+                                        "Activity"
+                                    )}"
+                                    loading="lazy"
+                                >
+                            </div>
+                        `
+                        : `
+                            <div class="activity-admin-image activity-no-image">
+                                <span>
+                                    GSA
+                                </span>
+                            </div>
+                        `;
+
+
+                return `
+
+                    <article
+                        class="activity-admin-card"
+                    >
+
+                        ${image}
+
+
+                        <div class="activity-admin-content">
+
+                            <div class="activity-admin-meta">
+
+                                <span>
+                                    ${escapeHTML(
+                                        activity.number ||
+                                        ""
+                                    )}
+                                </span>
+
+                                <span>
+                                    ${escapeHTML(
+                                        activity.category ||
+                                        ""
+                                    )}
+                                </span>
+
+                            </div>
+
+
+                            <h3>
+                                ${escapeHTML(
+                                    activity.title ||
+                                    "Untitled Activity"
+                                )}
+                            </h3>
+
+
+                            <p>
+                                ${escapeHTML(
+                                    activity.description ||
+                                    "No description."
+                                )}
+                            </p>
+
+
+                            <div class="activity-admin-actions">
+
+                                <button
+                                    type="button"
+                                    class="small-button"
+                                    data-activity-action="edit"
+                                    data-id="${escapeHTML(
+                                        activity.id
+                                    )}"
+                                >
+                                    Edit
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="small-button danger"
+                                    data-activity-action="delete"
+                                    data-id="${escapeHTML(
+                                        activity.id
+                                    )}"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                `;
+
+            })
+            .join("");
+
+}
+
+
+/* =========================================================
+   OPEN ACTIVITY MODAL
+========================================================= */
+
+function openActivityModal(
+    activity = null
+) {
+
+    if (!activityModal) {
+        return;
+    }
+
+
+    editingActivityId =
+        activity?.id || null;
+
+
+    if (activityModalTitle) {
+
+        activityModalTitle.textContent =
+            activity
+                ? "Edit Activity"
+                : "Add Activity";
+
+    }
+
+
+    if (activityId) {
+
+        activityId.value =
+            activity?.id || "";
+
+    }
+
+
+    if (activityNumber) {
+
+        activityNumber.value =
+            activity?.number || "";
+
+    }
+
+
+    if (activityCategory) {
+
+        activityCategory.value =
+            activity?.category || "";
+
+    }
+
+
+    if (activityTitle) {
+
+        activityTitle.value =
+            activity?.title || "";
+
+    }
+
+
+    if (activityDescription) {
+
+        activityDescription.value =
+            activity?.description || "";
+
+    }
+
+
+    currentActivityImageUrl =
+        activity?.image_url || "";
+
+
+    if (activityImage) {
+
+        activityImage.value = "";
+
+    }
+
+
+    if (
+        currentActivityImageUrl &&
+        activityPreviewImage &&
+        activityImagePreview
+    ) {
+
+        activityPreviewImage.src =
+            currentActivityImageUrl;
+
+        activityImagePreview.style.display =
+            "block";
+
+    } else {
+
+        hideActivityImagePreview();
+
+    }
+
+
+    setActivityStatus("");
+
+
+    openModal(
+        activityModal
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE ACTIVITY MODAL
+========================================================= */
+
+function closeActivityModal() {
+
+    editingActivityId =
+        null;
+
+    currentActivityImageUrl =
+        "";
+
+
+    if (activityForm) {
+
+        activityForm.reset();
+
+    }
+
+
+    if (activityId) {
+
+        activityId.value = "";
+
+    }
+
+
+    if (activityImage) {
+
+        activityImage.value = "";
+
+    }
+
+
+    hideActivityImagePreview();
+
+
+    setActivityStatus("");
+
+
+    closeModal(
+        activityModal
+    );
+
+}
+
+
+/* =========================================================
+   IMAGE PREVIEW
+========================================================= */
+
+function hideActivityImagePreview() {
+
+    if (activityImagePreview) {
+
+        activityImagePreview.style.display =
+            "none";
+
+    }
+
+
+    if (activityPreviewImage) {
+
+        activityPreviewImage.src =
+            "";
+
+    }
+
+}
+
+
+/* =========================================================
+   ACTIVITY STATUS
+========================================================= */
+
+function setActivityStatus(
+    message,
+    isError = false
+) {
+
+    if (!activityFormStatus) {
+        return;
+    }
+
+    activityFormStatus.textContent =
+        message || "";
+
+    activityFormStatus.style.color =
+        isError
+            ? "#ff3b30"
+            : "";
+
+}
+
+
+/* =========================================================
+   UPLOAD ACTIVITY IMAGE
+========================================================= */
+
+async function uploadActivityImage(
+    file
+) {
+
+    if (!file) {
+        return null;
+    }
+
+
+    if (
+        !file.type.startsWith(
+            "image/"
+        )
+    ) {
+
+        throw new Error(
+            "Please select a valid image file."
+        );
+
+    }
+
+
+    const maxSize =
+        10 * 1024 * 1024;
+
+
+    if (file.size > maxSize) {
+
+        throw new Error(
+            "Image size must be 10 MB or smaller."
+        );
+
+    }
+
+
+    const extension =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    const fileName =
+        `${crypto.randomUUID()}.${extension}`;
+
+
+    const filePath =
+        `activities/${fileName}`;
+
+
+    const {
+        error: uploadError
+    } =
+        await supabaseClient
+            .storage
+            .from("activities")
+            .upload(
+                filePath,
+                file,
+                {
+                    cacheControl: "3600",
+                    upsert: false
+                }
+            );
+
+
+    if (uploadError) {
+        throw uploadError;
+    }
+
+
+    const {
+        data
+    } =
+        supabaseClient
+            .storage
+            .from("activities")
+            .getPublicUrl(
+                filePath
+            );
+
+
+    return {
+        url:
+            data?.publicUrl || "",
+
+        path:
+            filePath
+    };
+
+}
+
+
+/* =========================================================
+   DELETE STORAGE IMAGE
+========================================================= */
+
+async function deleteActivityStorageImage(
+    imageUrl
+) {
+
+    if (!imageUrl) {
+        return;
+    }
+
+
+    try {
+
+        const marker =
+            "/storage/v1/object/public/activities/";
+
+        const index =
+            imageUrl.indexOf(
+                marker
+            );
+
+
+        if (index === -1) {
+            return;
+        }
+
+
+        const filePath =
+            decodeURIComponent(
+                imageUrl.substring(
+                    index + marker.length
+                )
+            );
+
+
+        if (!filePath) {
+            return;
+        }
+
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .storage
+                .from("activities")
+                .remove([
+                    filePath
+                ]);
+
+
+        if (error) {
+
+            console.warn(
+                "Storage image delete warning:",
+                error
+            );
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Could not delete activity image:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE ACTIVITY
+========================================================= */
+
+async function saveActivity() {
+
+    if (
+        !activityNumber ||
+        !activityCategory ||
+        !activityTitle
+    ) {
+        return;
+    }
+
+
+    const number =
+        activityNumber.value.trim();
+
+    const category =
+        activityCategory.value.trim();
+
+    const title =
+        activityTitle.value.trim();
+
+    const description =
+        activityDescription?.value.trim() || "";
+
+
+    if (
+        !number ||
+        !category ||
+        !title
+    ) {
+
+        setActivityStatus(
+            "Please fill in Number, Category and Title.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        if (saveActivityButton) {
+
+            saveActivityButton.disabled =
+                true;
+
+            saveActivityButton.textContent =
+                "Saving...";
+
+        }
+
+
+        setActivityStatus(
+            "Saving activity..."
+        );
+
+
+        let imageUrl =
+            currentActivityImageUrl;
+
+
+        /*
+         * Upload new image if selected
+         */
+
+        const selectedFile =
+            activityImage?.files?.[0];
+
+
+        if (selectedFile) {
+
+            setActivityStatus(
+                "Uploading photo..."
+            );
+
+
+            const uploaded =
+                await uploadActivityImage(
+                    selectedFile
+                );
+
+
+            imageUrl =
+                uploaded.url;
+
+
+            /*
+             * Delete old image after
+             * successful new upload
+             */
+
+            if (
+                currentActivityImageUrl &&
+                currentActivityImageUrl !== imageUrl
+            ) {
+
+                await deleteActivityStorageImage(
+                    currentActivityImageUrl
+                );
+
+            }
+
+        }
+
+
+        const payload = {
+
+            number:
+                number,
+
+            category:
+                category,
+
+            title:
+                title,
+
+            description:
+                description,
+
+            image_url:
+                imageUrl || null
+
+        };
+
+
+        if (editingActivityId) {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("activities")
+                    .update(payload)
+                    .eq(
+                        "id",
+                        editingActivityId
+                    );
+
+
+            if (error) {
+                throw error;
+            }
+
+        } else {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("activities")
+                    .insert(
+                        payload
+                    );
+
+
+            if (error) {
+                throw error;
+            }
+
+        }
+
+
+        await loadActivities();
+
+
+        closeActivityModal();
+
+
+        alert(
+            editingActivityId
+                ? "Activity updated successfully."
+                : "Activity added successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Activity save error:",
+            error
+        );
+
+
+        setActivityStatus(
+            error.message ||
+            "Unable to save activity.",
+            true
+        );
+
+
+    } finally {
+
+        if (saveActivityButton) {
+
+            saveActivityButton.disabled =
+                false;
+
+            saveActivityButton.textContent =
+                "Save Activity";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE ACTIVITY
+========================================================= */
+
+async function deleteActivity(
+    id
+) {
+
+    const activity =
+        activities.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!activity) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            `Delete "${activity.title}"?\n\nThis will also remove its uploaded photo.`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        /*
+         * Delete database record first
+         */
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("activities")
+                .delete()
+                .eq(
+                    "id",
+                    id
+                );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        /*
+         * Delete Storage image
+         */
+
+        if (activity.image_url) {
+
+            await deleteActivityStorageImage(
+                activity.image_url
+            );
+
+        }
+
+
+        await loadActivities();
+
+
+        alert(
+            "Activity deleted successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Activity delete error:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Unable to delete activity."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   NEW ACTIVITY BUTTON
+========================================================= */
+
+newActivityButton?.addEventListener(
+    "click",
+    () => {
+
+        openActivityModal();
+
+    }
+);
+
+
+/* =========================================================
+   ACTIVITY FORM
+========================================================= */
+
+activityForm?.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+        await saveActivity();
+
+    }
+);
+
+
+/* =========================================================
+   REMOVE IMAGE
+========================================================= */
+
+removeActivityImage?.addEventListener(
+    "click",
+    () => {
+
+        currentActivityImageUrl =
+            "";
+
+        if (activityImage) {
+
+            activityImage.value =
+                "";
+
+        }
+
+        hideActivityImagePreview();
+
+    }
+);
+
+
+/* =========================================================
+   NEW IMAGE PREVIEW
+========================================================= */
+
+activityImage?.addEventListener(
+    "change",
+    () => {
+
+        const file =
+            activityImage.files?.[0];
+
+
+        if (!file) {
+
+            if (
+                currentActivityImageUrl
+            ) {
+
+                if (
+                    activityPreviewImage &&
+                    activityImagePreview
+                ) {
+
+                    activityPreviewImage.src =
+                        currentActivityImageUrl;
+
+                    activityImagePreview.style.display =
+                        "block";
+
+                }
+
+            } else {
+
+                hideActivityImagePreview();
+
+            }
+
+            return;
+
+        }
+
+
+        const objectUrl =
+            URL.createObjectURL(
+                file
+            );
+
+
+        if (activityPreviewImage) {
+
+            activityPreviewImage.src =
+                objectUrl;
+
+        }
+
+
+        if (activityImagePreview) {
+
+            activityImagePreview.style.display =
+                "block";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ACTIVITY CARD ACTIONS
+========================================================= */
+
+activityList?.addEventListener(
+    "click",
+    event => {
+
+        const button =
+            event.target.closest(
+                "[data-activity-action]"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        const action =
+            button.dataset.activityAction;
+
+        const id =
+            button.dataset.id;
+
+
+        const activity =
+            activities.find(
+                item =>
+                    item.id === id
+            );
+
+
+        if (
+            action === "edit" &&
+            activity
+        ) {
+
+            openActivityModal(
+                activity
+            );
+
+        }
+
+
+        if (
+            action === "delete"
+        ) {
+
+            deleteActivity(
+                id
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOAD ACTIVITIES AFTER ADMIN INIT
+========================================================= */
+
+if (currentSession) {
+
+    loadActivities();
+
+}
+
   /* =====================================================
        START
     ===================================================== */
