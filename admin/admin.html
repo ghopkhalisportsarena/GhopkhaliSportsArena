@@ -1,2652 +1,2272 @@
-/* =========================================================
-   GSA ADMIN — COMPLETE APPLE INSPIRED ADMIN CSS
-   Ghopkhali Sports Arena
-========================================================= */
+<!DOCTYPE html>
+<html lang="en">
 
-/* =========================================================
-   ROOT
-========================================================= */
+<head>
 
-:root {
-    --bg: #f5f5f7;
-    --surface: #ffffff;
-    --surface-soft: #fafafa;
+<meta charset="UTF-8">
 
-    --text: #1d1d1f;
-    --text-secondary: #6e6e73;
-    --text-muted: #86868b;
-
-    --blue: #0071e3;
-    --blue-hover: #0077ed;
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    --green: #34c759;
-    --red: #ff3b30;
-    --orange: #ff9500;
+<meta
+    name="theme-color"
+    content="#f5f5f7"
+>
 
-    --black: #1d1d1f;
-    --white: #ffffff;
+<title>GSA Admin</title>
 
-    --border: rgba(0, 0, 0, 0.08);
-    --border-dark: rgba(255, 255, 255, 0.08);
-
-    --shadow-sm:
-        0 2px 8px rgba(0, 0, 0, 0.05);
+<link
+    rel="stylesheet"
+    href="./admin.css?v=20260904"
+>
 
-    --shadow:
-        0 10px 30px rgba(0, 0, 0, 0.07);
+</head>
 
-    --shadow-lg:
-        0 20px 60px rgba(0, 0, 0, 0.12);
 
-    --radius-sm: 10px;
-    --radius: 16px;
-    --radius-lg: 20px;
-    --radius-xl: 24px;
+<body>
 
-    --sidebar-width: 255px;
 
-    --font:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        "Helvetica Neue",
-        Arial,
-        sans-serif;
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-
-    min-height: 100vh;
-
-    background: var(--bg);
-    color: var(--text);
-
-    font-family: var(--font);
-    font-size: 15px;
-    line-height: 1.5;
-
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-}
-
-button,
-input,
-textarea,
-select {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-img {
-    max-width: 100%;
-    display: block;
-}
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-
-/* =========================================================
-   SCROLLBAR
-========================================================= */
-
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.18);
-    border-radius: 999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.28);
-}
-
-
-/* =========================================================
-   ANIMATIONS
-========================================================= */
-
-@keyframes gsaFadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes gsaFadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(14px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes gsaScaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.96);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@keyframes gsaSidebarIn {
-    from {
-        opacity: 0;
-        transform: translateX(-18px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes gsaFloat {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-3px);
-    }
-}
-
-@keyframes gsaSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes gsaPulse {
-    0%,
-    100% {
-        opacity: 1;
-    }
+<!-- =====================================================
+     LOGIN SCREEN
+===================================================== -->
 
-    50% {
-        opacity: 0.55;
-    }
-}
+<div
+    id="loginScreen"
+    class="login-page"
+>
 
+    <main class="login-shell">
 
-/* =========================================================
-   LOGIN PAGE
-========================================================= */
+        <section class="login-card">
 
-.login-page {
-    min-height: 100vh;
+            <div class="login-logo">
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+                <img
+                    src="../gsa.png"
+                    alt="Ghopkhali Sports Arena"
+                >
 
-    padding: 24px;
+            </div>
 
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(0, 113, 227, 0.08),
-            transparent 34%
-        ),
-        radial-gradient(
-            circle at bottom right,
-            rgba(52, 199, 89, 0.06),
-            transparent 30%
-        ),
-        var(--bg);
-}
 
-.login-shell {
-    width: 100%;
-    max-width: 430px;
-}
+            <p class="eyebrow">
+                GHOPKHALI SPORTS ARENA
+            </p>
 
-.login-card {
-    width: 100%;
 
-    padding: 42px 36px 34px;
+            <h1>
+                Admin
+                <br>
+                <span>Administration.</span>
+            </h1>
 
-    background: rgba(255, 255, 255, 0.92);
 
-    border: 1px solid rgba(0, 0, 0, 0.07);
+            <p class="login-subtitle">
+                Secure access to the GSA management panel.
+            </p>
 
-    border-radius: 26px;
 
-    box-shadow:
-        0 30px 80px rgba(0, 0, 0, 0.10);
+            <form
+                id="gsaAdminLoginForm"
+                autocomplete="on"
+            >
 
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+                <label>
 
-    animation:
-        gsaScaleIn
-        0.55s
-        cubic-bezier(.22, 1, .36, 1)
-        both;
-}
+                    EMAIL ADDRESS
 
-.login-logo {
-    width: 76px;
-    height: 76px;
+                    <input
+                        type="email"
+                        id="gsaAdminEmail"
+                        name="email"
+                        placeholder="admin@example.com"
+                        autocomplete="username"
+                        required
+                    >
 
-    margin: 0 auto 22px;
+                </label>
 
-    border-radius: 20px;
 
-    object-fit: contain;
+                <label>
 
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.10);
+                    PASSWORD
 
-    animation: gsaFloat 4s ease-in-out infinite;
-}
+                    <input
+                        type="password"
+                        id="gsaAdminPassword"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
 
-.login-card .eyebrow {
-    margin: 0 0 7px;
+                </label>
 
-    text-align: center;
 
-    color: var(--blue);
+                <div
+                    id="gsaAdminError"
+                    class="login-error"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
 
-    font-size: 12px;
-    font-weight: 700;
 
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-}
+                <button
+                    type="submit"
+                    id="gsaAdminLoginButton"
+                    class="primary-button"
+                >
+                    Login to Admin Panel
+                </button>
 
-.login-card h1 {
-    margin: 0;
 
-    text-align: center;
+            </form>
 
-    color: var(--text);
 
-    font-size: 30px;
-    font-weight: 700;
+            <a
+                href="../index.html"
+                class="back-link"
+            >
+                ← Back to Ghopkhali Sports Arena
+            </a>
 
-    letter-spacing: -0.035em;
-}
 
-.login-subtitle {
-    margin: 8px 0 28px;
+        </section>
 
-    text-align: center;
+    </main>
 
-    color: var(--text-secondary);
+</div>
 
-    font-size: 14px;
-}
 
 
-/* =========================================================
-   FORMS
-========================================================= */
+<!-- =====================================================
+     DASHBOARD SCREEN
+===================================================== -->
 
-.form-group {
-    margin-bottom: 18px;
-}
+<div
+    id="dashboardScreen"
+    hidden
+>
 
-.form-group label {
-    display: block;
 
-    margin-bottom: 7px;
+    <!-- MOBILE SIDEBAR OVERLAY -->
 
-    color: var(--text);
+    <div
+        id="adminSidebarOverlay"
+        class="admin-sidebar-overlay"
+    ></div>
 
-    font-size: 13px;
-    font-weight: 600;
-}
 
-.form-group input,
-.form-group textarea,
-.form-group select,
-.login-card input {
-    width: 100%;
 
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    <!-- =================================================
+         SIDEBAR
+    ================================================= -->
 
-    border-radius: 12px;
+    <aside
+        id="adminSidebar"
+        class="admin-sidebar"
+    >
 
-    background: #fff;
-    color: var(--text);
+        <div class="admin-brand">
 
-    outline: none;
+            <img
+                src="../gsa.png"
+                alt="GSA"
+            >
 
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        background .2s ease;
-}
+            <div>
 
-.form-group input,
-.form-group select,
-.login-card input {
-    min-height: 46px;
-    padding: 0 13px;
-}
+                <strong>
+                    GSA
+                </strong>
 
-.form-group textarea {
-    min-height: 130px;
-    padding: 12px 13px;
+                <span>
+                    ADMIN PANEL
+                </span>
 
-    resize: vertical;
-}
+            </div>
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus,
-.login-card input:focus {
-    border-color: rgba(0, 113, 227, 0.65);
+        </div>
 
-    box-shadow:
-        0 0 0 4px rgba(0, 113, 227, 0.10);
-}
 
-.form-row {
-    display: grid;
+        <nav>
 
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+            <a
+                href="#dashboard"
+                class="sidebar-link"
+                data-section="dashboard"
+            >
+                Dashboard
+            </a>
 
-    gap: 16px;
-}
 
-.form-check,
-.checkbox-row {
-    display: flex;
-    align-items: center;
-    gap: 9px;
+            <a
+                href="#notices"
+                class="sidebar-link"
+                data-section="notices"
+            >
+                Notices
+            </a>
 
-    margin: 12px 0;
-}
 
-.form-check input,
-.checkbox-row input {
-    width: 17px;
-    height: 17px;
+            <a
+                href="#fixtures"
+                class="sidebar-link"
+                data-section="fixtures"
+            >
+                Fixtures
+            </a>
 
-    accent-color: var(--blue);
-}
 
-.form-check label,
-.checkbox-row label {
-    margin: 0;
+            <a
+                href="#gallery"
+                class="sidebar-link"
+                data-section="gallery"
+            >
+                Gallery
+            </a>
 
-    color: var(--text-secondary);
+             <a
+    href="#tournaments"
+    class="sidebar-link"
+    data-section="tournaments"
+>
+    Tournaments
+</a>
 
-    font-size: 13px;
-}
+<a
+    href="#rules"
+    class="sidebar-link"
+    data-section="rules"
+>
+    Rules & Regulations
+</a>
 
+            <a
+                href="#applications"
+                class="sidebar-link"
+                data-section="applications"
+            >
+                Applications
+            </a>
 
-/* =========================================================
-   LOGIN BUTTON
-========================================================= */
+        </nav>
 
-.login-card .primary-button,
-#gsaAdminLoginButton {
-    width: 100%;
 
-    min-height: 48px;
+        <div class="sidebar-bottom">
 
-    margin-top: 5px;
+            <a
+                href="../index.html"
+                class="sidebar-link"
+            >
+                ← View Website
+            </a>
 
-    border: 0;
-    border-radius: 13px;
 
-    background: var(--black);
-    color: #fff;
+            <button
+                type="button"
+                id="logoutButton"
+                class="logout-button"
+            >
+                Logout
+            </button>
 
-    font-weight: 650;
+        </div>
 
-    transition:
-        transform .18s ease,
-        background .18s ease,
-        box-shadow .18s ease;
-}
+    </aside>
 
-.login-card .primary-button:hover,
-#gsaAdminLoginButton:hover {
-    background: #000;
 
-    transform: translateY(-1px);
 
-    box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.15);
-}
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================= -->
 
-.login-card .primary-button:active,
-#gsaAdminLoginButton:active {
-    transform: scale(0.985);
-}
+    <main class="admin-main">
 
-#gsaAdminError {
-    margin-top: 13px;
 
-    color: var(--red);
+        <!-- TOPBAR -->
 
-    font-size: 13px;
-    text-align: center;
-}
+        <header class="admin-topbar">
 
-.back-link {
-    display: block;
+            <button
+                type="button"
+                id="sidebarToggle"
+                class="sidebar-toggle"
+                aria-label="Open menu"
+            >
+                ☰
+            </button>
 
-    margin-top: 22px;
 
-    color: var(--text-secondary);
+            <div>
 
-    font-size: 13px;
+                <p class="eyebrow">
+                    GHOPKHALI SPORTS ARENA
+                </p>
 
-    text-align: center;
+                <h1>
+                    Admin Dashboard
+                </h1>
 
-    transition: color .2s ease;
-}
+            </div>
 
-.back-link:hover {
-    color: var(--blue);
-}
+        </header>
 
 
-/* =========================================================
-   DASHBOARD SCREEN
-========================================================= */
 
-#dashboardScreen {
-    min-height: 100vh;
-}
+        <!-- =================================================
+             DASHBOARD
+        ================================================= -->
 
+        <section
+            id="dashboard"
+            class="admin-section"
+        >
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
+            <div class="section-heading">
 
-.admin-sidebar {
-    position: fixed;
+                <div>
 
-    top: 0;
-    left: 0;
-    bottom: 0;
+                    <span class="section-label">
+                        OVERVIEW
+                    </span>
 
-    width: var(--sidebar-width);
+                    <h2>
+                        Dashboard
+                    </h2>
 
-    z-index: 1000;
+                    <p>
+                        Manage your GSA website from one place.
+                    </p>
 
-    display: flex;
-    flex-direction: column;
+                </div>
 
-    padding: 18px 14px;
+            </div>
 
-    overflow-y: auto;
 
-    background:
-        linear-gradient(
-            180deg,
-            #1d1d1f 0%,
-            #171719 100%
-        );
+            <div class="stats-grid">
 
-    color: #fff;
 
-    border-right:
-        1px solid rgba(255, 255, 255, 0.06);
+                <article class="stat-card">
 
-    box-shadow:
-        10px 0 35px rgba(0, 0, 0, 0.08);
+                    <span>
+                        NOTICES
+                    </span>
 
-    animation:
-        gsaSidebarIn
-        .45s
-        cubic-bezier(.22, 1, .36, 1)
-        both;
-}
+                    <strong id="noticeCount">
+                        0
+                    </strong>
 
-.admin-brand {
-    display: flex;
-    align-items: center;
+                </article>
 
-    gap: 11px;
 
-    padding: 8px 8px 20px;
+                <article class="stat-card">
 
-    margin-bottom: 8px;
+                    <span>
+                        FIXTURES
+                    </span>
 
-    border-bottom:
-        1px solid rgba(255, 255, 255, 0.07);
-}
+                    <strong id="fixtureCount">
+                        0
+                    </strong>
 
-.admin-brand img {
-    width: 42px;
-    height: 42px;
+                </article>
 
-    flex: 0 0 42px;
 
-    object-fit: contain;
+                <article class="stat-card">
 
-    border-radius: 11px;
+                    <span>
+                        MEMBERS
+                    </span>
 
-    background: #fff;
+                    <strong id="memberCount">
+                        0
+                    </strong>
 
-    padding: 4px;
-}
+                </article>
 
-.admin-brand strong {
-    display: block;
 
-    color: #fff;
+                <article class="stat-card">
 
-    font-size: 15px;
-    font-weight: 700;
+                    <span>
+                        APPLICATIONS
+                    </span>
 
-    line-height: 1.15;
-}
+                    <strong id="applicationCount">
+                        0
+                    </strong>
 
-.admin-brand span {
-    display: block;
+                </article>
 
-    margin-top: 3px;
 
-    color: rgba(255, 255, 255, 0.52);
+                <article class="stat-card">
 
-    font-size: 10px;
-}
+                    <span>
+                        GALLERY
+                    </span>
 
+                    <strong id="galleryCount">
+                        0
+                    </strong>
 
-/* =========================================================
-   SIDEBAR LINKS
-========================================================= */
+                </article>
 
-.sidebar-link {
-    position: relative;
 
-    display: flex;
-    align-items: center;
+            </div>
 
-    min-height: 43px;
 
-    margin: 3px 0;
 
-    padding: 0 12px;
+            <!-- QUICK ACTIONS -->
 
-    border-radius: 11px;
+            <div class="quick-actions">
 
-    color: rgba(255, 255, 255, 0.68);
+                <button
+                    type="button"
+                    class="primary-button"
+                    data-action="new-notice"
+                >
+                    + New Notice
+                </button>
 
-    font-size: 13px;
-    font-weight: 550;
 
-    transition:
-        background .2s ease,
-        color .2s ease,
-        transform .2s ease;
-}
+                <button
+                    type="button"
+                    class="secondary-button"
+                    data-action="upload-photo"
+                >
+                    + Upload Photo
+                </button>
 
-.sidebar-link:hover {
-    background: rgba(255, 255, 255, 0.07);
+            </div>
 
-    color: #fff;
+        </section>
 
-    transform: translateX(2px);
-}
 
-.sidebar-link.active {
-    background: rgba(255, 255, 255, 0.10);
 
-    color: #fff;
-}
+        <!-- =================================================
+             NOTICES
+        ================================================= -->
 
-.sidebar-link.active::before {
-    content: "";
+        <section
+            id="notices"
+            class="admin-section"
+        >
 
-    position: absolute;
+            <div class="section-heading">
 
-    left: 0;
-    top: 9px;
-    bottom: 9px;
+                <div>
 
-    width: 3px;
+                    <span class="section-label">
+                        CONTENT
+                    </span>
 
-    border-radius: 0 5px 5px 0;
+                    <h2>
+                        Notices
+                    </h2>
 
-    background: var(--blue);
-}
+                    <p>
+                        Publish and manage website notices.
+                    </p>
 
-.sidebar-bottom {
-    margin-top: auto;
+                </div>
 
-    padding-top: 14px;
 
-    border-top:
-        1px solid rgba(255, 255, 255, 0.07);
-}
+                <button
+                    type="button"
+                    id="newNoticeButton"
+                    class="primary-button"
+                >
+                    + New Notice
+                </button>
 
-.logout-button {
-    width: 100%;
+            </div>
 
-    min-height: 43px;
 
-    padding: 0 12px;
+            <div class="notice-stats">
 
-    border: 0;
+                <div>
 
-    border-radius: 11px;
+                    <span>
+                        Total
+                    </span>
 
-    background: rgba(255, 255, 255, 0.06);
+                    <strong id="noticeTotalCount">
+                        0
+                    </strong>
 
-    color: rgba(255, 255, 255, 0.72);
+                </div>
 
-    text-align: left;
 
-    font-size: 13px;
-    font-weight: 600;
+                <div>
 
-    transition:
-        background .2s ease,
-        color .2s ease;
-}
+                    <span>
+                        Published
+                    </span>
 
-.logout-button:hover {
-    background: rgba(255, 59, 48, 0.14);
+                    <strong id="noticePublishedCount">
+                        0
+                    </strong>
 
-    color: #ff6b63;
-}
+                </div>
 
 
-/* =========================================================
-   SIDEBAR TOGGLE
-========================================================= */
+                <div>
 
-.sidebar-toggle {
-    display: none;
+                    <span>
+                        Draft
+                    </span>
 
-    width: 40px;
-    height: 40px;
+                    <strong id="noticeDraftCount">
+                        0
+                    </strong>
 
-    align-items: center;
-    justify-content: center;
+                </div>
 
-    border: 0;
 
-    border-radius: 11px;
+                <div>
 
-    background: #fff;
+                    <span>
+                        Important
+                    </span>
 
-    color: var(--text);
+                    <strong id="noticeImportantCount">
+                        0
+                    </strong>
 
-    box-shadow: var(--shadow-sm);
+                </div>
 
-    transition:
-        transform .18s ease,
-        box-shadow .18s ease;
-}
+            </div>
 
-.sidebar-toggle:hover {
-    transform: translateY(-1px);
 
-    box-shadow: var(--shadow);
-}
+            <div id="noticeList">
 
-.sidebar-toggle:active {
-    transform: scale(.96);
-}
+                <div class="loading-state">
+                    Loading notices...
+                </div>
 
+            </div>
 
-/* =========================================================
-   SIDEBAR OVERLAY
-========================================================= */
+<!-- =================================================
+     NOTICE EDITOR
+================================================= -->
 
-.admin-sidebar-overlay {
-    position: fixed;
+<div
+    id="noticeEditor"
+    class="notice-editor"
+    style="display:none;"
+>
 
-    inset: 0;
+    <div class="notice-editor-header">
 
-    z-index: 999;
+        <div>
+            <span class="section-label">
+                NOTICE EDITOR
+            </span>
 
-    display: none;
+            <h3 id="noticeEditorTitle">
+                New Notice
+            </h3>
 
-    background: rgba(0, 0, 0, 0.35);
+            <p>
+                Create or update a website notice.
+            </p>
+        </div>
 
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+        <button
+            type="button"
+            id="closeNoticeEditor"
+            class="secondary-button"
+        >
+            Cancel
+        </button>
 
-    animation: gsaFadeIn .2s ease both;
-}
+    </div>
 
-.admin-sidebar-overlay.active {
-    display: block;
-}
 
+    <!-- TITLE -->
 
-/* =========================================================
-   MAIN AREA
-========================================================= */
+    <div class="form-group">
 
-.admin-main {
-    min-height: 100vh;
+        <label for="noticeTitle">
+            Notice Title
+        </label>
 
-    margin-left: var(--sidebar-width);
+        <input
+            type="text"
+            id="noticeTitle"
+            placeholder="Enter notice title"
+            autocomplete="off"
+        >
 
-    padding:
-        24px
-        28px
-        60px;
+    </div>
 
-    min-width: 0;
-}
 
-.admin-topbar,
-.admin-section {
-    width: 100%;
+    <!-- CATEGORY -->
 
-    max-width: 1400px;
+    <div class="form-group">
 
-    margin-left: auto;
-    margin-right: auto;
-}
+        <label for="noticeCategory">
+            Category
+        </label>
 
+        <select id="noticeCategory">
 
-/* =========================================================
-   TOPBAR
-========================================================= */
+            <option value="NOTICE">
+                NOTICE
+            </option>
 
-.admin-topbar {
-    min-height: 58px;
+            <option value="TOURNAMENT">
+                TOURNAMENT
+            </option>
 
-    display: flex;
-    align-items: center;
+            <option value="MATCH">
+                MATCH
+            </option>
 
-    gap: 14px;
+            <option value="EVENT">
+                EVENT
+            </option>
 
-    margin-bottom: 24px;
-}
+            <option value="ANNOUNCEMENT">
+                ANNOUNCEMENT
+            </option>
 
-.admin-topbar h1 {
-    margin: 0;
+            <option value="GENERAL">
+                GENERAL
+            </option>
 
-    font-size: 28px;
-    font-weight: 700;
+        </select>
 
-    letter-spacing: -0.035em;
-}
+    </div>
 
-.admin-topbar p {
-    margin: 3px 0 0;
 
-    color: var(--text-secondary);
+    <!-- CONTENT -->
 
-    font-size: 13px;
-}
+    <div class="form-group">
 
+        <label for="noticeContent">
+            Notice Content
+        </label>
 
-/* =========================================================
-   SECTIONS
-========================================================= */
+        <textarea
+            id="noticeContent"
+            rows="10"
+            placeholder="Write the full notice here..."
+        ></textarea>
 
-.admin-section {
-    animation:
-        gsaFadeUp
-        .45s
-        cubic-bezier(.22, 1, .36, 1)
-        both;
-}
+    </div>
 
-.admin-section:not(.active) {
-    animation: none;
-}
 
-.section-heading {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    <!-- IMAGE -->
 
-    gap: 20px;
+    <div class="form-group">
 
-    margin-bottom: 20px;
-}
+        <label for="noticeImage">
+            Notice Image
+        </label>
 
-.section-heading > div {
-    min-width: 0;
-}
+        <input
+            type="file"
+            id="noticeImage"
+            accept="image/jpeg,image/png,image/webp"
+        >
 
-.section-heading h2 {
-    margin: 0;
+        <small>
+            JPG, PNG or WebP image.
+        </small>
 
-    color: var(--text);
+    </div>
 
-    font-size: 23px;
-    font-weight: 700;
 
-    letter-spacing: -0.025em;
-}
+    <!-- IMAGE PREVIEW -->
 
-.section-heading p {
-    margin: 5px 0 0;
+    <div
+        id="noticeImagePreview"
+        class="notice-image-preview"
+        style="display:none;"
+    >
 
-    color: var(--text-secondary);
+        <img
+            id="noticePreviewImage"
+            src=""
+            alt="Notice image preview"
+        >
 
-    font-size: 13px;
-}
+        <button
+            type="button"
+            id="removeNoticeImage"
+            class="secondary-button"
+        >
+            Remove Image
+        </button>
 
-.section-label {
-    display: inline-block;
+    </div>
 
-    margin-bottom: 6px;
 
-    color: var(--blue);
+    <!-- OPTIONS -->
 
-    font-size: 11px;
-    font-weight: 700;
+    <div class="notice-options">
 
-    letter-spacing: .1em;
-    text-transform: uppercase;
-}
+        <label class="notice-option">
 
+            <input
+                type="checkbox"
+                id="noticeImportant"
+            >
 
-/* =========================================================
-   BUTTONS
-========================================================= */
+            <span>
+                <strong>Important Notice</strong>
+                <small>
+                    Show this notice in the important notice ticker.
+                </small>
+            </span>
 
-.primary-button,
-.secondary-button,
-.small-button {
-    border: 0;
+        </label>
 
-    font-weight: 600;
 
-    transition:
-        transform .18s ease,
-        box-shadow .18s ease,
-        background .18s ease,
-        color .18s ease;
-}
+        <label class="notice-option">
 
-.primary-button {
-    min-height: 43px;
+            <input
+                type="checkbox"
+                id="noticePublished"
+                checked
+            >
 
-    padding: 0 16px;
+            <span>
+                <strong>Publish Notice</strong>
+                <small>
+                    Make this notice visible on the website.
+                </small>
+            </span>
 
-    border-radius: 12px;
+        </label>
 
-    background: var(--black);
+    </div>
 
-    color: #fff;
-}
 
-.primary-button:hover {
-    background: #000;
+    <!-- ACTIONS -->
 
-    transform: translateY(-1px);
+    <div class="notice-editor-actions">
 
-    box-shadow:
-        0 9px 22px rgba(0, 0, 0, 0.14);
-}
+        <button
+            type="button"
+            id="saveNoticeButton"
+            class="primary-button"
+        >
+            Save Notice
+        </button>
 
-.secondary-button {
-    min-height: 43px;
+        <button
+            type="button"
+            id="cancelNoticeButton"
+            class="secondary-button"
+        >
+            Cancel
+        </button>
 
-    padding: 0 16px;
+    </div>
 
-    border-radius: 12px;
+</div>
 
-    background: #fff;
+        </section>
 
-    color: var(--text);
 
-    border: 1px solid var(--border);
-}
+<!-- =================================================
+     FIXTURES
+================================================= -->
 
-.secondary-button:hover {
-    background: #f0f0f2;
+<section
+    id="fixtures"
+    class="admin-section"
+>
 
-    transform: translateY(-1px);
-}
+    <div class="section-heading">
 
-.small-button {
-    min-height: 34px;
+        <div>
 
-    padding: 0 11px;
+            <span class="section-label">
+                MATCHES
+            </span>
 
-    border-radius: 9px;
+            <h2>
+                Fixtures
+            </h2>
 
-    background: #f2f2f7;
+            <p>
+                Manage upcoming matches.
+            </p>
 
-    color: var(--text);
+        </div>
 
-    font-size: 12px;
-}
 
-.small-button:hover {
-    transform: translateY(-1px);
+        <button
+            type="button"
+            id="newFixtureButton"
+            class="primary-button"
+        >
+            + Add Fixture
+        </button>
 
-    background: #e8e8ed;
-}
+    </div>
 
-.small-button.active {
-    background: rgba(0, 113, 227, 0.10);
 
-    color: var(--blue);
-}
+    <!-- =============================================
+         FIXTURE LIST
+    ============================================== -->
 
-.small-button.danger {
-    background: rgba(255, 59, 48, 0.09);
+    <div id="fixtureList">
 
-    color: var(--red);
-}
+        <div class="loading-state">
+            Loading fixtures...
+        </div>
 
-.small-button.danger:hover {
-    background: rgba(255, 59, 48, 0.14);
-}
+    </div>
 
-.card-actions {
-    display: flex;
-    flex-wrap: wrap;
+</section>
 
-    gap: 7px;
-}
 
+<!-- =================================================
+     FIXTURE MODAL
+================================================= -->
 
-/* =========================================================
-   DASHBOARD STATS
-========================================================= */
+<div
+    id="fixtureModal"
+    class="modal"
+    aria-hidden="true"
+>
 
-.stats-grid {
-    display: grid;
+    <div class="modal-content">
 
-    grid-template-columns:
-        repeat(5, minmax(0, 1fr));
+        <div class="modal-header">
 
-    gap: 14px;
+            <div>
 
-    margin-bottom: 26px;
-}
+                <span class="section-label">
+                    MATCH MANAGEMENT
+                </span>
 
-.stat-card {
-    position: relative;
+                <h2 id="fixtureModalTitle">
+                    Add Fixture
+                </h2>
 
-    min-width: 0;
+            </div>
 
-    padding: 19px;
 
-    background: var(--surface);
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal
+                aria-label="Close"
+            >
+                ×
+            </button>
 
-    border:
-        1px solid var(--border);
+        </div>
 
-    border-radius: 18px;
 
-    box-shadow: var(--shadow-sm);
+        <form id="fixtureForm">
 
-    overflow: hidden;
+            <input
+                type="hidden"
+                id="fixtureId"
+            >
 
-    animation:
-        gsaFadeUp
-        .45s
-        cubic-bezier(.22, 1, .36, 1)
-        both;
-}
 
-.stat-card:nth-child(2) {
-    animation-delay: .04s;
-}
+            <!-- HOME TEAM -->
 
-.stat-card:nth-child(3) {
-    animation-delay: .08s;
-}
+            <div class="form-group">
 
-.stat-card:nth-child(4) {
-    animation-delay: .12s;
-}
+                <label for="fixtureHomeTeam">
+                    Home Team
+                </label>
 
-.stat-card:nth-child(5) {
-    animation-delay: .16s;
-}
+                <input
+                    type="text"
+                    id="fixtureHomeTeam"
+                    placeholder="Ghopkhali Sports Arena"
+                    required
+                >
 
-.stat-card::after {
-    content: "";
+            </div>
 
-    position: absolute;
 
-    right: -20px;
-    top: -20px;
+            <!-- AWAY TEAM -->
 
-    width: 70px;
-    height: 70px;
+            <div class="form-group">
 
-    border-radius: 50%;
+                <label for="fixtureAwayTeam">
+                    Away Team
+                </label>
 
-    background:
-        rgba(0, 113, 227, 0.045);
-}
+                <input
+                    type="text"
+                    id="fixtureAwayTeam"
+                    placeholder="Opponent Team"
+                    required
+                >
 
-.stat-card span {
-    display: block;
+            </div>
 
-    margin-bottom: 8px;
 
-    color: var(--text-secondary);
+            <!-- TYPE -->
 
-    font-size: 12px;
-    font-weight: 600;
-}
+            <div class="form-group">
 
-.stat-card strong {
-    display: block;
+                <label for="fixtureType">
+                    Match Type
+                </label>
 
-    color: var(--text);
+                <select id="fixtureType">
 
-    font-size: 29px;
-    font-weight: 700;
+                    <option value="FRIENDLY MATCH">
+                        FRIENDLY MATCH
+                    </option>
 
-    letter-spacing: -0.04em;
-}
+                    <option value="TOURNAMENT">
+                        TOURNAMENT
+                    </option>
 
+                    <option value="LEAGUE">
+                        LEAGUE
+                    </option>
 
-/* =========================================================
-   QUICK ACTIONS
-========================================================= */
+                    <option value="FINAL">
+                        FINAL
+                    </option>
 
-.quick-actions {
-    display: flex;
-    flex-wrap: wrap;
+                    <option value="SEMI FINAL">
+                        SEMI FINAL
+                    </option>
 
-    gap: 10px;
+                    <option value="FIXTURE">
+                        FIXTURE
+                    </option>
 
-    margin-bottom: 30px;
+                </select>
 
-    padding: 18px;
+            </div>
 
-    background: #fff;
 
-    border:
-        1px solid var(--border);
+            <!-- DATE -->
 
-    border-radius: 18px;
+            <div class="form-group">
 
-    box-shadow: var(--shadow-sm);
-}
+                <label for="fixtureDate">
+                    Match Date
+                </label>
 
+                <input
+                    type="date"
+                    id="fixtureDate"
+                    required
+                >
 
-/* =========================================================
-   CONTENT CARDS
-========================================================= */
+            </div>
 
-.notice-card,
-.content-card,
-.application-card {
-    position: relative;
 
-    margin-bottom: 12px;
+            <!-- TIME -->
 
-    padding: 18px;
+            <div class="form-group">
 
-    background: var(--surface);
+                <label for="fixtureTime">
+                    Kickoff Time
+                </label>
 
-    border:
-        1px solid var(--border);
+                <input
+                    type="time"
+                    id="fixtureTime"
+                >
 
-    border-radius: 18px;
+            </div>
 
-    box-shadow: var(--shadow-sm);
 
-    transition:
-        transform .22s ease,
-        box-shadow .22s ease,
-        border-color .22s ease;
+            <!-- VENUE -->
 
-    animation:
-        gsaFadeUp
-        .38s
-        cubic-bezier(.22, 1, .36, 1)
-        both;
-}
+            <div class="form-group">
 
-.notice-card:hover,
-.content-card:hover,
-.application-card:hover {
-    transform: translateY(-2px);
+                <label for="fixtureVenue">
+                    Venue
+                </label>
 
-    box-shadow: var(--shadow);
+                <input
+                    type="text"
+                    id="fixtureVenue"
+                    placeholder="GSA Ground"
+                >
 
-    border-color:
-        rgba(0, 0, 0, 0.11);
-}
+            </div>
 
-.notice-card-main {
-    min-width: 0;
-}
 
-.content-card-top,
-.application-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+            <!-- PUBLISHED -->
 
-    gap: 15px;
-}
+            <div class="form-check">
 
-.notice-card h3,
-.content-card h3,
-.application-card h3 {
-    margin: 0 0 6px;
+                <input
+                    type="checkbox"
+                    id="fixturePublished"
+                    checked
+                >
 
-    color: var(--text);
+                <label for="fixturePublished">
+                    Publish this fixture on homepage
+                </label>
 
-    font-size: 16px;
-    font-weight: 650;
+            </div>
 
-    letter-spacing: -0.015em;
-}
 
-.notice-card p,
-.content-card p,
-.application-card p {
-    margin: 0;
+            <!-- ACTIONS -->
 
-    color: var(--text-secondary);
+            <div class="modal-actions">
 
-    font-size: 13px;
-}
+                <button
+                    type="button"
+                    class="secondary-button"
+                    data-close-modal
+                >
+                    Cancel
+                </button>
 
-.notice-meta {
-    display: flex;
-    flex-wrap: wrap;
 
-    align-items: center;
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Save Fixture
+                </button>
 
-    gap: 7px;
+            </div>
 
-    margin-top: 10px;
+        </form>
 
-    color: var(--text-muted);
+    </div>
 
-    font-size: 11px;
-}
+</div>
 
-.content-date {
-    color: var(--text-muted);
+<!-- =================================================
+     TOURNAMENTS
+================================================= -->
 
-    font-size: 11px;
-}
+<section
+    id="tournaments"
+    class="admin-section"
+>
 
+    <div class="section-heading">
 
-/* =========================================================
-   BADGES
-========================================================= */
+        <div>
 
-.badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+            <span class="section-label">
+                COMPETITIONS
+            </span>
 
-    min-height: 25px;
+            <h2>
+                Tournaments
+            </h2>
 
-    padding: 0 9px;
+            <p>
+                Manage GSA tournaments.
+            </p>
 
-    border-radius: 999px;
+        </div>
 
-    background: #f2f2f7;
 
-    color: var(--text-secondary);
+        <button
+            type="button"
+            id="newTournamentButton"
+            class="primary-button"
+        >
+            + Add Tournament
+        </button>
 
-    font-size: 10px;
-    font-weight: 700;
-}
+    </div>
 
-.badge.published {
-    background: rgba(52, 199, 89, 0.11);
 
-    color: #248a3d;
-}
+    <div id="tournamentList">
 
-.badge.draft {
-    background: rgba(142, 142, 147, 0.12);
+        <div class="loading-state">
+            Loading tournaments...
+        </div>
 
-    color: var(--text-secondary);
-}
+    </div>
 
-.badge.important {
-    background: rgba(255, 149, 0, 0.12);
+</section>
 
-    color: #b56b00;
-}
 
+<!-- =================================================
+     TOURNAMENT MODAL
+================================================= -->
 
-/* =========================================================
-   NOTICE IMAGE
-========================================================= */
+<div
+    id="tournamentModal"
+    class="modal"
+    aria-hidden="true"
+>
 
-.notice-card-image {
-    width: 100%;
+    <div class="modal-content">
 
-    max-height: 230px;
+        <div class="modal-header">
 
-    margin-bottom: 14px;
+            <div>
 
-    overflow: hidden;
+                <span class="section-label">
+                    COMPETITION
+                </span>
 
-    border-radius: 13px;
+                <h2 id="tournamentModalTitle">
+                    Add Tournament
+                </h2>
 
-    background: #f2f2f7;
-}
+            </div>
 
-.notice-card-image img {
-    width: 100%;
-    height: 230px;
 
-    object-fit: cover;
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal
+                aria-label="Close"
+            >
+                ×
+            </button>
 
-    transition: transform .35s ease;
-}
+        </div>
 
-.notice-card:hover .notice-card-image img {
-    transform: scale(1.025);
-}
 
-.notice-card-content {
-    min-width: 0;
-}
+        <form id="tournamentForm">
 
-.notice-category {
-    display: inline-block;
+            <input
+                type="hidden"
+                id="tournamentId"
+            >
 
-    margin-bottom: 7px;
 
-    color: var(--blue);
+            <div class="form-group">
 
-    font-size: 10px;
-    font-weight: 700;
+                <label for="tournamentName">
+                    Tournament Name
+                </label>
 
-    text-transform: uppercase;
-    letter-spacing: .07em;
-}
+                <input
+                    type="text"
+                    id="tournamentName"
+                    placeholder="e.g. Mini Football Tournament"
+                    required
+                >
 
+            </div>
 
-/* =========================================================
-   NOTICE STATS
-========================================================= */
 
-.notice-stats {
-    display: grid;
+            <div class="form-row">
 
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+                <div class="form-group">
 
-    gap: 12px;
+                    <label for="tournamentSeason">
+                        Season
+                    </label>
 
-    margin-bottom: 18px;
-}
+                    <input
+                        type="text"
+                        id="tournamentSeason"
+                        placeholder="e.g. Season 2026"
+                    >
 
-.notice-stats > div {
-    padding: 15px;
+                </div>
 
-    background: #fff;
 
-    border:
-        1px solid var(--border);
+                <div class="form-group">
 
-    border-radius: 15px;
+                    <label for="tournamentStatus">
+                        Status
+                    </label>
 
-    box-shadow: var(--shadow-sm);
-}
+                    <select id="tournamentStatus">
 
-.notice-stats strong {
-    display: block;
+                        <option value="UPCOMING">
+                            UPCOMING
+                        </option>
 
-    margin-bottom: 2px;
+                        <option value="PLANNED">
+                            PLANNED
+                        </option>
 
-    font-size: 23px;
-}
+                        <option value="ONGOING">
+                            ONGOING
+                        </option>
 
-.notice-stats span {
-    color: var(--text-secondary);
+                        <option value="COMPLETED">
+                            COMPLETED
+                        </option>
 
-    font-size: 11px;
-}
+                        <option value="COMING SOON">
+                            COMING SOON
+                        </option>
 
+                    </select>
 
-/* =========================================================
-   NOTICE EDITOR
-========================================================= */
+                </div>
 
-.notice-editor {
-    margin-top: 18px;
+            </div>
 
-    padding: 22px;
 
-    background: #fff;
+            <div class="form-group">
 
-    border:
-        1px solid var(--border);
+                <label for="tournamentVenue">
+                    Venue
+                </label>
 
-    border-radius: 20px;
+                <input
+                    type="text"
+                    id="tournamentVenue"
+                    placeholder="e.g. GSA Ground"
+                >
 
-    box-shadow: var(--shadow);
-}
+            </div>
 
-.notice-editor-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 
-    gap: 12px;
+            <div class="form-group">
 
-    margin-bottom: 20px;
-}
+                <label for="tournamentDate">
+                    Date / Details
+                </label>
 
-.notice-editor-header h3 {
-    margin: 0;
+                <input
+                    type="text"
+                    id="tournamentDate"
+                    placeholder="e.g. Date & venue will be announced"
+                >
 
-    font-size: 19px;
-}
+            </div>
 
-.notice-editor-actions {
-    display: flex;
-    gap: 8px;
-}
+<!-- =================================================
+     TOURNAMENT POSTER
+================================================= -->
 
-.notice-option {
-    display: flex;
-    align-items: center;
+<div class="form-group">
 
-    gap: 9px;
+    <label for="tournamentPoster">
+        Tournament Poster
+    </label>
 
-    margin: 10px 0;
-}
+    <input
+        type="file"
+        id="tournamentPoster"
+        accept="image/*"
+    >
 
-.notice-option input {
-    accent-color: var(--blue);
-}
+    <div
+        id="tournamentPosterPreview"
+        style="
+            display:none;
+            margin-top:15px;
+        "
+    >
 
-.notice-editor img {
-    max-width: 260px;
+        <img
+            id="tournamentPosterPreviewImage"
+            src=""
+            alt="Tournament Poster Preview"
+            style="
+                width:100%;
+                max-height:300px;
+                object-fit:cover;
+                border-radius:12px;
+                display:block;
+            "
+        >
 
-    margin-top: 10px;
+    </div>
 
-    border-radius: 12px;
-}
+</div>
 
+            <div class="form-group">
 
-/* =========================================================
-   FIXTURE CARDS
-========================================================= */
+                <label for="tournamentDescription">
+                    Description
+                </label>
 
-.admin-fixture-card {
-    display: grid;
+                <textarea
+                    id="tournamentDescription"
+                    rows="4"
+                    placeholder="Tournament details..."
+                ></textarea>
 
-    grid-template-columns:
-        120px
-        minmax(0, 1fr)
-        auto;
+            </div>
 
-    align-items: center;
 
-    gap: 18px;
+            <label class="checkbox-row">
 
-    margin-bottom: 12px;
+                <input
+                    type="checkbox"
+                    id="tournamentPublished"
+                    checked
+                >
 
-    padding: 18px;
+                <span>
+                    Publish on homepage
+                </span>
 
-    background: #fff;
+            </label>
 
-    border:
-        1px solid var(--border);
 
-    border-radius: 18px;
+            <div class="modal-actions">
 
-    box-shadow: var(--shadow-sm);
+                <button
+                    type="button"
+                    class="secondary-button"
+                    data-close-modal
+                >
+                    Cancel
+                </button>
 
-    transition:
-        transform .22s ease,
-        box-shadow .22s ease;
-}
 
-.admin-fixture-card:hover {
-    transform: translateY(-2px);
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Save Tournament
+                </button>
 
-    box-shadow: var(--shadow);
-}
+            </div>
 
-.admin-fixture-date {
-    color: var(--blue);
+        </form>
 
-    font-size: 13px;
-    font-weight: 700;
-}
+    </div>
 
-.admin-fixture-info {
-    min-width: 0;
-}
+</div>
 
-.admin-fixture-info strong {
-    display: block;
+        <!-- =================================================
+             GALLERY
+        ================================================= -->
 
-    margin-bottom: 4px;
+        <section
+            id="gallery"
+            class="admin-section"
+        >
 
-    font-size: 15px;
-}
+            <div class="section-heading">
 
-.admin-fixture-info span {
-    color: var(--text-secondary);
+                <div>
 
-    font-size: 12px;
-}
+                    <span class="section-label">
+                        MEDIA
+                    </span>
 
-.admin-fixture-tag,
-.admin-fixture-status {
-    display: inline-flex;
-    align-items: center;
+                    <h2>
+                        Gallery
+                    </h2>
 
-    min-height: 24px;
+                    <p>
+                        Upload photos that appear on the website.
+                    </p>
 
-    padding: 0 8px;
+                </div>
 
-    margin-right: 5px;
 
-    border-radius: 999px;
+                <label
+                    for="galleryUpload"
+                    class="primary-button upload-label"
+                >
 
-    background: #f2f2f7;
+                    + Upload Photo
 
-    color: var(--text-secondary);
+                    <input
+                        type="file"
+                        id="galleryUpload"
+                        accept="image/*"
+                        multiple
+                        hidden
+                    >
 
-    font-size: 10px;
-    font-weight: 650;
-}
+                </label>
 
-.admin-fixture-status {
-    background: rgba(52, 199, 89, 0.10);
+            </div>
 
-    color: #248a3d;
-}
 
-.admin-fixture-actions {
-    display: flex;
-    flex-wrap: wrap;
+            <div
+                id="galleryList"
+                class="gallery-admin-grid"
+            >
 
-    gap: 6px;
-}
+                <div class="empty-state">
+                    No photos uploaded yet.
+                </div>
 
+            </div>
 
-/* =========================================================
-   TOURNAMENT CARDS
-========================================================= */
+        </section>
 
-.tournament-card,
-.admin-tournament-card {
-    background: #fff;
+<!-- =================================================
+     RULES & REGULATIONS
+================================================= -->
 
-    border:
-        1px solid var(--border);
+<section
+    id="rules"
+    class="admin-section"
+>
 
-    border-radius: 18px;
+    <div class="section-heading">
 
-    overflow: hidden;
+        <div>
 
-    box-shadow: var(--shadow-sm);
+            <span class="section-label">
+                CLUB POLICY
+            </span>
 
-    transition:
-        transform .22s ease,
-        box-shadow .22s ease;
-}
+            <h2>
+                Rules & Regulations
+            </h2>
 
-.tournament-card:hover,
-.admin-tournament-card:hover {
-    transform: translateY(-2px);
+            <p>
+                Manage the official GSA rules, discipline
+                guidelines and regulations.
+            </p>
 
-    box-shadow: var(--shadow);
-}
+        </div>
 
-.tournament-card img,
-.admin-tournament-card img {
-    width: 100%;
 
-    aspect-ratio: 16 / 9;
+        <a
+            href="../rules.html"
+            target="_blank"
+            class="secondary-button"
+        >
+            View Public Page ↗
+        </a>
 
-    object-fit: cover;
+    </div>
 
-    background: #f2f2f7;
-}
 
-.tournament-card-content,
-.admin-tournament-card-content {
-    padding: 17px;
-}
+    <!-- =============================================
+         RULES EDITOR
+    ============================================== -->
 
-.tournament-card h3,
-.admin-tournament-card h3 {
-    margin: 0 0 5px;
+    <div
+        class="rules-admin-card"
+        id="rulesAdminEditor"
+    >
 
-    font-size: 16px;
-}
+        <div class="rules-admin-header">
 
-.tournament-card p,
-.admin-tournament-card p {
-    margin: 0;
+            <div>
 
-    color: var(--text-secondary);
+                <span class="section-label">
+                    OFFICIAL DOCUMENT
+                </span>
 
-    font-size: 12px;
-}
+                <h3>
+                    Edit Rules & Regulations
+                </h3>
 
+                <p>
+                    Changes saved here will appear
+                    automatically on the public Rules page.
+                </p>
 
-/* =========================================================
-   GALLERY
-========================================================= */
+            </div>
 
-.gallery-admin-grid {
-    display: grid;
 
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+            <div
+                id="rulesAdminUpdated"
+                class="rules-admin-updated"
+            >
+                Loading...
+            </div>
 
-    gap: 14px;
-}
+        </div>
 
-.gallery-admin-card {
-    position: relative;
 
-    aspect-ratio: 1 / 1;
+        <!-- TITLE -->
 
-    overflow: hidden;
+        <div class="form-group">
 
-    background: #fff;
+            <label for="rulesAdminTitle">
+                Rules Page Title
+            </label>
 
-    border:
-        1px solid var(--border);
+            <input
+                type="text"
+                id="rulesAdminTitle"
+                placeholder="Rules & Regulations"
+                autocomplete="off"
+            >
 
-    border-radius: 17px;
+        </div>
 
-    box-shadow: var(--shadow-sm);
 
-    animation:
-        gsaScaleIn
-        .35s
-        cubic-bezier(.22, 1, .36, 1)
-        both;
-}
+        <!-- CONTENT -->
 
-.gallery-admin-card img {
-    width: 100%;
-    height: 100%;
+        <div class="form-group">
 
-    object-fit: cover;
+            <label for="rulesAdminContent">
+                Rules & Regulations Content
+            </label>
 
-    transition: transform .4s ease;
-}
+            <textarea
+                id="rulesAdminContent"
+                rows="24"
+                placeholder="Write the complete GSA rules and regulations here..."
+            ></textarea>
 
-.gallery-admin-card:hover img {
-    transform: scale(1.05);
-}
+            <small>
+                Write the complete GSA rules, discipline
+                guidelines, financial principles and
+                sportsmanship standards here.
+            </small>
 
-.gallery-delete {
-    position: absolute;
+        </div>
 
-    top: 9px;
-    right: 9px;
 
-    width: 32px;
-    height: 32px;
+        <!-- ACTION BUTTONS -->
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+        <div class="rules-admin-actions">
 
-    border: 0;
+            <button
+                type="button"
+                id="saveRulesButton"
+                class="primary-button"
+            >
+                Save Rules
+            </button>
 
-    border-radius: 50%;
 
-    background: rgba(0, 0, 0, 0.68);
+            <button
+                type="button"
+                id="resetRulesButton"
+                class="secondary-button"
+            >
+                Reset
+            </button>
 
-    color: #fff;
 
-    backdrop-filter: blur(8px);
+            <a
+                href="../rules.html"
+                target="_blank"
+                class="secondary-button"
+            >
+                Preview ↗
+            </a>
 
-    transition:
-        background .2s ease,
-        transform .2s ease;
-}
+        </div>
 
-.gallery-delete:hover {
-    background: var(--red);
 
-    transform: scale(1.05);
-}
+        <!-- STATUS -->
 
-.upload-label {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+        <div
+            id="rulesAdminStatus"
+            class="rules-admin-status"
+            role="status"
+            aria-live="polite"
+        ></div>
 
-    min-height: 43px;
+    </div>
 
-    padding: 0 16px;
+</section>
 
-    border-radius: 12px;
+        <!-- =================================================
+             APPLICATIONS
+        ================================================= -->
 
-    background: var(--black);
+        <section
+            id="applications"
+            class="admin-section"
+        >
 
-    color: #fff;
+            <div class="section-heading">
 
-    font-size: 13px;
-    font-weight: 600;
+                <div>
 
-    cursor: pointer;
+                    <span class="section-label">
+                        REQUESTS
+                    </span>
 
-    transition:
-        transform .18s ease,
-        box-shadow .18s ease;
-}
+                    <h2>
+                        Applications
+                    </h2>
 
-.upload-label:hover {
-    transform: translateY(-1px);
+                    <p>
+                        Manage club and friendly match applications.
+                    </p>
 
-    box-shadow:
-        0 9px 22px rgba(0, 0, 0, 0.14);
-}
+                </div>
 
+            </div>
 
-/* =========================================================
-   RULES ADMIN
-========================================================= */
 
-.rules-admin-card {
-    padding: 24px;
+            <div class="application-tabs">
 
-    background: #fff;
 
-    border:
-        1px solid var(--border);
+                <div>
 
-    border-radius: 20px;
+                    <h3>
+                        Friendly Match Applications
+                    </h3>
 
-    box-shadow: var(--shadow-sm);
-}
 
-.rules-admin-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+                    <div id="friendlyList">
 
-    gap: 15px;
+                        <div class="empty-state">
+                            No Friendly Match applications.
+                        </div>
 
-    margin-bottom: 20px;
-}
+                    </div>
 
-.rules-admin-header h3 {
-    margin: 0;
+                </div>
 
-    font-size: 20px;
-}
 
-#rulesAdminUpdated {
-    color: var(--text-muted);
+                <div>
 
-    font-size: 11px;
-}
+                    <h3>
+                        Membership Applications
+                    </h3>
 
-#rulesAdminTitle {
-    font-size: 16px;
-    font-weight: 650;
-}
 
-#rulesAdminContent {
-    min-height: 300px;
-}
+                    <div id="membershipList">
 
-.rules-admin-actions {
-    display: flex;
-    flex-wrap: wrap;
+                        <div class="empty-state">
+                            No membership applications.
+                        </div>
 
-    gap: 8px;
+                    </div>
 
-    margin-top: 15px;
-}
+                </div>
 
-#rulesAdminStatus {
-    margin-top: 10px;
 
-    color: var(--text-secondary);
+            </div>
 
-    font-size: 12px;
-}
+        </section>
 
 
-/* =========================================================
-   APPLICATION TABS
-========================================================= */
+    </main>
 
-.application-tabs {
-    display: flex;
+</div>
 
-    gap: 7px;
 
-    margin-bottom: 18px;
 
-    padding: 5px;
+<!-- =====================================================
+     NOTICE MODAL
+===================================================== -->
 
-    width: fit-content;
+<div
+    id="noticeModal"
+    class="modal"
+    aria-hidden="true"
+>
 
-    background: #e9e9ee;
+    <div class="modal-box">
 
-    border-radius: 12px;
-}
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            ×
+        </button>
 
-.application-tabs button {
-    min-height: 35px;
 
-    padding: 0 13px;
+        <h2 id="noticeModalTitle">
+            New Notice
+        </h2>
 
-    border: 0;
 
-    border-radius: 9px;
+        <form id="noticeForm">
 
-    background: transparent;
+            <input
+                type="hidden"
+                id="noticeId"
+            >
 
-    color: var(--text-secondary);
 
-    font-size: 12px;
-    font-weight: 600;
-}
+            <label>
 
-.application-tabs button.active {
-    background: #fff;
+                Title
 
-    color: var(--text);
+                <input
+                    type="text"
+                    id="noticeTitle"
+                    placeholder="Notice title"
+                    required
+                >
 
-    box-shadow:
-        0 2px 7px rgba(0, 0, 0, 0.07);
-}
+            </label>
 
 
-/* =========================================================
-   APPLICATION DETAILS
-========================================================= */
+            <label>
 
-.application-card {
-    cursor: pointer;
-}
+                Category
 
-.application-card strong {
-    color: var(--text);
-}
+                <select id="noticeCategory">
 
-.application-card small {
-    color: var(--text-muted);
+                    <option value="GENERAL">
+                        General
+                    </option>
 
-    font-size: 11px;
-}
+                    <option value="MATCH">
+                        Match
+                    </option>
 
-#applicationDetails {
-    display: grid;
+                    <option value="TOURNAMENT">
+                        Tournament
+                    </option>
 
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+                    <option value="ANNOUNCEMENT">
+                        Announcement
+                    </option>
 
-    gap: 12px;
-}
+                </select>
 
-#applicationDetails > div {
-    padding: 14px;
+            </label>
 
-    background: #f7f7f9;
 
-    border-radius: 13px;
-}
+            <label>
 
-#applicationDetails strong {
-    display: block;
+                Content
 
-    margin-bottom: 3px;
+                <textarea
+                    id="noticeContent"
+                    rows="8"
+                    placeholder="Write notice..."
+                    required
+                ></textarea>
 
-    font-size: 11px;
+            </label>
 
-    color: var(--text-secondary);
-}
 
-#applicationDetails span,
-#applicationDetails p {
-    color: var(--text);
+            <label class="checkbox-label">
 
-    font-size: 13px;
-}
+                <input
+                    type="checkbox"
+                    id="noticePublished"
+                    checked
+                >
 
+                Publish this notice
 
-/* =========================================================
-   MODALS
-========================================================= */
+            </label>
 
-.modal {
-    position: fixed;
 
-    inset: 0;
+            <label class="checkbox-label">
 
-    z-index: 2000;
+                <input
+                    type="checkbox"
+                    id="noticeImportant"
+                >
 
-    display: none;
+                Mark as important
 
-    align-items: center;
-    justify-content: center;
+            </label>
 
-    padding: 20px;
 
-    background:
-        rgba(0, 0, 0, 0.38);
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Save Notice
+            </button>
 
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-}
+        </form>
 
-.modal.active {
-    display: flex;
+    </div>
 
-    animation: gsaFadeIn .2s ease both;
-}
+</div>
 
-.modal-content,
-.modal-box {
-    position: relative;
 
-    width: 100%;
 
-    max-width: 720px;
-    max-height: calc(100vh - 40px);
+<!-- =====================================================
+     FIXTURE MODAL
+===================================================== -->
 
-    overflow-y: auto;
+<div
+    id="fixtureModal"
+    class="modal"
+    aria-hidden="true"
+>
 
-    padding: 25px;
+    <div class="modal-box">
 
-    background: #fff;
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            ×
+        </button>
 
-    border:
-        1px solid rgba(0, 0, 0, 0.08);
 
-    border-radius: 22px;
+        <h2>
+            Add Fixture
+        </h2>
 
-    box-shadow: var(--shadow-lg);
 
-    animation:
-        gsaScaleIn
-        .25s
-        cubic-bezier(.22, 1, .36, 1)
-        both;
-}
+        <form id="fixtureForm">
 
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+            <input
+                type="hidden"
+                id="fixtureId"
+            >
 
-    gap: 15px;
 
-    margin-bottom: 20px;
-}
+            <label>
 
-.modal-header h2,
-.modal-header h3 {
-    margin: 0;
+                Home Team
 
-    font-size: 20px;
-    font-weight: 700;
+                <input
+                    type="text"
+                    id="fixtureHome"
+                    required
+                >
 
-    letter-spacing: -0.025em;
-}
+            </label>
 
-.modal-close {
-    width: 34px;
-    height: 34px;
 
-    flex: 0 0 34px;
+            <label>
 
-    border: 0;
+                Away Team
 
-    border-radius: 50%;
+                <input
+                    type="text"
+                    id="fixtureAway"
+                    required
+                >
 
-    background: #f2f2f7;
+            </label>
 
-    color: var(--text-secondary);
 
-    font-size: 18px;
+            <label>
 
-    transition:
-        background .18s ease,
-        transform .18s ease;
-}
+                Match Date
 
-.modal-close:hover {
-    background: #e5e5ea;
+                <input
+                    type="date"
+                    id="fixtureDate"
+                    required
+                >
 
-    transform: rotate(4deg);
-}
+            </label>
 
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
 
-    flex-wrap: wrap;
+            <label>
 
-    gap: 8px;
+                Match Time
 
-    margin-top: 22px;
+                <input
+                    type="time"
+                    id="fixtureTime"
+                >
 
-    padding-top: 18px;
+            </label>
 
-    border-top:
-        1px solid var(--border);
-}
 
+            <label>
 
-/* =========================================================
-   IMAGE PREVIEWS
-========================================================= */
+                Venue
 
-#noticeImagePreview,
-#tournamentPosterPreview {
-    margin-top: 12px;
+                <input
+                    type="text"
+                    id="fixtureVenue"
+                >
 
-    padding: 10px;
+            </label>
 
-    background: #f5f5f7;
 
-    border-radius: 13px;
-}
+            <label>
 
-#noticePreviewImage {
-    width: 100%;
+                Type
 
-    max-height: 240px;
+                <input
+                    type="text"
+                    id="fixtureType"
+                    value="FRIENDLY MATCH"
+                >
 
-    object-fit: cover;
+            </label>
 
-    border-radius: 9px;
-}
 
-#tournamentPosterPreviewImage {
-    width: 100%;
+            <label class="checkbox-label">
 
-    max-height: 320px;
+                <input
+                    type="checkbox"
+                    id="fixturePublished"
+                    checked
+                >
 
-    object-fit: contain;
+                Publish fixture
 
-    border-radius: 9px;
-}
+            </label>
 
 
-/* =========================================================
-   LOADING STATE
-========================================================= */
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Save Fixture
+            </button>
 
-.loading-state,
-.empty-state {
-    padding: 40px 20px;
+        </form>
 
-    color: var(--text-secondary);
+    </div>
 
-    text-align: center;
+</div>
 
-    font-size: 13px;
 
-    animation: gsaFadeIn .3s ease both;
-}
 
-.empty-state {
-    background: #fff;
+<!-- =====================================================
+     TOURNAMENT MODAL
+===================================================== -->
 
-    border:
-        1px dashed rgba(0, 0, 0, 0.12);
+<div
+    id="tournamentModal"
+    class="modal"
+    aria-hidden="true"
+>
 
-    border-radius: 17px;
-}
+    <div class="modal-box">
 
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            ×
+        </button>
 
-/* =========================================================
-   FULL SCREEN LOADING
-========================================================= */
 
-.loading-screen {
-    position: fixed;
+        <h2>
+            Tournament
+        </h2>
 
-    inset: 0;
 
-    z-index: 5000;
+        <form id="tournamentForm">
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+            <input
+                type="hidden"
+                id="tournamentId"
+            >
 
-    background:
-        rgba(245, 245, 247, 0.88);
 
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+            <label>
 
-    animation: gsaFadeIn .2s ease both;
-}
+                Tournament Name
 
-.loading-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+                <input
+                    type="text"
+                    id="tournamentName"
+                    required
+                >
 
-    gap: 13px;
+            </label>
 
-    padding: 25px;
 
-    background: #fff;
+            <label>
 
-    border-radius: 18px;
+                Subtitle / Season
 
-    box-shadow: var(--shadow-lg);
+                <input
+                    type="text"
+                    id="tournamentSubtitle"
+                >
 
-    font-size: 13px;
-}
+            </label>
 
-.spinner {
-    width: 32px;
-    height: 32px;
 
-    border:
-        3px solid #e5e5ea;
+            <label>
 
-    border-top-color: var(--blue);
+                Date
 
-    border-radius: 50%;
+                <input
+                    type="date"
+                    id="tournamentDate"
+                >
 
-    animation:
-        gsaSpin
-        .75s
-        linear
-        infinite;
-}
+            </label>
 
 
-/* =========================================================
-   PDF CONTAINER
-========================================================= */
+            <label>
 
-#adminPdfContainer,
-#membershipPdfContainer {
-    position: absolute;
+                Status
 
-    left: -99999px;
+                <select id="tournamentStatus">
 
-    top: 0;
-}
+                    <option value="UPCOMING">
+                        Upcoming
+                    </option>
 
-#adminPdfPage {
-    position: relative;
+                    <option value="ONGOING">
+                        Ongoing
+                    </option>
 
-    width: 794px;
-    min-height: 1123px;
+                    <option value="COMPLETED">
+                        Completed
+                    </option>
 
-    padding: 58px;
+                </select>
 
-    background: #fff;
+            </label>
 
-    color: #111;
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-}
+            <label>
 
-.admin-pdf-header {
-    text-align: center;
+                Details
 
-    margin-bottom: 28px;
-}
+                <textarea
+                    id="tournamentDetails"
+                    rows="6"
+                ></textarea>
 
-.admin-pdf-brand {
-    font-size: 25px;
-    font-weight: 700;
-}
+            </label>
 
-.admin-pdf-subtitle {
-    margin-top: 4px;
 
-    color: #555;
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Save Tournament
+            </button>
 
-    font-size: 13px;
-}
+        </form>
 
-.admin-pdf-document {
-    margin-top: 25px;
+    </div>
 
-    padding-top: 18px;
+</div>
 
-    border-top:
-        1px solid #ddd;
-}
 
-.admin-pdf-line {
-    height: 1px;
 
-    margin: 14px 0;
+<!-- =====================================================
+     APPLICATION DETAILS MODAL
+===================================================== -->
 
-    background: #e5e5e5;
-}
+<div
+    id="applicationModal"
+    class="modal"
+    aria-hidden="true"
+>
 
-.admin-pdf-status {
-    margin: 12px 0;
+    <div class="modal-box">
 
-    font-size: 12px;
-}
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            ×
+        </button>
 
-.admin-pdf-section {
-    margin-top: 22px;
-}
 
-.admin-pdf-section-title {
-    margin-bottom: 12px;
+        <h2 id="applicationModalTitle">
+            Application
+        </h2>
 
-    font-size: 14px;
-    font-weight: 700;
-}
 
-.admin-pdf-grid {
-    display: grid;
+        <div id="applicationDetails"></div>
 
-    grid-template-columns:
-        repeat(2, 1fr);
+    </div>
 
-    gap: 10px;
-}
+</div>
 
-.admin-pdf-item {
-    padding: 9px;
 
-    background: #fafafa;
 
-    border:
-        1px solid #eee;
+<!-- =====================================================
+     LOADING SCREEN
+===================================================== -->
 
-    border-radius: 7px;
-}
+<div
+    id="gsaAdminLoading"
+    class="loading-screen"
+    hidden
+>
 
-.admin-pdf-item strong {
-    display: block;
+    <div class="loading-box">
 
-    margin-bottom: 2px;
+        <div class="spinner"></div>
 
-    font-size: 9px;
-}
+        <p>
+            Signing in...
+        </p>
 
-.admin-pdf-item span {
-    font-size: 11px;
-}
+    </div>
 
-.admin-pdf-message {
-    margin-top: 15px;
+</div>
 
-    font-size: 11px;
 
-    line-height: 1.6;
-}
 
-.admin-pdf-footer {
-    position: absolute;
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
 
-    left: 58px;
-    right: 58px;
-    bottom: 58px;
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
-    display: flex;
-    justify-content: space-between;
 
-    padding-top: 10px;
+<!-- =====================================================
+     ADMIN JAVASCRIPT
+===================================================== -->
 
-    border-top:
-        1px solid #ddd;
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 
-    color: #777;
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
-    font-size: 9px;
-}
+<script src="admin.js"></script>
 
-.admin-pdf-footer-right {
-    text-align: right;
-}
+<!-- =====================================================
+     FRIENDLY APPLICATION PDF TEMPLATE
+===================================================== -->
 
+<div id="adminPdfContainer" style="display:none;">
 
-/* =========================================================
-   DESKTOP LARGE
-========================================================= */
+    <div id="adminPdfPage">
 
-@media (min-width: 1200px) {
+        <div class="admin-pdf-header">
 
-    .stats-grid {
-        gap: 16px;
-    }
+            <div>
+                <div class="admin-pdf-brand">
+                    GHOPKHALI SPORTS ARENA
+                </div>
 
-    .stat-card {
-        padding: 21px;
-    }
-}
+                <div class="admin-pdf-subtitle">
+                    FRIENDLY MATCH APPLICATION
+                </div>
+            </div>
 
+            <div class="admin-pdf-document">
+                OFFICIAL DOCUMENT
+            </div>
 
-/* =========================================================
-   TABLET
-========================================================= */
+        </div>
 
-@media (max-width: 1100px) {
 
-    .stats-grid {
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-    }
+        <div class="admin-pdf-line"></div>
 
-    .gallery-admin-grid {
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-    }
 
-    .admin-fixture-card {
-        grid-template-columns:
-            100px
-            minmax(0, 1fr);
-    }
+        <div
+            id="adminPdfStatus"
+            class="admin-pdf-status"
+        >
+            APPROVED
+        </div>
 
-    .admin-fixture-actions {
-        grid-column: 1 / -1;
 
-        justify-content: flex-end;
-    }
-}
+        <div class="admin-pdf-section">
 
+            <div class="admin-pdf-section-title">
+                APPLICATION DETAILS
+            </div>
 
-/* =========================================================
-   MOBILE SIDEBAR
-========================================================= */
+            <div class="admin-pdf-grid">
 
-@media (max-width: 800px) {
+                <div class="admin-pdf-item">
+                    <span>Application ID</span>
+                    <strong id="adminPdfApplicationId">—</strong>
+                </div>
 
-    .admin-sidebar {
-        transform: translateX(-110%);
+                <div class="admin-pdf-item">
+                    <span>Application Date</span>
+                    <strong id="adminPdfCreatedAt">—</strong>
+                </div>
 
-        transition:
-            transform
-            .28s
-            cubic-bezier(.22, 1, .36, 1);
+                <div class="admin-pdf-item">
+                    <span>Team / Club</span>
+                    <strong id="adminPdfTeamName">—</strong>
+                </div>
 
-        box-shadow:
-            18px 0 45px rgba(0, 0, 0, 0.18);
-    }
+                <div class="admin-pdf-item">
+                    <span>Contact Person</span>
+                    <strong id="adminPdfContactPerson">—</strong>
+                </div>
 
-    .admin-sidebar.active {
-        transform: translateX(0);
-    }
+                <div class="admin-pdf-item">
+                    <span>Phone</span>
+                    <strong id="adminPdfPhone">—</strong>
+                </div>
 
-    .admin-main {
-        margin-left: 0;
+                <div class="admin-pdf-item">
+                    <span>Email</span>
+                    <strong id="adminPdfEmail">—</strong>
+                </div>
 
-        padding:
-            16px
-            14px
-            50px;
-    }
+                <div class="admin-pdf-item">
+                    <span>Sport</span>
+                    <strong id="adminPdfSport">—</strong>
+                </div>
 
-    .sidebar-toggle {
-        display: flex;
-    }
+                <div class="admin-pdf-item">
+                    <span>Number of Players</span>
+                    <strong id="adminPdfPlayers">—</strong>
+                </div>
 
-    .admin-topbar {
-        min-height: 48px;
+                <div class="admin-pdf-item">
+                    <span>Preferred Date</span>
+                    <strong id="adminPdfDate">—</strong>
+                </div>
 
-        margin-bottom: 18px;
-    }
+                <div class="admin-pdf-item">
+                    <span>Preferred Time</span>
+                    <strong id="adminPdfTime">—</strong>
+                </div>
 
-    .admin-topbar h1 {
-        font-size: 22px;
-    }
+            </div>
 
-    .admin-topbar p {
-        display: none;
-    }
+        </div>
 
-    .section-heading {
-        align-items: flex-start;
 
-        flex-direction: column;
+        <div class="admin-pdf-section">
 
-        gap: 12px;
-    }
+            <div class="admin-pdf-section-title">
+                VENUE
+            </div>
 
-    .section-heading h2 {
-        font-size: 21px;
-    }
+            <div
+                id="adminPdfVenue"
+                class="admin-pdf-message"
+            >
+                —
+            </div>
 
-    .stats-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+        </div>
 
-        gap: 10px;
-    }
 
-    .stat-card {
-        padding: 15px;
-    }
+        <div class="admin-pdf-section">
 
-    .stat-card strong {
-        font-size: 25px;
-    }
+            <div class="admin-pdf-section-title">
+                ADDITIONAL MESSAGE
+            </div>
 
-    .notice-stats {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+            <div
+                id="adminPdfMessage"
+                class="admin-pdf-message"
+            >
+                —
+            </div>
 
-        gap: 10px;
-    }
+        </div>
 
-    .gallery-admin-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
 
-        gap: 10px;
-    }
+        <div class="admin-pdf-footer">
 
-    .form-row {
-        grid-template-columns: 1fr;
-    }
+            <div>
+                <strong>Ghopkhali Sports Arena</strong>
+                <br>
+                ghopkhalisportsarena@gmail.com
+            </div>
 
-    #applicationDetails {
-        grid-template-columns: 1fr;
-    }
+            <div class="admin-pdf-footer-right">
+                Official Club Document
+            </div>
 
-    .admin-fixture-card {
-        grid-template-columns:
-            1fr 1fr;
+        </div>
 
-        gap: 12px;
-    }
+    </div>
 
-    .admin-fixture-actions {
-        grid-column: 1 / -1;
+</div>
 
-        justify-content: flex-start;
-    }
+<!-- =====================================================
+     MEMBERSHIP APPLICATION PDF CONTAINER
+===================================================== -->
 
-    .modal {
-        padding: 12px;
-    }
+<div
+    id="membershipPdfContainer"
+    style="display:none;"
+></div>
+    
+</body>
 
-    .modal-content,
-    .modal-box {
-        max-height: calc(100vh - 24px);
-
-        padding: 19px;
-
-        border-radius: 18px;
-    }
-
-    .quick-actions {
-        padding: 14px;
-    }
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 560px) {
-
-    .login-page {
-        padding: 15px;
-    }
-
-    .login-card {
-        padding: 32px 22px 27px;
-
-        border-radius: 22px;
-    }
-
-    .login-card h1 {
-        font-size: 26px;
-    }
-
-    .login-logo {
-        width: 68px;
-        height: 68px;
-    }
-
-    .admin-main {
-        padding:
-            13px
-            11px
-            40px;
-    }
-
-    .admin-topbar {
-        gap: 10px;
-    }
-
-    .admin-topbar h1 {
-        font-size: 20px;
-    }
-
-    .stats-grid {
-        gap: 8px;
-    }
-
-    .stat-card {
-        padding: 13px;
-
-        border-radius: 15px;
-    }
-
-    .stat-card span {
-        font-size: 10px;
-    }
-
-    .stat-card strong {
-        font-size: 22px;
-    }
-
-    .notice-card,
-    .content-card,
-    .application-card {
-        padding: 14px;
-
-        border-radius: 15px;
-    }
-
-    .content-card-top,
-    .application-top {
-        flex-direction: column;
-    }
-
-    .card-actions {
-        width: 100%;
-    }
-
-    .small-button {
-        flex: 0 0 auto;
-    }
-
-    .notice-editor {
-        padding: 15px;
-
-        border-radius: 16px;
-    }
-
-    .notice-stats > div {
-        padding: 12px;
-
-        border-radius: 13px;
-    }
-
-    .notice-stats strong {
-        font-size: 20px;
-    }
-
-    .admin-fixture-card {
-        grid-template-columns: 1fr;
-
-        padding: 14px;
-
-        border-radius: 15px;
-    }
-
-    .admin-fixture-actions {
-        grid-column: auto;
-
-        width: 100%;
-    }
-
-    .admin-fixture-actions .small-button {
-        flex: 1;
-    }
-
-    .gallery-admin-grid {
-        gap: 8px;
-    }
-
-    .rules-admin-card {
-        padding: 16px;
-
-        border-radius: 16px;
-    }
-
-    .rules-admin-header {
-        flex-direction: column;
-    }
-
-    .application-tabs {
-        width: 100%;
-    }
-
-    .application-tabs button {
-        flex: 1;
-    }
-
-    .modal-header h2,
-    .modal-header h3 {
-        font-size: 18px;
-    }
-
-    .modal-actions {
-        flex-direction: column;
-    }
-
-    .modal-actions button {
-        width: 100%;
-    }
-}
-
-
-/* =========================================================
-   VERY SMALL DEVICES
-========================================================= */
-
-@media (max-width: 380px) {
-
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .notice-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .login-card {
-        padding-left: 18px;
-        padding-right: 18px;
-    }
-}
-
-
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
-
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-    outline: 3px solid rgba(0, 113, 227, 0.25);
-
-    outline-offset: 2px;
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-
-        transition-duration: 0.01ms !important;
-    }
-}
-
-
-/* =========================================================
-   IMPORTANT SIDEBAR SAFETY
-   DO NOT ADD transform:none HERE
-========================================================= */
-
-@media (max-width: 800px) {
-
-    .admin-sidebar {
-        transform: translateX(-110%);
-    }
-
-    .admin-sidebar.active {
-        transform: translateX(0);
-    }
-
-    .admin-sidebar-overlay {
-        display: none;
-    }
-
-    .admin-sidebar-overlay.active {
-        display: block;
-    }
-}
+</html>
