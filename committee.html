@@ -1180,6 +1180,281 @@ main {
 
 }
 
+/* =====================================================
+   PREMIUM SPORTS DIRECTOR PHOTO
+===================================================== */
+
+.sports-profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+}
+
+
+/* =====================================================
+   PREMIUM SPORTS PHOTO FRAME
+===================================================== */
+
+.sports-photo-wrap {
+
+    position: relative;
+
+    flex: 0 0 auto;
+
+    width: 82px;
+    height: 82px;
+
+    padding: 3px;
+
+    border-radius: 24px;
+
+    background:
+        conic-gradient(
+            from 0deg,
+            #0071e3,
+            #5856d6,
+            #af52de,
+            #ff2d55,
+            #ff9500,
+            #34c759,
+            #0071e3
+        );
+
+    animation:
+        sportsBorderRotate 6s linear infinite;
+
+    box-shadow:
+        0 9px 25px rgba(0,113,227,.16);
+
+    transition:
+        transform .45s ease,
+        box-shadow .45s ease;
+
+}
+
+
+/* =====================================================
+   SPORTS PHOTO GLOW
+===================================================== */
+
+.sports-photo-wrap::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: -4px;
+
+    border-radius: 28px;
+
+    background:
+        conic-gradient(
+            from 180deg,
+            transparent,
+            rgba(0,113,227,.55),
+            transparent,
+            rgba(175,82,222,.55),
+            transparent
+        );
+
+    filter:
+        blur(8px);
+
+    opacity: .65;
+
+    z-index: -1;
+
+    animation:
+        sportsGlow 3s ease-in-out infinite;
+
+}
+
+
+/* =====================================================
+   SPORTS PHOTO
+===================================================== */
+
+.sports-photo {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 21px;
+
+    border:
+        3px solid rgba(255,255,255,.96);
+
+    background:
+        #f5f5f7;
+
+    animation:
+        sportsPhotoCounterRotate 6s linear infinite;
+
+}
+
+
+/* =====================================================
+   SPORTS BORDER ANIMATION
+===================================================== */
+
+@keyframes sportsBorderRotate {
+
+    from {
+
+        transform:
+            rotate(0deg);
+
+    }
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+/* =====================================================
+   SPORTS GLOW ANIMATION
+===================================================== */
+
+@keyframes sportsGlow {
+
+    0%,100% {
+
+        opacity: .4;
+
+        transform:
+            scale(.98);
+
+    }
+
+    50% {
+
+        opacity: .85;
+
+        transform:
+            scale(1.04);
+
+    }
+
+}
+
+
+/* =====================================================
+   KEEP PHOTO UPRIGHT
+===================================================== */
+
+@keyframes sportsPhotoCounterRotate {
+
+    from {
+
+        transform:
+            rotate(0deg);
+
+    }
+
+    to {
+
+        transform:
+            rotate(-360deg);
+
+    }
+
+}
+
+
+/* =====================================================
+   SPORTS HOVER
+===================================================== */
+
+.sports-card:hover
+.sports-photo-wrap {
+
+    transform:
+        translateY(-5px)
+        scale(1.05);
+
+    box-shadow:
+        0 15px 35px rgba(0,113,227,.22),
+        0 0 25px rgba(88,86,214,.14);
+
+}
+
+
+/* =====================================================
+   SPORTS INFO
+===================================================== */
+
+.sports-info h3 {
+
+    margin: 0 0 7px;
+
+    font-size: 18px;
+
+    letter-spacing:
+        -.025em;
+
+}
+
+
+.sports-info p {
+
+    margin: 0;
+
+    color: var(--secondary);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .sports-profile {
+
+        gap: 15px;
+
+    }
+
+    .sports-photo-wrap {
+
+        width: 74px;
+        height: 74px;
+
+        border-radius: 21px;
+
+    }
+
+    .sports-photo {
+
+        border-radius: 18px;
+
+    }
+
+    .sports-info h3 {
+
+        font-size: 17px;
+
+    }
+
+}
 
 /* =====================================================
    BOARD MEMBERS
@@ -2097,44 +2372,32 @@ footer strong {
 
         <article class="sports-card">
 
-            <div class="sports-icon">
+            <div class="sports-profile">
 
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                >
+    <div class="sports-photo-wrap">
 
-                    <circle
-                        cx="12"
-                        cy="12"
-                        r="8"
-                        stroke="currentColor"
-                        stroke-width="1.7"
-                    />
+        <img
+            src="Images/hasib.png"
+            alt="Md Hasib Howlader Sayem - Director of Sports Operations"
+            class="sports-photo"
+            loading="lazy"
+        >
 
-                    <path
-                        d="M4.8 9L9 7L12 9.5L11 13H7L4.8 9Z"
-                        stroke="currentColor"
-                        stroke-width="1.3"
-                    />
+    </div>
 
-                    <path
-                        d="M19.2 9L15 7L12 9.5L13 13H17L19.2 9Z"
-                        stroke="currentColor"
-                        stroke-width="1.3"
-                    />
+    <div class="sports-info">
 
-                </svg>
+        <h3>
+            Md Hasib Howlader Sayem
+        </h3>
 
-            </div>
+        <p>
+            Director of Sports Operations
+        </p>
 
-            <h3>
-                Hasib Howlader Sayem
-            </h3>
+    </div>
 
-            <p>
-                Director of Sports Operations
-            </p>
+</div>
 
         </article>
 
