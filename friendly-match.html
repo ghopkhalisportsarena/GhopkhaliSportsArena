@@ -1113,6 +1113,90 @@ if (!savedApplication) {
     );
 }
 
+// ==================================================
+// SEND FRIENDLY MATCH EMAIL
+// ==================================================
+
+const {
+    data: emailResult,
+    error: emailError
+} =
+    await supabaseClient
+        .functions
+        .invoke(
+            "send-friendly-match-email",
+            {
+                body: {
+
+                    type:
+                        "friendly_match",
+
+                    applicationId:
+                        savedApplication.id,
+
+                    teamName:
+                        teamName,
+
+                    contactPerson:
+                        contactPerson,
+
+                    phone:
+                        phone,
+
+                    email:
+                        email || "",
+
+                    sport:
+                        sport,
+
+                    players:
+                        players,
+
+                    preferredDate:
+                        preferredDate,
+
+                    preferredTime:
+                        preferredTime || "",
+
+                    venue:
+                        venue || "",
+
+                    message:
+                        message || ""
+
+                }
+            }
+        );
+
+
+// ==================================================
+// EMAIL RESULT
+// ==================================================
+
+if (emailError) {
+
+    console.error(
+        "Friendly Match Email Error:",
+        emailError
+    );
+
+} else if (
+    !emailResult ||
+    emailResult.success !== true
+) {
+
+    console.error(
+        "Friendly Match Email Failed:",
+        emailResult
+    );
+
+} else {
+
+    console.log(
+        "Friendly Match email sent successfully."
+    );
+
+}
 
 // Save application for PDF download
 lastSubmittedApplication =
