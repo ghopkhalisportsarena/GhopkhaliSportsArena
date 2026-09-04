@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="ঘোপখালী স্পোর্টস অ্যারিনার খেলাধুলা, ফিটনেস ও কমিউনিটি কার্যক্রম।"
+    >
+
+    <meta
+        name="theme-color"
+        content="#f5f5f7"
+    >
+
+    <title>
+        Activities — Ghopkhali Sports Arena
+    </title>
+
+
+    <!-- =====================================================
+         SUPABASE
+    ====================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- =====================================================
+         FONT
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         STYLES
+    ====================================================== -->
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            margin: 0;
+
+            font-family:
+                "Noto Sans Bengali",
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: #1d1d1f;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #f5f5f7 0%,
+                    #ffffff 45%,
+                    #f5f5f7 100%
+                );
+
+            -webkit-font-smoothing: antialiased;
+        }
+
+
+        a {
+            color: inherit;
+
+            text-decoration: none;
+        }
+
+
+        img {
+            max-width: 100%;
+        }
+
+
+        /* =================================================
+           HEADER
+        ================================================= */
+
+        .site-header {
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            padding: 14px 20px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.78
+                );
+
+            border-bottom:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+
+            backdrop-filter:
+                blur(22px);
+
+            -webkit-backdrop-filter:
+                blur(22px);
+        }
+
+
+        .header-inner {
+            width: min(
+                1180px,
+                calc(100% - 20px)
+            );
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+
+        .brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+        }
+
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background:
+                #1d1d1f;
+
+            color: #fff;
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.05em;
+
+            box-shadow:
+                0 5px 16px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.16
+                );
+        }
+
+
+        .brand-text {
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .brand-text strong {
+            font-size: 14px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.02em;
+        }
+
+
+        .brand-text span {
+            color: #86868b;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            letter-spacing: 0.08em;
+
+            text-transform: uppercase;
+        }
+
+
+        .back-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 40px;
+
+            padding: 0 16px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.055
+                );
+
+            color: #1d1d1f;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .back-button:hover {
+            transform:
+                translateY(-1px);
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.09
+                );
+        }
+
+
+        /* =================================================
+           HERO
+        ================================================= */
+
+        .activities-hero {
+            position: relative;
+
+            overflow: hidden;
+
+            padding:
+                105px 20px
+                80px;
+
+            text-align: center;
+        }
+
+
+        .activities-hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            top: -230px;
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(
+                        0,
+                        122,
+                        255,
+                        0.12
+                    ),
+                    transparent 68%
+                );
+
+            pointer-events: none;
+        }
+
+
+        .hero-label {
+            position: relative;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 7px 13px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.045
+                );
+
+            color: #6e6e73;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.13em;
+
+            text-transform: uppercase;
+        }
+
+
+        .activities-hero h1 {
+            position: relative;
+
+            max-width: 850px;
+
+            margin:
+                22px auto 15px;
+
+            font-size:
+                clamp(
+                    42px,
+                    8vw,
+                    82px
+                );
+
+            line-height: 0.98;
+
+            letter-spacing: -0.065em;
+
+            font-weight: 800;
+        }
+
+
+        .activities-hero h1 span {
+            display: block;
+
+            color: #86868b;
+        }
+
+
+        .activities-hero p {
+            position: relative;
+
+            max-width: 650px;
+
+            margin: 0 auto;
+
+            color: #6e6e73;
+
+            font-size:
+                clamp(
+                    15px,
+                    2vw,
+                    18px
+                );
+
+            line-height: 1.75;
+        }
+
+
+        /* =================================================
+           MAIN
+        ================================================= */
+
+        .activities-main {
+            width: min(
+                1180px,
+                calc(100% - 32px)
+            );
+
+            margin:
+                0 auto 100px;
+        }
+
+
+        .activities-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+
+            gap: 24px;
+        }
+
+
+        /* =================================================
+           ACTIVITY CARD
+        ================================================= */
+
+        .activity-card {
+            position: relative;
+
+            overflow: hidden;
+
+            min-height: 550px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            border-radius: 32px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.86
+                );
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.07
+                );
+
+            box-shadow:
+                0 15px 50px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.07
+                );
+
+            transition:
+                transform 0.45s
+                cubic-bezier(
+                    0.2,
+                    0.8,
+                    0.2,
+                    1
+                ),
+                box-shadow 0.45s ease;
+        }
+
+
+        .activity-card:hover {
+            transform:
+                translateY(-7px);
+
+            box-shadow:
+                0 28px 70px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.12
+                );
+        }
+
+
+        /* =================================================
+           IMAGE
+        ================================================= */
+
+        .activity-image {
+            position: relative;
+
+            width: 100%;
+
+            height: 330px;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eeeeF2,
+                    #dfe1e7
+                );
+        }
+
+
+        .activity-image img {
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+
+            transition:
+                transform 0.8s
+                cubic-bezier(
+                    0.2,
+                    0.8,
+                    0.2,
+                    1
+                );
+        }
+
+
+        .activity-card:hover
+        .activity-image img {
+            transform:
+                scale(1.045);
+        }
+
+
+        .activity-image::after {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    transparent 45%,
+                    rgba(
+                        0,
+                        0,
+                        0,
+                        0.28
+                    )
+                );
+
+            pointer-events: none;
+        }
+
+
+        .activity-number {
+            position: absolute;
+
+            z-index: 2;
+
+            top: 18px;
+            left: 18px;
+
+            min-width: 50px;
+
+            padding: 7px 12px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.86
+                );
+
+            color: #1d1d1f;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            text-align: center;
+
+            backdrop-filter:
+                blur(12px);
+
+            -webkit-backdrop-filter:
+                blur(12px);
+        }
+
+
+        .activity-no-image {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            color:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.14
+                );
+
+            font-size: 52px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.08em;
+        }
+
+
+        /* =================================================
+           CONTENT
+        ================================================= */
+
+        .activity-content {
+            flex: 1;
+
+            display: flex;
+
+            flex-direction: column;
+
+            padding: 28px;
+        }
+
+
+        .activity-category {
+            margin-bottom: 10px;
+
+            color: #86868b;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.13em;
+
+            text-transform: uppercase;
+        }
+
+
+        .activity-content h2 {
+            margin: 0 0 12px;
+
+            color: #1d1d1f;
+
+            font-size:
+                clamp(
+                    24px,
+                    3vw,
+                    34px
+                );
+
+            line-height: 1.1;
+
+            letter-spacing: -0.04em;
+
+            font-weight: 800;
+        }
+
+
+        .activity-content p {
+            margin: 0;
+
+            color: #6e6e73;
+
+            font-size: 15px;
+
+            line-height: 1.75;
+        }
+
+
+        .activity-arrow {
+            margin-top: auto;
+
+            padding-top: 24px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            color: #1d1d1f;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        .activity-arrow-icon {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                #1d1d1f;
+
+            color: #fff;
+
+            font-size: 18px;
+
+            transition:
+                transform 0.25s ease;
+        }
+
+
+        .activity-card:hover
+        .activity-arrow-icon {
+            transform:
+                translateX(4px);
+        }
+
+
+        /* =================================================
+           LOADING
+        ================================================= */
+
+        .activities-loading {
+            grid-column:
+                1 / -1;
+
+            min-height: 300px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #86868b;
+
+            font-size: 14px;
+        }
+
+
+        /* =================================================
+           ERROR
+        ================================================= */
+
+        .activities-error {
+            grid-column:
+                1 / -1;
+
+            padding: 45px 25px;
+
+            text-align: center;
+
+            color: #6e6e73;
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.07
+                );
+
+            border-radius: 24px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.8
+                );
+        }
+
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        .site-footer {
+            padding:
+                45px 20px;
+
+            text-align: center;
+
+            border-top:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+
+            color: #86868b;
+
+            font-size: 12px;
+        }
+
+
+        .site-footer strong {
+            color: #1d1d1f;
+        }
+
+
+        /* =================================================
+           TABLET
+        ================================================= */
+
+        @media (max-width: 800px) {
+
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .activity-card {
+                min-height: auto;
+            }
+
+
+            .activity-image {
+                height: 360px;
+            }
+
+        }
+
+
+        /* =================================================
+           MOBILE
+        ================================================= */
+
+        @media (max-width: 600px) {
+
+            .site-header {
+                padding:
+                    10px 12px;
+            }
+
+
+            .header-inner {
+                width: 100%;
+            }
+
+
+            .brand-mark {
+                width: 38px;
+                height: 38px;
+
+                border-radius: 11px;
+            }
+
+
+            .brand-text strong {
+                font-size: 12px;
+            }
+
+
+            .brand-text span {
+                font-size: 8px;
+            }
+
+
+            .back-button {
+                min-height: 36px;
+
+                padding:
+                    0 13px;
+
+                font-size: 12px;
+            }
+
+
+            .activities-hero {
+                padding:
+                    75px 18px
+                    55px;
+            }
+
+
+            .activities-hero h1 {
+                font-size:
+                    clamp(
+                        43px,
+                        15vw,
+                        64px
+                    );
+            }
+
+
+            .activities-hero p {
+                font-size: 14px;
+
+                line-height: 1.7;
+            }
+
+
+            .activities-main {
+                width:
+                    calc(
+                        100% - 22px
+                    );
+
+                margin-bottom: 70px;
+            }
+
+
+            .activities-grid {
+                gap: 16px;
+            }
+
+
+            .activity-card {
+                border-radius: 24px;
+            }
+
+
+            .activity-image {
+                height: 260px;
+            }
+
+
+            .activity-content {
+                padding: 21px;
+            }
+
+
+            .activity-content h2 {
+                font-size: 25px;
+            }
+
+
+            .activity-content p {
+                font-size: 14px;
+            }
+
+        }
+
+
+        /* =================================================
+           REDUCED MOTION
+        ================================================= */
+
+        @media (
+            prefers-reduced-motion: reduce
+        ) {
+
+            html {
+                scroll-behavior: auto;
+            }
+
+
+            .activity-card,
+            .activity-image img,
+            .activity-arrow-icon,
+            .back-button {
+                transition: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="site-header">
+
+        <div class="header-inner">
+
+            <a
+                href="index.html"
+                class="brand"
+            >
+
+                <div class="brand-mark">
+                    GSA
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>
+                        ঘোপখালী স্পোর্টস অ্যারিনা
+                    </strong>
+
+                    <span>
+                        Ghopkhali Sports Arena
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="index.html"
+                class="back-button"
+            >
+                ← হোম
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="activities-hero">
+
+        <span class="hero-label">
+            03 / ACTIVITIES
+        </span>
+
+
+        <h1>
+            The Arena.
+            <span>
+                Built for movement.
+            </span>
+        </h1>
+
+
+        <p>
+            বিভিন্ন খেলাধুলা, ফিটনেস ও কমিউনিটি কার্যক্রমের
+            মাধ্যমে একটি সক্রিয়, শৃঙ্খলাবদ্ধ ও ঐক্যবদ্ধ
+            সমাজ গড়ে তোলাই আমাদের লক্ষ্য।
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ACTIVITIES
+    ====================================================== -->
+
+    <main class="activities-main">
+
+        <div
+            id="activitiesGrid"
+            class="activities-grid"
+        >
+
+            <div class="activities-loading">
+                Activities loading...
+            </div>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="site-footer">
+
+        <strong>
+            ঘোপখালী স্পোর্টস অ্যারিনা
+        </strong>
+
+        <br>
+
+        Built for movement. Different activities.
+        One community.
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         ACTIVITIES JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        "use strict";
+
+
+        /* =================================================
+           SUPABASE CONFIG
+        ================================================= */
+
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+        const SUPABASE_ANON_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_ANON_KEY
+            );
+
+
+        /* =================================================
+           ELEMENTS
+        ================================================= */
+
+        const activitiesGrid =
+            document.getElementById(
+                "activitiesGrid"
+            );
+
+
+        /* =================================================
+           ESCAPE HTML
+        ================================================= */
+
+        function escapeHTML(
+            value
+        ) {
+
+            return String(
+                value ?? ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =================================================
+           LOAD ACTIVITIES
+        ================================================= */
+
+        async function loadActivities() {
+
+            if (!activitiesGrid) {
+                return;
+            }
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from("activities")
+                        .select("*")
+                        .order(
+                            "number",
+                            {
+                                ascending: true
+                            }
+                        );
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                renderActivities(
+                    data || []
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Activities loading error:",
+                    error
+                );
+
+
+                activitiesGrid.innerHTML = `
+
+                    <div
+                        class="activities-error"
+                    >
+
+                        <strong>
+                            Activities load করা যায়নি।
+                        </strong>
+
+                        <br><br>
+
+                        ${escapeHTML(
+                            error.message ||
+                            "Unknown error"
+                        )}
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =================================================
+           RENDER ACTIVITIES
+        ================================================= */
+
+        function renderActivities(
+            activities
+        ) {
+
+            if (!activities.length) {
+
+                activitiesGrid.innerHTML = `
+
+                    <div
+                        class="activities-error"
+                    >
+
+                        এখনো কোনো Activity
+                        যোগ করা হয়নি।
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            activitiesGrid.innerHTML =
+                activities
+                    .map(
+                        activity => {
+
+                            const number =
+                                escapeHTML(
+                                    activity.number ||
+                                    ""
+                                );
+
+
+                            const category =
+                                escapeHTML(
+                                    activity.category ||
+                                    ""
+                                );
+
+
+                            const title =
+                                escapeHTML(
+                                    activity.title ||
+                                    "Activity"
+                                );
+
+
+                            const description =
+                                escapeHTML(
+                                    activity.description ||
+                                    ""
+                                );
+
+
+                            const image =
+                                activity.image_url
+                                    ? `
+
+                                        <img
+                                            src="${escapeHTML(
+                                                activity.image_url
+                                            )}"
+                                            alt="${title}"
+                                            loading="lazy"
+                                        >
+
+                                    `
+                                    : `
+
+                                        <div
+                                            class="activity-no-image"
+                                        >
+                                            GSA
+                                        </div>
+
+                                    `;
+
+
+                            return `
+
+                                <article
+                                    class="activity-card"
+                                >
+
+                                    <div
+                                        class="activity-image"
+                                    >
+
+                                        <span
+                                            class="activity-number"
+                                        >
+                                            ${number}
+                                        </span>
+
+                                        ${image}
+
+                                    </div>
+
+
+                                    <div
+                                        class="activity-content"
+                                    >
+
+                                        <div
+                                            class="activity-category"
+                                        >
+                                            ${category}
+                                        </div>
+
+
+                                        <h2>
+                                            ${title}
+                                        </h2>
+
+
+                                        <p>
+                                            ${description}
+                                        </p>
+
+
+                                        <div
+                                            class="activity-arrow"
+                                        >
+
+                                            <span>
+                                                ঘোপখালী স্পোর্টস অ্যারিনা
+                                            </span>
+
+
+                                            <span
+                                                class="activity-arrow-icon"
+                                            >
+                                                ↗
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            `;
+
+                        }
+                    )
+                    .join("");
+
+        }
+
+
+        /* =================================================
+           START
+        ================================================= */
+
+        loadActivities();
+
+    </script>
+
+</body>
+
+</html>
