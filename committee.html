@@ -699,6 +699,10 @@ main {
 }
 
 
+/* =====================================================
+   CARD TOP
+===================================================== */
+
 .card-top {
 
     display: flex;
@@ -731,6 +735,7 @@ main {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 17px;
@@ -765,12 +770,244 @@ main {
 }
 
 
+/* =====================================================
+   LEADER PROFILE
+===================================================== */
+
+.leader-profile {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 22px;
+
+    z-index: 2;
+
+}
+
+
+/* =====================================================
+   PREMIUM PHOTO FRAME
+===================================================== */
+
+.leader-photo-wrap {
+
+    position: relative;
+
+    flex: 0 0 auto;
+
+    width: 108px;
+    height: 108px;
+
+    padding: 4px;
+
+    border-radius: 30px;
+
+    background:
+        conic-gradient(
+            from 0deg,
+            #0071e3,
+            #5856d6,
+            #af52de,
+            #ff2d55,
+            #ff9500,
+            #34c759,
+            #0071e3
+        );
+
+    animation:
+        premiumBorderRotate 6s linear infinite;
+
+    box-shadow:
+        0 10px 30px rgba(0,113,227,.16),
+        0 0 0 1px rgba(255,255,255,.8);
+
+    transition:
+        transform .45s ease,
+        box-shadow .45s ease;
+
+}
+
+
+/* =====================================================
+   PREMIUM GLOW
+===================================================== */
+
+.leader-photo-wrap::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: -5px;
+
+    border-radius: 34px;
+
+    background:
+        conic-gradient(
+            from 180deg,
+            transparent,
+            rgba(0,113,227,.55),
+            transparent,
+            rgba(175,82,222,.55),
+            transparent
+        );
+
+    filter:
+        blur(9px);
+
+    opacity: .65;
+
+    z-index: -1;
+
+    animation:
+        premiumGlow 3s ease-in-out infinite;
+
+}
+
+
+/* =====================================================
+   PHOTO
+===================================================== */
+
+.leader-photo {
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 26px;
+
+    background:
+        #f5f5f7;
+
+    border:
+        3px solid rgba(255,255,255,.96);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,.06);
+
+    /*
+       Counter rotation keeps the actual
+       photo visually upright while the
+       premium frame rotates.
+    */
+
+    animation:
+        photoCounterRotate 6s linear infinite;
+
+}
+
+
+/* =====================================================
+   BORDER ANIMATION
+===================================================== */
+
+@keyframes premiumBorderRotate {
+
+    from {
+
+        transform:
+            rotate(0deg);
+
+    }
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+/* =====================================================
+   GLOW ANIMATION
+===================================================== */
+
+@keyframes premiumGlow {
+
+    0%,100% {
+
+        opacity: .45;
+
+        transform:
+            scale(.98);
+
+    }
+
+    50% {
+
+        opacity: .85;
+
+        transform:
+            scale(1.04);
+
+    }
+
+}
+
+
+/* =====================================================
+   PHOTO COUNTER ROTATION
+===================================================== */
+
+@keyframes photoCounterRotate {
+
+    from {
+
+        transform:
+            rotate(0deg);
+
+    }
+
+    to {
+
+        transform:
+            rotate(-360deg);
+
+    }
+
+}
+
+
+/* =====================================================
+   PHOTO HOVER
+===================================================== */
+
+.leader-card:hover
+.leader-photo-wrap {
+
+    transform:
+        translateY(-5px)
+        scale(1.04);
+
+    box-shadow:
+        0 16px 40px rgba(0,113,227,.22),
+        0 0 28px rgba(88,86,214,.14);
+
+}
+
+
+/* =====================================================
+   LEADER NAME
+===================================================== */
+
 .leader-card h3 {
 
     position: relative;
 
     margin:
-        25px 0 5px;
+        0 0 5px;
 
     font-size: 25px;
 
@@ -779,6 +1016,10 @@ main {
 
 }
 
+
+/* =====================================================
+   LEADER POSITION
+===================================================== */
 
 .leader-card p {
 
@@ -792,6 +1033,47 @@ main {
 
 }
 
+
+/* =====================================================
+   MOBILE PHOTO
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .leader-profile {
+
+        gap: 17px;
+
+    }
+
+    .leader-photo-wrap {
+
+        width: 88px;
+        height: 88px;
+
+        border-radius: 25px;
+
+    }
+
+    .leader-photo {
+
+        border-radius: 21px;
+
+    }
+
+    .leader-card h3 {
+
+        font-size: 21px;
+
+    }
+
+    .leader-card p {
+
+        font-size: 13px;
+
+    }
+
+}
 
 /* =====================================================
    SPORTS OPERATIONS
@@ -1515,17 +1797,32 @@ footer strong {
             </div>
 
 
-            <div>
+            <div class="leader-profile">
 
-                <h3>
-                    Al Amin
-                </h3>
+    <div class="leader-photo-wrap">
 
-                <p>
-                    President of the Board
-                </p>
+        <img
+            src="president.jpeg"
+            alt="Al Amin - President of the Board"
+            class="leader-photo"
+            loading="lazy"
+        >
 
-            </div>
+    </div>
+
+    <div>
+
+        <h3>
+            Al Amin
+        </h3>
+
+        <p>
+            President of the Board
+        </p>
+
+    </div>
+
+</div>
 
         </article>
 
@@ -1579,18 +1876,32 @@ footer strong {
             </div>
 
 
-            <div>
+           <div class="leader-profile">
 
-                <h3>
-                    Bone Amin
-                </h3>
+    <div class="leader-photo-wrap">
 
-                <p>
-                    Chief Executive Director
-                </p>
+        <img
+            src="advisor.jpg"
+            alt="Bone Amin - Chief Executive Director"
+            class="leader-photo"
+            loading="lazy"
+        >
 
-            </div>
+    </div>
 
+    <div>
+
+        <h3>
+            Bone Amin
+        </h3>
+
+        <p>
+            Chief Executive Director
+        </p>
+
+    </div>
+
+</div> 
         </article>
 
 
@@ -1642,18 +1953,33 @@ footer strong {
             </div>
 
 
-            <div>
+            <div class="leader-profile">
 
-                <h3>
-                    Shadat Fatih
-                </h3>
+    <div class="leader-photo-wrap">
 
-                <p>
-                    Director of Digital &amp;
-                    Corporate Affairs
-                </p>
+        <img
+            src="Images/shadat.jpg"
+            alt="Shadat Fatih - Director of Digital and Corporate Affairs"
+            class="leader-photo"
+            loading="lazy"
+        >
 
-            </div>
+    </div>
+
+    <div>
+
+        <h3>
+            Shadat Fatih
+        </h3>
+
+        <p>
+            Director of Digital &amp;
+            Corporate Affairs
+        </p>
+
+    </div>
+
+</div>
 
         </article>
 
@@ -1705,18 +2031,33 @@ footer strong {
             </div>
 
 
-            <div>
+            <div class="leader-profile">
 
-                <h3>
-                    Sogir Ahmed
-                </h3>
+    <div class="leader-photo-wrap">
 
-                <p>
-                    Director of Finance &amp;
-                    Commercials
-                </p>
+        <img
+            src="Images/sogir.jpg"
+            alt="Sogir Ahmed - Director of Accounting and Commercial"
+            class="leader-photo"
+            loading="lazy"
+        >
 
-            </div>
+    </div>
+
+    <div>
+
+        <h3>
+            Sogir Ahmed
+        </h3>
+
+        <p>
+            Director of Accounting &amp;
+            Commercial
+        </p>
+
+    </div>
+
+</div>
 
         </article>
 
