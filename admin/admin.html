@@ -779,9 +779,8 @@
 
         </section>
 
-
 <!-- =================================================
-     FIXTURES
+     FIXTURES & MATCH RESULTS
 ================================================= -->
 
 <section
@@ -794,15 +793,16 @@
         <div>
 
             <span class="section-label">
-                MATCHES
+                MATCH CENTER
             </span>
 
             <h2>
-                Fixtures
+                Fixtures & Results
             </h2>
 
             <p>
-                Manage upcoming matches.
+                Manage football and cricket fixtures,
+                upcoming matches and completed results.
             </p>
 
         </div>
@@ -820,10 +820,62 @@
 
 
     <!-- =============================================
+         QUICK FILTER
+    ============================================== -->
+
+    <div class="fixture-admin-filters">
+
+        <button
+            type="button"
+            class="fixture-filter active"
+            data-fixture-filter="all"
+        >
+            All
+        </button>
+
+        <button
+            type="button"
+            class="fixture-filter"
+            data-fixture-filter="upcoming"
+        >
+            Upcoming
+        </button>
+
+        <button
+            type="button"
+            class="fixture-filter"
+            data-fixture-filter="completed"
+        >
+            Results
+        </button>
+
+        <button
+            type="button"
+            class="fixture-filter"
+            data-fixture-filter="football"
+        >
+            ⚽ Football
+        </button>
+
+        <button
+            type="button"
+            class="fixture-filter"
+            data-fixture-filter="cricket"
+        >
+            🏏 Cricket
+        </button>
+
+    </div>
+
+
+    <!-- =============================================
          FIXTURE LIST
     ============================================== -->
 
-    <div id="fixtureList">
+    <div
+        id="fixtureList"
+        class="fixture-admin-list"
+    >
 
         <div class="loading-state">
             Loading fixtures...
@@ -844,7 +896,7 @@
     aria-hidden="true"
 >
 
-    <div class="modal-content">
+    <div class="modal-content fixture-modal-content">
 
         <div class="modal-header">
 
@@ -881,7 +933,65 @@
             >
 
 
-            <!-- HOME TEAM -->
+            <!-- =====================================
+                 SPORT
+            ====================================== -->
+
+            <div class="form-group">
+
+                <label for="fixtureSport">
+                    Sport
+                </label>
+
+                <select
+                    id="fixtureSport"
+                    required
+                >
+
+                    <option value="football">
+                        ⚽ Football
+                    </option>
+
+                    <option value="cricket">
+                        🏏 Cricket
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =====================================
+                 STATUS
+            ====================================== -->
+
+            <div class="form-group">
+
+                <label for="fixtureStatus">
+                    Match Status
+                </label>
+
+                <select
+                    id="fixtureStatus"
+                    required
+                >
+
+                    <option value="upcoming">
+                        Upcoming Fixture
+                    </option>
+
+                    <option value="completed">
+                        Completed Result
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =====================================
+                 HOME TEAM
+            ====================================== -->
 
             <div class="form-group">
 
@@ -899,7 +1009,28 @@
             </div>
 
 
-            <!-- AWAY TEAM -->
+            <!-- =====================================
+                 HOME LOGO
+            ====================================== -->
+
+            <div class="form-group">
+
+                <label for="fixtureHomeLogo">
+                    Home Team Logo URL
+                </label>
+
+                <input
+                    type="url"
+                    id="fixtureHomeLogo"
+                    placeholder="https://example.com/home-logo.png"
+                >
+
+            </div>
+
+
+            <!-- =====================================
+                 AWAY TEAM
+            ====================================== -->
 
             <div class="form-group">
 
@@ -917,46 +1048,47 @@
             </div>
 
 
-            <!-- TYPE -->
+            <!-- =====================================
+                 AWAY LOGO
+            ====================================== -->
 
             <div class="form-group">
 
-                <label for="fixtureType">
-                    Match Type
+                <label for="fixtureAwayLogo">
+                    Away Team Logo URL
                 </label>
 
-                <select id="fixtureType">
-
-                    <option value="FRIENDLY MATCH">
-                        FRIENDLY MATCH
-                    </option>
-
-                    <option value="TOURNAMENT">
-                        TOURNAMENT
-                    </option>
-
-                    <option value="LEAGUE">
-                        LEAGUE
-                    </option>
-
-                    <option value="FINAL">
-                        FINAL
-                    </option>
-
-                    <option value="SEMI FINAL">
-                        SEMI FINAL
-                    </option>
-
-                    <option value="FIXTURE">
-                        FIXTURE
-                    </option>
-
-                </select>
+                <input
+                    type="url"
+                    id="fixtureAwayLogo"
+                    placeholder="https://example.com/away-logo.png"
+                >
 
             </div>
 
 
-            <!-- DATE -->
+            <!-- =====================================
+                 TOURNAMENT
+            ====================================== -->
+
+            <div class="form-group">
+
+                <label for="fixtureTournament">
+                    Tournament / Competition
+                </label>
+
+                <input
+                    type="text"
+                    id="fixtureTournament"
+                    placeholder="GSA Friendly Match"
+                >
+
+            </div>
+
+
+            <!-- =====================================
+                 DATE
+            ====================================== -->
 
             <div class="form-group">
 
@@ -973,12 +1105,14 @@
             </div>
 
 
-            <!-- TIME -->
+            <!-- =====================================
+                 TIME
+            ====================================== -->
 
             <div class="form-group">
 
                 <label for="fixtureTime">
-                    Kickoff Time
+                    Match Time
                 </label>
 
                 <input
@@ -989,7 +1123,9 @@
             </div>
 
 
-            <!-- VENUE -->
+            <!-- =====================================
+                 VENUE
+            ====================================== -->
 
             <div class="form-group">
 
@@ -1000,30 +1136,72 @@
                 <input
                     type="text"
                     id="fixtureVenue"
-                    placeholder="GSA Ground"
+                    placeholder="Ghopkhali Sports Arena"
                 >
 
             </div>
 
 
-            <!-- PUBLISHED -->
+            <!-- =====================================
+                 SCORES
+            ====================================== -->
 
-            <div class="form-check">
+            <div class="fixture-score-grid">
 
-                <input
-                    type="checkbox"
-                    id="fixturePublished"
-                    checked
-                >
+                <div class="form-group">
 
-                <label for="fixturePublished">
-                    Publish this fixture on homepage
+                    <label for="fixtureHomeScore">
+                        Home Score
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fixtureHomeScore"
+                        placeholder="0"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="fixtureAwayScore">
+                        Away Score
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fixtureAwayScore"
+                        placeholder="0"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 DESCRIPTION
+            ====================================== -->
+
+            <div class="form-group">
+
+                <label for="fixtureDescription">
+                    Match Note
                 </label>
 
+                <textarea
+                    id="fixtureDescription"
+                    rows="4"
+                    placeholder="Optional match information..."
+                ></textarea>
+
             </div>
 
 
-            <!-- ACTIONS -->
+            <!-- =====================================
+                 ACTIONS
+            ====================================== -->
 
             <div class="modal-actions">
 
@@ -1039,6 +1217,7 @@
                 <button
                     type="submit"
                     class="primary-button"
+                    id="fixtureSaveButton"
                 >
                     Save Fixture
                 </button>
