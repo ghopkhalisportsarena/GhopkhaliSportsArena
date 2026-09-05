@@ -1406,106 +1406,6 @@ a {
 
 
 /* =========================================================
-   FIXTURE CARDS
-========================================================= */
-
-.admin-fixture-card {
-    display: grid;
-
-    grid-template-columns:
-        120px
-        minmax(0, 1fr)
-        auto;
-
-    align-items: center;
-
-    gap: 18px;
-
-    margin-bottom: 12px;
-
-    padding: 18px;
-
-    background: #fff;
-
-    border:
-        1px solid var(--border);
-
-    border-radius: 18px;
-
-    box-shadow: var(--shadow-sm);
-
-    transition:
-        transform .22s ease,
-        box-shadow .22s ease;
-}
-
-.admin-fixture-card:hover {
-    transform: translateY(-2px);
-
-    box-shadow: var(--shadow);
-}
-
-.admin-fixture-date {
-    color: var(--blue);
-
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.admin-fixture-info {
-    min-width: 0;
-}
-
-.admin-fixture-info strong {
-    display: block;
-
-    margin-bottom: 4px;
-
-    font-size: 15px;
-}
-
-.admin-fixture-info span {
-    color: var(--text-secondary);
-
-    font-size: 12px;
-}
-
-.admin-fixture-tag,
-.admin-fixture-status {
-    display: inline-flex;
-    align-items: center;
-
-    min-height: 24px;
-
-    padding: 0 8px;
-
-    margin-right: 5px;
-
-    border-radius: 999px;
-
-    background: #f2f2f7;
-
-    color: var(--text-secondary);
-
-    font-size: 10px;
-    font-weight: 650;
-}
-
-.admin-fixture-status {
-    background: rgba(52, 199, 89, 0.10);
-
-    color: #248a3d;
-}
-
-.admin-fixture-actions {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 6px;
-}
-
-
-/* =========================================================
    TOURNAMENT CARDS
 ========================================================= */
 
@@ -5471,4 +5371,501 @@ select:focus-visible {
 
     box-shadow:
         0 8px 24px rgba(0,0,0,.15);
+}
+
+/* =====================================================
+   FIXTURE ADMIN — QUICK FILTER
+===================================================== */
+
+.fixture-admin-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 26px;
+    padding: 4px 0;
+}
+
+/* Filter Button */
+
+.fixture-filter {
+    appearance: none;
+    -webkit-appearance: none;
+
+    border: 1px solid rgba(0, 0, 0, 0.08);
+
+    background: rgba(255, 255, 255, 0.78);
+
+    color: #1d1d1f;
+
+    padding: 10px 17px;
+
+    border-radius: 999px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.04);
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+/* Hover */
+
+.fixture-filter:hover {
+    transform: translateY(-2px);
+
+    background: #ffffff;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Active */
+
+.fixture-filter.active {
+    background: #111111;
+
+    color: #ffffff;
+
+    border-color: #111111;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.16);
+}
+
+/* Active Hover */
+
+.fixture-filter.active:hover {
+    background: #000000;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   FIXTURE ADMIN LIST
+===================================================== */
+
+.fixture-admin-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(320px, 1fr));
+
+    gap: 20px;
+
+    width: 100%;
+}
+
+
+/* =====================================================
+   FIXTURE ADMIN CARD
+===================================================== */
+
+.fixture-admin-card {
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.96),
+            rgba(248, 248, 250, 0.92)
+        );
+
+    border: 1px solid rgba(0, 0, 0, 0.07);
+
+    border-radius: 24px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.06);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.fixture-admin-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.10);
+}
+
+
+/* =====================================================
+   SPORT BADGE
+===================================================== */
+
+.fixture-admin-sport {
+    display: inline-flex;
+
+    align-items: center;
+    gap: 7px;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background: rgba(0, 0, 0, 0.05);
+
+    color: #555;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.3px;
+
+    margin-bottom: 14px;
+}
+
+
+/* =====================================================
+   MATCH STATUS
+===================================================== */
+
+.fixture-admin-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    margin-left: 6px;
+}
+
+.fixture-admin-status.upcoming {
+    background: rgba(52, 199, 89, 0.12);
+
+    color: #248a3d;
+}
+
+.fixture-admin-status.completed {
+    background: rgba(0, 0, 0, 0.07);
+
+    color: #555;
+}
+
+
+/* =====================================================
+   TEAM AREA
+===================================================== */
+
+.fixture-admin-teams {
+    display: grid;
+
+    grid-template-columns: 1fr auto 1fr;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 16px 0 18px;
+}
+
+.fixture-admin-team {
+    text-align: center;
+
+    min-width: 0;
+}
+
+.fixture-admin-team-name {
+    display: block;
+
+    color: #111;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    line-height: 1.35;
+}
+
+.fixture-admin-team-logo {
+    width: 54px;
+    height: 54px;
+
+    object-fit: contain;
+
+    display: block;
+
+    margin: 0 auto 9px;
+
+    border-radius: 14px;
+}
+
+.fixture-admin-vs {
+    font-size: 12px;
+
+    font-weight: 800;
+
+    color: #999;
+
+    letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   SCORE
+===================================================== */
+
+.fixture-admin-score {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 5px;
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    color: #111;
+}
+
+.fixture-admin-score-separator {
+    color: #999;
+
+    font-size: 17px;
+}
+
+
+/* =====================================================
+   MATCH INFORMATION
+===================================================== */
+
+.fixture-admin-info {
+    display: grid;
+
+    gap: 8px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.fixture-admin-info-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #666;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+.fixture-admin-info-item strong {
+    color: #222;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   RESULT DETAILS
+===================================================== */
+
+.fixture-admin-result-details {
+    margin-top: 15px;
+
+    padding: 14px;
+
+    border-radius: 16px;
+
+    background: rgba(0, 0, 0, 0.035);
+}
+
+.fixture-admin-result-details p {
+    margin: 5px 0;
+
+    color: #555;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.fixture-admin-result-details strong {
+    color: #111;
+}
+
+
+/* =====================================================
+   ADMIN CARD ACTIONS
+===================================================== */
+
+.fixture-admin-actions {
+    display: flex;
+
+    gap: 9px;
+
+    margin-top: 18px;
+}
+
+.fixture-admin-actions button {
+    flex: 1;
+
+    min-height: 42px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        background 0.2s ease;
+}
+
+.fixture-admin-actions button:hover {
+    transform: translateY(-2px);
+}
+
+.fixture-admin-edit {
+    background: #111111;
+
+    color: #ffffff;
+}
+
+.fixture-admin-delete {
+    background: rgba(255, 59, 48, 0.10);
+
+    color: #d70015;
+}
+
+
+/* =====================================================
+   EMPTY / LOADING STATE
+===================================================== */
+
+.fixture-admin-list .loading-state,
+.fixture-admin-list .empty-state {
+    grid-column: 1 / -1;
+
+    padding: 50px 20px;
+
+    text-align: center;
+
+    border-radius: 22px;
+
+    background: rgba(0, 0, 0, 0.025);
+
+    color: #777;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .fixture-admin-filters {
+        gap: 8px;
+
+        margin-top: 16px;
+        margin-bottom: 20px;
+    }
+
+    .fixture-filter {
+        padding: 9px 13px;
+
+        font-size: 13px;
+    }
+
+    .fixture-admin-list {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+    .fixture-admin-card {
+        padding: 18px;
+
+        border-radius: 20px;
+    }
+
+    .fixture-admin-teams {
+        gap: 8px;
+    }
+
+    .fixture-admin-team-name {
+        font-size: 14px;
+    }
+
+    .fixture-admin-team-logo {
+        width: 46px;
+        height: 46px;
+    }
+
+    .fixture-admin-score {
+        font-size: 21px;
+    }
+
+    .fixture-admin-actions button {
+        min-height: 40px;
+
+        font-size: 12px;
+    }
+}
+
+
+/* =====================================================
+   VERY SMALL MOBILE
+===================================================== */
+
+@media (max-width: 380px) {
+
+    .fixture-admin-filters {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .fixture-filter {
+        width: 100%;
+
+        text-align: center;
+    }
+
+    .fixture-admin-card {
+        padding: 15px;
+    }
+
 }
