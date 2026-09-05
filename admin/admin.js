@@ -1944,28 +1944,35 @@ $("noticeList")
         }
     );
 
-    /* =====================================================
-       FIXTURES
-    ===================================================== */
+/* =====================================================
+   FIXTURES & RESULTS
+===================================================== */
 
-    let fixtures = [];
+let fixtures = [];
 
-
-    async function loadFixtures() {
-
-        const list =
-            $("fixtureList");
-
-        if (!list) {
-            return;
-        }
+let activeFixtureFilter = "all";
 
 
-        list.innerHTML =
-            `<div class="loading-state">
-                Loading fixtures...
-             </div>`;
+/* =====================================================
+   LOAD FIXTURES
+===================================================== */
 
+async function loadFixtures() {
+
+    const list =
+        $("fixtureList");
+
+    if (!list) {
+        return;
+    }
+
+    list.innerHTML = `
+        <div class="loading-state">
+            Loading fixtures...
+        </div>
+    `;
+
+    try {
 
         const {
             data,
@@ -1979,27 +1986,17 @@ $("noticeList")
                     {
                         ascending: true
                     }
+                )
+                .order(
+                    "match_time",
+                    {
+                        ascending: true
+                    }
                 );
 
 
         if (error) {
-
-            console.error(
-                "Fixtures:",
-                error
-            );
-
-            list.innerHTML =
-                `<div class="empty-state">
-                    Unable to load fixtures.
-                    <br><br>
-                    ${escapeHTML(
-                        error.message
-                    )}
-                 </div>`;
-
-            return;
-
+            throw error;
         }
 
 
@@ -2010,318 +2007,728 @@ $("noticeList")
         renderFixtures();
 
     }
+    catch (error) {
+
+        console.error(
+            "Fixtures loading error:",
+            error
+        );
+
+        list.innerHTML = `
+            <div class="empty-state">
+
+                Unable to load fixtures.
+
+                <br><br>
+
+                ${escapeHTML(
+                    error?.message ||
+                    "Unknown error"
+                )}
+
+            </div>
+        `;
+
+    }
+
+}
 
 
-    function renderFixtures() {
+/* =====================================================
+   RENDER FIXTURES
+===================================================== */
 
-        const list =
-            $("fixtureList");
+function renderFixtures() {
 
-        if (!list) {
-            return;
-        }
+    const list =
+        $("fixtureList");
 
-
-        if (!fixtures.length) {
-
-            list.innerHTML =
-                `<div class="empty-state">
-                    No fixtures found.
-                 </div>`;
-
-            return;
-
-        }
+    if (!list) {
+        return;
+    }
 
 
-        list.innerHTML =
-            fixtures.map(
-                item => {
-
-                    const published =
-                        item.published !== false;
+    let filtered =
+        [...fixtures];
 
 
-                    return `
+    /* ---------------------------------------------
+       FILTER
+    --------------------------------------------- */
 
-                    <article class="content-card">
+    if (
+        activeFixtureFilter ===
+        "upcoming"
+    ) {
 
-                        <div class="content-card-top">
-
-                            <div>
-
-                                <div class="notice-meta">
-
-                                    <span class="badge">
-                                        ${escapeHTML(
-                                            item.type ||
-                                            "MATCH"
-                                        )}
-                                    </span>
-
-
-                                    <span class="badge ${
-                                        published
-                                            ? "published"
-                                            : "draft"
-                                    }">
-
-                                        ${
-                                            published
-                                                ? "Published"
-                                                : "Draft"
-                                        }
-
-                                    </span>
-
-                                </div>
-
-
-                                <h3>
-
-                                    ${escapeHTML(
-                                        item.home_team ||
-                                        "Home Team"
-                                    )}
-
-                                    <span>
-                                        VS
-                                    </span>
-
-                                    ${escapeHTML(
-                                        item.away_team ||
-                                        "Away Team"
-                                    )}
-
-                                </h3>
-
-
-                                <p>
-                                    ${escapeHTML(
-                                        item.venue ||
-                                        "Venue TBA"
-                                    )}
-                                </p>
-
-                            </div>
-
-
-                            <div class="content-date">
-
-                                ${formatDate(
-                                    item.match_date
-                                )}
-
-                                ${
-                                    item.match_time
-                                        ? `
-                                        <br>
-                                        ${escapeHTML(
-                                            String(
-                                                item.match_time
-                                            ).slice(
-                                                0,
-                                                5
-                                            )
-                                        )}
-                                        `
-                                        : ""
-                                }
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="card-actions">
-
-                            <button
-                                type="button"
-                                class="small-button"
-                                data-fixture-action="edit"
-                                data-id="${escapeHTML(
-                                    item.id
-                                )}"
-                            >
-                                Edit
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="small-button"
-                                data-fixture-action="publish"
-                                data-id="${escapeHTML(
-                                    item.id
-                                )}"
-                            >
-                                ${
-                                    published
-                                        ? "Unpublish"
-                                        : "Publish"
-                                }
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="small-button danger"
-                                data-fixture-action="delete"
-                                data-id="${escapeHTML(
-                                    item.id
-                                )}"
-                            >
-                                Delete
-                            </button>
-
-                        </div>
-
-                    </article>
-
-                    `;
-
-                }
-            ).join("");
+        filtered =
+            filtered.filter(
+                item =>
+                    item.status ===
+                    "upcoming"
+            );
 
     }
 
 
-    /* =====================================================
-       FIXTURE FORM
-    ===================================================== */
-
-    function openFixtureForm(
-        item = null
+    else if (
+        activeFixtureFilter ===
+        "completed"
     ) {
 
-        const form =
-            $("fixtureForm");
-
-
-        if (!form) {
-
-            console.error(
-                "fixtureForm not found."
+        filtered =
+            filtered.filter(
+                item =>
+                    item.status ===
+                    "completed"
             );
 
-            alert(
-                "Fixture form is missing from admin.html."
+    }
+
+
+    else if (
+        activeFixtureFilter ===
+        "football"
+    ) {
+
+        filtered =
+            filtered.filter(
+                item =>
+                    item.sport ===
+                    "football"
             );
 
-            return;
-
-        }
+    }
 
 
-        form.reset();
+    else if (
+        activeFixtureFilter ===
+        "cricket"
+    ) {
 
-
-        if ($("fixtureId")) {
-
-            $("fixtureId").value =
-                item?.id || "";
-
-        }
-
-
-        if ($("fixtureHome")) {
-
-            $("fixtureHome").value =
-                item?.home_team || "";
-
-        }
-
-
-        if ($("fixtureAway")) {
-
-            $("fixtureAway").value =
-                item?.away_team || "";
-
-        }
-
-
-        if ($("fixtureDate")) {
-
-            $("fixtureDate").value =
-                item?.match_date || "";
-
-        }
-
-
-        if ($("fixtureTime")) {
-
-            $("fixtureTime").value =
-                item?.match_time
-                    ? String(
-                        item.match_time
-                    ).slice(
-                        0,
-                        5
-                    )
-                    : "";
-
-        }
-
-
-        if ($("fixtureVenue")) {
-
-            $("fixtureVenue").value =
-                item?.venue || "";
-
-        }
-
-
-        if ($("fixtureType")) {
-
-            $("fixtureType").value =
-                item?.type ||
-                "FRIENDLY MATCH";
-
-        }
-
-
-        if ($("fixturePublished")) {
-
-            $("fixturePublished").checked =
-                item
-                    ? item.published !== false
-                    : true;
-
-        }
-
-
-        const modal =
-            $("fixtureModal");
-
-
-        if (!modal) {
-
-            console.error(
-                "fixtureModal not found."
+        filtered =
+            filtered.filter(
+                item =>
+                    item.sport ===
+                    "cricket"
             );
 
-            alert(
-                "Fixture modal is missing from admin.html."
-            );
+    }
 
-            return;
+
+    /* ---------------------------------------------
+       EMPTY
+    --------------------------------------------- */
+
+    if (!filtered.length) {
+
+        list.innerHTML = `
+            <div class="empty-state">
+
+                No fixtures found.
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    /* ---------------------------------------------
+       SORT
+    --------------------------------------------- */
+
+    filtered.sort(
+        (a, b) => {
+
+            const dateA =
+                new Date(
+                    `${a.match_date || ""}T${a.match_time || "00:00"}`
+                ).getTime();
+
+            const dateB =
+                new Date(
+                    `${b.match_date || ""}T${b.match_time || "00:00"}`
+                ).getTime();
+
+            if (
+                a.status === "completed" &&
+                b.status !== "completed"
+            ) {
+                return 1;
+            }
+
+            if (
+                a.status !== "completed" &&
+                b.status === "completed"
+            ) {
+                return -1;
+            }
+
+            return dateA - dateB;
 
         }
+    );
 
 
-        const title =
-            modal.querySelector("h2");
+    list.innerHTML =
+        filtered
+            .map(
+                createFixtureAdminCard
+            )
+            .join("");
+
+}
 
 
-        if (title) {
+/* =====================================================
+   CREATE FIXTURE CARD
+===================================================== */
 
-            title.textContent =
-                item
-                    ? "Edit Fixture"
-                    : "Add Fixture";
+function createFixtureAdminCard(
+    item
+) {
 
-        }
+    const sport =
+        item.sport === "cricket"
+            ? "cricket"
+            : "football";
 
+
+    const status =
+        item.status === "completed"
+            ? "completed"
+            : "upcoming";
+
+
+    const sportLabel =
+        sport === "cricket"
+            ? "🏏 CRICKET"
+            : "⚽ FOOTBALL";
+
+
+    const statusLabel =
+        status === "completed"
+            ? "COMPLETED"
+            : "UPCOMING";
+
+
+    const homeLogo =
+        item.home_logo ||
+        "gsa.png";
+
+
+    const awayLogo =
+        item.away_logo ||
+        "gsa.png";
+
+
+    const homeScore =
+        item.home_score ??
+        "";
+
+
+    const awayScore =
+        item.away_score ??
+        "";
+
+
+    const date =
+        item.match_date
+            ? formatDate(
+                item.match_date
+            )
+            : "Date TBA";
+
+
+    const time =
+        item.match_time
+            ? String(
+                item.match_time
+            ).slice(
+                0,
+                5
+            )
+            : "";
+
+
+    return `
+
+        <article
+            class="fixture-admin-card"
+        >
+
+            <div
+                class="fixture-admin-top"
+            >
+
+                <div
+                    class="fixture-admin-badges"
+                >
+
+                    <span
+                        class="
+                            fixture-admin-badge
+                            ${sport}
+                        "
+                    >
+                        ${sportLabel}
+                    </span>
+
+
+                    <span
+                        class="
+                            fixture-admin-badge
+                            ${status}
+                        "
+                    >
+                        ${statusLabel}
+                    </span>
+
+                </div>
+
+
+                <span
+                    class="fixture-admin-badge"
+                >
+                    ${escapeHTML(
+                        item.tournament ||
+                        "GSA Match"
+                    )}
+                </span>
+
+            </div>
+
+
+            <div
+                class="fixture-admin-teams"
+            >
+
+                <!-- HOME -->
+
+                <div
+                    class="fixture-admin-team"
+                >
+
+                    <img
+                        src="${escapeHTML(
+                            homeLogo
+                        )}"
+                        alt="${escapeHTML(
+                            item.home_team ||
+                            "Home Team"
+                        )}"
+                        class="fixture-admin-logo"
+                        onerror="
+                            this.src='gsa.png'
+                        "
+                    >
+
+                    <div>
+
+                        <div
+                            class="
+                                fixture-admin-team-name
+                            "
+                        >
+                            ${escapeHTML(
+                                item.home_team ||
+                                "Home Team"
+                            )}
+                        </div>
+
+                        ${
+                            status ===
+                            "completed"
+                                ? `
+                                    <div
+                                        class="
+                                            fixture-admin-score
+                                        "
+                                    >
+                                        ${escapeHTML(
+                                            String(
+                                                homeScore
+                                            )
+                                        )}
+                                    </div>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- VS -->
+
+                <div
+                    class="fixture-admin-vs"
+                >
+                    VS
+                </div>
+
+
+                <!-- AWAY -->
+
+                <div
+                    class="
+                        fixture-admin-team
+                        away
+                    "
+                >
+
+                    <div>
+
+                        <div
+                            class="
+                                fixture-admin-team-name
+                            "
+                        >
+                            ${escapeHTML(
+                                item.away_team ||
+                                "Away Team"
+                            )}
+                        </div>
+
+                        ${
+                            status ===
+                            "completed"
+                                ? `
+                                    <div
+                                        class="
+                                            fixture-admin-score
+                                        "
+                                    >
+                                        ${escapeHTML(
+                                            String(
+                                                awayScore
+                                            )
+                                        )}
+                                    </div>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+
+                    <img
+                        src="${escapeHTML(
+                            awayLogo
+                        )}"
+                        alt="${escapeHTML(
+                            item.away_team ||
+                            "Away Team"
+                        )}"
+                        class="fixture-admin-logo"
+                        onerror="
+                            this.src='gsa.png'
+                        "
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- META -->
+
+            <div
+                class="fixture-admin-meta"
+            >
+
+                <span>
+                    📅 ${escapeHTML(
+                        date
+                    )}
+                </span>
+
+                ${
+                    time
+                        ? `
+                            <span>
+                                ⏰ ${escapeHTML(
+                                    time
+                                )}
+                            </span>
+                        `
+                        : ""
+                }
+
+                ${
+                    item.venue
+                        ? `
+                            <span>
+                                📍 ${escapeHTML(
+                                    item.venue
+                                )}
+                            </span>
+                        `
+                        : ""
+                }
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div
+                class="fixture-admin-actions"
+            >
+
+                <button
+                    type="button"
+                    class="small-button"
+                    data-fixture-action="edit"
+                    data-id="${escapeHTML(
+                        item.id
+                    )}"
+                >
+                    Edit
+                </button>
+
+
+                <button
+                    type="button"
+                    class="small-button danger"
+                    data-fixture-action="delete"
+                    data-id="${escapeHTML(
+                        item.id
+                    )}"
+                >
+                    Delete
+                </button>
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =====================================================
+   OPEN FIXTURE FORM
+===================================================== */
+
+function openFixtureForm(
+    item = null
+) {
+
+    const form =
+        $("fixtureForm");
+
+    if (!form) {
+
+        alert(
+            "Fixture form is missing."
+        );
+
+        return;
+    }
+
+
+    form.reset();
+
+
+    /* ID */
+
+    if ($("fixtureId")) {
+
+        $("fixtureId").value =
+            item?.id || "";
+
+    }
+
+
+    /* SPORT */
+
+    if ($("fixtureSport")) {
+
+        $("fixtureSport").value =
+            item?.sport ||
+            "football";
+
+    }
+
+
+    /* STATUS */
+
+    if ($("fixtureStatus")) {
+
+        $("fixtureStatus").value =
+            item?.status ||
+            "upcoming";
+
+    }
+
+
+    /* HOME */
+
+    if ($("fixtureHomeTeam")) {
+
+        $("fixtureHomeTeam").value =
+            item?.home_team ||
+            "";
+
+    }
+
+
+    /* HOME LOGO */
+
+    if ($("fixtureHomeLogo")) {
+
+        $("fixtureHomeLogo").value =
+            item?.home_logo ||
+            "";
+
+    }
+
+
+    /* AWAY */
+
+    if ($("fixtureAwayTeam")) {
+
+        $("fixtureAwayTeam").value =
+            item?.away_team ||
+            "";
+
+    }
+
+
+    /* AWAY LOGO */
+
+    if ($("fixtureAwayLogo")) {
+
+        $("fixtureAwayLogo").value =
+            item?.away_logo ||
+            "";
+
+    }
+
+
+    /* TOURNAMENT */
+
+    if ($("fixtureTournament")) {
+
+        $("fixtureTournament").value =
+            item?.tournament ||
+            "";
+
+    }
+
+
+    /* DATE */
+
+    if ($("fixtureDate")) {
+
+        $("fixtureDate").value =
+            item?.match_date ||
+            "";
+
+    }
+
+
+    /* TIME */
+
+    if ($("fixtureTime")) {
+
+        $("fixtureTime").value =
+            item?.match_time
+                ? String(
+                    item.match_time
+                ).slice(
+                    0,
+                    5
+                )
+                : "";
+
+    }
+
+
+    /* VENUE */
+
+    if ($("fixtureVenue")) {
+
+        $("fixtureVenue").value =
+            item?.venue ||
+            "";
+
+    }
+
+
+    /* HOME SCORE */
+
+    if ($("fixtureHomeScore")) {
+
+        $("fixtureHomeScore").value =
+            item?.home_score ??
+            "";
+
+    }
+
+
+    /* AWAY SCORE */
+
+    if ($("fixtureAwayScore")) {
+
+        $("fixtureAwayScore").value =
+            item?.away_score ??
+            "";
+
+    }
+
+
+    /* DESCRIPTION */
+
+    if ($("fixtureDescription")) {
+
+        $("fixtureDescription").value =
+            item?.description ||
+            "";
+
+    }
+
+
+    /* TITLE */
+
+    const title =
+        $("fixtureModalTitle");
+
+    if (title) {
+
+        title.textContent =
+            item
+                ? "Edit Fixture"
+                : "Add Fixture";
+
+    }
+
+
+    /* BUTTON */
+
+    const saveButton =
+        $("fixtureSaveButton");
+
+    if (saveButton) {
+
+        saveButton.textContent =
+            item
+                ? "Update Fixture"
+                : "Save Fixture";
+
+    }
+
+
+    /* MODAL */
+
+    const modal =
+        $("fixtureModal");
+
+    if (modal) {
 
         openModal(
             modal
@@ -2329,294 +2736,473 @@ $("noticeList")
 
     }
 
+}
 
-    /* =====================================================
-       ADD FIXTURE BUTTON
-    ===================================================== */
 
-    $("newFixtureButton")
-        ?.addEventListener(
-            "click",
-            event => {
+/* =====================================================
+   ADD FIXTURE
+===================================================== */
 
-                event.preventDefault();
+$("newFixtureButton")
+    ?.addEventListener(
+        "click",
+        event => {
 
-                openFixtureForm();
+            event.preventDefault();
+
+            openFixtureForm();
+
+        }
+    );
+
+
+/* =====================================================
+   SAVE FIXTURE
+===================================================== */
+
+$("fixtureForm")
+    ?.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const id =
+                $("fixtureId")
+                    ?.value
+                    .trim() ||
+                "";
+
+
+            const sport =
+                $("fixtureSport")
+                    ?.value ||
+                "football";
+
+
+            const status =
+                $("fixtureStatus")
+                    ?.value ||
+                "upcoming";
+
+
+            const homeTeam =
+                $("fixtureHomeTeam")
+                    ?.value
+                    .trim() ||
+                "";
+
+
+            const homeLogo =
+                $("fixtureHomeLogo")
+                    ?.value
+                    .trim() ||
+                null;
+
+
+            const awayTeam =
+                $("fixtureAwayTeam")
+                    ?.value
+                    .trim() ||
+                "";
+
+
+            const awayLogo =
+                $("fixtureAwayLogo")
+                    ?.value
+                    .trim() ||
+                null;
+
+
+            const tournament =
+                $("fixtureTournament")
+                    ?.value
+                    .trim() ||
+                null;
+
+
+            const matchDate =
+                $("fixtureDate")
+                    ?.value ||
+                "";
+
+
+            const matchTime =
+                $("fixtureTime")
+                    ?.value ||
+                null;
+
+
+            const venue =
+                $("fixtureVenue")
+                    ?.value
+                    .trim() ||
+                null;
+
+
+            const homeScore =
+                $("fixtureHomeScore")
+                    ?.value
+                    .trim() ||
+                null;
+
+
+            const awayScore =
+                $("fixtureAwayScore")
+                    ?.value
+                    .trim() ||
+                null;
+
+
+            const description =
+                $("fixtureDescription")
+                    ?.value
+                    .trim() ||
+                null;
+
+
+            /* VALIDATION */
+
+            if (
+                !homeTeam ||
+                !awayTeam ||
+                !matchDate
+            ) {
+
+                alert(
+                    "Home Team, Away Team এবং Match Date অবশ্যই দিতে হবে।"
+                );
+
+                return;
 
             }
-        );
 
 
-    /* =====================================================
-       FIXTURE SAVE
-    ===================================================== */
+            /* COMPLETED MATCH SCORE */
 
-    $("fixtureForm")
-        ?.addEventListener(
-            "submit",
-            async event => {
+            if (
+                status === "completed" &&
+                (
+                    homeScore === null ||
+                    awayScore === null
+                )
+            ) {
 
-                event.preventDefault();
+                alert(
+                    "Completed Match-এর জন্য Home Score এবং Away Score দিতে হবে।"
+                );
 
+                return;
 
-                const id =
-                    $("fixtureId")
-                        ?.value
-                        .trim() || "";
-
-
-                const home =
-                    $("fixtureHome")
-                        ?.value
-                        .trim() || "";
+            }
 
 
-                const away =
-                    $("fixtureAway")
-                        ?.value
-                        .trim() || "";
+            const payload = {
+
+                sport,
+
+                status,
+
+                home_team:
+                    homeTeam,
+
+                away_team:
+                    awayTeam,
+
+                home_logo:
+                    homeLogo,
+
+                away_logo:
+                    awayLogo,
+
+                match_date:
+                    matchDate,
+
+                match_time:
+                    matchTime,
+
+                venue:
+                    venue,
+
+                tournament:
+                    tournament,
+
+                home_score:
+                    homeScore,
+
+                away_score:
+                    awayScore,
+
+                description:
+                    description
+
+            };
 
 
-                const date =
-                    $("fixtureDate")
-                        ?.value || "";
+            try {
+
+                const saveButton =
+                    $("fixtureSaveButton");
 
 
-                const time =
-                    $("fixtureTime")
-                        ?.value ||
-                    null;
+                if (saveButton) {
 
+                    saveButton.disabled =
+                        true;
 
-                const venue =
-                    $("fixtureVenue")
-                        ?.value
-                        .trim() ||
-                    null;
-
-
-                const type =
-                    $("fixtureType")
-                        ?.value ||
-                    "FRIENDLY MATCH";
-
-
-                const published =
-                    $("fixturePublished")
-                        ?.checked !== false;
-
-
-                if (
-                    !home ||
-                    !away ||
-                    !date
-                ) {
-
-                    alert(
-                        "Please enter Home Team, Away Team and Date."
-                    );
-
-                    return;
-
-                }
-
-
-                const payload = {
-
-                    home_team:
-                        home,
-
-                    away_team:
-                        away,
-
-                    match_date:
-                        date,
-
-                    match_time:
-                        time,
-
-                    venue:
-                        venue,
-
-                    type:
-                        type,
-
-                    published:
-                        published
-
-                };
-
-
-                try {
-
-                    let response;
-
-
-                    if (id) {
-
-                        response =
-                            await supabaseClient
-                                .from("fixtures")
-                                .update(payload)
-                                .eq(
-                                    "id",
-                                    id
-                                );
-
-                    } else {
-
-                        response =
-                            await supabaseClient
-                                .from("fixtures")
-                                .insert([
-                                    payload
-                                ]);
-
-                    }
-
-
-                    if (response.error) {
-                        throw response.error;
-                    }
-
-
-                    closeModal(
-                        $("fixtureModal")
-                    );
-
-
-                    await loadFixtures();
-
-                    await loadDashboardCounts();
-
-
-                    alert(
+                    saveButton.textContent =
                         id
-                            ? "Fixture updated successfully."
-                            : "Fixture added successfully."
-                    );
-
-
-                } catch (error) {
-
-                    showError(error);
-
-                }
-
-            }
-        );
-
-
-    /* =====================================================
-       FIXTURE ACTIONS
-    ===================================================== */
-
-    $("fixtureList")
-        ?.addEventListener(
-            "click",
-            async event => {
-
-                const button =
-                    event.target.closest(
-                        "[data-fixture-action]"
-                    );
-
-
-                if (!button) {
-                    return;
-                }
-
-
-                const id =
-                    button.dataset.id;
-
-
-                const item =
-                    fixtures.find(
-                        row =>
-                            String(row.id) ===
-                            String(id)
-                    );
-
-
-                if (!item) {
-                    return;
-                }
-
-
-                const action =
-                    button.dataset.fixtureAction;
-
-
-                if (
-                    action ===
-                    "edit"
-                ) {
-
-                    openFixtureForm(
-                        item
-                    );
-
-                    return;
+                            ? "Updating..."
+                            : "Saving...";
 
                 }
 
 
-                if (
-                    action ===
-                    "publish"
-                ) {
+                let response;
 
-                    const {
-                        error
-                    } =
+
+                /* UPDATE */
+
+                if (id) {
+
+                    response =
                         await supabaseClient
-                            .from("fixtures")
-                            .update({
-                                published:
-                                    item.published === false
-                            })
+                            .from(
+                                "fixtures"
+                            )
+                            .update(
+                                payload
+                            )
                             .eq(
                                 "id",
                                 id
                             );
 
-
-                    if (error) {
-
-                        showError(error);
-
-                        return;
-
-                    }
+                }
 
 
-                    await loadFixtures();
+                /* INSERT */
 
-                    return;
+                else {
+
+                    response =
+                        await supabaseClient
+                            .from(
+                                "fixtures"
+                            )
+                            .insert([
+                                payload
+                            ]);
 
                 }
 
 
+                if (response.error) {
+
+                    throw response.error;
+
+                }
+
+
+                closeModal(
+                    $("fixtureModal")
+                );
+
+
+                await loadFixtures();
+
+
                 if (
-                    action ===
-                    "delete"
+                    typeof loadDashboardCounts ===
+                    "function"
                 ) {
 
-                    if (
-                        !confirm(
-                            "Delete this fixture?"
-                        )
-                    ) {
-                        return;
-                    }
+                    await loadDashboardCounts();
 
+                }
+
+
+                alert(
+                    id
+                        ? "Fixture updated successfully."
+                        : "Fixture added successfully."
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Fixture save error:",
+                    error
+                );
+
+                showError(
+                    error
+                );
+
+            }
+
+
+            finally {
+
+                const saveButton =
+                    $("fixtureSaveButton");
+
+                if (saveButton) {
+
+                    saveButton.disabled =
+                        false;
+
+                    saveButton.textContent =
+                        id
+                            ? "Update Fixture"
+                            : "Save Fixture";
+
+                }
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   FILTER BUTTONS
+===================================================== */
+
+document
+    .querySelectorAll(
+        "[data-fixture-filter]"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            "[data-fixture-filter]"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    activeFixtureFilter =
+                        button.dataset.fixtureFilter ||
+                        "all";
+
+
+                    renderFixtures();
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   FIXTURE ACTIONS
+===================================================== */
+
+$("fixtureList")
+    ?.addEventListener(
+        "click",
+        async event => {
+
+            const button =
+                event.target.closest(
+                    "[data-fixture-action]"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const id =
+                button.dataset.id;
+
+
+            const item =
+                fixtures.find(
+                    row =>
+                        String(
+                            row.id
+                        ) ===
+                        String(
+                            id
+                        )
+                );
+
+
+            if (!item) {
+                return;
+            }
+
+
+            const action =
+                button.dataset.fixtureAction;
+
+
+            /* EDIT */
+
+            if (
+                action ===
+                "edit"
+            ) {
+
+                openFixtureForm(
+                    item
+                );
+
+                return;
+
+            }
+
+
+            /* DELETE */
+
+            if (
+                action ===
+                "delete"
+            ) {
+
+                const confirmed =
+                    confirm(
+                        `Delete "${item.home_team} vs ${item.away_team}"?`
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                try {
 
                     const {
                         error
                     } =
                         await supabaseClient
-                            .from("fixtures")
+                            .from(
+                                "fixtures"
+                            )
                             .delete()
                             .eq(
                                 "id",
@@ -2626,22 +3212,42 @@ $("noticeList")
 
                     if (error) {
 
-                        showError(error);
-
-                        return;
+                        throw error;
 
                     }
 
 
                     await loadFixtures();
 
-                    await loadDashboardCounts();
+
+                    if (
+                        typeof loadDashboardCounts ===
+                        "function"
+                    ) {
+
+                        await loadDashboardCounts();
+
+                    }
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Fixture delete error:",
+                        error
+                    );
+
+                    showError(
+                        error
+                    );
 
                 }
 
             }
-        );
 
+        }
+    );
 
 /* =====================================================
    TOURNAMENTS
