@@ -5869,3 +5869,874 @@ select:focus-visible {
     }
 
 }
+
+/* =========================================================
+   POINT TABLE ADMIN — PREMIUM
+========================================================= */
+
+.point-table-admin-tabs {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 24px;
+
+}
+
+
+.point-table-admin-tab {
+
+    appearance: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    padding: 11px 17px;
+    border-radius: 14px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    transition:
+        .25s ease;
+
+}
+
+
+.point-table-admin-tab:hover {
+
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+    color: var(--text);
+
+}
+
+
+.point-table-admin-tab.active {
+
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.point-table-admin-panel {
+
+    display: none;
+
+}
+
+
+.point-table-admin-panel.active {
+
+    display: block;
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.point-table-admin-header {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 22px;
+
+    margin-bottom: 16px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 22px;
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        var(--shadow-sm);
+
+}
+
+
+.point-table-admin-header h3 {
+
+    margin: 5px 0 6px;
+
+    color:
+        var(--text);
+
+    font-size:
+        18px;
+
+    font-weight:
+        900;
+
+    letter-spacing:
+        -.03em;
+
+}
+
+
+.point-table-admin-header p {
+
+    margin: 0;
+
+    color:
+        var(--muted);
+
+    font-size:
+        11px;
+
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.point-table-admin-toolbar {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        16px;
+
+}
+
+
+.point-table-admin-toolbar select {
+
+    width:
+        min(360px, 100%);
+
+    min-height:
+        44px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        13px;
+
+    outline:
+        none;
+
+    background:
+        var(--surface);
+
+    color:
+        var(--text);
+
+    font:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+}
+
+
+/* =========================================================
+   LIST
+========================================================= */
+
+.point-table-admin-list {
+
+    display:
+        grid;
+
+    gap:
+        10px;
+
+}
+
+
+/* =========================================================
+   TEAM CARD
+========================================================= */
+
+.point-admin-card {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        42px minmax(180px, 1.4fr) minmax(300px, 2fr) auto;
+
+    align-items:
+        center;
+
+    gap:
+        16px;
+
+    padding:
+        14px 16px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        18px;
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        var(--shadow-sm);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+
+}
+
+
+.point-admin-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        var(--shadow);
+
+    border-color:
+        var(--border-strong);
+
+}
+
+
+/* =========================================================
+   POSITION
+========================================================= */
+
+.point-admin-position {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--surface-soft);
+
+    border:
+        1px solid var(--border);
+
+    color:
+        var(--text);
+
+    font-size:
+        13px;
+
+    font-weight:
+        900;
+
+}
+
+
+/* =========================================================
+   TEAM
+========================================================= */
+
+.point-admin-team {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    min-width:
+        0;
+
+}
+
+
+.point-admin-logo {
+
+    width:
+        44px;
+
+    height:
+        44px;
+
+    flex:
+        0 0 auto;
+
+    object-fit:
+        contain;
+
+    border-radius:
+        12px;
+
+    padding:
+        5px;
+
+    background:
+        var(--surface-soft);
+
+    border:
+        1px solid var(--border);
+
+}
+
+
+.point-admin-logo-empty {
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    font-size:
+        19px;
+
+}
+
+
+.point-admin-team-info {
+
+    min-width:
+        0;
+
+}
+
+
+.point-admin-team-info strong {
+
+    display:
+        block;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--text);
+
+    font-size:
+        13px;
+
+    font-weight:
+        900;
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+
+.point-admin-team-info small {
+
+    display:
+        block;
+
+    margin-top:
+        4px;
+
+    overflow:
+        hidden;
+
+    color:
+        var(--muted);
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.point-admin-stats {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    gap:
+        7px;
+
+    flex-wrap:
+        wrap;
+
+}
+
+
+.point-admin-stats span {
+
+    min-width:
+        40px;
+
+    padding:
+        7px 8px;
+
+    text-align:
+        center;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        9px;
+
+    background:
+        var(--surface-soft);
+
+    color:
+        var(--text-secondary);
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+}
+
+
+.point-admin-stats span b {
+
+    display:
+        block;
+
+    margin-bottom:
+        2px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        7px;
+
+    letter-spacing:
+        .05em;
+
+}
+
+
+.point-admin-points {
+
+    padding:
+        9px 11px;
+
+    border-radius:
+        10px;
+
+    background:
+        var(--text);
+
+    color:
+        var(--bg);
+
+    font-size:
+        10px;
+
+    font-weight:
+        900;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.point-admin-actions {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+}
+
+
+.point-admin-actions button {
+
+    appearance:
+        none;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--surface-soft);
+
+    color:
+        var(--text);
+
+    padding:
+        8px 11px;
+
+    border-radius:
+        9px;
+
+    cursor:
+        pointer;
+
+    font:
+        inherit;
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    transition:
+        .2s ease;
+
+}
+
+
+.point-admin-actions button:hover {
+
+    transform:
+        translateY(-1px);
+
+    border-color:
+        var(--border-strong);
+
+}
+
+
+.point-admin-actions button.danger {
+
+    color:
+        #dc2626;
+
+    border-color:
+        rgba(220,38,38,.16);
+
+}
+
+
+.point-admin-actions button.danger:hover {
+
+    background:
+        rgba(220,38,38,.08);
+
+    border-color:
+        rgba(220,38,38,.3);
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.point-table-modal {
+
+    width:
+        min(720px, calc(100vw - 30px));
+
+}
+
+
+.point-form-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        14px;
+
+}
+
+
+.point-stats-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap:
+        12px;
+
+    margin-top:
+        14px;
+
+}
+
+
+.point-stats-grid .form-group {
+
+    min-width:
+        0;
+
+}
+
+
+.point-form-actions {
+
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        10px;
+
+    margin-top:
+        22px;
+
+    padding-top:
+        18px;
+
+    border-top:
+        1px solid var(--border);
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .point-admin-card {
+
+        grid-template-columns:
+            40px minmax(0, 1fr);
+
+    }
+
+
+    .point-admin-stats {
+
+        grid-column:
+            2;
+
+    }
+
+
+    .point-admin-actions {
+
+        grid-column:
+            2;
+
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .point-table-admin-header {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        padding:
+            17px;
+
+    }
+
+
+    .point-table-admin-header h3 {
+
+        font-size:
+            15px;
+
+    }
+
+
+    .point-table-admin-header p {
+
+        font-size:
+            10px;
+
+    }
+
+
+    .point-table-admin-tab {
+
+        flex:
+            1;
+
+        padding:
+            10px 12px;
+
+        font-size:
+            11px;
+
+    }
+
+
+    .point-form-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .point-stats-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .point-table-modal {
+
+        width:
+            calc(100vw - 20px);
+
+    }
+
+
+    .point-form-actions {
+
+        flex-direction:
+            column-reverse;
+
+    }
+
+
+    .point-form-actions button {
+
+        width:
+            100%;
+
+    }
+
+
+    .point-admin-card {
+
+        gap:
+            11px;
+
+        padding:
+            12px;
+
+        border-radius:
+            15px;
+
+    }
+
+
+    .point-admin-logo {
+
+        width:
+            39px;
+
+        height:
+            39px;
+
+    }
+
+
+    .point-admin-team-info strong {
+
+        font-size:
+            11px;
+
+    }
+
+
+    .point-admin-stats {
+
+        gap:
+            5px;
+
+    }
+
+
+    .point-admin-stats span {
+
+        min-width:
+            35px;
+
+        padding:
+            6px;
+
+        font-size:
+            9px;
+
+    }
+
+
+    .point-admin-actions button {
+
+        padding:
+            7px 10px;
+
+    }
+
+}
