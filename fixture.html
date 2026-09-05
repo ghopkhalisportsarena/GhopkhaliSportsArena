@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
@@ -16,44 +18,166 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
     <style>
 
         /* =========================================================
            GHOPKHALI SPORTS ARENA
-           PREMIUM INTERNATIONAL SPORTS UI
+           INTERNATIONAL STANDARD SPORTS PORTAL
+           LIGHT + TRUE BLACK DARK MODE
         ========================================================= */
+
 
         :root {
 
             --bg:
-                #05070b;
+                #f5f7fa;
 
-            --bg-soft:
-                #0a0e15;
+            --bg-secondary:
+                #ffffff;
+
+            --bg-tertiary:
+                #eef1f5;
 
             --surface:
-                rgba(255,255,255,.055);
+                rgba(255,255,255,.82);
 
-            --surface-strong:
-                rgba(255,255,255,.085);
+            --surface-solid:
+                #ffffff;
 
-            --surface-dark:
-                rgba(0,0,0,.28);
+            --surface-soft:
+                #f8fafc;
 
             --border:
-                rgba(255,255,255,.105);
+                rgba(15,23,42,.09);
 
-            --border-light:
-                rgba(255,255,255,.16);
+            --border-strong:
+                rgba(15,23,42,.15);
 
             --text:
-                #f7f8fa;
+                #0b1220;
+
+            --text-secondary:
+                #263246;
 
             --muted:
-                #9ba3b1;
+                #667085;
 
             --muted-2:
-                #707988;
+                #98a2b3;
+
+            --navy:
+                #071426;
+
+            --green:
+                #059669;
+
+            --green-light:
+                #10b981;
+
+            --green-soft:
+                rgba(5,150,105,.08);
+
+            --blue:
+                #2563eb;
+
+            --blue-light:
+                #3b82f6;
+
+            --blue-soft:
+                rgba(37,99,235,.08);
+
+            --indigo:
+                #4f46e5;
+
+            --indigo-light:
+                #6366f1;
+
+            --indigo-soft:
+                rgba(79,70,229,.08);
+
+            --gold:
+                #c58a18;
+
+            --gold-light:
+                #e3a92b;
+
+            --gold-soft:
+                rgba(197,138,24,.08);
+
+            --red:
+                #dc2626;
+
+            --shadow-sm:
+                0 5px 18px rgba(15,23,42,.06);
+
+            --shadow:
+                0 18px 50px rgba(15,23,42,.09);
+
+            --shadow-lg:
+                0 30px 90px rgba(15,23,42,.13);
+
+            --radius-xl:
+                28px;
+
+            --radius-lg:
+                22px;
+
+            --radius-md:
+                17px;
+
+            --radius-sm:
+                12px;
+
+            --ease:
+                cubic-bezier(.2,.75,.25,1);
+        }
+
+
+        /* =========================================================
+           DARK MODE
+        ========================================================= */
+
+        html[data-theme="dark"] {
+
+            --bg:
+                #000000;
+
+            --bg-secondary:
+                #050505;
+
+            --bg-tertiary:
+                #0a0a0a;
+
+            --surface:
+                rgba(255,255,255,.045);
+
+            --surface-solid:
+                #080808;
+
+            --surface-soft:
+                #0c0c0c;
+
+            --border:
+                rgba(255,255,255,.085);
+
+            --border-strong:
+                rgba(255,255,255,.14);
+
+            --text:
+                #f8fafc;
+
+            --text-secondary:
+                #d9dee7;
+
+            --muted:
+                #969da8;
+
+            --muted-2:
+                #666d78;
+
+            --navy:
+                #ffffff;
 
             --green:
                 #22c55e;
@@ -61,41 +185,44 @@
             --green-light:
                 #4ade80;
 
-            --green-dark:
-                #15803d;
+            --green-soft:
+                rgba(34,197,94,.08);
 
             --blue:
                 #3b82f6;
 
-            --purple:
+            --blue-light:
+                #60a5fa;
+
+            --blue-soft:
+                rgba(59,130,246,.09);
+
+            --indigo:
                 #8b5cf6;
 
-            --purple-light:
+            --indigo-light:
                 #a78bfa;
 
-            --orange:
-                #f59e0b;
+            --indigo-soft:
+                rgba(139,92,246,.09);
 
-            --red:
-                #ef4444;
+            --gold:
+                #f2b93b;
 
-            --radius-xl:
-                30px;
+            --gold-light:
+                #fbbf24;
 
-            --radius-lg:
-                24px;
+            --gold-soft:
+                rgba(242,185,59,.09);
 
-            --radius-md:
-                18px;
-
-            --radius-sm:
-                13px;
+            --shadow-sm:
+                0 5px 18px rgba(0,0,0,.35);
 
             --shadow:
-                0 30px 80px rgba(0,0,0,.42);
+                0 20px 60px rgba(0,0,0,.42);
 
-            --ease:
-                cubic-bezier(.2,.75,.25,1);
+            --shadow-lg:
+                0 35px 100px rgba(0,0,0,.6);
         }
 
 
@@ -112,6 +239,12 @@
 
         html {
             scroll-behavior: smooth;
+            color-scheme: light;
+        }
+
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
         }
 
 
@@ -129,34 +262,23 @@
                 Arial,
                 sans-serif;
 
-            color: var(--text);
+            color:
+                var(--text);
 
             background:
-                radial-gradient(
-                    circle at 12% 8%,
-                    rgba(34,197,94,.10),
-                    transparent 30%
-                ),
-                radial-gradient(
-                    circle at 90% 14%,
-                    rgba(139,92,246,.12),
-                    transparent 30%
-                ),
-                radial-gradient(
-                    circle at 50% 90%,
-                    rgba(59,130,246,.08),
-                    transparent 34%
-                ),
-                linear-gradient(
-                    180deg,
-                    #05070b 0%,
-                    #070a10 48%,
-                    #040609 100%
-                );
+                var(--bg);
 
             overflow-x: hidden;
+
+            transition:
+                background .45s ease,
+                color .45s ease;
         }
 
+
+        /* =========================================================
+           AMBIENT BACKGROUND
+        ========================================================= */
 
         body::before {
 
@@ -168,16 +290,76 @@
 
             pointer-events: none;
 
-            opacity: .22;
+            z-index: -5;
+
+            background:
+
+                radial-gradient(
+                    circle at 8% 5%,
+                    rgba(5,150,105,.075),
+                    transparent 27%
+                ),
+
+                radial-gradient(
+                    circle at 92% 12%,
+                    rgba(37,99,235,.07),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(79,70,229,.045),
+                    transparent 35%
+                );
+        }
+
+
+        html[data-theme="dark"] body::before {
+
+            background:
+
+                radial-gradient(
+                    circle at 8% 5%,
+                    rgba(34,197,94,.09),
+                    transparent 27%
+                ),
+
+                radial-gradient(
+                    circle at 92% 12%,
+                    rgba(59,130,246,.075),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(139,92,246,.055),
+                    transparent 35%
+                );
+        }
+
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            z-index: -4;
+
+            opacity: .35;
 
             background-image:
                 linear-gradient(
-                    rgba(255,255,255,.025) 1px,
+                    rgba(15,23,42,.025) 1px,
                     transparent 1px
                 ),
                 linear-gradient(
                     90deg,
-                    rgba(255,255,255,.025) 1px,
+                    rgba(15,23,42,.025) 1px,
                     transparent 1px
                 );
 
@@ -190,56 +372,23 @@
                     black,
                     transparent 85%
                 );
-
-            z-index: -3;
         }
 
 
-        body::after {
+        html[data-theme="dark"] body::after {
 
-            content: "";
+            opacity: .17;
 
-            position: fixed;
-
-            width: 500px;
-            height: 500px;
-
-            top: -200px;
-            left: -180px;
-
-            border-radius: 50%;
-
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(34,197,94,.12),
-                    transparent 68%
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
                 );
-
-            filter: blur(20px);
-
-            animation:
-                ambientFloat 13s ease-in-out infinite alternate;
-
-            pointer-events: none;
-
-            z-index: -2;
-        }
-
-
-        @keyframes ambientFloat {
-
-            0% {
-                transform:
-                    translate3d(0,0,0)
-                    scale(1);
-            }
-
-            100% {
-                transform:
-                    translate3d(160px,100px,0)
-                    scale(1.2);
-            }
         }
 
 
@@ -269,82 +418,112 @@
             width: 100%;
 
             border-bottom:
-                1px solid rgba(255,255,255,.08);
+                1px solid var(--border);
 
             background:
-                rgba(5,7,11,.72);
+                color-mix(
+                    in srgb,
+                    var(--surface-solid) 82%,
+                    transparent
+                );
 
             backdrop-filter:
                 blur(24px)
-                saturate(150%);
+                saturate(160%);
 
             -webkit-backdrop-filter:
                 blur(24px)
-                saturate(150%);
+                saturate(160%);
+
+            transition:
+                background .4s ease,
+                border-color .4s ease;
         }
 
 
         .nav-inner {
 
-            width: min(1240px, calc(100% - 36px));
+            width:
+                min(1240px, calc(100% - 36px));
 
-            min-height: 76px;
+            min-height:
+                76px;
 
-            margin: auto;
+            margin:
+                auto;
 
-            display: flex;
+            display:
+                flex;
 
-            align-items: center;
+            align-items:
+                center;
 
-            justify-content: space-between;
+            justify-content:
+                space-between;
 
-            gap: 20px;
+            gap:
+                16px;
         }
 
 
         .brand {
 
-            display: flex;
+            display:
+                flex;
 
-            align-items: center;
+            align-items:
+                center;
 
-            gap: 13px;
+            gap:
+                12px;
 
-            font-weight: 800;
+            min-width:
+                0;
 
-            letter-spacing: -.025em;
+            font-weight:
+                900;
         }
 
 
         .brand-mark {
 
-            position: relative;
+            position:
+                relative;
 
-            width: 44px;
-            height: 44px;
+            width:
+                45px;
 
-            display: grid;
+            height:
+                45px;
 
-            place-items: center;
+            flex:
+                0 0 auto;
 
-            border-radius: 14px;
+            display:
+                grid;
 
-            font-size: 20px;
+            place-items:
+                center;
+
+            border-radius:
+                14px;
+
+            overflow:
+                hidden;
 
             background:
                 linear-gradient(
                     145deg,
-                    rgba(34,197,94,.25),
-                    rgba(34,197,94,.04)
+                    var(--green),
+                    #047857
                 );
 
-            border:
-                1px solid rgba(74,222,128,.28);
+            color:
+                #ffffff;
 
             box-shadow:
-                0 0 30px rgba(34,197,94,.12);
-
-            overflow: hidden;
+                0 10px 28px
+                rgba(5,150,105,.18);
         }
 
 
@@ -352,100 +531,212 @@
 
             content: "";
 
-            position: absolute;
+            position:
+                absolute;
 
-            inset: -50%;
+            width:
+                150%;
+
+            height:
+                40%;
+
+            left:
+                -30%;
+
+            top:
+                30%;
 
             background:
-                conic-gradient(
-                    transparent,
-                    rgba(255,255,255,.35),
-                    transparent 25%
-                );
+                rgba(255,255,255,.24);
+
+            transform:
+                rotate(-28deg);
 
             animation:
-                rotateGlow 5s linear infinite;
+                logoShine 4.5s ease-in-out infinite;
         }
 
 
         .brand-mark span {
 
-            position: relative;
+            position:
+                relative;
 
-            z-index: 1;
+            z-index:
+                2;
+
+            font-size:
+                19px;
         }
 
 
-        @keyframes rotateGlow {
+        @keyframes logoShine {
 
-            to {
-                transform: rotate(360deg);
+            0%,
+            45% {
+                transform:
+                    translateX(-120%)
+                    rotate(-28deg);
             }
+
+            65%,
+            100% {
+                transform:
+                    translateX(220%)
+                    rotate(-28deg);
+            }
+        }
+
+
+        .brand-text {
+
+            min-width:
+                0;
         }
 
 
         .brand-text strong {
 
-            display: block;
+            display:
+                block;
 
-            font-size: 15px;
+            font-size:
+                15px;
+
+            letter-spacing:
+                -.02em;
+
+            white-space:
+                nowrap;
         }
 
 
         .brand-text small {
 
-            display: block;
+            display:
+                block;
 
-            margin-top: 2px;
+            margin-top:
+                2px;
 
-            font-size: 10px;
+            color:
+                var(--muted);
 
-            color: var(--muted);
+            font-size:
+                9px;
 
-            letter-spacing: .08em;
+            font-weight:
+                700;
 
-            text-transform: uppercase;
+            letter-spacing:
+                .08em;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .nav-actions {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+        }
+
+
+        .nav-home,
+        .theme-toggle {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                7px;
+
+            min-height:
+                40px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                999px;
+
+            color:
+                var(--text-secondary);
+
+            background:
+                var(--surface);
+
+            box-shadow:
+                var(--shadow-sm);
+
+            cursor:
+                pointer;
+
+            transition:
+                transform .3s var(--ease),
+                background .3s,
+                border-color .3s,
+                box-shadow .3s;
         }
 
 
         .nav-home {
 
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 8px;
-
             padding:
-                10px 16px;
+                9px 15px;
 
-            border:
-                1px solid var(--border);
+            font-size:
+                11px;
 
-            border-radius: 999px;
-
-            color: #dfe4eb;
-
-            background:
-                rgba(255,255,255,.04);
-
-            transition:
-                .35s var(--ease);
+            font-weight:
+                800;
         }
 
 
-        .nav-home:hover {
+        .theme-toggle {
 
-            transform: translateY(-2px);
+            width:
+                40px;
+
+            padding:
+                0;
+
+            font-size:
+                15px;
+        }
+
+
+        .nav-home:hover,
+        .theme-toggle:hover {
+
+            transform:
+                translateY(-2px);
 
             border-color:
-                rgba(255,255,255,.22);
-
-            background:
-                rgba(255,255,255,.075);
+                var(--border-strong);
 
             box-shadow:
-                0 10px 30px rgba(0,0,0,.25);
+                var(--shadow);
+        }
+
+
+        .theme-toggle:active {
+
+            transform:
+                scale(.94);
         }
 
 
@@ -455,43 +746,60 @@
 
         .hero {
 
-            position: relative;
+            position:
+                relative;
 
-            width: min(1240px, calc(100% - 36px));
+            width:
+                min(1240px, calc(100% - 36px));
 
-            margin: auto;
+            margin:
+                auto;
 
             padding:
-                90px 0
-                65px;
+                92px 0 72px;
 
-            text-align: center;
+            text-align:
+                center;
 
-            overflow: hidden;
+            overflow:
+                hidden;
         }
 
 
         .hero-orbit {
 
-            position: absolute;
+            position:
+                absolute;
 
-            width: 460px;
-            height: 460px;
+            width:
+                500px;
 
-            left: 50%;
-            top: 10px;
+            height:
+                500px;
 
-            transform: translateX(-50%);
+            left:
+                50%;
+
+            top:
+                4px;
+
+            transform:
+                translateX(-50%);
 
             border:
-                1px solid rgba(255,255,255,.035);
+                1px solid var(--border);
 
-            border-radius: 50%;
+            border-radius:
+                50%;
+
+            opacity:
+                .7;
 
             animation:
-                orbitSpin 25s linear infinite;
+                orbitSpin 28s linear infinite;
 
-            pointer-events: none;
+            pointer-events:
+                none;
         }
 
 
@@ -500,38 +808,57 @@
 
             content: "";
 
-            position: absolute;
+            position:
+                absolute;
 
-            width: 7px;
-            height: 7px;
+            width:
+                7px;
 
-            border-radius: 50%;
+            height:
+                7px;
 
-            background:
-                var(--green);
+            border-radius:
+                50%;
 
-            box-shadow:
-                0 0 25px var(--green);
+            animation:
+                orbitPulse 2.4s ease-in-out infinite;
         }
 
 
         .hero-orbit::before {
 
-            top: 45px;
-            left: 65px;
+            top:
+                42px;
+
+            left:
+                75px;
+
+            background:
+                var(--green);
+
+            box-shadow:
+                0 0 22px
+                var(--green);
         }
 
 
         .hero-orbit::after {
 
-            bottom: 70px;
-            right: 55px;
+            right:
+                55px;
+
+            bottom:
+                75px;
 
             background:
-                var(--purple);
+                var(--blue);
 
             box-shadow:
-                0 0 25px var(--purple);
+                0 0 22px
+                var(--blue);
+
+            animation-delay:
+                .8s;
         }
 
 
@@ -545,101 +872,135 @@
         }
 
 
+        @keyframes orbitPulse {
+
+            50% {
+                transform:
+                    scale(.65);
+            }
+        }
+
+
+        .hero-content {
+
+            position:
+                relative;
+
+            z-index:
+                2;
+        }
+
+
         .hero-badge {
 
-            position: relative;
+            display:
+                inline-flex;
 
-            z-index: 2;
+            align-items:
+                center;
 
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 9px;
+            gap:
+                8px;
 
             padding:
                 8px 13px;
 
             border:
-                1px solid rgba(74,222,128,.18);
+                1px solid
+                rgba(5,150,105,.2);
 
-            border-radius: 999px;
-
-            background:
-                rgba(34,197,94,.055);
+            border-radius:
+                999px;
 
             color:
-                #a7f3c0;
+                var(--green);
 
-            font-size: 11px;
+            background:
+                var(--green-soft);
 
-            font-weight: 800;
+            font-size:
+                10px;
 
-            letter-spacing: .13em;
+            font-weight:
+                900;
 
-            text-transform: uppercase;
+            letter-spacing:
+                .14em;
+
+            text-transform:
+                uppercase;
 
             animation:
-                fadeUp .7s var(--ease) both;
+                fadeUp .65s var(--ease) both;
         }
 
 
         .hero-badge-dot {
 
-            width: 7px;
-            height: 7px;
+            width:
+                7px;
 
-            border-radius: 50%;
+            height:
+                7px;
+
+            border-radius:
+                50%;
 
             background:
                 var(--green);
 
             box-shadow:
-                0 0 0 5px rgba(34,197,94,.08),
-                0 0 18px var(--green);
+                0 0 0 5px
+                rgba(5,150,105,.08),
+                0 0 18px
+                var(--green);
 
             animation:
-                pulseDot 2s infinite;
+                livePulse 2s infinite;
         }
 
 
-        @keyframes pulseDot {
+        @keyframes livePulse {
 
             50% {
-                transform: scale(.72);
-
-                box-shadow:
-                    0 0 0 8px rgba(34,197,94,.025),
-                    0 0 22px var(--green);
+                transform:
+                    scale(.7);
             }
         }
 
 
         .hero h1 {
 
-            position: relative;
+            margin-top:
+                22px;
 
-            z-index: 2;
-
-            margin-top: 22px;
+            color:
+                var(--text);
 
             font-size:
-                clamp(42px, 7vw, 78px);
+                clamp(43px, 7vw, 80px);
 
-            line-height: .98;
+            line-height:
+                .95;
 
             letter-spacing:
-                -.055em;
+                -.065em;
 
             font-weight:
-                900;
+                950;
+
+            animation:
+                fadeUp .8s .05s var(--ease) both;
+        }
+
+
+        .hero h1 .accent {
 
             background:
                 linear-gradient(
                     100deg,
-                    #fff 15%,
-                    #cfd5df 45%,
-                    #fff 70%
+                    var(--green),
+                    var(--blue)
                 );
 
             -webkit-background-clip:
@@ -648,33 +1009,15 @@
             background-clip:
                 text;
 
-            color: transparent;
-
-            background-size:
-                220% auto;
-
-            animation:
-                heroShine 6s linear infinite,
-                fadeUp .8s var(--ease) both;
-        }
-
-
-        @keyframes heroShine {
-
-            to {
-                background-position:
-                    -220% center;
-            }
+            color:
+                transparent;
         }
 
 
         .hero p {
 
-            position: relative;
-
-            z-index: 2;
-
-            max-width: 650px;
+            max-width:
+                680px;
 
             margin:
                 22px auto 0;
@@ -683,26 +1026,29 @@
                 var(--muted);
 
             font-size:
-                clamp(14px, 2vw, 17px);
+                clamp(13px, 2vw, 16px);
 
-            line-height: 1.75;
+            line-height:
+                1.8;
 
             animation:
-                fadeUp .9s .08s var(--ease) both;
+                fadeUp .9s .1s var(--ease) both;
         }
 
 
         @keyframes fadeUp {
 
             from {
-                opacity: 0;
+                opacity:
+                    0;
 
                 transform:
                     translateY(18px);
             }
 
             to {
-                opacity: 1;
+                opacity:
+                    1;
 
                 transform:
                     translateY(0);
@@ -716,14 +1062,17 @@
 
         .filters-wrap {
 
-            width: min(1240px, calc(100% - 36px));
+            width:
+                min(1240px, calc(100% - 36px));
 
             margin:
                 0 auto 55px;
 
-            display: flex;
+            display:
+                flex;
 
-            justify-content: center;
+            justify-content:
+                center;
 
             animation:
                 fadeUp .9s .15s var(--ease) both;
@@ -732,23 +1081,35 @@
 
         .filters {
 
-            position: relative;
+            display:
+                flex;
 
-            display: flex;
+            align-items:
+                center;
 
-            align-items: center;
+            gap:
+                4px;
 
-            gap: 5px;
+            padding:
+                5px;
 
-            padding: 6px;
+            max-width:
+                100%;
+
+            overflow-x:
+                auto;
 
             border:
                 1px solid var(--border);
 
-            border-radius: 18px;
+            border-radius:
+                16px;
 
             background:
-                rgba(255,255,255,.045);
+                var(--surface);
+
+            box-shadow:
+                var(--shadow-sm);
 
             backdrop-filter:
                 blur(18px);
@@ -756,25 +1117,33 @@
             -webkit-backdrop-filter:
                 blur(18px);
 
-            box-shadow:
-                0 20px 50px rgba(0,0,0,.22);
+            scrollbar-width:
+                none;
+        }
 
-            overflow-x: auto;
+
+        .filters::-webkit-scrollbar {
+            display:
+                none;
         }
 
 
         .filter-btn {
 
-            position: relative;
+            position:
+                relative;
 
-            flex-shrink: 0;
+            flex:
+                0 0 auto;
 
-            border: 0;
+            border:
+                0;
 
             padding:
                 11px 17px;
 
-            border-radius: 13px;
+            border-radius:
+                11px;
 
             color:
                 var(--muted);
@@ -782,67 +1151,58 @@
             background:
                 transparent;
 
-            cursor: pointer;
+            cursor:
+                pointer;
 
-            font-size: 12px;
+            font-size:
+                11px;
 
-            font-weight: 800;
-
-            transition:
-                .3s var(--ease);
-        }
-
-
-        .filter-btn::after {
-
-            content: "";
-
-            position: absolute;
-
-            inset: 0;
-
-            border-radius: inherit;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,255,255,.10),
-                    rgba(255,255,255,.025)
-                );
-
-            opacity: 0;
+            font-weight:
+                850;
 
             transition:
-                .3s;
+                color .3s,
+                background .3s,
+                transform .3s var(--ease);
         }
 
 
         .filter-btn:hover {
 
-            color: white;
+            color:
+                var(--text);
 
             transform:
                 translateY(-1px);
         }
 
 
-        .filter-btn:hover::after {
-
-            opacity: 1;
-        }
-
-
         .filter-btn.active {
 
             color:
-                white;
+                #ffffff;
 
             background:
-                rgba(255,255,255,.095);
+                var(--navy);
 
             box-shadow:
-                inset 0 0 0 1px rgba(255,255,255,.08),
-                0 7px 20px rgba(0,0,0,.2);
+                0 7px 18px
+                rgba(15,23,42,.12);
+        }
+
+
+        html[data-theme="dark"]
+        .filter-btn.active {
+
+            color:
+                #000000;
+
+            background:
+                #ffffff;
+
+            box-shadow:
+                0 7px 25px
+                rgba(255,255,255,.08);
         }
 
 
@@ -859,112 +1219,134 @@
                 auto;
 
             padding-bottom:
-                100px;
+                90px;
         }
 
 
         .section {
 
             margin-bottom:
-                80px;
+                78px;
         }
 
 
         .section-header {
 
-            display: flex;
+            display:
+                flex;
 
-            align-items: flex-end;
+            align-items:
+                flex-end;
 
-            justify-content: space-between;
-
-            gap: 20px;
+            gap:
+                20px;
 
             margin-bottom:
-                24px;
+                23px;
         }
 
 
         .section-title-wrap {
 
-            display: flex;
+            display:
+                flex;
 
-            align-items: center;
+            align-items:
+                center;
 
-            gap: 14px;
+            gap:
+                13px;
         }
 
 
         .section-icon {
 
-            width: 46px;
-            height: 46px;
+            width:
+                46px;
 
-            display: grid;
+            height:
+                46px;
 
-            place-items: center;
+            display:
+                grid;
 
-            border-radius: 15px;
+            place-items:
+                center;
 
-            font-size: 21px;
+            flex:
+                0 0 auto;
 
             border:
                 1px solid var(--border);
 
+            border-radius:
+                15px;
+
             background:
-                rgba(255,255,255,.055);
+                var(--surface);
 
             box-shadow:
-                inset 0 1px 0 rgba(255,255,255,.08);
+                var(--shadow-sm);
+
+            font-size:
+                20px;
         }
 
 
         .section-title {
 
+            color:
+                var(--text);
+
             font-size:
-                clamp(22px, 3vw, 30px);
+                clamp(22px, 3vw, 29px);
+
+            line-height:
+                1;
 
             letter-spacing:
-                -.035em;
+                -.04em;
 
             font-weight:
-                900;
+                950;
         }
 
 
         .section-subtitle {
 
             margin-top:
-                4px;
+                6px;
 
             color:
                 var(--muted);
 
             font-size:
-                12px;
+                11px;
         }
 
 
         .section-line {
 
-            flex: 1;
+            flex:
+                1;
 
-            height: 1px;
+            height:
+                1px;
 
             margin-bottom:
-                12px;
+                11px;
 
             background:
                 linear-gradient(
                     90deg,
-                    rgba(255,255,255,.13),
+                    var(--border-strong),
                     transparent
                 );
         }
 
 
         /* =========================================================
-           FIXTURE GRID
+           GRID
         ========================================================= */
 
         .fixture-grid {
@@ -981,16 +1363,19 @@
 
 
         /* =========================================================
-           PREMIUM CARD
+           BASE FIXTURE CARD
         ========================================================= */
 
         .fixture-card {
 
-            position: relative;
+            position:
+                relative;
 
-            isolation: isolate;
+            isolation:
+                isolate;
 
-            overflow: hidden;
+            overflow:
+                hidden;
 
             border:
                 1px solid var(--border);
@@ -999,52 +1384,27 @@
                 var(--radius-xl);
 
             background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.072),
-                    rgba(255,255,255,.027)
-                );
+                var(--surface);
 
             box-shadow:
-                0 20px 60px rgba(0,0,0,.25);
+                var(--shadow);
 
             backdrop-filter:
-                blur(22px)
+                blur(20px)
                 saturate(130%);
 
             -webkit-backdrop-filter:
-                blur(22px)
+                blur(20px)
                 saturate(130%);
 
             transition:
-                transform .5s var(--ease),
-                border-color .4s,
-                box-shadow .5s;
+                transform .45s var(--ease),
+                border-color .35s,
+                box-shadow .45s,
+                background .35s;
 
             animation:
                 cardEnter .65s var(--ease) both;
-        }
-
-
-        @keyframes cardEnter {
-
-            from {
-
-                opacity: 0;
-
-                transform:
-                    translateY(22px)
-                    scale(.985);
-            }
-
-            to {
-
-                opacity: 1;
-
-                transform:
-                    translateY(0)
-                    scale(1);
-            }
         }
 
 
@@ -1052,20 +1412,42 @@
 
             content: "";
 
-            position: absolute;
+            position:
+                absolute;
 
-            inset: 0;
+            inset:
+                0;
 
-            z-index: -2;
+            z-index:
+                -2;
 
             background:
                 radial-gradient(
-                    circle at 85% 5%,
-                    rgba(255,255,255,.08),
+                    circle at 90% 0%,
+                    rgba(255,255,255,.65),
                     transparent 30%
                 );
 
-            pointer-events: none;
+            opacity:
+                .5;
+
+            pointer-events:
+                none;
+        }
+
+
+        html[data-theme="dark"]
+        .fixture-card::before {
+
+            background:
+                radial-gradient(
+                    circle at 90% 0%,
+                    rgba(255,255,255,.06),
+                    transparent 30%
+                );
+
+            opacity:
+                1;
         }
 
 
@@ -1073,15 +1455,23 @@
 
             content: "";
 
-            position: absolute;
+            position:
+                absolute;
 
-            top: 0;
-            left: -120%;
+            top:
+                0;
 
-            width: 70%;
-            height: 100%;
+            left:
+                -130%;
 
-            z-index: 5;
+            width:
+                65%;
+
+            height:
+                100%;
+
+            z-index:
+                5;
 
             transform:
                 skewX(-18deg);
@@ -1090,38 +1480,75 @@
                 linear-gradient(
                     90deg,
                     transparent,
-                    rgba(255,255,255,.075),
+                    rgba(255,255,255,.35),
                     transparent
                 );
 
+            pointer-events:
+                none;
+
             transition:
                 left .8s var(--ease);
+        }
 
-            pointer-events: none;
+
+        html[data-theme="dark"]
+        .fixture-card::after {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,.075),
+                    transparent
+                );
         }
 
 
         .fixture-card:hover {
 
             transform:
-                translateY(-7px);
+                translateY(-6px);
 
             border-color:
-                rgba(255,255,255,.19);
+                var(--border-strong);
 
             box-shadow:
-                0 35px 90px rgba(0,0,0,.38);
+                var(--shadow-lg);
         }
 
 
         .fixture-card:hover::after {
 
-            left: 150%;
+            left:
+                155%;
+        }
+
+
+        @keyframes cardEnter {
+
+            from {
+                opacity:
+                    0;
+
+                transform:
+                    translateY(22px)
+                    scale(.985);
+            }
+
+            to {
+                opacity:
+                    1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
         }
 
 
         /* =========================================================
-           FOOTBALL CARD
+           SPORT IDENTITIES
         ========================================================= */
 
         .fixture-card.football {
@@ -1129,11 +1556,18 @@
             --accent:
                 var(--green);
 
-            --accent-light:
-                var(--green-light);
+            --accent-rgb:
+                5,150,105;
+        }
+
+
+        .fixture-card.cricket {
+
+            --accent:
+                var(--indigo);
 
             --accent-rgb:
-                34,197,94;
+                79,70,229;
         }
 
 
@@ -1141,39 +1575,10 @@
 
             background:
                 radial-gradient(
-                    circle at 88% 0%,
-                    rgba(34,197,94,.13),
-                    transparent 32%
-                ),
-                radial-gradient(
-                    circle at 15% 95%,
-                    rgba(34,197,94,.045),
-                    transparent 28%
+                    circle at 90% 0%,
+                    rgba(5,150,105,.12),
+                    transparent 33%
                 );
-        }
-
-
-        .fixture-card.football.result {
-
-            border-color:
-                rgba(34,197,94,.16);
-        }
-
-
-        /* =========================================================
-           CRICKET CARD
-        ========================================================= */
-
-        .fixture-card.cricket {
-
-            --accent:
-                var(--purple);
-
-            --accent-light:
-                var(--purple-light);
-
-            --accent-rgb:
-                139,92,246;
         }
 
 
@@ -1181,22 +1586,34 @@
 
             background:
                 radial-gradient(
-                    circle at 88% 0%,
-                    rgba(139,92,246,.15),
-                    transparent 32%
-                ),
-                radial-gradient(
-                    circle at 15% 95%,
-                    rgba(59,130,246,.055),
-                    transparent 28%
+                    circle at 90% 0%,
+                    rgba(79,70,229,.12),
+                    transparent 33%
                 );
         }
 
 
-        .fixture-card.cricket.result {
+        html[data-theme="dark"]
+        .fixture-card.football::before {
 
-            border-color:
-                rgba(139,92,246,.17);
+            background:
+                radial-gradient(
+                    circle at 90% 0%,
+                    rgba(34,197,94,.13),
+                    transparent 33%
+                );
+        }
+
+
+        html[data-theme="dark"]
+        .fixture-card.cricket::before {
+
+            background:
+                radial-gradient(
+                    circle at 90% 0%,
+                    rgba(139,92,246,.14),
+                    transparent 33%
+                );
         }
 
 
@@ -1206,52 +1623,57 @@
 
         .card-top {
 
-            position: relative;
+            display:
+                flex;
 
-            display: flex;
+            align-items:
+                center;
 
-            align-items: center;
+            justify-content:
+                space-between;
 
-            justify-content: space-between;
-
-            gap: 12px;
+            gap:
+                10px;
 
             padding:
-                20px 22px 0;
+                19px 22px 0;
         }
 
 
         .sport-label {
 
-            display: inline-flex;
+            display:
+                inline-flex;
 
-            align-items: center;
+            align-items:
+                center;
 
-            gap: 7px;
+            gap:
+                6px;
 
             padding:
                 7px 10px;
+
+            border:
+                1px solid var(--border);
 
             border-radius:
                 999px;
 
             color:
-                #dce2e9;
+                var(--text-secondary);
 
             background:
-                rgba(255,255,255,.045);
-
-            border:
-                1px solid var(--border);
+                var(--surface-soft);
 
             font-size:
-                10px;
+                9px;
 
             font-weight:
-                900;
+                950;
 
             letter-spacing:
-                .09em;
+                .08em;
 
             text-transform:
                 uppercase;
@@ -1261,26 +1683,26 @@
         .football .sport-label {
 
             color:
-                #9ff0bb;
+                var(--green);
 
             border-color:
-                rgba(34,197,94,.18);
+                rgba(5,150,105,.18);
 
             background:
-                rgba(34,197,94,.055);
+                var(--green-soft);
         }
 
 
         .cricket .sport-label {
 
             color:
-                #c9b7ff;
+                var(--indigo);
 
             border-color:
-                rgba(139,92,246,.2);
+                rgba(79,70,229,.18);
 
             background:
-                rgba(139,92,246,.065);
+                var(--indigo-soft);
         }
 
 
@@ -1289,52 +1711,52 @@
             padding:
                 7px 10px;
 
+            border:
+                1px solid var(--border);
+
             border-radius:
                 999px;
 
             color:
                 var(--muted);
 
-            border:
-                1px solid var(--border);
-
             background:
-                rgba(0,0,0,.16);
+                var(--surface-soft);
 
             font-size:
-                9px;
+                8px;
 
             font-weight:
-                900;
+                950;
 
             letter-spacing:
-                .08em;
+                .09em;
         }
 
 
         .upcoming .status-label {
 
             color:
-                #d9e5ff;
+                var(--blue);
 
             border-color:
-                rgba(59,130,246,.2);
+                rgba(37,99,235,.17);
 
             background:
-                rgba(59,130,246,.055);
+                var(--blue-soft);
         }
 
 
         .result .status-label {
 
             color:
-                #c8fbd7;
+                var(--gold);
 
             border-color:
-                rgba(34,197,94,.2);
+                rgba(197,138,24,.2);
 
             background:
-                rgba(34,197,94,.055);
+                var(--gold-soft);
         }
 
 
@@ -1345,19 +1767,19 @@
         .card-date {
 
             margin:
-                17px 22px 0;
+                16px 22px 0;
 
             color:
                 var(--muted);
 
             font-size:
-                11px;
+                10px;
 
             font-weight:
-                700;
+                750;
 
             letter-spacing:
-                .05em;
+                .04em;
         }
 
 
@@ -1367,7 +1789,8 @@
 
         .match-area {
 
-            position: relative;
+            position:
+                relative;
 
             display:
                 grid;
@@ -1384,13 +1807,14 @@
                 12px;
 
             padding:
-                28px 22px 25px;
+                28px 22px 24px;
         }
 
 
         .team {
 
-            min-width: 0;
+            min-width:
+                0;
 
             display:
                 flex;
@@ -1402,7 +1826,7 @@
                 center;
 
             gap:
-                12px;
+                11px;
 
             text-align:
                 center;
@@ -1411,7 +1835,8 @@
 
         .team-logo {
 
-            position: relative;
+            position:
+                relative;
 
             width:
                 76px;
@@ -1428,25 +1853,22 @@
             padding:
                 10px;
 
+            border:
+                1px solid var(--border);
+
             border-radius:
-                23px;
+                22px;
 
             background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,.11),
-                    rgba(255,255,255,.035)
-                );
-
-            border:
-                1px solid rgba(255,255,255,.12);
+                var(--surface-solid);
 
             box-shadow:
-                0 14px 35px rgba(0,0,0,.25);
+                var(--shadow-sm);
 
             transition:
                 transform .45s var(--ease),
-                box-shadow .45s;
+                box-shadow .45s,
+                border-color .35s;
         }
 
 
@@ -1454,38 +1876,49 @@
 
             content: "";
 
-            position: absolute;
+            position:
+                absolute;
 
-            inset: -1px;
+            inset:
+                -1px;
 
             border-radius:
                 inherit;
 
-            padding: 1px;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.6),
+                    transparent 50%
+                );
+
+            opacity:
+                .65;
+
+            pointer-events:
+                none;
+        }
+
+
+        html[data-theme="dark"]
+        .team-logo::before {
 
             background:
                 linear-gradient(
                     145deg,
-                    rgba(255,255,255,.25),
-                    transparent 45%
+                    rgba(255,255,255,.12),
+                    transparent 50%
                 );
-
-            -webkit-mask:
-                linear-gradient(#000 0 0) content-box,
-                linear-gradient(#000 0 0);
-
-            -webkit-mask-composite:
-                xor;
-
-            mask-composite:
-                exclude;
-
-            opacity:
-                .55;
         }
 
 
         .team-logo img {
+
+            position:
+                relative;
+
+            z-index:
+                2;
 
             width:
                 100%;
@@ -1496,14 +1929,21 @@
             object-fit:
                 contain;
 
+            transition:
+                transform .45s var(--ease);
+        }
+
+
+        .team-logo > span {
+
             position:
                 relative;
 
             z-index:
                 2;
 
-            transition:
-                transform .45s var(--ease);
+            font-size:
+                25px;
         }
 
 
@@ -1511,12 +1951,19 @@
 
             transform:
                 translateY(-5px)
-                rotate(-2deg);
+                scale(1.025);
+
+            border-color:
+                rgba(
+                    var(--accent-rgb),
+                    .25
+                );
 
             box-shadow:
-                0 20px 45px rgba(
+                0 18px 42px
+                rgba(
                     var(--accent-rgb),
-                    .18
+                    .12
                 );
         }
 
@@ -1531,16 +1978,16 @@
         .team-name {
 
             max-width:
-                170px;
+                175px;
 
             color:
-                #f1f3f6;
+                var(--text);
 
             font-size:
-                14px;
+                13px;
 
             line-height:
-                1.35;
+                1.4;
 
             font-weight:
                 850;
@@ -1553,7 +2000,8 @@
 
         .vs {
 
-            position: relative;
+            position:
+                relative;
 
             width:
                 46px;
@@ -1567,6 +2015,9 @@
             place-items:
                 center;
 
+            border:
+                1px solid var(--border);
+
             border-radius:
                 50%;
 
@@ -1574,19 +2025,19 @@
                 var(--muted);
 
             background:
-                rgba(255,255,255,.035);
-
-            border:
-                1px solid var(--border);
+                var(--surface-soft);
 
             font-size:
-                10px;
+                9px;
 
             font-weight:
-                900;
+                950;
 
             letter-spacing:
                 .08em;
+
+            box-shadow:
+                var(--shadow-sm);
         }
 
 
@@ -1595,39 +2046,38 @@
 
             content: "";
 
-            position: absolute;
+            position:
+                absolute;
 
             width:
                 1px;
 
             height:
-                32px;
+                28px;
 
             background:
                 linear-gradient(
                     transparent,
-                    rgba(255,255,255,.15),
+                    var(--border-strong),
                     transparent
                 );
         }
 
 
         .vs::before {
-
             top:
-                -37px;
+                -33px;
         }
 
 
         .vs::after {
-
             bottom:
-                -37px;
+                -33px;
         }
 
 
         /* =========================================================
-           RESULT SCORE
+           RESULT AREA
         ========================================================= */
 
         .result-score-area {
@@ -1642,10 +2092,10 @@
                 center;
 
             gap:
-                8px;
+                7px;
 
             min-width:
-                100px;
+                105px;
         }
 
 
@@ -1655,10 +2105,10 @@
                 var(--muted-2);
 
             font-size:
-                9px;
+                8px;
 
             font-weight:
-                900;
+                950;
 
             letter-spacing:
                 .17em;
@@ -1667,8 +2117,11 @@
 
         .score {
 
+            color:
+                var(--text);
+
             font-size:
-                clamp(28px, 4vw, 40px);
+                clamp(29px, 4vw, 40px);
 
             line-height:
                 1;
@@ -1677,32 +2130,39 @@
                 950;
 
             letter-spacing:
-                -.06em;
-
-            color:
-                #fff;
-
-            text-shadow:
-                0 0 25px rgba(255,255,255,.08);
+                -.065em;
 
             animation:
                 scoreReveal .7s var(--ease) both;
         }
 
 
+        .score-divider {
+
+            margin:
+                0 5px;
+
+            color:
+                var(--muted-2);
+
+            font-weight:
+                500;
+        }
+
+
         @keyframes scoreReveal {
 
             from {
-
-                opacity: 0;
+                opacity:
+                    0;
 
                 transform:
-                    scale(.75);
+                    scale(.72);
             }
 
             to {
-
-                opacity: 1;
+                opacity:
+                    1;
 
                 transform:
                     scale(1);
@@ -1715,17 +2175,18 @@
             padding:
                 5px 8px;
 
+            border:
+                1px solid
+                rgba(197,138,24,.2);
+
             border-radius:
                 7px;
 
             color:
-                #b8f8cb;
+                var(--gold);
 
             background:
-                rgba(34,197,94,.075);
-
-            border:
-                1px solid rgba(34,197,94,.18);
+                var(--gold-soft);
 
             font-size:
                 8px;
@@ -1739,7 +2200,7 @@
 
 
         /* =========================================================
-           CRICKET SCORE
+           CRICKET RESULT
         ========================================================= */
 
         .cricket-score {
@@ -1760,30 +2221,33 @@
 
         .cricket-score-main {
 
+            color:
+                var(--text);
+
             font-size:
-                clamp(24px, 4vw, 35px);
+                clamp(23px, 4vw, 34px);
+
+            line-height:
+                1;
 
             font-weight:
                 950;
 
             letter-spacing:
-                -.045em;
+                -.05em;
+
+            animation:
+                scoreReveal .7s var(--ease) both;
         }
 
 
-        .cricket-overs {
+        .cricket-score-divider {
+
+            margin:
+                0 3px;
 
             color:
-                #c6b9ef;
-
-            font-size:
-                10px;
-
-            font-weight:
-                850;
-
-            letter-spacing:
-                .08em;
+                var(--muted-2);
         }
 
 
@@ -1792,23 +2256,24 @@
             padding:
                 5px 9px;
 
+            border:
+                1px solid
+                rgba(79,70,229,.2);
+
             border-radius:
                 7px;
 
             color:
-                #d5caff;
+                var(--indigo);
 
             background:
-                rgba(139,92,246,.07);
-
-            border:
-                1px solid rgba(139,92,246,.18);
+                var(--indigo-soft);
 
             font-size:
-                8px;
+                7px;
 
             font-weight:
-                900;
+                950;
 
             letter-spacing:
                 .09em;
@@ -1822,22 +2287,22 @@
         .result-title {
 
             margin:
-                0 22px 5px;
+                0 22px 4px;
+
+            color:
+                var(--gold);
 
             text-align:
                 center;
 
-            color:
-                var(--muted-2);
-
             font-size:
-                9px;
+                8px;
 
             font-weight:
-                900;
+                950;
 
             letter-spacing:
-                .18em;
+                .2em;
 
             text-transform:
                 uppercase;
@@ -1857,29 +2322,29 @@
                 14px 15px;
 
             border:
-                1px solid rgba(255,255,255,.065);
+                1px solid var(--border);
 
             border-radius:
                 15px;
 
             background:
-                rgba(255,255,255,.025);
+                var(--surface-soft);
         }
 
 
         .scorers-title {
 
             margin-bottom:
-                9px;
+                8px;
 
             color:
                 var(--muted-2);
 
             font-size:
-                9px;
+                8px;
 
             font-weight:
-                900;
+                950;
 
             letter-spacing:
                 .1em;
@@ -1891,9 +2356,6 @@
 
         .scorer {
 
-            position:
-                relative;
-
             display:
                 flex;
 
@@ -1901,19 +2363,19 @@
                 center;
 
             gap:
-                9px;
+                8px;
 
             padding:
                 6px 0;
 
             color:
-                #dce1e7;
+                var(--text-secondary);
 
             font-size:
-                11px;
+                10px;
 
             animation:
-                scorerIn .5s var(--ease) both;
+                scorerIn .45s var(--ease) both;
         }
 
 
@@ -1923,13 +2385,7 @@
                 "⚽";
 
             font-size:
-                11px;
-
-            filter:
-                drop-shadow(
-                    0 0 8px
-                    rgba(34,197,94,.45)
-                );
+                10px;
         }
 
 
@@ -1939,10 +2395,10 @@
                 auto;
 
             color:
-                #86efac;
+                var(--green);
 
             font-size:
-                10px;
+                9px;
 
             font-weight:
                 900;
@@ -1952,16 +2408,16 @@
         @keyframes scorerIn {
 
             from {
-
-                opacity: 0;
+                opacity:
+                    0;
 
                 transform:
                     translateX(-8px);
             }
 
             to {
-
-                opacity: 1;
+                opacity:
+                    1;
 
                 transform:
                     translateX(0);
@@ -1982,7 +2438,7 @@
                 repeat(2,1fr);
 
             gap:
-                10px;
+                9px;
 
             margin:
                 0 22px 18px;
@@ -2001,7 +2457,8 @@
                 13px;
 
             border:
-                1px solid rgba(139,92,246,.13);
+                1px solid
+                rgba(79,70,229,.14);
 
             border-radius:
                 15px;
@@ -2009,8 +2466,8 @@
             background:
                 linear-gradient(
                     145deg,
-                    rgba(139,92,246,.07),
-                    rgba(255,255,255,.025)
+                    var(--indigo-soft),
+                    var(--surface-soft)
                 );
 
             transition:
@@ -2021,15 +2478,19 @@
 
         .innings-box::before {
 
-            content:
-                "";
+            content: "";
 
             position:
                 absolute;
 
-            left: 0;
-            right: 0;
-            top: 0;
+            left:
+                0;
+
+            right:
+                0;
+
+            top:
+                0;
 
             height:
                 2px;
@@ -2037,7 +2498,7 @@
             background:
                 linear-gradient(
                     90deg,
-                    var(--purple),
+                    var(--indigo),
                     transparent
                 );
         }
@@ -2049,7 +2510,7 @@
                 translateY(-3px);
 
             border-color:
-                rgba(167,139,250,.3);
+                rgba(79,70,229,.28);
         }
 
 
@@ -2059,10 +2520,10 @@
                 var(--muted-2);
 
             font-size:
-                9px;
+                8px;
 
             font-weight:
-                800;
+                850;
 
             white-space:
                 nowrap;
@@ -2081,7 +2542,7 @@
                 5px;
 
             color:
-                #fff;
+                var(--text);
 
             font-size:
                 20px;
@@ -2100,18 +2561,18 @@
                 3px;
 
             color:
-                #b8a8e9;
+                var(--indigo);
 
             font-size:
-                9px;
+                8px;
 
             font-weight:
-                800;
+                850;
         }
 
 
         /* =========================================================
-           DETAILS
+           RESULT DETAILS
         ========================================================= */
 
         .result-details {
@@ -2123,7 +2584,7 @@
                 repeat(2,1fr);
 
             gap:
-                10px;
+                9px;
 
             margin:
                 0 22px 18px;
@@ -2139,13 +2600,13 @@
                 12px 13px;
 
             border:
-                1px solid rgba(255,255,255,.06);
+                1px solid var(--border);
 
             border-radius:
                 14px;
 
             background:
-                rgba(255,255,255,.025);
+                var(--surface-soft);
         }
 
 
@@ -2155,13 +2616,13 @@
                 var(--muted-2);
 
             font-size:
-                8px;
+                7px;
 
             font-weight:
-                900;
+                950;
 
             letter-spacing:
-                .09em;
+                .1em;
 
             text-transform:
                 uppercase;
@@ -2174,10 +2635,10 @@
                 4px;
 
             color:
-                #e9edf2;
+                var(--text-secondary);
 
             font-size:
-                11px;
+                10px;
 
             font-weight:
                 800;
@@ -2200,31 +2661,28 @@
         .result-note {
 
             margin:
-                0 22px 19px;
+                0 22px 18px;
 
             padding:
                 12px 14px;
 
             border-left:
-                2px solid var(--accent);
+                2px solid var(--gold);
 
             border-radius:
                 0 12px 12px 0;
 
-            background:
-                rgba(
-                    var(--accent-rgb),
-                    .045
-                );
-
             color:
-                #cbd2dc;
+                var(--text-secondary);
+
+            background:
+                var(--gold-soft);
 
             font-size:
-                11px;
+                10px;
 
             line-height:
-                1.6;
+                1.65;
         }
 
 
@@ -2244,19 +2702,19 @@
                 wrap;
 
             gap:
-                9px;
+                8px;
 
             padding:
-                15px 22px 19px;
+                14px 22px 18px;
 
             border-top:
-                1px solid rgba(255,255,255,.055);
+                1px solid var(--border);
 
             color:
                 var(--muted-2);
 
             font-size:
-                10px;
+                9px;
 
             font-weight:
                 700;
@@ -2277,9 +2735,8 @@
 
 
         .meta-separator {
-
             opacity:
-                .3;
+                .35;
         }
 
 
@@ -2308,19 +2765,19 @@
                 center;
 
             gap:
-                10px;
+                9px;
+
+            padding:
+                25px;
 
             border:
-                1px dashed rgba(255,255,255,.11);
+                1px dashed var(--border-strong);
 
             border-radius:
-                24px;
+                23px;
 
             background:
-                rgba(255,255,255,.025);
-
-            color:
-                var(--muted);
+                var(--surface);
 
             text-align:
                 center;
@@ -2330,9 +2787,10 @@
         .empty-icon {
 
             width:
-                55px;
+                54px;
+
             height:
-                55px;
+                54px;
 
             display:
                 grid;
@@ -2340,14 +2798,17 @@
             place-items:
                 center;
 
+            border:
+                1px solid var(--border);
+
             border-radius:
-                18px;
+                17px;
 
             background:
-                rgba(255,255,255,.045);
+                var(--surface-soft);
 
             font-size:
-                23px;
+                22px;
 
             animation:
                 emptyFloat 3s ease-in-out infinite;
@@ -2366,29 +2827,29 @@
         .empty-title {
 
             color:
-                #dce1e8;
+                var(--text);
 
             font-size:
-                14px;
+                13px;
 
             font-weight:
-                850;
+                900;
         }
 
 
         .empty-text {
 
             max-width:
-                400px;
+                420px;
 
             color:
-                var(--muted-2);
+                var(--muted);
 
             font-size:
-                11px;
+                10px;
 
             line-height:
-                1.6;
+                1.7;
         }
 
 
@@ -2397,6 +2858,9 @@
         ========================================================= */
 
         .loading {
+
+            grid-column:
+                1 / -1;
 
             min-height:
                 230px;
@@ -2411,10 +2875,13 @@
                 1px solid var(--border);
 
             border-radius:
-                24px;
+                23px;
 
             background:
-                rgba(255,255,255,.025);
+                var(--surface);
+
+            box-shadow:
+                var(--shadow-sm);
         }
 
 
@@ -2430,7 +2897,7 @@
                 center;
 
             gap:
-                14px;
+                13px;
 
             color:
                 var(--muted);
@@ -2440,18 +2907,19 @@
         .spinner {
 
             width:
-                35px;
-            height:
-                35px;
+                34px;
 
-            border-radius:
-                50%;
+            height:
+                34px;
 
             border:
-                2px solid rgba(255,255,255,.08);
+                2px solid var(--border);
 
             border-top-color:
                 var(--green);
+
+            border-radius:
+                50%;
 
             animation:
                 spin .8s linear infinite;
@@ -2480,10 +2948,10 @@
                 auto;
 
             padding:
-                25px 0 45px;
+                24px 0 42px;
 
             border-top:
-                1px solid rgba(255,255,255,.07);
+                1px solid var(--border);
 
             color:
                 var(--muted-2);
@@ -2492,20 +2960,20 @@
                 center;
 
             font-size:
-                10px;
+                9px;
 
             line-height:
-                1.7;
+                1.8;
         }
 
 
         .footer strong {
 
             color:
-                #cfd5dd;
+                var(--text-secondary);
 
             font-weight:
-                850;
+                900;
         }
 
 
@@ -2516,31 +2984,28 @@
         @media (max-width: 850px) {
 
             .fixture-grid {
-
                 grid-template-columns:
                     1fr;
             }
 
 
             .hero {
-
                 padding:
-                    70px 0 55px;
+                    72px 0 58px;
             }
 
 
             .hero-orbit {
 
                 width:
-                    360px;
+                    390px;
 
                 height:
-                    360px;
+                    390px;
             }
 
 
             .section {
-
                 margin-bottom:
                     60px;
             }
@@ -2552,10 +3017,10 @@
             .nav-inner {
 
                 width:
-                    min(100% - 24px, 1240px);
+                    calc(100% - 24px);
 
                 min-height:
-                    68px;
+                    67px;
             }
 
 
@@ -2563,6 +3028,7 @@
 
                 width:
                     40px;
+
                 height:
                     40px;
 
@@ -2572,14 +3038,12 @@
 
 
             .brand-text strong {
-
                 font-size:
-                    13px;
+                    12px;
             }
 
 
             .brand-text small {
-
                 display:
                     none;
             }
@@ -2587,11 +3051,24 @@
 
             .nav-home {
 
+                min-height:
+                    38px;
+
                 padding:
-                    9px 12px;
+                    8px 12px;
 
                 font-size:
-                    11px;
+                    10px;
+            }
+
+
+            .theme-toggle {
+
+                width:
+                    38px;
+
+                min-height:
+                    38px;
             }
 
 
@@ -2601,14 +3078,14 @@
                     calc(100% - 24px);
 
                 padding:
-                    58px 0 45px;
+                    60px 0 46px;
             }
 
 
             .hero h1 {
 
                 font-size:
-                    clamp(38px, 12vw, 55px);
+                    clamp(39px, 12vw, 55px);
             }
 
 
@@ -2618,17 +3095,17 @@
                     17px;
 
                 font-size:
-                    13px;
+                    12px;
             }
 
 
             .hero-orbit {
 
                 width:
-                    280px;
+                    285px;
 
                 height:
-                    280px;
+                    285px;
             }
 
 
@@ -2641,7 +3118,7 @@
                     flex-start;
 
                 margin-bottom:
-                    42px;
+                    40px;
             }
 
 
@@ -2650,11 +3127,8 @@
                 width:
                     100%;
 
-                justify-content:
-                    flex-start;
-
                 border-radius:
-                    15px;
+                    14px;
             }
 
 
@@ -2664,7 +3138,7 @@
                     10px 13px;
 
                 font-size:
-                    10px;
+                    9px;
             }
 
 
@@ -2674,7 +3148,7 @@
                     calc(100% - 24px);
 
                 padding-bottom:
-                    65px;
+                    60px;
             }
 
 
@@ -2692,6 +3166,7 @@
 
                 width:
                     40px;
+
                 height:
                     40px;
 
@@ -2699,40 +3174,40 @@
                     13px;
 
                 font-size:
-                    18px;
+                    17px;
             }
 
 
             .section-title {
 
                 font-size:
-                    21px;
+                    20px;
             }
 
 
             .section-subtitle {
 
+                margin-top:
+                    5px;
+
                 font-size:
-                    10px;
+                    9px;
             }
 
 
             .section-line {
-
                 display:
                     none;
             }
 
 
             .fixture-grid {
-
                 gap:
                     15px;
             }
 
 
             .fixture-card {
-
                 border-radius:
                     22px;
             }
@@ -2755,19 +3230,20 @@
             .match-area {
 
                 gap:
-                    5px;
+                    4px;
 
                 padding:
-                    24px 12px 21px;
+                    23px 10px 20px;
             }
 
 
             .team-logo {
 
                 width:
-                    62px;
+                    61px;
+
                 height:
-                    62px;
+                    61px;
 
                 padding:
                     8px;
@@ -2780,56 +3256,64 @@
             .team-name {
 
                 max-width:
-                    105px;
+                    103px;
 
                 font-size:
-                    11px;
+                    10px;
             }
 
 
             .vs {
 
                 width:
-                    38px;
+                    37px;
+
                 height:
-                    38px;
+                    37px;
 
                 font-size:
-                    8px;
+                    7px;
             }
 
 
             .vs::before {
 
                 top:
-                    -28px;
+                    -27px;
 
                 height:
-                    23px;
+                    21px;
             }
 
 
             .vs::after {
 
                 bottom:
-                    -28px;
+                    -27px;
 
                 height:
-                    23px;
+                    21px;
+            }
+
+
+            .result-score-area {
+
+                min-width:
+                    87px;
             }
 
 
             .score {
 
                 font-size:
-                    27px;
+                    26px;
             }
 
 
             .cricket-score-main {
 
                 font-size:
-                    23px;
+                    21px;
             }
 
 
@@ -2853,7 +3337,7 @@
             .detail-value {
 
                 font-size:
-                    10px;
+                    9px;
             }
 
 
@@ -2898,10 +3382,10 @@
             .card-meta {
 
                 padding:
-                    13px 16px 16px;
+                    12px 16px 15px;
 
                 font-size:
-                    9px;
+                    8px;
             }
         }
 
@@ -2911,29 +3395,30 @@
             .team-logo {
 
                 width:
-                    55px;
+                    54px;
+
                 height:
-                    55px;
+                    54px;
             }
 
 
             .team-name {
 
                 max-width:
-                    88px;
+                    84px;
 
                 font-size:
-                    10px;
+                    9px;
             }
 
 
             .match-area {
 
                 padding-left:
-                    7px;
+                    6px;
 
                 padding-right:
-                    7px;
+                    6px;
             }
 
 
@@ -2944,6 +3429,18 @@
 
                 padding-right:
                     13px;
+            }
+
+
+            .brand-text strong {
+                max-width:
+                    130px;
+
+                overflow:
+                    hidden;
+
+                text-overflow:
+                    ellipsis;
             }
         }
 
@@ -2973,6 +3470,7 @@
         }
 
     </style>
+
 </head>
 
 
@@ -2987,11 +3485,15 @@
 
         <div class="nav-inner">
 
-            <a href="index.html" class="brand">
+            <a
+                href="index.html"
+                class="brand"
+            >
 
                 <div class="brand-mark">
                     <span>⚡</span>
                 </div>
+
 
                 <div class="brand-text">
 
@@ -3008,12 +3510,27 @@
             </a>
 
 
-            <a
-                href="index.html"
-                class="nav-home"
-            >
-                ← Home
-            </a>
+            <div class="nav-actions">
+
+                <button
+                    type="button"
+                    class="theme-toggle"
+                    id="themeToggle"
+                    aria-label="Toggle dark mode"
+                    title="Toggle theme"
+                >
+                    🌙
+                </button>
+
+
+                <a
+                    href="index.html"
+                    class="nav-home"
+                >
+                    ← Home
+                </a>
+
+            </div>
 
         </div>
 
@@ -3029,26 +3546,38 @@
 
         <div class="hero-orbit"></div>
 
-        <div class="hero-badge">
 
-            <span class="hero-badge-dot"></span>
+        <div class="hero-content">
 
-            Live Sports Center
+            <div class="hero-badge">
+
+                <span class="hero-badge-dot"></span>
+
+                Live Sports Center
+
+            </div>
+
+
+            <h1>
+
+                Fixtures &amp;
+
+                <span class="accent">
+                    Results
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                Ghopkhali Sports Arena-এর Football ও Cricket
+                ম্যাচের আসন্ন Fixture এবং সম্পন্ন ম্যাচের
+                Official Results এক জায়গায় দেখুন।
+
+            </p>
 
         </div>
-
-
-        <h1>
-            Fixtures &amp;<br>
-            Results
-        </h1>
-
-
-        <p>
-            Ghopkhali Sports Arena-এর Football ও Cricket
-            ম্যাচের আসন্ন Fixture এবং সম্পন্ন ম্যাচের
-            Official Results এক জায়গায় দেখুন।
-        </p>
 
     </section>
 
@@ -3136,6 +3665,7 @@
                         📅
                     </div>
 
+
                     <div>
 
                         <h2 class="section-title">
@@ -3149,6 +3679,7 @@
                     </div>
 
                 </div>
+
 
                 <div class="section-line"></div>
 
@@ -3197,6 +3728,7 @@
                         🏆
                     </div>
 
+
                     <div>
 
                         <h2 class="section-title">
@@ -3210,6 +3742,7 @@
                     </div>
 
                 </div>
+
 
                 <div class="section-line"></div>
 
@@ -3239,7 +3772,6 @@
 
         </section>
 
-
     </main>
 
 
@@ -3265,11 +3797,97 @@
     <script>
 
         /* =========================================================
+           THEME
+        ========================================================= */
+
+        const themeToggle =
+            document.getElementById(
+                "themeToggle"
+            );
+
+
+        function applyTheme(theme) {
+
+            document.documentElement
+                .setAttribute(
+                    "data-theme",
+                    theme
+                );
+
+
+            if (theme === "dark") {
+
+                themeToggle.textContent =
+                    "☀️";
+
+                themeToggle.setAttribute(
+                    "aria-label",
+                    "Switch to light mode"
+                );
+
+            } else {
+
+                themeToggle.textContent =
+                    "🌙";
+
+                themeToggle.setAttribute(
+                    "aria-label",
+                    "Switch to dark mode"
+                );
+            }
+
+
+            localStorage.setItem(
+                "gsa-fixture-theme",
+                theme
+            );
+        }
+
+
+        const savedTheme =
+            localStorage.getItem(
+                "gsa-fixture-theme"
+            );
+
+
+        if (savedTheme === "dark") {
+
+            applyTheme("dark");
+
+        } else {
+
+            applyTheme("light");
+        }
+
+
+        themeToggle.addEventListener(
+            "click",
+            () => {
+
+                const current =
+                    document.documentElement
+                        .getAttribute(
+                            "data-theme"
+                        );
+
+                applyTheme(
+                    current === "dark"
+                        ? "light"
+                        : "dark"
+                );
+
+            }
+        );
+
+
+
+        /* =========================================================
            SUPABASE
         ========================================================= */
 
         const SUPABASE_URL =
             "https://cmygmswzokyrmgdnuszq.supabase.co";
+
 
         const SUPABASE_KEY =
             "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
@@ -3282,13 +3900,16 @@
             );
 
 
+
         /* =========================================================
            STATE
         ========================================================= */
 
         let fixtures = [];
 
-        let currentFilter = "all";
+        let currentFilter =
+            "all";
+
 
 
         /* =========================================================
@@ -3300,20 +3921,24 @@
                 "upcomingGrid"
             );
 
+
         const resultsGrid =
             document.getElementById(
                 "resultsGrid"
             );
+
 
         const upcomingSection =
             document.getElementById(
                 "upcomingSection"
             );
 
+
         const resultsSection =
             document.getElementById(
                 "resultsSection"
             );
+
 
 
         /* =========================================================
@@ -3329,28 +3954,35 @@
                 return "";
             }
 
+
             return String(value)
+
                 .replace(
                     /&/g,
                     "&amp;"
                 )
+
                 .replace(
                     /</g,
                     "&lt;"
                 )
+
                 .replace(
                     />/g,
                     "&gt;"
                 )
+
                 .replace(
                     /"/g,
                     "&quot;"
                 )
+
                 .replace(
                     /'/g,
                     "&#039;"
                 );
         }
+
 
 
         /* =========================================================
@@ -3363,6 +3995,7 @@
                 return "";
             }
 
+
             try {
 
                 return new Date(
@@ -3370,10 +4003,17 @@
                 ).toLocaleDateString(
                     "bn-BD",
                     {
-                        weekday: "long",
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric"
+                        weekday:
+                            "long",
+
+                        day:
+                            "numeric",
+
+                        month:
+                            "long",
+
+                        year:
+                            "numeric"
                     }
                 );
 
@@ -3382,6 +4022,7 @@
                 return date;
             }
         }
+
 
 
         /* =========================================================
@@ -3394,12 +4035,15 @@
                 return "";
             }
 
+
             const parts =
                 time.split(":");
+
 
             if (!parts.length) {
                 return time;
             }
+
 
             let hour =
                 parseInt(
@@ -3407,19 +4051,24 @@
                     10
                 );
 
+
             const minute =
                 parts[1] || "00";
+
 
             const suffix =
                 hour >= 12
                     ? "PM"
                     : "AM";
 
+
             hour =
                 hour % 12 || 12;
 
+
             return `${hour}:${minute} ${suffix}`;
         }
+
 
 
         /* =========================================================
@@ -3430,30 +4079,41 @@
 
             const parts = [];
 
+
             if (item.venue) {
 
                 parts.push(
                     `<span class="meta-item">
-                        📍 ${escapeHTML(item.venue)}
+                        📍 ${escapeHTML(
+                            item.venue
+                        )}
                     </span>`
                 );
             }
+
 
             if (item.tournament) {
 
                 parts.push(
-                    `<span class="meta-separator">•</span>`
+                    `<span class="meta-separator">
+                        •
+                    </span>`
                 );
+
 
                 parts.push(
                     `<span class="meta-item">
-                        🏆 ${escapeHTML(item.tournament)}
+                        🏆 ${escapeHTML(
+                            item.tournament
+                        )}
                     </span>`
                 );
             }
 
+
             return parts.join("");
         }
+
 
 
         /* =========================================================
@@ -3465,6 +4125,7 @@
             if (!item.scorer_name) {
                 return "";
             }
+
 
             const names =
                 String(
@@ -3519,12 +4180,12 @@
                             ${
                                 times[index]
                                     ? `
-                                    <span class="scorer-time">
-                                        ${escapeHTML(
-                                            times[index]
-                                        )}
-                                    </span>
-                                    `
+                                        <span class="scorer-time">
+                                            ${escapeHTML(
+                                                times[index]
+                                            )}
+                                        </span>
+                                      `
                                     : ""
                             }
 
@@ -3538,6 +4199,7 @@
         }
 
 
+
         /* =========================================================
            CRICKET INNINGS
         ========================================================= */
@@ -3547,14 +4209,17 @@
             const homeScore =
                 item.home_score || "—";
 
+
             const awayScore =
                 item.away_score || "—";
+
 
             const homeWickets =
                 item.home_wickets !== null &&
                 item.home_wickets !== undefined
                     ? item.home_wickets
                     : "—";
+
 
             const awayWickets =
                 item.away_wickets !== null &&
@@ -3567,6 +4232,7 @@
                 item.home_overs
                     ? item.home_overs
                     : "Overs not added";
+
 
             const awayOvers =
                 item.away_overs
@@ -3586,6 +4252,7 @@
                             )}
                         </div>
 
+
                         <div class="innings-score">
                             ${escapeHTML(
                                 homeScore
@@ -3593,6 +4260,7 @@
                                 homeWickets
                             )}
                         </div>
+
 
                         <div class="innings-overs">
                             ${escapeHTML(
@@ -3611,6 +4279,7 @@
                             )}
                         </div>
 
+
                         <div class="innings-score">
                             ${escapeHTML(
                                 awayScore
@@ -3618,6 +4287,7 @@
                                 awayWickets
                             )}
                         </div>
+
 
                         <div class="innings-overs">
                             ${escapeHTML(
@@ -3633,6 +4303,7 @@
         }
 
 
+
         /* =========================================================
            FOOTBALL CARD
         ========================================================= */
@@ -3645,6 +4316,7 @@
 
             const homeScore =
                 item.home_score ?? "—";
+
 
             const awayScore =
                 item.away_score ?? "—";
@@ -3668,12 +4340,15 @@
                             ⚽ Football
                         </span>
 
+
                         <span class="status-label">
+
                             ${
                                 isResult
                                     ? "RESULT"
                                     : "UPCOMING"
                             }
+
                         </span>
 
                     </div>
@@ -3708,6 +4383,7 @@
 
 
                     <div class="match-area">
+
 
                         <div class="team">
 
@@ -3745,6 +4421,7 @@
                         </div>
 
 
+
                         ${
                             isResult
                                 ? `
@@ -3755,22 +4432,23 @@
                                             FULL TIME
                                         </div>
 
+
                                         <div class="score">
+
                                             ${escapeHTML(
                                                 homeScore
                                             )}
-                                            <span
-                                                style="
-                                                    color:#6d7582;
-                                                    margin:0 5px;
-                                                "
-                                            >
+
+                                            <span class="score-divider">
                                                 -
                                             </span>
+
                                             ${escapeHTML(
                                                 awayScore
                                             )}
+
                                         </div>
+
 
                                         <div class="minute-badge">
                                             90 MIN
@@ -3787,6 +4465,7 @@
 
                                   `
                         }
+
 
 
                         <div class="team">
@@ -3827,11 +4506,15 @@
                     </div>
 
 
+
                     ${
                         isResult
-                            ? createScorersHTML(item)
+                            ? createScorersHTML(
+                                item
+                              )
                             : ""
                     }
+
 
 
                     ${
@@ -3892,22 +4575,31 @@
                     }
 
 
+
                     ${
-                        isResult && item.result_note
+                        isResult &&
+                        item.result_note
                             ? `
+
                                 <div class="result-note">
+
                                     ${escapeHTML(
                                         item.result_note
                                     )}
+
                                 </div>
+
                               `
                             : ""
                     }
 
 
+
                     <div class="card-meta">
 
-                        ${createMetaHTML(item)}
+                        ${createMetaHTML(
+                            item
+                        )}
 
                     </div>
 
@@ -3915,6 +4607,7 @@
 
             `;
         }
+
 
 
         /* =========================================================
@@ -3929,6 +4622,7 @@
 
             const homeScore =
                 item.home_score ?? "—";
+
 
             const awayScore =
                 item.away_score ?? "—";
@@ -3952,12 +4646,15 @@
                             🏏 Cricket
                         </span>
 
+
                         <span class="status-label">
+
                             ${
                                 isResult
                                     ? "RESULT"
                                     : "UPCOMING"
                             }
+
                         </span>
 
                     </div>
@@ -3991,7 +4688,9 @@
                     }
 
 
+
                     <div class="match-area">
+
 
                         <div class="team">
 
@@ -4029,6 +4728,7 @@
                         </div>
 
 
+
                         ${
                             isResult
                                 ? `
@@ -4036,21 +4736,21 @@
                                     <div class="cricket-score">
 
                                         <div class="cricket-score-main">
+
                                             ${escapeHTML(
                                                 homeScore
                                             )}
-                                            <span
-                                                style="
-                                                    color:#6d7582;
-                                                    margin:0 3px;
-                                                "
-                                            >
+
+                                            <span class="cricket-score-divider">
                                                 –
                                             </span>
+
                                             ${escapeHTML(
                                                 awayScore
                                             )}
+
                                         </div>
+
 
                                         <div class="cricket-status-badge">
                                             CRICKET RESULT
@@ -4067,6 +4767,7 @@
 
                                   `
                         }
+
 
 
                         <div class="team">
@@ -4107,11 +4808,15 @@
                     </div>
 
 
+
                     ${
                         isResult
-                            ? createCricketInningsHTML(item)
+                            ? createCricketInningsHTML(
+                                item
+                              )
                             : ""
                     }
+
 
 
                     ${
@@ -4135,23 +4840,27 @@
                                                     </div>
 
                                                     <div class="detail-value">
+
                                                         🏏 ${escapeHTML(
                                                             item.highest_score_player
                                                         )}
+
                                                         ${
                                                             item.highest_score_runs !== null &&
                                                             item.highest_score_runs !== undefined
                                                                 ? ` • ${escapeHTML(
                                                                     item.highest_score_runs
-                                                                )} Runs`
+                                                                  )} Runs`
                                                                 : ""
                                                         }
+
                                                     </div>
 
                                                 </div>
                                               `
                                             : ""
                                     }
+
 
 
                                     ${
@@ -4181,22 +4890,31 @@
                     }
 
 
+
                     ${
-                        isResult && item.result_note
+                        isResult &&
+                        item.result_note
                             ? `
+
                                 <div class="result-note">
+
                                     ${escapeHTML(
                                         item.result_note
                                     )}
+
                                 </div>
+
                               `
                             : ""
                     }
 
 
+
                     <div class="card-meta">
 
-                        ${createMetaHTML(item)}
+                        ${createMetaHTML(
+                            item
+                        )}
 
                     </div>
 
@@ -4206,8 +4924,9 @@
         }
 
 
+
         /* =========================================================
-           EMPTY
+           EMPTY STATE
         ========================================================= */
 
         function createEmptyHTML(
@@ -4224,9 +4943,11 @@
                         ${icon}
                     </div>
 
+
                     <div class="empty-title">
                         ${title}
                     </div>
+
 
                     <div class="empty-text">
                         ${text}
@@ -4236,6 +4957,7 @@
 
             `;
         }
+
 
 
         /* =========================================================
@@ -4250,18 +4972,24 @@
                     data,
                     error
                 } = await supabaseClient
+
                     .from("fixtures")
+
                     .select("*")
+
                     .order(
                         "match_date",
                         {
-                            ascending: true
+                            ascending:
+                                true
                         }
                     )
+
                     .order(
                         "match_time",
                         {
-                            ascending: true
+                            ascending:
+                                true
                         }
                     );
 
@@ -4303,6 +5031,7 @@
         }
 
 
+
         /* =========================================================
            FILTER
         ========================================================= */
@@ -4310,14 +5039,16 @@
         function filterFixtures() {
 
             if (
-                currentFilter === "all"
+                currentFilter ===
+                "all"
             ) {
                 return fixtures;
             }
 
 
             if (
-                currentFilter === "upcoming"
+                currentFilter ===
+                "upcoming"
             ) {
 
                 return fixtures.filter(
@@ -4329,7 +5060,8 @@
 
 
             if (
-                currentFilter === "completed"
+                currentFilter ===
+                "completed"
             ) {
 
                 return fixtures.filter(
@@ -4341,7 +5073,8 @@
 
 
             if (
-                currentFilter === "football"
+                currentFilter ===
+                "football"
             ) {
 
                 return fixtures.filter(
@@ -4353,7 +5086,8 @@
 
 
             if (
-                currentFilter === "cricket"
+                currentFilter ===
+                "cricket"
             ) {
 
                 return fixtures.filter(
@@ -4366,6 +5100,7 @@
 
             return fixtures;
         }
+
 
 
         /* =========================================================
@@ -4396,13 +5131,25 @@
 
             upcomingGrid.innerHTML =
                 upcoming.length
+
                     ? upcoming
-                        .map(item =>
-                            item.sport === "cricket"
-                                ? createCricketCard(item)
-                                : createFootballCard(item)
+
+                        .map(
+                            item =>
+                                item.sport ===
+                                "cricket"
+
+                                    ? createCricketCard(
+                                        item
+                                      )
+
+                                    : createFootballCard(
+                                        item
+                                      )
                         )
+
                         .join("")
+
                     : createEmptyHTML(
                         "📅",
                         "কোনো Upcoming Fixture নেই",
@@ -4412,15 +5159,27 @@
 
             resultsGrid.innerHTML =
                 results.length
+
                     ? results
                         .slice()
                         .reverse()
-                        .map(item =>
-                            item.sport === "cricket"
-                                ? createCricketCard(item)
-                                : createFootballCard(item)
+
+                        .map(
+                            item =>
+                                item.sport ===
+                                "cricket"
+
+                                    ? createCricketCard(
+                                        item
+                                      )
+
+                                    : createFootballCard(
+                                        item
+                                      )
                         )
+
                         .join("")
+
                     : createEmptyHTML(
                         "🏆",
                         "কোনো Result নেই",
@@ -4430,6 +5189,7 @@
 
             updateSections();
         }
+
 
 
         /* =========================================================
@@ -4464,8 +5224,10 @@
                         ? ""
                         : "none";
 
+
                 resultsSection.style.display =
                     "none";
+
 
                 return;
             }
@@ -4479,10 +5241,12 @@
                 upcomingSection.style.display =
                     "none";
 
+
                 resultsSection.style.display =
                     showResults
                         ? ""
                         : "none";
+
 
                 return;
             }
@@ -4491,9 +5255,11 @@
             upcomingSection.style.display =
                 "";
 
+
             resultsSection.style.display =
                 "";
         }
+
 
 
         /* =========================================================
@@ -4519,6 +5285,7 @@
                     .querySelectorAll(
                         "[data-filter]"
                     )
+
                     .forEach(
                         item =>
                             item.classList.remove(
@@ -4542,28 +5309,39 @@
         );
 
 
+
         /* =========================================================
            REALTIME
         ========================================================= */
 
         supabaseClient
+
             .channel(
                 "fixtures-live"
             )
+
             .on(
                 "postgres_changes",
                 {
-                    event: "*",
-                    schema: "public",
-                    table: "fixtures"
+                    event:
+                        "*",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "fixtures"
                 },
+
                 () => {
 
                     loadFixtures();
 
                 }
             )
+
             .subscribe();
+
 
 
         /* =========================================================
