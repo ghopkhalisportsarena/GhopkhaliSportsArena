@@ -945,6 +945,600 @@
 </section>
 
 <!-- =====================================================
+     POINT TABLE MANAGEMENT
+===================================================== -->
+
+<section
+    id="pointTables"
+    class="admin-section"
+>
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="section-label">
+                COMPETITION CENTER
+            </span>
+
+            <h2>
+                Point Tables
+            </h2>
+
+            <p>
+                Manage Football and Cricket tournament
+                standings.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SPORT TABS
+    ================================================= -->
+
+    <div class="point-table-admin-tabs">
+
+        <button
+            type="button"
+            class="point-table-admin-tab active"
+            data-point-sport="football"
+        >
+            ⚽ Football
+        </button>
+
+        <button
+            type="button"
+            class="point-table-admin-tab"
+            data-point-sport="cricket"
+        >
+            🏏 Cricket
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         FOOTBALL POINT TABLE
+    ================================================= -->
+
+    <div
+        id="footballPointAdmin"
+        class="point-table-admin-panel active"
+    >
+
+        <div class="point-table-admin-header">
+
+            <div>
+
+                <span class="section-label">
+                    FOOTBALL
+                </span>
+
+                <h3>
+                    Football Tournament Point Table
+                </h3>
+
+                <p>
+                    Manage football league standings,
+                    team statistics and points.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                id="newFootballPointButton"
+                class="primary-button"
+            >
+                + Add Football Team
+            </button>
+
+        </div>
+
+
+        <div class="point-table-admin-toolbar">
+
+            <select
+                id="footballTournamentFilter"
+            >
+
+                <option value="">
+                    All Tournaments
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="footballPointList"
+            class="point-table-admin-list"
+        >
+
+            <div class="loading-state">
+                Loading football standings...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CRICKET POINT TABLE
+    ================================================= -->
+
+    <div
+        id="cricketPointAdmin"
+        class="point-table-admin-panel"
+    >
+
+        <div class="point-table-admin-header">
+
+            <div>
+
+                <span class="section-label">
+                    CRICKET
+                </span>
+
+                <h3>
+                    Cricket Tournament Point Table
+                </h3>
+
+                <p>
+                    Manage cricket tournament standings,
+                    NRR and points.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                id="newCricketPointButton"
+                class="primary-button"
+            >
+                + Add Cricket Team
+            </button>
+
+        </div>
+
+
+        <div class="point-table-admin-toolbar">
+
+            <select
+                id="cricketTournamentFilter"
+            >
+
+                <option value="">
+                    All Tournaments
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="cricketPointList"
+            class="point-table-admin-list"
+        >
+
+            <div class="loading-state">
+                Loading cricket standings...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     FOOTBALL POINT TABLE MODAL
+===================================================== -->
+
+<div
+    id="footballPointModal"
+    class="modal"
+    aria-hidden="true"
+>
+
+    <div class="modal-content point-table-modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="section-label">
+                    FOOTBALL
+                </span>
+
+                <h2 id="footballPointModalTitle">
+                    Add Football Team
+                </h2>
+
+                <p>
+                    Add or edit football tournament standings.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-point-modal-close="football"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="footballPointForm">
+
+            <input
+                type="hidden"
+                id="footballPointId"
+            >
+
+
+            <div class="point-form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Tournament Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="footballPointTournament"
+                        placeholder="GSL 2026"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Team Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="footballPointTeam"
+                        placeholder="Ghopkhali United"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Team Logo URL
+                </label>
+
+                <input
+                    type="url"
+                    id="footballPointLogo"
+                    placeholder="https://..."
+                >
+
+            </div>
+
+
+            <div class="point-stats-grid">
+
+                <div class="form-group">
+                    <label>Played</label>
+                    <input
+                        type="number"
+                        id="footballPointPlayed"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Won</label>
+                    <input
+                        type="number"
+                        id="footballPointWon"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Drawn</label>
+                    <input
+                        type="number"
+                        id="footballPointDrawn"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Lost</label>
+                    <input
+                        type="number"
+                        id="footballPointLost"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Goals For</label>
+                    <input
+                        type="number"
+                        id="footballPointGF"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Goals Against</label>
+                    <input
+                        type="number"
+                        id="footballPointGA"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Points</label>
+                    <input
+                        type="number"
+                        id="footballPointPoints"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="point-form-actions">
+
+                <button
+                    type="button"
+                    class="secondary-button"
+                    data-point-modal-close="football"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Save Football Team
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CRICKET POINT TABLE MODAL
+===================================================== -->
+
+<div
+    id="cricketPointModal"
+    class="modal"
+    aria-hidden="true"
+>
+
+    <div class="modal-content point-table-modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="section-label">
+                    CRICKET
+                </span>
+
+                <h2 id="cricketPointModalTitle">
+                    Add Cricket Team
+                </h2>
+
+                <p>
+                    Add or edit cricket tournament standings.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-point-modal-close="cricket"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="cricketPointForm">
+
+            <input
+                type="hidden"
+                id="cricketPointId"
+            >
+
+
+            <div class="point-form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Tournament Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="cricketPointTournament"
+                        placeholder="Arena Champions Trophy 2027"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Team Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="cricketPointTeam"
+                        placeholder="Ghopkhali Cricket Club"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Team Logo URL
+                </label>
+
+                <input
+                    type="url"
+                    id="cricketPointLogo"
+                    placeholder="https://..."
+                >
+
+            </div>
+
+
+            <div class="point-stats-grid">
+
+                <div class="form-group">
+                    <label>Played</label>
+                    <input
+                        type="number"
+                        id="cricketPointPlayed"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Won</label>
+                    <input
+                        type="number"
+                        id="cricketPointWon"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Lost</label>
+                    <input
+                        type="number"
+                        id="cricketPointLost"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>No Result</label>
+                    <input
+                        type="number"
+                        id="cricketPointNR"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        NRR
+                    </label>
+
+                    <input
+                        type="number"
+                        id="cricketPointNRR"
+                        step="0.001"
+                        value="0"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Points
+                    </label>
+
+                    <input
+                        type="number"
+                        id="cricketPointPoints"
+                        min="0"
+                        value="0"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="point-form-actions">
+
+                <button
+                    type="button"
+                    class="secondary-button"
+                    data-point-modal-close="cricket"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Save Cricket Team
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- =====================================================
      FIXTURE MODAL
 ===================================================== -->
 
