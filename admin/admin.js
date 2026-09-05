@@ -11170,3 +11170,1900 @@ if (currentSession) {
 }
 
 });
+
+/* =========================================================
+   GSA POINT TABLE MANAGEMENT
+   Football + Cricket
+   ========================================================= */
+
+(function () {
+
+    "use strict";
+
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+    const pointSupabase =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    /* =====================================================
+       STATE
+    ===================================================== */
+
+    let footballPoints = [];
+    let cricketPoints = [];
+
+    let currentPointSport =
+        "football";
+
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    function escapePointHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    function numberValue(value) {
+
+        const number =
+            Number(value);
+
+        return Number.isFinite(number)
+            ? number
+            : 0;
+
+    }
+
+
+    function openPointModal(modal) {
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.add("active");
+
+        modal.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        document.body.classList.add(
+            "modal-open"
+        );
+
+    }
+
+
+    function closePointModal(modal) {
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove(
+            "active"
+        );
+
+        modal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        document.body.classList.remove(
+            "modal-open"
+        );
+
+    }
+
+
+    /* =====================================================
+       FOOTBALL
+    ===================================================== */
+
+    async function loadFootballPoints() {
+
+        const list =
+            document.getElementById(
+                "footballPointList"
+            );
+
+        if (!list) {
+            return;
+        }
+
+
+        list.innerHTML = `
+            <div class="loading-state">
+                Loading football standings...
+            </div>
+        `;
+
+
+        const {
+            data,
+            error
+        } =
+            await pointSupabase
+                .from("football_points")
+                .select("*")
+                .order("points", {
+                    ascending: false
+                })
+                .order("goals_for", {
+                    ascending: false
+                });
+
+
+        if (error) {
+
+            console.error(
+                "Football point table error:",
+                error
+            );
+
+            list.innerHTML = `
+                <div class="empty-state">
+                    Failed to load football standings.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        footballPoints =
+            data || [];
+
+
+        populateFootballTournaments();
+
+        renderFootballPoints();
+
+    }
+
+
+    function populateFootballTournaments() {
+
+        const select =
+            document.getElementById(
+                "footballTournamentFilter"
+            );
+
+        if (!select) {
+            return;
+        }
+
+
+        const currentValue =
+            select.value;
+
+
+        const tournaments =
+            [
+                ...new Set(
+                    footballPoints
+                        .map(
+                            item =>
+                                item.tournament
+                        )
+                        .filter(Boolean)
+                )
+            ]
+            .sort();
+
+
+        select.innerHTML = `
+            <option value="">
+                All Tournaments
+            </option>
+
+            ${
+                tournaments
+                    .map(
+                        tournament => `
+                            <option
+                                value="${escapePointHTML(tournament)}"
+                            >
+                                ${escapePointHTML(tournament)}
+                            </option>
+                        `
+                    )
+                    .join("")
+            }
+        `;
+
+
+        if (
+            tournaments.includes(
+                currentValue
+            )
+        ) {
+
+            select.value =
+                currentValue;
+
+        }
+
+    }
+
+
+    function renderFootballPoints() {
+
+        const list =
+            document.getElementById(
+                "footballPointList"
+            );
+
+        if (!list) {
+            return;
+        }
+
+
+        const filter =
+            document.getElementById(
+                "footballTournamentFilter"
+            )?.value || "";
+
+
+        let rows =
+            footballPoints;
+
+
+        if (filter) {
+
+            rows =
+                rows.filter(
+                    item =>
+                        item.tournament ===
+                        filter
+                );
+
+        }
+
+
+        rows =
+            [...rows].sort(
+                (a, b) => {
+
+                    const points =
+                        numberValue(
+                            b.points
+                        ) -
+                        numberValue(
+                            a.points
+                        );
+
+                    if (points !== 0) {
+                        return points;
+                    }
+
+
+                    const gdA =
+                        numberValue(
+                            a.goals_for
+                        ) -
+                        numberValue(
+                            a.goals_against
+                        );
+
+                    const gdB =
+                        numberValue(
+                            b.goals_for
+                        ) -
+                        numberValue(
+                            b.goals_against
+                        );
+
+
+                    if (
+                        gdB !== gdA
+                    ) {
+                        return gdB - gdA;
+                    }
+
+
+                    return (
+                        numberValue(
+                            b.goals_for
+                        ) -
+                        numberValue(
+                            a.goals_for
+                        )
+                    );
+
+                }
+            );
+
+
+        if (!rows.length) {
+
+            list.innerHTML = `
+                <div class="empty-state">
+                    No football teams found.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            rows
+                .map(
+                    (item, index) => {
+
+                        const gd =
+                            numberValue(
+                                item.goals_for
+                            ) -
+                            numberValue(
+                                item.goals_against
+                            );
+
+
+                        return `
+                            <article
+                                class="point-admin-card football-point-admin-card"
+                            >
+
+                                <div
+                                    class="point-admin-position"
+                                >
+                                    ${index + 1}
+                                </div>
+
+
+                                <div
+                                    class="point-admin-team"
+                                >
+
+                                    ${
+                                        item.team_logo
+                                            ? `
+                                                <img
+                                                    src="${escapePointHTML(item.team_logo)}"
+                                                    alt=""
+                                                    class="point-admin-logo"
+                                                    onerror="this.style.display='none'"
+                                                >
+                                            `
+                                            : `
+                                                <div
+                                                    class="point-admin-logo point-admin-logo-empty"
+                                                >
+                                                    ⚽
+                                                </div>
+                                            `
+                                    }
+
+
+                                    <div
+                                        class="point-admin-team-info"
+                                    >
+
+                                        <strong>
+                                            ${escapePointHTML(item.team_name)}
+                                        </strong>
+
+                                        <small>
+                                            ${escapePointHTML(item.tournament)}
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div
+                                    class="point-admin-stats"
+                                >
+
+                                    <span>
+                                        <b>P</b>
+                                        ${numberValue(item.played)}
+                                    </span>
+
+                                    <span>
+                                        <b>W</b>
+                                        ${numberValue(item.won)}
+                                    </span>
+
+                                    <span>
+                                        <b>D</b>
+                                        ${numberValue(item.drawn)}
+                                    </span>
+
+                                    <span>
+                                        <b>L</b>
+                                        ${numberValue(item.lost)}
+                                    </span>
+
+                                    <span>
+                                        <b>GF</b>
+                                        ${numberValue(item.goals_for)}
+                                    </span>
+
+                                    <span>
+                                        <b>GA</b>
+                                        ${numberValue(item.goals_against)}
+                                    </span>
+
+                                    <span>
+                                        <b>GD</b>
+                                        ${gd}
+                                    </span>
+
+                                    <strong
+                                        class="point-admin-points"
+                                    >
+                                        ${numberValue(item.points)}
+                                        Pts
+                                    </strong>
+
+                                </div>
+
+
+                                <div
+                                    class="point-admin-actions"
+                                >
+
+                                    <button
+                                        type="button"
+                                        data-football-point-edit="${item.id}"
+                                    >
+                                        Edit
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="danger"
+                                        data-football-point-delete="${item.id}"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </div>
+
+                            </article>
+                        `;
+
+                    }
+                )
+                .join("");
+
+    }
+
+
+    function resetFootballForm() {
+
+        document.getElementById(
+            "footballPointForm"
+        )?.reset();
+
+
+        document.getElementById(
+            "footballPointId"
+        ).value = "";
+
+
+        document.getElementById(
+            "footballPointPlayed"
+        ).value = 0;
+
+
+        document.getElementById(
+            "footballPointWon"
+        ).value = 0;
+
+
+        document.getElementById(
+            "footballPointDrawn"
+        ).value = 0;
+
+
+        document.getElementById(
+            "footballPointLost"
+        ).value = 0;
+
+
+        document.getElementById(
+            "footballPointGF"
+        ).value = 0;
+
+
+        document.getElementById(
+            "footballPointGA"
+        ).value = 0;
+
+
+        document.getElementById(
+            "footballPointPoints"
+        ).value = 0;
+
+
+        document.getElementById(
+            "footballPointModalTitle"
+        ).textContent =
+            "Add Football Team";
+
+    }
+
+
+    function editFootballPoint(item) {
+
+        document.getElementById(
+            "footballPointId"
+        ).value =
+            item.id;
+
+
+        document.getElementById(
+            "footballPointTournament"
+        ).value =
+            item.tournament || "";
+
+
+        document.getElementById(
+            "footballPointTeam"
+        ).value =
+            item.team_name || "";
+
+
+        document.getElementById(
+            "footballPointLogo"
+        ).value =
+            item.team_logo || "";
+
+
+        document.getElementById(
+            "footballPointPlayed"
+        ).value =
+            numberValue(item.played);
+
+
+        document.getElementById(
+            "footballPointWon"
+        ).value =
+            numberValue(item.won);
+
+
+        document.getElementById(
+            "footballPointDrawn"
+        ).value =
+            numberValue(item.drawn);
+
+
+        document.getElementById(
+            "footballPointLost"
+        ).value =
+            numberValue(item.lost);
+
+
+        document.getElementById(
+            "footballPointGF"
+        ).value =
+            numberValue(item.goals_for);
+
+
+        document.getElementById(
+            "footballPointGA"
+        ).value =
+            numberValue(item.goals_against);
+
+
+        document.getElementById(
+            "footballPointPoints"
+        ).value =
+            numberValue(item.points);
+
+
+        document.getElementById(
+            "footballPointModalTitle"
+        ).textContent =
+            "Edit Football Team";
+
+
+        openPointModal(
+            document.getElementById(
+                "footballPointModal"
+            )
+        );
+
+    }
+
+
+    async function saveFootballPoint(
+        event
+    ) {
+
+        event.preventDefault();
+
+
+        const id =
+            document.getElementById(
+                "footballPointId"
+            ).value.trim();
+
+
+        const payload = {
+
+            tournament:
+                document.getElementById(
+                    "footballPointTournament"
+                ).value.trim(),
+
+            team_name:
+                document.getElementById(
+                    "footballPointTeam"
+                ).value.trim(),
+
+            team_logo:
+                document.getElementById(
+                    "footballPointLogo"
+                ).value.trim() || null,
+
+            played:
+                numberValue(
+                    document.getElementById(
+                        "footballPointPlayed"
+                    ).value
+                ),
+
+            won:
+                numberValue(
+                    document.getElementById(
+                        "footballPointWon"
+                    ).value
+                ),
+
+            drawn:
+                numberValue(
+                    document.getElementById(
+                        "footballPointDrawn"
+                    ).value
+                ),
+
+            lost:
+                numberValue(
+                    document.getElementById(
+                        "footballPointLost"
+                    ).value
+                ),
+
+            goals_for:
+                numberValue(
+                    document.getElementById(
+                        "footballPointGF"
+                    ).value
+                ),
+
+            goals_against:
+                numberValue(
+                    document.getElementById(
+                        "footballPointGA"
+                    ).value
+                ),
+
+            points:
+                numberValue(
+                    document.getElementById(
+                        "footballPointPoints"
+                    ).value
+                ),
+
+            updated_at:
+                new Date().toISOString()
+
+        };
+
+
+        if (
+            !payload.tournament ||
+            !payload.team_name
+        ) {
+
+            alert(
+                "Tournament name and team name are required."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            let response;
+
+
+            if (id) {
+
+                response =
+                    await pointSupabase
+                        .from("football_points")
+                        .update(payload)
+                        .eq("id", id);
+
+            } else {
+
+                response =
+                    await pointSupabase
+                        .from("football_points")
+                        .insert([
+                            payload
+                        ]);
+
+            }
+
+
+            if (response.error) {
+                throw response.error;
+            }
+
+
+            closePointModal(
+                document.getElementById(
+                    "footballPointModal"
+                )
+            );
+
+
+            resetFootballForm();
+
+
+            await loadFootballPoints();
+
+
+            alert(
+                id
+                    ? "Football team updated successfully."
+                    : "Football team added successfully."
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Football point save error:",
+                error
+            );
+
+            alert(
+                error?.message ||
+                "Unable to save football team."
+            );
+
+        }
+
+    }
+
+
+    async function deleteFootballPoint(
+        id
+    ) {
+
+        const item =
+            footballPoints.find(
+                row =>
+                    row.id === id
+            );
+
+
+        if (!item) {
+            return;
+        }
+
+
+        const confirmed =
+            confirm(
+                `Delete "${item.team_name}" from "${item.tournament}"?`
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const {
+                error
+            } =
+                await pointSupabase
+                    .from("football_points")
+                    .delete()
+                    .eq("id", id);
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            await loadFootballPoints();
+
+
+        } catch (error) {
+
+            console.error(
+                "Football point delete error:",
+                error
+            );
+
+            alert(
+                error?.message ||
+                "Unable to delete football team."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CRICKET
+    ===================================================== */
+
+    async function loadCricketPoints() {
+
+        const list =
+            document.getElementById(
+                "cricketPointList"
+            );
+
+        if (!list) {
+            return;
+        }
+
+
+        list.innerHTML = `
+            <div class="loading-state">
+                Loading cricket standings...
+            </div>
+        `;
+
+
+        const {
+            data,
+            error
+        } =
+            await pointSupabase
+                .from("cricket_points")
+                .select("*")
+                .order("points", {
+                    ascending: false
+                })
+                .order("nrr", {
+                    ascending: false
+                });
+
+
+        if (error) {
+
+            console.error(
+                "Cricket point table error:",
+                error
+            );
+
+            list.innerHTML = `
+                <div class="empty-state">
+                    Failed to load cricket standings.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        cricketPoints =
+            data || [];
+
+
+        populateCricketTournaments();
+
+        renderCricketPoints();
+
+    }
+
+
+    function populateCricketTournaments() {
+
+        const select =
+            document.getElementById(
+                "cricketTournamentFilter"
+            );
+
+        if (!select) {
+            return;
+        }
+
+
+        const currentValue =
+            select.value;
+
+
+        const tournaments =
+            [
+                ...new Set(
+                    cricketPoints
+                        .map(
+                            item =>
+                                item.tournament
+                        )
+                        .filter(Boolean)
+                )
+            ]
+            .sort();
+
+
+        select.innerHTML = `
+            <option value="">
+                All Tournaments
+            </option>
+
+            ${
+                tournaments
+                    .map(
+                        tournament => `
+                            <option
+                                value="${escapePointHTML(tournament)}"
+                            >
+                                ${escapePointHTML(tournament)}
+                            </option>
+                        `
+                    )
+                    .join("")
+            }
+        `;
+
+
+        if (
+            tournaments.includes(
+                currentValue
+            )
+        ) {
+
+            select.value =
+                currentValue;
+
+        }
+
+    }
+
+
+    function renderCricketPoints() {
+
+        const list =
+            document.getElementById(
+                "cricketPointList"
+            );
+
+        if (!list) {
+            return;
+        }
+
+
+        const filter =
+            document.getElementById(
+                "cricketTournamentFilter"
+            )?.value || "";
+
+
+        let rows =
+            cricketPoints;
+
+
+        if (filter) {
+
+            rows =
+                rows.filter(
+                    item =>
+                        item.tournament ===
+                        filter
+                );
+
+        }
+
+
+        rows =
+            [...rows].sort(
+                (a, b) => {
+
+                    const points =
+                        numberValue(
+                            b.points
+                        ) -
+                        numberValue(
+                            a.points
+                        );
+
+                    if (points !== 0) {
+                        return points;
+                    }
+
+
+                    return (
+                        Number(b.nrr || 0) -
+                        Number(a.nrr || 0)
+                    );
+
+                }
+            );
+
+
+        if (!rows.length) {
+
+            list.innerHTML = `
+                <div class="empty-state">
+                    No cricket teams found.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            rows
+                .map(
+                    (item, index) => `
+
+                        <article
+                            class="point-admin-card cricket-point-admin-card"
+                        >
+
+                            <div
+                                class="point-admin-position"
+                            >
+                                ${index + 1}
+                            </div>
+
+
+                            <div
+                                class="point-admin-team"
+                            >
+
+                                ${
+                                    item.team_logo
+                                        ? `
+                                            <img
+                                                src="${escapePointHTML(item.team_logo)}"
+                                                alt=""
+                                                class="point-admin-logo"
+                                                onerror="this.style.display='none'"
+                                            >
+                                        `
+                                        : `
+                                            <div
+                                                class="point-admin-logo point-admin-logo-empty"
+                                            >
+                                                🏏
+                                            </div>
+                                        `
+                                }
+
+
+                                <div
+                                    class="point-admin-team-info"
+                                >
+
+                                    <strong>
+                                        ${escapePointHTML(item.team_name)}
+                                    </strong>
+
+                                    <small>
+                                        ${escapePointHTML(item.tournament)}
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="point-admin-stats"
+                            >
+
+                                <span>
+                                    <b>P</b>
+                                    ${numberValue(item.played)}
+                                </span>
+
+                                <span>
+                                    <b>W</b>
+                                    ${numberValue(item.won)}
+                                </span>
+
+                                <span>
+                                    <b>L</b>
+                                    ${numberValue(item.lost)}
+                                </span>
+
+                                <span>
+                                    <b>NR</b>
+                                    ${numberValue(item.no_result)}
+                                </span>
+
+                                <span>
+                                    <b>NRR</b>
+                                    ${Number(item.nrr || 0).toFixed(3)}
+                                </span>
+
+                                <strong
+                                    class="point-admin-points"
+                                >
+                                    ${numberValue(item.points)}
+                                    Pts
+                                </strong>
+
+                            </div>
+
+
+                            <div
+                                class="point-admin-actions"
+                            >
+
+                                <button
+                                    type="button"
+                                    data-cricket-point-edit="${item.id}"
+                                >
+                                    Edit
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="danger"
+                                    data-cricket-point-delete="${item.id}"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    `
+                )
+                .join("");
+
+    }
+
+
+    function resetCricketForm() {
+
+        document.getElementById(
+            "cricketPointForm"
+        )?.reset();
+
+
+        document.getElementById(
+            "cricketPointId"
+        ).value = "";
+
+
+        document.getElementById(
+            "cricketPointPlayed"
+        ).value = 0;
+
+
+        document.getElementById(
+            "cricketPointWon"
+        ).value = 0;
+
+
+        document.getElementById(
+            "cricketPointLost"
+        ).value = 0;
+
+
+        document.getElementById(
+            "cricketPointNR"
+        ).value = 0;
+
+
+        document.getElementById(
+            "cricketPointNRR"
+        ).value = 0;
+
+
+        document.getElementById(
+            "cricketPointPoints"
+        ).value = 0;
+
+
+        document.getElementById(
+            "cricketPointModalTitle"
+        ).textContent =
+            "Add Cricket Team";
+
+    }
+
+
+    function editCricketPoint(item) {
+
+        document.getElementById(
+            "cricketPointId"
+        ).value =
+            item.id;
+
+
+        document.getElementById(
+            "cricketPointTournament"
+        ).value =
+            item.tournament || "";
+
+
+        document.getElementById(
+            "cricketPointTeam"
+        ).value =
+            item.team_name || "";
+
+
+        document.getElementById(
+            "cricketPointLogo"
+        ).value =
+            item.team_logo || "";
+
+
+        document.getElementById(
+            "cricketPointPlayed"
+        ).value =
+            numberValue(item.played);
+
+
+        document.getElementById(
+            "cricketPointWon"
+        ).value =
+            numberValue(item.won);
+
+
+        document.getElementById(
+            "cricketPointLost"
+        ).value =
+            numberValue(item.lost);
+
+
+        document.getElementById(
+            "cricketPointNR"
+        ).value =
+            numberValue(item.no_result);
+
+
+        document.getElementById(
+            "cricketPointNRR"
+        ).value =
+            Number(
+                item.nrr || 0
+            ).toFixed(3);
+
+
+        document.getElementById(
+            "cricketPointPoints"
+        ).value =
+            numberValue(item.points);
+
+
+        document.getElementById(
+            "cricketPointModalTitle"
+        ).textContent =
+            "Edit Cricket Team";
+
+
+        openPointModal(
+            document.getElementById(
+                "cricketPointModal"
+            )
+        );
+
+    }
+
+
+    async function saveCricketPoint(
+        event
+    ) {
+
+        event.preventDefault();
+
+
+        const id =
+            document.getElementById(
+                "cricketPointId"
+            ).value.trim();
+
+
+        const payload = {
+
+            tournament:
+                document.getElementById(
+                    "cricketPointTournament"
+                ).value.trim(),
+
+            team_name:
+                document.getElementById(
+                    "cricketPointTeam"
+                ).value.trim(),
+
+            team_logo:
+                document.getElementById(
+                    "cricketPointLogo"
+                ).value.trim() || null,
+
+            played:
+                numberValue(
+                    document.getElementById(
+                        "cricketPointPlayed"
+                    ).value
+                ),
+
+            won:
+                numberValue(
+                    document.getElementById(
+                        "cricketPointWon"
+                    ).value
+                ),
+
+            lost:
+                numberValue(
+                    document.getElementById(
+                        "cricketPointLost"
+                    ).value
+                ),
+
+            no_result:
+                numberValue(
+                    document.getElementById(
+                        "cricketPointNR"
+                    ).value
+                ),
+
+            nrr:
+                Number(
+                    document.getElementById(
+                        "cricketPointNRR"
+                    ).value
+                ) || 0,
+
+            points:
+                numberValue(
+                    document.getElementById(
+                        "cricketPointPoints"
+                    ).value
+                ),
+
+            updated_at:
+                new Date().toISOString()
+
+        };
+
+
+        if (
+            !payload.tournament ||
+            !payload.team_name
+        ) {
+
+            alert(
+                "Tournament name and team name are required."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            let response;
+
+
+            if (id) {
+
+                response =
+                    await pointSupabase
+                        .from("cricket_points")
+                        .update(payload)
+                        .eq("id", id);
+
+            } else {
+
+                response =
+                    await pointSupabase
+                        .from("cricket_points")
+                        .insert([
+                            payload
+                        ]);
+
+            }
+
+
+            if (response.error) {
+                throw response.error;
+            }
+
+
+            closePointModal(
+                document.getElementById(
+                    "cricketPointModal"
+                )
+            );
+
+
+            resetCricketForm();
+
+
+            await loadCricketPoints();
+
+
+            alert(
+                id
+                    ? "Cricket team updated successfully."
+                    : "Cricket team added successfully."
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Cricket point save error:",
+                error
+            );
+
+            alert(
+                error?.message ||
+                "Unable to save cricket team."
+            );
+
+        }
+
+    }
+
+
+    async function deleteCricketPoint(
+        id
+    ) {
+
+        const item =
+            cricketPoints.find(
+                row =>
+                    row.id === id
+            );
+
+
+        if (!item) {
+            return;
+        }
+
+
+        const confirmed =
+            confirm(
+                `Delete "${item.team_name}" from "${item.tournament}"?`
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const {
+                error
+            } =
+                await pointSupabase
+                    .from("cricket_points")
+                    .delete()
+                    .eq("id", id);
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            await loadCricketPoints();
+
+
+        } catch (error) {
+
+            console.error(
+                "Cricket point delete error:",
+                error
+            );
+
+            alert(
+                error?.message ||
+                "Unable to delete cricket team."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SPORT TABS
+    ===================================================== */
+
+    document
+        .querySelectorAll(
+            "[data-point-sport]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            "[data-point-sport]"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                        );
+
+
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    currentPointSport =
+                        button.dataset.pointSport;
+
+
+                    document
+                        .getElementById(
+                            "footballPointAdmin"
+                        )
+                        ?.classList.toggle(
+                            "active",
+                            currentPointSport ===
+                            "football"
+                        );
+
+
+                    document
+                        .getElementById(
+                            "cricketPointAdmin"
+                        )
+                        ?.classList.toggle(
+                            "active",
+                            currentPointSport ===
+                            "cricket"
+                        );
+
+                }
+            );
+
+        });
+
+
+    /* =====================================================
+       NEW FOOTBALL
+    ===================================================== */
+
+    document
+        .getElementById(
+            "newFootballPointButton"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                resetFootballForm();
+
+                openPointModal(
+                    document.getElementById(
+                        "footballPointModal"
+                    )
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       NEW CRICKET
+    ===================================================== */
+
+    document
+        .getElementById(
+            "newCricketPointButton"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                resetCricketForm();
+
+                openPointModal(
+                    document.getElementById(
+                        "cricketPointModal"
+                    )
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       FORMS
+    ===================================================== */
+
+    document
+        .getElementById(
+            "footballPointForm"
+        )
+        ?.addEventListener(
+            "submit",
+            saveFootballPoint
+        );
+
+
+    document
+        .getElementById(
+            "cricketPointForm"
+        )
+        ?.addEventListener(
+            "submit",
+            saveCricketPoint
+        );
+
+
+    /* =====================================================
+       CLOSE BUTTONS
+    ===================================================== */
+
+    document
+        .querySelectorAll(
+            "[data-point-modal-close]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const sport =
+                        button.dataset
+                            .pointModalClose;
+
+
+                    closePointModal(
+                        document.getElementById(
+                            sport === "football"
+                                ? "footballPointModal"
+                                : "cricketPointModal"
+                        )
+                    );
+
+                }
+            );
+
+        });
+
+
+    /* =====================================================
+       CLICK OUTSIDE MODAL
+    ===================================================== */
+
+    [
+        "footballPointModal",
+        "cricketPointModal"
+    ]
+        .forEach(id => {
+
+            document
+                .getElementById(id)
+                ?.addEventListener(
+                    "click",
+                    event => {
+
+                        if (
+                            event.target.id ===
+                            id
+                        ) {
+
+                            closePointModal(
+                                event.currentTarget
+                            );
+
+                        }
+
+                    }
+                );
+
+        });
+
+
+    /* =====================================================
+       FOOTBALL ACTIONS
+    ===================================================== */
+
+    document
+        .getElementById(
+            "footballPointList"
+        )
+        ?.addEventListener(
+            "click",
+            event => {
+
+                const editButton =
+                    event.target.closest(
+                        "[data-football-point-edit]"
+                    );
+
+
+                if (editButton) {
+
+                    const item =
+                        footballPoints.find(
+                            row =>
+                                row.id ===
+                                editButton.dataset
+                                    .footballPointEdit
+                        );
+
+
+                    if (item) {
+
+                        editFootballPoint(
+                            item
+                        );
+
+                    }
+
+                    return;
+
+                }
+
+
+                const deleteButton =
+                    event.target.closest(
+                        "[data-football-point-delete]"
+                    );
+
+
+                if (deleteButton) {
+
+                    deleteFootballPoint(
+                        deleteButton.dataset
+                            .footballPointDelete
+                    );
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       CRICKET ACTIONS
+    ===================================================== */
+
+    document
+        .getElementById(
+            "cricketPointList"
+        )
+        ?.addEventListener(
+            "click",
+            event => {
+
+                const editButton =
+                    event.target.closest(
+                        "[data-cricket-point-edit]"
+                    );
+
+
+                if (editButton) {
+
+                    const item =
+                        cricketPoints.find(
+                            row =>
+                                row.id ===
+                                editButton.dataset
+                                    .cricketPointEdit
+                        );
+
+
+                    if (item) {
+
+                        editCricketPoint(
+                            item
+                        );
+
+                    }
+
+                    return;
+
+                }
+
+
+                const deleteButton =
+                    event.target.closest(
+                        "[data-cricket-point-delete]"
+                    );
+
+
+                if (deleteButton) {
+
+                    deleteCricketPoint(
+                        deleteButton.dataset
+                            .cricketPointDelete
+                    );
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       FILTERS
+    ===================================================== */
+
+    document
+        .getElementById(
+            "footballTournamentFilter"
+        )
+        ?.addEventListener(
+            "change",
+            renderFootballPoints
+        );
+
+
+    document
+        .getElementById(
+            "cricketTournamentFilter"
+        )
+        ?.addEventListener(
+            "change",
+            renderCricketPoints
+        );
+
+
+    /* =====================================================
+       INITIAL LOAD
+    ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+            loadFootballPoints();
+
+            loadCricketPoints();
+
+        }
+    );
+
+
+})();
