@@ -3469,6 +3469,152 @@
             }
         }
 
+/* =====================================================
+   POINT TABLE LINKS
+===================================================== */
+
+.point-table-links {
+
+    width: min(1100px, 92%);
+
+    margin:
+        25px auto 35px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 14px;
+}
+
+
+.point-table-link {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    text-decoration: none;
+
+    color: inherit;
+
+    background:
+        rgba(255,255,255,.85);
+
+    border:
+        1px solid rgba(0,0,0,.08);
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+}
+
+
+.point-table-link:hover {
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 18px 40px
+        rgba(0,0,0,.12);
+}
+
+
+.point-table-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 14px;
+
+    font-size: 23px;
+}
+
+
+.football-point-link
+.point-table-icon {
+
+    background:
+        #e9f8f0;
+}
+
+
+.cricket-point-link
+.point-table-icon {
+
+    background:
+        #edf4ff;
+}
+
+
+.point-table-text {
+
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.point-table-text strong {
+
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 900;
+}
+
+
+.point-table-text small {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: #667085;
+
+    font-size: 10px;
+}
+
+
+.point-table-arrow {
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+
+@media(max-width:700px) {
+
+    .point-table-links {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
     </style>
 
 </head>
@@ -3640,6 +3786,70 @@
     </div>
 
 
+<!-- =============================================
+     TOURNAMENT POINT TABLE
+============================================= -->
+
+<div class="point-table-links">
+
+    <a
+        href="point-table.html?sport=football"
+        class="point-table-link football-point-link"
+    >
+
+        <span class="point-table-icon">
+            ⚽
+        </span>
+
+        <span class="point-table-text">
+
+            <strong>
+                Football Tournaments
+                Point Table
+            </strong>
+
+            <small>
+                Football League Standings
+            </small>
+
+        </span>
+
+        <span class="point-table-arrow">
+            →
+        </span>
+
+    </a>
+
+
+    <a
+        href="point-table.html?sport=cricket"
+        class="point-table-link cricket-point-link"
+    >
+
+        <span class="point-table-icon">
+            🏏
+        </span>
+
+        <span class="point-table-text">
+
+            <strong>
+                Cricket Tournament
+                Point Table
+            </strong>
+
+            <small>
+                Cricket Tournament Standings
+            </small>
+
+        </span>
+
+        <span class="point-table-arrow">
+            →
+        </span>
+
+    </a>
+
+</div>
 
     <!-- =========================================================
          MAIN
