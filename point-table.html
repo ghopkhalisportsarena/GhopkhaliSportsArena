@@ -1193,7 +1193,49 @@ async function init() {
 
     setupSportButtons();
 
-    await loadFootball();
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const requestedSport =
+        params.get("sport");
+
+
+    if (
+        requestedSport === "cricket"
+    ) {
+
+        currentSport = "cricket";
+
+
+        document
+            .querySelectorAll(
+                ".sport-btn"
+            )
+            .forEach(button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.sport ===
+                    "cricket"
+                );
+
+            });
+
+
+        await loadCricket();
+
+    } else {
+
+        currentSport = "football";
+
+        await loadFootball();
+
+    }
+
 
     renderTournamentSelector();
 
