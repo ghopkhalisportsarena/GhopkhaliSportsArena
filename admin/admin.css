@@ -4706,22 +4706,24 @@ select:focus-visible {
     position: relative;
     isolation: isolate;
     overflow: hidden;
+
     margin: 24px 0 30px;
-    padding: 32px 34px;
-    border-radius: 30px;
+    padding: 30px;
+
+    border-radius: 32px;
 
     background:
         linear-gradient(
             135deg,
             #1d1d1f 0%,
-            #252529 48%,
+            #252528 45%,
             #101012 100%
         );
 
     border: 1px solid rgba(255,255,255,.10);
 
     box-shadow:
-        0 25px 70px rgba(0,0,0,.18),
+        0 25px 70px rgba(0,0,0,.20),
         inset 0 1px 0 rgba(255,255,255,.08);
 
     color: #fff;
@@ -4731,14 +4733,18 @@ select:focus-visible {
 }
 
 
-/* Ambient Glow */
+/* =====================================================
+   BACKGROUND GLOW
+===================================================== */
 
 .admin-access-glow {
     position: absolute;
-    width: 360px;
-    height: 360px;
-    right: -150px;
-    top: -190px;
+
+    width: 420px;
+    height: 420px;
+
+    right: -170px;
+    top: -220px;
 
     border-radius: 50%;
 
@@ -4746,31 +4752,33 @@ select:focus-visible {
         radial-gradient(
             circle,
             rgba(0,113,227,.34),
-            rgba(0,113,227,.08) 42%,
+            rgba(0,113,227,.10) 40%,
             transparent 72%
         );
 
-    filter: blur(4px);
+    filter: blur(5px);
 
-    z-index: -1;
+    z-index: -2;
 
     animation:
         adminGlowMove 7s ease-in-out infinite;
 }
 
 
-/* Second Glow */
+/* =====================================================
+   SECOND LIGHT
+===================================================== */
 
 .admin-access-card::before {
     content: "";
 
     position: absolute;
 
-    width: 240px;
-    height: 240px;
+    width: 280px;
+    height: 280px;
 
-    left: -120px;
-    bottom: -150px;
+    left: -140px;
+    bottom: -170px;
 
     border-radius: 50%;
 
@@ -4781,14 +4789,16 @@ select:focus-visible {
             transparent 70%
         );
 
-    z-index: -1;
+    z-index: -2;
 
     animation:
-        adminGlowMoveTwo 8s ease-in-out infinite;
+        adminGlowTwo 8s ease-in-out infinite;
 }
 
 
-/* Moving Light */
+/* =====================================================
+   LIGHT SWEEP
+===================================================== */
 
 .admin-access-card::after {
     content: "";
@@ -4805,7 +4815,7 @@ select:focus-visible {
         linear-gradient(
             110deg,
             transparent,
-            rgba(255,255,255,.09),
+            rgba(255,255,255,.08),
             transparent
         );
 
@@ -4818,24 +4828,190 @@ select:focus-visible {
 }
 
 
-/* Content */
+/* =====================================================
+   CONTENT
+===================================================== */
 
 .admin-access-content {
     position: relative;
     z-index: 5;
+
+    display: flex;
+    align-items: center;
+
+    gap: 30px;
 }
 
 
-/* Badge */
+/* =====================================================
+   PROFILE PHOTO AREA
+===================================================== */
 
-.admin-access-badge {
+.admin-profile-photo {
+    position: relative;
+
+    width: 125px;
+    height: 125px;
+
+    flex: 0 0 125px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =====================================================
+   PHOTO
+===================================================== */
+
+.admin-profile-image {
+    position: relative;
+    z-index: 5;
+
+    width: 88px;
+    height: 88px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 3px solid rgba(255,255,255,.95);
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.40),
+        0 0 35px rgba(0,113,227,.22);
+
+    animation:
+        adminPhotoFloat 5s ease-in-out infinite;
+}
+
+
+/* =====================================================
+   PREMIUM ANIMATED RING
+===================================================== */
+
+.admin-photo-ring {
+    position: absolute;
+
+    width: 116px;
+    height: 116px;
+
+    border-radius: 50%;
+
+    background:
+        conic-gradient(
+            from 0deg,
+            #0071e3,
+            #5ac8fa,
+            #ffffff,
+            #0071e3,
+            #34c759,
+            #0071e3
+        );
+
+    animation:
+        adminRingRotate 4s linear infinite;
+
+    box-shadow:
+        0 0 22px rgba(0,113,227,.35);
+
+    z-index: 1;
+}
+
+
+/* =====================================================
+   INNER DARK MASK
+===================================================== */
+
+.admin-photo-ring::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 4px;
+
+    border-radius: 50%;
+
+    background: #1d1d1f;
+}
+
+
+/* =====================================================
+   SECOND RING
+===================================================== */
+
+.admin-photo-ring.ring-two {
+    width: 125px;
+    height: 125px;
+
+    background:
+        conic-gradient(
+            from 180deg,
+            transparent,
+            rgba(255,255,255,.55),
+            transparent,
+            rgba(0,113,227,.45),
+            transparent
+        );
+
+    animation:
+        adminRingRotateReverse 7s linear infinite;
+
+    opacity: .75;
+
+    z-index: 0;
+}
+
+
+/* =====================================================
+   PHOTO GLOW
+===================================================== */
+
+.admin-photo-glow {
+    position: absolute;
+
+    width: 105px;
+    height: 105px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,113,227,.38),
+            transparent 70%
+        );
+
+    filter: blur(8px);
+
+    animation:
+        adminPhotoGlow 3s ease-in-out infinite;
+
+    z-index: -1;
+}
+
+
+/* =====================================================
+   TEXT AREA
+===================================================== */
+
+.admin-access-text {
+    min-width: 0;
+}
+
+
+/* =====================================================
+   LABEL
+===================================================== */
+
+.admin-access-label {
     display: inline-flex;
     align-items: center;
-    gap: 9px;
 
-    margin-bottom: 18px;
+    margin-bottom: 9px;
 
-    padding: 7px 12px;
+    padding: 6px 11px;
 
     border-radius: 999px;
 
@@ -4846,73 +5022,64 @@ select:focus-visible {
         1px solid rgba(255,255,255,.10);
 
     color:
-        rgba(255,255,255,.65);
+        rgba(255,255,255,.55);
 
-    font-size: 10px;
+    font-size: 9px;
+
     font-weight: 800;
 
-    letter-spacing: .12em;
-
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    letter-spacing: .13em;
 }
 
 
-/* Status Dot */
+/* =====================================================
+   TITLE
+===================================================== */
 
-.admin-access-dot {
-    width: 7px;
-    height: 7px;
+.admin-access-text h2 {
+    margin: 0;
 
-    border-radius: 50%;
+    font-size: clamp(
+        25px,
+        4vw,
+        38px
+    );
 
-    background: #34c759;
-
-    box-shadow:
-        0 0 0 5px rgba(52,199,89,.10),
-        0 0 18px rgba(52,199,89,.55);
-
-    animation:
-        adminDotPulse 2s ease-in-out infinite;
-}
-
-
-/* Main Title */
-
-.admin-access-title {
-    font-size: clamp(25px, 4vw, 38px);
+    line-height: 1.15;
 
     font-weight: 800;
 
     letter-spacing: -.045em;
 
-    line-height: 1.1;
-
     color: #ffffff;
 }
 
 
-/* Subtitle */
+.admin-access-text h2 span {
+    display: block;
 
-.admin-access-subtitle {
-    margin-top: 4px;
+    margin-top: 3px;
 
-    font-size: 16px;
+    font-size: .58em;
 
     font-weight: 600;
 
+    letter-spacing: -.02em;
+
     color:
-        rgba(255,255,255,.48);
+        rgba(255,255,255,.50);
 }
 
 
-/* Divider */
+/* =====================================================
+   DIVIDER
+===================================================== */
 
 .admin-access-divider {
-    width: 52px;
+    width: 55px;
     height: 2px;
 
-    margin: 20px 0;
+    margin: 17px 0 14px;
 
     border-radius: 999px;
 
@@ -4920,51 +5087,60 @@ select:focus-visible {
         linear-gradient(
             90deg,
             #0071e3,
-            rgba(0,113,227,.15)
+            #5ac8fa,
+            transparent
         );
 
     box-shadow:
-        0 0 15px rgba(0,113,227,.35);
+        0 0 16px rgba(0,113,227,.40);
+
+    animation:
+        adminDividerPulse 3s ease-in-out infinite;
 }
 
 
-/* Role */
+/* =====================================================
+   ROLE
+===================================================== */
 
 .admin-access-role {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-
-.admin-access-role strong {
-    font-size: 13px;
-
-    font-weight: 700;
+    margin: 0;
 
     color:
-        rgba(255,255,255,.90);
+        rgba(255,255,255,.82);
+
+    font-size: 13px;
+
+    font-weight: 650;
 
     letter-spacing: -.01em;
 }
 
 
-.admin-access-role span {
-    font-size: 12px;
+/* =====================================================
+   ORGANIZATION
+===================================================== */
+
+.admin-access-organization {
+    margin: 5px 0 0;
 
     color:
-        rgba(255,255,255,.42);
+        rgba(255,255,255,.40);
+
+    font-size: 12px;
 
     font-weight: 500;
 }
 
 
-/* Decorative Orbits */
+/* =====================================================
+   ORBIT DECORATION
+===================================================== */
 
 .admin-access-orbit {
     position: absolute;
 
-    border: 1px solid rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.06);
 
     border-radius: 50%;
 
@@ -4976,11 +5152,11 @@ select:focus-visible {
     width: 230px;
     height: 230px;
 
-    right: 35px;
-    top: -90px;
+    right: 30px;
+    top: -105px;
 
     animation:
-        adminOrbitOne 12s linear infinite;
+        adminOrbitOne 13s linear infinite;
 }
 
 
@@ -4988,18 +5164,20 @@ select:focus-visible {
     width: 150px;
     height: 150px;
 
-    right: 75px;
-    top: -50px;
+    right: 70px;
+    top: -65px;
 
     border-color:
-        rgba(0,113,227,.14);
+        rgba(0,113,227,.13);
 
     animation:
         adminOrbitTwo 8s linear infinite reverse;
 }
 
 
-/* Animations */
+/* =====================================================
+   ANIMATIONS
+===================================================== */
 
 @keyframes adminCardFloat {
 
@@ -5019,31 +5197,35 @@ select:focus-visible {
 
     0%,
     100% {
-        transform: scale(1)
-                   translate(0,0);
+        transform:
+            scale(1)
+            translate(0,0);
+
         opacity: .65;
     }
 
     50% {
-        transform: scale(1.18)
-                   translate(-20px,20px);
+        transform:
+            scale(1.18)
+            translate(-18px,18px);
+
         opacity: 1;
     }
 
 }
 
 
-@keyframes adminGlowMoveTwo {
+@keyframes adminGlowTwo {
 
     0%,
     100% {
         transform: scale(1);
-        opacity: .45;
+        opacity: .40;
     }
 
     50% {
         transform: scale(1.25);
-        opacity: .8;
+        opacity: .75;
     }
 
 }
@@ -5063,16 +5245,72 @@ select:focus-visible {
 }
 
 
-@keyframes adminDotPulse {
+@keyframes adminRingRotate {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+@keyframes adminRingRotateReverse {
+
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+
+}
+
+
+@keyframes adminPhotoFloat {
 
     0%,
     100% {
-        transform: scale(1);
-        opacity: .8;
+        transform: translateY(0);
     }
 
     50% {
-        transform: scale(1.25);
+        transform: translateY(-3px);
+    }
+
+}
+
+
+@keyframes adminPhotoGlow {
+
+    0%,
+    100% {
+        transform: scale(.90);
+        opacity: .55;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+
+}
+
+
+@keyframes adminDividerPulse {
+
+    0%,
+    100% {
+        width: 55px;
+        opacity: .75;
+    }
+
+    50% {
+        width: 85px;
         opacity: 1;
     }
 
@@ -5105,51 +5343,90 @@ select:focus-visible {
 }
 
 
-/* Hover */
+/* =====================================================
+   HOVER
+===================================================== */
 
 .admin-access-card:hover {
+
     transform: translateY(-5px);
 
     box-shadow:
-        0 30px 80px rgba(0,0,0,.23),
-        inset 0 1px 0 rgba(255,255,255,.10);
+        0 30px 80px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.11);
 
-    animation-play-state: paused;
 }
 
 
-/* Mobile */
+/* =====================================================
+   MOBILE
+===================================================== */
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
 
     .admin-access-card {
-        margin: 18px 0 24px;
-        padding: 26px 22px;
-        border-radius: 25px;
+        padding: 24px 20px;
+        border-radius: 26px;
     }
 
-    .admin-access-title {
-        font-size: 27px;
+
+    .admin-access-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        gap: 20px;
     }
 
-    .admin-access-subtitle {
-        font-size: 14px;
+
+    .admin-profile-photo {
+        width: 115px;
+        height: 115px;
     }
 
-    .admin-access-role strong {
+
+    .admin-profile-image {
+        width: 82px;
+        height: 82px;
+    }
+
+
+    .admin-photo-ring {
+        width: 106px;
+        height: 106px;
+    }
+
+
+    .admin-photo-ring.ring-two {
+        width: 115px;
+        height: 115px;
+    }
+
+
+    .admin-access-text h2 {
+        font-size: 28px;
+    }
+
+
+    .admin-access-divider {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+    .admin-access-role {
         font-size: 12px;
+        line-height: 1.5;
     }
 
-    .admin-access-role span {
-        font-size: 11px;
-    }
 
     .orbit-one {
-        right: -80px;
+        right: -100px;
     }
 
+
     .orbit-two {
-        right: -35px;
+        right: -55px;
     }
 
 }
