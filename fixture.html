@@ -1,81 +1,247 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     >
+
+    <title>Fixtures & Results | Ghopkhali Sports Arena</title>
 
     <meta
         name="description"
-        content="Ghopkhali Sports Arena — Football and Cricket Fixtures & Results"
+        content="Ghopkhali Sports Arena — Football & Cricket Fixtures and Results"
     >
-
-    <title>
-        Fixtures & Results | Ghopkhali Sports Arena
-    </title>
-
-
-    <!-- =================================================
-         SUPABASE
-    ================================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
-    <!-- =================================================
-         FONT
-    ================================================== -->
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-
-    <!-- =================================================
-         PAGE CSS
-    ================================================== -->
-
     <style>
 
+        /* =========================================================
+           GHOPKHALI SPORTS ARENA
+           PREMIUM INTERNATIONAL SPORTS UI
+        ========================================================= */
+
+        :root {
+
+            --bg:
+                #05070b;
+
+            --bg-soft:
+                #0a0e15;
+
+            --surface:
+                rgba(255,255,255,.055);
+
+            --surface-strong:
+                rgba(255,255,255,.085);
+
+            --surface-dark:
+                rgba(0,0,0,.28);
+
+            --border:
+                rgba(255,255,255,.105);
+
+            --border-light:
+                rgba(255,255,255,.16);
+
+            --text:
+                #f7f8fa;
+
+            --muted:
+                #9ba3b1;
+
+            --muted-2:
+                #707988;
+
+            --green:
+                #22c55e;
+
+            --green-light:
+                #4ade80;
+
+            --green-dark:
+                #15803d;
+
+            --blue:
+                #3b82f6;
+
+            --purple:
+                #8b5cf6;
+
+            --purple-light:
+                #a78bfa;
+
+            --orange:
+                #f59e0b;
+
+            --red:
+                #ef4444;
+
+            --radius-xl:
+                30px;
+
+            --radius-lg:
+                24px;
+
+            --radius-md:
+                18px;
+
+            --radius-sm:
+                13px;
+
+            --shadow:
+                0 30px 80px rgba(0,0,0,.42);
+
+            --ease:
+                cubic-bezier(.2,.75,.25,1);
+        }
+
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
+
 
         html {
             scroll-behavior: smooth;
         }
 
+
         body {
-            font-family: "Inter", -apple-system, BlinkMacSystemFont,
-                "Segoe UI", sans-serif;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #f8f8fa 0%,
-                    #ffffff 45%,
-                    #f5f5f7 100%
-                );
-
-            color: #1d1d1f;
 
             min-height: 100vh;
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 12% 8%,
+                    rgba(34,197,94,.10),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 14%,
+                    rgba(139,92,246,.12),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 50% 90%,
+                    rgba(59,130,246,.08),
+                    transparent 34%
+                ),
+                linear-gradient(
+                    180deg,
+                    #05070b 0%,
+                    #070a10 48%,
+                    #040609 100%
+                );
+
+            overflow-x: hidden;
         }
+
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            opacity: .22;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                );
+
+            background-size:
+                70px 70px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 85%
+                );
+
+            z-index: -3;
+        }
+
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            width: 500px;
+            height: 500px;
+
+            top: -200px;
+            left: -180px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(34,197,94,.12),
+                    transparent 68%
+                );
+
+            filter: blur(20px);
+
+            animation:
+                ambientFloat 13s ease-in-out infinite alternate;
+
+            pointer-events: none;
+
+            z-index: -2;
+        }
+
+
+        @keyframes ambientFloat {
+
+            0% {
+                transform:
+                    translate3d(0,0,0)
+                    scale(1);
+            }
+
+            100% {
+                transform:
+                    translate3d(160px,100px,0)
+                    scale(1.2);
+            }
+        }
+
 
         a {
             color: inherit;
@@ -83,274 +249,629 @@
         }
 
 
-        /* =================================================
+        button {
+            font: inherit;
+        }
+
+
+        /* =========================================================
            NAVBAR
-        ================================================== */
+        ========================================================= */
 
-        .top-nav {
+        .navbar {
+
             position: sticky;
-            top: 0;
-            z-index: 1000;
 
-            height: 68px;
+            top: 0;
+
+            z-index: 100;
+
+            width: 100%;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.08);
+
+            background:
+                rgba(5,7,11,.72);
+
+            backdrop-filter:
+                blur(24px)
+                saturate(150%);
+
+            -webkit-backdrop-filter:
+                blur(24px)
+                saturate(150%);
+        }
+
+
+        .nav-inner {
+
+            width: min(1240px, calc(100% - 36px));
+
+            min-height: 76px;
+
+            margin: auto;
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
-            padding: 0 6%;
-
-            background: rgba(255,255,255,0.82);
-
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
-
-            border-bottom: 1px solid rgba(0,0,0,0.06);
+            gap: 20px;
         }
+
 
         .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
 
-            font-size: 15px;
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
             font-weight: 800;
 
-            letter-spacing: -0.3px;
+            letter-spacing: -.025em;
         }
+
 
         .brand-mark {
-            width: 34px;
-            height: 34px;
 
-            border-radius: 10px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #111;
-            color: #fff;
-
-            font-size: 15px;
-        }
-
-        .nav-back {
-            font-size: 13px;
-            font-weight: 600;
-
-            color: #555;
-
-            transition: 0.2s ease;
-        }
-
-        .nav-back:hover {
-            color: #111;
-        }
-
-
-        /* =================================================
-           HERO
-        ================================================== */
-
-        .hero {
             position: relative;
 
+            width: 44px;
+            height: 44px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 14px;
+
+            font-size: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(34,197,94,.25),
+                    rgba(34,197,94,.04)
+                );
+
+            border:
+                1px solid rgba(74,222,128,.28);
+
+            box-shadow:
+                0 0 30px rgba(34,197,94,.12);
+
             overflow: hidden;
-
-            padding:
-                85px 6%
-                65px;
-
-            text-align: center;
         }
 
-        .hero::before {
+
+        .brand-mark::before {
+
             content: "";
 
             position: absolute;
 
-            width: 500px;
-            height: 500px;
-
-            left: 50%;
-            top: -280px;
-
-            transform: translateX(-50%);
+            inset: -50%;
 
             background:
-                radial-gradient(
-                    circle,
-                    rgba(0,0,0,0.08),
-                    transparent 70%
+                conic-gradient(
+                    transparent,
+                    rgba(255,255,255,.35),
+                    transparent 25%
                 );
 
-            pointer-events: none;
+            animation:
+                rotateGlow 5s linear infinite;
         }
 
-        .hero-label {
+
+        .brand-mark span {
+
             position: relative;
+
+            z-index: 1;
+        }
+
+
+        @keyframes rotateGlow {
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        .brand-text strong {
+
+            display: block;
+
+            font-size: 15px;
+        }
+
+
+        .brand-text small {
+
+            display: block;
+
+            margin-top: 2px;
+
+            font-size: 10px;
+
+            color: var(--muted);
+
+            letter-spacing: .08em;
+
+            text-transform: uppercase;
+        }
+
+
+        .nav-home {
 
             display: inline-flex;
 
             align-items: center;
-            gap: 7px;
 
-            padding: 7px 12px;
+            gap: 8px;
+
+            padding:
+                10px 16px;
+
+            border:
+                1px solid var(--border);
 
             border-radius: 999px;
 
-            background: rgba(0,0,0,0.05);
+            color: #dfe4eb;
 
-            color: #666;
+            background:
+                rgba(255,255,255,.04);
 
-            font-size: 11px;
-            font-weight: 700;
-
-            letter-spacing: 1px;
+            transition:
+                .35s var(--ease);
         }
 
-        .hero-dot {
-            width: 6px;
-            height: 6px;
+
+        .nav-home:hover {
+
+            transform: translateY(-2px);
+
+            border-color:
+                rgba(255,255,255,.22);
+
+            background:
+                rgba(255,255,255,.075);
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,.25);
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+
+            position: relative;
+
+            width: min(1240px, calc(100% - 36px));
+
+            margin: auto;
+
+            padding:
+                90px 0
+                65px;
+
+            text-align: center;
+
+            overflow: hidden;
+        }
+
+
+        .hero-orbit {
+
+            position: absolute;
+
+            width: 460px;
+            height: 460px;
+
+            left: 50%;
+            top: 10px;
+
+            transform: translateX(-50%);
+
+            border:
+                1px solid rgba(255,255,255,.035);
 
             border-radius: 50%;
 
-            background: #34c759;
-        }
+            animation:
+                orbitSpin 25s linear infinite;
 
-        .hero h1 {
-            position: relative;
-
-            margin-top: 20px;
-
-            font-size:
-                clamp(38px, 7vw, 76px);
-
-            line-height: 1.02;
-
-            letter-spacing: -3px;
-
-            font-weight: 800;
-        }
-
-        .hero h1 span {
-            color: #8a8a8f;
-        }
-
-        .hero p {
-            position: relative;
-
-            max-width: 650px;
-
-            margin: 22px auto 0;
-
-            color: #6e6e73;
-
-            font-size: 15px;
-
-            line-height: 1.7;
+            pointer-events: none;
         }
 
 
-        /* =================================================
-           MAIN
-        ================================================== */
+        .hero-orbit::before,
+        .hero-orbit::after {
 
-        .container {
-            width: min(1180px, 90%);
+            content: "";
 
-            margin: 0 auto 80px;
-        }
+            position: absolute;
 
+            width: 7px;
+            height: 7px;
 
-        /* =================================================
-           FILTER BAR
-        ================================================== */
-
-        .filter-area {
-            position: sticky;
-
-            top: 82px;
-
-            z-index: 50;
-
-            margin-bottom: 35px;
-
-            padding: 12px;
-
-            border-radius: 20px;
+            border-radius: 50%;
 
             background:
-                rgba(255,255,255,0.82);
-
-            border:
-                1px solid rgba(0,0,0,0.06);
-
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+                var(--green);
 
             box-shadow:
-                0 10px 35px rgba(0,0,0,0.05);
+                0 0 25px var(--green);
         }
 
-        .filter-row {
-            display: flex;
 
-            flex-wrap: wrap;
+        .hero-orbit::before {
 
-            justify-content: center;
-
-            gap: 8px;
+            top: 45px;
+            left: 65px;
         }
 
-        .filter-button {
-            border: 0;
 
-            padding: 10px 15px;
+        .hero-orbit::after {
+
+            bottom: 70px;
+            right: 55px;
+
+            background:
+                var(--purple);
+
+            box-shadow:
+                0 0 25px var(--purple);
+        }
+
+
+        @keyframes orbitSpin {
+
+            to {
+                transform:
+                    translateX(-50%)
+                    rotate(360deg);
+            }
+        }
+
+
+        .hero-badge {
+
+            position: relative;
+
+            z-index: 2;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding:
+                8px 13px;
+
+            border:
+                1px solid rgba(74,222,128,.18);
 
             border-radius: 999px;
 
-            background: transparent;
+            background:
+                rgba(34,197,94,.055);
 
-            color: #666;
+            color:
+                #a7f3c0;
 
-            font-family: inherit;
+            font-size: 11px;
 
-            font-size: 12px;
-            font-weight: 700;
+            font-weight: 800;
+
+            letter-spacing: .13em;
+
+            text-transform: uppercase;
+
+            animation:
+                fadeUp .7s var(--ease) both;
+        }
+
+
+        .hero-badge-dot {
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background:
+                var(--green);
+
+            box-shadow:
+                0 0 0 5px rgba(34,197,94,.08),
+                0 0 18px var(--green);
+
+            animation:
+                pulseDot 2s infinite;
+        }
+
+
+        @keyframes pulseDot {
+
+            50% {
+                transform: scale(.72);
+
+                box-shadow:
+                    0 0 0 8px rgba(34,197,94,.025),
+                    0 0 22px var(--green);
+            }
+        }
+
+
+        .hero h1 {
+
+            position: relative;
+
+            z-index: 2;
+
+            margin-top: 22px;
+
+            font-size:
+                clamp(42px, 7vw, 78px);
+
+            line-height: .98;
+
+            letter-spacing:
+                -.055em;
+
+            font-weight:
+                900;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    #fff 15%,
+                    #cfd5df 45%,
+                    #fff 70%
+                );
+
+            -webkit-background-clip:
+                text;
+
+            background-clip:
+                text;
+
+            color: transparent;
+
+            background-size:
+                220% auto;
+
+            animation:
+                heroShine 6s linear infinite,
+                fadeUp .8s var(--ease) both;
+        }
+
+
+        @keyframes heroShine {
+
+            to {
+                background-position:
+                    -220% center;
+            }
+        }
+
+
+        .hero p {
+
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 650px;
+
+            margin:
+                22px auto 0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                clamp(14px, 2vw, 17px);
+
+            line-height: 1.75;
+
+            animation:
+                fadeUp .9s .08s var(--ease) both;
+        }
+
+
+        @keyframes fadeUp {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* =========================================================
+           FILTERS
+        ========================================================= */
+
+        .filters-wrap {
+
+            width: min(1240px, calc(100% - 36px));
+
+            margin:
+                0 auto 55px;
+
+            display: flex;
+
+            justify-content: center;
+
+            animation:
+                fadeUp .9s .15s var(--ease) both;
+        }
+
+
+        .filters {
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 6px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 18px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            backdrop-filter:
+                blur(18px);
+
+            -webkit-backdrop-filter:
+                blur(18px);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.22);
+
+            overflow-x: auto;
+        }
+
+
+        .filter-btn {
+
+            position: relative;
+
+            flex-shrink: 0;
+
+            border: 0;
+
+            padding:
+                11px 17px;
+
+            border-radius: 13px;
+
+            color:
+                var(--muted);
+
+            background:
+                transparent;
 
             cursor: pointer;
 
+            font-size: 12px;
+
+            font-weight: 800;
+
             transition:
-                0.25s ease;
+                .3s var(--ease);
         }
 
-        .filter-button:hover {
-            background: rgba(0,0,0,0.05);
 
-            color: #111;
+        .filter-btn::after {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            border-radius: inherit;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.10),
+                    rgba(255,255,255,.025)
+                );
+
+            opacity: 0;
+
+            transition:
+                .3s;
         }
 
-        .filter-button.active {
-            background: #111;
 
-            color: #fff;
+        .filter-btn:hover {
+
+            color: white;
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .filter-btn:hover::after {
+
+            opacity: 1;
+        }
+
+
+        .filter-btn.active {
+
+            color:
+                white;
+
+            background:
+                rgba(255,255,255,.095);
 
             box-shadow:
-                0 5px 15px rgba(0,0,0,0.15);
+                inset 0 0 0 1px rgba(255,255,255,.08),
+                0 7px 20px rgba(0,0,0,.2);
         }
 
 
-        /* =================================================
-           SECTION
-        ================================================== */
+        /* =========================================================
+           MAIN
+        ========================================================= */
 
-        .match-section {
-            margin-bottom: 55px;
+        .main {
+
+            width:
+                min(1240px, calc(100% - 36px));
+
+            margin:
+                auto;
+
+            padding-bottom:
+                100px;
         }
 
-        .section-heading {
+
+        .section {
+
+            margin-bottom:
+                80px;
+        }
+
+
+        .section-header {
+
             display: flex;
 
             align-items: flex-end;
@@ -359,239 +880,333 @@
 
             gap: 20px;
 
-            margin-bottom: 20px;
-        }
-
-        .section-kicker {
-            margin-bottom: 5px;
-
-            color: #999;
-
-            font-size: 10px;
-
-            font-weight: 800;
-
-            letter-spacing: 1.5px;
-        }
-
-        .section-heading h2 {
-            font-size: 27px;
-
-            letter-spacing: -1px;
-
-            font-weight: 800;
-        }
-
-        .section-count {
-            color: #999;
-
-            font-size: 12px;
-
-            font-weight: 600;
+            margin-bottom:
+                24px;
         }
 
 
-        /* =================================================
-           MATCH GRID
-        ================================================== */
+        .section-title-wrap {
 
-        .match-grid {
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        .section-icon {
+
+            width: 46px;
+            height: 46px;
+
             display: grid;
 
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(320px, 1fr)
-                );
+            place-items: center;
 
-            gap: 20px;
+            border-radius: 15px;
+
+            font-size: 21px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                rgba(255,255,255,.055);
+
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,.08);
         }
 
 
-        /* =================================================
-           COMMON MATCH CARD
-        ================================================== */
+        .section-title {
 
-        .match-card {
+            font-size:
+                clamp(22px, 3vw, 30px);
+
+            letter-spacing:
+                -.035em;
+
+            font-weight:
+                900;
+        }
+
+
+        .section-subtitle {
+
+            margin-top:
+                4px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+        }
+
+
+        .section-line {
+
+            flex: 1;
+
+            height: 1px;
+
+            margin-bottom:
+                12px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.13),
+                    transparent
+                );
+        }
+
+
+        /* =========================================================
+           FIXTURE GRID
+        ========================================================= */
+
+        .fixture-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0,1fr));
+
+            gap:
+                22px;
+        }
+
+
+        /* =========================================================
+           PREMIUM CARD
+        ========================================================= */
+
+        .fixture-card {
+
             position: relative;
+
+            isolation: isolate;
 
             overflow: hidden;
 
-            border-radius: 28px;
-
             border:
-                1px solid rgba(0,0,0,0.07);
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius-xl);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.072),
+                    rgba(255,255,255,.027)
+                );
 
             box-shadow:
-                0 12px 40px rgba(0,0,0,0.06);
+                0 20px 60px rgba(0,0,0,.25);
+
+            backdrop-filter:
+                blur(22px)
+                saturate(130%);
+
+            -webkit-backdrop-filter:
+                blur(22px)
+                saturate(130%);
 
             transition:
-                transform 0.3s ease,
-                box-shadow 0.3s ease;
+                transform .5s var(--ease),
+                border-color .4s,
+                box-shadow .5s;
+
+            animation:
+                cardEnter .65s var(--ease) both;
         }
 
-        .match-card:hover {
-            transform: translateY(-6px);
+
+        @keyframes cardEnter {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(22px)
+                    scale(.985);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+
+        .fixture-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            z-index: -2;
+
+            background:
+                radial-gradient(
+                    circle at 85% 5%,
+                    rgba(255,255,255,.08),
+                    transparent 30%
+                );
+
+            pointer-events: none;
+        }
+
+
+        .fixture-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -120%;
+
+            width: 70%;
+            height: 100%;
+
+            z-index: 5;
+
+            transform:
+                skewX(-18deg);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,.075),
+                    transparent
+                );
+
+            transition:
+                left .8s var(--ease);
+
+            pointer-events: none;
+        }
+
+
+        .fixture-card:hover {
+
+            transform:
+                translateY(-7px);
+
+            border-color:
+                rgba(255,255,255,.19);
 
             box-shadow:
-                0 22px 55px rgba(0,0,0,0.11);
+                0 35px 90px rgba(0,0,0,.38);
         }
 
 
-        /* =================================================
-           FOOTBALL FIXTURE
-        ================================================== */
+        .fixture-card:hover::after {
 
-        .football-fixture {
+            left: 150%;
+        }
+
+
+        /* =========================================================
+           FOOTBALL CARD
+        ========================================================= */
+
+        .fixture-card.football {
+
+            --accent:
+                var(--green);
+
+            --accent-light:
+                var(--green-light);
+
+            --accent-rgb:
+                34,197,94;
+        }
+
+
+        .fixture-card.football::before {
+
             background:
-                linear-gradient(
-                    145deg,
-                    #f4f7f4,
-                    #ffffff
+                radial-gradient(
+                    circle at 88% 0%,
+                    rgba(34,197,94,.13),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 15% 95%,
+                    rgba(34,197,94,.045),
+                    transparent 28%
                 );
         }
 
-        .football-fixture::before {
-            content: "";
 
-            position: absolute;
+        .fixture-card.football.result {
 
-            width: 220px;
-            height: 220px;
-
-            right: -80px;
-            top: -90px;
-
-            border-radius: 50%;
-
-            border:
-                25px solid rgba(52,199,89,0.07);
-        }
-
-        .football-fixture .sport-label {
-            background:
-                rgba(52,199,89,0.11);
-
-            color: #248a3d;
+            border-color:
+                rgba(34,197,94,.16);
         }
 
 
-        /* =================================================
-           CRICKET FIXTURE
-        ================================================== */
+        /* =========================================================
+           CRICKET CARD
+        ========================================================= */
 
-        .cricket-fixture {
+        .fixture-card.cricket {
+
+            --accent:
+                var(--purple);
+
+            --accent-light:
+                var(--purple-light);
+
+            --accent-rgb:
+                139,92,246;
+        }
+
+
+        .fixture-card.cricket::before {
+
             background:
-                linear-gradient(
-                    145deg,
-                    #f6f5fb,
-                    #ffffff
+                radial-gradient(
+                    circle at 88% 0%,
+                    rgba(139,92,246,.15),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 15% 95%,
+                    rgba(59,130,246,.055),
+                    transparent 28%
                 );
         }
 
-        .cricket-fixture::before {
-            content: "";
 
-            position: absolute;
+        .fixture-card.cricket.result {
 
-            width: 190px;
-            height: 190px;
-
-            right: -75px;
-            top: -75px;
-
-            border-radius: 50%;
-
-            border:
-                22px solid rgba(88,86,214,0.07);
-        }
-
-        .cricket-fixture .sport-label {
-            background:
-                rgba(88,86,214,0.11);
-
-            color: #4b49a8;
+            border-color:
+                rgba(139,92,246,.17);
         }
 
 
-        /* =================================================
-           RESULT CARDS
-        ================================================== */
-
-        .football-result {
-            background:
-                linear-gradient(
-                    145deg,
-                    #f1f6f2,
-                    #ffffff
-                );
-        }
-
-        .football-result::before {
-            content: "90 MIN";
-
-            position: absolute;
-
-            right: 20px;
-            top: 20px;
-
-            padding: 6px 9px;
-
-            border-radius: 999px;
-
-            background:
-                rgba(52,199,89,0.10);
-
-            color: #248a3d;
-
-            font-size: 9px;
-
-            font-weight: 800;
-
-            letter-spacing: 0.5px;
-        }
-
-        .cricket-result {
-            background:
-                linear-gradient(
-                    145deg,
-                    #f3f2fa,
-                    #ffffff
-                );
-        }
-
-        .cricket-result::before {
-            content: "MATCH RESULT";
-
-            position: absolute;
-
-            right: 20px;
-            top: 20px;
-
-            padding: 6px 9px;
-
-            border-radius: 999px;
-
-            background:
-                rgba(88,86,214,0.10);
-
-            color: #4b49a8;
-
-            font-size: 9px;
-
-            font-weight: 800;
-
-            letter-spacing: 0.5px;
-        }
-
-
-        /* =================================================
+        /* =========================================================
            CARD TOP
-        ================================================== */
+        ========================================================= */
 
         .card-top {
+
             position: relative;
-            z-index: 2;
 
             display: flex;
 
@@ -599,917 +1214,2041 @@
 
             justify-content: space-between;
 
-            gap: 10px;
+            gap: 12px;
 
-            padding: 21px 22px 0;
+            padding:
+                20px 22px 0;
         }
 
+
         .sport-label {
+
             display: inline-flex;
 
             align-items: center;
 
             gap: 7px;
 
-            padding: 7px 10px;
+            padding:
+                7px 10px;
 
-            border-radius: 999px;
+            border-radius:
+                999px;
 
-            font-size: 10px;
+            color:
+                #dce2e9;
 
-            font-weight: 800;
+            background:
+                rgba(255,255,255,.045);
 
-            letter-spacing: 0.6px;
+            border:
+                1px solid var(--border);
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                .09em;
+
+            text-transform:
+                uppercase;
         }
+
+
+        .football .sport-label {
+
+            color:
+                #9ff0bb;
+
+            border-color:
+                rgba(34,197,94,.18);
+
+            background:
+                rgba(34,197,94,.055);
+        }
+
+
+        .cricket .sport-label {
+
+            color:
+                #c9b7ff;
+
+            border-color:
+                rgba(139,92,246,.2);
+
+            background:
+                rgba(139,92,246,.065);
+        }
+
 
         .status-label {
-            padding: 6px 9px;
-
-            border-radius: 999px;
-
-            background:
-                rgba(0,0,0,0.05);
-
-            color: #777;
-
-            font-size: 9px;
-
-            font-weight: 800;
-        }
-
-        .status-label.upcoming {
-            background:
-                rgba(52,199,89,0.10);
-
-            color: #248a3d;
-        }
-
-        .status-label.completed {
-            background:
-                rgba(0,0,0,0.06);
-
-            color: #666;
-        }
-
-
-        /* =================================================
-           DATE STRIP
-        ================================================== */
-
-        .match-date-strip {
-            position: relative;
-            z-index: 2;
 
             padding:
-                17px 22px 5px;
+                7px 10px;
 
-            color: #777;
+            border-radius:
+                999px;
 
-            font-size: 11px;
+            color:
+                var(--muted);
 
-            font-weight: 600;
+            border:
+                1px solid var(--border);
+
+            background:
+                rgba(0,0,0,.16);
+
+            font-size:
+                9px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                .08em;
         }
 
 
-        /* =================================================
-           TEAMS
-        ================================================== */
+        .upcoming .status-label {
 
-        .teams-area {
+            color:
+                #d9e5ff;
+
+            border-color:
+                rgba(59,130,246,.2);
+
+            background:
+                rgba(59,130,246,.055);
+        }
+
+
+        .result .status-label {
+
+            color:
+                #c8fbd7;
+
+            border-color:
+                rgba(34,197,94,.2);
+
+            background:
+                rgba(34,197,94,.055);
+        }
+
+
+        /* =========================================================
+           DATE
+        ========================================================= */
+
+        .card-date {
+
+            margin:
+                17px 22px 0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                .05em;
+        }
+
+
+        /* =========================================================
+           MATCH AREA
+        ========================================================= */
+
+        .match-area {
+
             position: relative;
-            z-index: 2;
 
-            display: grid;
+            display:
+                grid;
 
             grid-template-columns:
-                minmax(0, 1fr)
+                minmax(0,1fr)
                 auto
-                minmax(0, 1fr);
+                minmax(0,1fr);
 
-            align-items: center;
+            align-items:
+                center;
 
-            gap: 12px;
+            gap:
+                12px;
 
             padding:
-                20px 22px;
+                28px 22px 25px;
         }
+
 
         .team {
+
             min-width: 0;
 
-            text-align: center;
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            text-align:
+                center;
         }
+
 
         .team-logo {
-            width: 68px;
-            height: 68px;
 
-            display: block;
+            position: relative;
 
-            margin: 0 auto 10px;
+            width:
+                76px;
 
-            object-fit: contain;
+            height:
+                76px;
 
-            border-radius: 18px;
+            display:
+                grid;
 
-            background: #fff;
+            place-items:
+                center;
 
-            padding: 7px;
+            padding:
+                10px;
+
+            border-radius:
+                23px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.11),
+                    rgba(255,255,255,.035)
+                );
+
+            border:
+                1px solid rgba(255,255,255,.12);
 
             box-shadow:
-                0 7px 20px rgba(0,0,0,0.08);
+                0 14px 35px rgba(0,0,0,.25);
+
+            transition:
+                transform .45s var(--ease),
+                box-shadow .45s;
         }
 
-        .team-logo-fallback {
-            width: 68px;
-            height: 68px;
 
-            display: flex;
+        .team-logo::before {
 
-            align-items: center;
-            justify-content: center;
+            content: "";
 
-            margin: 0 auto 10px;
+            position: absolute;
 
-            border-radius: 18px;
+            inset: -1px;
+
+            border-radius:
+                inherit;
+
+            padding: 1px;
 
             background:
-                rgba(0,0,0,0.05);
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.25),
+                    transparent 45%
+                );
 
-            font-size: 27px;
+            -webkit-mask:
+                linear-gradient(#000 0 0) content-box,
+                linear-gradient(#000 0 0);
+
+            -webkit-mask-composite:
+                xor;
+
+            mask-composite:
+                exclude;
+
+            opacity:
+                .55;
         }
+
+
+        .team-logo img {
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            object-fit:
+                contain;
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+            transition:
+                transform .45s var(--ease);
+        }
+
+
+        .team:hover .team-logo {
+
+            transform:
+                translateY(-5px)
+                rotate(-2deg);
+
+            box-shadow:
+                0 20px 45px rgba(
+                    var(--accent-rgb),
+                    .18
+                );
+        }
+
+
+        .team:hover .team-logo img {
+
+            transform:
+                scale(1.08);
+        }
+
 
         .team-name {
-            display: block;
 
-            color: #111;
+            max-width:
+                170px;
 
-            font-size: 14px;
+            color:
+                #f1f3f6;
 
-            line-height: 1.35;
+            font-size:
+                14px;
 
-            font-weight: 800;
+            line-height:
+                1.35;
 
-            word-break: break-word;
-        }
-
-        .versus {
-            color: #aaa;
-
-            font-size: 10px;
-
-            font-weight: 800;
-
-            letter-spacing: 1px;
+            font-weight:
+                850;
         }
 
 
-        /* =================================================
-           SCORE
-        ================================================== */
+        /* =========================================================
+           VS
+        ========================================================= */
 
-        .score-line {
-            display: flex;
+        .vs {
 
-            align-items: center;
-            justify-content: center;
-
-            gap: 8px;
-
-            margin-top: 6px;
-
-            color: #111;
-
-            font-size: 25px;
-
-            font-weight: 800;
-        }
-
-        .score-separator {
-            color: #999;
-
-            font-size: 16px;
-
-            font-weight: 500;
-        }
-
-
-        /* =================================================
-           FOOTBALL SCORERS
-        ================================================== */
-
-        .football-scorers {
             position: relative;
-            z-index: 2;
 
-            margin:
-                0 22px 17px;
+            width:
+                46px;
 
-            padding: 13px;
+            height:
+                46px;
 
-            border-radius: 17px;
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                50%;
+
+            color:
+                var(--muted);
 
             background:
-                rgba(255,255,255,0.72);
+                rgba(255,255,255,.035);
 
             border:
-                1px solid rgba(0,0,0,0.045);
-        }
+                1px solid var(--border);
 
-        .details-title {
-            margin-bottom: 8px;
+            font-size:
+                10px;
 
-            color: #888;
+            font-weight:
+                900;
 
-            font-size: 9px;
-
-            font-weight: 800;
-
-            letter-spacing: 1px;
-        }
-
-        .scorer-row {
-            display: flex;
-
-            justify-content: space-between;
-
-            gap: 10px;
-
-            padding: 5px 0;
-
-            color: #444;
-
-            font-size: 11px;
-        }
-
-        .scorer-time {
-            color: #888;
-
-            font-weight: 700;
+            letter-spacing:
+                .08em;
         }
 
 
-        /* =================================================
-           CRICKET INNINGS
-        ================================================== */
+        .vs::before,
+        .vs::after {
 
-        .cricket-innings {
-            position: relative;
-            z-index: 2;
+            content: "";
 
-            display: grid;
+            position: absolute;
 
-            grid-template-columns: 1fr 1fr;
+            width:
+                1px;
 
-            gap: 10px;
-
-            margin:
-                0 22px 17px;
-        }
-
-        .innings-box {
-            padding: 13px;
-
-            border-radius: 17px;
+            height:
+                32px;
 
             background:
-                rgba(255,255,255,0.75);
-
-            border:
-                1px solid rgba(0,0,0,0.045);
-
-            text-align: center;
-        }
-
-        .innings-team {
-            display: block;
-
-            margin-bottom: 4px;
-
-            color: #888;
-
-            font-size: 9px;
-
-            font-weight: 700;
-        }
-
-        .innings-score {
-            display: block;
-
-            color: #111;
-
-            font-size: 19px;
-
-            font-weight: 800;
-        }
-
-        .innings-overs {
-            display: block;
-
-            margin-top: 3px;
-
-            color: #888;
-
-            font-size: 9px;
-
-            font-weight: 600;
+                linear-gradient(
+                    transparent,
+                    rgba(255,255,255,.15),
+                    transparent
+                );
         }
 
 
-        /* =================================================
-           RESULT INFORMATION
-        ================================================== */
+        .vs::before {
 
-        .result-details {
-            position: relative;
-            z-index: 2;
-
-            margin:
-                0 22px 17px;
-
-            padding: 14px;
-
-            border-radius: 17px;
-
-            background:
-                rgba(255,255,255,0.70);
-
-            border:
-                1px solid rgba(0,0,0,0.045);
-        }
-
-        .result-item {
-            display: flex;
-
-            align-items: flex-start;
-
-            justify-content: space-between;
-
-            gap: 15px;
-
-            padding: 5px 0;
-
-            color: #777;
-
-            font-size: 11px;
-
-            line-height: 1.45;
-        }
-
-        .result-item strong {
-            color: #222;
-
-            font-weight: 700;
-
-            text-align: right;
+            top:
+                -37px;
         }
 
 
-        /* =================================================
-           MATCH META
-        ================================================== */
+        .vs::after {
 
-        .match-meta {
-            position: relative;
-            z-index: 2;
-
-            display: grid;
-
-            gap: 8px;
-
-            padding:
-                15px 22px;
-
-            border-top:
-                1px solid rgba(0,0,0,0.06);
-        }
-
-        .meta-item {
-            display: flex;
-
-            align-items: flex-start;
-
-            gap: 8px;
-
-            color: #777;
-
-            font-size: 10px;
-
-            line-height: 1.45;
-        }
-
-        .meta-item strong {
-            color: #333;
+            bottom:
+                -37px;
         }
 
 
-        /* =================================================
-           TOURNAMENT
-        ================================================== */
+        /* =========================================================
+           RESULT SCORE
+        ========================================================= */
 
-        .tournament-name {
-            position: relative;
-            z-index: 2;
+        .result-score-area {
 
-            padding:
-                0 22px 19px;
+            display:
+                flex;
 
-            color: #999;
+            flex-direction:
+                column;
 
-            font-size: 9px;
+            align-items:
+                center;
 
-            font-weight: 700;
+            gap:
+                8px;
 
-            letter-spacing: 0.3px;
+            min-width:
+                100px;
         }
 
 
-        /* =================================================
-           EMPTY STATE
-        ================================================== */
+        .full-time {
 
-        .empty-state {
-            padding: 70px 20px;
+            color:
+                var(--muted-2);
 
-            border-radius: 25px;
+            font-size:
+                9px;
 
-            background:
-                rgba(0,0,0,0.025);
+            font-weight:
+                900;
 
-            text-align: center;
-
-            color: #888;
-
-            font-size: 14px;
-        }
-
-        .empty-icon {
-            font-size: 36px;
-
-            margin-bottom: 12px;
-        }
-
-        .empty-state strong {
-            display: block;
-
-            margin-bottom: 5px;
-
-            color: #333;
+            letter-spacing:
+                .17em;
         }
 
 
-        /* =================================================
-           LOADING
-        ================================================== */
+        .score {
 
-        .loading-state {
-            padding: 70px 20px;
+            font-size:
+                clamp(28px, 4vw, 40px);
 
-            text-align: center;
+            line-height:
+                1;
 
-            color: #888;
+            font-weight:
+                950;
 
-            font-size: 13px;
-        }
+            letter-spacing:
+                -.06em;
 
-        .loading-spinner {
-            width: 25px;
-            height: 25px;
+            color:
+                #fff;
 
-            margin: 0 auto 13px;
-
-            border-radius: 50%;
-
-            border:
-                2px solid rgba(0,0,0,0.08);
-
-            border-top-color: #111;
+            text-shadow:
+                0 0 25px rgba(255,255,255,.08);
 
             animation:
-                spin 0.8s linear infinite;
+                scoreReveal .7s var(--ease) both;
         }
+
+
+        @keyframes scoreReveal {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    scale(.75);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    scale(1);
+            }
+        }
+
+
+        .minute-badge {
+
+            padding:
+                5px 8px;
+
+            border-radius:
+                7px;
+
+            color:
+                #b8f8cb;
+
+            background:
+                rgba(34,197,94,.075);
+
+            border:
+                1px solid rgba(34,197,94,.18);
+
+            font-size:
+                8px;
+
+            font-weight:
+                950;
+
+            letter-spacing:
+                .1em;
+        }
+
+
+        /* =========================================================
+           CRICKET SCORE
+        ========================================================= */
+
+        .cricket-score {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            align-items:
+                center;
+
+            gap:
+                6px;
+        }
+
+
+        .cricket-score-main {
+
+            font-size:
+                clamp(24px, 4vw, 35px);
+
+            font-weight:
+                950;
+
+            letter-spacing:
+                -.045em;
+        }
+
+
+        .cricket-overs {
+
+            color:
+                #c6b9ef;
+
+            font-size:
+                10px;
+
+            font-weight:
+                850;
+
+            letter-spacing:
+                .08em;
+        }
+
+
+        .cricket-status-badge {
+
+            padding:
+                5px 9px;
+
+            border-radius:
+                7px;
+
+            color:
+                #d5caff;
+
+            background:
+                rgba(139,92,246,.07);
+
+            border:
+                1px solid rgba(139,92,246,.18);
+
+            font-size:
+                8px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                .09em;
+        }
+
+
+        /* =========================================================
+           RESULT TITLE
+        ========================================================= */
+
+        .result-title {
+
+            margin:
+                0 22px 5px;
+
+            text-align:
+                center;
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                9px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                .18em;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        /* =========================================================
+           FOOTBALL SCORERS
+        ========================================================= */
+
+        .scorers {
+
+            margin:
+                0 22px 18px;
+
+            padding:
+                14px 15px;
+
+            border:
+                1px solid rgba(255,255,255,.065);
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(255,255,255,.025);
+        }
+
+
+        .scorers-title {
+
+            margin-bottom:
+                9px;
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                9px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                .1em;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .scorer {
+
+            position:
+                relative;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                9px;
+
+            padding:
+                6px 0;
+
+            color:
+                #dce1e7;
+
+            font-size:
+                11px;
+
+            animation:
+                scorerIn .5s var(--ease) both;
+        }
+
+
+        .scorer::before {
+
+            content:
+                "⚽";
+
+            font-size:
+                11px;
+
+            filter:
+                drop-shadow(
+                    0 0 8px
+                    rgba(34,197,94,.45)
+                );
+        }
+
+
+        .scorer-time {
+
+            margin-left:
+                auto;
+
+            color:
+                #86efac;
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+        }
+
+
+        @keyframes scorerIn {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateX(-8px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateX(0);
+            }
+        }
+
+
+        /* =========================================================
+           CRICKET INNINGS
+        ========================================================= */
+
+        .innings-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap:
+                10px;
+
+            margin:
+                0 22px 18px;
+        }
+
+
+        .innings-box {
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            padding:
+                13px;
+
+            border:
+                1px solid rgba(139,92,246,.13);
+
+            border-radius:
+                15px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(139,92,246,.07),
+                    rgba(255,255,255,.025)
+                );
+
+            transition:
+                transform .35s var(--ease),
+                border-color .35s;
+        }
+
+
+        .innings-box::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            left: 0;
+            right: 0;
+            top: 0;
+
+            height:
+                2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--purple),
+                    transparent
+                );
+        }
+
+
+        .innings-box:hover {
+
+            transform:
+                translateY(-3px);
+
+            border-color:
+                rgba(167,139,250,.3);
+        }
+
+
+        .innings-team {
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+
+            white-space:
+                nowrap;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+        }
+
+
+        .innings-score {
+
+            margin-top:
+                5px;
+
+            color:
+                #fff;
+
+            font-size:
+                20px;
+
+            font-weight:
+                950;
+
+            letter-spacing:
+                -.04em;
+        }
+
+
+        .innings-overs {
+
+            margin-top:
+                3px;
+
+            color:
+                #b8a8e9;
+
+            font-size:
+                9px;
+
+            font-weight:
+                800;
+        }
+
+
+        /* =========================================================
+           DETAILS
+        ========================================================= */
+
+        .result-details {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap:
+                10px;
+
+            margin:
+                0 22px 18px;
+        }
+
+
+        .detail-item {
+
+            min-width:
+                0;
+
+            padding:
+                12px 13px;
+
+            border:
+                1px solid rgba(255,255,255,.06);
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(255,255,255,.025);
+        }
+
+
+        .detail-label {
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                8px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                .09em;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .detail-value {
+
+            margin-top:
+                4px;
+
+            color:
+                #e9edf2;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            white-space:
+                nowrap;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+        }
+
+
+        /* =========================================================
+           RESULT NOTE
+        ========================================================= */
+
+        .result-note {
+
+            margin:
+                0 22px 19px;
+
+            padding:
+                12px 14px;
+
+            border-left:
+                2px solid var(--accent);
+
+            border-radius:
+                0 12px 12px 0;
+
+            background:
+                rgba(
+                    var(--accent-rgb),
+                    .045
+                );
+
+            color:
+                #cbd2dc;
+
+            font-size:
+                11px;
+
+            line-height:
+                1.6;
+        }
+
+
+        /* =========================================================
+           META
+        ========================================================= */
+
+        .card-meta {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            flex-wrap:
+                wrap;
+
+            gap:
+                9px;
+
+            padding:
+                15px 22px 19px;
+
+            border-top:
+                1px solid rgba(255,255,255,.055);
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+        }
+
+
+        .meta-item {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                5px;
+        }
+
+
+        .meta-separator {
+
+            opacity:
+                .3;
+        }
+
+
+        /* =========================================================
+           EMPTY STATE
+        ========================================================= */
+
+        .empty-state {
+
+            grid-column:
+                1 / -1;
+
+            min-height:
+                220px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                10px;
+
+            border:
+                1px dashed rgba(255,255,255,.11);
+
+            border-radius:
+                24px;
+
+            background:
+                rgba(255,255,255,.025);
+
+            color:
+                var(--muted);
+
+            text-align:
+                center;
+        }
+
+
+        .empty-icon {
+
+            width:
+                55px;
+            height:
+                55px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            font-size:
+                23px;
+
+            animation:
+                emptyFloat 3s ease-in-out infinite;
+        }
+
+
+        @keyframes emptyFloat {
+
+            50% {
+                transform:
+                    translateY(-6px);
+            }
+        }
+
+
+        .empty-title {
+
+            color:
+                #dce1e8;
+
+            font-size:
+                14px;
+
+            font-weight:
+                850;
+        }
+
+
+        .empty-text {
+
+            max-width:
+                400px;
+
+            color:
+                var(--muted-2);
+
+            font-size:
+                11px;
+
+            line-height:
+                1.6;
+        }
+
+
+        /* =========================================================
+           LOADING
+        ========================================================= */
+
+        .loading {
+
+            min-height:
+                230px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                24px;
+
+            background:
+                rgba(255,255,255,.025);
+        }
+
+
+        .loading-inner {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            align-items:
+                center;
+
+            gap:
+                14px;
+
+            color:
+                var(--muted);
+        }
+
+
+        .spinner {
+
+            width:
+                35px;
+            height:
+                35px;
+
+            border-radius:
+                50%;
+
+            border:
+                2px solid rgba(255,255,255,.08);
+
+            border-top-color:
+                var(--green);
+
+            animation:
+                spin .8s linear infinite;
+        }
+
 
         @keyframes spin {
+
             to {
-                transform: rotate(360deg);
+                transform:
+                    rotate(360deg);
             }
         }
 
 
-        /* =================================================
+        /* =========================================================
            FOOTER
-        ================================================== */
+        ========================================================= */
 
-        footer {
+        .footer {
+
+            width:
+                min(1240px, calc(100% - 36px));
+
+            margin:
+                auto;
+
             padding:
-                45px 6% 60px;
+                25px 0 45px;
 
-            text-align: center;
+            border-top:
+                1px solid rgba(255,255,255,.07);
 
-            color: #999;
+            color:
+                var(--muted-2);
 
-            font-size: 11px;
+            text-align:
+                center;
+
+            font-size:
+                10px;
+
+            line-height:
+                1.7;
         }
 
-        footer strong {
-            color: #555;
+
+        .footer strong {
+
+            color:
+                #cfd5dd;
+
+            font-weight:
+                850;
         }
 
 
-        /* =================================================
-           MOBILE
-        ================================================== */
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
 
-        @media (max-width: 650px) {
+        @media (max-width: 850px) {
 
-            .top-nav {
-                height: 62px;
+            .fixture-grid {
 
-                padding: 0 5%;
+                grid-template-columns:
+                    1fr;
             }
 
-            .brand {
-                font-size: 13px;
-            }
-
-            .brand-mark {
-                width: 31px;
-                height: 31px;
-            }
-
-            .nav-back {
-                font-size: 11px;
-            }
 
             .hero {
+
                 padding:
-                    65px 5%
-                    48px;
+                    70px 0 55px;
             }
+
+
+            .hero-orbit {
+
+                width:
+                    360px;
+
+                height:
+                    360px;
+            }
+
+
+            .section {
+
+                margin-bottom:
+                    60px;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .nav-inner {
+
+                width:
+                    min(100% - 24px, 1240px);
+
+                min-height:
+                    68px;
+            }
+
+
+            .brand-mark {
+
+                width:
+                    40px;
+                height:
+                    40px;
+
+                border-radius:
+                    12px;
+            }
+
+
+            .brand-text strong {
+
+                font-size:
+                    13px;
+            }
+
+
+            .brand-text small {
+
+                display:
+                    none;
+            }
+
+
+            .nav-home {
+
+                padding:
+                    9px 12px;
+
+                font-size:
+                    11px;
+            }
+
+
+            .hero {
+
+                width:
+                    calc(100% - 24px);
+
+                padding:
+                    58px 0 45px;
+            }
+
 
             .hero h1 {
-                letter-spacing: -2px;
+
+                font-size:
+                    clamp(38px, 12vw, 55px);
             }
+
 
             .hero p {
-                font-size: 13px;
+
+                margin-top:
+                    17px;
+
+                font-size:
+                    13px;
             }
 
-            .container {
-                width: 92%;
+
+            .hero-orbit {
+
+                width:
+                    280px;
+
+                height:
+                    280px;
             }
 
-            .filter-area {
-                top: 70px;
 
-                border-radius: 17px;
+            .filters-wrap {
 
-                padding: 9px;
+                width:
+                    calc(100% - 24px);
+
+                justify-content:
+                    flex-start;
+
+                margin-bottom:
+                    42px;
             }
 
-            .filter-row {
-                gap: 5px;
+
+            .filters {
+
+                width:
+                    100%;
+
+                justify-content:
+                    flex-start;
+
+                border-radius:
+                    15px;
             }
 
-            .filter-button {
-                padding: 8px 11px;
 
-                font-size: 10px;
-            }
+            .filter-btn {
 
-            .section-heading {
-                align-items: flex-start;
-
-                flex-direction: column;
-
-                gap: 4px;
-            }
-
-            .section-heading h2 {
-                font-size: 23px;
-            }
-
-            .match-grid {
-                grid-template-columns: 1fr;
-
-                gap: 15px;
-            }
-
-            .match-card {
-                border-radius: 23px;
-            }
-
-            .teams-area {
                 padding:
-                    18px 17px;
+                    10px 13px;
+
+                font-size:
+                    10px;
             }
+
+
+            .main {
+
+                width:
+                    calc(100% - 24px);
+
+                padding-bottom:
+                    65px;
+            }
+
+
+            .section-header {
+
+                align-items:
+                    center;
+
+                margin-bottom:
+                    17px;
+            }
+
+
+            .section-icon {
+
+                width:
+                    40px;
+                height:
+                    40px;
+
+                border-radius:
+                    13px;
+
+                font-size:
+                    18px;
+            }
+
+
+            .section-title {
+
+                font-size:
+                    21px;
+            }
+
+
+            .section-subtitle {
+
+                font-size:
+                    10px;
+            }
+
+
+            .section-line {
+
+                display:
+                    none;
+            }
+
+
+            .fixture-grid {
+
+                gap:
+                    15px;
+            }
+
+
+            .fixture-card {
+
+                border-radius:
+                    22px;
+            }
+
 
             .card-top {
+
                 padding:
-                    18px 17px 0;
+                    16px 16px 0;
             }
 
-            .match-date-strip {
+
+            .card-date {
+
+                margin:
+                    13px 16px 0;
+            }
+
+
+            .match-area {
+
+                gap:
+                    5px;
+
                 padding:
-                    14px 17px 4px;
+                    24px 12px 21px;
             }
 
-            .team-logo,
-            .team-logo-fallback {
-                width: 55px;
-                height: 55px;
 
-                border-radius: 15px;
+            .team-logo {
+
+                width:
+                    62px;
+                height:
+                    62px;
+
+                padding:
+                    8px;
+
+                border-radius:
+                    18px;
             }
 
-            .team-logo-fallback {
-                font-size: 22px;
-            }
 
             .team-name {
-                font-size: 12px;
+
+                max-width:
+                    105px;
+
+                font-size:
+                    11px;
             }
 
-            .score-line {
-                font-size: 21px;
+
+            .vs {
+
+                width:
+                    38px;
+                height:
+                    38px;
+
+                font-size:
+                    8px;
             }
 
-            .football-scorers,
-            .cricket-innings,
+
+            .vs::before {
+
+                top:
+                    -28px;
+
+                height:
+                    23px;
+            }
+
+
+            .vs::after {
+
+                bottom:
+                    -28px;
+
+                height:
+                    23px;
+            }
+
+
+            .score {
+
+                font-size:
+                    27px;
+            }
+
+
+            .cricket-score-main {
+
+                font-size:
+                    23px;
+            }
+
+
             .result-details {
-                margin-left: 17px;
-                margin-right: 17px;
+
+                margin:
+                    0 16px 15px;
+
+                gap:
+                    7px;
             }
 
-            .match-meta {
+
+            .detail-item {
+
                 padding:
-                    13px 17px;
+                    10px;
             }
 
-            .tournament-name {
+
+            .detail-value {
+
+                font-size:
+                    10px;
+            }
+
+
+            .scorers {
+
+                margin:
+                    0 16px 15px;
+            }
+
+
+            .innings-grid {
+
+                margin:
+                    0 16px 15px;
+
+                gap:
+                    7px;
+            }
+
+
+            .innings-box {
+
                 padding:
-                    0 17px 17px;
+                    10px;
             }
 
-            .cricket-innings {
-                gap: 7px;
-            }
 
             .innings-score {
-                font-size: 16px;
+
+                font-size:
+                    17px;
+            }
+
+
+            .result-note {
+
+                margin:
+                    0 16px 15px;
+            }
+
+
+            .card-meta {
+
+                padding:
+                    13px 16px 16px;
+
+                font-size:
+                    9px;
+            }
+        }
+
+
+        @media (max-width: 380px) {
+
+            .team-logo {
+
+                width:
+                    55px;
+                height:
+                    55px;
+            }
+
+
+            .team-name {
+
+                max-width:
+                    88px;
+
+                font-size:
+                    10px;
+            }
+
+
+            .match-area {
+
+                padding-left:
+                    7px;
+
+                padding-right:
+                    7px;
+            }
+
+
+            .card-top {
+
+                padding-left:
+                    13px;
+
+                padding-right:
+                    13px;
+            }
+        }
+
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+
+                animation-duration:
+                    .01ms !important;
+
+                animation-iteration-count:
+                    1 !important;
+
+                scroll-behavior:
+                    auto !important;
+
+                transition-duration:
+                    .01ms !important;
             }
         }
 
     </style>
-
 </head>
 
 
 <body>
 
 
-    <!-- =================================================
+    <!-- =========================================================
          NAVBAR
-    ================================================== -->
+    ========================================================= -->
 
-    <nav class="top-nav">
+    <header class="navbar">
 
-        <a
-            href="index.html"
-            class="brand"
-        >
-            <span class="brand-mark">
-                GSA
-            </span>
+        <div class="nav-inner">
 
-            <span>
-                Ghopkhali Sports Arena
-            </span>
-        </a>
+            <a href="index.html" class="brand">
 
-        <a
-            href="index.html"
-            class="nav-back"
-        >
-            ← Home
-        </a>
+                <div class="brand-mark">
+                    <span>⚡</span>
+                </div>
 
-    </nav>
+                <div class="brand-text">
+
+                    <strong>
+                        Ghopkhali Sports Arena
+                    </strong>
+
+                    <small>
+                        Sports • Community • Excellence
+                    </small>
+
+                </div>
+
+            </a>
 
 
-    <!-- =================================================
-         HERO
-    ================================================== -->
+            <a
+                href="index.html"
+                class="nav-home"
+            >
+                ← Home
+            </a>
 
-    <header class="hero">
-
-        <div class="hero-label">
-            <span class="hero-dot"></span>
-            MATCH CENTER
         </div>
-
-        <h1>
-            Fixtures &
-            <span>Results.</span>
-        </h1>
-
-        <p>
-            Follow every football and cricket match
-            at Ghopkhali Sports Arena — upcoming fixtures,
-            completed results and match highlights.
-        </p>
 
     </header>
 
 
-    <!-- =================================================
-         MAIN
-    ================================================== -->
 
-    <main class="container">
+    <!-- =========================================================
+         HERO
+    ========================================================= -->
 
+    <section class="hero">
 
-        <!-- =================================================
-             FILTERS
-        ================================================== -->
+        <div class="hero-orbit"></div>
 
-        <div class="filter-area">
+        <div class="hero-badge">
 
-            <div class="filter-row">
+            <span class="hero-badge-dot"></span>
 
-                <button
-                    type="button"
-                    class="filter-button active"
-                    data-filter="all"
-                >
-                    All
-                </button>
-
-                <button
-                    type="button"
-                    class="filter-button"
-                    data-filter="upcoming"
-                >
-                    Upcoming
-                </button>
-
-                <button
-                    type="button"
-                    class="filter-button"
-                    data-filter="completed"
-                >
-                    Results
-                </button>
-
-                <button
-                    type="button"
-                    class="filter-button"
-                    data-filter="football"
-                >
-                    ⚽ Football
-                </button>
-
-                <button
-                    type="button"
-                    class="filter-button"
-                    data-filter="cricket"
-                >
-                    🏏 Cricket
-                </button>
-
-            </div>
+            Live Sports Center
 
         </div>
 
 
-        <!-- =================================================
+        <h1>
+            Fixtures &amp;<br>
+            Results
+        </h1>
+
+
+        <p>
+            Ghopkhali Sports Arena-এর Football ও Cricket
+            ম্যাচের আসন্ন Fixture এবং সম্পন্ন ম্যাচের
+            Official Results এক জায়গায় দেখুন।
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         FILTERS
+    ========================================================= -->
+
+    <div class="filters-wrap">
+
+        <div class="filters">
+
+            <button
+                type="button"
+                class="filter-btn active"
+                data-filter="all"
+            >
+                All
+            </button>
+
+
+            <button
+                type="button"
+                class="filter-btn"
+                data-filter="upcoming"
+            >
+                Upcoming
+            </button>
+
+
+            <button
+                type="button"
+                class="filter-btn"
+                data-filter="completed"
+            >
+                Results
+            </button>
+
+
+            <button
+                type="button"
+                class="filter-btn"
+                data-filter="football"
+            >
+                ⚽ Football
+            </button>
+
+
+            <button
+                type="button"
+                class="filter-btn"
+                data-filter="cricket"
+            >
+                🏏 Cricket
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================================
+         MAIN
+    ========================================================= -->
+
+    <main class="main">
+
+
+        <!-- =====================================================
              UPCOMING
-        ================================================== -->
+        ====================================================== -->
 
         <section
-            class="match-section"
+            class="section"
             id="upcomingSection"
         >
 
-            <div class="section-heading">
+            <div class="section-header">
 
-                <div>
+                <div class="section-title-wrap">
 
-                    <p class="section-kicker">
-                        NEXT MATCHES
-                    </p>
+                    <div class="section-icon">
+                        📅
+                    </div>
 
-                    <h2>
-                        Upcoming Fixtures
-                    </h2>
+                    <div>
+
+                        <h2 class="section-title">
+                            Upcoming Fixtures
+                        </h2>
+
+                        <p class="section-subtitle">
+                            পরবর্তী ম্যাচসমূহ
+                        </p>
+
+                    </div>
 
                 </div>
 
-                <span
-                    class="section-count"
-                    id="upcomingCount"
-                >
-                    0 matches
-                </span>
+                <div class="section-line"></div>
 
             </div>
 
+
             <div
-                class="match-grid"
+                class="fixture-grid"
                 id="upcomingGrid"
-            ></div>
+            >
+
+                <div class="loading">
+
+                    <div class="loading-inner">
+
+                        <div class="spinner"></div>
+
+                        <span>
+                            Loading fixtures...
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </section>
 
 
-        <!-- =================================================
+
+        <!-- =====================================================
              RESULTS
-        ================================================== -->
+        ====================================================== -->
 
         <section
-            class="match-section"
+            class="section"
             id="resultsSection"
         >
 
-            <div class="section-heading">
+            <div class="section-header">
 
-                <div>
+                <div class="section-title-wrap">
 
-                    <p class="section-kicker">
-                        MATCH HISTORY
-                    </p>
+                    <div class="section-icon">
+                        🏆
+                    </div>
 
-                    <h2>
-                        Results
-                    </h2>
+                    <div>
+
+                        <h2 class="section-title">
+                            Match Results
+                        </h2>
+
+                        <p class="section-subtitle">
+                            সম্পন্ন ম্যাচের ফলাফল
+                        </p>
+
+                    </div>
 
                 </div>
 
-                <span
-                    class="section-count"
-                    id="resultsCount"
-                >
-                    0 matches
-                </span>
+                <div class="section-line"></div>
 
             </div>
 
+
             <div
-                class="match-grid"
+                class="fixture-grid"
                 id="resultsGrid"
-            ></div>
+            >
+
+                <div class="loading">
+
+                    <div class="loading-inner">
+
+                        <div class="spinner"></div>
+
+                        <span>
+                            Loading results...
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </section>
 
-
-        <!-- =================================================
-             EMPTY
-        ================================================== -->
-
-        <div
-            id="emptyState"
-            class="empty-state"
-            style="display:none;"
-        >
-
-            <div class="empty-icon">
-                🏟️
-            </div>
-
-            <strong>
-                No fixtures found
-            </strong>
-
-            <span>
-                There are no matches matching your selected filter.
-            </span>
-
-        </div>
-
-
-        <!-- =================================================
-             LOADING
-        ================================================== -->
-
-        <div
-            id="loadingState"
-            class="loading-state"
-        >
-
-            <div class="loading-spinner"></div>
-
-            Loading fixtures...
-
-        </div>
 
     </main>
 
 
-    <!-- =================================================
-         FOOTER
-    ================================================== -->
 
-    <footer>
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
+
+    <footer class="footer">
 
         <strong>
             Ghopkhali Sports Arena
@@ -1517,78 +3256,69 @@
 
         <br>
 
-        Fixtures & Results
+        Football • Cricket • Community • Excellence
 
     </footer>
 
 
-    <!-- =================================================
-         JAVASCRIPT
-    ================================================== -->
 
     <script>
 
-        "use strict";
-
-
-        /* =================================================
-           SUPABASE CONFIG
-        ================================================== */
+        /* =========================================================
+           SUPABASE
+        ========================================================= */
 
         const SUPABASE_URL =
             "https://cmygmswzokyrmgdnuszq.supabase.co";
 
-        const SUPABASE_ANON_KEY =
+        const SUPABASE_KEY =
             "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
+
         const supabaseClient =
-            window.supabase.createClient(
+            supabase.createClient(
                 SUPABASE_URL,
-                SUPABASE_ANON_KEY
+                SUPABASE_KEY
             );
 
 
-        /* =================================================
+        /* =========================================================
            STATE
-        ================================================== */
+        ========================================================= */
 
         let fixtures = [];
 
-        let activeFilter = "all";
+        let currentFilter = "all";
 
 
-        /* =================================================
+        /* =========================================================
            ELEMENTS
-        ================================================== */
+        ========================================================= */
 
         const upcomingGrid =
-            document.getElementById("upcomingGrid");
+            document.getElementById(
+                "upcomingGrid"
+            );
 
         const resultsGrid =
-            document.getElementById("resultsGrid");
+            document.getElementById(
+                "resultsGrid"
+            );
 
         const upcomingSection =
-            document.getElementById("upcomingSection");
+            document.getElementById(
+                "upcomingSection"
+            );
 
         const resultsSection =
-            document.getElementById("resultsSection");
-
-        const upcomingCount =
-            document.getElementById("upcomingCount");
-
-        const resultsCount =
-            document.getElementById("resultsCount");
-
-        const emptyState =
-            document.getElementById("emptyState");
-
-        const loadingState =
-            document.getElementById("loadingState");
+            document.getElementById(
+                "resultsSection"
+            );
 
 
-        /* =================================================
+        /* =========================================================
            ESCAPE HTML
-        ================================================== */
+        ========================================================= */
 
         function escapeHTML(value) {
 
@@ -1600,70 +3330,85 @@
             }
 
             return String(value)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
         }
 
 
-        /* =================================================
-           FORMAT DATE
-        ================================================== */
+        /* =========================================================
+           DATE FORMAT
+        ========================================================= */
 
-        function formatDate(dateValue) {
+        function formatDate(date) {
 
-            if (!dateValue) {
-                return "Date not available";
+            if (!date) {
+                return "";
             }
 
-            const date =
-                new Date(
-                    `${dateValue}T00:00:00`
+            try {
+
+                return new Date(
+                    date + "T00:00:00"
+                ).toLocaleDateString(
+                    "bn-BD",
+                    {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                    }
                 );
 
-            if (Number.isNaN(date.getTime())) {
-                return escapeHTML(dateValue);
-            }
+            } catch {
 
-            return date.toLocaleDateString(
-                "en-GB",
-                {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric"
-                }
-            );
+                return date;
+            }
         }
 
 
-        /* =================================================
-           FORMAT TIME
-        ================================================== */
+        /* =========================================================
+           TIME FORMAT
+        ========================================================= */
 
-        function formatTime(timeValue) {
+        function formatTime(time) {
 
-            if (!timeValue) {
-                return "Time TBA";
+            if (!time) {
+                return "";
             }
 
             const parts =
-                String(timeValue).split(":");
+                time.split(":");
 
-            if (parts.length < 2) {
-                return escapeHTML(timeValue);
+            if (!parts.length) {
+                return time;
             }
 
             let hour =
-                parseInt(parts[0], 10);
+                parseInt(
+                    parts[0],
+                    10
+                );
 
             const minute =
-                parts[1];
-
-            if (Number.isNaN(hour)) {
-                return escapeHTML(timeValue);
-            }
+                parts[1] || "00";
 
             const suffix =
                 hour >= 12
@@ -1677,26 +3422,827 @@
         }
 
 
-        /* =================================================
-           NORMALIZE SPORT
-        ================================================== */
+        /* =========================================================
+           META
+        ========================================================= */
 
-        function normalizeSport(sport) {
+        function createMetaHTML(item) {
 
-            return String(
-                sport || ""
-            ).toLowerCase().trim();
+            const parts = [];
+
+            if (item.venue) {
+
+                parts.push(
+                    `<span class="meta-item">
+                        📍 ${escapeHTML(item.venue)}
+                    </span>`
+                );
+            }
+
+            if (item.tournament) {
+
+                parts.push(
+                    `<span class="meta-separator">•</span>`
+                );
+
+                parts.push(
+                    `<span class="meta-item">
+                        🏆 ${escapeHTML(item.tournament)}
+                    </span>`
+                );
+            }
+
+            return parts.join("");
         }
 
 
-        /* =================================================
+        /* =========================================================
+           FOOTBALL SCORERS
+        ========================================================= */
+
+        function createScorersHTML(item) {
+
+            if (!item.scorer_name) {
+                return "";
+            }
+
+            const names =
+                String(
+                    item.scorer_name
+                )
+                .split(",")
+                .map(
+                    value =>
+                        value.trim()
+                )
+                .filter(Boolean);
+
+
+            const times =
+                item.score_time
+                    ? String(
+                        item.score_time
+                    )
+                    .split(",")
+                    .map(
+                        value =>
+                            value.trim()
+                    )
+                    : [];
+
+
+            if (!names.length) {
+                return "";
+            }
+
+
+            return `
+
+                <div class="scorers">
+
+                    <div class="scorers-title">
+                        Goal Scorers
+                    </div>
+
+                    ${names.map(
+                        (name, index) => `
+
+                        <div
+                            class="scorer"
+                            style="animation-delay:${index * 60}ms"
+                        >
+
+                            <span>
+                                ${escapeHTML(name)}
+                            </span>
+
+                            ${
+                                times[index]
+                                    ? `
+                                    <span class="scorer-time">
+                                        ${escapeHTML(
+                                            times[index]
+                                        )}
+                                    </span>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+                    `).join("")}
+
+                </div>
+
+            `;
+        }
+
+
+        /* =========================================================
+           CRICKET INNINGS
+        ========================================================= */
+
+        function createCricketInningsHTML(item) {
+
+            const homeScore =
+                item.home_score || "—";
+
+            const awayScore =
+                item.away_score || "—";
+
+            const homeWickets =
+                item.home_wickets !== null &&
+                item.home_wickets !== undefined
+                    ? item.home_wickets
+                    : "—";
+
+            const awayWickets =
+                item.away_wickets !== null &&
+                item.away_wickets !== undefined
+                    ? item.away_wickets
+                    : "—";
+
+
+            const homeOvers =
+                item.home_overs
+                    ? item.home_overs
+                    : "Overs not added";
+
+            const awayOvers =
+                item.away_overs
+                    ? item.away_overs
+                    : "Overs not added";
+
+
+            return `
+
+                <div class="innings-grid">
+
+                    <div class="innings-box">
+
+                        <div class="innings-team">
+                            ${escapeHTML(
+                                item.home_team
+                            )}
+                        </div>
+
+                        <div class="innings-score">
+                            ${escapeHTML(
+                                homeScore
+                            )}/${escapeHTML(
+                                homeWickets
+                            )}
+                        </div>
+
+                        <div class="innings-overs">
+                            ${escapeHTML(
+                                homeOvers
+                            )} Ov
+                        </div>
+
+                    </div>
+
+
+                    <div class="innings-box">
+
+                        <div class="innings-team">
+                            ${escapeHTML(
+                                item.away_team
+                            )}
+                        </div>
+
+                        <div class="innings-score">
+                            ${escapeHTML(
+                                awayScore
+                            )}/${escapeHTML(
+                                awayWickets
+                            )}
+                        </div>
+
+                        <div class="innings-overs">
+                            ${escapeHTML(
+                                awayOvers
+                            )} Ov
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+        }
+
+
+        /* =========================================================
+           FOOTBALL CARD
+        ========================================================= */
+
+        function createFootballCard(item) {
+
+            const isResult =
+                item.status === "completed";
+
+
+            const homeScore =
+                item.home_score ?? "—";
+
+            const awayScore =
+                item.away_score ?? "—";
+
+
+            return `
+
+                <article
+                    class="
+                        fixture-card
+                        football
+                        ${isResult
+                            ? "result"
+                            : "upcoming"}
+                    "
+                >
+
+                    <div class="card-top">
+
+                        <span class="sport-label">
+                            ⚽ Football
+                        </span>
+
+                        <span class="status-label">
+                            ${
+                                isResult
+                                    ? "RESULT"
+                                    : "UPCOMING"
+                            }
+                        </span>
+
+                    </div>
+
+
+                    <div class="card-date">
+
+                        ${formatDate(
+                            item.match_date
+                        )}
+
+                        ${
+                            item.match_time
+                                ? ` • ${formatTime(
+                                    item.match_time
+                                )}`
+                                : ""
+                        }
+
+                    </div>
+
+
+                    ${
+                        isResult
+                            ? `
+                                <div class="result-title">
+                                    FULL TIME
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    <div class="match-area">
+
+                        <div class="team">
+
+                            <div class="team-logo">
+
+                                ${
+                                    item.home_logo
+                                        ? `
+                                            <img
+                                                src="${escapeHTML(
+                                                    item.home_logo
+                                                )}"
+                                                alt="${escapeHTML(
+                                                    item.home_team
+                                                )}"
+                                                loading="lazy"
+                                            >
+                                          `
+                                        : `
+                                            <span>
+                                                ⚽
+                                            </span>
+                                          `
+                                }
+
+                            </div>
+
+
+                            <div class="team-name">
+                                ${escapeHTML(
+                                    item.home_team
+                                )}
+                            </div>
+
+                        </div>
+
+
+                        ${
+                            isResult
+                                ? `
+
+                                    <div class="result-score-area">
+
+                                        <div class="full-time">
+                                            FULL TIME
+                                        </div>
+
+                                        <div class="score">
+                                            ${escapeHTML(
+                                                homeScore
+                                            )}
+                                            <span
+                                                style="
+                                                    color:#6d7582;
+                                                    margin:0 5px;
+                                                "
+                                            >
+                                                -
+                                            </span>
+                                            ${escapeHTML(
+                                                awayScore
+                                            )}
+                                        </div>
+
+                                        <div class="minute-badge">
+                                            90 MIN
+                                        </div>
+
+                                    </div>
+
+                                  `
+                                : `
+
+                                    <div class="vs">
+                                        VS
+                                    </div>
+
+                                  `
+                        }
+
+
+                        <div class="team">
+
+                            <div class="team-logo">
+
+                                ${
+                                    item.away_logo
+                                        ? `
+                                            <img
+                                                src="${escapeHTML(
+                                                    item.away_logo
+                                                )}"
+                                                alt="${escapeHTML(
+                                                    item.away_team
+                                                )}"
+                                                loading="lazy"
+                                            >
+                                          `
+                                        : `
+                                            <span>
+                                                ⚽
+                                            </span>
+                                          `
+                                }
+
+                            </div>
+
+
+                            <div class="team-name">
+                                ${escapeHTML(
+                                    item.away_team
+                                )}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    ${
+                        isResult
+                            ? createScorersHTML(item)
+                            : ""
+                    }
+
+
+                    ${
+                        isResult &&
+                        (
+                            item.man_of_the_match ||
+                            item.result_note
+                        )
+                            ? `
+
+                                <div class="result-details">
+
+                                    ${
+                                        item.man_of_the_match
+                                            ? `
+                                                <div class="detail-item">
+
+                                                    <div class="detail-label">
+                                                        Man of the Match
+                                                    </div>
+
+                                                    <div class="detail-value">
+                                                        ⭐ ${escapeHTML(
+                                                            item.man_of_the_match
+                                                        )}
+                                                    </div>
+
+                                                </div>
+                                              `
+                                            : ""
+                                    }
+
+
+                                    ${
+                                        item.result_note
+                                            ? `
+                                                <div class="detail-item">
+
+                                                    <div class="detail-label">
+                                                        Result
+                                                    </div>
+
+                                                    <div class="detail-value">
+                                                        ${escapeHTML(
+                                                            item.result_note
+                                                        )}
+                                                    </div>
+
+                                                </div>
+                                              `
+                                            : ""
+                                    }
+
+                                </div>
+
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        isResult && item.result_note
+                            ? `
+                                <div class="result-note">
+                                    ${escapeHTML(
+                                        item.result_note
+                                    )}
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    <div class="card-meta">
+
+                        ${createMetaHTML(item)}
+
+                    </div>
+
+                </article>
+
+            `;
+        }
+
+
+        /* =========================================================
+           CRICKET CARD
+        ========================================================= */
+
+        function createCricketCard(item) {
+
+            const isResult =
+                item.status === "completed";
+
+
+            const homeScore =
+                item.home_score ?? "—";
+
+            const awayScore =
+                item.away_score ?? "—";
+
+
+            return `
+
+                <article
+                    class="
+                        fixture-card
+                        cricket
+                        ${isResult
+                            ? "result"
+                            : "upcoming"}
+                    "
+                >
+
+                    <div class="card-top">
+
+                        <span class="sport-label">
+                            🏏 Cricket
+                        </span>
+
+                        <span class="status-label">
+                            ${
+                                isResult
+                                    ? "RESULT"
+                                    : "UPCOMING"
+                            }
+                        </span>
+
+                    </div>
+
+
+                    <div class="card-date">
+
+                        ${formatDate(
+                            item.match_date
+                        )}
+
+                        ${
+                            item.match_time
+                                ? ` • ${formatTime(
+                                    item.match_time
+                                )}`
+                                : ""
+                        }
+
+                    </div>
+
+
+                    ${
+                        isResult
+                            ? `
+                                <div class="result-title">
+                                    MATCH RESULT
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    <div class="match-area">
+
+                        <div class="team">
+
+                            <div class="team-logo">
+
+                                ${
+                                    item.home_logo
+                                        ? `
+                                            <img
+                                                src="${escapeHTML(
+                                                    item.home_logo
+                                                )}"
+                                                alt="${escapeHTML(
+                                                    item.home_team
+                                                )}"
+                                                loading="lazy"
+                                            >
+                                          `
+                                        : `
+                                            <span>
+                                                🏏
+                                            </span>
+                                          `
+                                }
+
+                            </div>
+
+
+                            <div class="team-name">
+                                ${escapeHTML(
+                                    item.home_team
+                                )}
+                            </div>
+
+                        </div>
+
+
+                        ${
+                            isResult
+                                ? `
+
+                                    <div class="cricket-score">
+
+                                        <div class="cricket-score-main">
+                                            ${escapeHTML(
+                                                homeScore
+                                            )}
+                                            <span
+                                                style="
+                                                    color:#6d7582;
+                                                    margin:0 3px;
+                                                "
+                                            >
+                                                –
+                                            </span>
+                                            ${escapeHTML(
+                                                awayScore
+                                            )}
+                                        </div>
+
+                                        <div class="cricket-status-badge">
+                                            CRICKET RESULT
+                                        </div>
+
+                                    </div>
+
+                                  `
+                                : `
+
+                                    <div class="vs">
+                                        VS
+                                    </div>
+
+                                  `
+                        }
+
+
+                        <div class="team">
+
+                            <div class="team-logo">
+
+                                ${
+                                    item.away_logo
+                                        ? `
+                                            <img
+                                                src="${escapeHTML(
+                                                    item.away_logo
+                                                )}"
+                                                alt="${escapeHTML(
+                                                    item.away_team
+                                                )}"
+                                                loading="lazy"
+                                            >
+                                          `
+                                        : `
+                                            <span>
+                                                🏏
+                                            </span>
+                                          `
+                                }
+
+                            </div>
+
+
+                            <div class="team-name">
+                                ${escapeHTML(
+                                    item.away_team
+                                )}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    ${
+                        isResult
+                            ? createCricketInningsHTML(item)
+                            : ""
+                    }
+
+
+                    ${
+                        isResult &&
+                        (
+                            item.highest_score_player ||
+                            item.highest_score_runs ||
+                            item.man_of_the_match
+                        )
+                            ? `
+
+                                <div class="result-details">
+
+                                    ${
+                                        item.highest_score_player
+                                            ? `
+                                                <div class="detail-item">
+
+                                                    <div class="detail-label">
+                                                        Highest Score
+                                                    </div>
+
+                                                    <div class="detail-value">
+                                                        🏏 ${escapeHTML(
+                                                            item.highest_score_player
+                                                        )}
+                                                        ${
+                                                            item.highest_score_runs !== null &&
+                                                            item.highest_score_runs !== undefined
+                                                                ? ` • ${escapeHTML(
+                                                                    item.highest_score_runs
+                                                                )} Runs`
+                                                                : ""
+                                                        }
+                                                    </div>
+
+                                                </div>
+                                              `
+                                            : ""
+                                    }
+
+
+                                    ${
+                                        item.man_of_the_match
+                                            ? `
+                                                <div class="detail-item">
+
+                                                    <div class="detail-label">
+                                                        Man of the Match
+                                                    </div>
+
+                                                    <div class="detail-value">
+                                                        ⭐ ${escapeHTML(
+                                                            item.man_of_the_match
+                                                        )}
+                                                    </div>
+
+                                                </div>
+                                              `
+                                            : ""
+                                    }
+
+                                </div>
+
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        isResult && item.result_note
+                            ? `
+                                <div class="result-note">
+                                    ${escapeHTML(
+                                        item.result_note
+                                    )}
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    <div class="card-meta">
+
+                        ${createMetaHTML(item)}
+
+                    </div>
+
+                </article>
+
+            `;
+        }
+
+
+        /* =========================================================
+           EMPTY
+        ========================================================= */
+
+        function createEmptyHTML(
+            icon,
+            title,
+            text
+        ) {
+
+            return `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        ${icon}
+                    </div>
+
+                    <div class="empty-title">
+                        ${title}
+                    </div>
+
+                    <div class="empty-text">
+                        ${text}
+                    </div>
+
+                </div>
+
+            `;
+        }
+
+
+        /* =========================================================
            LOAD FIXTURES
-        ================================================== */
+        ========================================================= */
 
         async function loadFixtures() {
-
-            loadingState.style.display =
-                "block";
 
             try {
 
@@ -1719,14 +4265,15 @@
                         }
                     );
 
+
                 if (error) {
                     throw error;
                 }
 
+
                 fixtures =
-                    Array.isArray(data)
-                        ? data
-                        : [];
+                    data || [];
+
 
                 renderFixtures();
 
@@ -1737,1134 +4284,271 @@
                     error
                 );
 
-                fixtures = [];
 
-                upcomingGrid.innerHTML = "";
+                upcomingGrid.innerHTML =
+                    createEmptyHTML(
+                        "⚠️",
+                        "Fixtures Load করা যায়নি",
+                        "দয়া করে কিছুক্ষণ পর আবার চেষ্টা করুন।"
+                    );
 
-                resultsGrid.innerHTML = "";
+
+                resultsGrid.innerHTML =
+                    createEmptyHTML(
+                        "⚠️",
+                        "Results Load করা যায়নি",
+                        "দয়া করে কিছুক্ষণ পর আবার চেষ্টা করুন।"
+                    );
+            }
+        }
+
+
+        /* =========================================================
+           FILTER
+        ========================================================= */
+
+        function filterFixtures() {
+
+            if (
+                currentFilter === "all"
+            ) {
+                return fixtures;
+            }
+
+
+            if (
+                currentFilter === "upcoming"
+            ) {
+
+                return fixtures.filter(
+                    item =>
+                        item.status ===
+                        "upcoming"
+                );
+            }
+
+
+            if (
+                currentFilter === "completed"
+            ) {
+
+                return fixtures.filter(
+                    item =>
+                        item.status ===
+                        "completed"
+                );
+            }
+
+
+            if (
+                currentFilter === "football"
+            ) {
+
+                return fixtures.filter(
+                    item =>
+                        item.sport ===
+                        "football"
+                );
+            }
+
+
+            if (
+                currentFilter === "cricket"
+            ) {
+
+                return fixtures.filter(
+                    item =>
+                        item.sport ===
+                        "cricket"
+                );
+            }
+
+
+            return fixtures;
+        }
+
+
+        /* =========================================================
+           RENDER
+        ========================================================= */
+
+        function renderFixtures() {
+
+            const filtered =
+                filterFixtures();
+
+
+            const upcoming =
+                filtered.filter(
+                    item =>
+                        item.status ===
+                        "upcoming"
+                );
+
+
+            const results =
+                filtered.filter(
+                    item =>
+                        item.status ===
+                        "completed"
+                );
+
+
+            upcomingGrid.innerHTML =
+                upcoming.length
+                    ? upcoming
+                        .map(item =>
+                            item.sport === "cricket"
+                                ? createCricketCard(item)
+                                : createFootballCard(item)
+                        )
+                        .join("")
+                    : createEmptyHTML(
+                        "📅",
+                        "কোনো Upcoming Fixture নেই",
+                        "বর্তমানে এই category-তে কোনো upcoming match পাওয়া যায়নি।"
+                    );
+
+
+            resultsGrid.innerHTML =
+                results.length
+                    ? results
+                        .slice()
+                        .reverse()
+                        .map(item =>
+                            item.sport === "cricket"
+                                ? createCricketCard(item)
+                                : createFootballCard(item)
+                        )
+                        .join("")
+                    : createEmptyHTML(
+                        "🏆",
+                        "কোনো Result নেই",
+                        "বর্তমানে এই category-তে কোনো completed match পাওয়া যায়নি।"
+                    );
+
+
+            updateSections();
+        }
+
+
+        /* =========================================================
+           SECTION VISIBILITY
+        ========================================================= */
+
+        function updateSections() {
+
+            const showUpcoming =
+                fixtures.some(
+                    item =>
+                        item.status ===
+                        "upcoming"
+                );
+
+
+            const showResults =
+                fixtures.some(
+                    item =>
+                        item.status ===
+                        "completed"
+                );
+
+
+            if (
+                currentFilter ===
+                "upcoming"
+            ) {
+
+                upcomingSection.style.display =
+                    showUpcoming
+                        ? ""
+                        : "none";
+
+                resultsSection.style.display =
+                    "none";
+
+                return;
+            }
+
+
+            if (
+                currentFilter ===
+                "completed"
+            ) {
 
                 upcomingSection.style.display =
                     "none";
 
                 resultsSection.style.display =
-                    "none";
+                    showResults
+                        ? ""
+                        : "none";
 
-                emptyState.style.display =
-                    "block";
-
-                emptyState.innerHTML = `
-                    <div class="empty-icon">⚠️</div>
-                    <strong>Unable to load fixtures</strong>
-                    <span>Please try again later.</span>
-                `;
-
-            } finally {
-
-                loadingState.style.display =
-                    "none";
+                return;
             }
-        }
-
-
-        /* =================================================
-           FILTER FIXTURES
-        ================================================== */
-
-        function getFilteredFixtures() {
-
-            return fixtures.filter(
-                fixture => {
-
-                    const sport =
-                        normalizeSport(
-                            fixture.sport
-                        );
-
-                    const status =
-                        String(
-                            fixture.status || "upcoming"
-                        ).toLowerCase();
-
-                    if (
-                        activeFilter === "all"
-                    ) {
-                        return true;
-                    }
-
-                    if (
-                        activeFilter === "football"
-                    ) {
-                        return sport === "football";
-                    }
-
-                    if (
-                        activeFilter === "cricket"
-                    ) {
-                        return sport === "cricket";
-                    }
-
-                    if (
-                        activeFilter === "upcoming"
-                    ) {
-                        return status === "upcoming";
-                    }
-
-                    if (
-                        activeFilter === "completed"
-                    ) {
-                        return status === "completed";
-                    }
-
-                    return true;
-                }
-            );
-        }
-
-
-        /* =================================================
-           RENDER
-        ================================================== */
-
-        function renderFixtures() {
-
-            const filtered =
-                getFilteredFixtures();
-
-            const upcoming =
-                filtered.filter(
-                    item =>
-                        String(
-                            item.status || "upcoming"
-                        ).toLowerCase()
-                        === "upcoming"
-                );
-
-            const results =
-                filtered.filter(
-                    item =>
-                        String(
-                            item.status || ""
-                        ).toLowerCase()
-                        === "completed"
-                );
-
-
-            upcomingCount.textContent =
-                `${upcoming.length} ${
-                    upcoming.length === 1
-                        ? "match"
-                        : "matches"
-                }`;
-
-            resultsCount.textContent =
-                `${results.length} ${
-                    results.length === 1
-                        ? "match"
-                        : "matches"
-                }`;
-
-
-            upcomingGrid.innerHTML =
-                upcoming
-                    .map(
-                        fixture =>
-                            createMatchCard(
-                                fixture,
-                                false
-                            )
-                    )
-                    .join("");
-
-
-            resultsGrid.innerHTML =
-                results
-                    .map(
-                        fixture =>
-                            createMatchCard(
-                                fixture,
-                                true
-                            )
-                    )
-                    .join("");
 
 
             upcomingSection.style.display =
-                upcoming.length
-                    ? "block"
-                    : "none";
+                "";
 
             resultsSection.style.display =
-                results.length
-                    ? "block"
-                    : "none";
-
-            emptyState.style.display =
-                !upcoming.length &&
-                !results.length
-                    ? "block"
-                    : "none";
+                "";
         }
 
 
-        /* =================================================
-           CREATE MATCH CARD
-        ================================================== */
-
-        function createMatchCard(
-            fixture,
-            isResult
-        ) {
-
-            const sport =
-                normalizeSport(
-                    fixture.sport
-                );
-
-            if (sport === "cricket") {
-
-                return createCricketCard(
-                    fixture,
-                    isResult
-                );
-            }
-
-            return createFootballCard(
-                fixture,
-                isResult
-            );
-        }
-
-
-        /* =================================================
-           LOGO HTML
-        ================================================== */
-
-        function teamLogo(
-            url,
-            fallback
-        ) {
-
-            if (url) {
-
-                return `
-                    <img
-                        class="team-logo"
-                        src="${escapeHTML(url)}"
-                        alt=""
-                        loading="lazy"
-                        onerror="
-                            this.outerHTML =
-                            '<div class=&quot;team-logo-fallback&quot;>${fallback}</div>'
-                        "
-                    >
-                `;
-            }
-
-            return `
-                <div class="team-logo-fallback">
-                    ${fallback}
-                </div>
-            `;
-        }
-
-
-        /* =================================================
-           FOOTBALL CARD
-        ================================================== */
-
-        function createFootballCard(
-            fixture,
-            isResult
-        ) {
-
-            const homeTeam =
-                escapeHTML(
-                    fixture.home_team ||
-                    "Home Team"
-                );
-
-            const awayTeam =
-                escapeHTML(
-                    fixture.away_team ||
-                    "Away Team"
-                );
-
-            const homeLogo =
-                teamLogo(
-                    fixture.home_logo,
-                    "⚽"
-                );
-
-            const awayLogo =
-                teamLogo(
-                    fixture.away_logo,
-                    "⚽"
-                );
-
-
-            const scoreExists =
-                fixture.home_score !== null &&
-                fixture.home_score !== undefined &&
-                fixture.home_score !== "" &&
-                fixture.away_score !== null &&
-                fixture.away_score !== undefined &&
-                fixture.away_score !== "";
-
-
-            const scoreHTML =
-                isResult && scoreExists
-
-                    ? `
-                        <div class="score-line">
-                            <span>
-                                ${escapeHTML(
-                                    fixture.home_score
-                                )}
-                            </span>
-
-                            <span class="score-separator">
-                                –
-                            </span>
-
-                            <span>
-                                ${escapeHTML(
-                                    fixture.away_score
-                                )}
-                            </span>
-                        </div>
-                    `
-
-                    : `
-                        <div class="versus">
-                            VS
-                        </div>
-                    `;
-
-
-            const scorerHTML =
-                isResult
-                    ? createFootballScorers(
-                        fixture
-                    )
-                    : "";
-
-
-            const resultHTML =
-                isResult
-                    ? createFootballResultDetails(
-                        fixture
-                    )
-                    : "";
-
-
-            return `
-                <article
-                    class="
-                        match-card
-                        ${isResult
-                            ? "football-result"
-                            : "football-fixture"}
-                    "
-                >
-
-                    <div class="card-top">
-
-                        <span class="sport-label">
-                            ⚽ FOOTBALL
-                        </span>
-
-                        <span
-                            class="
-                                status-label
-                                ${isResult
-                                    ? "completed"
-                                    : "upcoming"}
-                            "
-                        >
-                            ${isResult
-                                ? "FINAL"
-                                : "UPCOMING"}
-                        </span>
-
-                    </div>
-
-
-                    <div class="match-date-strip">
-
-                        ${formatDate(
-                            fixture.match_date
-                        )}
-
-                        ·
-
-                        ${formatTime(
-                            fixture.match_time
-                        )}
-
-                    </div>
-
-
-                    <div class="teams-area">
-
-                        <div class="team">
-
-                            ${homeLogo}
-
-                            <span class="team-name">
-                                ${homeTeam}
-                            </span>
-
-                        </div>
-
-
-                        <div>
-
-                            ${scoreHTML}
-
-                        </div>
-
-
-                        <div class="team">
-
-                            ${awayLogo}
-
-                            <span class="team-name">
-                                ${awayTeam}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    ${scorerHTML}
-
-                    ${resultHTML}
-
-
-                    ${createMetaHTML(
-                        fixture
-                    )}
-
-                </article>
-            `;
-        }
-
-
-        /* =================================================
-           FOOTBALL SCORERS
-        ================================================== */
-
-        function createFootballScorers(
-            fixture
-        ) {
-
-            if (
-                !fixture.scorer_name &&
-                !fixture.score_time
-            ) {
-                return "";
-            }
-
-
-            const names =
-                String(
-                    fixture.scorer_name || ""
-                )
-                .split(",")
-                .map(
-                    item => item.trim()
-                )
-                .filter(Boolean);
-
-
-            const times =
-                String(
-                    fixture.score_time || ""
-                )
-                .split(",")
-                .map(
-                    item => item.trim()
-                );
-
-
-            const max =
-                Math.max(
-                    names.length,
-                    times.length
-                );
-
-
-            let rows = "";
-
-            for (
-                let i = 0;
-                i < max;
-                i++
-            ) {
-
-                const name =
-                    names[i] ||
-                    "Goal";
-
-                const time =
-                    times[i] ||
-                    "";
-
-                rows += `
-                    <div class="scorer-row">
-
-                        <span>
-                            ⚽
-                            ${escapeHTML(name)}
-                        </span>
-
-                        <span class="scorer-time">
-                            ${escapeHTML(time)}
-                        </span>
-
-                    </div>
-                `;
-            }
-
-
-            return `
-                <div class="football-scorers">
-
-                    <div class="details-title">
-                        GOAL SCORERS
-                    </div>
-
-                    ${rows}
-
-                </div>
-            `;
-        }
-
-
-        /* =================================================
-           FOOTBALL RESULT DETAILS
-        ================================================== */
-
-        function createFootballResultDetails(
-            fixture
-        ) {
-
-            if (
-                !fixture.man_of_the_match &&
-                !fixture.result_note
-            ) {
-                return "";
-            }
-
-            return `
-                <div class="result-details">
-
-                    ${
-                        fixture.man_of_the_match
-                            ? `
-                                <div class="result-item">
-
-                                    <span>
-                                        Man of the Match
-                                    </span>
-
-                                    <strong>
-                                        🏆
-                                        ${escapeHTML(
-                                            fixture.man_of_the_match
-                                        )}
-                                    </strong>
-
-                                </div>
-                            `
-                            : ""
-                    }
-
-
-                    ${
-                        fixture.result_note
-                            ? `
-                                <div class="result-item">
-
-                                    <span>
-                                        Result
-                                    </span>
-
-                                    <strong>
-                                        ${escapeHTML(
-                                            fixture.result_note
-                                        )}
-                                    </strong>
-
-                                </div>
-                            `
-                            : ""
-                    }
-
-                </div>
-            `;
-        }
-
-
-        /* =================================================
-           CRICKET CARD
-        ================================================== */
-
-        function createCricketCard(
-            fixture,
-            isResult
-        ) {
-
-            const homeTeam =
-                escapeHTML(
-                    fixture.home_team ||
-                    "Home Team"
-                );
-
-            const awayTeam =
-                escapeHTML(
-                    fixture.away_team ||
-                    "Away Team"
-                );
-
-
-            const homeLogo =
-                teamLogo(
-                    fixture.home_logo,
-                    "🏏"
-                );
-
-            const awayLogo =
-                teamLogo(
-                    fixture.away_logo,
-                    "🏏"
-                );
-
-
-            const inningsHTML =
-                isResult
-                    ? createCricketInnings(
-                        fixture
-                    )
-                    : `
-                        <div class="teams-area">
-
-                            <div class="team">
-
-                                ${homeLogo}
-
-                                <span class="team-name">
-                                    ${homeTeam}
-                                </span>
-
-                            </div>
-
-                            <div class="versus">
-                                VS
-                            </div>
-
-                            <div class="team">
-
-                                ${awayLogo}
-
-                                <span class="team-name">
-                                    ${awayTeam}
-                                </span>
-
-                            </div>
-
-                        </div>
-                    `;
-
-
-            const resultHTML =
-                isResult
-                    ? createCricketResultDetails(
-                        fixture
-                    )
-                    : "";
-
-
-            return `
-                <article
-                    class="
-                        match-card
-                        ${isResult
-                            ? "cricket-result"
-                            : "cricket-fixture"}
-                    "
-                >
-
-                    <div class="card-top">
-
-                        <span class="sport-label">
-                            🏏 CRICKET
-                        </span>
-
-                        <span
-                            class="
-                                status-label
-                                ${isResult
-                                    ? "completed"
-                                    : "upcoming"}
-                            "
-                        >
-                            ${isResult
-                                ? "FINAL"
-                                : "UPCOMING"}
-                        </span>
-
-                    </div>
-
-
-                    <div class="match-date-strip">
-
-                        ${formatDate(
-                            fixture.match_date
-                        )}
-
-                        ·
-
-                        ${formatTime(
-                            fixture.match_time
-                        )}
-
-                    </div>
-
-
-                    ${
-                        isResult
-                            ? createCricketResultTeams(
-                                fixture,
-                                homeTeam,
-                                awayTeam,
-                                homeLogo,
-                                awayLogo
-                            )
-                            : inningsHTML
-                    }
-
-
-                    ${resultHTML}
-
-
-                    ${createMetaHTML(
-                        fixture
-                    )}
-
-                </article>
-            `;
-        }
-
-
-        /* =================================================
-           CRICKET RESULT TEAMS
-        ================================================== */
-
-        function createCricketResultTeams(
-            fixture,
-            homeTeam,
-            awayTeam,
-            homeLogo,
-            awayLogo
-        ) {
-
-            return `
-                <div class="teams-area">
-
-                    <div class="team">
-
-                        ${homeLogo}
-
-                        <span class="team-name">
-                            ${homeTeam}
-                        </span>
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="score-line">
-
-                            <span>
-                                ${escapeHTML(
-                                    fixture.home_score ??
-                                    "—"
-                                )}
-                            </span>
-
-                            <span class="score-separator">
-                                –
-                            </span>
-
-                            <span>
-                                ${escapeHTML(
-                                    fixture.away_score ??
-                                    "—"
-                                )}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="team">
-
-                        ${awayLogo}
-
-                        <span class="team-name">
-                            ${awayTeam}
-                        </span>
-
-                    </div>
-
-                </div>
-            `;
-        }
-
-
-        /* =================================================
-           CRICKET INNINGS
-        ================================================== */
-
-        function createCricketInnings(
-            fixture
-        ) {
-
-            const homeRuns =
-                fixture.home_score ?? "—";
-
-            const awayRuns =
-                fixture.away_score ?? "—";
-
-            const homeWickets =
-                fixture.home_wickets !== null &&
-                fixture.home_wickets !== undefined
-                    ? fixture.home_wickets
-                    : "—";
-
-            const awayWickets =
-                fixture.away_wickets !== null &&
-                fixture.away_wickets !== undefined
-                    ? fixture.away_wickets
-                    : "—";
-
-
-            return `
-                <div class="cricket-innings">
-
-                    <div class="innings-box">
-
-                        <span class="innings-team">
-                            ${escapeHTML(
-                                fixture.home_team ||
-                                "Home"
-                            )}
-                        </span>
-
-                        <span class="innings-score">
-                            ${escapeHTML(
-                                homeRuns
-                            )}/${escapeHTML(
-                                homeWickets
-                            )}
-                        </span>
-
-                        ${
-                            fixture.home_overs
-                                ? `
-                                    <span class="innings-overs">
-                                        ${escapeHTML(
-                                            fixture.home_overs
-                                        )}
-                                        Ov
-                                    </span>
-                                `
-                                : ""
-                        }
-
-                    </div>
-
-
-                    <div class="innings-box">
-
-                        <span class="innings-team">
-                            ${escapeHTML(
-                                fixture.away_team ||
-                                "Away"
-                            )}
-                        </span>
-
-                        <span class="innings-score">
-                            ${escapeHTML(
-                                awayRuns
-                            )}/${escapeHTML(
-                                awayWickets
-                            )}
-                        </span>
-
-                        ${
-                            fixture.away_overs
-                                ? `
-                                    <span class="innings-overs">
-                                        ${escapeHTML(
-                                            fixture.away_overs
-                                        )}
-                                        Ov
-                                    </span>
-                                `
-                                : ""
-                        }
-
-                    </div>
-
-                </div>
-            `;
-        }
-
-
-        /* =================================================
-           CRICKET RESULT DETAILS
-        ================================================== */
-
-        function createCricketResultDetails(
-            fixture
-        ) {
-
-            if (
-                !fixture.highest_score_player &&
-                fixture.man_of_the_match &&
-                !fixture.result_note
-            ) {
-
-                return `
-                    <div class="result-details">
-
-                        <div class="result-item">
-
-                            <span>
-                                Man of the Match
-                            </span>
-
-                            <strong>
-                                🏆
-                                ${escapeHTML(
-                                    fixture.man_of_the_match
-                                )}
-                            </strong>
-
-                        </div>
-
-                    </div>
-                `;
-            }
-
-
-            if (
-                !fixture.highest_score_player &&
-                !fixture.highest_score_runs &&
-                !fixture.man_of_the_match &&
-                !fixture.result_note
-            ) {
-                return "";
-            }
-
-
-            return `
-                <div class="result-details">
-
-                    ${
-                        fixture.highest_score_player
-                            ? `
-                                <div class="result-item">
-
-                                    <span>
-                                        Highest Score
-                                    </span>
-
-                                    <strong>
-                                        ${escapeHTML(
-                                            fixture.highest_score_player
-                                        )}
-                                        ${
-                                            fixture.highest_score_runs !== null &&
-                                            fixture.highest_score_runs !== undefined &&
-                                            fixture.highest_score_runs !== ""
-                                                ? ` · ${escapeHTML(
-                                                    fixture.highest_score_runs
-                                                )} runs`
-                                                : ""
-                                        }
-                                    </strong>
-
-                                </div>
-                            `
-                            : ""
-                    }
-
-
-                    ${
-                        fixture.man_of_the_match
-                            ? `
-                                <div class="result-item">
-
-                                    <span>
-                                        Man of the Match
-                                    </span>
-
-                                    <strong>
-                                        🏆
-                                        ${escapeHTML(
-                                            fixture.man_of_the_match
-                                        )}
-                                    </strong>
-
-                                </div>
-                            `
-                            : ""
-                    }
-
-
-                    ${
-                        fixture.result_note
-                            ? `
-                                <div class="result-item">
-
-                                    <span>
-                                        Result
-                                    </span>
-
-                                    <strong>
-                                        ${escapeHTML(
-                                            fixture.result_note
-                                        )}
-                                    </strong>
-
-                                </div>
-                            `
-                            : ""
-                    }
-
-                </div>
-            `;
-        }
-
-
-        /* =================================================
-           META
-        ================================================== */
-
-        function createMetaHTML(
-            fixture
-        ) {
-
-            const venue =
-                fixture.venue
-                    ? `
-                        <div class="meta-item">
-                            📍
-                            <span>
-                                <strong>Venue:</strong>
-                                ${escapeHTML(
-                                    fixture.venue
-                                )}
-                            </span>
-                        </div>
-                    `
-                    : "";
-
-
-            const tournament =
-                fixture.tournament
-                    ? `
-                        <div class="tournament-name">
-                            🏆
-                            ${escapeHTML(
-                                fixture.tournament
-                            )}
-                        </div>
-                    `
-                    : "";
-
-
-            return `
-                <div class="match-meta">
-
-                    ${venue}
-
-                </div>
-
-                ${tournament}
-            `;
-        }
-
-
-        /* =================================================
+        /* =========================================================
            FILTER BUTTONS
-        ================================================== */
+        ========================================================= */
 
-        document
-            .querySelectorAll(
-                "[data-filter]"
-            )
-            .forEach(
-                button => {
+        document.addEventListener(
+            "click",
+            event => {
 
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            document
-                                .querySelectorAll(
-                                    "[data-filter]"
-                                )
-                                .forEach(
-                                    item => {
-                                        item.classList
-                                            .remove(
-                                                "active"
-                                            );
-                                    }
-                                );
-
-                            button.classList
-                                .add("active");
-
-
-                            activeFilter =
-                                button.dataset.filter;
-
-
-                            renderFixtures();
-
-                            window.scrollTo({
-                                top:
-                                    document
-                                        .querySelector(
-                                            ".filter-area"
-                                        )
-                                        .offsetTop - 90,
-                                behavior:
-                                    "smooth"
-                            });
-
-                        }
+                const button =
+                    event.target.closest(
+                        "[data-filter]"
                     );
 
+
+                if (!button) {
+                    return;
                 }
-            );
 
 
-        /* =================================================
+                document
+                    .querySelectorAll(
+                        "[data-filter]"
+                    )
+                    .forEach(
+                        item =>
+                            item.classList.remove(
+                                "active"
+                            )
+                    );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                currentFilter =
+                    button.dataset.filter;
+
+
+                renderFixtures();
+
+            }
+        );
+
+
+        /* =========================================================
            REALTIME
-        ================================================== */
+        ========================================================= */
 
         supabaseClient
             .channel(
-                "public-fixtures-page"
+                "fixtures-live"
             )
             .on(
                 "postgres_changes",
@@ -2882,9 +4566,9 @@
             .subscribe();
 
 
-        /* =================================================
+        /* =========================================================
            INITIAL LOAD
-        ================================================== */
+        ========================================================= */
 
         loadFixtures();
 
