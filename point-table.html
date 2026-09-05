@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>GSA | Tournament Points Table</title>
+
+<meta
+    name="description"
+    content="Ghopkhali Sports Arena tournament football and cricket points tables."
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+>
+
+
+<style>
+
+/* =====================================================
+   ROOT
+===================================================== */
+
+:root {
+
+    --bg: #f4f6f8;
+
+    --surface: #ffffff;
+    --surface-2: #f8fafc;
+
+    --text: #101828;
+    --muted: #667085;
+
+    --border: #e4e7ec;
+
+    --football: #087443;
+    --football-light: #e9f8f0;
+
+    --cricket: #1455c0;
+    --cricket-light: #edf4ff;
+
+    --gold: #b88916;
+    --gold-light: #fff7dc;
+
+    --danger: #d92d20;
+
+    --shadow:
+        0 12px 35px rgba(16,24,40,.08);
+
+    --radius: 20px;
+}
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+html[data-theme="dark"] {
+
+    --bg: #000000;
+
+    --surface: #050505;
+    --surface-2: #0b0b0b;
+
+    --text: #f5f5f5;
+    --muted: #9ca3af;
+
+    --border: #1d1d1d;
+
+    --football: #22c55e;
+    --football-light: #07160d;
+
+    --cricket: #4d8dff;
+    --cricket-light: #07101f;
+
+    --gold: #e6bd4f;
+    --gold-light: #171207;
+
+    --shadow:
+        0 20px 60px rgba(0,0,0,.65);
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    background: var(--bg);
+
+    color: var(--text);
+
+    transition:
+        background .35s ease,
+        color .35s ease;
+}
+
+
+/* =====================================================
+   BACKGROUND
+===================================================== */
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: .55;
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(20,85,192,.08),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 20%,
+            rgba(8,116,67,.08),
+            transparent 30%
+        );
+
+    z-index: -1;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+
+    backdrop-filter: blur(18px);
+
+    background:
+        color-mix(
+            in srgb,
+            var(--surface) 88%,
+            transparent
+        );
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+.nav {
+
+    width: min(1200px, 92%);
+
+    margin: auto;
+
+    min-height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    text-decoration: none;
+
+    color: var(--text);
+}
+
+
+.brand-mark {
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 13px;
+
+    display: grid;
+
+    place-items: center;
+
+    font-weight: 900;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111,
+            #333
+        );
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.16);
+}
+
+
+.brand-text strong {
+
+    display: block;
+
+    font-size: 14px;
+
+    letter-spacing: .05em;
+}
+
+.brand-text span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    letter-spacing: .13em;
+
+    text-transform: uppercase;
+}
+
+
+/* =====================================================
+   HEADER ACTIONS
+===================================================== */
+
+.header-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.header-btn {
+
+    border: 1px solid var(--border);
+
+    background: var(--surface);
+
+    color: var(--text);
+
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 13px;
+
+    cursor: pointer;
+
+    font-size: 17px;
+
+    transition: .25s ease;
+}
+
+.header-btn:hover {
+
+    transform: translateY(-2px);
+
+    border-color: var(--text);
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+
+    width: min(1200px, 92%);
+
+    margin: auto;
+
+    padding:
+        70px 0 35px;
+
+    text-align: center;
+}
+
+
+.eyebrow {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        8px 13px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 999px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: .14em;
+
+    text-transform: uppercase;
+}
+
+
+.hero h1 {
+
+    margin:
+        20px 0 12px;
+
+    font-size:
+        clamp(34px, 6vw, 64px);
+
+    line-height: .98;
+
+    letter-spacing: -.055em;
+
+    font-weight: 900;
+}
+
+
+.hero p {
+
+    max-width: 650px;
+
+    margin: auto;
+
+    color: var(--muted);
+
+    line-height: 1.7;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   SPORT SWITCH
+===================================================== */
+
+.sport-switch {
+
+    width: min(700px, 92%);
+
+    margin:
+        20px auto 35px;
+
+    padding: 6px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 6px;
+
+    background: var(--surface-2);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 16px;
+}
+
+
+.sport-btn {
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+
+.sport-btn.active {
+
+    background: var(--surface);
+
+    color: var(--text);
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.07);
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main {
+
+    width: min(1200px, 92%);
+
+    margin: auto;
+
+    padding-bottom: 70px;
+}
+
+
+/* =====================================================
+   TOURNAMENT SELECTOR
+===================================================== */
+
+.tournament-selector {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    margin-bottom: 18px;
+}
+
+
+.tournament-btn {
+
+    padding:
+        10px 15px;
+
+    border:
+        1px solid var(--border);
+
+    background: var(--surface);
+
+    color: var(--muted);
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+
+.tournament-btn:hover {
+
+    transform: translateY(-1px);
+}
+
+
+.tournament-btn.active {
+
+    color: white;
+
+    background: var(--text);
+
+    border-color: var(--text);
+}
+
+
+/* =====================================================
+   TABLE CARD
+===================================================== */
+
+.table-card {
+
+    background: var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow);
+
+    animation:
+        tableIn .5s ease;
+}
+
+
+@keyframes tableIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(12px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* =====================================================
+   TABLE HEADER
+===================================================== */
+
+.table-header {
+
+    padding:
+        25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+.table-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+
+.sport-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 15px;
+
+    font-size: 23px;
+}
+
+
+.football-theme .sport-icon {
+
+    background:
+        var(--football-light);
+}
+
+
+.cricket-theme .sport-icon {
+
+    background:
+        var(--cricket-light);
+}
+
+
+.table-heading h2 {
+
+    margin: 0;
+
+    font-size: 19px;
+
+    font-weight: 900;
+}
+
+
+.table-heading p {
+
+    margin:
+        4px 0 0;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   TABLE WRAPPER
+===================================================== */
+
+.table-scroll {
+
+    overflow-x: auto;
+}
+
+
+table {
+
+    width: 100%;
+
+    min-width: 720px;
+
+    border-collapse: collapse;
+}
+
+
+thead th {
+
+    padding:
+        14px 12px;
+
+    background:
+        var(--surface-2);
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: .08em;
+
+    text-transform: uppercase;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+thead th:nth-child(2) {
+
+    text-align: left;
+}
+
+
+tbody tr {
+
+    border-top:
+        1px solid var(--border);
+
+    transition: .2s ease;
+}
+
+
+tbody tr:hover {
+
+    background:
+        var(--surface-2);
+}
+
+
+tbody td {
+
+    padding:
+        15px 12px;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+tbody td:nth-child(2) {
+
+    text-align: left;
+}
+
+
+/* =====================================================
+   POSITION
+===================================================== */
+
+.position {
+
+    width: 55px;
+
+    font-weight: 900;
+
+    color: var(--muted);
+}
+
+
+.position.top-one {
+
+    color: var(--gold);
+
+    font-size: 16px;
+}
+
+
+.position.top-two {
+
+    color: #64748b;
+
+    font-size: 15px;
+}
+
+
+.position.top-three {
+
+    color: #a16207;
+
+    font-size: 15px;
+}
+
+
+/* =====================================================
+   TEAM
+===================================================== */
+
+.team-cell {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    min-width: 200px;
+}
+
+
+.team-logo {
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 10px;
+
+    object-fit: cover;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--surface-2);
+}
+
+
+.team-name {
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+/* =====================================================
+   POINTS
+===================================================== */
+
+.points {
+
+    font-size: 15px !important;
+
+    font-weight: 900 !important;
+}
+
+
+.football-theme .points {
+
+    color:
+        var(--football);
+}
+
+
+.cricket-theme .points {
+
+    color:
+        var(--cricket);
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty {
+
+    padding:
+        60px 20px;
+
+    text-align: center;
+
+    color: var(--muted);
+}
+
+
+.empty-icon {
+
+    font-size: 35px;
+
+    margin-bottom: 10px;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer {
+
+    padding:
+        30px 20px 45px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+
+.footer strong {
+
+    color: var(--text);
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width: 650px) {
+
+    .nav {
+
+        min-height: 64px;
+    }
+
+    .brand-mark {
+
+        width: 38px;
+
+        height: 38px;
+    }
+
+    .hero {
+
+        padding-top: 50px;
+    }
+
+    .hero h1 {
+
+        font-size: 39px;
+    }
+
+    .table-header {
+
+        padding: 19px;
+    }
+
+    .table-heading h2 {
+
+        font-size: 16px;
+    }
+
+    .sport-icon {
+
+        width: 43px;
+
+        height: 43px;
+    }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media(prefers-reduced-motion: reduce) {
+
+    * {
+
+        animation: none !important;
+
+        transition: none !important;
+
+        scroll-behavior: auto !important;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <nav class="nav">
+
+        <a
+            href="index.html"
+            class="brand"
+        >
+
+            <div class="brand-mark">
+                GSA
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    GHOPKHALI SPORTS ARENA
+                </strong>
+
+                <span>
+                    Official Tournament Centre
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <div class="header-actions">
+
+            <button
+                class="header-btn"
+                id="themeToggle"
+                type="button"
+                aria-label="Toggle dark mode"
+            >
+                🌙
+            </button>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+
+<section class="hero">
+
+    <div class="eyebrow">
+        🏆 Official Tournament Standings
+    </div>
+
+    <h1>
+        Points Table
+    </h1>
+
+    <p>
+        Ghopkhali Sports Arena-এর সকল
+        Football ও Cricket tournament-এর
+        official standings, points এবং
+        performance statistics।
+    </p>
+
+</section>
+
+
+
+<div class="sport-switch">
+
+    <button
+        class="sport-btn active"
+        data-sport="football"
+    >
+        ⚽ Football
+    </button>
+
+    <button
+        class="sport-btn"
+        data-sport="cricket"
+    >
+        🏏 Cricket
+    </button>
+
+</div>
+
+
+
+<main class="main">
+
+    <div
+        id="tournamentSelector"
+        class="tournament-selector"
+    >
+    </div>
+
+
+    <section
+        id="tableContainer"
+        class="table-card football-theme"
+    >
+
+        <div class="table-header">
+
+            <div class="table-heading">
+
+                <div class="sport-icon">
+                    ⚽
+                </div>
+
+                <div>
+
+                    <h2 id="tableTitle">
+                        Football Tournament
+                    </h2>
+
+                    <p id="tableSubtitle">
+                        Official league standings
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-scroll">
+
+            <table>
+
+                <thead id="tableHead"></thead>
+
+                <tbody id="tableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="10"
+                            class="empty"
+                        >
+
+                            Loading standings...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<footer class="footer">
+
+    <strong>
+        GHOPKHALI SPORTS ARENA
+    </strong>
+
+    <br>
+
+    Official Tournament Points Table
+
+</footer>
+
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+    "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+const supabaseScript =
+    document.createElement("script");
+
+supabaseScript.src =
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+supabaseScript.onload = init;
+
+document.head.appendChild(
+    supabaseScript
+);
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let currentSport = "football";
+
+let currentTournament = "";
+
+let footballData = [];
+
+let cricketData = [];
+
+let supabaseClient;
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+async function init() {
+
+    supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    setupTheme();
+
+    setupSportButtons();
+
+    await loadFootball();
+
+    renderTournamentSelector();
+
+    renderTable();
+}
+
+
+/* =====================================================
+   LOAD FOOTBALL
+===================================================== */
+
+async function loadFootball() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("football_points")
+            .select("*");
+
+
+    if (error) {
+
+        console.error(error);
+
+        footballData = [];
+
+        return;
+    }
+
+
+    footballData =
+        data || [];
+}
+
+
+/* =====================================================
+   LOAD CRICKET
+===================================================== */
+
+async function loadCricket() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("cricket_points")
+            .select("*");
+
+
+    if (error) {
+
+        console.error(error);
+
+        cricketData = [];
+
+        return;
+    }
+
+
+    cricketData =
+        data || [];
+}
+
+
+/* =====================================================
+   SPORT BUTTONS
+===================================================== */
+
+function setupSportButtons() {
+
+    document
+        .querySelectorAll(".sport-btn")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    document
+                        .querySelectorAll(
+                            ".sport-btn"
+                        )
+                        .forEach(item => {
+
+                            item.classList
+                                .remove(
+                                    "active"
+                                );
+
+                        });
+
+
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    currentSport =
+                        button.dataset.sport;
+
+
+                    if (
+                        currentSport ===
+                        "cricket"
+                    ) {
+
+                        if (
+                            !cricketData.length
+                        ) {
+
+                            await loadCricket();
+
+                        }
+
+                    } else {
+
+                        if (
+                            !footballData.length
+                        ) {
+
+                            await loadFootball();
+
+                        }
+
+                    }
+
+
+                    currentTournament = "";
+
+                    renderTournamentSelector();
+
+                    renderTable();
+
+                }
+            );
+
+        });
+}
+
+
+/* =====================================================
+   TOURNAMENT SELECTOR
+===================================================== */
+
+function renderTournamentSelector() {
+
+    const selector =
+        document.getElementById(
+            "tournamentSelector"
+        );
+
+
+    const data =
+        currentSport === "football"
+            ? footballData
+            : cricketData;
+
+
+    const tournaments = [
+        ...new Set(
+            data
+                .map(item => item.tournament)
+                .filter(Boolean)
+        )
+    ];
+
+
+    selector.innerHTML = "";
+
+
+    if (!tournaments.length) {
+
+        currentTournament = "";
+
+        return;
+    }
+
+
+    if (
+        !currentTournament ||
+        !tournaments.includes(
+            currentTournament
+        )
+    ) {
+
+        currentTournament =
+            tournaments[0];
+
+    }
+
+
+    tournaments.forEach(
+        tournament => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type = "button";
+
+            button.className =
+                "tournament-btn";
+
+
+            if (
+                tournament ===
+                currentTournament
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            button.textContent =
+                tournament;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    currentTournament =
+                        tournament;
+
+                    renderTournamentSelector();
+
+                    renderTable();
+
+                }
+            );
+
+
+            selector.appendChild(
+                button
+            );
+
+        }
+    );
+}
+
+
+/* =====================================================
+   RENDER TABLE
+===================================================== */
+
+function renderTable() {
+
+    const container =
+        document.getElementById(
+            "tableContainer"
+        );
+
+    const title =
+        document.getElementById(
+            "tableTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "tableSubtitle"
+        );
+
+    const head =
+        document.getElementById(
+            "tableHead"
+        );
+
+    const body =
+        document.getElementById(
+            "tableBody"
+        );
+
+
+    const isFootball =
+        currentSport === "football";
+
+
+    container.classList.toggle(
+        "football-theme",
+        isFootball
+    );
+
+    container.classList.toggle(
+        "cricket-theme",
+        !isFootball
+    );
+
+
+    title.textContent =
+        currentTournament ||
+        (
+            isFootball
+                ? "Football Tournament"
+                : "Cricket Tournament"
+        );
+
+
+    subtitle.textContent =
+        isFootball
+            ? "Official Football League Standings"
+            : "Official Cricket Tournament Standings";
+
+
+    head.innerHTML =
+        isFootball
+            ? footballHeader()
+            : cricketHeader();
+
+
+    const source =
+        isFootball
+            ? footballData
+            : cricketData;
+
+
+    let rows =
+        source.filter(
+            item =>
+                item.tournament ===
+                currentTournament
+        );
+
+
+    if (!rows.length) {
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="${isFootball ? 10 : 8}"
+                    class="empty"
+                >
+
+                    <div class="empty-icon">
+                        ${isFootball ? "⚽" : "🏏"}
+                    </div>
+
+                    No standings available
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+    }
+
+
+    rows =
+        sortRows(rows);
+
+
+    body.innerHTML =
+        rows
+            .map(
+                (item, index) =>
+                    isFootball
+                        ? footballRow(
+                            item,
+                            index
+                        )
+                        : cricketRow(
+                            item,
+                            index
+                        )
+            )
+            .join("");
+}
+
+
+/* =====================================================
+   FOOTBALL HEADER
+===================================================== */
+
+function footballHeader() {
+
+    return `
+
+        <tr>
+
+            <th>Pos</th>
+
+            <th>Team</th>
+
+            <th>P</th>
+
+            <th>W</th>
+
+            <th>D</th>
+
+            <th>L</th>
+
+            <th>GF</th>
+
+            <th>GA</th>
+
+            <th>GD</th>
+
+            <th>Pts</th>
+
+        </tr>
+
+    `;
+}
+
+
+/* =====================================================
+   CRICKET HEADER
+===================================================== */
+
+function cricketHeader() {
+
+    return `
+
+        <tr>
+
+            <th>Pos</th>
+
+            <th>Team</th>
+
+            <th>P</th>
+
+            <th>W</th>
+
+            <th>L</th>
+
+            <th>NR</th>
+
+            <th>NRR</th>
+
+            <th>Pts</th>
+
+        </tr>
+
+    `;
+}
+
+
+/* =====================================================
+   SORT
+===================================================== */
+
+function sortRows(rows) {
+
+    return [...rows].sort(
+        (a, b) => {
+
+            if (
+                Number(b.points || 0) !==
+                Number(a.points || 0)
+            ) {
+
+                return (
+                    Number(b.points || 0) -
+                    Number(a.points || 0)
+                );
+
+            }
+
+
+            if (
+                currentSport ===
+                "football"
+            ) {
+
+                const gdA =
+                    Number(a.goals_for || 0) -
+                    Number(a.goals_against || 0);
+
+                const gdB =
+                    Number(b.goals_for || 0) -
+                    Number(b.goals_against || 0);
+
+
+                if (gdB !== gdA) {
+
+                    return gdB - gdA;
+
+                }
+
+
+                return (
+                    Number(b.goals_for || 0) -
+                    Number(a.goals_for || 0)
+                );
+
+            }
+
+
+            return (
+                Number(b.nrr || 0) -
+                Number(a.nrr || 0)
+            );
+
+        }
+    );
+}
+
+
+/* =====================================================
+   FOOTBALL ROW
+===================================================== */
+
+function footballRow(
+    item,
+    index
+) {
+
+    const position =
+        index + 1;
+
+
+    const gd =
+        Number(item.goals_for || 0) -
+        Number(item.goals_against || 0);
+
+
+    const logo =
+        safeImage(
+            item.team_logo
+        );
+
+
+    return `
+
+        <tr>
+
+            <td
+                class="position ${positionClass(position)}"
+            >
+                ${position}
+            </td>
+
+
+            <td>
+
+                <div class="team-cell">
+
+                    <img
+                        src="${logo}"
+                        class="team-logo"
+                        alt=""
+                        onerror="this.style.display='none'"
+                    >
+
+                    <span class="team-name">
+                        ${escapeHtml(
+                            item.team_name
+                        )}
+                    </span>
+
+                </div>
+
+            </td>
+
+
+            <td>
+                ${number(item.played)}
+            </td>
+
+            <td>
+                ${number(item.won)}
+            </td>
+
+            <td>
+                ${number(item.drawn)}
+            </td>
+
+            <td>
+                ${number(item.lost)}
+            </td>
+
+            <td>
+                ${number(item.goals_for)}
+            </td>
+
+            <td>
+                ${number(item.goals_against)}
+            </td>
+
+            <td>
+                ${gd}
+            </td>
+
+            <td class="points">
+                ${number(item.points)}
+            </td>
+
+        </tr>
+
+    `;
+}
+
+
+/* =====================================================
+   CRICKET ROW
+===================================================== */
+
+function cricketRow(
+    item,
+    index
+) {
+
+    const position =
+        index + 1;
+
+
+    const logo =
+        safeImage(
+            item.team_logo
+        );
+
+
+    const nrr =
+        Number(item.nrr || 0)
+            .toFixed(3);
+
+
+    return `
+
+        <tr>
+
+            <td
+                class="position ${positionClass(position)}"
+            >
+                ${position}
+            </td>
+
+
+            <td>
+
+                <div class="team-cell">
+
+                    <img
+                        src="${logo}"
+                        class="team-logo"
+                        alt=""
+                        onerror="this.style.display='none'"
+                    >
+
+                    <span class="team-name">
+                        ${escapeHtml(
+                            item.team_name
+                        )}
+                    </span>
+
+                </div>
+
+            </td>
+
+
+            <td>
+                ${number(item.played)}
+            </td>
+
+            <td>
+                ${number(item.won)}
+            </td>
+
+            <td>
+                ${number(item.lost)}
+            </td>
+
+            <td>
+                ${number(item.no_result)}
+            </td>
+
+            <td>
+                ${nrr}
+            </td>
+
+            <td class="points">
+                ${number(item.points)}
+            </td>
+
+        </tr>
+
+    `;
+}
+
+
+/* =====================================================
+   POSITION CLASS
+===================================================== */
+
+function positionClass(
+    position
+) {
+
+    if (position === 1) {
+
+        return "top-one";
+
+    }
+
+    if (position === 2) {
+
+        return "top-two";
+
+    }
+
+    if (position === 3) {
+
+        return "top-three";
+
+    }
+
+    return "";
+
+}
+
+
+/* =====================================================
+   NUMBER
+===================================================== */
+
+function number(value) {
+
+    return Number(value || 0);
+}
+
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+function safeImage(url) {
+
+    if (
+        !url ||
+        typeof url !== "string"
+    ) {
+
+        return "";
+
+    }
+
+
+    return escapeAttribute(url);
+}
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function escapeAttribute(value) {
+
+    return escapeHtml(value);
+}
+
+
+/* =====================================================
+   THEME
+===================================================== */
+
+function setupTheme() {
+
+    const saved =
+        localStorage.getItem(
+            "gsa-theme"
+        );
+
+
+    if (saved === "dark") {
+
+        document.documentElement
+            .setAttribute(
+                "data-theme",
+                "dark"
+            );
+
+    }
+
+
+    updateThemeButton();
+
+
+    document
+        .getElementById(
+            "themeToggle"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                const dark =
+                    document.documentElement
+                        .getAttribute(
+                            "data-theme"
+                        ) === "dark";
+
+
+                if (dark) {
+
+                    document.documentElement
+                        .removeAttribute(
+                            "data-theme"
+                        );
+
+                    localStorage.setItem(
+                        "gsa-theme",
+                        "light"
+                    );
+
+                } else {
+
+                    document.documentElement
+                        .setAttribute(
+                            "data-theme",
+                            "dark"
+                        );
+
+                    localStorage.setItem(
+                        "gsa-theme",
+                        "dark"
+                    );
+
+                }
+
+
+                updateThemeButton();
+
+            }
+        );
+}
+
+
+function updateThemeButton() {
+
+    const button =
+        document.getElementById(
+            "themeToggle"
+        );
+
+
+    if (!button) return;
+
+
+    const dark =
+        document.documentElement
+            .getAttribute(
+                "data-theme"
+            ) === "dark";
+
+
+    button.textContent =
+        dark
+            ? "☀️"
+            : "🌙";
+
+}
+
+</script>
+
+</body>
+</html>
