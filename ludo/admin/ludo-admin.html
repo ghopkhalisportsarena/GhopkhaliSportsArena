@@ -4019,17 +4019,20 @@ async function addTeam() {
                 "ludo_teams"
             )
             .insert(
-                {
-                    tournament_id:
-                        currentTournament.id,
+    {
+        tournament_id:
+            currentTournament.id,
 
-                    team_name:
-                        teamName,
+        team_name:
+            teamName,
 
-                    team_code:
-                        teamCode || null
-                }
-            )
+        team_code:
+            teamCode || null,
+
+        status:
+            "active"
+    }
+)
             .select()
             .single();
 
