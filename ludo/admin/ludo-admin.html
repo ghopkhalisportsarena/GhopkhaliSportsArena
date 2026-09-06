@@ -3874,18 +3874,19 @@ async function addPlayer() {
             .from(
                 "ludo_players"
             )
-            .insert(
-                {
-                    tournament_id:
-                        currentTournament.id,
+            .insert({
+    tournament_id:
+        currentTournament.id,
 
-                    player_name:
-                        name,
+    player_name:
+        name,
 
-                    player_code:
-                        code || null
-                }
-            );
+    player_code:
+        code || null,
+
+    status:
+        "active"
+});
 
 
     if (error) {
