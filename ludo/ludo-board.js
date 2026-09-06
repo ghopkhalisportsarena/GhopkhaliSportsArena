@@ -1,28 +1,23 @@
 /* =========================================================
    GHOPKHALI SPORTS ARENA
-   ONLINE LUDO TOURNAMENT
-   STEP 1 — ORIGINAL LUDO BOARD ENGINE
-
-   IMPORTANT:
-   This file ONLY creates the board.
-   No New Game.
-   No Reset.
-   No local game state.
-   No Supabase mutation.
+   ONLINE LUDO
+   STEP 2 — TOKEN SYSTEM
 ========================================================= */
 
 "use strict";
 
 
 /* =========================================================
-   BOARD CONFIG
+   BOARD CONSTANTS
 ========================================================= */
 
-const LUDO_BOARD_SIZE = 15;
+const LUDO_SIZE = 15;
+
+const TOKEN_COUNT = 4;
 
 
 /* =========================================================
-   PLAYERS / COLORS
+   COLORS
 ========================================================= */
 
 const LUDO_COLORS = {
@@ -39,19 +34,45 @@ const LUDO_COLORS = {
 
 
 /* =========================================================
-   52-CELL MAIN TRACK
+   PLAYER CONFIGURATION
+========================================================= */
 
-   Coordinate:
-   [row, column]
+const LUDO_PLAYERS = {
 
-   0-based 15 × 15 board.
+    red: {
+
+        name: "Player 1",
+
+        color: "red",
+
+        homeClass: "red-home",
+
+        startIndex: 0
+
+    },
+
+    blue: {
+
+        name: "Player 2",
+
+        color: "blue",
+
+        homeClass: "blue-home",
+
+        startIndex: 39
+
+    }
+
+};
+
+
+/* =========================================================
+   STANDARD 52-CELL TRACK
 ========================================================= */
 
 const LUDO_TRACK = [
 
-    /* -----------------------------------------
-       RED START → TOP
-    ----------------------------------------- */
+    /* Red side */
 
     [6, 1],
     [6, 2],
@@ -66,13 +87,10 @@ const LUDO_TRACK = [
     [1, 6],
     [0, 6],
 
-    /* -----------------------------------------
-       TOP → GREEN
-    ----------------------------------------- */
+    /* Green side */
 
     [0, 7],
     [0, 8],
-
     [1, 8],
     [2, 8],
     [3, 8],
@@ -86,13 +104,10 @@ const LUDO_TRACK = [
     [6, 13],
     [6, 14],
 
-    /* -----------------------------------------
-       GREEN → YELLOW
-    ----------------------------------------- */
+    /* Yellow side */
 
     [7, 14],
     [8, 14],
-
     [8, 13],
     [8, 12],
     [8, 11],
@@ -106,13 +121,10 @@ const LUDO_TRACK = [
     [13, 8],
     [14, 8],
 
-    /* -----------------------------------------
-       YELLOW → BLUE
-    ----------------------------------------- */
+    /* Blue side */
 
     [14, 7],
     [14, 6],
-
     [13, 6],
     [12, 6],
     [11, 6],
@@ -126,48 +138,10 @@ const LUDO_TRACK = [
     [8, 1],
     [8, 0],
 
-    /* -----------------------------------------
-       BLUE → RED
-    ----------------------------------------- */
-
     [7, 0],
     [6, 0]
 
 ];
-
-
-/* =========================================================
-   PLAYER START INDEX
-========================================================= */
-
-const LUDO_START_INDEX = {
-
-    red: 0,
-
-    green: 13,
-
-    yellow: 26,
-
-    blue: 39
-
-};
-
-
-/* =========================================================
-   PLAYER START CELLS
-========================================================= */
-
-const LUDO_START_CELLS = {
-
-    red: [6, 1],
-
-    green: [1, 8],
-
-    yellow: [8, 13],
-
-    blue: [13, 6]
-
-};
 
 
 /* =========================================================
@@ -225,124 +199,62 @@ const LUDO_HOME_LANES = {
 
 /* =========================================================
    SAFE CELLS
-
-   These are visual safe positions only.
-   Game-rule handling comes later.
 ========================================================= */
 
 const LUDO_SAFE_CELLS = [
 
     [6, 1],
-
     [1, 8],
-
     [8, 13],
-
     [13, 6],
 
     [2, 6],
-
     [6, 12],
-
     [12, 8],
-
     [8, 2]
 
 ];
 
 
 /* =========================================================
-   HOME YARD CONFIGURATION
+   TOKEN HOME SLOTS
 ========================================================= */
 
-const LUDO_HOME_YARDS = {
-
-    red: {
-
-        row: 0,
-
-        col: 0
-
-    },
-
-    green: {
-
-        row: 0,
-
-        col: 9
-
-    },
-
-    yellow: {
-
-        row: 9,
-
-        col: 9
-
-    },
-
-    blue: {
-
-        row: 9,
-
-        col: 0
-
-    }
-
-};
-
-
-/* =========================================================
-   TOKEN SLOT POSITIONS
-========================================================= */
-
-const LUDO_TOKEN_SLOTS = {
+const LUDO_HOME_SLOTS = {
 
     red: [
 
-        [1, 1],
-
-        [1, 4],
-
-        [4, 1],
-
+        [2, 2],
+        [2, 4],
+        [4, 2],
         [4, 4]
 
     ],
 
     green: [
 
-        [1, 10],
-
-        [1, 13],
-
+        [2, 10],
+        [2, 12],
         [4, 10],
-
-        [4, 13]
+        [4, 12]
 
     ],
 
     yellow: [
 
         [10, 10],
-
-        [10, 13],
-
-        [13, 10],
-
-        [13, 13]
+        [10, 12],
+        [12, 10],
+        [12, 12]
 
     ],
 
     blue: [
 
-        [10, 1],
-
+        [10, 2],
         [10, 4],
-
-        [13, 1],
-
-        [13, 4]
+        [12, 2],
+        [12, 4]
 
     ]
 
@@ -350,640 +262,82 @@ const LUDO_TOKEN_SLOTS = {
 
 
 /* =========================================================
-   CELL COMPARISON
+   GAME BOARD STATE
+   STEP 2 ONLY
 ========================================================= */
 
-function ludoSameCell(a, b) {
+const ludoBoardState = {
 
-    return (
+    tokens: {
 
-        a[0] === b[0] &&
+        red: [
 
-        a[1] === b[1]
+            {
+                id: "red-1",
+                state: "home",
+                position: -1
+            },
 
-    );
+            {
+                id: "red-2",
+                state: "home",
+                position: -1
+            },
 
-}
+            {
+                id: "red-3",
+                state: "home",
+                position: -1
+            },
+
+            {
+                id: "red-4",
+                state: "home",
+                position: -1
+            }
+
+        ],
+
+        blue: [
+
+            {
+                id: "blue-1",
+                state: "home",
+                position: -1
+            },
+
+            {
+                id: "blue-2",
+                state: "home",
+                position: -1
+            },
+
+            {
+                id: "blue-3",
+                state: "home",
+                position: -1
+            },
+
+            {
+                id: "blue-4",
+                state: "home",
+                position: -1
+            }
+
+        ]
+
+    }
+
+};
 
 
 /* =========================================================
-   TRACK INDEX
+   UTILITY
 ========================================================= */
 
-function getLudoTrackIndex(row, col) {
+function cellKey(row, col) {
 
-    return LUDO_TRACK.findIndex(
-
-        cell =>
-
-            cell[0] === row &&
-
-            cell[1] === col
-
-    );
-
-}
-
-
-/* =========================================================
-   IS TRACK
-========================================================= */
-
-function isLudoTrackCell(row, col) {
-
-    return (
-
-        getLudoTrackIndex(
-            row,
-            col
-        ) !== -1
-
-    );
-
-}
-
-
-/* =========================================================
-   SAFE CELL
-========================================================= */
-
-function isLudoSafeCell(row, col) {
-
-    return LUDO_SAFE_CELLS.some(
-
-        cell =>
-
-            cell[0] === row &&
-
-            cell[1] === col
-
-    );
-
-}
-
-
-/* =========================================================
-   START PLAYER
-========================================================= */
-
-function getLudoStartPlayer(row, col) {
-
-    for (
-
-        const player of Object.keys(
-            LUDO_START_CELLS
-        )
-
-    ) {
-
-        if (
-
-            ludoSameCell(
-
-                LUDO_START_CELLS[player],
-
-                [row, col]
-
-            )
-
-        ) {
-
-            return player;
-
-        }
-
-    }
-
-    return null;
-
-}
-
-
-/* =========================================================
-   HOME LANE PLAYER
-========================================================= */
-
-function getLudoHomeLanePlayer(row, col) {
-
-    for (
-
-        const player of Object.keys(
-            LUDO_HOME_LANES
-        )
-
-    ) {
-
-        if (
-
-            LUDO_HOME_LANES[player].some(
-
-                cell =>
-
-                    cell[0] === row &&
-
-                    cell[1] === col
-
-            )
-
-        ) {
-
-            return player;
-
-        }
-
-    }
-
-    return null;
-
-}
-
-
-/* =========================================================
-   HOME AREA
-========================================================= */
-
-function getLudoHomePlayer(row, col) {
-
-    if (
-
-        row <= 5 &&
-
-        col <= 5
-
-    ) {
-
-        return "red";
-
-    }
-
-
-    if (
-
-        row <= 5 &&
-
-        col >= 9
-
-    ) {
-
-        return "green";
-
-    }
-
-
-    if (
-
-        row >= 9 &&
-
-        col >= 9
-
-    ) {
-
-        return "yellow";
-
-    }
-
-
-    if (
-
-        row >= 9 &&
-
-        col <= 5
-
-    ) {
-
-        return "blue";
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================================================
-   CELL TYPE
-========================================================= */
-
-function getLudoCellType(row, col) {
-
-    /* -----------------------------------------
-       CENTER
-    ----------------------------------------- */
-
-    if (
-
-        row >= 6 &&
-
-        row <= 8 &&
-
-        col >= 6 &&
-
-        col <= 8
-
-    ) {
-
-        return "center";
-
-    }
-
-
-    /* -----------------------------------------
-       HOME
-    ----------------------------------------- */
-
-    const home =
-        getLudoHomePlayer(
-            row,
-            col
-        );
-
-
-    if (home) {
-
-        return `${home}-home`;
-
-    }
-
-
-    /* -----------------------------------------
-       HOME LANE
-    ----------------------------------------- */
-
-    const lane =
-        getLudoHomeLanePlayer(
-            row,
-            col
-        );
-
-
-    if (lane) {
-
-        return `${lane}-lane`;
-
-    }
-
-
-    /* -----------------------------------------
-       TRACK
-    ----------------------------------------- */
-
-    if (
-
-        isLudoTrackCell(
-            row,
-            col
-        )
-
-    ) {
-
-        return "track";
-
-    }
-
-
-    return "empty";
-
-}
-
-
-/* =========================================================
-   CREATE CELL
-========================================================= */
-
-function createLudoCell(row, col) {
-
-    const cell =
-        document.createElement(
-            "div"
-        );
-
-
-    cell.className =
-        "ludo-cell";
-
-
-    cell.dataset.row =
-        row;
-
-
-    cell.dataset.col =
-        col;
-
-
-    const type =
-        getLudoCellType(
-            row,
-            col
-        );
-
-
-    cell.dataset.type =
-        type;
-
-
-    /* -----------------------------------------
-       TRACK
-    ----------------------------------------- */
-
-    if (
-        type === "track"
-    ) {
-
-        cell.classList.add(
-            "ludo-track"
-        );
-
-    }
-
-
-    /* -----------------------------------------
-       HOME
-    ----------------------------------------- */
-
-    if (
-
-        type.endsWith(
-            "-home"
-        )
-
-    ) {
-
-        const player =
-            type.replace(
-                "-home",
-                ""
-            );
-
-
-        cell.classList.add(
-            "ludo-home",
-            `ludo-home-${player}`
-        );
-
-    }
-
-
-    /* -----------------------------------------
-       HOME LANE
-    ----------------------------------------- */
-
-    if (
-
-        type.endsWith(
-            "-lane"
-        )
-
-    ) {
-
-        const player =
-            type.replace(
-                "-lane",
-                ""
-            );
-
-
-        cell.classList.add(
-            "ludo-home-lane",
-            `ludo-lane-${player}`
-        );
-
-    }
-
-
-    /* -----------------------------------------
-       SAFE
-    ----------------------------------------- */
-
-    if (
-
-        isLudoSafeCell(
-            row,
-            col
-        )
-
-    ) {
-
-        cell.classList.add(
-            "ludo-safe"
-        );
-
-
-        const star =
-            document.createElement(
-                "span"
-            );
-
-
-        star.className =
-            "ludo-safe-star";
-
-
-        star.textContent =
-            "★";
-
-
-        cell.appendChild(
-            star
-        );
-
-    }
-
-
-    /* -----------------------------------------
-       START
-    ----------------------------------------- */
-
-    const startPlayer =
-        getLudoStartPlayer(
-            row,
-            col
-        );
-
-
-    if (startPlayer) {
-
-        cell.classList.add(
-            "ludo-start",
-            `ludo-start-${startPlayer}`
-        );
-
-    }
-
-
-    return cell;
-
-}
-
-
-/* =========================================================
-   CREATE HOME
-========================================================= */
-
-function createLudoHome(player) {
-
-    const home =
-        document.createElement(
-            "div"
-        );
-
-
-    home.className =
-        `ludo-yard ludo-yard-${player}`;
-
-
-    home.dataset.player =
-        player;
-
-
-    const inner =
-        document.createElement(
-            "div"
-        );
-
-
-    inner.className =
-        "ludo-yard-inner";
-
-
-    for (
-        let i = 0;
-        i < 4;
-        i++
-    ) {
-
-        const slot =
-            document.createElement(
-                "div"
-            );
-
-
-        slot.className =
-            "ludo-token-slot";
-
-
-        slot.dataset.player =
-            player;
-
-
-        slot.dataset.token =
-            i;
-
-
-        inner.appendChild(
-            slot
-        );
-
-    }
-
-
-    home.appendChild(
-        inner
-    );
-
-
-    return home;
-
-}
-
-
-/* =========================================================
-   CREATE CENTER
-========================================================= */
-
-function createLudoCenter() {
-
-    const center =
-        document.createElement(
-            "div"
-        );
-
-
-    center.className =
-        "ludo-center";
-
-
-    const colors = [
-
-        "red",
-
-        "green",
-
-        "yellow",
-
-        "blue"
-
-    ];
-
-
-    colors.forEach(
-
-        color => {
-
-            const triangle =
-                document.createElement(
-                    "div"
-                );
-
-
-            triangle.className =
-                `ludo-center-${color}`;
-
-
-            center.appendChild(
-                triangle
-            );
-
-        }
-
-    );
-
-
-    const finish =
-        document.createElement(
-            "div"
-        );
-
-
-    finish.className =
-        "ludo-finish";
-
-
-    finish.textContent =
-        "★";
-
-
-    center.appendChild(
-        finish
-    );
-
-
-    return center;
-
-}
-
-
-/* =========================================================
-   CREATE TOKEN LAYER
-========================================================= */
-
-function createLudoTokenLayer() {
-
-    const layer =
-        document.createElement(
-            "div"
-        );
-
-
-    layer.id =
-        "ludo-token-layer";
-
-
-    layer.className =
-        "ludo-token-layer";
-
-
-    return layer;
+    return `${row}-${col}`;
 
 }
 
@@ -996,66 +350,108 @@ function createLudoBoard(container) {
 
     if (!container) {
 
-        console.error(
-            "Ludo board container not found."
-        );
-
-        return null;
+        return;
 
     }
 
-
-    /* -----------------------------------------
-       IMPORTANT
-
-       Only render.
-       Never create/reset game state.
-    ----------------------------------------- */
 
     container.innerHTML = "";
 
 
     const board =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     board.className =
         "ludo-board";
 
 
-    board.dataset.board =
-        "online-tournament";
+    board.setAttribute(
+        "data-board",
+        "ludo"
+    );
 
 
-    board.dataset.size =
-        LUDO_BOARD_SIZE;
-
-
-    /* -----------------------------------------
-       15 × 15 CELLS
-    ----------------------------------------- */
+    /* -----------------------------------------------------
+       CREATE 15 × 15 CELLS
+    ----------------------------------------------------- */
 
     for (
         let row = 0;
-        row < LUDO_BOARD_SIZE;
+        row < LUDO_SIZE;
         row++
     ) {
 
         for (
             let col = 0;
-            col < LUDO_BOARD_SIZE;
+            col < LUDO_SIZE;
             col++
         ) {
 
-            board.appendChild(
+            const cell =
+                document.createElement("div");
 
-                createLudoCell(
+
+            cell.className =
+                "cell";
+
+
+            cell.dataset.row =
+                row;
+
+
+            cell.dataset.col =
+                col;
+
+
+            const type =
+                getCellType(
+                    row,
+                    col
+                );
+
+
+            cell.classList.add(
+                type
+            );
+
+
+            /* Safe cell */
+
+            if (
+                isSafeCell(
                     row,
                     col
                 )
+            ) {
 
+                cell.classList.add(
+                    "safe"
+                );
+
+            }
+
+
+            /* Start cells */
+
+            const startColor =
+                getStartColor(
+                    row,
+                    col
+                );
+
+
+            if (startColor) {
+
+                cell.classList.add(
+                    `start-${startColor}`
+                );
+
+            }
+
+
+            board.appendChild(
+                cell
             );
 
         }
@@ -1063,47 +459,44 @@ function createLudoBoard(container) {
     }
 
 
-    /* -----------------------------------------
+    /* -----------------------------------------------------
        HOME YARDS
-    ----------------------------------------- */
+    ----------------------------------------------------- */
 
-    board.appendChild(
-        createLudoHome("red")
+    createHomeYards(
+        board
     );
 
 
-    board.appendChild(
-        createLudoHome("green")
-    );
-
-
-    board.appendChild(
-        createLudoHome("yellow")
-    );
-
-
-    board.appendChild(
-        createLudoHome("blue")
-    );
-
-
-    /* -----------------------------------------
+    /* -----------------------------------------------------
        CENTER
-    ----------------------------------------- */
+    ----------------------------------------------------- */
 
-    board.appendChild(
-        createLudoCenter()
+    createHomeCenter(
+        board
     );
 
 
-    /* -----------------------------------------
+    /* -----------------------------------------------------
        TOKEN LAYER
+    ----------------------------------------------------- */
 
-       Step 2 will use this.
-    ----------------------------------------- */
+    const tokenLayer =
+        document.createElement(
+            "div"
+        );
+
+
+    tokenLayer.className =
+        "token-layer";
+
+
+    tokenLayer.id =
+        "ludo-token-layer";
+
 
     board.appendChild(
-        createLudoTokenLayer()
+        tokenLayer
     );
 
 
@@ -1112,31 +505,827 @@ function createLudoBoard(container) {
     );
 
 
-    return board;
+    /* -----------------------------------------------------
+       INITIAL TOKEN RENDER
+    ----------------------------------------------------- */
+
+    renderTokens();
 
 }
 
 
 /* =========================================================
-   PUBLIC API
+   CELL TYPE
+========================================================= */
+
+function getCellType(row, col) {
+
+
+    /* Red home */
+
+    if (
+        row < 6 &&
+        col < 6
+    ) {
+
+        return "yard red-yard";
+
+    }
+
+
+    /* Green home */
+
+    if (
+        row < 6 &&
+        col > 8
+    ) {
+
+        return "yard green-yard";
+
+    }
+
+
+    /* Yellow home */
+
+    if (
+        row > 8 &&
+        col > 8
+    ) {
+
+        return "yard yellow-yard";
+
+    }
+
+
+    /* Blue home */
+
+    if (
+        row > 8 &&
+        col < 6
+    ) {
+
+        return "yard blue-yard";
+
+    }
+
+
+    /* Center */
+
+    if (
+        row >= 6 &&
+        row <= 8 &&
+        col >= 6 &&
+        col <= 8
+    ) {
+
+        return "center-cell";
+
+    }
+
+
+    /* Home lanes */
+
+    for (
+        const color of Object.keys(
+            LUDO_HOME_LANES
+        )
+    ) {
+
+        const lane =
+            LUDO_HOME_LANES[
+                color
+            ];
+
+
+        for (
+            const coordinate of lane
+        ) {
+
+            if (
+                coordinate[0] === row &&
+                coordinate[1] === col
+            ) {
+
+                return `home-lane ${color}-lane`;
+
+            }
+
+        }
+
+    }
+
+
+    /* Track */
+
+    return "track";
+
+}
+
+
+/* =========================================================
+   SAFE CELL CHECK
+========================================================= */
+
+function isSafeCell(
+    row,
+    col
+) {
+
+    return LUDO_SAFE_CELLS.some(
+        coordinate =>
+
+            coordinate[0] === row &&
+            coordinate[1] === col
+
+    );
+
+}
+
+
+/* =========================================================
+   START COLOR
+========================================================= */
+
+function getStartColor(
+    row,
+    col
+) {
+
+    const starts = {
+
+        red: [6, 1],
+
+        green: [1, 8],
+
+        yellow: [8, 13],
+
+        blue: [13, 6]
+
+    };
+
+
+    for (
+        const color of Object.keys(
+            starts
+        )
+    ) {
+
+        if (
+
+            starts[color][0] === row &&
+            starts[color][1] === col
+
+        ) {
+
+            return color;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   HOME YARDS
+========================================================= */
+
+function createHomeYards(
+    board
+) {
+
+
+    const yards = [
+
+        {
+            color: "red",
+            row: 0,
+            col: 0
+        },
+
+        {
+            color: "green",
+            row: 0,
+            col: 9
+        },
+
+        {
+            color: "yellow",
+            row: 9,
+            col: 9
+        },
+
+        {
+            color: "blue",
+            row: 9,
+            col: 0
+        }
+
+    ];
+
+
+    yards.forEach(
+        yardData => {
+
+
+            const yard =
+                document.createElement(
+                    "div"
+                );
+
+
+            yard.className =
+                `yard-overlay ${yardData.color}-yard-overlay`;
+
+
+            yard.style.gridRow =
+                `${yardData.row + 1} / span 6`;
+
+
+            yard.style.gridColumn =
+                `${yardData.col + 1} / span 6`;
+
+
+            /* Inner yard */
+
+            const inner =
+                document.createElement(
+                    "div"
+                );
+
+
+            inner.className =
+                "yard-inner";
+
+
+            /* Four token slots */
+
+            const slots =
+                LUDO_HOME_SLOTS[
+                    yardData.color
+                ];
+
+
+            slots.forEach(
+                (slot, index) => {
+
+
+                    const tokenSlot =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    tokenSlot.className =
+                        "token-slot";
+
+
+                    tokenSlot.dataset.color =
+                        yardData.color;
+
+
+                    tokenSlot.dataset.slot =
+                        index;
+
+
+                    inner.appendChild(
+                        tokenSlot
+                    );
+
+                }
+            );
+
+
+            yard.appendChild(
+                inner
+            );
+
+
+            board.appendChild(
+                yard
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   HOME CENTER
+========================================================= */
+
+function createHomeCenter(
+    board
+) {
+
+    const center =
+        document.createElement(
+            "div"
+        );
+
+
+    center.className =
+        "home-center";
+
+
+    center.style.gridRow =
+        "7 / span 3";
+
+
+    center.style.gridColumn =
+        "7 / span 3";
+
+
+    const red =
+        document.createElement(
+            "div"
+        );
+
+
+    red.className =
+        "center-triangle center-red";
+
+
+    const green =
+        document.createElement(
+            "div"
+        );
+
+
+    green.className =
+        "center-triangle center-green";
+
+
+    const yellow =
+        document.createElement(
+            "div"
+        );
+
+
+    yellow.className =
+        "center-triangle center-yellow";
+
+
+    const blue =
+        document.createElement(
+            "div"
+        );
+
+
+    blue.className =
+        "center-triangle center-blue";
+
+
+    const star =
+        document.createElement(
+            "div"
+        );
+
+
+    star.className =
+        "center-star";
+
+
+    star.textContent =
+        "★";
+
+
+    center.appendChild(
+        red
+    );
+
+
+    center.appendChild(
+        green
+    );
+
+
+    center.appendChild(
+        yellow
+    );
+
+
+    center.appendChild(
+        blue
+    );
+
+
+    center.appendChild(
+        star
+    );
+
+
+    board.appendChild(
+        center
+    );
+
+}
+
+
+/* =========================================================
+   CREATE TOKEN ELEMENT
+========================================================= */
+
+function createTokenElement(
+    token,
+    color,
+    index
+) {
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.className =
+        `ludo-token token-${color}`;
+
+
+    element.dataset.tokenId =
+        token.id;
+
+
+    element.dataset.color =
+        color;
+
+
+    element.dataset.index =
+        index;
+
+
+    element.setAttribute(
+        "aria-label",
+        `${color} token ${index + 1}`
+    );
+
+
+    /* Token inner circle */
+
+    const inner =
+        document.createElement(
+            "div"
+        );
+
+
+    inner.className =
+        "token-inner";
+
+
+    /* Token number */
+
+    const number =
+        document.createElement(
+            "span"
+        );
+
+
+    number.className =
+        "token-number";
+
+
+    number.textContent =
+        index + 1;
+
+
+    inner.appendChild(
+        number
+    );
+
+
+    element.appendChild(
+        inner
+    );
+
+
+    return element;
+
+}
+
+
+/* =========================================================
+   RENDER TOKENS
+========================================================= */
+
+function renderTokens() {
+
+
+    const layer =
+        document.getElementById(
+            "ludo-token-layer"
+        );
+
+
+    if (!layer) {
+
+        return;
+
+    }
+
+
+    layer.innerHTML = "";
+
+
+    Object.keys(
+        ludoBoardState.tokens
+    ).forEach(
+        color => {
+
+
+            ludoBoardState.tokens[
+                color
+            ].forEach(
+                (
+                    token,
+                    index
+                ) => {
+
+
+                    const element =
+                        createTokenElement(
+                            token,
+                            color,
+                            index
+                        );
+
+
+                    positionToken(
+                        element,
+                        token,
+                        color,
+                        index
+                    );
+
+
+                    layer.appendChild(
+                        element
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   POSITION TOKEN
+========================================================= */
+
+function positionToken(
+    element,
+    token,
+    color,
+    index
+) {
+
+
+    /* -----------------------------------------------------
+       TOKEN IN HOME YARD
+    ----------------------------------------------------- */
+
+    if (
+        token.state ===
+        "home"
+    ) {
+
+        const slot =
+            LUDO_HOME_SLOTS[
+                color
+            ][index];
+
+
+        const row =
+            slot[0];
+
+
+        const col =
+            slot[1];
+
+
+        element.style.gridRow =
+            row + 1;
+
+
+        element.style.gridColumn =
+            col + 1;
+
+
+        element.classList.add(
+            "token-in-home"
+        );
+
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       TOKEN ON TRACK
+    ----------------------------------------------------- */
+
+    if (
+        token.state ===
+        "track"
+    ) {
+
+        const coordinate =
+            LUDO_TRACK[
+                token.position
+            ];
+
+
+        if (!coordinate) {
+
+            return;
+
+        }
+
+
+        element.style.gridRow =
+            coordinate[0] + 1;
+
+
+        element.style.gridColumn =
+            coordinate[1] + 1;
+
+
+        element.classList.add(
+            "token-on-track"
+        );
+
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       TOKEN IN HOME LANE
+    ----------------------------------------------------- */
+
+    if (
+        token.state ===
+        "lane"
+    ) {
+
+        const lane =
+            LUDO_HOME_LANES[
+                color
+            ];
+
+
+        const coordinate =
+            lane[
+                token.position
+            ];
+
+
+        if (!coordinate) {
+
+            return;
+
+        }
+
+
+        element.style.gridRow =
+            coordinate[0] + 1;
+
+
+        element.style.gridColumn =
+            coordinate[1] + 1;
+
+
+        element.classList.add(
+            "token-in-lane"
+        );
+
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       TOKEN FINISHED
+    ----------------------------------------------------- */
+
+    if (
+        token.state ===
+        "finished"
+    ) {
+
+        element.style.gridRow =
+            "8";
+
+
+        element.style.gridColumn =
+            "8";
+
+
+        element.classList.add(
+            "token-finished"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PUBLIC TOKEN API
+========================================================= */
+
+function getLudoTokenState() {
+
+    return structuredClone(
+        ludoBoardState.tokens
+    );
+
+}
+
+
+/* =========================================================
+   MOVE TOKEN — PREPARATION ONLY
+========================================================= */
+
+function setLudoTokenPosition(
+    color,
+    tokenIndex,
+    state,
+    position
+) {
+
+
+    if (
+        !ludoBoardState.tokens[
+            color
+        ]
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        !ludoBoardState.tokens[
+            color
+        ][tokenIndex]
+    ) {
+
+        return false;
+
+    }
+
+
+    ludoBoardState.tokens[
+        color
+    ][tokenIndex].state =
+        state;
+
+
+    ludoBoardState.tokens[
+        color
+    ][tokenIndex].position =
+        position;
+
+
+    renderTokens();
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   BOARD API
 ========================================================= */
 
 window.LudoBoard = {
 
-    size:
-        LUDO_BOARD_SIZE,
+    create:
+        createLudoBoard,
 
-    colors:
-        LUDO_COLORS,
+    renderTokens:
+        renderTokens,
+
+    getTokenState:
+        getLudoTokenState,
+
+    setTokenPosition:
+        setLudoTokenPosition,
 
     track:
         LUDO_TRACK,
-
-    startIndex:
-        LUDO_START_INDEX,
-
-    startCells:
-        LUDO_START_CELLS,
 
     homeLanes:
         LUDO_HOME_LANES,
@@ -1144,60 +1333,36 @@ window.LudoBoard = {
     safeCells:
         LUDO_SAFE_CELLS,
 
-    homeYards:
-        LUDO_HOME_YARDS,
-
-    tokenSlots:
-        LUDO_TOKEN_SLOTS,
-
-    getCellType:
-        getLudoCellType,
-
-    getTrackIndex:
-        getLudoTrackIndex,
-
-    isTrackCell:
-        isLudoTrackCell,
-
-    isSafeCell:
-        isLudoSafeCell,
-
-    getStartPlayer:
-        getLudoStartPlayer,
-
-    getHomeLanePlayer:
-        getLudoHomeLanePlayer,
-
-    createBoard:
-        createLudoBoard
+    players:
+        LUDO_PLAYERS
 
 };
 
 
 /* =========================================================
-   AUTO RENDER
+   INITIALIZE
 ========================================================= */
 
 document.addEventListener(
-
     "DOMContentLoaded",
+    () => {
 
-    function () {
-
-        const container =
+        const board =
             document.getElementById(
                 "ludo-board"
             );
 
 
-        if (container) {
+        if (!board) {
 
-            createLudoBoard(
-                container
-            );
+            return;
 
         }
 
-    }
 
+        createLudoBoard(
+            board
+        );
+
+    }
 );
