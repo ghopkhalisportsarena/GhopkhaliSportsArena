@@ -2425,88 +2425,241 @@
     class="toast"
     id="toast"
 ></div>
-<!-- =====================================================
-     MATCH RESULT MODAL
-===================================================== -->
 
-<div
-    class="modal"
-    id="resultModal"
->
+/* =====================================================
+   MATCH RESULT MODAL
+===================================================== */
 
-    <div class="modal-card">
+async function openResultModal(
+    fixtureId
+) {
 
-        <div class="modal-head">
-
-            <h3>
-                🏆 Match Result
-            </h3>
-
-            <button
-                class="close-btn"
-                data-close="resultModal"
-            >
-                ×
-            </button>
-
-        </div>
+    const fixture =
+        fixtures.find(
+            item =>
+                item.id ===
+                fixtureId
+        );
 
 
-        <input
-            type="hidden"
-            id="resultFixtureId"
+    if (!fixture) {
+
+        showToast(
+            "Fixture পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* -------------------------------------------------
+       COMPLETED PROTECTION
+    ------------------------------------------------- */
+
+    if (
+        fixture.status ===
+        "completed"
+    ) {
+
+        showToast(
+            "এই ম্যাচের Result ইতোমধ্যে Save করা হয়েছে।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* -------------------------------------------------
+       VALID STATUS
+    ------------------------------------------------- */
+
+    if (
+        fixture.status !==
+            "scheduled" &&
+        fixture.status !==
+            "live"
+    ) {
+
+        showToast(
+            "এই Fixture-এ Result দেওয়া যাচ্ছে না।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const modal =
+        document.getElementById(
+            "resultModal"
+        );
+
+
+    const fixtureIdInput =
+        document.getElementById(
+            "resultFixtureId"
+        );
+
+
+    const winnerSelect =
+        document.getElementById(
+            "resultWinner"
+        );
+
+
+    const matchInfo =
+        document.getElementById(
+            "resultMatchInfo"
+        );
+
+
+    if (
+        !modal ||
+        !fixtureIdInput ||
+        !winnerSelect ||
+        !matchInfo
+    ) {
+
+        showToast(
+            "Result Modal পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* -------------------------------------------------
+       PARTICIPANT NAMES
+    ------------------------------------------------- */
+
+    const participantA =
+        getParticipantName(
+            fixture.participant_a_id
+        );
+
+
+    const participantB =
+        getParticipantName(
+            fixture.participant_b_id
+        );
+
+
+    /* -------------------------------------------------
+       SET FIXTURE ID
+    ------------------------------------------------- */
+
+    fixtureIdInput.value =
+        fixture.id;
+
+
+    /* -------------------------------------------------
+       MATCH INFORMATION
+    ------------------------------------------------- */
+
+    matchInfo.textContent =
+        `#${fixture.match_number} — ${participantA} vs ${participantB}`;
+
+
+    /* -------------------------------------------------
+       RESET WINNER
+    ------------------------------------------------- */
+
+    winnerSelect.innerHTML = `
+
+        <option value="">
+            Select Winner
+        </option>
+
+    `;
+
+
+    /* -------------------------------------------------
+       PLAYER / TEAM A
+    ------------------------------------------------- */
+
+    winnerSelect.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <option
+            value="${fixture.participant_a_id}"
         >
 
+            ${escapeHTML(
+                participantA
+            )}
 
-        <div
-            class="notice"
-            id="resultMatchInfo"
+        </option>
+
+        `
+
+    );
+
+
+    /* -------------------------------------------------
+       PLAYER / TEAM B
+    ------------------------------------------------- */
+
+    winnerSelect.insertAdjacentHTML(
+
+        "beforeend",
+
+        `
+
+        <option
+            value="${fixture.participant_b_id}"
         >
-            Match
-        </div>
+
+            ${escapeHTML(
+                participantB
+            )}
+
+        </option>
+
+        `
+
+    );
 
 
-        <div class="field">
+    /* -------------------------------------------------
+       RESET SAVE BUTTON
+    ------------------------------------------------- */
 
-            <label>
-                Winner
-            </label>
-
-            <select
-                id="resultWinner"
-            >
-
-                <option value="">
-                    Select Winner
-                </option>
-
-            </select>
-
-        </div>
+    const saveButton =
+        document.getElementById(
+            "saveResultBtn"
+        );
 
 
-        <div class="modal-actions">
+    if (saveButton) {
 
-            <button
-                class="action-btn"
-                data-close="resultModal"
-            >
-                Cancel
-            </button>
+        saveButton.disabled =
+            false;
 
-            <button
-                class="action-btn primary"
-                id="saveResultBtn"
-            >
-                Save Result
-            </button>
+        saveButton.textContent =
+            "Save Result";
 
-        </div>
+    }
 
-    </div>
 
-</div>
+    /* -------------------------------------------------
+       SHOW MODAL
+    ------------------------------------------------- */
 
+    modal.classList.add(
+        "show"
+    );
+
+}
 
 <script>
 
@@ -5615,6 +5768,14 @@ function renderFixtures() {
             "fixtureBody"
         );
 
+
+    if (!body) {
+
+        return;
+
+    }
+
+
     body.innerHTML = "";
 
 
@@ -5622,16 +5783,21 @@ function renderFixtures() {
 
         body.innerHTML =
             `<tr>
+
                 <td colspan="6">
 
                     <div class="empty">
+
                         এখনো কোনো Fixture তৈরি হয়নি।
+
                     </div>
 
                 </td>
+
             </tr>`;
 
         return;
+
     }
 
 
@@ -5643,6 +5809,7 @@ function renderFixtures() {
                     fixture.participant_a_id
                 );
 
+
             const participantB =
                 getParticipantName(
                     fixture.participant_b_id
@@ -5652,13 +5819,66 @@ function renderFixtures() {
             let actionHTML = "";
 
 
-            /*
-             * যদি Result এখনো দেওয়া না হয়
-             */
+            /* =================================================
+               COMPLETED
+            ================================================= */
 
             if (
-                fixture.status !==
+                fixture.status ===
                 "completed"
+            ) {
+
+                const winnerName =
+                    getParticipantName(
+                        fixture.winner_id
+                    );
+
+
+                actionHTML = `
+
+                    <div
+                        style="
+                            display:flex;
+                            flex-direction:column;
+                            gap:6px;
+                            align-items:flex-start;
+                        "
+                    >
+
+                        <span
+                            class="badge green"
+                        >
+                            ✓ Result Complete
+                        </span>
+
+
+                        <small
+                            style="
+                                opacity:.75;
+                                font-size:11px;
+                            "
+                        >
+                            🏆 ${
+                                escapeHTML(
+                                    winnerName
+                                )
+                            }
+                        </small>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* =================================================
+               LIVE
+            ================================================= */
+
+            else if (
+                fixture.status ===
+                "live"
             ) {
 
                 actionHTML = `
@@ -5700,19 +5920,47 @@ function renderFixtures() {
 
             }
 
-            /*
-             * Result already completed
-             */
+
+            /* =================================================
+               SCHEDULED
+            ================================================= */
 
             else {
 
                 actionHTML = `
 
-                    <span
-                        class="badge green"
+                    <div
+                        style="
+                            display:flex;
+                            gap:6px;
+                            flex-wrap:wrap;
+                        "
                     >
-                        ✓ Result Complete
-                    </span>
+
+                        <button
+                            class="small-btn"
+                            onclick="
+                                openResultModal(
+                                    '${fixture.id}'
+                                )
+                            "
+                        >
+                            🏆 Result
+                        </button>
+
+
+                        <button
+                            class="small-btn delete"
+                            onclick="
+                                deleteFixture(
+                                    '${fixture.id}'
+                                )
+                            "
+                        >
+                            Delete
+                        </button>
+
+                    </div>
 
                 `;
 
@@ -5720,20 +5968,25 @@ function renderFixtures() {
 
 
             body.insertAdjacentHTML(
+
                 "beforeend",
+
                 `
 
                 <tr>
 
                     <td>
                         ${escapeHTML(
-                            fixture.round_name
+                            fixture.round_name ||
+                            ""
                         )}
                     </td>
 
 
                     <td>
-                        #${fixture.match_number}
+                        #${
+                            fixture.match_number
+                        }
                     </td>
 
 
@@ -5765,22 +6018,30 @@ function renderFixtures() {
                 </tr>
 
                 `
+
             );
 
         }
+
     );
+
 }
 
 /* =====================================================
    MATCH RESULT MODAL
 ===================================================== */
 
-async function openResultModal(fixtureId) {
+async function openResultModal(
+    fixtureId
+) {
 
     const fixture =
         fixtures.find(
-            item => item.id === fixtureId
+            item =>
+                item.id ===
+                fixtureId
         );
+
 
     if (!fixture) {
 
@@ -5790,10 +6051,18 @@ async function openResultModal(fixtureId) {
         );
 
         return;
+
     }
 
 
-    if (fixture.status === "completed") {
+    /* -------------------------------------------------
+       COMPLETED PROTECTION
+    ------------------------------------------------- */
+
+    if (
+        fixture.status ===
+        "completed"
+    ) {
 
         showToast(
             "এই ম্যাচের Result ইতোমধ্যে Save করা হয়েছে।",
@@ -5801,20 +6070,53 @@ async function openResultModal(fixtureId) {
         );
 
         return;
+
+    }
+
+
+    /* -------------------------------------------------
+       VALID STATUS
+    ------------------------------------------------- */
+
+    if (
+        fixture.status !==
+            "scheduled" &&
+        fixture.status !==
+            "live"
+    ) {
+
+        showToast(
+            "এই Fixture-এ Result দেওয়া যাচ্ছে না।",
+            "error"
+        );
+
+        return;
+
     }
 
 
     const modal =
-        document.getElementById("resultModal");
+        document.getElementById(
+            "resultModal"
+        );
+
 
     const fixtureIdInput =
-        document.getElementById("resultFixtureId");
+        document.getElementById(
+            "resultFixtureId"
+        );
+
 
     const winnerSelect =
-        document.getElementById("resultWinner");
+        document.getElementById(
+            "resultWinner"
+        );
+
 
     const matchInfo =
-        document.getElementById("resultMatchInfo");
+        document.getElementById(
+            "resultMatchInfo"
+        );
 
 
     if (
@@ -5830,17 +6132,19 @@ async function openResultModal(fixtureId) {
         );
 
         return;
+
     }
 
 
-    fixtureIdInput.value =
-        fixture.id;
-
+    /* -------------------------------------------------
+       PARTICIPANT NAMES
+    ------------------------------------------------- */
 
     const participantA =
         getParticipantName(
             fixture.participant_a_id
         );
+
 
     const participantB =
         getParticipantName(
@@ -5848,40 +6152,115 @@ async function openResultModal(fixtureId) {
         );
 
 
+    /* -------------------------------------------------
+       SET FIXTURE ID
+    ------------------------------------------------- */
+
+    fixtureIdInput.value =
+        fixture.id;
+
+
+    /* -------------------------------------------------
+       MATCH INFORMATION
+    ------------------------------------------------- */
+
     matchInfo.textContent =
         `#${fixture.match_number} — ${participantA} vs ${participantB}`;
 
 
+    /* -------------------------------------------------
+       RESET WINNER
+    ------------------------------------------------- */
+
     winnerSelect.innerHTML = `
+
         <option value="">
             Select Winner
         </option>
+
     `;
 
 
+    /* -------------------------------------------------
+       PLAYER / TEAM A
+    ------------------------------------------------- */
+
     winnerSelect.insertAdjacentHTML(
+
         "beforeend",
+
         `
-        <option value="${fixture.participant_a_id}">
-            ${escapeHTML(participantA)}
+
+        <option
+            value="${fixture.participant_a_id}"
+        >
+
+            ${escapeHTML(
+                participantA
+            )}
+
         </option>
+
         `
+
     );
 
 
+    /* -------------------------------------------------
+       PLAYER / TEAM B
+    ------------------------------------------------- */
+
     winnerSelect.insertAdjacentHTML(
+
         "beforeend",
+
         `
-        <option value="${fixture.participant_b_id}">
-            ${escapeHTML(participantB)}
+
+        <option
+            value="${fixture.participant_b_id}"
+        >
+
+            ${escapeHTML(
+                participantB
+            )}
+
         </option>
+
         `
+
     );
 
 
-    modal.classList.add("show");
+    /* -------------------------------------------------
+       RESET SAVE BUTTON
+    ------------------------------------------------- */
+
+    const saveButton =
+        document.getElementById(
+            "saveResultBtn"
+        );
+
+
+    if (saveButton) {
+
+        saveButton.disabled =
+            false;
+
+        saveButton.textContent =
+            "Save Result";
+
+    }
+
+
+    /* -------------------------------------------------
+       SHOW MODAL
+    ------------------------------------------------- */
+
+    modal.classList.add(
+        "show"
+    );
+
 }
-
 
 /* =====================================================
    SAVE MATCH RESULT
@@ -5892,13 +6271,20 @@ async function saveMatchResult() {
     const fixtureId =
         document.getElementById(
             "resultFixtureId"
-        ).value;
+        )?.value
+        ?.trim();
+
 
     const winnerId =
         document.getElementById(
             "resultWinner"
-        ).value;
+        )?.value
+        ?.trim();
 
+
+    /* -------------------------------------------------
+       BASIC VALIDATION
+    ------------------------------------------------- */
 
     if (!fixtureId) {
 
@@ -5908,6 +6294,7 @@ async function saveMatchResult() {
         );
 
         return;
+
     }
 
 
@@ -5919,12 +6306,31 @@ async function saveMatchResult() {
         );
 
         return;
+
     }
 
 
+    if (!currentTournament) {
+
+        showToast(
+            "Tournament পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* -------------------------------------------------
+       FIND FIXTURE
+    ------------------------------------------------- */
+
     const fixture =
         fixtures.find(
-            item => item.id === fixtureId
+            item =>
+                item.id ===
+                fixtureId
         );
 
 
@@ -5936,10 +6342,18 @@ async function saveMatchResult() {
         );
 
         return;
+
     }
 
 
-    if (fixture.status === "completed") {
+    /* -------------------------------------------------
+       COMPLETED PROTECTION
+    ------------------------------------------------- */
+
+    if (
+        fixture.status ===
+        "completed"
+    ) {
 
         showToast(
             "এই ম্যাচের Result ইতোমধ্যে Save করা হয়েছে।",
@@ -5947,8 +6361,89 @@ async function saveMatchResult() {
         );
 
         return;
+
     }
 
+
+    /* -------------------------------------------------
+       STATUS VALIDATION
+    ------------------------------------------------- */
+
+    if (
+        fixture.status !==
+            "scheduled" &&
+        fixture.status !==
+            "live"
+    ) {
+
+        showToast(
+            "এই Fixture-এ Result Save করা যাবে না।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* -------------------------------------------------
+       WINNER VALIDATION
+    ------------------------------------------------- */
+
+    const participantAId =
+        fixture.participant_a_id;
+
+
+    const participantBId =
+        fixture.participant_b_id;
+
+
+    if (
+        winnerId !==
+            participantAId &&
+        winnerId !==
+            participantBId
+    ) {
+
+        showToast(
+            "নির্বাচিত Winner এই ম্যাচের Participant নয়।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* -------------------------------------------------
+       LOSER
+    ------------------------------------------------- */
+
+    const loserId =
+        winnerId ===
+            participantAId
+
+            ? participantBId
+
+            : participantAId;
+
+
+    /* -------------------------------------------------
+       PARTICIPANT TYPE
+    ------------------------------------------------- */
+
+    const participantType =
+        currentMode ===
+            "single"
+
+            ? "player"
+
+            : "team";
+
+
+    /* -------------------------------------------------
+       SAVE BUTTON
+    ------------------------------------------------- */
 
     const saveButton =
         document.getElementById(
@@ -5960,85 +6455,218 @@ async function saveMatchResult() {
 
         if (saveButton) {
 
-            saveButton.disabled = true;
+            saveButton.disabled =
+                true;
 
             saveButton.textContent =
                 "Saving...";
+
         }
 
 
-        const loserId =
-            winnerId === fixture.participant_a_id
-                ? fixture.participant_b_id
-                : fixture.participant_a_id;
+        /* -------------------------------------------------
+           FINAL DATABASE CHECK
 
-
-        /* -----------------------------------------
-           UPDATE FIXTURE
-        ----------------------------------------- */
+           User অন্য tab/device থেকে Result save করে
+           ফেললেও duplicate prevention-এর জন্য
+           আবার database থেকে status যাচাই।
+        ------------------------------------------------- */
 
         const {
-            error: fixtureError
-        } = await supabaseClient
 
-            .from("ludo_fixtures")
+            data:
+                latestFixture,
 
-            .update({
+            error:
+                latestFixtureError
 
-                status: "completed",
+        } =
+            await supabaseClient
 
-                winner_id: winnerId
+                .from(
+                    "ludo_fixtures"
+                )
 
-            })
+                .select(
+                    "id,status,winner_id,participant_a_id,participant_b_id"
+                )
 
-            .eq(
-                "id",
-                fixtureId
-            );
+                .eq(
+                    "id",
+                    fixtureId
+                )
+
+                .eq(
+                    "tournament_id",
+                    currentTournament.id
+                )
+
+                .maybeSingle();
 
 
-        if (fixtureError) {
+        if (
+            latestFixtureError
+        ) {
 
-            throw fixtureError;
+            throw latestFixtureError;
+
         }
 
 
-        const participantType =
-            currentMode === "single"
-                ? "player"
-                : "team";
+        if (!latestFixture) {
+
+            throw new Error(
+                "Fixture database-এ পাওয়া যায়নি।"
+            );
+
+        }
 
 
-        /* -----------------------------------------
-           WINNER +3
-        ----------------------------------------- */
+        if (
+            latestFixture.status ===
+            "completed"
+        ) {
+
+            showToast(
+                "এই ম্যাচের Result ইতোমধ্যে অন্যভাবে Save হয়েছে।",
+                "error"
+            );
+
+            await loadFixtures();
+
+            renderFixtures();
+
+            return;
+
+        }
+
+
+        /* -------------------------------------------------
+           FINAL WINNER VALIDATION
+        ------------------------------------------------- */
+
+        if (
+            winnerId !==
+                latestFixture.participant_a_id &&
+            winnerId !==
+                latestFixture.participant_b_id
+        ) {
+
+            throw new Error(
+                "Winner এই Fixture-এর Participant নয়।"
+            );
+
+        }
+
+
+        /* -------------------------------------------------
+           UPDATE WINNER POINTS
+        ------------------------------------------------- */
 
         await updateParticipantPoints(
+
             currentTournament.id,
+
             winnerId,
+
             participantType,
+
             "win"
+
         );
 
 
-        /* -----------------------------------------
-           LOSER
-        ----------------------------------------- */
+        /* -------------------------------------------------
+           UPDATE LOSER POINTS
+        ------------------------------------------------- */
 
         await updateParticipantPoints(
+
             currentTournament.id,
+
             loserId,
+
             participantType,
+
             "loss"
+
         );
 
+
+        /* -------------------------------------------------
+           COMPLETE FIXTURE
+        ------------------------------------------------- */
+
+        const {
+
+            error:
+                fixtureError
+
+        } =
+            await supabaseClient
+
+                .from(
+                    "ludo_fixtures"
+                )
+
+                .update(
+
+                    {
+
+                        status:
+                            "completed",
+
+                        winner_id:
+                            winnerId,
+
+                        updated_at:
+                            new Date()
+                                .toISOString()
+
+                    }
+
+                )
+
+                .eq(
+                    "id",
+                    fixtureId
+                )
+
+                .eq(
+                    "tournament_id",
+                    currentTournament.id
+                )
+
+                .neq(
+                    "status",
+                    "completed"
+                );
+
+
+        if (
+            fixtureError
+        ) {
+
+            throw fixtureError;
+
+        }
+
+
+        /* -------------------------------------------------
+           UPDATE LOCAL FIXTURE
+        ------------------------------------------------- */
 
         fixture.status =
             "completed";
 
+
         fixture.winner_id =
             winnerId;
 
+
+        /* -------------------------------------------------
+           CLOSE MODAL
+        ------------------------------------------------- */
 
         const modal =
             document.getElementById(
@@ -6055,12 +6683,25 @@ async function saveMatchResult() {
         }
 
 
-        renderFixtures();
+        /* -------------------------------------------------
+           RELOAD ALL RESULT DATA
+        ------------------------------------------------- */
+
+        await loadFixtures();
 
         await loadPoints();
 
+
+        renderFixtures();
+
         renderPoints();
 
+        updateStats();
+
+
+        /* -------------------------------------------------
+           SUCCESS
+        ------------------------------------------------- */
 
         showToast(
             "🏆 Match Result সফলভাবে Save হয়েছে!",
@@ -6077,13 +6718,45 @@ async function saveMatchResult() {
 
 
         showToast(
+
             "Result Save করা যায়নি: " +
+
             (
-                error.message ||
+                error?.message ||
                 "Unknown error"
             ),
+
             "error"
+
         );
+
+
+        /*
+         * Error হলে fresh database state load
+         */
+
+        try {
+
+            await loadFixtures();
+
+            await loadPoints();
+
+            renderFixtures();
+
+            renderPoints();
+
+            updateStats();
+
+        } catch (
+            reloadError
+        ) {
+
+            console.error(
+                "Result Recovery Error:",
+                reloadError
+            );
+
+        }
 
 
     } finally {
@@ -6095,11 +6768,12 @@ async function saveMatchResult() {
 
             saveButton.textContent =
                 "Save Result";
+
         }
 
     }
-}
 
+}
 
 /* =====================================================
    UPDATE PARTICIPANT POINTS
@@ -6114,59 +6788,131 @@ async function updateParticipantPoints(
 
 ) {
 
+    if (!tournamentId) {
+
+        throw new Error(
+            "Tournament ID পাওয়া যায়নি।"
+        );
+
+    }
+
+
+    if (!participantId) {
+
+        throw new Error(
+            "Participant ID পাওয়া যায়নি।"
+        );
+
+    }
+
+
+    if (
+        participantType !== "player" &&
+        participantType !== "team"
+    ) {
+
+        throw new Error(
+            "Invalid participant type."
+        );
+
+    }
+
+
+    if (
+        result !== "win" &&
+        result !== "loss"
+    ) {
+
+        throw new Error(
+            "Invalid match result."
+        );
+
+    }
+
+
+    /* -------------------------------------------------
+       LOAD EXISTING POINTS
+    ------------------------------------------------- */
+
     const {
         data,
         error
-    } = await supabaseClient
+    } =
+        await supabaseClient
 
-        .from("ludo_points")
+            .from("ludo_points")
 
-        .select("*")
+            .select("*")
 
-        .eq(
-            "tournament_id",
-            tournamentId
-        )
+            .eq(
+                "tournament_id",
+                tournamentId
+            )
 
-        .eq(
-            "participant_id",
-            participantId
-        )
+            .eq(
+                "participant_id",
+                participantId
+            )
 
-        .eq(
-            "participant_type",
-            participantType
-        )
+            .eq(
+                "participant_type",
+                participantType
+            )
 
-        .maybeSingle();
+            .maybeSingle();
 
 
     if (error) {
 
         throw error;
+
     }
 
 
+    /* -------------------------------------------------
+       CURRENT VALUES
+    ------------------------------------------------- */
+
     let played =
-        data?.played || 0;
+        Number(
+            data?.played || 0
+        );
+
 
     let won =
-        data?.won || 0;
+        Number(
+            data?.won || 0
+        );
+
 
     let draw =
-        data?.draw || 0;
+        Number(
+            data?.draw || 0
+        );
+
 
     let lost =
-        data?.lost || 0;
+        Number(
+            data?.lost || 0
+        );
+
 
     let points =
-        data?.points || 0;
+        Number(
+            data?.points || 0
+        );
 
+
+    /* -------------------------------------------------
+       UPDATE RESULT
+    ------------------------------------------------- */
 
     played++;
 
 
-    if (result === "win") {
+    if (
+        result === "win"
+    ) {
 
         won++;
 
@@ -6175,55 +6921,82 @@ async function updateParticipantPoints(
     }
 
 
-    if (result === "loss") {
+    if (
+        result === "loss"
+    ) {
 
         lost++;
 
     }
 
 
+    /* -------------------------------------------------
+       UPSERT
+    ------------------------------------------------- */
+
     const {
         error: upsertError
-    } = await supabaseClient
+    } =
+        await supabaseClient
 
-        .from("ludo_points")
+            .from("ludo_points")
 
-        .upsert({
+            .upsert(
 
-            tournament_id:
-                tournamentId,
+                {
 
-            participant_id:
-                participantId,
+                    tournament_id:
+                        tournamentId,
 
-            participant_type:
-                participantType,
+                    participant_id:
+                        participantId,
 
-            played,
+                    participant_type:
+                        participantType,
 
-            won,
+                    played,
 
-            draw,
+                    won,
 
-            lost,
+                    draw,
 
-            points,
+                    lost,
 
-            updated_at:
-                new Date().toISOString()
+                    points,
 
-        }, {
+                    updated_at:
+                        new Date()
+                            .toISOString()
 
-            onConflict:
-                "tournament_id,participant_id,participant_type"
+                },
 
-        });
+                {
+
+                    onConflict:
+                        "tournament_id,participant_id,participant_type"
+
+                }
+
+            );
 
 
     if (upsertError) {
 
         throw upsertError;
+
     }
+
+
+    return {
+
+        played,
+        won,
+        draw,
+        lost,
+        points
+
+    };
+
 }
 
 /* =====================================================
