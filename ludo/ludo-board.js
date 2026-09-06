@@ -898,6 +898,16 @@ function createTokenElement(
     element.className =
         `ludo-token token-${color}`;
 
+element.dataset.tokenColor =
+    color;
+
+element.dataset.tokenIndex =
+    index;
+
+element.addEventListener(
+    "click",
+    handleTokenClick
+);
 
     element.dataset.tokenId =
         token.id;
@@ -961,59 +971,57 @@ function createTokenElement(
 
 }
 
-
 /* =========================================================
    RENDER TOKENS
 ========================================================= */
 
 function renderTokens() {
 
-    const layer =
-        document.getElementById(
-            "ludo-token-layer"
-        );
-
-
-    if (!layer) {
-
-        return;
-
-    }
-
-
-    layer.innerHTML = "";
-
-
     Object.keys(
         ludoGameState.tokens
     ).forEach(
         color => {
 
-            ludoGameState.tokens[
-                color
-            ].forEach(
-                (
-                    token,
-                    index
-                ) => {
+            const tokens =
+                ludoGameState.tokens[
+                    color
+                ];
+
+
+            tokens.forEach(
+                (token, index) => {
 
                     const element =
-                        createTokenElement(
-                            token,
-                            color,
-                            index
+                        document.querySelector(
+                            `[data-token-color="${color}"][data-token-index="${index}"]`
                         );
 
 
-                    positionToken(
-                        element,
-                        token,
-                        color,
-                        index
+                    if (!element) {
+                        return;
+                    }
+
+
+                    /*
+                     * Remove previous state classes
+                     */
+
+                    element.classList.remove(
+                        "token-valid",
+                        "token-disabled"
                     );
 
 
+                    /*
+                     * Token is playable
+                     */
+
                     if (
+                        color ===
+                        ludoGameState.currentPlayer &&
+
+                        ludoGameState.waitingForToken &&
+
                         isValidTokenChoice(
                             color,
                             index
@@ -1021,28 +1029,28 @@ function renderTokens() {
                     ) {
 
                         element.classList.add(
-                            "token-selectable"
-                        );
-
-
-                        element.addEventListener(
-                            "click",
-                            () => {
-
-                                moveSelectedToken(
-                                    color,
-                                    index
-                                );
-
-                            }
+                            "token-valid"
                         );
 
                     }
 
 
-                    layer.appendChild(
-                        element
-                    );
+                    /*
+                     * Token is not playable
+                     */
+
+                    else if (
+                        color ===
+                        ludoGameState.currentPlayer &&
+
+                        ludoGameState.waitingForToken
+                    ) {
+
+                        element.classList.add(
+                            "token-disabled"
+                        );
+
+                    }
 
                 }
             );
@@ -1051,7 +1059,6 @@ function renderTokens() {
     );
 
 }
-
 
 /* =========================================================
    POSITION TOKEN
@@ -2462,6 +2469,96 @@ window.LudoBoard = {
 
 };
 
+/* =========================================================
+   TOKEN CLICK HANDLER
+========================================================= */
+
+function handleTokenClick(
+    event
+) {
+
+    const token =
+        event.currentTarget;
+
+
+    const color =
+        token.dataset.tokenColor;
+
+
+    const index =
+        Number(
+            token.dataset.tokenIndex
+        );
+
+
+    /*
+     * Only current player's
+     * token can be selected.
+     */
+
+    if (
+        color !==
+        ludoGameState.currentPlayer
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Dice must already be rolled.
+     */
+
+    if (
+        !ludoGameState.diceRolled
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Token selection must be active.
+     */
+
+    if (
+        !ludoGameState.waitingForToken
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Check whether this token
+     * can actually move.
+     */
+
+    if (
+        !isValidTokenChoice(
+            color,
+            index
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Move selected token.
+     */
+
+    moveSelectedToken(
+        color,
+        index
+    );
+
+}
 
 /* =========================================================
    INITIALIZE
