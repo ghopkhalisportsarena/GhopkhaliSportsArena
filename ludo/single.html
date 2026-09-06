@@ -2983,37 +2983,64 @@
 ></div>
 
 
-
 <script>
 
 "use strict";
 
 
 /* =========================================================
-   CONSTANTS
+   GHOPKHALI SPORTS ARENA
+   PREMIUM LUDO GAME ENGINE
+   ---------------------------------------------------------
+   2 HUMAN PLAYERS
+   RED  = PLAYER 1
+   BLUE = PLAYER 2
+
+   AI = GAME CONTROLLER / REFEREE ONLY
+
+   AI DOES NOT PLAY.
 ========================================================= */
 
-const BOARD_SIZE =
-    15;
 
-const PATH_LENGTH =
-    52;
+/* =========================================================
+   BOARD CONSTANTS
+========================================================= */
 
-const HOME_DISTANCE =
-    50;
+const BOARD_SIZE = 15;
 
-const FINISH_POSITION =
-    57;
-
+const TRACK_LENGTH = 52;
 
 /*
-    Classic 52-cell outer path.
+    Progress:
 
-    Coordinates are row / column.
+    -1  = Yard
+     0  = Starting cell
+     1  = Track
+    ...
+    51 = Last outer-track cell
+    52-57 = Home lane
+    57 = Final home position
 */
+const FINAL_POSITION = 57;
+
+
+/* =========================================================
+   CLASSIC 52 CELL OUTER TRACK
+
+   This coordinate system is arranged so that:
+
+   RED:
+       start = (6,0)
+       home lane = row 7
+
+   BLUE:
+       start = (8,14)
+       home lane = row 7
+========================================================= */
 
 const PATH = [
 
+    [6,0],
     [6,1],
     [6,2],
     [6,3],
@@ -3025,11 +3052,11 @@ const PATH = [
     [3,6],
     [2,6],
     [1,6],
-
     [0,6],
-    [0,7],
-    [0,8],
 
+    [0,7],
+
+    [0,8],
     [1,8],
     [2,8],
     [3,8],
@@ -3044,8 +3071,8 @@ const PATH = [
     [6,14],
 
     [7,14],
-    [8,14],
 
+    [8,14],
     [8,13],
     [8,12],
     [8,11],
@@ -3060,8 +3087,8 @@ const PATH = [
     [14,8],
 
     [14,7],
-    [14,6],
 
+    [14,6],
     [13,6],
     [12,6],
     [11,6],
@@ -3075,98 +3102,140 @@ const PATH = [
     [8,1],
     [8,0],
 
-    [7,0],
-    [6,0]
+    [7,0]
 
 ];
 
 
-/*
-    Red starts at path index 0.
+/* =========================================================
+   PLAYER START POSITIONS
 
-    Blue starts 26 cells later.
-*/
+   Red starts at path 0.
+   Blue starts exactly opposite at path 26.
+========================================================= */
 
 const START_INDEX = {
 
-    red:
-        0,
+    red: 0,
 
-    blue:
-        26
+    blue: 26
 
 };
 
 
-/*
-    Safe cells.
+/* =========================================================
+   SAFE CELLS
 
-    Includes traditional star-style safe positions
-    and player starting cells.
-*/
+   Starting cells + traditional safe/star positions.
+========================================================= */
 
-const SAFE_CELLS =
-    new Set([
-        0,
-        8,
-        13,
-        21,
-        26,
-        34,
-        39,
-        47
-    ]);
+const SAFE_CELLS = new Set([
+
+    0,
+    8,
+    13,
+    21,
+    26,
+    34,
+    39,
+    47
+
+]);
 
 
-/*
-    Home slots.
-*/
+/* =========================================================
+   HOME LANES
 
-const HOME_SLOTS = {
+   Progress 52 -> first home cell
+   Progress 57 -> final home cell
+========================================================= */
+
+const HOME_LANES = {
 
     red: [
+
+        [7,1],
+        [7,2],
+        [7,3],
+        [7,4],
+        [7,5],
+        [7,6]
+
+    ],
+
+    blue: [
+
+        [7,13],
+        [7,12],
+        [7,11],
+        [7,10],
+        [7,9],
+        [7,8]
+
+    ]
+
+};
+
+
+/* =========================================================
+   CENTER FINISH POSITIONS
+========================================================= */
+
+const FINISH_SLOTS = {
+
+    red: [
+
+        [6.55,6.55],
+        [6.55,7.45],
+        [7.45,6.55],
+        [7.45,7.45]
+
+    ],
+
+    blue: [
+
+        [7.55,7.55],
+        [7.55,8.45],
+        [8.45,7.55],
+        [8.45,8.45]
+
+    ]
+
+};
+
+
+/* =========================================================
+   YARD POSITIONS
+
+   These are visual positions inside each active home.
+========================================================= */
+
+const YARD_SLOTS = {
+
+    red: [
+
         [2.5,2.5],
         [2.5,5.5],
         [5.5,2.5],
         [5.5,5.5]
+
     ],
 
     blue: [
+
         [9.5,9.5],
         [9.5,12.5],
         [12.5,9.5],
         [12.5,12.5]
+
     ]
 
 };
 
 
-/*
-    Inactive home slots.
-*/
-
-const INACTIVE_HOME_SLOTS = {
-
-    green: [
-        [2.5,9.5],
-        [2.5,12.5],
-        [5.5,9.5],
-        [5.5,12.5]
-    ],
-
-    yellow: [
-        [9.5,2.5],
-        [9.5,5.5],
-        [12.5,2.5],
-        [12.5,5.5]
-    ]
-
-};
-
-
-/*
-    Dice faces.
-*/
+/* =========================================================
+   DICE
+========================================================= */
 
 const DICE_FACES = {
 
@@ -3180,39 +3249,36 @@ const DICE_FACES = {
 };
 
 
-
 /* =========================================================
    GAME STATE
 ========================================================= */
 
-let currentPlayer =
-    "red";
+let currentPlayer = "red";
 
-let diceValue =
-    0;
+let diceValue = 0;
 
-let diceRolled =
-    false;
+let diceRolled = false;
 
-let gameOver =
-    false;
+let gameOver = false;
 
-let captureCount =
-    0;
+let captureCount = 0;
 
-let tokenIdCounter =
-    1;
+let sixChain = 0;
 
+let tokenSequence = 1;
+
+
+/* =========================================================
+   PLAYERS
+========================================================= */
 
 const players = {
 
     red: {
 
-        name:
-            "Player 1",
+        name: "Player 1",
 
-        color:
-            "red",
+        color: "red",
 
         tokens: []
 
@@ -3220,18 +3286,15 @@ const players = {
 
     blue: {
 
-        name:
-            "Player 2",
+        name: "Player 2",
 
-        color:
-            "blue",
+        color: "blue",
 
         tokens: []
 
     }
 
 };
-
 
 
 /* =========================================================
@@ -3281,17 +3344,22 @@ const rulesModal =
     document.getElementById("rulesModal");
 
 
-
 /* =========================================================
-   HELPERS
+   UTILITY
 ========================================================= */
 
 function showToast(message) {
 
+    if (!toast) {
+        return;
+    }
+
     toast.textContent =
         message;
 
-    toast.classList.add("show");
+    toast.classList.add(
+        "show"
+    );
 
     clearTimeout(
         showToast.timer
@@ -3312,11 +3380,16 @@ function showToast(message) {
 }
 
 
-
 function addLog(message) {
 
+    if (!gameLog) {
+        return;
+    }
+
     const item =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     item.className =
         "log-item";
@@ -3324,7 +3397,9 @@ function addLog(message) {
     item.innerHTML =
         message;
 
-    gameLog.prepend(item);
+    gameLog.prepend(
+        item
+    );
 
 
     while (
@@ -3340,8 +3415,30 @@ function addLog(message) {
 }
 
 
+function getPlayerName(
+    player = currentPlayer
+) {
 
-function getCellElement(row, col) {
+    return players[player].name;
+
+}
+
+
+function getOpponent(
+    player
+) {
+
+    return player === "red"
+        ? "blue"
+        : "red";
+
+}
+
+
+function getCell(
+    row,
+    col
+) {
 
     return document.querySelector(
         `.cell[data-row="${row}"][data-col="${col}"]`
@@ -3350,16 +3447,18 @@ function getCellElement(row, col) {
 }
 
 
-
 /* =========================================================
-   BUILD BOARD
+   BOARD
 ========================================================= */
 
 function buildBoard() {
 
-    board.innerHTML =
-        "";
+    board.innerHTML = "";
 
+
+    /*
+        Create 15 × 15 cells.
+    */
 
     for (
         let row = 0;
@@ -3374,70 +3473,18 @@ function buildBoard() {
         ) {
 
             const cell =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             cell.className =
                 "cell";
-
 
             cell.dataset.row =
                 row;
 
             cell.dataset.col =
                 col;
-
-
-            /*
-                Outer home quadrants.
-            */
-
-            if (
-                row < 6 &&
-                col < 6
-            ) {
-
-                cell.classList.add(
-                    "red-home"
-                );
-
-            }
-
-
-            if (
-                row < 6 &&
-                col > 8
-            ) {
-
-                cell.classList.add(
-                    "green-home"
-                );
-
-            }
-
-
-            if (
-                row > 8 &&
-                col > 8
-            ) {
-
-                cell.classList.add(
-                    "yellow-home"
-                );
-
-            }
-
-
-            if (
-                row > 8 &&
-                col < 6
-            ) {
-
-                cell.classList.add(
-                    "blue-home"
-                );
-
-            }
-
 
             board.appendChild(
                 cell
@@ -3449,14 +3496,117 @@ function buildBoard() {
 
 
     /*
-        Mark path.
+        Home quadrants.
+    */
+
+    for (
+        let row = 0;
+        row < 6;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < 6;
+            col++
+        ) {
+
+            getCell(
+                row,
+                col
+            )?.classList.add(
+                "red-home"
+            );
+
+        }
+
+    }
+
+
+    for (
+        let row = 0;
+        row < 6;
+        row++
+    ) {
+
+        for (
+            let col = 9;
+            col < 15;
+            col++
+        ) {
+
+            getCell(
+                row,
+                col
+            )?.classList.add(
+                "green-home"
+            );
+
+        }
+
+    }
+
+
+    for (
+        let row = 9;
+        row < 15;
+        row++
+    ) {
+
+        for (
+            let col = 9;
+            col < 15;
+            col++
+        ) {
+
+            getCell(
+                row,
+                col
+            )?.classList.add(
+                "yellow-home"
+            );
+
+        }
+
+    }
+
+
+    for (
+        let row = 9;
+        row < 15;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < 6;
+            col++
+        ) {
+
+            getCell(
+                row,
+                col
+            )?.classList.add(
+                "blue-home"
+            );
+
+        }
+
+    }
+
+
+    /*
+        Outer path.
     */
 
     PATH.forEach(
-        ([row,col], index) => {
+        (
+            [row, col],
+            index
+        ) => {
 
             const cell =
-                getCellElement(
+                getCell(
                     row,
                     col
                 );
@@ -3516,52 +3666,16 @@ function buildBoard() {
 
 
     /*
-        Classic coloured home lanes.
+        Red home lane.
     */
 
-    const redLane = [
-        [7,1],
-        [7,2],
-        [7,3],
-        [7,4],
-        [7,5]
-    ];
+    HOME_LANES.red.forEach(
+        ([row,col]) => {
 
-
-    const greenLane = [
-        [1,7],
-        [2,7],
-        [3,7],
-        [4,7],
-        [5,7]
-    ];
-
-
-    const yellowLane = [
-        [7,9],
-        [7,10],
-        [7,11],
-        [7,12],
-        [7,13]
-    ];
-
-
-    const blueLane = [
-        [9,7],
-        [10,7],
-        [11,7],
-        [12,7],
-        [13,7]
-    ];
-
-
-    redLane.forEach(
-        ([r,c]) => {
-
-            const cell =
-                getCellElement(r,c);
-
-            cell.classList.add(
+            getCell(
+                row,
+                col
+            )?.classList.add(
                 "red-lane"
             );
 
@@ -3569,41 +3683,17 @@ function buildBoard() {
     );
 
 
-    greenLane.forEach(
-        ([r,c]) => {
+    /*
+        Blue home lane.
+    */
 
-            const cell =
-                getCellElement(r,c);
+    HOME_LANES.blue.forEach(
+        ([row,col]) => {
 
-            cell.classList.add(
-                "green-lane"
-            );
-
-        }
-    );
-
-
-    yellowLane.forEach(
-        ([r,c]) => {
-
-            const cell =
-                getCellElement(r,c);
-
-            cell.classList.add(
-                "yellow-lane"
-            );
-
-        }
-    );
-
-
-    blueLane.forEach(
-        ([r,c]) => {
-
-            const cell =
-                getCellElement(r,c);
-
-            cell.classList.add(
+            getCell(
+                row,
+                col
+            )?.classList.add(
                 "blue-lane"
             );
 
@@ -3612,27 +3702,58 @@ function buildBoard() {
 
 
     /*
-        Home areas.
+        Green home lane.
     */
 
-    createHomeZone(
-        "red",
-        false
+    const greenLane = [
+
+        [1,7],
+        [2,7],
+        [3,7],
+        [4,7],
+        [5,7]
+
+    ];
+
+    greenLane.forEach(
+        ([row,col]) => {
+
+            getCell(
+                row,
+                col
+            )?.classList.add(
+                "green-lane"
+            );
+
+        }
     );
 
-    createHomeZone(
-        "green",
-        true
-    );
 
-    createHomeZone(
-        "yellow",
-        true
-    );
+    /*
+        Yellow home lane.
+    */
 
-    createHomeZone(
-        "blue",
-        false
+    const yellowLane = [
+
+        [13,7],
+        [12,7],
+        [11,7],
+        [10,7],
+        [9,7]
+
+    ];
+
+    yellowLane.forEach(
+        ([row,col]) => {
+
+            getCell(
+                row,
+                col
+            )?.classList.add(
+                "yellow-lane"
+            );
+
+        }
     );
 
 
@@ -3641,7 +3762,9 @@ function buildBoard() {
     */
 
     const center =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     center.className =
         "center-home";
@@ -3653,100 +3776,38 @@ function buildBoard() {
 }
 
 
-
 /* =========================================================
-   HOME ZONE
+   TOKENS
 ========================================================= */
 
-function createHomeZone(
-    color,
-    inactive
+function createToken(
+    player,
+    index
 ) {
 
-    const zone =
-        document.createElement("div");
+    return {
 
-    zone.className =
-        `home-zone ${color}`;
+        id:
+            tokenSequence++,
 
-    if (inactive) {
+        player,
 
-        zone.classList.add(
-            "inactive-home"
-        );
+        slot:
+            index,
 
-    }
+        progress:
+            -1,
 
+        finished:
+            false,
 
-    const inner =
-        document.createElement("div");
+        element:
+            null
 
-    inner.className =
-        "home-inner";
-
-
-    const slots =
-        inactive
-            ? INACTIVE_HOME_SLOTS[color]
-            : HOME_SLOTS[color];
-
-
-    slots.forEach(
-        ([r,c]) => {
-
-            const slot =
-                document.createElement("div");
-
-            slot.className =
-                "home-slot";
-
-            slot.style.gridArea =
-                "auto";
-
-            inner.appendChild(
-                slot
-            );
-
-        }
-    );
-
-
-    zone.appendChild(
-        inner
-    );
-
-    board.appendChild(
-        zone
-    );
-
-
-    /*
-        For active player,
-        tokens will be placed through JS.
-    */
-
-    if (!inactive) {
-
-        setTimeout(
-            () => {
-
-                positionHomeTokens(
-                    color
-                );
-
-            },
-            0
-        );
-
-    }
+    };
 
 }
 
-
-
-/* =========================================================
-   TOKEN CREATION
-========================================================= */
 
 function createTokens() {
 
@@ -3763,104 +3824,53 @@ function createTokens() {
         i++
     ) {
 
-        players.red.tokens.push({
-
-            id:
-                tokenIdCounter++,
-
-            player:
+        players.red.tokens.push(
+            createToken(
                 "red",
+                i
+            )
+        );
 
-            index:
-                -1,
-
-            finished:
-                false,
-
-            element:
-                null
-
-        });
-
-
-        players.blue.tokens.push({
-
-            id:
-                tokenIdCounter++,
-
-            player:
+        players.blue.tokens.push(
+            createToken(
                 "blue",
-
-            index:
-                -1,
-
-            finished:
-                false,
-
-            element:
-                null
-
-        });
+                i
+            )
+        );
 
     }
-
-
-    renderTokens();
 
 }
 
 
-
 /* =========================================================
-   CREATE TOKEN ELEMENT
+   TOKEN ELEMENT
 ========================================================= */
 
-function makeTokenElement(token) {
+function createTokenElement(
+    token
+) {
 
-    const el =
-        document.createElement("div");
+    const element =
+        document.createElement(
+            "div"
+        );
 
-    el.className =
+    element.className =
         `token ${token.player}`;
 
-    el.textContent =
+    element.textContent =
         "●";
 
-    el.dataset.tokenId =
+    element.dataset.tokenId =
         token.id;
 
 
-    el.addEventListener(
+    element.addEventListener(
         "click",
         () => {
 
-            if (
-                token.player !==
-                currentPlayer
-            ) {
-
-                return;
-
-            }
-
-
-            if (!diceRolled) {
-
-                return;
-
-            }
-
-
-            if (
-                !isLegalMove(token)
-            ) {
-
-                return;
-
-            }
-
-
-            moveToken(
+            handleTokenClick(
                 token
             );
 
@@ -3869,44 +3879,63 @@ function makeTokenElement(token) {
 
 
     board.appendChild(
-        el
+        element
     );
 
 
     token.element =
-        el;
-
-
-    return el;
+        element;
 
 }
 
 
-
 /* =========================================================
-   TOKEN POSITION
+   TRACK POSITION
 ========================================================= */
 
-function getTokenPosition(token) {
+function getGlobalTrackIndex(
+    token
+) {
+
+    if (
+        token.progress < 0 ||
+        token.progress > 51 ||
+        token.finished
+    ) {
+
+        return null;
+
+    }
+
+
+    return (
+        START_INDEX[token.player] +
+        token.progress
+    ) % TRACK_LENGTH;
+
+}
+
+
+/* =========================================================
+   VISUAL POSITION
+========================================================= */
+
+function getBasePosition(
+    token
+) {
 
     /*
-        Yard position.
+        Yard.
     */
 
     if (
-        token.index === -1
+        token.progress === -1
     ) {
 
-        const slots =
-            HOME_SLOTS[token.player];
-
         const slot =
-            slots[
-                players[token.player]
-                    .tokens
-                    .indexOf(token)
+            YARD_SLOTS[token.player][
+                token.slot
             ];
-
 
         return {
 
@@ -3922,67 +3951,71 @@ function getTokenPosition(token) {
 
 
     /*
-        Finished token.
+        Finished.
     */
 
     if (
         token.finished
     ) {
 
-        const finishSlots = {
-
-            red: [
-                [6.7,6.7],
-                [6.7,7.5],
-                [7.5,6.7],
-                [7.5,7.5]
-            ],
-
-            blue: [
-                [7.5,7.5],
-                [8.3,7.5],
-                [7.5,8.3],
-                [8.3,8.3]
-            ]
-
-        };
-
-
-        const index =
-            players[token.player]
-                .tokens
-                .indexOf(token);
-
-
-        const pos =
-            finishSlots[token.player][
-                index
+        const slot =
+            FINISH_SLOTS[token.player][
+                token.slot
             ];
-
 
         return {
 
             row:
-                pos[0],
+                slot[0],
 
             col:
-                pos[1]
+                slot[1]
 
         };
 
     }
 
 
-    const absolute =
-        (
-            START_INDEX[token.player] +
-            token.index
-        ) % PATH_LENGTH;
+    /*
+        Home lane.
+    */
 
+    if (
+        token.progress >= 52
+    ) {
+
+        const laneIndex =
+            token.progress - 52;
+
+        const coord =
+            HOME_LANES[token.player][
+                laneIndex
+            ];
+
+        return {
+
+            row:
+                coord[0] + .5,
+
+            col:
+                coord[1] + .5
+
+        };
+
+    }
+
+
+    /*
+        Outer track.
+    */
+
+    const globalIndex =
+        getGlobalTrackIndex(
+            token
+        );
 
     const coord =
-        PATH[absolute];
-
+        PATH[globalIndex];
 
     return {
 
@@ -3997,6 +4030,143 @@ function getTokenPosition(token) {
 }
 
 
+/* =========================================================
+   STACKING
+========================================================= */
+
+function getStackOffset(
+    token
+) {
+
+    const sameLocation =
+        getTokensAtSameLocation(
+            token
+        );
+
+
+    const count =
+        sameLocation.length;
+
+
+    if (
+        count <= 1
+    ) {
+
+        return {
+
+            x: 0,
+
+            y: 0
+
+        };
+
+    }
+
+
+    const position =
+        sameLocation.indexOf(
+            token
+        );
+
+
+    const offsets = [
+
+        [-0.16,-0.16],
+        [ 0.16,-0.16],
+        [-0.16, 0.16],
+        [ 0.16, 0.16]
+
+    ];
+
+
+    return {
+
+        x:
+            offsets[
+                position % offsets.length
+            ][0],
+
+        y:
+            offsets[
+                position % offsets.length
+            ][1]
+
+    };
+
+}
+
+
+/* =========================================================
+   SAME LOCATION
+========================================================= */
+
+function getTokensAtSameLocation(
+    token
+) {
+
+    const all =
+        players.red.tokens.concat(
+            players.blue.tokens
+        );
+
+
+    return all.filter(
+        other => {
+
+            if (
+                other.finished
+            ) {
+
+                return false;
+
+            }
+
+
+            if (
+                other.progress === -1
+            ) {
+
+                return false;
+
+            }
+
+
+            /*
+                Home lane positions.
+            */
+
+            if (
+                token.progress >= 52 ||
+                other.progress >= 52
+            ) {
+
+                return (
+                    token.player ===
+                    other.player &&
+                    token.progress ===
+                    other.progress
+                );
+
+            }
+
+
+            const a =
+                getGlobalTrackIndex(
+                    token
+                );
+
+            const b =
+                getGlobalTrackIndex(
+                    other
+                );
+
+            return a === b;
+
+        }
+    );
+
+}
+
 
 /* =========================================================
    RENDER TOKENS
@@ -4004,54 +4174,82 @@ function getTokenPosition(token) {
 
 function renderTokens() {
 
-    players.red.tokens
-        .concat(
+    const allTokens =
+        players.red.tokens.concat(
             players.blue.tokens
-        )
-        .forEach(
-            token => {
-
-                if (!token.element) {
-
-                    makeTokenElement(
-                        token
-                    );
-
-                }
-
-                const pos =
-                    getTokenPosition(
-                        token
-                    );
+        );
 
 
-                token.element.style.left =
-                    `${(pos.col / BOARD_SIZE) * 100}%`;
+    allTokens.forEach(
+        token => {
 
-                token.element.style.top =
-                    `${(pos.row / BOARD_SIZE) * 100}%`;
+            if (
+                !token.element
+            ) {
+
+                createTokenElement(
+                    token
+                );
+
+            }
 
 
-                token.element.classList.remove(
-                    "selectable"
+            const base =
+                getBasePosition(
+                    token
                 );
 
 
-                if (
-                    diceRolled &&
-                    token.player ===
-                    currentPlayer &&
-                    isLegalMove(token)
-                ) {
+            const offset =
+                getStackOffset(
+                    token
+                );
 
-                    token.element.classList.add(
-                        "selectable"
-                    );
 
-                }
+            const row =
+                base.row +
+                offset.y;
+
+
+            const col =
+                base.col +
+                offset.x;
+
+
+            token.element.style.left =
+                `${(
+                    col /
+                    BOARD_SIZE
+                ) * 100}%`;
+
+
+            token.element.style.top =
+                `${(
+                    row /
+                    BOARD_SIZE
+                ) * 100}%`;
+
+
+            token.element.classList.remove(
+                "selectable"
+            );
+
+
+            if (
+                diceRolled &&
+                token.player ===
+                currentPlayer &&
+                isLegalMove(token)
+            ) {
+
+                token.element.classList.add(
+                    "selectable"
+                );
 
             }
-        );
+
+        }
+    );
 
 
     updateStats();
@@ -4059,54 +4257,144 @@ function renderTokens() {
 }
 
 
-
 /* =========================================================
-   HOME TOKEN POSITION
+   BLOCKADE
 ========================================================= */
 
-function positionHomeTokens(color) {
+function getOpponentTokensOnCell(
+    movingToken,
+    globalIndex
+) {
 
-    /*
-        Token positions are already handled
-        by getTokenPosition().
-    */
+    const opponent =
+        getOpponent(
+            movingToken.player
+        );
 
-    renderTokens();
+
+    return players[opponent]
+        .tokens
+        .filter(
+            token => {
+
+                if (
+                    token.finished ||
+                    token.progress < 0 ||
+                    token.progress > 51
+                ) {
+
+                    return false;
+
+                }
+
+
+                return (
+                    getGlobalTrackIndex(
+                        token
+                    ) ===
+                    globalIndex
+                );
+
+            }
+        );
 
 }
 
 
-
 /* =========================================================
-   GET GLOBAL POSITION
+   CHECK BLOCKADE
 ========================================================= */
 
-function getGlobalIndex(token) {
+function isBlockedByOpponent(
+    token,
+    dice
+) {
 
     if (
-        token.index < 0 ||
-        token.finished
+        token.progress < 0
     ) {
 
-        return null;
+        return false;
 
     }
 
 
-    return (
-        START_INDEX[token.player] +
-        token.index
-    ) % PATH_LENGTH;
+    /*
+        Check every track cell crossed.
+    */
+
+    for (
+        let step = 1;
+        step <= dice;
+        step++
+    ) {
+
+        const nextProgress =
+            token.progress +
+            step;
+
+
+        if (
+            nextProgress >
+            51
+        ) {
+
+            break;
+
+        }
+
+
+        const globalIndex =
+            (
+                START_INDEX[token.player] +
+                nextProgress
+            ) % TRACK_LENGTH;
+
+
+        const enemies =
+            getOpponentTokensOnCell(
+                token,
+                globalIndex
+            );
+
+
+        /*
+            Two or more opponent tokens
+            create a blockade.
+        */
+
+        if (
+            enemies.length >= 2
+        ) {
+
+            return true;
+
+        }
+
+    }
+
+
+    return false;
 
 }
-
 
 
 /* =========================================================
    LEGAL MOVE
 ========================================================= */
 
-function isLegalMove(token) {
+function isLegalMove(
+    token
+) {
+
+    if (
+        gameOver
+    ) {
+
+        return false;
+
+    }
+
 
     if (
         token.player !==
@@ -4128,30 +4416,101 @@ function isLegalMove(token) {
 
 
     if (
-        token.index === -1
+        !diceRolled ||
+        diceValue < 1
     ) {
 
-        return diceValue === 6;
+        return false;
 
     }
 
 
     /*
-        Exact finish rule.
+        Yard -> Board
+        Requires 6.
     */
 
-    return (
-        token.index +
-        diceValue <=
-        FINISH_POSITION
-    );
+    if (
+        token.progress === -1
+    ) {
+
+        if (
+            diceValue !== 6
+        ) {
+
+            return false;
+
+        }
+
+
+        /*
+            Starting cell may be occupied
+            by an opponent blockade.
+        */
+
+        const start =
+            START_INDEX[token.player];
+
+
+        const enemies =
+            getOpponentTokensOnCell(
+                token,
+                start
+            );
+
+
+        if (
+            enemies.length >= 2
+        ) {
+
+            return false;
+
+        }
+
+
+        return true;
+
+    }
+
+
+    /*
+        Exact finish validation.
+    */
+
+    if (
+        token.progress +
+        diceValue >
+        FINAL_POSITION
+    ) {
+
+        return false;
+
+    }
+
+
+    /*
+        Blockade validation.
+    */
+
+    if (
+        isBlockedByOpponent(
+            token,
+            diceValue
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    return true;
 
 }
 
 
-
 /* =========================================================
-   GET LEGAL TOKENS
+   LEGAL TOKEN LIST
 ========================================================= */
 
 function getLegalTokens() {
@@ -4160,11 +4519,91 @@ function getLegalTokens() {
         .tokens
         .filter(
             token =>
-                isLegalMove(token)
+                isLegalMove(
+                    token
+                )
         );
 
 }
 
+
+/* =========================================================
+   AI GAME CONTROLLER
+========================================================= */
+
+const AIController = {
+
+    validateDice() {
+
+        if (
+            gameOver
+        ) {
+
+            return false;
+
+        }
+
+        if (
+            diceRolled
+        ) {
+
+            return false;
+
+        }
+
+        return true;
+
+    },
+
+
+    validateToken(
+        token
+    ) {
+
+        return isLegalMove(
+            token
+        );
+
+    },
+
+
+    validateTurn(
+        player
+    ) {
+
+        return (
+            player ===
+            currentPlayer
+        );
+
+    },
+
+
+    validateWinner(
+        player
+    ) {
+
+        return players[player]
+            .tokens
+            .every(
+                token =>
+                    token.finished
+            );
+
+    },
+
+
+    logAction(
+        message
+    ) {
+
+        addLog(
+            `🧠 ${message}`
+        );
+
+    }
+
+};
 
 
 /* =========================================================
@@ -4179,18 +4618,19 @@ rollBtn.addEventListener(
 
 function rollDice() {
 
-    if (gameOver) {
+    if (
+        !AIController.validateDice()
+    ) {
 
-        return;
+        if (
+            diceRolled
+        ) {
 
-    }
+            showToast(
+                "আগের Dice-এর move সম্পূর্ণ করুন।"
+            );
 
-
-    if (diceRolled) {
-
-        showToast(
-            "আগে একটি Token move করুন।"
-        );
+        }
 
         return;
 
@@ -4200,12 +4640,13 @@ function rollDice() {
     rollBtn.disabled =
         true;
 
+
     dice.classList.add(
         "rolling"
     );
 
 
-    let ticks =
+    let animationCount =
         0;
 
 
@@ -4213,122 +4654,129 @@ function rollDice() {
         setInterval(
             () => {
 
-                const temp =
+                const temporary =
                     Math.floor(
                         Math.random() * 6
                     ) + 1;
 
-                dice.textContent =
-                    DICE_FACES[temp];
 
-                ticks++;
+                dice.textContent =
+                    DICE_FACES[
+                        temporary
+                    ];
+
+
+                animationCount++;
 
 
                 if (
-                    ticks >= 8
+                    animationCount >= 8
                 ) {
 
                     clearInterval(
                         animation
                     );
 
+
                     dice.classList.remove(
                         "rolling"
                     );
 
 
-                    finishRoll();
+                    completeDiceRoll();
 
                 }
 
             },
-            70
+            65
         );
 
 }
 
 
-
 /* =========================================================
-   FINISH ROLL
+   COMPLETE DICE ROLL
 ========================================================= */
 
-function finishRoll() {
+function completeDiceRoll() {
 
     diceValue =
         Math.floor(
             Math.random() * 6
         ) + 1;
 
+
     dice.textContent =
-        DICE_FACES[diceValue];
+        DICE_FACES[
+            diceValue
+        ];
+
 
     diceRolled =
         true;
 
 
-    const legal =
+    const legalTokens =
         getLegalTokens();
+
+
+    if (
+        diceValue === 6
+    ) {
+
+        sixChain++;
+
+    } else {
+
+        sixChain = 0;
+
+    }
 
 
     addLog(
         `<strong>${getPlayerName()}</strong>
-         🎲 rolled <strong>${diceValue}</strong>.`
+         🎲 rolled
+         <strong>${diceValue}</strong>.`
     );
 
 
+    AIController.logAction(
+        `Dice result ${diceValue} validated.`
+    );
+
+
+    /*
+        Three consecutive sixes:
+        cancel this turn.
+    */
+
     if (
-        legal.length === 0
+        sixChain >= 3
     ) {
+
+        addLog(
+            `⚠️ Three consecutive 6s.
+             Turn forfeited.`
+        );
+
+
+        showToast(
+            "পরপর ৩ বার ৬ — Turn বাতিল।"
+        );
+
 
         diceRolled =
             false;
 
+        diceValue =
+            0;
 
-        /*
-            6 still gives another turn
-            even if no move exists.
-        */
-
-        if (
-            diceValue === 6
-        ) {
-
-            addLog(
-                `🎁 <strong>${getPlayerName()}</strong>
-                 gets another turn.`
-            );
-
-            rollBtn.disabled =
-                false;
-
-            diceHint.textContent =
-                "Roll again";
-
-            showToast(
-                "6 এসেছে — আবার Roll করুন।"
-            );
-
-            return;
-
-        }
-
-
-        addLog(
-            `⚠️ No legal move. Turn passed.`
-        );
-
-
-        diceHint.textContent =
-            "Turn changing...";
+        sixChain =
+            0;
 
 
         setTimeout(
-            () => {
-
-                nextTurn();
-
-            },
+            nextTurn,
             650
         );
 
@@ -4338,47 +4786,110 @@ function finishRoll() {
     }
 
 
+    /*
+        No legal move.
+    */
+
+    if (
+        legalTokens.length === 0
+    ) {
+
+        diceRolled =
+            false;
+
+
+        if (
+            diceValue === 6
+        ) {
+
+            /*
+                Six gives another roll.
+            */
+
+            diceValue =
+                0;
+
+            diceHint.textContent =
+                "Bonus Roll";
+
+
+            rollBtn.disabled =
+                false;
+
+
+            addLog(
+                `🎁
+                 <strong>${getPlayerName()}</strong>
+                 gets another roll.`
+            );
+
+
+            showToast(
+                "6 এসেছে — আবার Dice Roll করুন।"
+            );
+
+
+            renderTokens();
+
+            return;
+
+        }
+
+
+        addLog(
+            `⚠️ No legal move.
+             Turn passed.`
+        );
+
+
+        diceHint.textContent =
+            "No legal move";
+
+
+        setTimeout(
+            nextTurn,
+            700
+        );
+
+
+        return;
+
+    }
+
+
     diceHint.textContent =
-        `${legal.length} move available`;
+        legalTokens.length === 1
+            ? "1 legal move"
+            : `${legalTokens.length} legal moves`;
 
 
     renderTokens();
 
 
-    if (
-        legal.length === 1
-    ) {
+    AIController.logAction(
+        `${legalTokens.length} legal token move(s) found.`
+    );
 
-        /*
-            If only one legal move exists,
-            allow the player to tap it.
-        */
 
-        showToast(
-            "আপনার highlighted Token-এ চাপ দিন।"
-        );
-
-    } else {
-
-        showToast(
-            "একটি Token নির্বাচন করুন।"
-        );
-
-    }
+    showToast(
+        legalTokens.length === 1
+            ? "Highlighted Token-এ চাপ দিন।"
+            : "একটি highlighted Token নির্বাচন করুন।"
+    );
 
 }
 
 
-
 /* =========================================================
-   MOVE TOKEN
+   TOKEN CLICK
 ========================================================= */
 
-function moveToken(token) {
+function handleTokenClick(
+    token
+) {
 
     if (
-        !diceRolled ||
-        !isLegalMove(token)
+        gameOver
     ) {
 
         return;
@@ -4386,65 +4897,155 @@ function moveToken(token) {
     }
 
 
+    if (
+        !AIController.validateTurn(
+            token.player
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !diceRolled
+    ) {
+
+        showToast(
+            "আগে Dice Roll করুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !AIController.validateToken(
+            token
+        )
+    ) {
+
+        showToast(
+            "এই Token-এর legal move নেই।"
+        );
+
+        return;
+
+    }
+
+
+    moveToken(
+        token
+    );
+
+}
+
+
+/* =========================================================
+   MOVE TOKEN
+========================================================= */
+
+function moveToken(
+    token
+) {
+
+    /*
+        AI validates again immediately
+        before changing state.
+    */
+
+    if (
+        !AIController.validateToken(
+            token
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const rolled =
+        diceValue;
+
+
+    const wasInYard =
+        token.progress === -1;
+
+
+    /*
+        Remove selection first.
+    */
+
     diceRolled =
         false;
-
 
     rollBtn.disabled =
         true;
 
 
-    token.element.classList.remove(
+    token.element?.classList.remove(
         "selectable"
     );
 
 
     /*
-        Token leaving yard.
+        Enter from yard.
     */
 
     if (
-        token.index === -1
+        wasInYard
     ) {
 
-        token.index =
+        token.progress =
             0;
 
 
         addLog(
             `<strong>${getPlayerName()}</strong>
-             entered a Token onto the board.`
+             entered a Token from Yard.`
         );
 
     } else {
 
-        token.index +=
-            diceValue;
+        token.progress +=
+            rolled;
 
 
         addLog(
             `<strong>${getPlayerName()}</strong>
-             moved a Token by
-             <strong>${diceValue}</strong> steps.`
+             moved a Token
+             <strong>${rolled}</strong>
+             steps.`
         );
 
     }
 
 
     /*
-        Exact finish.
+        Home reached.
     */
 
     if (
-        token.index ===
-        FINISH_POSITION
+        token.progress ===
+        FINAL_POSITION
     ) {
 
         token.finished =
             true;
 
+
         addLog(
-            `🏠 Token reached <strong>Home</strong>.`
+            `🏠
+             <strong>${getPlayerName()}</strong>
+             brought a Token Home.`
+        );
+
+
+        showToast(
+            "Token reached Home! 🏠"
         );
 
     }
@@ -4458,10 +5059,12 @@ function moveToken(token) {
     */
 
     if (
-        !token.finished
+        !token.finished &&
+        token.progress >= 0 &&
+        token.progress <= 51
     ) {
 
-        handleCapture(
+        processCapture(
             token
         );
 
@@ -4469,11 +5072,11 @@ function moveToken(token) {
 
 
     /*
-        Winner.
+        Winner check.
     */
 
     if (
-        checkWinner(
+        AIController.validateWinner(
             currentPlayer
         )
     ) {
@@ -4486,31 +5089,35 @@ function moveToken(token) {
 
 
     /*
-        Six gives another turn.
+        Six = bonus turn.
     */
 
     if (
-        diceValue === 6
+        rolled === 6
     ) {
 
         diceValue =
             0;
 
-        diceHint.textContent =
-            "Bonus turn";
+        diceRolled =
+            false;
 
         rollBtn.disabled =
             false;
 
+        diceHint.textContent =
+            "Bonus Roll";
+
 
         addLog(
-            `🎁 <strong>${getPlayerName()}</strong>
-             gets another turn.`
+            `🎁
+             <strong>${getPlayerName()}</strong>
+             gets another roll.`
         );
 
 
         showToast(
-            "6 এসেছে — Bonus Turn!"
+            "6 এসেছে — Bonus Roll!"
         );
 
 
@@ -4521,37 +5128,41 @@ function moveToken(token) {
     }
 
 
+    /*
+        Normal turn change.
+    */
+
     diceValue =
+        0;
+
+    sixChain =
         0;
 
 
     setTimeout(
-        () => {
-
-            nextTurn();
-
-        },
+        nextTurn,
         350
     );
 
 }
 
 
-
 /* =========================================================
    CAPTURE
 ========================================================= */
 
-function handleCapture(movingToken) {
+function processCapture(
+    movingToken
+) {
 
-    const movingGlobal =
-        getGlobalIndex(
+    const globalIndex =
+        getGlobalTrackIndex(
             movingToken
         );
 
 
     if (
-        movingGlobal === null
+        globalIndex === null
     ) {
 
         return;
@@ -4559,11 +5170,19 @@ function handleCapture(movingToken) {
     }
 
 
+    /*
+        Safe cells cannot be captured.
+    */
+
     if (
         SAFE_CELLS.has(
-            movingGlobal
+            globalIndex
         )
     ) {
+
+        AIController.logAction(
+            "Safe cell detected — capture blocked."
+        );
 
         return;
 
@@ -4571,62 +5190,119 @@ function handleCapture(movingToken) {
 
 
     const opponent =
-        movingToken.player ===
-        "red"
-            ? "blue"
-            : "red";
+        getOpponent(
+            movingToken.player
+        );
 
 
-    players[opponent]
-        .tokens
-        .forEach(
-            enemy => {
+    const enemies =
+        players[opponent]
+            .tokens
+            .filter(
+                token => {
 
-                if (
-                    enemy.finished ||
-                    enemy.index < 0
-                ) {
+                    if (
+                        token.finished ||
+                        token.progress < 0 ||
+                        token.progress > 51
+                    ) {
 
-                    return;
+                        return false;
 
-                }
+                    }
 
 
-                const enemyGlobal =
-                    getGlobalIndex(
-                        enemy
+                    return (
+                        getGlobalTrackIndex(
+                            token
+                        ) ===
+                        globalIndex
                     );
 
-
-                if (
-                    enemyGlobal !==
-                    movingGlobal
-                ) {
-
-                    return;
-
                 }
+            );
 
 
-                enemy.index =
-                    -1;
+    /*
+        Two or more opponent tokens
+        form a blockade and cannot be captured.
+    */
 
+    if (
+        enemies.length >= 2
+    ) {
 
-                captureCount++;
-
-
-                addLog(
-                    `⚔️ <strong>${getPlayerName()}</strong>
-                     captured an opponent Token.`
-                );
-
-
-                showToast(
-                    "Token Captured!"
-                );
-
-            }
+        AIController.logAction(
+            "Opponent blockade protected."
         );
+
+        return;
+
+    }
+
+
+    /*
+        Capture exactly one enemy.
+    */
+
+    if (
+        enemies.length === 1
+    ) {
+
+        const enemy =
+            enemies[0];
+
+
+        enemy.progress =
+            -1;
+
+        enemy.finished =
+            false;
+
+
+        captureCount++;
+
+
+        addLog(
+            `⚔️
+             <strong>${getPlayerName()}</strong>
+             captured an opponent Token.`
+        );
+
+
+        AIController.logAction(
+            "Capture validated and applied."
+        );
+
+
+        showToast(
+            "Token Captured! ⚔️"
+        );
+
+
+        if (
+            enemy.element
+        ) {
+
+            enemy.element.classList.add(
+                "pop"
+            );
+
+
+            setTimeout(
+                () => {
+
+                    enemy.element?.classList.remove(
+                        "pop"
+                    );
+
+                },
+                400
+            );
+
+        }
+
+    }
 
 
     renderTokens();
@@ -4634,27 +5310,23 @@ function handleCapture(movingToken) {
 }
 
 
-
 /* =========================================================
    WINNER
 ========================================================= */
 
-function checkWinner(player) {
-
-    return players[player]
-        .tokens
-        .every(
-            token =>
-                token.finished
-        );
-
-}
-
-
-
 function finishGame() {
 
     gameOver =
+        true;
+
+    diceRolled =
+        false;
+
+    diceValue =
+        0;
+
+
+    rollBtn.disabled =
         true;
 
 
@@ -4671,7 +5343,7 @@ function finishGame() {
     document.getElementById(
         "winnerText"
     ).textContent =
-        `Congratulations! ${winner.name} has brought all four Tokens Home.`;
+        `${winner.name} successfully brought all four Tokens Home.`;
 
 
     winnerModal.classList.add(
@@ -4679,17 +5351,21 @@ function finishGame() {
     );
 
 
-    rollBtn.disabled =
-        true;
-
-
     addLog(
-        `🏆 <strong>${winner.name}</strong>
+        `🏆
+         <strong>${winner.name}</strong>
          won the match!`
     );
 
-}
 
+    AIController.logAction(
+        "Winner validated. Match closed."
+    );
+
+
+    renderTokens();
+
+}
 
 
 /* =========================================================
@@ -4698,10 +5374,19 @@ function finishGame() {
 
 function nextTurn() {
 
+    if (
+        gameOver
+    ) {
+
+        return;
+
+    }
+
+
     currentPlayer =
-        currentPlayer === "red"
-            ? "blue"
-            : "red";
+        getOpponent(
+            currentPlayer
+        );
 
 
     diceValue =
@@ -4710,17 +5395,19 @@ function nextTurn() {
     diceRolled =
         false;
 
+    sixChain =
+        0;
+
 
     rollBtn.disabled =
         false;
 
 
-    updateTurnUI();
-
-
     diceHint.textContent =
         "Roll to play";
 
+
+    updateTurnUI();
 
     renderTokens();
 
@@ -4730,21 +5417,12 @@ function nextTurn() {
          <strong>${getPlayerName()}</strong>`
     );
 
-}
 
-
-
-/* =========================================================
-   PLAYER NAME
-========================================================= */
-
-function getPlayerName() {
-
-    return players[currentPlayer]
-        .name;
+    AIController.logAction(
+        `Turn changed to ${getPlayerName()}.`
+    );
 
 }
-
 
 
 /* =========================================================
@@ -4753,30 +5431,29 @@ function getPlayerName() {
 
 function updateTurnUI() {
 
-    const isRed =
+    const redActive =
         currentPlayer ===
         "red";
 
 
     turnPlayer.textContent =
-        isRed
+        redActive
             ? "🔴 Player 1"
             : "🔵 Player 2";
 
 
     redCard.classList.toggle(
         "active",
-        isRed
+        redActive
     );
 
 
     blueCard.classList.toggle(
         "active",
-        !isRed
+        !redActive
     );
 
 }
-
 
 
 /* =========================================================
@@ -4817,7 +5494,6 @@ function updateStats() {
 }
 
 
-
 /* =========================================================
    NEW GAME
 ========================================================= */
@@ -4839,7 +5515,10 @@ function newGame() {
     captureCount =
         0;
 
-    tokenIdCounter =
+    sixChain =
+        0;
+
+    tokenSequence =
         1;
 
 
@@ -4860,25 +5539,24 @@ function newGame() {
 
 
     /*
-        Remove old token elements.
+        Remove existing tokens.
     */
 
     document
-        .querySelectorAll(".token")
+        .querySelectorAll(
+            ".token"
+        )
         .forEach(
-            el => el.remove()
+            element =>
+                element.remove()
         );
 
-
-    /*
-        Rebuild game state.
-    */
 
     createTokens();
 
     updateTurnUI();
 
-    updateStats();
+    renderTokens();
 
 
     winnerModal.classList.remove(
@@ -4887,13 +5565,22 @@ function newGame() {
 
 
     addLog(
-        `🎮 New match started.
-         <strong>Player 1</strong> starts.`
+        `🎮
+         <strong>Player 1 vs Player 2</strong>
+         match started.`
     );
 
 
     addLog(
-        `🧠 AI Game Controller is active.`
+        `🧠
+         Advanced AI Game Controller:
+         <strong>ACTIVE</strong>`
+    );
+
+
+    addLog(
+        `🔴
+         Player 1 starts the match.`
     );
 
 
@@ -4904,13 +5591,14 @@ function newGame() {
 }
 
 
-
 /* =========================================================
-   NEW GAME BUTTON
+   BUTTONS
 ========================================================= */
 
 document
-    .getElementById("newGameBtn")
+    .getElementById(
+        "newGameBtn"
+    )
     .addEventListener(
         "click",
         newGame
@@ -4918,20 +5606,23 @@ document
 
 
 document
-    .getElementById("winnerNewGameBtn")
+    .getElementById(
+        "winnerNewGameBtn"
+    )
     .addEventListener(
         "click",
         newGame
     );
 
 
-
 /* =========================================================
-   RULES
+   RULES MODAL
 ========================================================= */
 
 document
-    .getElementById("rulesBtn")
+    .getElementById(
+        "rulesBtn"
+    )
     .addEventListener(
         "click",
         () => {
@@ -4945,7 +5636,9 @@ document
 
 
 document
-    .getElementById("closeRulesBtn")
+    .getElementById(
+        "closeRulesBtn"
+    )
     .addEventListener(
         "click",
         () => {
@@ -4996,7 +5689,6 @@ winnerModal.addEventListener(
 );
 
 
-
 /* =========================================================
    INITIALIZE
 ========================================================= */
@@ -5007,14 +5699,26 @@ createTokens();
 
 updateTurnUI();
 
-addLog(
-    `🎮 Match ready:
-     <strong>Player 1 vs Player 2</strong>`
-);
+renderTokens();
+
 
 addLog(
-    `🧠 AI Game Controller:
+    `🎮
+     <strong>Player 1 vs Player 2</strong>
+     ready.`
+);
+
+
+addLog(
+    `🧠
+     AI Game Controller:
      <strong>ACTIVE</strong>`
+);
+
+
+addLog(
+    `🔴
+     Player 1 starts.`
 );
 
 </script>
