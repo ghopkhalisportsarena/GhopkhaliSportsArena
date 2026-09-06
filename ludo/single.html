@@ -12,35 +12,65 @@
 
     <meta
         name="theme-color"
-        content="#060912"
-    >
-
-    <meta
-        name="description"
-        content="Ghopkhali Sports Arena — Premium 1 vs 1 Ludo Tournament"
+        content="#05070b"
     >
 
     <title>
-        Single Ludo — Ghopkhali Sports Arena
+        Single Tournament — Ghopkhali Sports Arena
     </title>
 
 
     <style>
 
         /* =====================================================
-           RESET
+           ROOT
         ===================================================== */
+
+        :root {
+
+            --bg:
+                #05070b;
+
+            --panel:
+                rgba(255,255,255,0.055);
+
+            --panel-strong:
+                rgba(255,255,255,0.085);
+
+            --border:
+                rgba(255,255,255,0.11);
+
+            --text:
+                #f5f7fb;
+
+            --muted:
+                #9299a8;
+
+            --red:
+                #ff3b30;
+
+            --blue:
+                #0a84ff;
+
+            --green:
+                #30d158;
+
+            --yellow:
+                #ffd60a;
+
+            --shadow:
+                0 25px 70px rgba(0,0,0,0.48);
+
+            --radius:
+                24px;
+
+        }
+
 
         * {
 
             box-sizing:
                 border-box;
-
-            margin:
-                0;
-
-            padding:
-                0;
 
             -webkit-tap-highlight-color:
                 transparent;
@@ -48,133 +78,78 @@
         }
 
 
-        :root {
+        html,
+        body {
 
-            --bg:
-                #060912;
+            margin:
+                0;
 
-            --panel:
-                #0d1320;
-
-            --panel-2:
-                #111a2b;
-
-            --text:
-                #f7f9ff;
-
-            --muted:
-                #8490a8;
-
-            --red:
-                #ed2939;
-
-            --red-light:
-                #ff6570;
-
-            --blue:
-                #1769e0;
-
-            --blue-light:
-                #5ba5ff;
-
-            --green:
-                #18a957;
-
-            --yellow:
-                #f4bd19;
-
-            --white:
-                #ffffff;
-
-            --board:
-                #f7f7f4;
-
-            --line:
-                #202735;
-
-            --gold:
-                #ffd45a;
-
-        }
-
-
-        html {
+            padding:
+                0;
 
             min-height:
                 100%;
+
+            background:
+                var(--bg);
+
+            color:
+                var(--text);
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                sans-serif;
 
         }
 
 
         body {
 
-            min-height:
-                100vh;
-
-            color:
-                var(--text);
+            overflow-x:
+                hidden;
 
             background:
 
                 radial-gradient(
-                    circle at 10% 10%,
-                    rgba(23,105,224,.16),
-                    transparent 28%
-                ),
-
-                radial-gradient(
-                    circle at 90% 10%,
-                    rgba(237,41,57,.14),
-                    transparent 28%
-                ),
-
-                radial-gradient(
-                    circle at 50% 100%,
-                    rgba(24,169,87,.10),
+                    circle at 15% 10%,
+                    rgba(10,132,255,0.12),
                     transparent 30%
                 ),
 
-                var(--bg);
+                radial-gradient(
+                    circle at 85% 15%,
+                    rgba(255,59,48,0.10),
+                    transparent 30%
+                ),
 
-            font-family:
-                Inter,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
+                radial-gradient(
+                    circle at 50% 90%,
+                    rgba(48,209,88,0.07),
+                    transparent 35%
+                ),
 
-            overflow-x:
-                hidden;
+                #05070b;
 
         }
 
 
-        body::before {
+        button,
+        select {
 
-            content:
-                "";
+            font:
+                inherit;
 
-            position:
-                fixed;
+        }
 
-            inset:
-                0;
 
-            pointer-events:
-                none;
+        button {
 
-            opacity:
-                .08;
-
-            background-image:
-                radial-gradient(
-                    #ffffff 1px,
-                    transparent 1px
-                );
-
-            background-size:
-                34px 34px;
+            cursor:
+                pointer;
 
         }
 
@@ -186,7 +161,7 @@
         .app {
 
             width:
-                min(1450px, 100%);
+                min(1400px, 100%);
 
             margin:
                 auto;
@@ -213,10 +188,37 @@
                 space-between;
 
             gap:
-                15px;
+                14px;
 
-            margin-bottom:
-                18px;
+            padding:
+                14px 16px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                rgba(12,15,22,0.76);
+
+            backdrop-filter:
+                blur(24px);
+
+            -webkit-backdrop-filter:
+                blur(24px);
+
+            border-radius:
+                20px;
+
+            box-shadow:
+                var(--shadow);
+
+            position:
+                sticky;
+
+            top:
+                10px;
+
+            z-index:
+                50;
 
         }
 
@@ -230,18 +232,21 @@
                 center;
 
             gap:
-                12px;
+                11px;
+
+            min-width:
+                0;
 
         }
 
 
-        .brand-logo {
+        .brand-icon {
 
             width:
-                48px;
+                42px;
 
             height:
-                48px;
+                42px;
 
             display:
                 grid;
@@ -250,62 +255,62 @@
                 center;
 
             border-radius:
-                15px;
-
-            font-size:
-                23px;
-
-            font-weight:
-                900;
+                14px;
 
             background:
                 linear-gradient(
                     145deg,
-                    #1a263b,
-                    #0b111d
+                    rgba(255,255,255,0.16),
+                    rgba(255,255,255,0.035)
                 );
 
             border:
-                1px solid
-                rgba(255,255,255,.1);
-
-            box-shadow:
-
-                inset 0 1px 0
-                rgba(255,255,255,.12),
-
-                0 10px 30px
-                rgba(0,0,0,.35);
-
-        }
-
-
-        .brand h1 {
+                1px solid var(--border);
 
             font-size:
-                clamp(16px, 2vw, 22px);
+                21px;
 
-            font-weight:
-                900;
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.08);
 
         }
 
 
-        .brand p {
+        .brand-title {
+
+            font-size:
+                14px;
+
+            font-weight:
+                800;
+
+            white-space:
+                nowrap;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
+        }
+
+
+        .brand-sub {
 
             margin-top:
-                3px;
+                2px;
+
+            font-size:
+                10px;
 
             color:
                 var(--muted);
 
-            font-size:
-                11px;
-
         }
 
 
-        .live {
+        .top-status {
 
             display:
                 flex;
@@ -314,34 +319,36 @@
                 center;
 
             gap:
-                7px;
+                8px;
 
             padding:
-                9px 13px;
-
-            border-radius:
-                999px;
-
-            background:
-                rgba(255,255,255,.05);
+                9px 12px;
 
             border:
-                1px solid
-                rgba(255,255,255,.08);
+                1px solid rgba(48,209,88,0.18);
+
+            border-radius:
+                13px;
+
+            background:
+                rgba(48,209,88,0.06);
+
+            color:
+                #a8efbd;
 
             font-size:
                 10px;
 
             font-weight:
-                900;
+                800;
 
-            letter-spacing:
-                .5px;
+            white-space:
+                nowrap;
 
         }
 
 
-        .live-dot {
+        .status-dot {
 
             width:
                 7px;
@@ -353,31 +360,108 @@
                 50%;
 
             background:
-                #22d66d;
+                var(--green);
 
             box-shadow:
-                0 0 14px
-                #22d66d;
+                0 0 12px rgba(48,209,88,0.85);
 
             animation:
-                livePulse
-                1.4s
-                infinite;
+                pulse 1.8s infinite;
 
         }
 
 
-        @keyframes livePulse {
+        @keyframes pulse {
+
+            0%,
+            100% {
+
+                opacity:
+                    1;
+
+                transform:
+                    scale(1);
+
+            }
 
             50% {
 
                 opacity:
-                    .35;
+                    .45;
 
                 transform:
-                    scale(.65);
+                    scale(.72);
 
             }
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            text-align:
+                center;
+
+            padding:
+                34px 12px 22px;
+
+        }
+
+
+        .hero-kicker {
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                2px;
+
+            color:
+                #8f9aad;
+
+        }
+
+
+        .hero h1 {
+
+            margin:
+                8px 0 7px;
+
+            font-size:
+                clamp(27px, 5vw, 48px);
+
+            line-height:
+                1.02;
+
+            letter-spacing:
+                -1.7px;
+
+        }
+
+
+        .hero p {
+
+            margin:
+                0 auto;
+
+            max-width:
+                680px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.7;
 
         }
 
@@ -392,29 +476,27 @@
                 grid;
 
             grid-template-columns:
-                1fr
-                auto
-                1fr;
-
-            align-items:
-                center;
+                1fr auto 1fr;
 
             gap:
                 12px;
 
-            margin-bottom:
-                18px;
+            align-items:
+                center;
+
+            margin:
+                8px auto 20px;
+
+            max-width:
+                920px;
 
         }
 
 
-        .player {
+        .player-card {
 
-            min-height:
-                68px;
-
-            padding:
-                10px 14px;
+            position:
+                relative;
 
             display:
                 flex;
@@ -425,56 +507,58 @@
             gap:
                 11px;
 
+            min-width:
+                0;
+
+            padding:
+                12px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--panel);
+
             border-radius:
                 18px;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    #111a2a,
-                    #0a101b
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,.07);
-
             transition:
-                .3s ease;
+                .25s ease;
 
         }
 
 
-        .player.active {
+        .player-card.active {
 
             transform:
                 translateY(-2px);
 
-        }
-
-
-        .player.red.active {
-
             box-shadow:
-
-                0 0 0 1px
-                rgba(237,41,57,.55),
-
-                0 0 30px
-                rgba(237,41,57,.18);
+                0 15px 35px rgba(0,0,0,0.25);
 
         }
 
 
-        .player.blue.active {
+        .player-card.red.active {
+
+            border-color:
+                rgba(255,59,48,0.5);
 
             box-shadow:
+                0 0 0 1px rgba(255,59,48,0.08),
+                0 15px 40px rgba(255,59,48,0.12);
 
-                0 0 0 1px
-                rgba(23,105,224,.55),
+        }
 
-                0 0 30px
-                rgba(23,105,224,.18);
+
+        .player-card.blue.active {
+
+            border-color:
+                rgba(10,132,255,0.5);
+
+            box-shadow:
+                0 0 0 1px rgba(10,132,255,0.08),
+                0 15px 40px rgba(10,132,255,0.12);
 
         }
 
@@ -482,13 +566,13 @@
         .avatar {
 
             width:
-                43px;
+                42px;
 
             height:
-                43px;
+                42px;
 
             flex:
-                none;
+                0 0 42px;
 
             display:
                 grid;
@@ -499,14 +583,14 @@
             border-radius:
                 14px;
 
-            color:
-                #ffffff;
-
             font-size:
-                17px;
+                20px;
 
-            font-weight:
-                900;
+            background:
+                rgba(255,255,255,0.06);
+
+            border:
+                1px solid var(--border);
 
         }
 
@@ -514,11 +598,7 @@
         .red .avatar {
 
             background:
-                linear-gradient(
-                    145deg,
-                    var(--red-light),
-                    var(--red)
-                );
+                rgba(255,59,48,0.12);
 
         }
 
@@ -526,11 +606,15 @@
         .blue .avatar {
 
             background:
-                linear-gradient(
-                    145deg,
-                    var(--blue-light),
-                    var(--blue)
-                );
+                rgba(10,132,255,0.12);
+
+        }
+
+
+        .player-info {
+
+            min-width:
+                0;
 
         }
 
@@ -543,30 +627,51 @@
             font-weight:
                 900;
 
+            white-space:
+                nowrap;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
         }
 
 
-        .player-status {
+        .player-color {
 
             margin-top:
                 3px;
 
-            color:
-                var(--muted);
-
             font-size:
                 10px;
+
+            color:
+                var(--muted);
 
         }
 
 
-        .turn-box {
+        .turn-indicator {
 
             min-width:
-                105px;
+                130px;
+
+            padding:
+                10px 13px;
 
             text-align:
                 center;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                16px;
+
+            background:
+                rgba(255,255,255,0.045);
 
         }
 
@@ -582,22 +687,16 @@
             font-weight:
                 800;
 
-            text-transform:
-                uppercase;
-
-            letter-spacing:
-                1.5px;
-
         }
 
 
-        .turn-name {
+        .turn-player {
 
             margin-top:
                 3px;
 
             font-size:
-                12px;
+                11px;
 
             font-weight:
                 900;
@@ -606,7 +705,7 @@
 
 
         /* =====================================================
-           GAME LAYOUT
+           MAIN GAME AREA
         ===================================================== */
 
         .game-layout {
@@ -615,14 +714,10 @@
                 grid;
 
             grid-template-columns:
-                minmax(0,820px)
-                minmax(250px,330px);
-
-            justify-content:
-                center;
+                minmax(0, 1fr) 320px;
 
             gap:
-                20px;
+                18px;
 
             align-items:
                 start;
@@ -631,34 +726,39 @@
 
 
         /* =====================================================
-           BOARD
+           BOARD WRAPPER
         ===================================================== */
 
         .board-shell {
 
+            position:
+                relative;
+
             width:
-                100%;
+                min(780px, 100%);
+
+            margin:
+                auto;
 
             padding:
-                13px;
+                12px;
+
+            border:
+                1px solid rgba(255,255,255,0.13);
 
             border-radius:
-                27px;
+                31px;
 
             background:
                 linear-gradient(
                     145deg,
-                    #1a2435,
-                    #080d16
+                    rgba(255,255,255,0.075),
+                    rgba(255,255,255,0.025)
                 );
 
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-
             box-shadow:
-                0 25px 70px
-                rgba(0,0,0,.55);
+                0 35px 90px rgba(0,0,0,0.55),
+                inset 0 1px 0 rgba(255,255,255,0.06);
 
         }
 
@@ -672,487 +772,35 @@
                 100%;
 
             aspect-ratio:
-                1;
+                1 / 1;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(15, 1fr);
+
+            grid-template-rows:
+                repeat(15, 1fr);
 
             overflow:
                 hidden;
 
             border-radius:
-                17px;
+                23px;
 
             background:
-                #ffffff;
+                #f6f7fa;
 
             box-shadow:
-                inset
-                0 0 0 2px
-                #171b23;
-
-            display:
-                grid;
-
-            grid-template-columns:
-                40% 20% 40%;
-
-            grid-template-rows:
-                40% 20% 40%;
+                inset 0 0 0 2px rgba(0,0,0,0.08);
 
         }
 
 
         /* =====================================================
-           YARDS
+           BOARD CELLS
         ===================================================== */
-
-        .yard {
-
-            position:
-                relative;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            padding:
-                6%;
-
-        }
-
-
-        .yard.red {
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #ff6570,
-                    #d91e2f
-                );
-
-        }
-
-
-        .yard.green {
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #55df91,
-                    #11954a
-                );
-
-        }
-
-
-        .yard.blue {
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #5aa7ff,
-                    #1259c4
-                );
-
-        }
-
-
-        .yard.yellow {
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #ffe97a,
-                    #e3a900
-                );
-
-        }
-
-
-        .yard-inner {
-
-            width:
-                74%;
-
-            aspect-ratio:
-                1;
-
-            padding:
-                13%;
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            grid-template-rows:
-                1fr 1fr;
-
-            place-items:
-                center;
-
-            border-radius:
-                12%;
-
-            background:
-                #ffffff;
-
-            box-shadow:
-                inset
-                0 0 0 5px
-                rgba(0,0,0,.06),
-
-                0 5px 15px
-                rgba(0,0,0,.12);
-
-        }
-
-
-        .token-slot {
-
-            position:
-                relative;
-
-            width:
-                42%;
-
-            aspect-ratio:
-                1;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-        }
-
-
-        /* =====================================================
-           PREMIUM TOKEN
-        ===================================================== */
-
-        .token {
-
-            --token-main:
-                #999999;
-
-            --token-light:
-                #ffffff;
-
-            position:
-                relative;
-
-            width:
-                100%;
-
-            height:
-                100%;
-
-            cursor:
-                pointer;
-
-            transform-origin:
-                50% 90%;
-
-            transition:
-                transform .22s ease,
-                filter .22s ease;
-
-            filter:
-                drop-shadow(
-                    0 5px 3px
-                    rgba(0,0,0,.32)
-                )
-
-                drop-shadow(
-                    0 9px 7px
-                    rgba(0,0,0,.16)
-                );
-
-            z-index:
-                20;
-
-        }
-
-
-        .token::before {
-
-            content:
-                "";
-
-            position:
-                absolute;
-
-            width:
-                48%;
-
-            aspect-ratio:
-                1;
-
-            left:
-                26%;
-
-            top:
-                0;
-
-            border-radius:
-                50%;
-
-            background:
-                radial-gradient(
-                    circle at 30% 23%,
-                    #ffffff 0 7%,
-                    var(--token-light) 9% 16%,
-                    var(--token-main) 40%,
-                    color-mix(
-                        in srgb,
-                        var(--token-main),
-                        #000 30%
-                    ) 100%
-                );
-
-            box-shadow:
-
-                inset
-                -4px -5px 5px
-                rgba(0,0,0,.22),
-
-                inset
-                3px 2px 5px
-                rgba(255,255,255,.5);
-
-            z-index:
-                3;
-
-        }
-
-
-        .token::after {
-
-            content:
-                "";
-
-            position:
-                absolute;
-
-            left:
-                12%;
-
-            right:
-                12%;
-
-            top:
-                26%;
-
-            height:
-                59%;
-
-            clip-path:
-                polygon(
-                    28% 0,
-                    72% 0,
-                    86% 35%,
-                    100% 82%,
-                    100% 100%,
-                    0 100%,
-                    0 82%,
-                    14% 35%
-                );
-
-            border-radius:
-                0 0 38% 38%;
-
-            background:
-                linear-gradient(
-                    105deg,
-                    color-mix(
-                        in srgb,
-                        var(--token-main),
-                        #fff 28%
-                    ),
-                    var(--token-main) 45%,
-                    color-mix(
-                        in srgb,
-                        var(--token-main),
-                        #000 30%
-                    )
-                );
-
-            box-shadow:
-
-                inset
-                3px 0 4px
-                rgba(255,255,255,.28),
-
-                inset
-                -4px 0 5px
-                rgba(0,0,0,.18);
-
-        }
-
-
-        .token.red {
-
-            --token-main:
-                var(--red);
-
-            --token-light:
-                #ff7d87;
-
-        }
-
-
-        .token.blue {
-
-            --token-main:
-                var(--blue);
-
-            --token-light:
-                #79b5ff;
-
-        }
-
-
-        .token.green {
-
-            --token-main:
-                var(--green);
-
-            --token-light:
-                #7bf0a7;
-
-        }
-
-
-        .token.yellow {
-
-            --token-main:
-                var(--yellow);
-
-            --token-light:
-                #fff0a2;
-
-        }
-
-
-        .token.movable {
-
-            animation:
-                tokenFloat
-                1s
-                ease-in-out
-                infinite;
-
-            filter:
-
-                drop-shadow(
-                    0 0 5px
-                    var(--token-main)
-                )
-
-                drop-shadow(
-                    0 0 14px
-                    var(--token-main)
-                );
-
-        }
-
-
-        @keyframes tokenFloat {
-
-            50% {
-
-                transform:
-                    translateY(-5px)
-                    scale(1.08);
-
-            }
-
-        }
-
-
-        .token.moving {
-
-            animation:
-                tokenHop
-                .2s
-                ease;
-
-        }
-
-
-        @keyframes tokenHop {
-
-            50% {
-
-                transform:
-                    translateY(-11px)
-                    scale(1.08);
-
-            }
-
-        }
-
-        /* =====================================================
-           TRACK
-        ===================================================== */
-
-        .track {
-
-            background:
-                #ffffff;
-
-        }
-
-
-        .track.vertical {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            grid-template-rows:
-                repeat(6,1fr);
-
-            border-left:
-                1px solid
-                var(--line);
-
-            border-right:
-                1px solid
-                var(--line);
-
-        }
-
-
-        .track.horizontal {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(6,1fr);
-
-            grid-template-rows:
-                repeat(3,1fr);
-
-            border-top:
-                1px solid
-                var(--line);
-
-            border-bottom:
-                1px solid
-                var(--line);
-
-        }
-
 
         .cell {
 
@@ -1160,31 +808,103 @@
                 relative;
 
             border:
-                1px solid
-                #ccd0d7;
+                1px solid rgba(15,18,25,0.08);
 
             background:
                 #ffffff;
 
-            overflow:
-                hidden;
-
         }
 
 
-        /* =====================================================
-           SAFE SQUARE
-        ===================================================== */
-
-        .cell.safe {
+        .cell.track {
 
             background:
-                #f5f7fa;
+                #fbfbfd;
 
         }
 
 
-        .cell.safe::before {
+        .cell.red-home {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff6259,
+                    #ff3b30
+                );
+
+        }
+
+
+        .cell.blue-home {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #2b96ff,
+                    #0a84ff
+                );
+
+        }
+
+
+        .cell.green-home {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #45df70,
+                    #30d158
+                );
+
+        }
+
+
+        .cell.yellow-home {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffe46a,
+                    #ffd60a
+                );
+
+        }
+
+
+        .cell.red-lane {
+
+            background:
+                rgba(255,59,48,0.76);
+
+        }
+
+
+        .cell.blue-lane {
+
+            background:
+                rgba(10,132,255,0.76);
+
+        }
+
+
+        .cell.green-lane {
+
+            background:
+                rgba(48,209,88,0.76);
+
+        }
+
+
+        .cell.yellow-lane {
+
+            background:
+                rgba(255,214,10,0.76);
+
+        }
+
+
+        .cell.safe::after {
 
             content:
                 "★";
@@ -1202,47 +922,18 @@
                 center;
 
             color:
-                #303744;
+                rgba(30,35,45,0.45);
 
             font-size:
-                clamp(11px,2.2vw,21px);
-
-            font-weight:
-                700;
-
-            line-height:
-                1;
-
-            z-index:
-                2;
+                clamp(7px, 1.5vw, 15px);
 
         }
 
-
-        /* =====================================================
-           START SQUARE
-           Start is also a Safe Square
-        ===================================================== */
 
         .cell.start-red {
 
             background:
-                #ff4553;
-
-        }
-
-
-        .cell.start-red::before {
-
-            content:
-                "★";
-
-            color:
-                #ffffff;
-
-            text-shadow:
-                0 1px 2px
-                rgba(0,0,0,.25);
+                #ff3b30;
 
         }
 
@@ -1250,22 +941,7 @@
         .cell.start-blue {
 
             background:
-                #3789ef;
-
-        }
-
-
-        .cell.start-blue::before {
-
-            content:
-                "★";
-
-            color:
-                #ffffff;
-
-            text-shadow:
-                0 1px 2px
-                rgba(0,0,0,.25);
+                #0a84ff;
 
         }
 
@@ -1273,22 +949,7 @@
         .cell.start-green {
 
             background:
-                #31c36d;
-
-        }
-
-
-        .cell.start-green::before {
-
-            content:
-                "★";
-
-            color:
-                #ffffff;
-
-            text-shadow:
-                0 1px 2px
-                rgba(0,0,0,.25);
+                #30d158;
 
         }
 
@@ -1296,33 +957,203 @@
         .cell.start-yellow {
 
             background:
-                #ffd43e;
+                #ffd60a;
 
         }
 
-
-        .cell.start-yellow::before {
-
-            content:
-                "★";
-
-            color:
-                #ffffff;
-
-            text-shadow:
-                0 1px 2px
-                rgba(0,0,0,.25);
-
-        }
 
         /* =====================================================
-           CENTER HOME
+           HOME ZONES
         ===================================================== */
 
-        .middle {
+        .home-zone {
+
+            position:
+                absolute;
+
+            z-index:
+                2;
+
+            width:
+                40%;
+
+            height:
+                40%;
+
+            padding:
+                5%;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+        }
+
+
+        .home-zone.red {
+
+            left:
+                0;
+
+            top:
+                0;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff5c54,
+                    #ff2d20
+                );
+
+        }
+
+
+        .home-zone.green {
+
+            right:
+                0;
+
+            top:
+                0;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #48e878,
+                    #24c94d
+                );
+
+        }
+
+
+        .home-zone.yellow {
+
+            right:
+                0;
+
+            bottom:
+                0;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffe66b,
+                    #ffd000
+                );
+
+        }
+
+
+        .home-zone.blue {
+
+            left:
+                0;
+
+            bottom:
+                0;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #319bff,
+                    #0879ef
+                );
+
+        }
+
+
+        .home-inner {
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            padding:
+                12%;
+
+            border-radius:
+                18%;
+
+            background:
+                rgba(255,255,255,0.94);
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,0.18),
+                inset 0 0 0 1px rgba(0,0,0,0.05);
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            grid-template-rows:
+                1fr 1fr;
+
+            gap:
+                12%;
+
+        }
+
+
+        .home-slot {
 
             position:
                 relative;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(20,25,35,0.07);
+
+            box-shadow:
+                inset 0 2px 6px rgba(0,0,0,0.08);
+
+        }
+
+
+        .inactive-home .home-inner {
+
+            opacity:
+                .78;
+
+        }
+
+
+        /* =====================================================
+           CENTER
+        ===================================================== */
+
+        .center-home {
+
+            position:
+                absolute;
+
+            z-index:
+                6;
+
+            left:
+                40%;
+
+            top:
+                40%;
+
+            width:
+                20%;
+
+            height:
+                20%;
 
             overflow:
                 hidden;
@@ -1330,119 +1161,23 @@
             background:
                 #ffffff;
 
-        }
-
-
-        .home-center {
-
-            position:
-                absolute;
-
-            inset:
-                0;
-
-        }
-
-
-        .home-center .tri {
-
-            position:
-                absolute;
-
-            width:
-                50%;
-
-            height:
-                50%;
-
-        }
-
-
-        .tri.red {
-
-            top:
-                0;
-
-            left:
-                0;
-
-            background:
-                var(--red);
-
             clip-path:
                 polygon(
                     0 0,
+                    50% 50%,
+                    100% 0,
                     100% 100%,
+                    50% 50%,
                     0 100%
                 );
 
-        }
-
-
-        .tri.green {
-
-            top:
-                0;
-
-            right:
-                0;
-
-            background:
-                var(--green);
-
-            clip-path:
-                polygon(
-                    0 100%,
-                    100% 0,
-                    100% 100%
-                );
+            box-shadow:
+                0 0 0 2px rgba(0,0,0,0.07);
 
         }
 
 
-        .tri.yellow {
-
-            bottom:
-                0;
-
-            right:
-                0;
-
-            background:
-                var(--yellow);
-
-            clip-path:
-                polygon(
-                    0 0,
-                    100% 0,
-                    100% 100%
-                );
-
-        }
-
-
-        .tri.blue {
-
-            bottom:
-                0;
-
-            left:
-                0;
-
-            background:
-                var(--blue);
-
-            clip-path:
-                polygon(
-                    0 0,
-                    0 100%,
-                    100% 0
-                );
-
-        }
-
-
-        .home-center::after {
+        .center-home::before {
 
             content:
                 "";
@@ -1451,88 +1186,281 @@
                 absolute;
 
             inset:
-                38%;
+                0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--red) 0 25%,
+                    var(--green) 25% 50%,
+                    var(--yellow) 50% 75%,
+                    var(--blue) 75% 100%
+                );
+
+            opacity:
+                .92;
+
+        }
+
+
+        /* =====================================================
+           TOKENS
+        ===================================================== */
+
+        .token {
+
+            width:
+                68%;
+
+            aspect-ratio:
+                1;
 
             border-radius:
                 50%;
 
+            position:
+                absolute;
+
+            z-index:
+                20;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            font-size:
+                clamp(7px, 1.3vw, 12px);
+
+            font-weight:
+                900;
+
+            color:
+                #ffffff;
+
+            border:
+                2px solid rgba(255,255,255,0.82);
+
+            box-shadow:
+                0 5px 12px rgba(0,0,0,0.28),
+                inset 0 2px 4px rgba(255,255,255,0.45);
+
+            transform:
+                translate(-50%, -50%);
+
+            transition:
+                left .32s cubic-bezier(.22,.61,.36,1),
+                top .32s cubic-bezier(.22,.61,.36,1),
+                transform .18s ease,
+                box-shadow .18s ease;
+
+            pointer-events:
+                auto;
+
+        }
+
+
+        .token.red {
+
             background:
                 radial-gradient(
-                    circle,
-                    #ffffff 0 12%,
-                    rgba(255,255,255,.25) 13% 40%,
-                    transparent 41%
+                    circle at 30% 25%,
+                    #ff938c,
+                    #ff3b30 52%,
+                    #d91e16
                 );
 
         }
 
 
+        .token.blue {
+
+            background:
+                radial-gradient(
+                    circle at 30% 25%,
+                    #91caff,
+                    #0a84ff 52%,
+                    #0061c9
+                );
+
+        }
+
+
+        .token.selectable {
+
+            cursor:
+                pointer;
+
+            animation:
+                tokenGlow 1.15s infinite;
+
+        }
+
+
+        .token.selectable:hover {
+
+            transform:
+                translate(-50%, -50%) scale(1.12);
+
+        }
+
+
+        @keyframes tokenGlow {
+
+            0%,
+            100% {
+
+                box-shadow:
+                    0 5px 12px rgba(0,0,0,0.28),
+                    0 0 0 0 rgba(255,255,255,0.4);
+
+            }
+
+            50% {
+
+                box-shadow:
+                    0 5px 12px rgba(0,0,0,0.28),
+                    0 0 0 8px rgba(255,255,255,0.12);
+
+            }
+
+        }
+
+
+        .token.pop {
+
+            animation:
+                tokenPop .35s ease;
+
+        }
+
+
+        @keyframes tokenPop {
+
+            50% {
+
+                transform:
+                    translate(-50%, -50%) scale(1.22);
+
+            }
+
+        }
+
+
         /* =====================================================
-           BOARD TOKEN OVERLAY
+           BOARD OVERLAY
         ===================================================== */
 
-        .board-token {
+        .board-overlay {
 
             position:
                 absolute;
 
-            width:
-                5.2%;
-
-            aspect-ratio:
-                .78;
-
             z-index:
-                50;
+                40;
+
+            left:
+                50%;
+
+            top:
+                50%;
+
+            transform:
+                translate(-50%, -50%);
 
             pointer-events:
                 none;
 
+            text-align:
+                center;
+
         }
 
 
-        .board-token .token {
+        .board-badge {
 
-            width:
-                100%;
+            display:
+                inline-flex;
 
-            height:
-                100%;
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                8px 12px;
+
+            border:
+                1px solid rgba(255,255,255,0.35);
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(10,12,17,0.74);
+
+            backdrop-filter:
+                blur(12px);
+
+            color:
+                #ffffff;
+
+            font-size:
+                clamp(7px, 1.3vw, 11px);
+
+            font-weight:
+                900;
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,0.22);
 
         }
 
 
         /* =====================================================
-           CONTROL PANEL
+           SIDE PANEL
         ===================================================== */
 
-        .control-panel {
+        .side-panel {
 
-            padding:
-                18px;
+            display:
+                flex;
 
-            border-radius:
-                24px;
+            flex-direction:
+                column;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    #111a29,
-                    #090e18
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,.08);
-
-            box-shadow:
-                0 25px 70px
-                rgba(0,0,0,.55);
+            gap:
+                13px;
 
         }
 
 
-        .control-title {
+        .panel {
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                21px;
+
+            background:
+                var(--panel);
+
+            padding:
+                16px;
+
+            box-shadow:
+                0 18px 45px rgba(0,0,0,0.22);
+
+            backdrop-filter:
+                blur(20px);
+
+        }
+
+
+        .panel-title {
 
             display:
                 flex;
@@ -1543,16 +1471,14 @@
             justify-content:
                 space-between;
 
+            gap:
+                10px;
+
             margin-bottom:
-                15px;
-
-        }
-
-
-        .control-title h2 {
+                13px;
 
             font-size:
-                14px;
+                12px;
 
             font-weight:
                 900;
@@ -1560,25 +1486,99 @@
         }
 
 
-        .match-badge {
+        .controller {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
 
             padding:
-                6px 9px;
+                11px;
+
+            border:
+                1px solid rgba(48,209,88,0.18);
 
             border-radius:
-                999px;
-
-            color:
-                #aeb8cb;
+                15px;
 
             background:
-                rgba(255,255,255,.06);
+                rgba(48,209,88,0.055);
+
+        }
+
+
+        .controller-icon {
+
+            width:
+                38px;
+
+            height:
+                38px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(48,209,88,0.10);
+
+            font-size:
+                18px;
+
+        }
+
+
+        .controller-name {
+
+            font-size:
+                11px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .controller-desc {
+
+            margin-top:
+                3px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                9px;
+
+            line-height:
+                1.4;
+
+        }
+
+
+        .controller-state {
+
+            margin-left:
+                auto;
 
             font-size:
                 9px;
 
             font-weight:
-                800;
+                900;
+
+            color:
+                #78e997;
 
         }
 
@@ -1590,21 +1590,16 @@
         .dice-area {
 
             display:
-                grid;
+                flex;
 
-            place-items:
+            align-items:
                 center;
 
-            padding:
-                15px 0 20px;
+            justify-content:
+                space-between;
 
-        }
-
-
-        .dice-wrap {
-
-            perspective:
-                700px;
+            gap:
+                12px;
 
         }
 
@@ -1612,10 +1607,16 @@
         .dice {
 
             width:
-                88px;
+                76px;
 
             height:
-                88px;
+                76px;
+
+            flex:
+                0 0 76px;
+
+            border-radius:
+                20px;
 
             display:
                 grid;
@@ -1623,35 +1624,25 @@
             place-items:
                 center;
 
-            border-radius:
-                10px;
+            font-size:
+                36px;
 
             background:
                 linear-gradient(
                     145deg,
                     #ffffff,
-                    #dce1e8
+                    #dfe4eb
                 );
 
-            border:
-                1px solid
-                rgba(0,0,0,.16);
+            color:
+                #11151d;
 
             box-shadow:
+                0 12px 25px rgba(0,0,0,0.25),
+                inset 0 2px 0 rgba(255,255,255,0.95);
 
-                0 15px 30px
-                rgba(0,0,0,.35),
-
-                inset
-                4px 4px 8px
-                rgba(255,255,255,.9),
-
-                inset
-                -7px -8px 12px
-                rgba(0,0,0,.13);
-
-            transform-style:
-                preserve-3d;
+            user-select:
+                none;
 
         }
 
@@ -1659,14 +1650,7 @@
         .dice.rolling {
 
             animation:
-                diceRoll
-                .78s
-                cubic-bezier(
-                    .25,
-                    .8,
-                    .25,
-                    1
-                );
+                diceRoll .55s ease;
 
         }
 
@@ -1676,9 +1660,7 @@
             0% {
 
                 transform:
-                    rotateX(0)
-                    rotateY(0)
-                    rotateZ(0)
+                    rotate(0deg)
                     scale(1);
 
             }
@@ -1686,9 +1668,7 @@
             30% {
 
                 transform:
-                    rotateX(170deg)
-                    rotateY(130deg)
-                    rotateZ(70deg)
+                    rotate(18deg)
                     scale(1.08);
 
             }
@@ -1696,19 +1676,15 @@
             65% {
 
                 transform:
-                    rotateX(340deg)
-                    rotateY(280deg)
-                    rotateZ(170deg)
-                    scale(.96);
+                    rotate(-18deg)
+                    scale(.94);
 
             }
 
             100% {
 
                 transform:
-                    rotateX(360deg)
-                    rotateY(360deg)
-                    rotateZ(180deg)
+                    rotate(0deg)
                     scale(1);
 
             }
@@ -1716,99 +1692,38 @@
         }
 
 
-        .pips {
-
-            width:
-                68%;
-
-            height:
-                68%;
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            grid-template-rows:
-                repeat(3,1fr);
-
-        }
-
-
-        .pip {
-
-            width:
-                13px;
-
-            aspect-ratio:
-                1;
-
-            align-self:
-                center;
-
-            justify-self:
-                center;
-
-            border-radius:
-                50%;
-
-            background:
-                #11151c;
-
-            box-shadow:
-                inset
-                1px 1px 1px
-                rgba(255,255,255,.15);
-
-        }
-
-
-        /* =====================================================
-           ROLL BUTTON
-        ===================================================== */
-
-        .roll-button {
+        .roll-btn {
 
             width:
                 100%;
 
-            padding:
-                14px;
+            min-height:
+                48px;
 
             border:
                 0;
 
             border-radius:
-                14px;
+                15px;
 
             color:
                 #ffffff;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    #2b7fff,
-                    #1157ca
-                );
-
-            box-shadow:
-
-                0 8px 20px
-                rgba(23,105,224,.25),
-
-                inset
-                0 1px 0
-                rgba(255,255,255,.25);
-
             font-size:
-                13px;
+                12px;
 
             font-weight:
                 900;
 
-            cursor:
-                pointer;
+            background:
+                linear-gradient(
+                    135deg,
+                    #0a84ff,
+                    #006fe6
+                );
+
+            box-shadow:
+                0 10px 25px rgba(10,132,255,0.23);
 
             transition:
                 .2s ease;
@@ -1816,84 +1731,70 @@
         }
 
 
-        .roll-button:active {
+        .roll-btn:hover {
 
             transform:
-                scale(.98);
+                translateY(-1px);
 
         }
 
 
-        .roll-button:disabled {
+        .roll-btn:disabled {
 
             opacity:
-                .4;
+                .42;
 
             cursor:
                 not-allowed;
 
-        }
-
-
-        .status {
-
-            min-height:
-                30px;
-
-            margin-top:
-                10px;
-
-            color:
-                #9aa6bb;
-
-            text-align:
-                center;
-
-            font-size:
-                10px;
-
-            line-height:
-                1.5;
+            transform:
+                none;
 
         }
 
 
         /* =====================================================
-           TIMER
+           STATS
         ===================================================== */
 
-        .timer {
-
-            margin-top:
-                17px;
-
-        }
-
-
-        .timer-head {
+        .stats {
 
             display:
-                flex;
+                grid;
 
-            justify-content:
-                space-between;
+            grid-template-columns:
+                repeat(3,1fr);
 
-            margin-bottom:
-                6px;
-
-            color:
-                #8f9bb1;
-
-            font-size:
-                10px;
+            gap:
+                8px;
 
         }
 
 
-        .timer-value {
+        .stat {
 
-            color:
-                #ffffff;
+            padding:
+                11px 8px;
+
+            text-align:
+                center;
+
+            border:
+                1px solid rgba(255,255,255,0.07);
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+        }
+
+
+        .stat-value {
+
+            font-size:
+                16px;
 
             font-weight:
                 900;
@@ -1901,55 +1802,80 @@
         }
 
 
-        .timer-track {
+        .stat-label {
 
-            height:
-                5px;
+            margin-top:
+                3px;
 
-            overflow:
-                hidden;
+            color:
+                var(--muted);
 
-            border-radius:
-                999px;
-
-            background:
-                #1e293a;
-
-        }
-
-
-        .timer-fill {
-
-            height:
-                100%;
-
-            width:
-                100%;
-
-            border-radius:
-                inherit;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #38d98a,
-                    #ffd54e,
-                    #ff5261
-                );
-
-            transition:
-                width
-                1s
-                linear;
+            font-size:
+                8px;
 
         }
 
 
         /* =====================================================
-           SCORE
+           LOG
         ===================================================== */
 
-        .score-card {
+        .game-log {
+
+            max-height:
+                230px;
+
+            overflow:
+                auto;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                7px;
+
+        }
+
+
+        .log-item {
+
+            padding:
+                9px 10px;
+
+            border-radius:
+                11px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            color:
+                #cdd2dc;
+
+            font-size:
+                9px;
+
+            line-height:
+                1.45;
+
+        }
+
+
+        .log-item strong {
+
+            color:
+                #ffffff;
+
+        }
+
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .actions {
 
             display:
                 grid;
@@ -1958,53 +1884,41 @@
                 1fr 1fr;
 
             gap:
-                8px;
-
-            margin-top:
-                18px;
-
-        }
-
-
-        .score {
-
-            padding:
-                12px;
-
-            border-radius:
-                14px;
-
-            background:
-                rgba(255,255,255,.035);
-
-            border:
-                1px solid
-                rgba(255,255,255,.055);
-
-        }
-
-
-        .score small {
-
-            color:
-                #7e899e;
-
-            font-size:
                 9px;
 
         }
 
 
-        .score strong {
+        .action-btn {
 
-            display:
-                block;
+            min-height:
+                44px;
 
-            margin-top:
-                3px;
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            color:
+                #dce1e9;
 
             font-size:
-                20px;
+                10px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .action-btn.primary {
+
+            background:
+                rgba(255,255,255,0.10);
 
         }
 
@@ -2013,51 +1927,50 @@
            RULES
         ===================================================== */
 
-        .help {
+        .rules {
 
-            margin-top:
-                18px;
+            display:
+                grid;
 
-            padding-top:
-                15px;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.07);
+            gap:
+                7px;
 
         }
 
 
-        .help h3 {
+        .rule {
 
-            margin-bottom:
+            display:
+                flex;
+
+            gap:
                 8px;
 
-            font-size:
-                11px;
-
-        }
-
-
-        .help p {
-
             color:
-                #7f8aa0;
+                #b8beca;
 
             font-size:
                 9px;
 
             line-height:
-                1.8;
+                1.45;
+
+        }
+
+
+        .rule b {
+
+            color:
+                #ffffff;
 
         }
 
 
         /* =====================================================
-           WINNER
+           MODAL
         ===================================================== */
 
-        .winner-overlay {
+        .modal {
 
             position:
                 fixed;
@@ -2066,7 +1979,7 @@
                 0;
 
             z-index:
-                999;
+                200;
 
             display:
                 none;
@@ -2074,16 +1987,19 @@
             place-items:
                 center;
 
+            padding:
+                20px;
+
             background:
-                rgba(2,5,10,.78);
+                rgba(0,0,0,0.68);
 
             backdrop-filter:
-                blur(12px);
+                blur(14px);
 
         }
 
 
-        .winner-overlay.show {
+        .modal.show {
 
             display:
                 grid;
@@ -2091,49 +2007,36 @@
         }
 
 
-        .winner-card {
+        .modal-card {
 
             width:
-                min(410px,90vw);
+                min(420px,100%);
 
             padding:
-                35px 25px;
+                24px;
+
+            border:
+                1px solid rgba(255,255,255,0.14);
+
+            border-radius:
+                25px;
+
+            background:
+                #11151d;
+
+            box-shadow:
+                0 30px 100px rgba(0,0,0,0.55);
 
             text-align:
                 center;
 
-            border-radius:
-                28px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #18243a,
-                    #090f1b
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,.12);
-
-            box-shadow:
-                0 30px 90px
-                rgba(0,0,0,.65);
-
             animation:
-                winnerIn
-                .65s
-                cubic-bezier(
-                    .2,
-                    1.5,
-                    .4,
-                    1
-                );
+                modalIn .25s ease;
 
         }
 
 
-        @keyframes winnerIn {
+        @keyframes modalIn {
 
             from {
 
@@ -2141,8 +2044,8 @@
                     0;
 
                 transform:
-                    scale(.55)
-                    translateY(40px);
+                    translateY(12px)
+                    scale(.96);
 
             }
 
@@ -2152,114 +2055,146 @@
                     1;
 
                 transform:
-                    scale(1)
-                    translateY(0);
+                    translateY(0)
+                    scale(1);
 
             }
 
         }
 
 
-        .trophy {
+        .winner-icon {
+
+            width:
+                72px;
+
+            height:
+                72px;
+
+            margin:
+                0 auto 13px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(255,214,10,0.10);
 
             font-size:
-                65px;
-
-            animation:
-                trophyFloat
-                1.5s
-                ease-in-out
-                infinite;
+                36px;
 
         }
 
 
-        @keyframes trophyFloat {
+        .modal-card h2 {
 
-            50% {
-
-                transform:
-                    translateY(-10px)
-                    rotate(3deg);
-
-            }
-
-        }
-
-
-        .winner-card h2 {
-
-            margin-top:
-                10px;
+            margin:
+                0;
 
             font-size:
-                28px;
+                24px;
 
         }
 
 
-        .winner-card p {
+        .modal-card p {
 
-            margin-top:
-                7px;
+            margin:
+                8px 0 20px;
 
             color:
-                #9aa6ba;
+                var(--muted);
 
             font-size:
-                12px;
+                11px;
+
+        }
+
+
+        .modal-buttons {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr;
+
+            gap:
+                9px;
 
         }
 
 
         /* =====================================================
-           PARTICLES
+           TOAST
         ===================================================== */
 
-        .particle {
+        .toast {
 
             position:
                 fixed;
 
-            width:
-                7px;
+            left:
+                50%;
 
-            height:
-                7px;
+            bottom:
+                24px;
 
             z-index:
-                9999;
+                300;
+
+            transform:
+                translate(-50%, 20px);
+
+            opacity:
+                0;
 
             pointer-events:
                 none;
 
-            border-radius:
-                50%;
+            padding:
+                11px 16px;
 
-            animation:
-                particleFly
-                .8s
-                ease-out
-                forwards;
+            border:
+                1px solid rgba(255,255,255,0.12);
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(18,21,28,0.92);
+
+            backdrop-filter:
+                blur(18px);
+
+            color:
+                #ffffff;
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+
+            transition:
+                .25s ease;
 
         }
 
 
-        @keyframes particleFly {
+        .toast.show {
 
-            to {
+            opacity:
+                1;
 
-                transform:
-                    translate(
-                        var(--x),
-                        var(--y)
-                    )
-                    scale(0);
-
-                opacity:
-                    0;
-
-            }
+            transform:
+                translate(-50%, 0);
 
         }
 
@@ -2268,171 +2203,134 @@
            RESPONSIVE
         ===================================================== */
 
-        @media(max-width:1050px){
+        @media (max-width: 1050px) {
 
             .game-layout {
 
                 grid-template-columns:
-                    minmax(0,760px);
+                    1fr;
 
             }
 
-            .control-panel {
+            .side-panel {
 
                 width:
-                    min(760px,100%);
+                    min(780px,100%);
 
                 margin:
                     auto;
+
+                display:
+                    grid;
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
+            }
+
+            .side-panel .panel:last-child {
+
+                grid-column:
+                    1 / -1;
 
             }
 
         }
 
 
-        @media(max-width:650px){
+        @media (max-width: 700px) {
 
             .app {
 
                 padding:
-                    9px;
+                    10px;
 
             }
 
 
             .topbar {
 
-                margin-bottom:
-                    10px;
-
-            }
-
-
-            .brand-logo {
-
-                width:
-                    40px;
-
-                height:
-                    40px;
-
-                border-radius:
-                    12px;
-
-                font-size:
-                    18px;
-
-            }
-
-
-            .brand h1 {
-
-                font-size:
-                    15px;
-
-            }
-
-
-            .brand p {
-
-                font-size:
-                    9px;
-
-            }
-
-
-            .live {
+                top:
+                    6px;
 
                 padding:
-                    7px 9px;
+                    11px;
+
+            }
+
+
+            .brand-icon {
+
+                width:
+                    38px;
+
+                height:
+                    38px;
+
+            }
+
+
+            .brand-title {
+
+                font-size:
+                    12px;
+
+            }
+
+
+            .top-status {
+
+                padding:
+                    8px 9px;
 
                 font-size:
                     8px;
+
+            }
+
+
+            .hero {
+
+                padding:
+                    27px 8px 17px;
+
+            }
+
+
+            .hero h1 {
+
+                font-size:
+                    29px;
+
+            }
+
+
+            .hero p {
+
+                font-size:
+                    11px;
 
             }
 
 
             .players {
 
-                gap:
-                    6px;
-
-                margin-bottom:
-                    10px;
+                grid-template-columns:
+                    1fr 1fr;
 
             }
 
 
-            .player {
+            .turn-indicator {
 
-                min-height:
-                    56px;
+                grid-column:
+                    1 / -1;
 
-                padding:
-                    7px;
-
-                border-radius:
-                    13px;
-
-                gap:
-                    7px;
-
-            }
-
-
-            .avatar {
-
-                width:
-                    34px;
-
-                height:
-                    34px;
-
-                border-radius:
-                    10px;
-
-                font-size:
-                    13px;
-
-            }
-
-
-            .player-name {
-
-                font-size:
-                    10px;
-
-            }
-
-
-            .player-status {
-
-                font-size:
-                    8px;
-
-            }
-
-
-            .turn-box {
+                grid-row:
+                    2;
 
                 min-width:
-                    70px;
-
-            }
-
-
-            .turn-label {
-
-                font-size:
-                    7px;
-
-            }
-
-
-            .turn-name {
-
-                font-size:
-                    9px;
+                    0;
 
             }
 
@@ -2440,7 +2338,15 @@
             .board-shell {
 
                 padding:
-                    6px;
+                    7px;
+
+                border-radius:
+                    22px;
+
+            }
+
+
+            .board {
 
                 border-radius:
                     17px;
@@ -2448,13 +2354,63 @@
             }
 
 
-            .control-panel {
+            .side-panel {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .side-panel .panel:last-child {
+
+                grid-column:
+                    auto;
+
+            }
+
+        }
+
+
+        @media (max-width: 420px) {
+
+            .player-card {
 
                 padding:
-                    14px;
+                    9px;
 
-                border-radius:
-                    18px;
+            }
+
+
+            .avatar {
+
+                width:
+                    36px;
+
+                height:
+                    36px;
+
+                flex-basis:
+                    36px;
+
+                font-size:
+                    17px;
+
+            }
+
+
+            .player-name {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .player-color {
+
+                font-size:
+                    8px;
 
             }
 
@@ -2462,18 +2418,13 @@
             .dice {
 
                 width:
-                    74px;
+                    66px;
 
                 height:
-                    74px;
+                    66px;
 
-            }
-
-
-            .pip {
-
-                width:
-                    10px;
+                flex-basis:
+                    66px;
 
             }
 
@@ -2498,34 +2449,59 @@
 
         <div class="brand">
 
-            <div class="brand-logo">
+            <div class="brand-icon">
                 🎲
             </div>
 
             <div>
 
-                <h1>
+                <div class="brand-title">
                     Ghopkhali Sports Arena
-                </h1>
+                </div>
 
-                <p>
-                    Premium 1 vs 1 Ludo Tournament
-                </p>
+                <div class="brand-sub">
+                    Premium Ludo Tournament
+                </div>
 
             </div>
 
         </div>
 
 
-        <div class="live">
+        <div class="top-status">
 
-            <span class="live-dot"></span>
+            <span class="status-dot"></span>
 
-            LIVE MATCH
+            AI GAME CONTROLLER ON
 
         </div>
 
     </header>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero">
+
+        <div class="hero-kicker">
+            SINGLE TOURNAMENT
+        </div>
+
+        <h1>
+            Premium Ludo
+        </h1>
+
+        <p>
+            Classic 4-colour Ludo board · 2 Human Players ·
+            Advanced AI Game Controller · Real Dice ·
+            Safe Zone · Capture · Home & Winner System
+        </p>
+
+    </section>
+
 
 
     <!-- =====================================================
@@ -2536,25 +2512,22 @@
 
 
         <div
-            class="player red active"
-            id="playerRed"
+            class="player-card red active"
+            id="playerRedCard"
         >
 
             <div class="avatar">
-                R
+                👤
             </div>
 
-            <div>
+            <div class="player-info">
 
                 <div class="player-name">
-                    Player A
+                    Player 1
                 </div>
 
-                <div
-                    class="player-status"
-                    id="redStatus"
-                >
-                    Your Turn
+                <div class="player-color">
+                    🔴 Red Player
                 </div>
 
             </div>
@@ -2562,49 +2535,50 @@
         </div>
 
 
-        <div class="turn-box">
+
+        <div class="turn-indicator">
 
             <div class="turn-label">
-                Current Turn
+                CURRENT TURN
             </div>
 
             <div
-                class="turn-name"
-                id="turnName"
+                class="turn-player"
+                id="turnPlayer"
             >
-                Player A
+                🔴 Player 1
             </div>
 
         </div>
+
 
 
         <div
-            class="player blue"
-            id="playerBlue"
+            class="player-card blue"
+            id="playerBlueCard"
         >
 
             <div class="avatar">
-                B
+                👤
             </div>
 
-            <div>
+            <div class="player-info">
 
                 <div class="player-name">
-                    Player B
+                    Player 2
                 </div>
 
-                <div
-                    class="player-status"
-                    id="blueStatus"
-                >
-                    Waiting
+                <div class="player-color">
+                    🔵 Blue Player
                 </div>
 
             </div>
 
         </div>
 
+
     </section>
+
 
 
     <!-- =====================================================
@@ -2623,389 +2597,391 @@
             <div
                 class="board"
                 id="board"
-            >
+            ></div>
 
 
-                <!-- RED YARD -->
+            <div class="board-overlay">
 
-                <div class="yard red">
+                <div class="board-badge">
 
-                    <div class="yard-inner">
-
-                        <div class="token-slot">
-
-                            <div
-                                class="token red"
-                                data-color="red"
-                                data-token="0"
-                            ></div>
-
-                        </div>
-
-
-                        <div class="token-slot">
-
-                            <div
-                                class="token red"
-                                data-color="red"
-                                data-token="1"
-                            ></div>
-
-                        </div>
-
-
-                        <div class="token-slot">
-
-                            <div
-                                class="token red"
-                                data-color="red"
-                                data-token="2"
-                            ></div>
-
-                        </div>
-
-
-                        <div class="token-slot">
-
-                            <div
-                                class="token red"
-                                data-color="red"
-                                data-token="3"
-                            ></div>
-
-                        </div>
-
-                    </div>
+                    🧠
+                    AI RULE ENGINE
 
                 </div>
-
-
-                <!-- GREEN VERTICAL TRACK -->
-
-                <div
-                    class="track vertical"
-                    id="greenTrack"
-                ></div>
-
-
-                <!-- GREEN YARD -->
-
-                <div class="yard green">
-
-                    <div class="yard-inner">
-
-                        <div class="token-slot">
-                            <div class="token green"></div>
-                        </div>
-
-                        <div class="token-slot">
-                            <div class="token green"></div>
-                        </div>
-
-                        <div class="token-slot">
-                            <div class="token green"></div>
-                        </div>
-
-                        <div class="token-slot">
-                            <div class="token green"></div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- RED HORIZONTAL TRACK -->
-
-                <div
-                    class="track horizontal"
-                    id="redTrack"
-                ></div>
-
-
-                <!-- CENTER -->
-
-                <div class="middle">
-
-                    <div class="home-center">
-
-                        <div class="tri red"></div>
-
-                        <div class="tri green"></div>
-
-                        <div class="tri yellow"></div>
-
-                        <div class="tri blue"></div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- YELLOW HORIZONTAL TRACK -->
-
-                <div
-                    class="track horizontal"
-                    id="yellowTrack"
-                ></div>
-
-
-                <!-- BLUE YARD -->
-
-                <div class="yard blue">
-
-                    <div class="yard-inner">
-
-                        <div class="token-slot">
-                            <div class="token blue"></div>
-                        </div>
-
-                        <div class="token-slot">
-                            <div class="token blue"></div>
-                        </div>
-
-                        <div class="token-slot">
-                            <div class="token blue"></div>
-                        </div>
-
-                        <div class="token-slot">
-                            <div class="token blue"></div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- BLUE VERTICAL TRACK -->
-
-                <div
-                    class="track vertical"
-                    id="blueTrack"
-                ></div>
-
-
-                <!-- YELLOW YARD -->
-
-                <div class="yard yellow">
-
-                    <div class="yard-inner">
-
-                        <div class="token-slot">
-                            <div class="token yellow"></div>
-                        </div>
-
-                        <div class="token-slot">
-                            <div class="token yellow"></div>
-                        </div>
-
-                        <div class="token-slot">
-                            <div class="token yellow"></div>
-                        </div>
-
-                        <div class="token-slot">
-                            <div class="token yellow"></div>
-                        </div>
-
-                    </div>
-
-                </div>
-
 
             </div>
 
         </section>
 
 
+
         <!-- =================================================
-             CONTROL
+             SIDE PANEL
         ================================================== -->
 
-        <aside class="control-panel">
+        <aside class="side-panel">
 
 
-            <div class="control-title">
+            <!-- AI CONTROLLER -->
 
-                <h2>
-                    Match Control
-                </h2>
+            <section class="panel">
 
-                <span class="match-badge">
-                    1 VS 1
-                </span>
+                <div class="panel-title">
 
-            </div>
+                    <span>
+                        🧠 Game Controller
+                    </span>
+
+                    <span
+                        style="
+                            color:#70e991;
+                            font-size:9px;
+                        "
+                    >
+                        ACTIVE
+                    </span>
+
+                </div>
+
+
+                <div class="controller">
+
+                    <div class="controller-icon">
+                        🧠
+                    </div>
+
+                    <div>
+
+                        <div class="controller-name">
+                            Advanced AI Engine
+                        </div>
+
+                        <div class="controller-desc">
+                            Controls rules, turns, legal moves,
+                            capture, safe zones and winner logic.
+                        </div>
+
+                    </div>
+
+                    <div class="controller-state">
+                        ON
+                    </div>
+
+                </div>
+
+            </section>
+
 
 
             <!-- DICE -->
 
-            <div class="dice-area">
+            <section class="panel">
 
-                <div class="dice-wrap">
+                <div class="panel-title">
+
+                    <span>
+                        🎲 Dice
+                    </span>
+
+                    <span
+                        id="diceHint"
+                        style="
+                            color:#8f97a6;
+                            font-size:9px;
+                        "
+                    >
+                        Roll to play
+                    </span>
+
+                </div>
+
+
+                <div class="dice-area">
 
                     <div
                         class="dice"
                         id="dice"
                     >
+                        ⚀
+                    </div>
+
+
+                    <button
+                        class="roll-btn"
+                        id="rollBtn"
+                    >
+                        🎲 Roll Dice
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- STATS -->
+
+            <section class="panel">
+
+                <div class="panel-title">
+                    Match Stats
+                </div>
+
+
+                <div class="stats">
+
+                    <div class="stat">
 
                         <div
-                            class="pips"
-                            id="pips"
-                        ></div>
+                            class="stat-value"
+                            id="redTokens"
+                        >
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            RED HOME
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <div
+                            class="stat-value"
+                            id="blueTokens"
+                        >
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            BLUE HOME
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <div
+                            class="stat-value"
+                            id="captures"
+                        >
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            CAPTURES
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
+            </section>
 
 
-            <!-- ROLL -->
 
-            <button
-                class="roll-button"
-                id="rollButton"
-                type="button"
-            >
+            <!-- GAME LOG -->
 
-                🎲 ROLL DICE
+            <section class="panel">
 
-            </button>
+                <div class="panel-title">
+                    Game Log
+                </div>
 
 
-            <div
-                class="status"
-                id="gameStatus"
-            >
-                Player A — Roll the dice
-            </div>
+                <div
+                    class="game-log"
+                    id="gameLog"
+                ></div>
+
+            </section>
 
 
-            <!-- TIMER -->
 
-            <div class="timer">
+            <!-- ACTIONS -->
 
-                <div class="timer-head">
+            <section class="panel">
 
-                    <span>
-                        Turn Timer
-                    </span>
+                <div class="actions">
 
-                    <span
-                        class="timer-value"
-                        id="timerValue"
+                    <button
+                        class="action-btn primary"
+                        id="newGameBtn"
                     >
-                        30s
-                    </span>
+                        ↻ New Game
+                    </button>
+
+                    <button
+                        class="action-btn"
+                        id="rulesBtn"
+                    >
+                        ℹ Rules
+                    </button>
 
                 </div>
 
-
-                <div class="timer-track">
-
-                    <div
-                        class="timer-fill"
-                        id="timerFill"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <!-- SCORE -->
-
-            <div class="score-card">
-
-
-                <div class="score">
-
-                    <small>
-                        RED HOME
-                    </small>
-
-                    <strong id="redHomeCount">
-                        0/4
-                    </strong>
-
-                </div>
-
-
-                <div class="score">
-
-                    <small>
-                        BLUE HOME
-                    </small>
-
-                    <strong id="blueHomeCount">
-                        0/4
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-
-            <!-- RULES -->
-
-            <div class="help">
-
-                <h3>
-                    Ludo Rules
-                </h3>
-
-                <p>
-
-                    ৬ পেলে Base থেকে Guti বের হবে।
-                    Dice-এর exact number অনুযায়ী
-                    Guti এগোবে। Safe ও Start square-এ
-                    Capture হবে না। একই রঙের ২ বা তার
-                    বেশি Guti একই ঘরে থাকলে Block হবে।
-                    ৬, Capture অথবা Home হলে Bonus Roll।
-                    Home-এ ঢুকতে Exact Roll প্রয়োজন।
-                    পরপর ৩টি ৬ হলে Turn বাতিল।
-
-                </p>
-
-            </div>
+            </section>
 
 
         </aside>
 
-
     </main>
-
 
 </div>
 
 
+
 <!-- =========================================================
-     WINNER
+     RULES MODAL
 ========================================================= -->
 
 <div
-    class="winner-overlay"
-    id="winnerOverlay"
+    class="modal"
+    id="rulesModal"
 >
 
-    <div class="winner-card">
+    <div class="modal-card">
 
-        <div class="trophy">
-            🏆
+        <div class="winner-icon">
+            📜
         </div>
 
-        <h2 id="winnerTitle">
-            Player A Wins!
+        <h2>
+            Ludo Rules
         </h2>
 
         <p>
-            All four tokens reached Home.
+            Classic rules are enforced by the AI Game Controller.
         </p>
+
+
+        <div
+            class="rules"
+            style="text-align:left;"
+        >
+
+            <div class="rule">
+                🎲
+                <span>
+                    <b>6 Roll:</b>
+                    A token can leave the yard only after rolling 6.
+                </span>
+            </div>
+
+            <div class="rule">
+                ➡️
+                <span>
+                    <b>Movement:</b>
+                    Tokens move according to the dice number.
+                </span>
+            </div>
+
+            <div class="rule">
+                🛡️
+                <span>
+                    <b>Safe Zone:</b>
+                    Safe cells protect tokens from capture.
+                </span>
+            </div>
+
+            <div class="rule">
+                ⚔️
+                <span>
+                    <b>Capture:</b>
+                    Landing on an opponent's unsafe token
+                    sends it back to its yard.
+                </span>
+            </div>
+
+            <div class="rule">
+                🏠
+                <span>
+                    <b>Home:</b>
+                    Exact movement is required to finish a token.
+                </span>
+            </div>
+
+            <div class="rule">
+                🏆
+                <span>
+                    <b>Winner:</b>
+                    The first player to bring all four tokens
+                    home wins.
+                </span>
+            </div>
+
+        </div>
+
+
+        <div
+            class="modal-buttons"
+            style="margin-top:20px;"
+        >
+
+            <button
+                class="action-btn primary"
+                id="closeRulesBtn"
+            >
+                Close
+            </button>
+
+        </div>
 
     </div>
 
 </div>
+
+
+
+<!-- =========================================================
+     WINNER MODAL
+========================================================= -->
+
+<div
+    class="modal"
+    id="winnerModal"
+>
+
+    <div class="modal-card">
+
+        <div class="winner-icon">
+            🏆
+        </div>
+
+        <h2 id="winnerTitle">
+            Player Wins
+        </h2>
+
+        <p id="winnerText">
+            Congratulations!
+        </p>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="action-btn primary"
+                id="winnerNewGameBtn"
+            >
+                ↻ New Game
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
 
 
 <script>
@@ -3014,565 +2990,43 @@
 
 
 /* =========================================================
-   CONFIG
+   CONSTANTS
 ========================================================= */
 
-const CONFIG = {
+const BOARD_SIZE =
+    15;
 
-    TURN_TIME:
-        30,
+const PATH_LENGTH =
+    52;
 
-    STORAGE_KEY:
-        "ghopkhali_ludo_single_match_v2",
+const HOME_DISTANCE =
+    50;
 
-    TRACK_LENGTH:
-        52,
+const FINISH_POSITION =
+    57;
 
-    HOME_START:
-        52,
 
-    HOME_END:
-        57,
+/*
+    Classic 52-cell outer path.
 
-    START: {
+    Coordinates are row / column.
+*/
 
-        red:
-            0,
+const PATH = [
 
-        blue:
-            26
-
-    },
-
-    SAFE: [
-
-        0,
-        8,
-        13,
-        21,
-        26,
-        34,
-        39,
-        47
-
-    ]
-
-};
-
-
-/* =========================================================
-   INITIAL STATE
-========================================================= */
-
-function createInitialState(){
-
-    return {
-
-        version:
-            2,
-
-        turn:
-            "red",
-
-        dice:
-            null,
-
-        consecutiveSixes:
-            0,
-
-        waitingForMove:
-            false,
-
-        gameOver:
-            false,
-
-        timer:
-            CONFIG.TURN_TIME,
-
-        tokens: {
-
-            red: [
-
-                { progress:-1 },
-                { progress:-1 },
-                { progress:-1 },
-                { progress:-1 }
-
-            ],
-
-            blue: [
-
-                { progress:-1 },
-                { progress:-1 },
-                { progress:-1 },
-                { progress:-1 }
-
-            ]
-
-        }
-
-    };
-
-}
-
-
-let state =
-    createInitialState();
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const $ =
-    selector =>
-        document.querySelector(selector);
-
-
-const rollButton =
-    $("#rollButton");
-
-const dice =
-    $("#dice");
-
-const pips =
-    $("#pips");
-
-const gameStatus =
-    $("#gameStatus");
-
-const turnName =
-    $("#turnName");
-
-const timerValue =
-    $("#timerValue");
-
-const timerFill =
-    $("#timerFill");
-
-const redHomeCount =
-    $("#redHomeCount");
-
-const blueHomeCount =
-    $("#blueHomeCount");
-
-const playerRed =
-    $("#playerRed");
-
-const playerBlue =
-    $("#playerBlue");
-
-const winnerOverlay =
-    $("#winnerOverlay");
-
-const winnerTitle =
-    $("#winnerTitle");
-
-
-/* =========================================================
-   TIMER
-========================================================= */
-
-let timerId =
-    null;
-
-
-/* =========================================================
-   SAVE STATE
-========================================================= */
-
-function saveGameState(){
-
-    try {
-
-        const data = {
-
-            version:
-                2,
-
-            turn:
-                state.turn,
-
-            dice:
-                state.dice,
-
-            consecutiveSixes:
-                state.consecutiveSixes,
-
-            waitingForMove:
-                state.waitingForMove,
-
-            gameOver:
-                state.gameOver,
-
-            timer:
-                state.timer,
-
-            tokens:
-                state.tokens
-
-        };
-
-
-        localStorage.setItem(
-
-            CONFIG.STORAGE_KEY,
-
-            JSON.stringify(data)
-
-        );
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Ludo save error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   LOAD STATE
-========================================================= */
-
-function loadGameState(){
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                CONFIG.STORAGE_KEY
-            );
-
-
-        if(!saved){
-
-            return false;
-
-        }
-
-
-        const parsed =
-            JSON.parse(saved);
-
-
-        if(!parsed){
-
-            return false;
-
-        }
-
-
-        if(
-            parsed.turn !== "red" &&
-            parsed.turn !== "blue"
-        ){
-
-            return false;
-
-        }
-
-
-        state.turn =
-            parsed.turn;
-
-
-        state.dice =
-            Number.isInteger(parsed.dice)
-                ? parsed.dice
-                : null;
-
-
-        state.consecutiveSixes =
-            Number.isInteger(
-                parsed.consecutiveSixes
-            )
-                ? parsed.consecutiveSixes
-                : 0;
-
-
-        state.waitingForMove =
-            parsed.waitingForMove === true;
-
-
-        state.gameOver =
-            parsed.gameOver === true;
-
-
-        state.timer =
-            Number.isFinite(parsed.timer)
-                ? Math.max(
-                    0,
-                    Math.min(
-                        CONFIG.TURN_TIME,
-                        parsed.timer
-                    )
-                )
-                : CONFIG.TURN_TIME;
-
-
-        if(
-            parsed.tokens &&
-            Array.isArray(parsed.tokens.red) &&
-            Array.isArray(parsed.tokens.blue) &&
-            parsed.tokens.red.length === 4 &&
-            parsed.tokens.blue.length === 4
-        ){
-
-            state.tokens =
-                parsed.tokens;
-
-        }
-
-
-        return true;
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Ludo restore error:",
-            error
-        );
-
-        return false;
-
-    }
-
-}
-
-
-/* =========================================================
-   CLEAR OLD STATE
-   Admin-only integration later.
-========================================================= */
-
-function clearSavedState(){
-
-    localStorage.removeItem(
-        CONFIG.STORAGE_KEY
-    );
-
-}
-
-
-/* =========================================================
-   TRACK CELLS
-========================================================= */
-
-function createTrackCells(){
-
-    const tracks = [
-
-        $("#greenTrack"),
-        $("#redTrack"),
-        $("#yellowTrack"),
-        $("#blueTrack")
-
-    ];
-
-
-    tracks.forEach(track => {
-
-        track.innerHTML = "";
-
-
-        for(
-            let i = 0;
-            i < 18;
-            i++
-        ){
-
-            const cell =
-                document.createElement(
-                    "div"
-                );
-
-
-            cell.className =
-                "cell";
-
-
-            track.appendChild(
-                cell
-            );
-
-        }
-
-    });
-
-
-    const green =
-        $("#greenTrack").children;
-
-    const red =
-        $("#redTrack").children;
-
-    const yellow =
-        $("#yellowTrack").children;
-
-    const blue =
-        $("#blueTrack").children;
-
-
-    [
-        green[0],
-        green[8],
-        red[3],
-        red[15],
-        yellow[2],
-        yellow[12],
-        blue[5],
-        blue[14]
-
-    ].forEach(cell => {
-
-        if(cell){
-
-            cell.classList.add(
-                "safe"
-            );
-
-        }
-
-    });
-
-
-    if(red[5]){
-
-        red[5].classList.add(
-            "start-red"
-        );
-
-    }
-
-
-    if(green[8]){
-
-        green[8].classList.add(
-            "start-green"
-        );
-
-    }
-
-
-    if(blue[5]){
-
-        blue[5].classList.add(
-            "start-blue"
-        );
-
-    }
-
-
-    if(yellow[12]){
-
-        yellow[12].classList.add(
-            "start-yellow"
-        );
-
-    }
-
-}
-
-
-createTrackCells();
-
-
-/* =========================================================
-   DICE
-========================================================= */
-
-const dicePatterns = {
-
-    1:
-        [4],
-
-    2:
-        [1,9],
-
-    3:
-        [1,5,9],
-
-    4:
-        [1,3,7,9],
-
-    5:
-        [1,3,5,7,9],
-
-    6:
-        [1,3,4,6,7,9]
-
-};
-
-
-function renderDice(number){
-
-    pips.innerHTML =
-        "";
-
-
-    const positions =
-        dicePatterns[number] ||
-        dicePatterns[1];
-
-
-    for(
-        let i = 1;
-        i <= 9;
-        i++
-    ){
-
-        const pip =
-            document.createElement(
-                "span"
-            );
-
-
-        pip.className =
-            "pip";
-
-
-        pip.style.visibility =
-            positions.includes(i)
-                ? "visible"
-                : "hidden";
-
-
-        pips.appendChild(
-            pip
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   TRACK GEOMETRY
-========================================================= */
-
-const ring = [
-
-    [6,0],
     [6,1],
     [6,2],
     [6,3],
     [6,4],
+    [6,5],
 
     [5,6],
     [4,6],
     [3,6],
     [2,6],
     [1,6],
-    [0,6],
 
+    [0,6],
     [0,7],
     [0,8],
 
@@ -3621,79 +3075,1018 @@ const ring = [
     [8,1],
     [8,0],
 
-    [7,0]
+    [7,0],
+    [6,0]
 
 ];
 
 
-const homeColumns = {
+/*
+    Red starts at path index 0.
+
+    Blue starts 26 cells later.
+*/
+
+const START_INDEX = {
+
+    red:
+        0,
+
+    blue:
+        26
+
+};
+
+
+/*
+    Safe cells.
+
+    Includes traditional star-style safe positions
+    and player starting cells.
+*/
+
+const SAFE_CELLS =
+    new Set([
+        0,
+        8,
+        13,
+        21,
+        26,
+        34,
+        39,
+        47
+    ]);
+
+
+/*
+    Home slots.
+*/
+
+const HOME_SLOTS = {
 
     red: [
-
-        [7,1],
-        [7,2],
-        [7,3],
-        [7,4],
-        [7,5]
-
+        [2.5,2.5],
+        [2.5,5.5],
+        [5.5,2.5],
+        [5.5,5.5]
     ],
 
     blue: [
-
-        [7,13],
-        [7,12],
-        [7,11],
-        [7,10],
-        [7,9]
-
+        [9.5,9.5],
+        [9.5,12.5],
+        [12.5,9.5],
+        [12.5,12.5]
     ]
 
 };
 
 
+/*
+    Inactive home slots.
+*/
+
+const INACTIVE_HOME_SLOTS = {
+
+    green: [
+        [2.5,9.5],
+        [2.5,12.5],
+        [5.5,9.5],
+        [5.5,12.5]
+    ],
+
+    yellow: [
+        [9.5,2.5],
+        [9.5,5.5],
+        [12.5,2.5],
+        [12.5,5.5]
+    ]
+
+};
+
+
+/*
+    Dice faces.
+*/
+
+const DICE_FACES = {
+
+    1: "⚀",
+    2: "⚁",
+    3: "⚂",
+    4: "⚃",
+    5: "⚄",
+    6: "⚅"
+
+};
+
+
+
 /* =========================================================
-   TOKEN HELPERS
+   GAME STATE
 ========================================================= */
 
-function getToken(
-    color,
-    index
-){
+let currentPlayer =
+    "red";
 
-    return state.tokens[color][index];
+let diceValue =
+    0;
+
+let diceRolled =
+    false;
+
+let gameOver =
+    false;
+
+let captureCount =
+    0;
+
+let tokenIdCounter =
+    1;
+
+
+const players = {
+
+    red: {
+
+        name:
+            "Player 1",
+
+        color:
+            "red",
+
+        tokens: []
+
+    },
+
+    blue: {
+
+        name:
+            "Player 2",
+
+        color:
+            "blue",
+
+        tokens: []
+
+    }
+
+};
+
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const board =
+    document.getElementById("board");
+
+const dice =
+    document.getElementById("dice");
+
+const rollBtn =
+    document.getElementById("rollBtn");
+
+const turnPlayer =
+    document.getElementById("turnPlayer");
+
+const redCard =
+    document.getElementById("playerRedCard");
+
+const blueCard =
+    document.getElementById("playerBlueCard");
+
+const gameLog =
+    document.getElementById("gameLog");
+
+const toast =
+    document.getElementById("toast");
+
+const redTokensEl =
+    document.getElementById("redTokens");
+
+const blueTokensEl =
+    document.getElementById("blueTokens");
+
+const capturesEl =
+    document.getElementById("captures");
+
+const diceHint =
+    document.getElementById("diceHint");
+
+const winnerModal =
+    document.getElementById("winnerModal");
+
+const rulesModal =
+    document.getElementById("rulesModal");
+
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function showToast(message) {
+
+    toast.textContent =
+        message;
+
+    toast.classList.add("show");
+
+    clearTimeout(
+        showToast.timer
+    );
+
+    showToast.timer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            1800
+        );
 
 }
 
 
-function isHome(token){
 
-    return (
-        token.progress ===
-        CONFIG.HOME_END
+function addLog(message) {
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "log-item";
+
+    item.innerHTML =
+        message;
+
+    gameLog.prepend(item);
+
+
+    while (
+        gameLog.children.length > 30
+    ) {
+
+        gameLog.removeChild(
+            gameLog.lastChild
+        );
+
+    }
+
+}
+
+
+
+function getCellElement(row, col) {
+
+    return document.querySelector(
+        `.cell[data-row="${row}"][data-col="${col}"]`
     );
 
 }
 
 
-function isOnTrack(token){
 
-    return (
-        token.progress >= 0 &&
-        token.progress < CONFIG.HOME_START
+/* =========================================================
+   BUILD BOARD
+========================================================= */
+
+function buildBoard() {
+
+    board.innerHTML =
+        "";
+
+
+    for (
+        let row = 0;
+        row < BOARD_SIZE;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < BOARD_SIZE;
+            col++
+        ) {
+
+            const cell =
+                document.createElement("div");
+
+            cell.className =
+                "cell";
+
+
+            cell.dataset.row =
+                row;
+
+            cell.dataset.col =
+                col;
+
+
+            /*
+                Outer home quadrants.
+            */
+
+            if (
+                row < 6 &&
+                col < 6
+            ) {
+
+                cell.classList.add(
+                    "red-home"
+                );
+
+            }
+
+
+            if (
+                row < 6 &&
+                col > 8
+            ) {
+
+                cell.classList.add(
+                    "green-home"
+                );
+
+            }
+
+
+            if (
+                row > 8 &&
+                col > 8
+            ) {
+
+                cell.classList.add(
+                    "yellow-home"
+                );
+
+            }
+
+
+            if (
+                row > 8 &&
+                col < 6
+            ) {
+
+                cell.classList.add(
+                    "blue-home"
+                );
+
+            }
+
+
+            board.appendChild(
+                cell
+            );
+
+        }
+
+    }
+
+
+    /*
+        Mark path.
+    */
+
+    PATH.forEach(
+        ([row,col], index) => {
+
+            const cell =
+                getCellElement(
+                    row,
+                    col
+                );
+
+            if (!cell) {
+                return;
+            }
+
+            cell.classList.remove(
+                "red-home",
+                "green-home",
+                "yellow-home",
+                "blue-home"
+            );
+
+            cell.classList.add(
+                "track"
+            );
+
+
+            if (
+                SAFE_CELLS.has(index)
+            ) {
+
+                cell.classList.add(
+                    "safe"
+                );
+
+            }
+
+
+            if (
+                index ===
+                START_INDEX.red
+            ) {
+
+                cell.classList.add(
+                    "start-red"
+                );
+
+            }
+
+
+            if (
+                index ===
+                START_INDEX.blue
+            ) {
+
+                cell.classList.add(
+                    "start-blue"
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+        Classic coloured home lanes.
+    */
+
+    const redLane = [
+        [7,1],
+        [7,2],
+        [7,3],
+        [7,4],
+        [7,5]
+    ];
+
+
+    const greenLane = [
+        [1,7],
+        [2,7],
+        [3,7],
+        [4,7],
+        [5,7]
+    ];
+
+
+    const yellowLane = [
+        [7,9],
+        [7,10],
+        [7,11],
+        [7,12],
+        [7,13]
+    ];
+
+
+    const blueLane = [
+        [9,7],
+        [10,7],
+        [11,7],
+        [12,7],
+        [13,7]
+    ];
+
+
+    redLane.forEach(
+        ([r,c]) => {
+
+            const cell =
+                getCellElement(r,c);
+
+            cell.classList.add(
+                "red-lane"
+            );
+
+        }
+    );
+
+
+    greenLane.forEach(
+        ([r,c]) => {
+
+            const cell =
+                getCellElement(r,c);
+
+            cell.classList.add(
+                "green-lane"
+            );
+
+        }
+    );
+
+
+    yellowLane.forEach(
+        ([r,c]) => {
+
+            const cell =
+                getCellElement(r,c);
+
+            cell.classList.add(
+                "yellow-lane"
+            );
+
+        }
+    );
+
+
+    blueLane.forEach(
+        ([r,c]) => {
+
+            const cell =
+                getCellElement(r,c);
+
+            cell.classList.add(
+                "blue-lane"
+            );
+
+        }
+    );
+
+
+    /*
+        Home areas.
+    */
+
+    createHomeZone(
+        "red",
+        false
+    );
+
+    createHomeZone(
+        "green",
+        true
+    );
+
+    createHomeZone(
+        "yellow",
+        true
+    );
+
+    createHomeZone(
+        "blue",
+        false
+    );
+
+
+    /*
+        Center.
+    */
+
+    const center =
+        document.createElement("div");
+
+    center.className =
+        "center-home";
+
+    board.appendChild(
+        center
     );
 
 }
 
 
-function getGlobalPosition(
-    color,
-    progress
-){
 
-    if(
-        progress < 0 ||
-        progress >= CONFIG.HOME_START
-    ){
+/* =========================================================
+   HOME ZONE
+========================================================= */
+
+function createHomeZone(
+    color,
+    inactive
+) {
+
+    const zone =
+        document.createElement("div");
+
+    zone.className =
+        `home-zone ${color}`;
+
+    if (inactive) {
+
+        zone.classList.add(
+            "inactive-home"
+        );
+
+    }
+
+
+    const inner =
+        document.createElement("div");
+
+    inner.className =
+        "home-inner";
+
+
+    const slots =
+        inactive
+            ? INACTIVE_HOME_SLOTS[color]
+            : HOME_SLOTS[color];
+
+
+    slots.forEach(
+        ([r,c]) => {
+
+            const slot =
+                document.createElement("div");
+
+            slot.className =
+                "home-slot";
+
+            slot.style.gridArea =
+                "auto";
+
+            inner.appendChild(
+                slot
+            );
+
+        }
+    );
+
+
+    zone.appendChild(
+        inner
+    );
+
+    board.appendChild(
+        zone
+    );
+
+
+    /*
+        For active player,
+        tokens will be placed through JS.
+    */
+
+    if (!inactive) {
+
+        setTimeout(
+            () => {
+
+                positionHomeTokens(
+                    color
+                );
+
+            },
+            0
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   TOKEN CREATION
+========================================================= */
+
+function createTokens() {
+
+    players.red.tokens =
+        [];
+
+    players.blue.tokens =
+        [];
+
+
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
+
+        players.red.tokens.push({
+
+            id:
+                tokenIdCounter++,
+
+            player:
+                "red",
+
+            index:
+                -1,
+
+            finished:
+                false,
+
+            element:
+                null
+
+        });
+
+
+        players.blue.tokens.push({
+
+            id:
+                tokenIdCounter++,
+
+            player:
+                "blue",
+
+            index:
+                -1,
+
+            finished:
+                false,
+
+            element:
+                null
+
+        });
+
+    }
+
+
+    renderTokens();
+
+}
+
+
+
+/* =========================================================
+   CREATE TOKEN ELEMENT
+========================================================= */
+
+function makeTokenElement(token) {
+
+    const el =
+        document.createElement("div");
+
+    el.className =
+        `token ${token.player}`;
+
+    el.textContent =
+        "●";
+
+    el.dataset.tokenId =
+        token.id;
+
+
+    el.addEventListener(
+        "click",
+        () => {
+
+            if (
+                token.player !==
+                currentPlayer
+            ) {
+
+                return;
+
+            }
+
+
+            if (!diceRolled) {
+
+                return;
+
+            }
+
+
+            if (
+                !isLegalMove(token)
+            ) {
+
+                return;
+
+            }
+
+
+            moveToken(
+                token
+            );
+
+        }
+    );
+
+
+    board.appendChild(
+        el
+    );
+
+
+    token.element =
+        el;
+
+
+    return el;
+
+}
+
+
+
+/* =========================================================
+   TOKEN POSITION
+========================================================= */
+
+function getTokenPosition(token) {
+
+    /*
+        Yard position.
+    */
+
+    if (
+        token.index === -1
+    ) {
+
+        const slots =
+            HOME_SLOTS[token.player];
+
+        const slot =
+            slots[
+                players[token.player]
+                    .tokens
+                    .indexOf(token)
+            ];
+
+
+        return {
+
+            row:
+                slot[0],
+
+            col:
+                slot[1]
+
+        };
+
+    }
+
+
+    /*
+        Finished token.
+    */
+
+    if (
+        token.finished
+    ) {
+
+        const finishSlots = {
+
+            red: [
+                [6.7,6.7],
+                [6.7,7.5],
+                [7.5,6.7],
+                [7.5,7.5]
+            ],
+
+            blue: [
+                [7.5,7.5],
+                [8.3,7.5],
+                [7.5,8.3],
+                [8.3,8.3]
+            ]
+
+        };
+
+
+        const index =
+            players[token.player]
+                .tokens
+                .indexOf(token);
+
+
+        const pos =
+            finishSlots[token.player][
+                index
+            ];
+
+
+        return {
+
+            row:
+                pos[0],
+
+            col:
+                pos[1]
+
+        };
+
+    }
+
+
+    const absolute =
+        (
+            START_INDEX[token.player] +
+            token.index
+        ) % PATH_LENGTH;
+
+
+    const coord =
+        PATH[absolute];
+
+
+    return {
+
+        row:
+            coord[0] + .5,
+
+        col:
+            coord[1] + .5
+
+    };
+
+}
+
+
+
+/* =========================================================
+   RENDER TOKENS
+========================================================= */
+
+function renderTokens() {
+
+    players.red.tokens
+        .concat(
+            players.blue.tokens
+        )
+        .forEach(
+            token => {
+
+                if (!token.element) {
+
+                    makeTokenElement(
+                        token
+                    );
+
+                }
+
+                const pos =
+                    getTokenPosition(
+                        token
+                    );
+
+
+                token.element.style.left =
+                    `${(pos.col / BOARD_SIZE) * 100}%`;
+
+                token.element.style.top =
+                    `${(pos.row / BOARD_SIZE) * 100}%`;
+
+
+                token.element.classList.remove(
+                    "selectable"
+                );
+
+
+                if (
+                    diceRolled &&
+                    token.player ===
+                    currentPlayer &&
+                    isLegalMove(token)
+                ) {
+
+                    token.element.classList.add(
+                        "selectable"
+                    );
+
+                }
+
+            }
+        );
+
+
+    updateStats();
+
+}
+
+
+
+/* =========================================================
+   HOME TOKEN POSITION
+========================================================= */
+
+function positionHomeTokens(color) {
+
+    /*
+        Token positions are already handled
+        by getTokenPosition().
+    */
+
+    renderTokens();
+
+}
+
+
+
+/* =========================================================
+   GET GLOBAL POSITION
+========================================================= */
+
+function getGlobalIndex(token) {
+
+    if (
+        token.index < 0 ||
+        token.finished
+    ) {
 
         return null;
 
@@ -3701,151 +4094,42 @@ function getGlobalPosition(
 
 
     return (
-
-        CONFIG.START[color] +
-        progress
-
-    ) % CONFIG.TRACK_LENGTH;
+        START_INDEX[token.player] +
+        token.index
+    ) % PATH_LENGTH;
 
 }
 
 
-/* =========================================================
-   SAFE
-========================================================= */
-
-function isSafePosition(position){
-
-    return CONFIG.SAFE.includes(
-        position
-    );
-
-}
-
 
 /* =========================================================
-   STACK
+   LEGAL MOVE
 ========================================================= */
 
-function getStackCount(
-    color,
-    progress
-){
+function isLegalMove(token) {
 
-    if(progress < 0){
-
-        return 0;
-
-    }
-
-
-    return state.tokens[color]
-        .filter(
-            token =>
-                token.progress ===
-                progress
-        )
-        .length;
-
-}
-
-
-/* =========================================================
-   OPPONENT
-========================================================= */
-
-function getOpponent(color){
-
-    return color === "red"
-        ? "blue"
-        : "red";
-
-}
-
-
-/* =========================================================
-   OPPONENT BLOCK
-========================================================= */
-
-function opponentHasBlock(
-    attackerColor,
-    position
-){
-
-    const opponent =
-        getOpponent(
-            attackerColor
-        );
-
-
-    return state.tokens[opponent]
-        .some(token => {
-
-            if(
-                !isOnTrack(token)
-            ){
-
-                return false;
-
-            }
-
-
-            const enemyPosition =
-                getGlobalPosition(
-                    opponent,
-                    token.progress
-                );
-
-
-            return (
-
-                enemyPosition === position &&
-
-                getStackCount(
-                    opponent,
-                    token.progress
-                ) >= 2
-
-            );
-
-        });
-
-}
-
-
-/* =========================================================
-   CAN MOVE
-========================================================= */
-
-function canMoveToken(
-    color,
-    index,
-    diceValue
-){
-
-    const token =
-        getToken(
-            color,
-            index
-        );
-
-
-    if(
-        isHome(token)
-    ){
+    if (
+        token.player !==
+        currentPlayer
+    ) {
 
         return false;
 
     }
 
 
-    /*
-       Base
-    */
+    if (
+        token.finished
+    ) {
 
-    if(
-        token.progress === -1
-    ){
+        return false;
+
+    }
+
+
+    if (
+        token.index === -1
+    ) {
 
         return diceValue === 6;
 
@@ -3853,628 +4137,348 @@ function canMoveToken(
 
 
     /*
-       Exact Home
+        Exact finish rule.
     */
-
-    const target =
-        token.progress +
-        diceValue;
-
 
     return (
-        target <=
-        CONFIG.HOME_END
+        token.index +
+        diceValue <=
+        FINISH_POSITION
     );
 
 }
 
 
+
 /* =========================================================
-   LEGAL TOKENS
+   GET LEGAL TOKENS
 ========================================================= */
 
-function getLegalTokens(
-    color,
-    diceValue
-){
+function getLegalTokens() {
 
-    const legal = [];
-
-
-    for(
-        let i = 0;
-        i < 4;
-        i++
-    ){
-
-        if(
-            canMoveToken(
-                color,
-                i,
-                diceValue
-            )
-        ){
-
-            legal.push(i);
-
-        }
-
-    }
-
-
-    return legal;
+    return players[currentPlayer]
+        .tokens
+        .filter(
+            token =>
+                isLegalMove(token)
+        );
 
 }
 
 
-/* =========================================================
-   CAPTURE
-========================================================= */
-
-function captureOpponents(
-    attackerColor,
-    position
-){
-
-    if(
-        isSafePosition(position)
-    ){
-
-        return false;
-
-    }
-
-
-    if(
-        opponentHasBlock(
-            attackerColor,
-            position
-        )
-    ){
-
-        return false;
-
-    }
-
-
-    const opponent =
-        getOpponent(
-            attackerColor
-        );
-
-
-    const enemies =
-        state.tokens[opponent]
-            .filter(token => {
-
-                if(
-                    !isOnTrack(token)
-                ){
-
-                    return false;
-
-                }
-
-
-                return (
-                    getGlobalPosition(
-                        opponent,
-                        token.progress
-                    ) === position
-                );
-
-            });
-
-
-    /*
-       Multiple opponent tokens
-       form protection.
-    */
-
-    if(
-        enemies.length >= 2
-    ){
-
-        return false;
-
-    }
-
-
-    let captured =
-        false;
-
-
-    enemies.forEach(enemy => {
-
-        enemy.progress =
-            -1;
-
-        captured =
-            true;
-
-    });
-
-
-    return captured;
-
-}
-
 
 /* =========================================================
-   MOVE TOKEN
+   ROLL DICE
 ========================================================= */
 
-async function moveToken(
-    color,
-    index
-){
-
-    if(
-        state.gameOver ||
-        !state.waitingForMove ||
-        state.dice === null
-    ){
-
-        return;
-
-    }
-
-
-    const diceValue =
-        state.dice;
-
-
-    if(
-        !canMoveToken(
-            color,
-            index,
-            diceValue
-        )
-    ){
-
-        return;
-
-    }
-
-
-    state.waitingForMove =
-        false;
-
-
-    rollButton.disabled =
-        true;
-
-
-    clearHighlights();
-
-
-    const token =
-        getToken(
-            color,
-            index
-        );
-
-
-    const oldProgress =
-        token.progress;
-
-
-    /*
-       Base to Start
-    */
-
-    if(
-        oldProgress === -1
-    ){
-
-        token.progress =
-            0;
-
-
-        saveGameState();
-
-
-        await animateTokenStep(
-            color,
-            index
-        );
-
-    }
-
-    else {
-
-        /*
-           Move step by step
-        */
-
-        for(
-            let step = 0;
-            step < diceValue;
-            step++
-        ){
-
-            token.progress =
-                oldProgress +
-                step +
-                1;
-
-
-            saveGameState();
-
-
-            renderState();
-
-
-            await delay(
-                145
-            );
-
-        }
-
-    }
-
-
-    renderState();
-
-
-    /*
-       Capture
-    */
-
-    let captured =
-        false;
-
-
-    if(
-        isOnTrack(token)
-    ){
-
-        const position =
-            getGlobalPosition(
-                color,
-                token.progress
-            );
-
-
-        captured =
-            captureOpponents(
-                color,
-                position
-            );
-
-
-        if(captured){
-
-            saveGameState();
-
-            createCaptureParticles(
-                color
-            );
-
-        }
-
-    }
-
-
-    /*
-       Home
-    */
-
-    const reachedHome =
-        isHome(token);
-
-
-    updateScore();
-
-
-    /*
-       Winner
-    */
-
-    const winner =
-        state.tokens[color]
-            .every(
-                token =>
-                    isHome(token)
-            );
-
-
-    if(winner){
-
-        finishGame(
-            color
-        );
-
-        return;
-
-    }
-
-
-    /*
-       Bonus
-    */
-
-    if(
-        captured ||
-        reachedHome ||
-        diceValue === 6
-    ){
-
-        state.dice =
-            null;
-
-
-        if(captured){
-
-            gameStatus.textContent =
-                "⚔️ Capture! Bonus Roll";
-
-        }
-
-        else if(reachedHome){
-
-            gameStatus.textContent =
-                "🏠 Home! Bonus Roll";
-
-        }
-
-        else {
-
-            gameStatus.textContent =
-                "🎲 6! Bonus Roll";
-
-        }
-
-
-        saveGameState();
-
-
-        await delay(
-            500
-        );
-
-
-        startNextRoll();
-
-        return;
-
-    }
-
-
-    /*
-       Normal turn
-    */
-
-    state.dice =
-        null;
-
-
-    saveGameState();
-
-
-    switchTurn();
-
-}
-
-
-/* =========================================================
-   STEP ANIMATION
-========================================================= */
-
-async function animateTokenStep(
-    color,
-    index
-){
-
-    renderState();
-
-
-    await delay(
-        180
-    );
-
-
-}
-
-
-/* =========================================================
-   DELAY
-========================================================= */
-
-function delay(ms){
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                ms
-            )
-    );
-
-}
-
-
-/* =========================================================
-   ROLL
-========================================================= */
-
-rollButton.addEventListener(
+rollBtn.addEventListener(
     "click",
     rollDice
 );
 
 
-async function rollDice(){
+function rollDice() {
 
-    if(
-        state.gameOver ||
-        state.waitingForMove ||
-        state.dice !== null
-    ){
+    if (gameOver) {
 
         return;
 
     }
 
 
-    rollButton.disabled =
+    if (diceRolled) {
+
+        showToast(
+            "আগে একটি Token move করুন।"
+        );
+
+        return;
+
+    }
+
+
+    rollBtn.disabled =
         true;
-
-
-    clearHighlights();
-
-
-    dice.classList.remove(
-        "rolling"
-    );
-
-
-    void dice.offsetWidth;
-
 
     dice.classList.add(
         "rolling"
     );
 
 
-    await delay(
-        780
-    );
+    let ticks =
+        0;
 
 
-    const value =
+    const animation =
+        setInterval(
+            () => {
+
+                const temp =
+                    Math.floor(
+                        Math.random() * 6
+                    ) + 1;
+
+                dice.textContent =
+                    DICE_FACES[temp];
+
+                ticks++;
+
+
+                if (
+                    ticks >= 8
+                ) {
+
+                    clearInterval(
+                        animation
+                    );
+
+                    dice.classList.remove(
+                        "rolling"
+                    );
+
+
+                    finishRoll();
+
+                }
+
+            },
+            70
+        );
+
+}
+
+
+
+/* =========================================================
+   FINISH ROLL
+========================================================= */
+
+function finishRoll() {
+
+    diceValue =
         Math.floor(
             Math.random() * 6
         ) + 1;
 
+    dice.textContent =
+        DICE_FACES[diceValue];
 
-    renderDice(
-        value
-    );
-
-
-    state.dice =
-        value;
-
-
-    /*
-       Three six penalty
-    */
-
-    if(
-        value === 6
-    ){
-
-        state.consecutiveSixes++;
-
-    }
-
-    else {
-
-        state.consecutiveSixes =
-            0;
-
-    }
-
-
-    saveGameState();
-
-
-    if(
-        state.consecutiveSixes >= 3
-    ){
-
-        state.dice =
-            null;
-
-        state.consecutiveSixes =
-            0;
-
-
-        saveGameState();
-
-
-        gameStatus.textContent =
-            "❌ Three 6s — Turn Lost";
-
-
-        await delay(
-            900
-        );
-
-
-        switchTurn();
-
-
-        return;
-
-    }
+    diceRolled =
+        true;
 
 
     const legal =
-        getLegalTokens(
-            state.turn,
-            value
-        );
+        getLegalTokens();
 
 
-    /*
-       No legal move
-    */
+    addLog(
+        `<strong>${getPlayerName()}</strong>
+         🎲 rolled <strong>${diceValue}</strong>.`
+    );
 
-    if(
+
+    if (
         legal.length === 0
-    ){
+    ) {
 
-        state.waitingForMove =
+        diceRolled =
             false;
 
 
-        saveGameState();
+        /*
+            6 still gives another turn
+            even if no move exists.
+        */
 
+        if (
+            diceValue === 6
+        ) {
 
-        gameStatus.textContent =
-            "No legal move";
-
-
-        if(
-            value === 6
-        ){
-
-            state.dice =
-                null;
-
-
-            saveGameState();
-
-
-            await delay(
-                600
+            addLog(
+                `🎁 <strong>${getPlayerName()}</strong>
+                 gets another turn.`
             );
 
+            rollBtn.disabled =
+                false;
 
-            startNextRoll();
+            diceHint.textContent =
+                "Roll again";
 
+            showToast(
+                "6 এসেছে — আবার Roll করুন।"
+            );
 
             return;
 
         }
 
 
-        await delay(
-            600
+        addLog(
+            `⚠️ No legal move. Turn passed.`
         );
 
 
-        state.dice =
-            null;
+        diceHint.textContent =
+            "Turn changing...";
 
 
-        saveGameState();
+        setTimeout(
+            () => {
+
+                nextTurn();
+
+            },
+            650
+        );
 
 
-        switchTurn();
+        return;
 
+    }
+
+
+    diceHint.textContent =
+        `${legal.length} move available`;
+
+
+    renderTokens();
+
+
+    if (
+        legal.length === 1
+    ) {
+
+        /*
+            If only one legal move exists,
+            allow the player to tap it.
+        */
+
+        showToast(
+            "আপনার highlighted Token-এ চাপ দিন।"
+        );
+
+    } else {
+
+        showToast(
+            "একটি Token নির্বাচন করুন।"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   MOVE TOKEN
+========================================================= */
+
+function moveToken(token) {
+
+    if (
+        !diceRolled ||
+        !isLegalMove(token)
+    ) {
+
+        return;
+
+    }
+
+
+    diceRolled =
+        false;
+
+
+    rollBtn.disabled =
+        true;
+
+
+    token.element.classList.remove(
+        "selectable"
+    );
+
+
+    /*
+        Token leaving yard.
+    */
+
+    if (
+        token.index === -1
+    ) {
+
+        token.index =
+            0;
+
+
+        addLog(
+            `<strong>${getPlayerName()}</strong>
+             entered a Token onto the board.`
+        );
+
+    } else {
+
+        token.index +=
+            diceValue;
+
+
+        addLog(
+            `<strong>${getPlayerName()}</strong>
+             moved a Token by
+             <strong>${diceValue}</strong> steps.`
+        );
+
+    }
+
+
+    /*
+        Exact finish.
+    */
+
+    if (
+        token.index ===
+        FINISH_POSITION
+    ) {
+
+        token.finished =
+            true;
+
+        addLog(
+            `🏠 Token reached <strong>Home</strong>.`
+        );
+
+    }
+
+
+    renderTokens();
+
+
+    /*
+        Capture.
+    */
+
+    if (
+        !token.finished
+    ) {
+
+        handleCapture(
+            token
+        );
+
+    }
+
+
+    /*
+        Winner.
+    */
+
+    if (
+        checkWinner(
+            currentPlayer
+        )
+    ) {
+
+        finishGame();
 
         return;
 
@@ -4482,1421 +4486,539 @@ async function rollDice(){
 
 
     /*
-       Wait for token
+        Six gives another turn.
     */
 
-    state.waitingForMove =
-        true;
+    if (
+        diceValue === 6
+    ) {
 
+        diceValue =
+            0;
 
-    saveGameState();
+        diceHint.textContent =
+            "Bonus turn";
 
+        rollBtn.disabled =
+            false;
 
-    highlightLegalTokens(
-        state.turn,
-        legal
-    );
 
-
-    gameStatus.textContent =
-        legal.length === 1
-            ? "Select the highlighted Guti"
-            : `${legal.length} Guti can move`;
-
-
-    resetTimer();
-
-}
-
-
-/* =========================================================
-   HIGHLIGHT
-========================================================= */
-
-function highlightLegalTokens(
-    color,
-    legal
-){
-
-    document
-        .querySelectorAll(
-            `.token.${color}`
-        )
-        .forEach(
-            (token,index) => {
-
-                token.classList.remove(
-                    "movable"
-                );
-
-
-                if(
-                    legal.includes(index)
-                ){
-
-                    token.classList.add(
-                        "movable"
-                    );
-
-
-                    token.onclick =
-                        () =>
-                            moveToken(
-                                color,
-                                index
-                            );
-
-                }
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   CLEAR HIGHLIGHT
-========================================================= */
-
-function clearHighlights(){
-
-    document
-        .querySelectorAll(
-            ".token"
-        )
-        .forEach(token => {
-
-            token.classList.remove(
-                "movable"
-            );
-
-
-            token.onclick =
-                null;
-
-        });
-
-}
-
-
-/* =========================================================
-   NEXT ROLL
-========================================================= */
-
-function startNextRoll(){
-
-    clearHighlights();
-
-
-    state.waitingForMove =
-        false;
-
-
-    state.dice =
-        null;
-
-
-    saveGameState();
-
-
-    resetTimer();
-
-
-    rollButton.disabled =
-        false;
-
-
-    gameStatus.textContent =
-        `${getPlayerName(
-            state.turn
-        )} — Roll the dice`;
-
-}
-
-
-/* =========================================================
-   TURN
-========================================================= */
-
-function switchTurn(){
-
-    clearHighlights();
-
-
-    state.waitingForMove =
-        false;
-
-
-    state.dice =
-        null;
-
-
-    state.consecutiveSixes =
-        0;
-
-
-    state.turn =
-        state.turn === "red"
-            ? "blue"
-            : "red";
-
-
-    saveGameState();
-
-
-    updateTurnUI();
-
-
-    resetTimer();
-
-
-    rollButton.disabled =
-        false;
-
-
-    gameStatus.textContent =
-        `${getPlayerName(
-            state.turn
-        )} — Roll the dice`;
-
-}
-
-
-/* =========================================================
-   PLAYER NAME
-========================================================= */
-
-function getPlayerName(color){
-
-    return color === "red"
-        ? "Player A"
-        : "Player B";
-
-}
-
-
-/* =========================================================
-   TURN UI
-========================================================= */
-
-function updateTurnUI(){
-
-    turnName.textContent =
-        getPlayerName(
-            state.turn
+        addLog(
+            `🎁 <strong>${getPlayerName()}</strong>
+             gets another turn.`
         );
 
 
-    playerRed.classList.toggle(
-        "active",
-        state.turn === "red"
-    );
+        showToast(
+            "6 এসেছে — Bonus Turn!"
+        );
 
 
-    playerBlue.classList.toggle(
-        "active",
-        state.turn === "blue"
-    );
-
-
-    $("#redStatus").textContent =
-        state.turn === "red"
-            ? "Your Turn"
-            : "Waiting";
-
-
-    $("#blueStatus").textContent =
-        state.turn === "blue"
-            ? "Your Turn"
-            : "Waiting";
-
-}
-
-
-/* =========================================================
-   TIMER
-========================================================= */
-
-function resetTimer(){
-
-    clearInterval(
-        timerId
-    );
-
-
-    if(state.gameOver){
+        renderTokens();
 
         return;
 
     }
 
 
-    state.timer =
-        CONFIG.TURN_TIME;
+    diceValue =
+        0;
 
 
-    updateTimerUI();
+    setTimeout(
+        () => {
+
+            nextTurn();
+
+        },
+        350
+    );
+
+}
 
 
-    saveGameState();
+
+/* =========================================================
+   CAPTURE
+========================================================= */
+
+function handleCapture(movingToken) {
+
+    const movingGlobal =
+        getGlobalIndex(
+            movingToken
+        );
 
 
-    timerId =
-        setInterval(
-            () => {
+    if (
+        movingGlobal === null
+    ) {
 
-                if(
-                    state.gameOver
-                ){
+        return;
 
-                    clearInterval(
-                        timerId
-                    );
+    }
+
+
+    if (
+        SAFE_CELLS.has(
+            movingGlobal
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const opponent =
+        movingToken.player ===
+        "red"
+            ? "blue"
+            : "red";
+
+
+    players[opponent]
+        .tokens
+        .forEach(
+            enemy => {
+
+                if (
+                    enemy.finished ||
+                    enemy.index < 0
+                ) {
 
                     return;
 
                 }
 
 
-                state.timer--;
-
-
-                updateTimerUI();
-
-
-                saveGameState();
-
-
-                if(
-                    state.timer <= 0
-                ){
-
-                    clearInterval(
-                        timerId
+                const enemyGlobal =
+                    getGlobalIndex(
+                        enemy
                     );
 
 
-                    handleTimeout();
+                if (
+                    enemyGlobal !==
+                    movingGlobal
+                ) {
+
+                    return;
 
                 }
 
-            },
-            1000
-        );
 
-}
+                enemy.index =
+                    -1;
 
 
-/* =========================================================
-   UPDATE TIMER
-========================================================= */
-
-function updateTimerUI(){
-
-    const seconds =
-        Math.max(
-            0,
-            state.timer
-        );
+                captureCount++;
 
 
-    timerValue.textContent =
-        `${seconds}s`;
-
-
-    timerFill.style.width =
-        `${
-            (
-                seconds /
-                CONFIG.TURN_TIME
-            ) * 100
-        }%`;
-
-}
-
-
-/* =========================================================
-   TIMEOUT AI
-========================================================= */
-
-function handleTimeout(){
-
-    if(
-        state.gameOver
-    ){
-
-        return;
-
-    }
-
-
-    /*
-       If token selection is pending,
-       AI chooses a legal move.
-    */
-
-    if(
-        state.waitingForMove &&
-        state.dice !== null
-    ){
-
-        const legal =
-            getLegalTokens(
-                state.turn,
-                state.dice
-            );
-
-
-        if(legal.length){
-
-            const selected =
-                chooseAIMove(
-                    state.turn,
-                    state.dice,
-                    legal
+                addLog(
+                    `⚔️ <strong>${getPlayerName()}</strong>
+                     captured an opponent Token.`
                 );
 
 
-            gameStatus.textContent =
-                "🤖 AI Timeout Assist";
-
-
-            moveToken(
-                state.turn,
-                selected
-            );
-
-
-            return;
-
-        }
-
-    }
-
-
-    /*
-       If player did not roll,
-       timeout performs AI roll.
-    */
-
-    gameStatus.textContent =
-        "🤖 AI Timeout — Auto Roll";
-
-
-    rollDice();
-
-}
-
-
-/* =========================================================
-   ADVANCED AI
-========================================================= */
-
-function chooseAIMove(
-    color,
-    diceValue,
-    legal
-){
-
-    let bestIndex =
-        legal[0];
-
-
-    let bestScore =
-        -Infinity;
-
-
-    legal.forEach(index => {
-
-        const token =
-            getToken(
-                color,
-                index
-            );
-
-
-        let score =
-            0;
-
-
-        /*
-           Bring token out
-        */
-
-        if(
-            token.progress === -1
-        ){
-
-            score +=
-                55;
-
-        }
-
-
-        /*
-           Target
-        */
-
-        const target =
-            token.progress === -1
-                ? 0
-                : token.progress + diceValue;
-
-
-        /*
-           Home
-        */
-
-        if(
-            target ===
-            CONFIG.HOME_END
-        ){
-
-            score +=
-                1200;
-
-        }
-
-
-        /*
-           Progress
-        */
-
-        score +=
-            Math.min(
-                target,
-                CONFIG.HOME_END
-            ) * 3;
-
-
-        /*
-           Safe
-        */
-
-        if(
-            target >= 0 &&
-            target < CONFIG.HOME_START
-        ){
-
-            const position =
-                getGlobalPosition(
-                    color,
-                    target
+                showToast(
+                    "Token Captured!"
                 );
-
-
-            if(
-                isSafePosition(
-                    position
-                )
-            ){
-
-                score +=
-                    120;
 
             }
-
-
-            /*
-               Capture opportunity
-            */
-
-            const opponent =
-                getOpponent(
-                    color
-                );
-
-
-            const enemies =
-                state.tokens[opponent]
-                    .filter(enemy => {
-
-                        if(
-                            !isOnTrack(enemy)
-                        ){
-
-                            return false;
-
-                        }
-
-
-                        return (
-
-                            getGlobalPosition(
-                                opponent,
-                                enemy.progress
-                            ) === position
-
-                        );
-
-                    });
-
-
-            if(
-                enemies.length === 1 &&
-                !isSafePosition(position)
-            ){
-
-                score +=
-                    600;
-
-            }
-
-        }
-
-
-        /*
-           Stack
-        */
-
-        if(
-            target >= 0 &&
-            target < CONFIG.HOME_START
-        ){
-
-            const stack =
-                getStackCount(
-                    color,
-                    target
-                );
-
-
-            if(
-                stack >= 1
-            ){
-
-                score +=
-                    90;
-
-            }
-
-        }
-
-
-        /*
-           Near Home
-        */
-
-        if(
-            target >= 45
-        ){
-
-            score +=
-                140;
-
-        }
-
-
-        /*
-           Natural variation
-        */
-
-        score +=
-            Math.random() * 10;
-
-
-        if(
-            score > bestScore
-        ){
-
-            bestScore =
-                score;
-
-            bestIndex =
-                index;
-
-        }
-
-    });
-
-
-    return bestIndex;
-
-}
-
-
-/* =========================================================
-   RENDER
-========================================================= */
-
-function renderState(){
-
-    updateScore();
-
-    updateTurnUI();
-
-
-    /*
-       Keep selected tokens highlighted
-       after refresh.
-    */
-
-    if(
-        state.waitingForMove &&
-        state.dice !== null &&
-        !state.gameOver
-    ){
-
-        const legal =
-            getLegalTokens(
-                state.turn,
-                state.dice
-            );
-
-
-        highlightLegalTokens(
-            state.turn,
-            legal
         );
 
-    }
+
+    renderTokens();
 
 }
 
-
-/* =========================================================
-   SCORE
-========================================================= */
-
-function updateScore(){
-
-    const redHome =
-        state.tokens.red
-            .filter(
-                isHome
-            )
-            .length;
-
-
-    const blueHome =
-        state.tokens.blue
-            .filter(
-                isHome
-            )
-            .length;
-
-
-    redHomeCount.textContent =
-        `${redHome}/4`;
-
-
-    blueHomeCount.textContent =
-        `${blueHome}/4`;
-
-}
 
 
 /* =========================================================
    WINNER
 ========================================================= */
 
-function finishGame(color){
+function checkWinner(player) {
 
-    state.gameOver =
+    return players[player]
+        .tokens
+        .every(
+            token =>
+                token.finished
+        );
+
+}
+
+
+
+function finishGame() {
+
+    gameOver =
         true;
 
 
-    state.waitingForMove =
-        false;
+    const winner =
+        players[currentPlayer];
 
 
-    state.dice =
-        null;
+    document.getElementById(
+        "winnerTitle"
+    ).textContent =
+        `🏆 ${winner.name} Wins`;
 
 
-    clearInterval(
-        timerId
-    );
+    document.getElementById(
+        "winnerText"
+    ).textContent =
+        `Congratulations! ${winner.name} has brought all four Tokens Home.`;
 
 
-    clearHighlights();
-
-
-    rollButton.disabled =
-        true;
-
-
-    saveGameState();
-
-
-    winnerTitle.textContent =
-        `${getPlayerName(
-            color
-        )} Wins!`;
-
-
-    winnerOverlay.classList.add(
+    winnerModal.classList.add(
         "show"
     );
 
 
-    createVictoryParticles(
-        color
+    rollBtn.disabled =
+        true;
+
+
+    addLog(
+        `🏆 <strong>${winner.name}</strong>
+         won the match!`
     );
 
 }
 
 
-/* =========================================================
-   VICTORY PARTICLES
-========================================================= */
-
-function createVictoryParticles(
-    color
-){
-
-    const colors = [
-
-        color === "red"
-            ? "#ed2939"
-            : "#1769e0",
-
-        "#ffd45a",
-        "#ffffff",
-        "#38d98a"
-
-    ];
-
-
-    for(
-        let i = 0;
-        i < 70;
-        i++
-    ){
-
-        const particle =
-            document.createElement(
-                "div"
-            );
-
-
-        particle.className =
-            "particle";
-
-
-        particle.style.background =
-            colors[
-                Math.floor(
-                    Math.random() *
-                    colors.length
-                )
-            ];
-
-
-        particle.style.left =
-            "50%";
-
-
-        particle.style.top =
-            "50%";
-
-
-        particle.style.setProperty(
-            "--x",
-            `${
-                (
-                    Math.random() - .5
-                ) *
-                window.innerWidth
-            }px`
-        );
-
-
-        particle.style.setProperty(
-            "--y",
-            `${
-                (
-                    Math.random() - .5
-                ) *
-                window.innerHeight
-            }px`
-        );
-
-
-        document.body.appendChild(
-            particle
-        );
-
-
-        setTimeout(
-            () =>
-                particle.remove(),
-            900
-        );
-
-    }
-
-}
-
 
 /* =========================================================
-   CAPTURE PARTICLES
+   NEXT TURN
 ========================================================= */
 
-function createCaptureParticles(
-    color
-){
+function nextTurn() {
 
-    const particleColor =
-        color === "red"
-            ? "#ed2939"
-            : "#1769e0";
+    currentPlayer =
+        currentPlayer === "red"
+            ? "blue"
+            : "red";
 
 
-    for(
-        let i = 0;
-        i < 16;
-        i++
-    ){
+    diceValue =
+        0;
 
-        const particle =
-            document.createElement(
-                "div"
-            );
-
-
-        particle.className =
-            "particle";
-
-
-        particle.style.background =
-            particleColor;
-
-
-        particle.style.left =
-            "50%";
-
-
-        particle.style.top =
-            "50%";
-
-
-        particle.style.setProperty(
-            "--x",
-            `${
-                (
-                    Math.random() - .5
-                ) * 180
-            }px`
-        );
-
-
-        particle.style.setProperty(
-            "--y",
-            `${
-                (
-                    Math.random() - .5
-                ) * 180
-            }px`
-        );
-
-
-        document.body.appendChild(
-            particle
-        );
-
-
-        setTimeout(
-            () =>
-                particle.remove(),
-            850
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   RESTORE AFTER REFRESH
-========================================================= */
-
-function initializeGame(){
-
-    const restored =
-        loadGameState();
-
-
-    /*
-       Dice
-    */
-
-    if(
-        state.dice !== null
-    ){
-
-        renderDice(
-            state.dice
-        );
-
-    }
-
-    else {
-
-        renderDice(
-            1
-        );
-
-    }
-
-
-    /*
-       UI
-    */
-
-    updateTurnUI();
-
-    updateScore();
-
-
-    /*
-       Finished match
-    */
-
-    if(
-        state.gameOver
-    ){
-
-        rollButton.disabled =
-            true;
-
-
-        gameStatus.textContent =
-            "🏆 Match Finished";
-
-
-        winnerTitle.textContent =
-            `${getPlayerName(
-                state.turn
-            )} Wins!`;
-
-
-        winnerOverlay.classList.add(
-            "show"
-        );
-
-
-        return;
-
-    }
-
-
-    /*
-       Pending token move
-    */
-
-    if(
-        restored &&
-        state.waitingForMove &&
-        state.dice !== null
-    ){
-
-        const legal =
-            getLegalTokens(
-                state.turn,
-                state.dice
-            );
-
-
-        if(
-            legal.length
-        ){
-
-            highlightLegalTokens(
-                state.turn,
-                legal
-            );
-
-
-            rollButton.disabled =
-                true;
-
-
-            gameStatus.textContent =
-                "Select your highlighted Guti";
-
-
-            /*
-               Continue timer from
-               saved state.
-            */
-
-            startRestoredTimer();
-
-
-            return;
-
-        }
-
-    }
-
-
-    /*
-       Normal restored state
-    */
-
-    rollButton.disabled =
+    diceRolled =
         false;
 
 
-    gameStatus.textContent =
-        `${getPlayerName(
-            state.turn
-        )} — Roll the dice`;
+    rollBtn.disabled =
+        false;
 
 
-    startRestoredTimer();
+    updateTurnUI();
 
 
-    saveGameState();
+    diceHint.textContent =
+        "Roll to play";
+
+
+    renderTokens();
+
+
+    addLog(
+        `🔄 Turn:
+         <strong>${getPlayerName()}</strong>`
+    );
 
 }
 
 
+
 /* =========================================================
-   RESTORED TIMER
+   PLAYER NAME
 ========================================================= */
 
-function startRestoredTimer(){
+function getPlayerName() {
 
-    clearInterval(
-        timerId
+    return players[currentPlayer]
+        .name;
+
+}
+
+
+
+/* =========================================================
+   TURN UI
+========================================================= */
+
+function updateTurnUI() {
+
+    const isRed =
+        currentPlayer ===
+        "red";
+
+
+    turnPlayer.textContent =
+        isRed
+            ? "🔴 Player 1"
+            : "🔵 Player 2";
+
+
+    redCard.classList.toggle(
+        "active",
+        isRed
     );
 
 
-    if(
-        state.gameOver
-    ){
-
-        return;
-
-    }
-
-
-    updateTimerUI();
-
-
-    timerId =
-        setInterval(
-            () => {
-
-                if(
-                    state.gameOver
-                ){
-
-                    clearInterval(
-                        timerId
-                    );
-
-                    return;
-
-                }
-
-
-                state.timer--;
-
-
-                updateTimerUI();
-
-
-                saveGameState();
-
-
-                if(
-                    state.timer <= 0
-                ){
-
-                    clearInterval(
-                        timerId
-                    );
-
-
-                    handleTimeout();
-
-                }
-
-            },
-            1000
-        );
+    blueCard.classList.toggle(
+        "active",
+        !isRed
+    );
 
 }
 
 
+
 /* =========================================================
-   ADMIN INTEGRATION API
+   STATS
 ========================================================= */
 
-/*
-   IMPORTANT:
+function updateStats() {
 
-   Player UI DOES NOT expose
-   Reset / New Game / Restart.
+    const redHome =
+        players.red.tokens
+            .filter(
+                token =>
+                    token.finished
+            )
+            .length;
 
-   These functions are prepared
-   for Admin Panel + Supabase.
-*/
 
-window.GhopkhaliLudo = {
+    const blueHome =
+        players.blue.tokens
+            .filter(
+                token =>
+                    token.finished
+            )
+            .length;
 
 
-    getState(){
+    redTokensEl.textContent =
+        redHome;
 
-        return structuredClone(
-            state
-        );
 
-    },
+    blueTokensEl.textContent =
+        blueHome;
 
 
-    saveState(){
+    capturesEl.textContent =
+        captureCount;
 
-        saveGameState();
+}
 
-    },
 
 
-    startMatch(){
+/* =========================================================
+   NEW GAME
+========================================================= */
 
-        state =
-            createInitialState();
+function newGame() {
 
+    currentPlayer =
+        "red";
 
-        clearHighlights();
+    diceValue =
+        0;
 
+    diceRolled =
+        false;
 
-        winnerOverlay.classList.remove(
-            "show"
-        );
+    gameOver =
+        false;
 
+    captureCount =
+        0;
 
-        renderDice(
-            1
-        );
+    tokenIdCounter =
+        1;
 
 
-        updateTurnUI();
+    dice.textContent =
+        "⚀";
 
-        updateScore();
 
+    diceHint.textContent =
+        "Roll to play";
 
-        gameStatus.textContent =
-            "Player A — Roll the dice";
 
+    rollBtn.disabled =
+        false;
 
-        rollButton.disabled =
-            false;
 
-
-        saveGameState();
-
-
-        resetTimer();
-
-    },
-
-
-    pauseMatch(){
-
-        clearInterval(
-            timerId
-        );
-
-
-        rollButton.disabled =
-            true;
-
-
-        gameStatus.textContent =
-            "⏸️ Match Paused";
-
-
-        saveGameState();
-
-    },
-
-
-    resumeMatch(){
-
-        if(
-            state.gameOver
-        ){
-
-            return;
-
-        }
-
-
-        rollButton.disabled =
-            state.waitingForMove;
-
-
-        gameStatus.textContent =
-            `${getPlayerName(
-                state.turn
-            )} — Match Resumed`;
-
-
-        saveGameState();
-
-
-        startRestoredTimer();
-
-    },
-
-
-    forceTurn(color){
-
-        if(
-            color !== "red" &&
-            color !== "blue"
-        ){
-
-            return;
-
-        }
-
-
-        state.turn =
-            color;
-
-
-        state.dice =
-            null;
-
-
-        state.waitingForMove =
-            false;
-
-
-        state.consecutiveSixes =
-            0;
-
-
-        clearHighlights();
-
-
-        updateTurnUI();
-
-
-        renderDice(
-            1
-        );
-
-
-        rollButton.disabled =
-            false;
-
-
-        gameStatus.textContent =
-            `${getPlayerName(
-                color
-            )} — Forced Turn`;
-
-
-        saveGameState();
-
-
-        resetTimer();
-
-    },
-
-
-    endMatch(){
-
-        state.gameOver =
-            true;
-
-
-        state.waitingForMove =
-            false;
-
-
-        state.dice =
-            null;
-
-
-        clearInterval(
-            timerId
-        );
-
-
-        clearHighlights();
-
-
-        rollButton.disabled =
-            true;
-
-
-        gameStatus.textContent =
-            "⛔ Match Ended by Admin";
-
-
-        saveGameState();
-
-    },
+    gameLog.innerHTML =
+        "";
 
 
     /*
-       ADMIN ONLY RESET
-
-       This method is NOT connected
-       to any player-side button.
+        Remove old token elements.
     */
 
-    resetMatch(){
-
-        state =
-            createInitialState();
-
-
-        clearInterval(
-            timerId
+    document
+        .querySelectorAll(".token")
+        .forEach(
+            el => el.remove()
         );
 
 
-        clearHighlights();
+    /*
+        Rebuild game state.
+    */
+
+    createTokens();
+
+    updateTurnUI();
+
+    updateStats();
 
 
-        winnerOverlay.classList.remove(
-            "show"
-        );
+    winnerModal.classList.remove(
+        "show"
+    );
 
 
-        renderDice(
-            1
-        );
+    addLog(
+        `🎮 New match started.
+         <strong>Player 1</strong> starts.`
+    );
 
 
-        updateTurnUI();
-
-        updateScore();
-
-
-        rollButton.disabled =
-            false;
+    addLog(
+        `🧠 AI Game Controller is active.`
+    );
 
 
-        gameStatus.textContent =
-            "Player A — Roll the dice";
+    showToast(
+        "New Ludo Match Started!"
+    );
 
+}
 
-        saveGameState();
-
-
-        resetTimer();
-
-    }
-
-};
 
 
 /* =========================================================
-   START
+   NEW GAME BUTTON
 ========================================================= */
 
-initializeGame();
+document
+    .getElementById("newGameBtn")
+    .addEventListener(
+        "click",
+        newGame
+    );
+
+
+document
+    .getElementById("winnerNewGameBtn")
+    .addEventListener(
+        "click",
+        newGame
+    );
+
+
+
+/* =========================================================
+   RULES
+========================================================= */
+
+document
+    .getElementById("rulesBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            rulesModal.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+
+document
+    .getElementById("closeRulesBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            rulesModal.classList.remove(
+                "show"
+            );
+
+        }
+    );
+
+
+rulesModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target ===
+            rulesModal
+        ) {
+
+            rulesModal.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+winnerModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target ===
+            winnerModal
+        ) {
+
+            winnerModal.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+buildBoard();
+
+createTokens();
+
+updateTurnUI();
+
+addLog(
+    `🎮 Match ready:
+     <strong>Player 1 vs Player 2</strong>`
+);
+
+addLog(
+    `🧠 AI Game Controller:
+     <strong>ACTIVE</strong>`
+);
 
 </script>
+
 
 </body>
 
