@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Double Tournament — Team Join</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #fff0d8 0%,
+                    #f8fafc 45%,
+                    #ffffff 100%
+                );
+
+            color: #111827;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 520px;
+
+            background: rgba(255,255,255,.84);
+
+            border-radius: 30px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,.10);
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 18px;
+
+            border-radius: 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 32px;
+
+            background: #111827;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+
+            margin: 0;
+
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color: #6b7280;
+
+            margin: 8px 0 25px;
+
+            font-size: 14px;
+        }
+
+        .tournament {
+            background: #f3f4f6;
+
+            border-radius: 18px;
+
+            padding: 16px;
+
+            margin-bottom: 22px;
+
+            text-align: center;
+        }
+
+        .tournament strong {
+            display: block;
+
+            font-size: 17px;
+
+            margin-bottom: 5px;
+        }
+
+        .tournament span {
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 16px;
+
+            padding: 15px;
+
+            font-size: 16px;
+
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #111827;
+
+            box-shadow:
+                0 0 0 4px rgba(17,24,39,.08);
+        }
+
+        .join-btn {
+            width: 100%;
+
+            border: 0;
+
+            border-radius: 17px;
+
+            padding: 16px;
+
+            margin-top: 5px;
+
+            background: #111827;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .join-btn:disabled {
+            opacity: .55;
+
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+
+            margin-top: 18px;
+
+            padding: 14px;
+
+            border-radius: 15px;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .success {
+            background: #ecfdf5;
+
+            color: #047857;
+        }
+
+        .error {
+            background: #fef2f2;
+
+            color: #b91c1c;
+        }
+
+        .team-code {
+            display: none;
+
+            margin-top: 20px;
+
+            text-align: center;
+
+            background: #f3f4f6;
+
+            border-radius: 20px;
+
+            padding: 18px;
+        }
+
+        .team-code.show {
+            display: block;
+        }
+
+        .team-code small {
+            color: #6b7280;
+        }
+
+        .team-code strong {
+            display: block;
+
+            margin-top: 6px;
+
+            font-size: 25px;
+
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            text-align: center;
+
+            margin-top: 24px;
+
+            color: #9ca3af;
+
+            font-size: 12px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="logo">
+        🎲
+    </div>
+
+    <h1>
+        Double Tournament
+    </h1>
+
+    <div class="subtitle">
+        Team Registration
+    </div>
+
+
+    <div class="tournament">
+
+        <strong id="tournamentName">
+            Ludo Double Tournament
+        </strong>
+
+        <span>
+            ২ Player = ১ Team • সর্বোচ্চ ২৫ Team
+        </span>
+
+    </div>
+
+
+    <form id="joinForm">
+
+        <div class="field">
+
+            <label>
+                Team Name
+            </label>
+
+            <input
+                id="teamName"
+                type="text"
+                placeholder="আপনার Team Name"
+                maxlength="60"
+                required
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Player 1
+            </label>
+
+            <input
+                id="player1"
+                type="text"
+                placeholder="প্রথম Player-এর নাম"
+                maxlength="80"
+                required
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Player 2
+            </label>
+
+            <input
+                id="player2"
+                type="text"
+                placeholder="দ্বিতীয় Player-এর নাম"
+                maxlength="80"
+                required
+            >
+
+        </div>
+
+
+        <button
+            class="join-btn"
+            id="joinBtn"
+            type="submit"
+        >
+            🎲 Team-এ Join করুন
+        </button>
+
+    </form>
+
+
+    <div
+        class="message"
+        id="message"
+    ></div>
+
+
+    <div
+        class="team-code"
+        id="codeBox"
+    >
+
+        <small>
+            আপনার Team Code
+        </small>
+
+        <strong id="teamCode">
+            —
+        </strong>
+
+    </div>
+
+
+    <div class="footer">
+        Ghopkhali Sports Arena
+    </div>
+
+</div>
+
+
+<script>
+
+    const SUPABASE_URL =
+        "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+    const {
+        createClient
+    } = window.supabase;
+
+
+    const supabaseClient =
+        createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    const form =
+        document.getElementById(
+            "joinForm"
+        );
+
+    const teamName =
+        document.getElementById(
+            "teamName"
+        );
+
+    const player1 =
+        document.getElementById(
+            "player1"
+        );
+
+    const player2 =
+        document.getElementById(
+            "player2"
+        );
+
+    const joinBtn =
+        document.getElementById(
+            "joinBtn"
+        );
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+    const codeBox =
+        document.getElementById(
+            "codeBox"
+        );
+
+    const teamCode =
+        document.getElementById(
+            "teamCode"
+        );
+
+    const tournamentName =
+        document.getElementById(
+            "tournamentName"
+        );
+
+
+    function showMessage(
+        text,
+        type
+    ) {
+
+        message.textContent =
+            text;
+
+        message.className =
+            "message show " +
+            type;
+    }
+
+
+    function generateCode() {
+
+        const chars =
+            "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+        let code = "";
+
+        for (
+            let i = 0;
+            i < 6;
+            i++
+        ) {
+
+            code +=
+                chars[
+                    Math.floor(
+                        Math.random() *
+                        chars.length
+                    )
+                ];
+        }
+
+        return "D-" + code;
+    }
+
+
+    async function loadTournament() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "ludo_tournaments"
+                )
+                .select("*")
+                .eq(
+                    "tournament_type",
+                    "double"
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: true
+                    }
+                )
+                .limit(1)
+                .maybeSingle();
+
+
+        if (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Tournament তথ্য লোড করা যায়নি।",
+                "error"
+            );
+
+            return null;
+        }
+
+
+        if (!data) {
+
+            showMessage(
+                "কোনো Double Tournament পাওয়া যায়নি।",
+                "error"
+            );
+
+            return null;
+        }
+
+
+        tournamentName.textContent =
+            data.tournament_name;
+
+
+        if (
+            data.status !==
+            "registration"
+        ) {
+
+            showMessage(
+                "এই Tournament-এ বর্তমানে Registration বন্ধ আছে।",
+                "error"
+            );
+
+            joinBtn.disabled = true;
+
+            return null;
+        }
+
+
+        return data;
+    }
+
+
+    async function checkCapacity(
+        tournamentId
+    ) {
+
+        const {
+            count,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "ludo_teams"
+                )
+                .select(
+                    "id",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                )
+                .eq(
+                    "tournament_id",
+                    tournamentId
+                );
+
+
+        if (error) {
+
+            console.error(error);
+
+            throw error;
+        }
+
+
+        return count || 0;
+    }
+
+
+    form.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const team =
+                teamName.value.trim();
+
+            const p1 =
+                player1.value.trim();
+
+            const p2 =
+                player2.value.trim();
+
+
+            if (
+                !team ||
+                !p1 ||
+                !p2
+            ) {
+
+                showMessage(
+                    "Team Name এবং দুইজন Player-এর নাম পূরণ করুন।",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            joinBtn.disabled = true;
+
+            joinBtn.textContent =
+                "Team Join করা হচ্ছে...";
+
+
+            try {
+
+                const tournament =
+                    await loadTournament();
+
+
+                if (!tournament) {
+                    return;
+                }
+
+
+                const count =
+                    await checkCapacity(
+                        tournament.id
+                    );
+
+
+                if (count >= 25) {
+
+                    showMessage(
+                        "দুঃখিত, Double Tournament-এর ২৫টি Team পূর্ণ হয়ে গেছে।",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                const generatedTeamCode =
+                    generateCode();
+
+
+                const {
+                    data:
+                        createdTeam,
+                    error:
+                        teamError
+                } =
+                    await supabaseClient
+                        .from(
+                            "ludo_teams"
+                        )
+                        .insert({
+                            tournament_id:
+                                tournament.id,
+
+                            team_name:
+                                team,
+
+                            team_code:
+                                generatedTeamCode,
+
+                            status:
+                                "active"
+                        })
+                        .select()
+                        .single();
+
+
+                if (teamError) {
+
+                    console.error(
+                        teamError
+                    );
+
+                    throw teamError;
+                }
+
+
+                const {
+                    error:
+                        playersError
+                } =
+                    await supabaseClient
+                        .from(
+                            "ludo_team_players"
+                        )
+                        .insert([
+                            {
+                                team_id:
+                                    createdTeam.id,
+
+                                player_name:
+                                    p1,
+
+                                player_number:
+                                    1
+                            },
+
+                            {
+                                team_id:
+                                    createdTeam.id,
+
+                                player_name:
+                                    p2,
+
+                                player_number:
+                                    2
+                            }
+                        ]);
+
+
+                if (playersError) {
+
+                    console.error(
+                        playersError
+                    );
+
+                    await supabaseClient
+                        .from(
+                            "ludo_teams"
+                        )
+                        .delete()
+                        .eq(
+                            "id",
+                            createdTeam.id
+                        );
+
+                    throw playersError;
+                }
+
+
+                teamCode.textContent =
+                    createdTeam.team_code;
+
+
+                codeBox.classList.add(
+                    "show"
+                );
+
+
+                showMessage(
+                    "🎉 অভিনন্দন! আপনার Team সফলভাবে Double Tournament-এ Join করেছে।",
+                    "success"
+                );
+
+
+                teamName.disabled = true;
+
+                player1.disabled = true;
+
+                player2.disabled = true;
+
+                joinBtn.textContent =
+                    "✓ Successfully Joined";
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                showMessage(
+                    "Team Join করা যায়নি: " +
+                    (
+                        error.message ||
+                        "Unknown error"
+                    ),
+                    "error"
+                );
+
+                joinBtn.disabled =
+                    false;
+
+                joinBtn.textContent =
+                    "🎲 Team-এ Join করুন";
+            }
+
+        }
+    );
+
+
+    loadTournament();
+
+</script>
+
+</body>
+</html>
