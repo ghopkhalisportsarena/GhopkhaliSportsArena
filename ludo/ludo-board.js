@@ -87,6 +87,10 @@ const LUDO_PLAYERS = {
 
 };
 
+const ACTIVE_PLAYERS = [
+    "red",
+    "blue"
+];
 
 /* =========================================================
    52 CELL TRACK
@@ -94,6 +98,7 @@ const LUDO_PLAYERS = {
 
 const LUDO_TRACK = [
 
+    [6, 0],
     [6, 1],
     [6, 2],
     [6, 3],
@@ -108,8 +113,8 @@ const LUDO_TRACK = [
     [0, 6],
 
     [0, 7],
-    [0, 8],
 
+    [0, 8],
     [1, 8],
     [2, 8],
     [3, 8],
@@ -158,7 +163,6 @@ const LUDO_TRACK = [
     [7, 0]
 
 ];
-
 
 /* =========================================================
    HOME LANES
@@ -1749,10 +1753,7 @@ function handleCapture(
     }
 
 
-    Object.keys(
-        ludoGameState.tokens
-    ).forEach(
-        color => {
+    ACTIVE_PLAYERS.forEach(color => {
 
             if (
                 color ===
@@ -1866,57 +1867,27 @@ function checkWinner(
 
 function changeTurn() {
 
-    const order = [
-
-        "red",
-
-        "green",
-
-        "yellow",
-
-        "blue"
-
-    ];
-
+    const order = ACTIVE_PLAYERS;
 
     const currentIndex =
         order.indexOf(
             ludoGameState.currentPlayer
         );
 
-
-    let nextIndex =
-        (
-            currentIndex + 1
-        ) % order.length;
-
-
-    /*
-     * Step 3 supports the
-     * complete four-color engine.
-     *
-     * UI will later decide
-     * which players are active
-     * for 1v1 / 2v2.
-     */
-
+    const nextIndex =
+        (currentIndex + 1) %
+        order.length;
 
     ludoGameState.currentPlayer =
-        order[
-            nextIndex
-        ];
+        order[nextIndex];
 
+    ludoGameState.dice = null;
 
-    ludoGameState.dice =
-        null;
+    ludoGameState.diceRolled = false;
 
-
-    ludoGameState.diceRolled =
-        false;
-
+    ludoGameState.waitingForToken = false;
 
     updateTurnUI();
-
 }
 
 
