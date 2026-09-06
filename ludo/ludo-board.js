@@ -972,6 +972,272 @@ element.addEventListener(
 }
 
 /* =========================================================
+   STEP 8 — TOKEN MOVEMENT ANIMATION
+========================================================= */
+
+let ludoAnimationRunning = false;
+
+
+/* ---------------------------------------------------------
+   WAIT
+--------------------------------------------------------- */
+
+function waitForAnimation(
+    milliseconds
+) {
+
+    return new Promise(
+        resolve => {
+
+            setTimeout(
+                resolve,
+                milliseconds
+            );
+
+        }
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   ANIMATE TOKEN MOVEMENT
+--------------------------------------------------------- */
+
+async function animateTokenMovement(
+    color,
+    tokenIndex,
+    fromProgress,
+    toProgress
+) {
+
+    if (
+        fromProgress ===
+        toProgress
+    ) {
+
+        return;
+
+    }
+
+
+    ludoAnimationRunning =
+        true;
+
+
+    const direction =
+        toProgress >
+        fromProgress
+            ? 1
+            : -1;
+
+
+    let currentProgress =
+        fromProgress;
+
+
+    while (
+        currentProgress !==
+        toProgress
+    ) {
+
+        currentProgress +=
+            direction;
+
+
+        const token =
+            ludoGameState.tokens[
+                color
+            ][
+                tokenIndex
+            ];
+
+
+        if (!token) {
+            break;
+        }
+
+
+        /*
+         * Main track
+         */
+
+        if (
+            currentProgress <
+            HOME_ENTRY_STEP
+        ) {
+
+            token.state =
+                "track";
+
+
+            token.progress =
+                currentProgress;
+
+
+            token.position =
+                getTrackIndex(
+                    color,
+                    currentProgress
+                );
+
+        }
+
+
+        /*
+         * Home lane
+         */
+
+        else {
+
+            const lanePosition =
+                currentProgress -
+                HOME_ENTRY_STEP;
+
+
+            if (
+                lanePosition >= 0 &&
+                lanePosition <
+                LUDO_HOME_LANES[
+                    color
+                ].length
+            ) {
+
+                token.state =
+                    "lane";
+
+
+                token.progress =
+                    currentProgress;
+
+
+                token.position =
+                    lanePosition;
+
+            }
+
+
+            /*
+             * Finished
+             */
+
+            else {
+
+                token.state =
+                    "finished";
+
+
+                token.finished =
+                    true;
+
+
+                token.progress =
+                    FINISH_STEP;
+
+
+                token.position =
+                    LUDO_HOME_LANES[
+                        color
+                    ].length;
+
+            }
+
+        }
+
+
+        renderTokens();
+
+
+        await waitForAnimation(
+            120
+        );
+
+    }
+
+
+    ludoAnimationRunning =
+        false;
+
+}
+
+async function playTokenMovementAnimation(
+    color,
+    index,
+    fromProgress,
+    toProgress
+) {
+
+    if (
+        fromProgress ===
+        toProgress
+    ) {
+
+        return;
+
+    }
+
+
+    ludoAnimationRunning =
+        true;
+
+
+    const token =
+        ludoGameState.tokens[
+            color
+        ][index];
+
+
+    if (!token) {
+
+        ludoAnimationRunning =
+            false;
+
+        return;
+
+    }
+
+
+    /*
+     * Temporarily restore the
+     * starting position.
+     */
+
+    token.state =
+        "track";
+
+
+    token.progress =
+        fromProgress;
+
+
+    token.position =
+        getTrackIndex(
+            color,
+            fromProgress
+        );
+
+
+    renderTokens();
+
+
+    /*
+     * Move one cell at a time.
+     */
+
+    await animateTokenMovement(
+        color,
+        index,
+        fromProgress,
+        toProgress
+    );
+
+
+    ludoAnimationRunning =
+        false;
+
+}
+
+/* =========================================================
    RENDER TOKENS
 ========================================================= */
 
@@ -1496,15 +1762,22 @@ function moveSelectedToken(
     index
 ) {
 
+       /* -----------------------------------------------------
+       BLOCK ACTION DURING ANIMATION
+    ----------------------------------------------------- */
+
     if (
-        ludoGameState.currentPlayer !==
-        color
+        ludoAnimationRunning
     ) {
 
         return false;
 
     }
 
+
+    /* -----------------------------------------------------
+       DICE MUST BE ROLLED
+    ----------------------------------------------------- */
 
     if (
         !ludoGameState.diceRolled
@@ -1525,6 +1798,13 @@ function moveSelectedToken(
         ][index];
 
 
+    if (!token) {
+
+        return false;
+
+    }
+
+
     if (
         !canTokenMove(
             color,
@@ -1539,6 +1819,15 @@ function moveSelectedToken(
 
 
     /* -----------------------------------------------------
+       SAVE OLD POSITION
+    ----------------------------------------------------- */
+
+    const oldProgress =
+        token.progress;
+
+   
+
+    /* -----------------------------------------------------
        TOKEN FROM HOME
     ----------------------------------------------------- */
 
@@ -1548,8 +1837,8 @@ function moveSelectedToken(
     ) {
 
         /*
-         * Token can leave home only
-         * when dice = 6.
+         * Token leaves home
+         * only with 6.
          */
 
         token.state =
@@ -1569,7 +1858,7 @@ function moveSelectedToken(
 
 
     /* -----------------------------------------------------
-       TOKEN ON TRACK
+       TOKEN ON MAIN TRACK
     ----------------------------------------------------- */
 
     else if (
@@ -1577,49 +1866,43 @@ function moveSelectedToken(
         "track"
     ) {
 
-        const newProgress =
+        const targetProgress =
             token.progress +
             dice;
 
 
         /*
-         * Token is still on
-         * the main 52-cell track.
+         * Still on main track.
          */
 
         if (
-            newProgress <
+            targetProgress <
             HOME_ENTRY_STEP
         ) {
 
             token.progress =
-                newProgress;
+                targetProgress;
 
 
             token.position =
                 getTrackIndex(
                     color,
-                    newProgress
+                    targetProgress
                 );
 
         }
 
 
         /*
-         * Token enters its
-         * own home lane.
+         * Enter home lane.
          */
 
         else {
 
             const lanePosition =
-                newProgress -
+                targetProgress -
                 HOME_ENTRY_STEP;
 
-
-            /*
-             * Still inside home lane
-             */
 
             if (
                 lanePosition >= 0 &&
@@ -1634,7 +1917,7 @@ function moveSelectedToken(
 
 
                 token.progress =
-                    newProgress;
+                    targetProgress;
 
 
                 token.position =
@@ -1644,7 +1927,7 @@ function moveSelectedToken(
 
 
             /*
-             * Reached final home
+             * Finish.
              */
 
             else {
@@ -1682,36 +1965,28 @@ function moveSelectedToken(
         "lane"
     ) {
 
-        const newPosition =
+        const targetPosition =
             token.position +
             dice;
 
 
-        /*
-         * Still inside home lane
-         */
-
         if (
-            newPosition <
+            targetPosition <
             LUDO_HOME_LANES[
                 color
             ].length
         ) {
 
             token.position =
-                newPosition;
+                targetPosition;
 
 
             token.progress =
                 HOME_ENTRY_STEP +
-                newPosition;
+                targetPosition;
 
         }
 
-
-        /*
-         * Token reaches final home
-         */
 
         else {
 
@@ -1736,9 +2011,54 @@ function moveSelectedToken(
 
     }
 
+    /* -----------------------------------------------------
+       PREPARE MOVEMENT ANIMATION
+    ----------------------------------------------------- */
+
+    const finalProgress =
+        token.progress;
+
+
+    /*
+     * Restore token to its
+     * original position before
+     * starting the animation.
+     */
+
+    token.progress =
+        oldProgress;
+
+
+    token.state =
+        oldProgress === 0 &&
+        token.state === "track"
+            ? "track"
+            : token.state;
+
+
+    if (
+        oldProgress <
+        HOME_ENTRY_STEP
+    ) {
+
+        token.state =
+            "track";
+
+
+        token.position =
+            getTrackIndex(
+                color,
+                oldProgress
+            );
+
+    }
+
+
+    renderTokens();
+
 
     /* -----------------------------------------------------
-       AFTER MOVEMENT
+       LOCK GAME STATE
     ----------------------------------------------------- */
 
     ludoGameState.diceRolled =
@@ -1749,59 +2069,103 @@ function moveSelectedToken(
         false;
 
 
-    /*
-     * Capture opponent token
-     * if landing on a non-safe cell.
-     */
-
-    handleCapture(
-        color,
-        token
-    );
-
-
-    /*
-     * Check whether this player
-     * has finished all tokens.
-     */
-
-    checkWinner(
-        color
-    );
-
-
-    /*
-     * Re-render board.
-     */
-
-    renderTokens();
-
-
     /* -----------------------------------------------------
-       SIX = EXTRA TURN
+       PLAY MOVEMENT ANIMATION
     ----------------------------------------------------- */
 
-    if (
-        dice === 6 &&
-        !ludoGameState.winner
-    ) {
+    playTokenMovementAnimation(
+        color,
+        index,
+        oldProgress,
+        finalProgress
+    ).then(
+        () => {
 
-        ludoGameState.dice =
-            null;
-
-
-        ludoGameState.diceRolled =
-            false;
-
-
-        updateGameMessage(
-            `${getPlayerName(color)} — ৬ এসেছে। অতিরিক্ত চাল।`
-        );
+            const animatedToken =
+                ludoGameState.tokens[
+                    color
+                ][index];
 
 
-        return true;
+            if (!animatedToken) {
+                return;
+            }
 
-    }
+
+            /* ---------------------------------------------
+               CAPTURE
+            --------------------------------------------- */
+
+            handleCapture(
+                color,
+                animatedToken
+            );
+
+
+            /* ---------------------------------------------
+               WINNER CHECK
+            --------------------------------------------- */
+
+            checkWinner(
+                color
+            );
+
+
+            /* ---------------------------------------------
+               FINAL RENDER
+            --------------------------------------------- */
+
+            renderTokens();
+
+
+            /* ---------------------------------------------
+               SIX = EXTRA TURN
+            --------------------------------------------- */
+
+            if (
+                dice === 6 &&
+                !ludoGameState.winner
+            ) {
+
+                ludoGameState.dice =
+                    null;
+
+
+                ludoGameState.diceRolled =
+                    false;
+
+
+                ludoGameState.waitingForToken =
+                    false;
+
+
+                updateGameMessage(
+                    `${getPlayerName(color)} — ৬ এসেছে। অতিরিক্ত চাল।`
+                );
+
+
+                return;
+
+            }
+
+
+            /* ---------------------------------------------
+               NEXT TURN
+            --------------------------------------------- */
+
+            if (
+                !ludoGameState.winner
+            ) {
+
+                changeTurn();
+
+            }
+
+        }
+    );
+
+
+    return true;
 
 
     /* -----------------------------------------------------
