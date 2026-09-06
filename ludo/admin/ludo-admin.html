@@ -3357,23 +3357,77 @@ function renderParticipants() {
 
                         <td>
 
-                            <div class="row-actions">
+                            <div
+    class="row-actions"
+    style="
+        flex-wrap:wrap;
+        align-items:center;
+    "
+>
 
-                                <button
-                                    class="small-btn"
-                                    onclick="editPlayer('${player.id}')"
-                                >
-                                    Edit
-                                </button>
+    <select
+        class="small-btn"
+        style="
+            min-width:105px;
+            cursor:pointer;
+        "
+        onchange="
+            updateParticipantStatus(
+                'player',
+                '${player.id}',
+                this.value
+            )
+        "
+    >
 
-                                <button
-                                    class="small-btn delete"
-                                    onclick="deletePlayer('${player.id}')"
-                                >
-                                    Delete
-                                </button>
+        <option
+            value="active"
+            ${player.status === "active" ? "selected" : ""}
+        >
+            ✓ Active
+        </option>
 
-                            </div>
+        <option
+            value="inactive"
+            ${player.status === "inactive" ? "selected" : ""}
+        >
+            ⏸ Inactive
+        </option>
+
+        <option
+            value="eliminated"
+            ${player.status === "eliminated" ? "selected" : ""}
+        >
+            ✕ Eliminated
+        </option>
+
+    </select>
+
+
+    <button
+        class="small-btn"
+        onclick="
+            editPlayer(
+                '${player.id}'
+            )
+        "
+    >
+        Edit
+    </button>
+
+
+    <button
+        class="small-btn delete"
+        onclick="
+            deletePlayer(
+                '${player.id}'
+            )
+        "
+    >
+        Delete
+    </button>
+
+</div>
 
                         </td>
 
@@ -3478,23 +3532,77 @@ function renderParticipants() {
 
                         <td>
 
-                            <div class="row-actions">
+                            <div
+    class="row-actions"
+    style="
+        flex-wrap:wrap;
+        align-items:center;
+    "
+>
 
-                                <button
-                                    class="small-btn"
-                                    onclick="editTeam('${team.id}')"
-                                >
-                                    Edit
-                                </button>
+    <select
+        class="small-btn"
+        style="
+            min-width:105px;
+            cursor:pointer;
+        "
+        onchange="
+            updateParticipantStatus(
+                'team',
+                '${team.id}',
+                this.value
+            )
+        "
+    >
 
-                                <button
-                                    class="small-btn delete"
-                                    onclick="deleteTeam('${team.id}')"
-                                >
-                                    Delete
-                                </button>
+        <option
+            value="active"
+            ${team.status === "active" ? "selected" : ""}
+        >
+            ✓ Active
+        </option>
 
-                            </div>
+        <option
+            value="inactive"
+            ${team.status === "inactive" ? "selected" : ""}
+        >
+            ⏸ Inactive
+        </option>
+
+        <option
+            value="eliminated"
+            ${team.status === "eliminated" ? "selected" : ""}
+        >
+            ✕ Eliminated
+        </option>
+
+    </select>
+
+
+    <button
+        class="small-btn"
+        onclick="
+            editTeam(
+                '${team.id}'
+            )
+        "
+    >
+        Edit
+    </button>
+
+
+    <button
+        class="small-btn delete"
+        onclick="
+            deleteTeam(
+                '${team.id}'
+            )
+        "
+    >
+        Delete
+    </button>
+
+</div>
 
                         </td>
 
@@ -3509,7 +3617,193 @@ function renderParticipants() {
 
 }
 
+/* =========================================================
+   PARTICIPANT STATUS MANAGEMENT
+========================================================= */
 
+async function updateParticipantStatus(
+    participantType,
+    participantId,
+    newStatus
+) {
+
+    if (!currentTournament) {
+
+        showToast(
+            "Tournament পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const allowedStatuses = [
+        "active",
+        "inactive",
+        "eliminated"
+    ];
+
+
+    if (
+        !allowedStatuses.includes(
+            newStatus
+        )
+    ) {
+
+        showToast(
+            "Invalid Status.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const table =
+        participantType === "player"
+            ? "ludo_players"
+            : "ludo_teams";
+
+
+    const label =
+        participantType === "player"
+            ? "Player"
+            : "Team";
+
+
+    const currentParticipant =
+        participantType === "player"
+            ? players.find(
+                player =>
+                    player.id ===
+                    participantId
+            )
+            : teams.find(
+                team =>
+                    team.id ===
+                    participantId
+            );
+
+
+    if (!currentParticipant) {
+
+        showToast(
+            `${label} পাওয়া যায়নি।`,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const oldStatus =
+        currentParticipant.status ||
+        "active";
+
+
+    if (
+        oldStatus ===
+        newStatus
+    ) {
+
+        return;
+
+    }
+
+
+    const statusText = {
+
+        active:
+            "Active",
+
+        inactive:
+            "Inactive",
+
+        eliminated:
+            "Eliminated"
+
+    };
+
+
+    const confirmed =
+        confirm(
+            `${label}-এর Status "${statusText[newStatus]}" করা হবে।\n\nআপনি কি নিশ্চিত?`
+        );
+
+
+    if (!confirmed) {
+
+        renderParticipants();
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from(table)
+            .update({
+                status:
+                    newStatus,
+
+                updated_at:
+                    new Date()
+                        .toISOString()
+            })
+            .eq(
+                "id",
+                participantId
+            )
+            .eq(
+                "tournament_id",
+                currentTournament.id
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Status Update Error:",
+            error
+        );
+
+
+        showToast(
+            `${label} Status update করা যায়নি: ` +
+            (
+                error.message ||
+                "Unknown error"
+            ),
+            "error"
+        );
+
+
+        await loadParticipants();
+
+        return;
+
+    }
+
+
+    showToast(
+        `✓ ${label} Status "${statusText[newStatus]}" করা হয়েছে।`,
+        "success"
+    );
+
+
+    await loadParticipants();
+
+    updateStats();
+
+}
+    
 /* =========================================================
    ADD PLAYER
 ========================================================= */
@@ -5489,18 +5783,55 @@ async function generateFixtures() {
      * Current participants
      */
 
-    const participants =
-        currentMode === "single"
-            ? players.map(player => ({
-                id: player.id,
-                name: player.player_name
-            }))
-            : teams.map(team => ({
-                id: team.id,
-                name: team.team_name
-            }));
+    /* =====================================================
+   ACTIVE PARTICIPANTS ONLY
+===================================================== */
+
+const participants =
+    currentMode === "single"
+
+        ? players
+            .filter(
+                player =>
+                    player.status ===
+                    "active"
+            )
+            .map(
+                player => ({
+                    id:
+                        player.id,
+
+                    name:
+                        player.player_name
+                })
+            )
+
+        : teams
+            .filter(
+                team =>
+                    team.status ===
+                    "active"
+            )
+            .map(
+                team => ({
+                    id:
+                        team.id,
+
+                    name:
+                        team.team_name
+                })
+            );
+    
+const totalParticipants =
+    currentMode === "single"
+        ? players.length
+        : teams.length;
 
 
+const inactiveParticipants =
+    totalParticipants -
+    participants.length;
+    
     /*
      * Minimum participants
      */
@@ -5512,20 +5843,24 @@ async function generateFixtures() {
 
 
     if (
-        participants.length <
-        minimum
-    ) {
+    participants.length <
+    minimum
+) {
 
-        showToast(
-            currentMode === "single"
-                ? "Fixture তৈরির জন্য কমপক্ষে ২ জন Player প্রয়োজন।"
-                : "Fixture তৈরির জন্য কমপক্ষে ২টি Team প্রয়োজন।",
-            "error"
-        );
+    showToast(
 
-        return;
-    }
+        currentMode === "single"
 
+            ? "Fixture তৈরির জন্য কমপক্ষে ২ জন Active Player প্রয়োজন।"
+
+            : "Fixture তৈরির জন্য কমপক্ষে ২টি Active Team প্রয়োজন।",
+
+        "error"
+    );
+
+    return;
+
+}
 
     /*
      * Maximum validation
@@ -5633,9 +5968,13 @@ async function generateFixtures() {
     ) {
 
         const confirmed =
-            confirm(
-                "আগের Fixture মুছে নতুন Fixture তৈরি করা হবে। আপনি কি নিশ্চিত?"
-            );
+    confirm(
+        `Active ${currentMode === "single" ? "Player" : "Team"}: ${participants.length}\n` +
+        `Inactive/Eliminated: ${inactiveParticipants}\n\n` +
+        `এই Active participant-দের নিয়ে নতুন Round Robin Fixture তৈরি হবে।\n\n` +
+        `আগের Scheduled Fixture মুছে ফেলা হবে।\n\n` +
+        `আপনি কি নিশ্চিত?`
+    );
 
 
         if (!confirmed) {
