@@ -12,15 +12,15 @@
 
     <meta
         name="theme-color"
-        content="#080c18"
+        content="#070b16"
     >
 
     <meta
         name="description"
-        content="Ghopkhali Sports Arena Single Ludo Tournament"
+        content="Ghopkhali Sports Arena Premium Single Ludo"
     >
 
-    <title>Single Tournament — Ludo</title>
+    <title>Single Ludo — Ghopkhali Sports Arena</title>
 
 
     <style>
@@ -35,31 +35,40 @@
                 #070b16;
 
             --surface:
-                rgba(255, 255, 255, 0.055);
+                rgba(255,255,255,.055);
 
-            --surface-hover:
-                rgba(255, 255, 255, 0.08);
+            --surface-2:
+                rgba(255,255,255,.075);
 
             --border:
-                rgba(255, 255, 255, 0.10);
+                rgba(255,255,255,.11);
 
             --text:
                 #ffffff;
 
             --muted:
-                #99a4ba;
+                #96a1b7;
 
             --blue:
                 #5c8dff;
 
             --blue-light:
-                #8eafff;
+                #9ab6ff;
 
-            --green:
-                #35d399;
+            --red:
+                #ff4d67;
+
+            --red-soft:
+                rgba(255,77,103,.16);
 
             --yellow:
                 #ffd166;
+
+            --yellow-soft:
+                rgba(255,209,102,.16);
+
+            --green:
+                #35d399;
 
             --radius:
                 24px;
@@ -98,20 +107,26 @@
             min-height:
                 100vh;
 
+            overflow-x:
+                hidden;
+
             color:
                 var(--text);
 
             background:
+
                 radial-gradient(
-                    circle at 50% -10%,
-                    rgba(92, 141, 255, 0.18),
-                    transparent 34%
+                    circle at 15% 0%,
+                    rgba(92,141,255,.20),
+                    transparent 30%
                 ),
+
                 radial-gradient(
-                    circle at 100% 50%,
-                    rgba(120, 75, 220, 0.10),
+                    circle at 100% 45%,
+                    rgba(122,68,230,.15),
                     transparent 32%
                 ),
+
                 var(--bg);
 
             font-family:
@@ -123,28 +138,23 @@
                 Arial,
                 sans-serif;
 
-            overflow-x:
-                hidden;
-
-        }
-
-
-        a {
-
-            color:
-                inherit;
-
-            text-decoration:
-                none;
-
         }
 
 
         button,
+        select,
         input {
 
             font:
                 inherit;
+
+        }
+
+
+        button {
+
+            border:
+                0;
 
         }
 
@@ -182,10 +192,10 @@
                 50%;
 
             filter:
-                blur(80px);
+                blur(90px);
 
             opacity:
-                0.18;
+                .18;
 
             animation:
                 float 12s ease-in-out infinite;
@@ -196,13 +206,13 @@
         .orb-one {
 
             width:
-                280px;
+                320px;
 
             height:
-                280px;
+                320px;
 
             left:
-                -130px;
+                -160px;
 
             top:
                 15%;
@@ -225,7 +235,7 @@
                 -150px;
 
             top:
-                45%;
+                55%;
 
             background:
                 #7541df;
@@ -242,14 +252,20 @@
             100% {
 
                 transform:
-                    translate(0, 0);
+                    translate(
+                        0,
+                        0
+                    );
 
             }
 
             50% {
 
                 transform:
-                    translate(25px, -25px);
+                    translate(
+                        25px,
+                        -25px
+                    );
 
             }
 
@@ -263,19 +279,22 @@
         .app {
 
             width:
-                min(100%, 1100px);
+                min(
+                    100%,
+                    1180px
+                );
 
             margin:
                 auto;
 
             padding:
-                18px 22px 35px;
+                16px 18px 40px;
 
         }
 
 
         /* =====================================================
-           TOP BAR
+           TOPBAR
         ===================================================== */
 
         .topbar {
@@ -290,15 +309,15 @@
                 space-between;
 
             gap:
-                15px;
+                12px;
 
             padding:
-                8px 0 22px;
+                4px 0 18px;
 
         }
 
 
-        .back-button {
+        .back {
 
             display:
                 inline-flex;
@@ -307,7 +326,7 @@
                 center;
 
             gap:
-                8px;
+                7px;
 
             padding:
                 10px 14px;
@@ -318,36 +337,22 @@
             border-radius:
                 14px;
 
-            background:
-                rgba(255, 255, 255, 0.05);
-
             color:
-                #dce4f7;
+                #dce5f7;
+
+            background:
+                rgba(255,255,255,.045);
 
             font-size:
                 12px;
 
             font-weight:
-                700;
-
-            transition:
-                0.25s ease;
+                750;
 
         }
 
 
-        .back-button:hover {
-
-            background:
-                rgba(255, 255, 255, 0.09);
-
-            transform:
-                translateX(-2px);
-
-        }
-
-
-        .status {
+        .live {
 
             display:
                 inline-flex;
@@ -362,7 +367,12 @@
                 9px 13px;
 
             border:
-                1px solid rgba(53, 211, 153, 0.20);
+                1px solid rgba(
+                    53,
+                    211,
+                    153,
+                    .20
+                );
 
             border-radius:
                 999px;
@@ -371,18 +381,23 @@
                 #8ef0ca;
 
             background:
-                rgba(53, 211, 153, 0.07);
+                rgba(
+                    53,
+                    211,
+                    153,
+                    .07
+                );
 
             font-size:
                 11px;
 
             font-weight:
-                750;
+                800;
 
         }
 
 
-        .status-dot {
+        .live-dot {
 
             width:
                 7px;
@@ -399,22 +414,43 @@
             box-shadow:
                 0 0 12px var(--green);
 
+            animation:
+                pulse 1.5s infinite;
+
+        }
+
+
+        @keyframes pulse {
+
+            50% {
+
+                opacity:
+                    .35;
+
+                transform:
+                    scale(.7);
+
+            }
+
         }
 
 
         /* =====================================================
-           HERO
+           HEADER
         ===================================================== */
 
         .hero {
 
+            text-align:
+                center;
+
             padding:
-                24px 0 25px;
+                15px 0 22px;
 
         }
 
 
-        .hero-label {
+        .eyebrow {
 
             display:
                 inline-flex;
@@ -429,10 +465,13 @@
                 var(--blue-light);
 
             font-size:
-                12px;
+                11px;
 
             font-weight:
-                800;
+                850;
+
+            letter-spacing:
+                .4px;
 
         }
 
@@ -440,19 +479,23 @@
         .hero h1 {
 
             margin-top:
-                10px;
+                9px;
 
             font-size:
-                clamp(34px, 7vw, 58px);
+                clamp(
+                    30px,
+                    6vw,
+                    50px
+                );
 
             line-height:
                 1;
 
-            font-weight:
-                900;
-
             letter-spacing:
-                -2.5px;
+                -2px;
+
+            font-weight:
+                950;
 
         }
 
@@ -463,7 +506,7 @@
                 linear-gradient(
                     135deg,
                     #ffffff,
-                    #8caeff
+                    #86a8ff
                 );
 
             -webkit-background-clip:
@@ -483,14 +526,14 @@
             max-width:
                 650px;
 
-            margin-top:
-                14px;
+            margin:
+                12px auto 0;
 
             color:
                 var(--muted);
 
             font-size:
-                14px;
+                12px;
 
             line-height:
                 1.7;
@@ -499,427 +542,102 @@
 
 
         /* =====================================================
-           STATS
+           GAME LAYOUT
         ===================================================== */
 
-        .stats {
+        .game-layout {
 
             display:
                 grid;
 
             grid-template-columns:
-                repeat(3, 1fr);
-
-            gap:
-                12px;
-
-            margin:
-                15px 0 20px;
-
-        }
-
-
-        .stat {
-
-            padding:
-                18px;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                20px;
-
-            background:
-                var(--surface);
-
-            backdrop-filter:
-                blur(15px);
-
-        }
-
-
-        .stat-icon {
-
-            font-size:
-                20px;
-
-        }
-
-
-        .stat strong {
-
-            display:
-                block;
-
-            margin-top:
-                8px;
-
-            font-size:
-                23px;
-
-        }
-
-
-        .stat span {
-
-            display:
-                block;
-
-            margin-top:
-                3px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-
-        }
-
-
-        /* =====================================================
-           MAIN GRID
-        ===================================================== */
-
-        .main-grid {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                minmax(0, 1.4fr)
-                minmax(300px, 0.6fr);
+                minmax(
+                    0,
+                    1fr
+                )
+                310px;
 
             gap:
                 18px;
-
-        }
-
-
-        /* =====================================================
-           CARD
-        ===================================================== */
-
-        .card {
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                var(--radius);
-
-            background:
-                var(--surface);
-
-            backdrop-filter:
-                blur(20px);
-
-            box-shadow:
-                0 20px 60px rgba(0, 0, 0, 0.25);
-
-        }
-
-
-        /* =====================================================
-           JOIN CARD
-        ===================================================== */
-
-        .join-card {
-
-            padding:
-                28px;
-
-        }
-
-
-        .section-title {
-
-            display:
-                flex;
 
             align-items:
-                center;
-
-            justify-content:
-                space-between;
-
-            gap:
-                12px;
-
-        }
-
-
-        .section-title h2 {
-
-            font-size:
-                19px;
-
-            font-weight:
-                850;
-
-        }
-
-
-        .section-title span {
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-
-        }
-
-
-        .join-description {
-
-            margin-top:
-                10px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                13px;
-
-            line-height:
-                1.65;
+                start;
 
         }
 
 
         /* =====================================================
-           FORM
+           BOARD CARD
         ===================================================== */
 
-        .form {
+        .board-card {
 
-            margin-top:
-                24px;
-
-        }
-
-
-        .field {
-
-            margin-bottom:
-                15px;
-
-        }
-
-
-        .field label {
-
-            display:
-                block;
-
-            margin-bottom:
-                8px;
-
-            color:
-                #cbd3e4;
-
-            font-size:
-                12px;
-
-            font-weight:
-                700;
-
-        }
-
-
-        .input {
-
-            width:
-                100%;
-
-            height:
-                50px;
+            position:
+                relative;
 
             padding:
-                0 15px;
-
-            outline:
-                none;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                15px;
-
-            color:
-                #ffffff;
-
-            background:
-                rgba(0, 0, 0, 0.16);
-
-            transition:
-                border-color 0.25s ease,
-                background 0.25s ease;
-
-        }
-
-
-        .input::placeholder {
-
-            color:
-                #69748b;
-
-        }
-
-
-        .input:focus {
-
-            border-color:
-                rgba(92, 141, 255, 0.65);
-
-            background:
-                rgba(92, 141, 255, 0.05);
-
-        }
-
-
-        .join-button {
-
-            width:
-                100%;
-
-            height:
-                52px;
-
-            margin-top:
-                5px;
-
-            border:
-                0;
-
-            border-radius:
-                15px;
-
-            color:
-                #ffffff;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #4f7fff,
-                    #6c9cff
+                clamp(
+                    10px,
+                    2vw,
+                    22px
                 );
 
-            font-size:
-                13px;
-
-            font-weight:
-                850;
-
-            cursor:
-                pointer;
-
-            box-shadow:
-                0 14px 35px rgba(79, 127, 255, 0.22);
-
-            transition:
-                transform 0.25s ease,
-                box-shadow 0.25s ease;
-
-        }
-
-
-        .join-button:hover {
-
-            transform:
-                translateY(-2px);
-
-            box-shadow:
-                0 18px 42px rgba(79, 127, 255, 0.30);
-
-        }
-
-
-        .join-button:active {
-
-            transform:
-                scale(0.98);
-
-        }
-
-
-        /* =====================================================
-           NOTICE
-        ===================================================== */
-
-        .notice {
-
-            display:
-                flex;
-
-            gap:
-                10px;
-
-            margin-top:
-                15px;
-
-            padding:
-                13px;
-
             border:
-                1px solid rgba(255, 209, 102, 0.14);
+                1px solid var(--border);
 
             border-radius:
-                14px;
+                28px;
 
             background:
-                rgba(255, 209, 102, 0.05);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .045
+                );
 
-            color:
-                #c7cdd9;
+            backdrop-filter:
+                blur(22px);
 
-            font-size:
-                11px;
-
-            line-height:
-                1.55;
-
-        }
-
-
-        .notice-icon {
-
-            flex:
-                0 0 auto;
+            box-shadow:
+                0 25px 80px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .35
+                );
 
         }
 
 
         /* =====================================================
-           RIGHT COLUMN
+           PLAYER STRIP
         ===================================================== */
 
-        .side-card {
-
-            padding:
-                23px;
-
-        }
-
-
-        .side-list {
+        .players {
 
             display:
                 grid;
 
+            grid-template-columns:
+                1fr
+                auto
+                1fr;
+
             gap:
                 10px;
 
-            margin-top:
-                18px;
+            align-items:
+                center;
+
+            margin-bottom:
+                13px;
 
         }
 
 
-        .side-item {
+        .player {
 
             display:
                 flex;
@@ -928,30 +646,52 @@
                 center;
 
             gap:
-                12px;
+                9px;
+
+            min-width:
+                0;
 
             padding:
-                13px;
+                11px 13px;
 
             border:
-                1px solid rgba(255, 255, 255, 0.065);
+                1px solid var(--border);
 
             border-radius:
-                15px;
+                16px;
 
             background:
-                rgba(255, 255, 255, 0.035);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .045
+                );
 
         }
 
 
-        .side-item-icon {
+        .player.ai {
+
+            justify-content:
+                flex-end;
+
+            text-align:
+                right;
+
+        }
+
+
+        .avatar {
 
             width:
-                38px;
+                34px;
 
             height:
-                38px;
+                34px;
+
+            flex:
+                0 0 34px;
 
             display:
                 grid;
@@ -962,19 +702,41 @@
             border-radius:
                 12px;
 
-            background:
-                rgba(92, 141, 255, 0.09);
-
             font-size:
                 17px;
 
         }
 
 
-        .side-item strong {
+        .avatar.red {
+
+            background:
+                var(--red-soft);
+
+        }
+
+
+        .avatar.yellow {
+
+            background:
+                var(--yellow-soft);
+
+        }
+
+
+        .player strong {
 
             display:
                 block;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
+            white-space:
+                nowrap;
 
             font-size:
                 12px;
@@ -982,84 +744,826 @@
         }
 
 
-        .side-item span {
+        .player small {
 
             display:
                 block;
 
             margin-top:
-                3px;
+                2px;
 
             color:
                 var(--muted);
 
             font-size:
-                10px;
+                9px;
+
+        }
+
+
+        .turn-indicator {
+
+            min-width:
+                78px;
+
+            padding:
+                9px;
+
+            border:
+                1px solid
+                rgba(
+                    92,
+                    141,
+                    255,
+                    .24
+                );
+
+            border-radius:
+                13px;
+
+            color:
+                var(--blue-light);
+
+            background:
+                rgba(
+                    92,
+                    141,
+                    255,
+                    .08
+                );
+
+            text-align:
+                center;
+
+            font-size:
+                9px;
+
+            font-weight:
+                850;
 
         }
 
 
         /* =====================================================
-           TOURNAMENT RULES
+           BOARD
         ===================================================== */
 
-        .rules {
+        .board-wrap {
 
-            margin-top:
-                18px;
+            width:
+                min(
+                    100%,
+                    680px
+                );
+
+            margin:
+                auto;
+
+            aspect-ratio:
+                1;
 
             padding:
-                23px;
+                5px;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .12
+                );
+
+            border-radius:
+                24px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .25
+                );
+
+            box-shadow:
+                inset 0 0 40px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .35
+                );
 
         }
 
 
-        .rules-list {
+        .board {
+
+            position:
+                relative;
+
+            width:
+                100%;
+
+            height:
+                100%;
 
             display:
                 grid;
 
             grid-template-columns:
-                repeat(2, 1fr);
+                repeat(
+                    15,
+                    1fr
+                );
 
-            gap:
-                10px;
+            grid-template-rows:
+                repeat(
+                    15,
+                    1fr
+                );
 
-            margin-top:
-                18px;
-
-        }
-
-
-        .rule {
-
-            padding:
-                14px;
-
-            border:
-                1px solid rgba(255, 255, 255, 0.065);
+            overflow:
+                hidden;
 
             border-radius:
-                15px;
+                20px;
 
             background:
-                rgba(255, 255, 255, 0.035);
+                #eef2f7;
 
         }
 
 
-        .rule strong {
+        /* =====================================================
+           BOARD CELLS
+        ===================================================== */
+
+        .cell {
+
+            position:
+                relative;
+
+            border:
+                1px solid
+                rgba(
+                    15,
+                    23,
+                    42,
+                    .07
+                );
+
+            background:
+                #f8fafc;
+
+        }
+
+
+        .cell.path {
+
+            background:
+                #ffffff;
+
+        }
+
+
+        .cell.safe::after {
+
+            content:
+                "★";
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            color:
+                rgba(
+                    92,
+                    141,
+                    255,
+                    .30
+                );
+
+            font-size:
+                clamp(
+                    8px,
+                    1.5vw,
+                    15px
+                );
+
+        }
+
+
+        .cell.red-zone {
+
+            background:
+                #ffe4e9;
+
+        }
+
+
+        .cell.yellow-zone {
+
+            background:
+                #fff2c7;
+
+        }
+
+
+        .cell.red-lane {
+
+            background:
+                #ffd9df;
+
+        }
+
+
+        .cell.yellow-lane {
+
+            background:
+                #ffedb2;
+
+        }
+
+
+        .cell.center {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff647b,
+                    #ffd75e
+                );
+
+        }
+
+
+        /* =====================================================
+           HOME AREAS
+        ===================================================== */
+
+        .home-area {
+
+            position:
+                absolute;
+
+            width:
+                26.666%;
+
+            height:
+                26.666%;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border:
+                1px solid
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .08
+                );
+
+            border-radius:
+                18px;
+
+            z-index:
+                2;
+
+        }
+
+
+        .home-red {
+
+            left:
+                3.2%;
+
+            top:
+                3.2%;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff566f,
+                    #d92d48
+                );
+
+        }
+
+
+        .home-yellow {
+
+            right:
+                3.2%;
+
+            bottom:
+                3.2%;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffe083,
+                    #e6ad32
+                );
+
+        }
+
+
+        .home-inner {
+
+            width:
+                72%;
+
+            height:
+                72%;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    1fr
+                );
+
+            gap:
+                8px;
+
+            padding:
+                10px;
+
+            border-radius:
+                17px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .28
+                );
+
+            box-shadow:
+                inset 0 0 20px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .10
+                );
+
+        }
+
+
+        .home-slot {
+
+            border:
+                2px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .60
+                );
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .20
+                );
+
+        }
+
+
+        /* =====================================================
+           CENTER
+        ===================================================== */
+
+        .center-home {
+
+            position:
+                absolute;
+
+            left:
+                40%;
+
+            top:
+                40%;
+
+            width:
+                20%;
+
+            height:
+                20%;
+
+            z-index:
+                5;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            overflow:
+                hidden;
+
+            border:
+                2px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .65
+                );
+
+            border-radius:
+                50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff556e 0 50%,
+                    #ffd45d 50%
+                );
+
+            box-shadow:
+                0 8px 25px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .20
+                );
+
+        }
+
+
+        .center-home span {
+
+            padding:
+                7px;
+
+            border-radius:
+                10px;
+
+            color:
+                #fff;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .20
+                );
+
+            font-size:
+                clamp(
+                    8px,
+                    1.6vw,
+                    15px
+                );
+
+            font-weight:
+                950;
+
+        }
+
+
+        /* =====================================================
+           TOKEN
+        ===================================================== */
+
+        .token {
+
+            position:
+                absolute;
+
+            z-index:
+                10;
+
+            width:
+                72%;
+
+            height:
+                72%;
+
+            left:
+                14%;
+
+            top:
+                14%;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border:
+                2px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .82
+                );
+
+            border-radius:
+                50%;
+
+            color:
+                #fff;
+
+            font-size:
+                clamp(
+                    7px,
+                    1.5vw,
+                    13px
+                );
+
+            font-weight:
+                950;
+
+            cursor:
+                pointer;
+
+            box-shadow:
+                0 4px 10px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .30
+                );
+
+            transition:
+                transform .22s ease,
+                box-shadow .22s ease;
+
+        }
+
+
+        .token:hover {
+
+            transform:
+                scale(
+                    1.10
+                );
+
+        }
+
+
+        .token.red {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff6378,
+                    #d92343
+                );
+
+        }
+
+
+        .token.yellow {
+
+            color:
+                #5c4610;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffe58a,
+                    #e8b43b
+                );
+
+        }
+
+
+        .token.movable {
+
+            animation:
+                tokenPulse 1s
+                infinite;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(
+                    92,
+                    141,
+                    255,
+                    .25
+                ),
+                0 5px 15px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .25
+                );
+
+        }
+
+
+        @keyframes tokenPulse {
+
+            50% {
+
+                transform:
+                    scale(
+                        1.12
+                    );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           DICE PANEL
+        ===================================================== */
+
+        .dice-panel {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                100px
+                1fr;
+
+            gap:
+                13px;
+
+            align-items:
+                center;
+
+            margin-top:
+                15px;
+
+            padding:
+                13px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .04
+                );
+
+        }
+
+
+        .dice {
+
+            width:
+                78px;
+
+            height:
+                78px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .16
+                );
+
+            border-radius:
+                18px;
+
+            color:
+                #111827;
+
+            background:
+                #ffffff;
+
+            box-shadow:
+                0 10px 25px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .25
+                );
+
+            font-size:
+                42px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .dice.rolling {
+
+            animation:
+                diceRoll .55s
+                ease-in-out;
+
+        }
+
+
+        @keyframes diceRoll {
+
+            0% {
+
+                transform:
+                    rotate(
+                        0
+                    )
+                    scale(
+                        1
+                    );
+
+            }
+
+            35% {
+
+                transform:
+                    rotate(
+                        12deg
+                    )
+                    scale(
+                        1.12
+                    );
+
+            }
+
+            70% {
+
+                transform:
+                    rotate(
+                        -12deg
+                    )
+                    scale(
+                        .94
+                    );
+
+            }
+
+            100% {
+
+                transform:
+                    rotate(
+                        0
+                    )
+                    scale(
+                        1
+                    );
+
+            }
+
+        }
+
+
+        .dice-info strong {
 
             display:
                 block;
 
             font-size:
-                12px;
+                13px;
 
         }
 
 
-        .rule span {
+        .dice-info span {
 
             display:
                 block;
@@ -1079,20 +1583,270 @@
         }
 
 
-        /* =====================================================
-           FOOTER
-        ===================================================== */
+        .roll-button {
 
-        footer {
+            width:
+                100%;
 
-            padding:
-                30px 0 5px;
+            height:
+                45px;
 
-            text-align:
-                center;
+            margin-top:
+                10px;
+
+            border-radius:
+                13px;
 
             color:
-                #687288;
+                #fff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f7fff,
+                    #6d9cff
+                );
+
+            font-size:
+                12px;
+
+            font-weight:
+                850;
+
+            cursor:
+                pointer;
+
+            box-shadow:
+                0 10px 25px
+                rgba(
+                    79,
+                    127,
+                    255,
+                    .20
+                );
+
+        }
+
+
+        .roll-button:disabled {
+
+            opacity:
+                .45;
+
+            cursor:
+                not-allowed;
+
+            box-shadow:
+                none;
+
+        }
+
+
+        /* =====================================================
+           SIDE
+        ===================================================== */
+
+        .side {
+
+            display:
+                grid;
+
+            gap:
+                13px;
+
+        }
+
+
+        .side-card {
+
+            padding:
+                19px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                22px;
+
+            background:
+                var(--surface);
+
+            backdrop-filter:
+                blur(20px);
+
+        }
+
+
+        .side-title {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
+
+        }
+
+
+        .side-title h2 {
+
+            font-size:
+                15px;
+
+            font-weight:
+                850;
+
+        }
+
+
+        .side-title span {
+
+            color:
+                var(--muted);
+
+            font-size:
+                9px;
+
+        }
+
+
+        /* =====================================================
+           SETTINGS
+        ===================================================== */
+
+        .setting {
+
+            margin-top:
+                14px;
+
+        }
+
+
+        .setting label {
+
+            display:
+                block;
+
+            margin-bottom:
+                7px;
+
+            color:
+                #cbd4e5;
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .select {
+
+            width:
+                100%;
+
+            height:
+                42px;
+
+            padding:
+                0 12px;
+
+            outline:
+                none;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                12px;
+
+            color:
+                #fff;
+
+            background:
+                #111827;
+
+            font-size:
+                11px;
+
+        }
+
+
+        /* =====================================================
+           MATCH INFO
+        ===================================================== */
+
+        .info-list {
+
+            display:
+                grid;
+
+            gap:
+                8px;
+
+            margin-top:
+                13px;
+
+        }
+
+
+        .info-row {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            padding:
+                10px 11px;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .055
+                );
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .025
+                );
+
+        }
+
+
+        .info-row span {
+
+            color:
+                var(--muted);
+
+            font-size:
+                9px;
+
+        }
+
+
+        .info-row strong {
 
             font-size:
                 10px;
@@ -1101,20 +1855,377 @@
 
 
         /* =====================================================
-           MOBILE
+           LOG
         ===================================================== */
 
-        @media (max-width: 760px) {
+        .game-log {
 
-            .app {
+            max-height:
+                190px;
 
-                padding:
-                    15px;
+            overflow:
+                auto;
+
+            margin-top:
+                13px;
+
+            padding-right:
+                3px;
+
+        }
+
+
+        .log-item {
+
+            padding:
+                9px 10px;
+
+            border-bottom:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .05
+                );
+
+            color:
+                #c7cfdf;
+
+            font-size:
+                9px;
+
+            line-height:
+                1.5;
+
+        }
+
+
+        .log-item:first-child {
+
+            color:
+                #fff;
+
+        }
+
+
+        /* =====================================================
+           NEW GAME
+        ===================================================== */
+
+        .new-game {
+
+            width:
+                100%;
+
+            height:
+                43px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                13px;
+
+            color:
+                #dce5f7;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .055
+                );
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .new-game:hover {
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .09
+                );
+
+        }
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .game-status {
+
+            margin-top:
+                13px;
+
+            padding:
+                12px;
+
+            border:
+                1px solid
+                rgba(
+                    92,
+                    141,
+                    255,
+                    .16
+                );
+
+            border-radius:
+                13px;
+
+            color:
+                #b7c8f7;
+
+            background:
+                rgba(
+                    92,
+                    141,
+                    255,
+                    .055
+                );
+
+            font-size:
+                10px;
+
+            line-height:
+                1.5;
+
+            text-align:
+                center;
+
+        }
+
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .modal {
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            z-index:
+                100;
+
+            display:
+                none;
+
+            place-items:
+                center;
+
+            padding:
+                20px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .65
+                );
+
+            backdrop-filter:
+                blur(12px);
+
+        }
+
+
+        .modal.show {
+
+            display:
+                grid;
+
+        }
+
+
+        .modal-card {
+
+            width:
+                min(
+                    100%,
+                    390px
+                );
+
+            padding:
+                28px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                25px;
+
+            background:
+                #101625;
+
+            box-shadow:
+                0 30px 90px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .55
+                );
+
+            text-align:
+                center;
+
+            animation:
+                modalIn .25s ease;
+
+        }
+
+
+        @keyframes modalIn {
+
+            from {
+
+                opacity:
+                    0;
+
+                transform:
+                    translateY(
+                        15px
+                    )
+                    scale(
+                        .97
+                    );
 
             }
 
+            to {
 
-            .main-grid {
+                opacity:
+                    1;
+
+                transform:
+                    none;
+
+            }
+
+        }
+
+
+        .winner-icon {
+
+            font-size:
+                55px;
+
+        }
+
+
+        .modal-card h2 {
+
+            margin-top:
+                12px;
+
+            font-size:
+                24px;
+
+        }
+
+
+        .modal-card p {
+
+            margin-top:
+                8px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        .modal-button {
+
+            width:
+                100%;
+
+            height:
+                45px;
+
+            margin-top:
+                20px;
+
+            border-radius:
+                13px;
+
+            color:
+                #fff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f7fff,
+                    #6d9cff
+                );
+
+            font-size:
+                11px;
+
+            font-weight:
+                850;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            padding:
+                25px 0 5px;
+
+            color:
+                #657087;
+
+            text-align:
+                center;
+
+            font-size:
+                9px;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (
+            max-width: 900px
+        ) {
+
+            .game-layout {
 
                 grid-template-columns:
                     1fr;
@@ -1122,25 +2233,30 @@
             }
 
 
-            .hero {
+            .side {
 
-                padding-top:
-                    20px;
-
-            }
-
-
-            .join-card {
-
-                padding:
-                    22px;
+                grid-template-columns:
+                    repeat(
+                        2,
+                        1fr
+                    );
 
             }
 
         }
 
 
-        @media (max-width: 480px) {
+        @media (
+            max-width: 600px
+        ) {
+
+            .app {
+
+                padding:
+                    12px;
+
+            }
+
 
             .topbar {
 
@@ -1150,24 +2266,10 @@
             }
 
 
-            .back-button {
+            .hero {
 
                 padding:
-                    9px 11px;
-
-                font-size:
-                    11px;
-
-            }
-
-
-            .status {
-
-                padding:
-                    8px 10px;
-
-                font-size:
-                    10px;
+                    10px 0 17px;
 
             }
 
@@ -1175,47 +2277,100 @@
             .hero h1 {
 
                 font-size:
-                    40px;
+                    36px;
 
             }
 
 
-            .stats {
+            .players {
 
-                gap:
+                grid-template-columns:
+                    1fr
+                    auto
+                    1fr;
+
+            }
+
+
+            .player {
+
+                padding:
                     8px;
 
             }
 
 
-            .stat {
+            .player strong {
+
+                font-size:
+                    10px;
+
+            }
+
+
+            .player small {
+
+                font-size:
+                    8px;
+
+            }
+
+
+            .avatar {
+
+                width:
+                    29px;
+
+                height:
+                    29px;
+
+                flex-basis:
+                    29px;
+
+                font-size:
+                    14px;
+
+            }
+
+
+            .turn-indicator {
+
+                min-width:
+                    65px;
 
                 padding:
-                    14px 10px;
-
-                text-align:
-                    center;
-
-            }
-
-
-            .stat strong {
+                    7px;
 
                 font-size:
-                    19px;
+                    8px;
 
             }
 
 
-            .stat span {
+            .dice-panel {
+
+                grid-template-columns:
+                    82px
+                    1fr;
+
+            }
+
+
+            .dice {
+
+                width:
+                    65px;
+
+                height:
+                    65px;
 
                 font-size:
-                    9px;
+                    34px;
 
             }
 
 
-            .rules-list {
+            .side {
 
                 grid-template-columns:
                     1fr;
@@ -1225,11 +2380,64 @@
         }
 
 
-        /* =====================================================
-           ACCESSIBILITY
-        ===================================================== */
+        @media (
+            max-width: 390px
+        ) {
 
-        @media (prefers-reduced-motion: reduce) {
+            .board-card {
+
+                padding:
+                    7px;
+
+                border-radius:
+                    20px;
+
+            }
+
+
+            .board-wrap {
+
+                padding:
+                    3px;
+
+                border-radius:
+                    18px;
+
+            }
+
+
+            .players {
+
+                gap:
+                    5px;
+
+            }
+
+
+            .player {
+
+                gap:
+                    5px;
+
+                padding:
+                    7px 6px;
+
+            }
+
+
+            .turn-indicator {
+
+                min-width:
+                    56px;
+
+            }
+
+        }
+
+
+        @media (
+            prefers-reduced-motion: reduce
+        ) {
 
             *,
             *::before,
@@ -1266,246 +2474,262 @@
     </div>
 
 
-
-    <!-- =====================================================
-         APP
-    ===================================================== -->
-
     <main class="app">
 
 
         <!-- =================================================
-             TOP BAR
-        ================================================== -->
+             TOPBAR
+        ================================================= -->
 
         <header class="topbar">
 
             <a
                 href="index.html"
-                class="back-button"
+                class="back"
             >
                 ← Ludo Home
             </a>
 
 
-            <div class="status">
+            <div class="live">
 
-                <span class="status-dot"></span>
+                <span class="live-dot"></span>
 
-                Single Tournament
+                SINGLE 1 VS 1
 
             </div>
 
         </header>
 
 
-
         <!-- =================================================
              HERO
-        ================================================== -->
+        ================================================= -->
 
         <section class="hero">
 
-            <div class="hero-label">
+            <div class="eyebrow">
 
-                🎲 INDIVIDUAL MODE
+                🎲 GHOPKHALI SPORTS ARENA
 
             </div>
 
 
             <h1>
 
-                <span>Single</span>
-                Tournament
+                <span>Premium</span>
+                Ludo
 
             </h1>
 
 
             <p>
 
-                একজন খেলোয়াড় বনাম একজন খেলোয়াড়।
-                আপনার Match, Fixture এবং Tournament
-                Information এই জায়গা থেকেই পরিচালিত হবে।
+                1 VS 1 Ludo Game · Human vs AI ·
+                Real Dice · Token Capture ·
+                Safe Zone · Home & Winner System
 
             </p>
 
         </section>
 
 
-
         <!-- =================================================
-             STATS
-        ================================================== -->
+             GAME
+        ================================================= -->
 
-        <section class="stats">
-
-
-            <div class="stat">
-
-                <div class="stat-icon">
-                    👤
-                </div>
-
-                <strong>
-                    2-50
-                </strong>
-
-                <span>
-                    Players Capacity 
-                </span>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-icon">
-                    ⚔️
-                </div>
-
-                <strong>
-                    1 VS 1
-                </strong>
-
-                <span>
-                    Match Format
-                </span>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-icon">
-                    🎲
-                </div>
-
-                <strong>
-                    LIVE
-                </strong>
-
-                <span>
-                    Game System
-                </span>
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- =================================================
-             MAIN
-        ================================================== -->
-
-        <section class="main-grid">
+        <section class="game-layout">
 
 
             <!-- =============================================
-                 JOIN
+                 BOARD
             ============================================== -->
 
-            <div class="card join-card">
+            <div class="board-card">
 
 
-                <div class="section-title">
+                <!-- PLAYERS -->
 
-                    <h2>
-                        Tournament Join
-                    </h2>
-
-                    <span>
-                        Player Registration
-                    </span>
-
-                </div>
+                <div class="players">
 
 
-                <p class="join-description">
-
-                    Tournament Director-এর দেওয়া
-                    Player Join Link ব্যবহার করে এখানে
-                    আপনার নাম দিয়ে অংশগ্রহণ করুন।
-
-                </p>
-
-
-
-                <form
-                    class="form"
-                    id="singleJoinForm"
-                >
-
-
-                    <div class="field">
-
-                        <label for="playerName">
-                            খেলোয়াড়ের নাম
-                        </label>
-
-                        <input
-                            id="playerName"
-                            class="input"
-                            type="text"
-                            maxlength="40"
-                            placeholder="আপনার নাম লিখুন"
-                            autocomplete="name"
-                            required
-                        >
-
-                    </div>
-
-
-
-                    <div class="field">
-
-                        <label for="playerCode">
-                            Player Code
-                        </label>
-
-                        <input
-                            id="playerCode"
-                            class="input"
-                            type="text"
-                            maxlength="20"
-                            placeholder="Director-এর দেওয়া Code"
-                            autocomplete="off"
-                            required
-                        >
-
-                    </div>
-
-
-
-                    <button
-                        type="submit"
-                        class="join-button"
+                    <div
+                        class="player"
+                        id="humanPlayer"
                     >
 
-                        JOIN SINGLE TOURNAMENT
-                        <span>→</span>
+                        <div
+                            class="avatar red"
+                        >
+                            👤
+                        </div>
 
-                    </button>
+                        <div>
+
+                            <strong>
+                                You
+                            </strong>
+
+                            <small>
+                                Red Player
+                            </small>
+
+                        </div>
+
+                    </div>
 
 
-                </form>
+                    <div
+                        class="turn-indicator"
+                        id="turnIndicator"
+                    >
+                        Your Turn
+                    </div>
 
 
+                    <div
+                        class="player ai"
+                        id="aiPlayer"
+                    >
 
-                <div class="notice">
+                        <div>
 
-                    <span class="notice-icon">
-                        ℹ️
-                    </span>
+                            <strong>
+                                AI Bot
+                            </strong>
 
-                    <span>
+                            <small>
+                                Yellow Player
+                            </small>
 
-                        বর্তমানে এটি Tournament Lobby।
-                        Player verification এবং Match assignment
-                        পরবর্তী ধাপে Supabase-এর মাধ্যমে যুক্ত হবে।
+                        </div>
 
-                    </span>
+                        <div
+                            class="avatar yellow"
+                        >
+                            🤖
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- BOARD -->
+
+                <div class="board-wrap">
+
+                    <div
+                        class="board"
+                        id="board"
+                    >
+
+
+                        <!-- HOME AREAS -->
+
+                        <div
+                            class="home-area home-red"
+                        >
+
+                            <div
+                                class="home-inner"
+                                id="redHome"
+                            >
+
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="home-area home-yellow"
+                        >
+
+                            <div
+                                class="home-inner"
+                                id="yellowHome"
+                            >
+
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="center-home"
+                        >
+
+                            <span>
+                                🏆
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- DICE -->
+
+                <div class="dice-panel">
+
+
+                    <div
+                        class="dice"
+                        id="dice"
+                    >
+                        ⚀
+                    </div>
+
+
+                    <div class="dice-info">
+
+                        <strong
+                            id="diceTitle"
+                        >
+                            Your Dice
+                        </strong>
+
+                        <span
+                            id="diceText"
+                        >
+                            Roll the dice to begin your turn.
+                        </span>
+
+
+                        <button
+                            class="roll-button"
+                            id="rollButton"
+                        >
+                            🎲 ROLL DICE
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div
+                    class="game-status"
+                    id="gameStatus"
+                >
+                    আপনার Turn। Dice Roll করুন।
 
                 </div>
 
@@ -1513,113 +2737,192 @@
             </div>
 
 
-
             <!-- =============================================
-                 TOURNAMENT INFORMATION
+                 SIDE PANEL
             ============================================== -->
 
-            <aside class="card side-card">
+            <aside class="side">
 
 
-                <div class="section-title">
+                <!-- SETTINGS -->
 
-                    <h2>
-                        Tournament
-                    </h2>
+                <div class="side-card">
 
-                    <span>
-                        Information
-                    </span>
+                    <div class="side-title">
+
+                        <h2>
+                            🎮 Game Settings
+                        </h2>
+
+                        <span>
+                            LOCAL GAME
+                        </span>
+
+                    </div>
+
+
+                    <div class="setting">
+
+                        <label
+                            for="difficulty"
+                        >
+                            AI Difficulty
+                        </label>
+
+
+                        <select
+                            class="select"
+                            id="difficulty"
+                        >
+
+                            <option value="easy">
+                                Easy
+                            </option>
+
+                            <option
+                                value="medium"
+                                selected
+                            >
+                                Medium
+                            </option>
+
+                            <option value="hard">
+                                Hard
+                            </option>
+
+                        </select>
+
+                    </div>
 
                 </div>
 
 
-                <div class="side-list">
+                <!-- MATCH INFO -->
 
+                <div class="side-card">
 
-                    <div class="side-item">
+                    <div class="side-title">
 
-                        <div class="side-item-icon">
-                            📅
-                        </div>
+                        <h2>
+                            📊 Match Info
+                        </h2>
 
-                        <div>
-
-                            <strong>
-                                Fixture
-                            </strong>
-
-                            <span>
-                                Match Schedule
-                            </span>
-
-                        </div>
+                        <span>
+                            LIVE
+                        </span>
 
                     </div>
 
 
-                    <div class="side-item">
+                    <div class="info-list">
 
-                        <div class="side-item-icon">
-                            📊
-                        </div>
 
-                        <div>
-
-                            <strong>
-                                Points Table
-                            </strong>
+                        <div class="info-row">
 
                             <span>
-                                Tournament Standings
+                                Your Tokens
                             </span>
 
+                            <strong
+                                id="humanFinished"
+                            >
+                                0 / 4
+                            </strong>
+
                         </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                AI Tokens
+                            </span>
+
+                            <strong
+                                id="aiFinished"
+                            >
+                                0 / 4
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                Your Captures
+                            </span>
+
+                            <strong
+                                id="humanCaptures"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                AI Captures
+                            </span>
+
+                            <strong
+                                id="aiCaptures"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- GAME LOG -->
+
+                <div class="side-card">
+
+                    <div class="side-title">
+
+                        <h2>
+                            📜 Game Log
+                        </h2>
+
+                        <span>
+                            EVENTS
+                        </span>
 
                     </div>
 
 
-                    <div class="side-item">
+                    <div
+                        class="game-log"
+                        id="gameLog"
+                    >
 
-                        <div class="side-item-icon">
-                            🏆
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Match Result
-                            </strong>
-
-                            <span>
-                                Completed Matches
-                            </span>
-
+                        <div class="log-item">
+                            Game ready.
                         </div>
 
                     </div>
 
+                </div>
 
-                    <div class="side-item">
 
-                        <div class="side-item-icon">
-                            🎮
-                        </div>
+                <!-- NEW GAME -->
 
-                        <div>
+                <div class="side-card">
 
-                            <strong>
-                                Game Room
-                            </strong>
-
-                            <span>
-                                Live Ludo Match
-                            </span>
-
-                        </div>
-
-                    </div>
-
+                    <button
+                        class="new-game"
+                        id="newGameButton"
+                    >
+                        ↻ NEW GAME
+                    </button>
 
                 </div>
 
@@ -1630,130 +2933,10 @@
         </section>
 
 
-
-        <!-- =================================================
-             RULES
-        ================================================== -->
-
-        <section class="card rules">
-
-
-            <div class="section-title">
-
-                <h2>
-                    Single Tournament Format
-                </h2>
-
-                <span>
-                    1 VS 1
-                </span>
-
-            </div>
-
-
-            <div class="rules-list">
-
-
-                <div class="rule">
-
-                    <strong>
-                        👤 Individual Player
-                    </strong>
-
-                    <span>
-                        প্রত্যেক Player আলাদাভাবে
-                        tournament-এ অংশগ্রহণ করবে।
-                    </span>
-
-                </div>
-
-
-                <div class="rule">
-
-                    <strong>
-                        ⚔️ One vs One
-                    </strong>
-
-                    <span>
-                        প্রতিটি Match-এ ২ জন
-                        Player অংশগ্রহণ করবে।
-                    </span>
-
-                </div>
-
-
-                <div class="rule">
-
-                    <strong>
-    👥 Capacity
-</strong>
-
-<span>
-    ন্যূনতম ২ জন এবং
-    সর্বোচ্চ ৫০ জন Player
-    tournament-এ থাকতে পারবে।
-</span>
-
-                </div>
-
-
-                <div class="rule">
-
-                    <strong>
-                        📋 Fixture
-                    </strong>
-
-                    <span>
-                        Tournament Director
-                        Fixture নির্ধারণ করবেন।
-                    </span>
-
-                </div>
-
-
-                <div class="rule">
-
-                    <strong>
-                        📊 Points
-                    </strong>
-
-                    <span>
-                        Match result অনুযায়ী
-                        Points Table পরিচালিত হবে।
-                    </span>
-
-                </div>
-
-
-                <div class="rule">
-
-                    <strong>
-                        🎮 Game
-                    </strong>
-
-                    <span>
-                        নির্ধারিত Match Room-এ
-                        Player অংশগ্রহণ করবে।
-                    </span>
-
-                </div>
-
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- =================================================
-             FOOTER
-        ================================================== -->
-
         <footer>
 
             © 2026 Ghopkhali Sports Arena
-            · Ludo Tournament
+            · Premium Ludo Game
 
         </footer>
 
@@ -1761,10 +2944,50 @@
     </main>
 
 
+    <!-- =====================================================
+         WINNER MODAL
+    ===================================================== -->
+
+    <div
+        class="modal"
+        id="winnerModal"
+    >
+
+        <div class="modal-card">
+
+            <div class="winner-icon">
+                🏆
+            </div>
+
+
+            <h2
+                id="winnerTitle"
+            >
+                You Win!
+            </h2>
+
+
+            <p
+                id="winnerText"
+            >
+                Congratulations!
+            </p>
+
+
+            <button
+                class="modal-button"
+                id="modalNewGame"
+            >
+                PLAY AGAIN
+            </button>
+
+        </div>
+
+    </div>
+
 
     <!-- =====================================================
-         TEMPORARY FRONTEND LOGIC
-         Real Supabase logic will be added later.
+         GAME ENGINE
     ===================================================== -->
 
     <script>
@@ -1772,50 +2995,2375 @@
         "use strict";
 
 
-        const form =
+        /* =====================================================
+           CONSTANTS
+        ===================================================== */
+
+        const PLAYER =
+            "red";
+
+
+        const AI =
+            "yellow";
+
+
+        const TOKENS =
+            4;
+
+
+        const FINISHED =
+            58;
+
+
+        const HOME_START =
+            52;
+
+
+        const PATH_LENGTH =
+            52;
+
+
+        const diceFaces = {
+
+            1: "⚀",
+            2: "⚁",
+            3: "⚂",
+            4: "⚃",
+            5: "⚄",
+            6: "⚅"
+
+        };
+
+
+        /*
+         * Classic 15 × 15 board path.
+         */
+
+        const pathCoordinates = [
+
+            [6,0],
+            [7,0],
+            [8,0],
+            [8,1],
+            [8,2],
+            [9,2],
+            [10,2],
+            [11,2],
+            [12,2],
+            [12,3],
+            [12,4],
+            [12,5],
+            [12,6],
+            [13,6],
+            [14,6],
+            [14,7],
+            [14,8],
+            [13,8],
+            [12,8],
+            [12,9],
+            [12,10],
+            [12,11],
+            [12,12],
+            [11,12],
+            [10,12],
+            [9,12],
+            [8,12],
+            [8,13],
+            [8,14],
+            [7,14],
+            [6,14],
+            [6,13],
+            [6,12],
+            [5,12],
+            [4,12],
+            [3,12],
+            [2,12],
+            [2,11],
+            [2,10],
+            [2,9],
+            [2,8],
+            [1,8],
+            [0,8],
+            [0,7],
+            [0,6],
+            [1,6],
+            [2,6],
+            [2,5],
+            [2,4],
+            [2,3],
+            [2,2],
+            [3,2],
+            [4,2],
+            [5,2],
+            [6,2],
+            [6,1]
+
+        ];
+
+
+        /*
+         * Red starts at path index 0.
+         * Yellow starts opposite at index 26.
+         */
+
+        const startIndex = {
+
+            red:
+                0,
+
+            yellow:
+                26
+
+        };
+
+
+        /*
+         * Home lanes.
+         */
+
+        const homeLanes = {
+
+            red: [
+
+                [6,1],
+                [6,2],
+                [6,3],
+                [6,4],
+                [6,5],
+                [7,6]
+
+            ],
+
+            yellow: [
+
+                [8,13],
+                [8,12],
+                [8,11],
+                [8,10],
+                [8,9],
+                [7,8]
+
+            ]
+
+        };
+
+
+        /*
+         * Safe cells.
+         */
+
+        const safeIndices = new Set([
+
+            0,
+            8,
+            13,
+            21,
+            26,
+            34,
+            39,
+            47
+
+        ]);
+
+
+        /* =====================================================
+           STATE
+        ===================================================== */
+
+        let state = {
+
+            turn:
+                PLAYER,
+
+            dice:
+                0,
+
+            rolling:
+                false,
+
+            gameOver:
+                false,
+
+            humanTokens:
+                [-1,-1,-1,-1],
+
+            aiTokens:
+                [-1,-1,-1,-1],
+
+            humanCaptures:
+                0,
+
+            aiCaptures:
+                0,
+
+            moves:
+                0
+
+        };
+
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
+
+        const board =
             document.getElementById(
-                "singleJoinForm"
+                "board"
             );
 
 
-        form.addEventListener(
-            "submit",
-            function (event) {
+        const dice =
+            document.getElementById(
+                "dice"
+            );
 
-                event.preventDefault();
+
+        const diceTitle =
+            document.getElementById(
+                "diceTitle"
+            );
 
 
-                const playerName =
-                    document
-                        .getElementById(
-                            "playerName"
+        const diceText =
+            document.getElementById(
+                "diceText"
+            );
+
+
+        const rollButton =
+            document.getElementById(
+                "rollButton"
+            );
+
+
+        const gameStatus =
+            document.getElementById(
+                "gameStatus"
+            );
+
+
+        const turnIndicator =
+            document.getElementById(
+                "turnIndicator"
+            );
+
+
+        const gameLog =
+            document.getElementById(
+                "gameLog"
+            );
+
+
+        const difficulty =
+            document.getElementById(
+                "difficulty"
+            );
+
+
+        /* =====================================================
+           BOARD CREATION
+        ===================================================== */
+
+        function createBoard() {
+
+            /*
+             * Keep overlays.
+             */
+
+            const overlays =
+                Array.from(
+                    board.children
+                );
+
+
+            board.innerHTML = "";
+
+
+            /*
+             * 225 cells.
+             */
+
+            for (
+                let row = 0;
+                row < 15;
+                row++
+            ) {
+
+                for (
+                    let col = 0;
+                    col < 15;
+                    col++
+                ) {
+
+                    const cell =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    cell.className =
+                        "cell";
+
+
+                    /*
+                     * Path cell.
+                     */
+
+                    const pathIndex =
+                        pathCoordinates.findIndex(
+                            coordinate =>
+                                coordinate[0] === col &&
+                                coordinate[1] === row
+                        );
+
+
+                    if (
+                        pathIndex !== -1
+                    ) {
+
+                        cell.classList.add(
+                            "path"
+                        );
+
+
+                        if (
+                            safeIndices.has(
+                                pathIndex
+                            )
+                        ) {
+
+                            cell.classList.add(
+                                "safe"
+                            );
+
+                        }
+
+                    }
+
+
+                    /*
+                     * Home lanes.
+                     */
+
+                    if (
+                        homeLanes.red.some(
+                            coordinate =>
+                                coordinate[0] === col &&
+                                coordinate[1] === row
                         )
-                        .value
-                        .trim();
+                    ) {
+
+                        cell.classList.add(
+                            "red-lane"
+                        );
+
+                    }
 
 
-                const playerCode =
-                    document
-                        .getElementById(
-                            "playerCode"
+                    if (
+                        homeLanes.yellow.some(
+                            coordinate =>
+                                coordinate[0] === col &&
+                                coordinate[1] === row
                         )
-                        .value
-                        .trim();
+                    ) {
+
+                        cell.classList.add(
+                            "yellow-lane"
+                        );
+
+                    }
 
 
-                if (!playerName || !playerCode) {
+                    /*
+                     * Center.
+                     */
 
-                    return;
+                    if (
+                        row >= 6 &&
+                        row <= 8 &&
+                        col >= 6 &&
+                        col <= 8
+                    ) {
+
+                        cell.classList.add(
+                            "center"
+                        );
+
+                    }
+
+
+                    board.appendChild(
+                        cell
+                    );
+
+                }
+
+            }
+
+
+            /*
+             * Add overlays again.
+             */
+
+            overlays.forEach(
+                overlay => {
+
+                    board.appendChild(
+                        overlay
+                    );
+
+                }
+            );
+
+
+            renderTokens();
+
+        }
+
+
+        /* =====================================================
+           CELL INDEX
+        ===================================================== */
+
+        function getCellIndex(
+            row,
+            col
+        ) {
+
+            return (
+                row * 15 +
+                col
+            );
+
+        }
+
+
+        /* =====================================================
+           GET COMMON PATH POSITION
+        ===================================================== */
+
+        function getCommonIndex(
+            player,
+            progress
+        ) {
+
+            if (
+                progress < 0 ||
+                progress >= PATH_LENGTH
+            ) {
+
+                return null;
+
+            }
+
+
+            return (
+                startIndex[player] +
+                progress
+            ) % PATH_LENGTH;
+
+        }
+
+
+        /* =====================================================
+           TOKEN COORDINATES
+        ===================================================== */
+
+        function getTokenCoordinate(
+            player,
+            progress,
+            tokenIndex
+        ) {
+
+            /*
+             * Yard positions.
+             */
+
+            if (
+                progress === -1
+            ) {
+
+                const positions = {
+
+                    red: [
+
+                        [4,4],
+                        [4,5],
+                        [5,4],
+                        [5,5]
+
+                    ],
+
+                    yellow: [
+
+                        [9,9],
+                        [9,10],
+                        [10,9],
+                        [10,10]
+
+                    ]
+
+                };
+
+
+                return positions[player][
+                    tokenIndex
+                ];
+
+            }
+
+
+            /*
+             * Finished tokens.
+             */
+
+            if (
+                progress === FINISHED
+            ) {
+
+                const positions = {
+
+                    red: [
+
+                        [6,6],
+                        [7,6],
+                        [6,7],
+                        [7,7]
+
+                    ],
+
+                    yellow: [
+
+                        [7,7],
+                        [8,7],
+                        [7,8],
+                        [8,8]
+
+                    ]
+
+                };
+
+
+                return positions[player][
+                    tokenIndex
+                ];
+
+            }
+
+
+            /*
+             * Home lane.
+             */
+
+            if (
+                progress >= HOME_START
+            ) {
+
+                const laneIndex =
+                    progress -
+                    HOME_START;
+
+
+                return homeLanes[player][
+                    Math.min(
+                        laneIndex,
+                        homeLanes[player].length - 1
+                    )
+                ];
+
+            }
+
+
+            /*
+             * Common path.
+             */
+
+            const commonIndex =
+                getCommonIndex(
+                    player,
+                    progress
+                );
+
+
+            return pathCoordinates[
+                commonIndex
+            ];
+
+        }
+
+
+        /* =====================================================
+           CLEAR TOKENS
+        ===================================================== */
+
+        function clearTokens() {
+
+            document
+                .querySelectorAll(
+                    ".token"
+                )
+                .forEach(
+                    token =>
+                        token.remove()
+                );
+
+        }
+
+
+        /* =====================================================
+           RENDER TOKENS
+        ===================================================== */
+
+        function renderTokens() {
+
+            clearTokens();
+
+
+            renderPlayerTokens(
+                PLAYER,
+                state.humanTokens
+            );
+
+
+            renderPlayerTokens(
+                AI,
+                state.aiTokens
+            );
+
+
+            updateStats();
+
+        }
+
+
+        /* =====================================================
+           RENDER PLAYER TOKENS
+        ===================================================== */
+
+        function renderPlayerTokens(
+            player,
+            tokens
+        ) {
+
+            tokens.forEach(
+                (
+                    progress,
+                    tokenIndex
+                ) => {
+
+                    const coordinate =
+                        getTokenCoordinate(
+                            player,
+                            progress,
+                            tokenIndex
+                        );
+
+
+                    if (!coordinate) {
+
+                        return;
+
+                    }
+
+
+                    const col =
+                        coordinate[0];
+
+
+                    const row =
+                        coordinate[1];
+
+
+                    const cell =
+                        board.children[
+                            getCellIndex(
+                                row,
+                                col
+                            )
+                        ];
+
+
+                    if (!cell) {
+
+                        return;
+
+                    }
+
+
+                    const token =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    token.type =
+                        "button";
+
+
+                    token.className =
+                        `token ${player}`;
+
+
+                    token.dataset.player =
+                        player;
+
+
+                    token.dataset.token =
+                        tokenIndex;
+
+
+                    token.textContent =
+                        tokenIndex + 1;
+
+
+                    /*
+                     * Movable human token.
+                     */
+
+                    if (
+                        player === PLAYER &&
+                        state.turn === PLAYER &&
+                        !state.rolling &&
+                        !state.gameOver &&
+                        state.dice > 0 &&
+                        isValidMove(
+                            PLAYER,
+                            tokenIndex,
+                            state.dice
+                        )
+                    ) {
+
+                        token.classList.add(
+                            "movable"
+                        );
+
+
+                        token.addEventListener(
+                            "click",
+                            () =>
+                                moveHumanToken(
+                                    tokenIndex
+                                )
+                        );
+
+                    }
+
+
+                    /*
+                     * Stack offset.
+                     */
+
+                    const sameTokens =
+                        tokens
+                            .map(
+                                (
+                                    value,
+                                    index
+                                ) => ({
+                                    value,
+                                    index
+                                })
+                            )
+                            .filter(
+                                item =>
+                                    item.value ===
+                                    progress
+                            )
+                            .map(
+                                item =>
+                                    item.index
+                            );
+
+
+                    const stackIndex =
+                        Math.max(
+                            0,
+                            sameTokens.indexOf(
+                                tokenIndex
+                            )
+                        );
+
+
+                    const offsets = [
+
+                        [0,0],
+                        [-13,-13],
+                        [13,-13],
+                        [0,13]
+
+                    ];
+
+
+                    const offset =
+                        offsets[
+                            stackIndex %
+                            offsets.length
+                        ];
+
+
+                    token.style.transform =
+                        `translate(
+                            ${offset[0]}%,
+                            ${offset[1]}%
+                        )`;
+
+
+                    cell.appendChild(
+                        token
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           VALID MOVE
+        ===================================================== */
+
+        function isValidMove(
+            player,
+            tokenIndex,
+            diceValue
+        ) {
+
+            const tokens =
+                player === PLAYER
+                    ? state.humanTokens
+                    : state.aiTokens;
+
+
+            const progress =
+                tokens[tokenIndex];
+
+
+            /*
+             * Already finished.
+             */
+
+            if (
+                progress === FINISHED
+            ) {
+
+                return false;
+
+            }
+
+
+            /*
+             * Yard requires 6.
+             */
+
+            if (
+                progress === -1
+            ) {
+
+                return (
+                    diceValue === 6
+                );
+
+            }
+
+
+            /*
+             * Exact finish.
+             */
+
+            return (
+                progress +
+                diceValue <=
+                FINISHED
+            );
+
+        }
+
+
+        /* =====================================================
+           GET VALID MOVES
+        ===================================================== */
+
+        function getValidMoves(
+            player,
+            diceValue
+        ) {
+
+            const tokens =
+                player === PLAYER
+                    ? state.humanTokens
+                    : state.aiTokens;
+
+
+            return tokens
+                .map(
+                    (
+                        _,
+                        index
+                    ) =>
+                        isValidMove(
+                            player,
+                            index,
+                            diceValue
+                        )
+                            ? index
+                            : null
+                )
+                .filter(
+                    index =>
+                        index !== null
+                );
+
+        }
+
+
+        /* =====================================================
+           ROLL DICE
+        ===================================================== */
+
+        async function rollDice() {
+
+            if (
+                state.gameOver ||
+                state.rolling ||
+                state.turn !== PLAYER
+            ) {
+
+                return;
+
+            }
+
+
+            state.rolling =
+                true;
+
+
+            rollButton.disabled =
+                true;
+
+
+            dice.classList.add(
+                "rolling"
+            );
+
+
+            /*
+             * Dice animation.
+             */
+
+            for (
+                let i = 0;
+                i < 7;
+                i++
+            ) {
+
+                const value =
+                    1 +
+                    Math.floor(
+                        Math.random() * 6
+                    );
+
+
+                dice.textContent =
+                    diceFaces[value];
+
+
+                await sleep(
+                    70 +
+                    i * 20
+                );
+
+            }
+
+
+            const value =
+                1 +
+                Math.floor(
+                    Math.random() * 6
+                );
+
+
+            state.dice =
+                value;
+
+
+            state.moves++;
+
+
+            dice.textContent =
+                diceFaces[value];
+
+
+            dice.classList.remove(
+                "rolling"
+            );
+
+
+            state.rolling =
+                false;
+
+
+            diceTitle.textContent =
+                `You rolled ${value}`;
+
+
+            addLog(
+                `আপনি Dice-এ ${value} পেয়েছেন।`
+            );
+
+
+            const validMoves =
+                getValidMoves(
+                    PLAYER,
+                    value
+                );
+
+
+            if (
+                validMoves.length === 0
+            ) {
+
+                gameStatus.textContent =
+                    value === 6
+                        ? "৬ পেয়েছেন, কিন্তু কোনো Valid Move নেই। আবার আপনার Turn হবে।"
+                        : "কোনো Valid Move নেই। AI-এর Turn।";
+
+
+                renderTokens();
+
+
+                if (
+                    value !== 6
+                ) {
+
+                    state.dice =
+                        0;
+
+                    state.turn =
+                        AI;
+
+                    updateTurnUI();
+
+
+                    await sleep(
+                        650
+                    );
+
+
+                    aiTurn();
+
+                } else {
+
+                    rollButton.disabled =
+                        false;
+
+                    gameStatus.textContent =
+                        "৬ পেয়েছেন। আবার Dice Roll করুন।";
 
                 }
 
 
-                alert(
-                    "Player registration system পরবর্তী ধাপে Supabase-এর সঙ্গে যুক্ত হবে।"
+                return;
+
+            }
+
+
+            gameStatus.textContent =
+                validMoves.length === 1
+                    ? "একটি Token চালানো যাবে।"
+                    : `${validMoves.length}টি Token চালানো যাবে। Token নির্বাচন করুন।`;
+
+
+            renderTokens();
+
+        }
+
+
+        /* =====================================================
+           HUMAN MOVE
+        ===================================================== */
+
+        async function moveHumanToken(
+            tokenIndex
+        ) {
+
+            if (
+                state.turn !== PLAYER ||
+                state.rolling ||
+                state.gameOver ||
+                state.dice === 0
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                !isValidMove(
+                    PLAYER,
+                    tokenIndex,
+                    state.dice
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const value =
+                state.dice;
+
+
+            state.dice =
+                0;
+
+
+            await moveToken(
+                PLAYER,
+                tokenIndex,
+                value
+            );
+
+
+            if (
+                checkWinner(
+                    PLAYER
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+             * Six gives another turn.
+             */
+
+            if (
+                value === 6
+            ) {
+
+                state.turn =
+                    PLAYER;
+
+                updateTurnUI();
+
+                gameStatus.textContent =
+                    "৬ পেয়েছেন! আবার Dice Roll করুন।";
+
+                rollButton.disabled =
+                    false;
+
+                renderTokens();
+
+                return;
+
+            }
+
+
+            state.turn =
+                AI;
+
+
+            updateTurnUI();
+
+            renderTokens();
+
+
+            await sleep(
+                600
+            );
+
+
+            aiTurn();
+
+        }
+
+
+        /* =====================================================
+           MOVE TOKEN
+        ===================================================== */
+
+        async function moveToken(
+            player,
+            tokenIndex,
+            diceValue
+        ) {
+
+            const tokens =
+                player === PLAYER
+                    ? state.humanTokens
+                    : state.aiTokens;
+
+
+            let current =
+                tokens[tokenIndex];
+
+
+            /*
+             * Exit yard.
+             */
+
+            if (
+                current === -1
+            ) {
+
+                current =
+                    0;
+
+                tokens[tokenIndex] =
+                    0;
+
+
+                addLog(
+                    player === PLAYER
+                        ? `Token ${tokenIndex + 1} Board-এ এসেছে।`
+                        : `AI Token ${tokenIndex + 1} Board-এ এসেছে।`
+                );
+
+                renderTokens();
+
+                await sleep(
+                    300
                 );
 
             }
+
+            else {
+
+                /*
+                 * Step-by-step movement.
+                 */
+
+                for (
+                    let step = 0;
+                    step < diceValue;
+                    step++
+                ) {
+
+                    tokens[tokenIndex]++;
+
+                    renderTokens();
+
+                    await sleep(
+                        90
+                    );
+
+                }
+
+            }
+
+
+            /*
+             * Finished.
+             */
+
+            if (
+                tokens[tokenIndex] >=
+                FINISHED
+            ) {
+
+                tokens[tokenIndex] =
+                    FINISHED;
+
+
+                addLog(
+                    player === PLAYER
+                        ? `🎉 আপনার Token ${tokenIndex + 1} Home-এ পৌঁছেছে।`
+                        : `🤖 AI-এর Token ${tokenIndex + 1} Home-এ পৌঁছেছে।`
+                );
+
+            }
+
+
+            /*
+             * Capture.
+             */
+
+            handleCapture(
+                player,
+                tokenIndex
+            );
+
+
+            renderTokens();
+
+        }
+
+
+        /* =====================================================
+           CAPTURE
+        ===================================================== */
+
+        function handleCapture(
+            player,
+            tokenIndex
+        ) {
+
+            const tokens =
+                player === PLAYER
+                    ? state.humanTokens
+                    : state.aiTokens;
+
+
+            const progress =
+                tokens[tokenIndex];
+
+
+            /*
+             * Only common path can capture.
+             */
+
+            if (
+                progress < 0 ||
+                progress >= HOME_START
+            ) {
+
+                return;
+
+            }
+
+
+            const commonIndex =
+                getCommonIndex(
+                    player,
+                    progress
+                );
+
+
+            /*
+             * Safe cell.
+             */
+
+            if (
+                safeIndices.has(
+                    commonIndex
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const opponent =
+                player === PLAYER
+                    ? AI
+                    : PLAYER;
+
+
+            const opponentTokens =
+                opponent === PLAYER
+                    ? state.humanTokens
+                    : state.aiTokens;
+
+
+            opponentTokens.forEach(
+                (
+                    opponentProgress,
+                    opponentIndex
+                ) => {
+
+                    if (
+                        opponentProgress < 0 ||
+                        opponentProgress >= HOME_START
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const opponentCommonIndex =
+                        getCommonIndex(
+                            opponent,
+                            opponentProgress
+                        );
+
+
+                    if (
+                        opponentCommonIndex ===
+                        commonIndex
+                    ) {
+
+                        opponentTokens[
+                            opponentIndex
+                        ] =
+                            -1;
+
+
+                        if (
+                            player === PLAYER
+                        ) {
+
+                            state.humanCaptures++;
+
+                        } else {
+
+                            state.aiCaptures++;
+
+                        }
+
+
+                        addLog(
+                            player === PLAYER
+                                ? `💥 আপনি AI-এর Token ${opponentIndex + 1} কাটেছেন!`
+                                : `🤖 AI আপনার Token ${opponentIndex + 1} কেটেছে!`
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           AI TURN
+        ===================================================== */
+
+        async function aiTurn() {
+
+            if (
+                state.gameOver
+            ) {
+
+                return;
+
+            }
+
+
+            state.turn =
+                AI;
+
+
+            updateTurnUI();
+
+
+            gameStatus.textContent =
+                "🤖 AI Dice Roll করছে...";
+
+
+            await sleep(
+                600
+            );
+
+
+            const value =
+                await rollAIDice();
+
+
+            if (
+                state.gameOver
+            ) {
+
+                return;
+
+            }
+
+
+            state.dice =
+                value;
+
+
+            const validMoves =
+                getValidMoves(
+                    AI,
+                    value
+                );
+
+
+            addLog(
+                `🤖 AI Dice-এ ${value} পেয়েছে।`
+            );
+
+
+            if (
+                validMoves.length === 0
+            ) {
+
+                gameStatus.textContent =
+                    "🤖 AI-এর কোনো Valid Move নেই।";
+
+
+                state.dice =
+                    0;
+
+
+                if (
+                    value === 6
+                ) {
+
+                    state.turn =
+                        AI;
+
+                    updateTurnUI();
+
+                    await sleep(
+                        500
+                    );
+
+                    aiTurn();
+
+                } else {
+
+                    state.turn =
+                        PLAYER;
+
+                    updateTurnUI();
+
+                    renderTokens();
+
+                }
+
+
+                return;
+
+            }
+
+
+            /*
+             * Choose move according to difficulty.
+             */
+
+            const selected =
+                chooseAIMove(
+                    validMoves,
+                    value
+                );
+
+
+            await sleep(
+                550
+            );
+
+
+            state.dice =
+                0;
+
+
+            await moveToken(
+                AI,
+                selected,
+                value
+            );
+
+
+            if (
+                checkWinner(
+                    AI
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+             * Six = another AI turn.
+             */
+
+            if (
+                value === 6
+            ) {
+
+                state.turn =
+                    AI;
+
+                updateTurnUI();
+
+                await sleep(
+                    500
+                );
+
+                aiTurn();
+
+                return;
+
+            }
+
+
+            state.turn =
+                PLAYER;
+
+
+            updateTurnUI();
+
+
+            renderTokens();
+
+
+            gameStatus.textContent =
+                "আপনার Turn। Dice Roll করুন।";
+
+
+            rollButton.disabled =
+                false;
+
+        }
+
+
+        /* =====================================================
+           AI DICE
+        ===================================================== */
+
+        async function rollAIDice() {
+
+            dice.classList.add(
+                "rolling"
+            );
+
+
+            for (
+                let i = 0;
+                i < 5;
+                i++
+            ) {
+
+                const random =
+                    1 +
+                    Math.floor(
+                        Math.random() * 6
+                    );
+
+
+                dice.textContent =
+                    diceFaces[random];
+
+
+                await sleep(
+                    90
+                );
+
+            }
+
+
+            const value =
+                1 +
+                Math.floor(
+                    Math.random() * 6
+                );
+
+
+            dice.textContent =
+                diceFaces[value];
+
+
+            dice.classList.remove(
+                "rolling"
+            );
+
+
+            diceTitle.textContent =
+                `AI rolled ${value}`;
+
+
+            diceText.textContent =
+                "AI is choosing a move...";
+
+
+            return value;
+
+        }
+
+
+        /* =====================================================
+           AI DECISION
+        ===================================================== */
+
+        function chooseAIMove(
+            validMoves,
+            diceValue
+        ) {
+
+            const difficultyValue =
+                difficulty.value;
+
+
+            const tokens =
+                state.aiTokens;
+
+
+            /*
+             * EASY
+             */
+
+            if (
+                difficultyValue ===
+                "easy"
+            ) {
+
+                return randomItem(
+                    validMoves
+                );
+
+            }
+
+
+            /*
+             * Score every move.
+             */
+
+            const scored =
+                validMoves.map(
+                    index => {
+
+                        const progress =
+                            tokens[index];
+
+
+                        const newProgress =
+                            progress === -1
+                                ? 0
+                                : progress +
+                                  diceValue;
+
+
+                        let score =
+                            Math.random() *
+                            8;
+
+
+                        /*
+                         * Bring token out.
+                         */
+
+                        if (
+                            progress === -1 &&
+                            diceValue === 6
+                        ) {
+
+                            score +=
+                                45;
+
+                        }
+
+
+                        /*
+                         * Finish token.
+                         */
+
+                        if (
+                            newProgress >=
+                            FINISHED
+                        ) {
+
+                            score +=
+                                100;
+
+                        }
+
+
+                        /*
+                         * Advance.
+                         */
+
+                        score +=
+                            newProgress *
+                            1.8;
+
+
+                        /*
+                         * Capture opportunity.
+                         */
+
+                        const captureBonus =
+                            calculateCaptureBonus(
+                                AI,
+                                index,
+                                diceValue
+                            );
+
+
+                        score +=
+                            captureBonus;
+
+
+                        /*
+                         * HARD gets stronger
+                         */
+
+                        if (
+                            difficultyValue ===
+                            "hard"
+                        ) {
+
+                            score +=
+                                calculateSafetyBonus(
+                                    AI,
+                                    index,
+                                    diceValue
+                                );
+
+                        }
+
+
+                        return {
+
+                            index,
+                            score
+
+                        };
+
+                    }
+                );
+
+
+            scored.sort(
+                (
+                    a,
+                    b
+                ) =>
+                    b.score -
+                    a.score
+            );
+
+
+            return scored[0].index;
+
+        }
+
+
+        /* =====================================================
+           AI CAPTURE BONUS
+        ===================================================== */
+
+        function calculateCaptureBonus(
+            player,
+            tokenIndex,
+            diceValue
+        ) {
+
+            const tokens =
+                player === PLAYER
+                    ? state.humanTokens
+                    : state.aiTokens;
+
+
+            const current =
+                tokens[tokenIndex];
+
+
+            const next =
+                current === -1
+                    ? 0
+                    : current +
+                      diceValue;
+
+
+            if (
+                next < 0 ||
+                next >= HOME_START
+            ) {
+
+                return 0;
+
+            }
+
+
+            const commonIndex =
+                getCommonIndex(
+                    player,
+                    next
+                );
+
+
+            if (
+                safeIndices.has(
+                    commonIndex
+                )
+            ) {
+
+                return 0;
+
+            }
+
+
+            const opponent =
+                player === PLAYER
+                    ? AI
+                    : PLAYER;
+
+
+            const opponents =
+                opponent === PLAYER
+                    ? state.humanTokens
+                    : state.aiTokens;
+
+
+            const enemy =
+                opponents.some(
+                    progress => {
+
+                        if (
+                            progress < 0 ||
+                            progress >= HOME_START
+                        ) {
+
+                            return false;
+
+                        }
+
+
+                        return (
+                            getCommonIndex(
+                                opponent,
+                                progress
+                            ) ===
+                            commonIndex
+                        );
+
+                    }
+                );
+
+
+            return enemy
+                ? 70
+                : 0;
+
+        }
+
+
+        /* =====================================================
+           SAFETY BONUS
+        ===================================================== */
+
+        function calculateSafetyBonus(
+            player,
+            tokenIndex,
+            diceValue
+        ) {
+
+            const tokens =
+                player === PLAYER
+                    ? state.humanTokens
+                    : state.aiTokens;
+
+
+            const current =
+                tokens[tokenIndex];
+
+
+            const next =
+                current === -1
+                    ? 0
+                    : current +
+                      diceValue;
+
+
+            if (
+                next < 0 ||
+                next >= HOME_START
+            ) {
+
+                return 0;
+
+            }
+
+
+            const commonIndex =
+                getCommonIndex(
+                    player,
+                    next
+                );
+
+
+            if (
+                safeIndices.has(
+                    commonIndex
+                )
+            ) {
+
+                return 20;
+
+            }
+
+
+            return 0;
+
+        }
+
+
+        /* =====================================================
+           WINNER
+        ===================================================== */
+
+        function checkWinner(
+            player
+        ) {
+
+            const tokens =
+                player === PLAYER
+                    ? state.humanTokens
+                    : state.aiTokens;
+
+
+            const winner =
+                tokens.every(
+                    token =>
+                        token ===
+                        FINISHED
+                );
+
+
+            if (!winner) {
+
+                return false;
+
+            }
+
+
+            state.gameOver =
+                true;
+
+
+            rollButton.disabled =
+                true;
+
+
+            if (
+                player === PLAYER
+            ) {
+
+                gameStatus.textContent =
+                    "🏆 Congratulations! আপনি ম্যাচ জিতেছেন।";
+
+                showWinner(
+                    "🏆 You Win!",
+                    "অসাধারণ! আপনি সবগুলো Token Home-এ পৌঁছে ম্যাচ জিতেছেন।"
+                );
+
+                addLog(
+                    "🏆 আপনি ম্যাচ জিতেছেন!"
+                );
+
+            } else {
+
+                gameStatus.textContent =
+                    "🤖 AI ম্যাচ জিতেছে।";
+
+                showWinner(
+                    "🤖 AI Wins!",
+                    "AI Bot সবগুলো Token Home-এ পৌঁছে ম্যাচ জিতেছে।"
+                );
+
+                addLog(
+                    "🤖 AI ম্যাচ জিতেছে।"
+                );
+
+            }
+
+
+            return true;
+
+        }
+
+
+        /* =====================================================
+           TURN UI
+        ===================================================== */
+
+        function updateTurnUI() {
+
+            if (
+                state.turn ===
+                PLAYER
+            ) {
+
+                turnIndicator.textContent =
+                    "Your Turn";
+
+
+                turnIndicator.style.color =
+                    "#9ab6ff";
+
+
+                diceTitle.textContent =
+                    "Your Dice";
+
+
+                diceText.textContent =
+                    "Roll the dice to continue.";
+
+
+            } else {
+
+                turnIndicator.textContent =
+                    "AI Turn";
+
+
+                turnIndicator.style.color =
+                    "#ffe08a";
+
+
+                diceTitle.textContent =
+                    "AI Dice";
+
+
+                diceText.textContent =
+                    "AI is playing...";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        function updateStats() {
+
+            document.getElementById(
+                "humanFinished"
+            ).textContent =
+                `${
+                    state.humanTokens.filter(
+                        token =>
+                            token ===
+                            FINISHED
+                    ).length
+                } / 4`;
+
+
+            document.getElementById(
+                "aiFinished"
+            ).textContent =
+                `${
+                    state.aiTokens.filter(
+                        token =>
+                            token ===
+                            FINISHED
+                    ).length
+                } / 4`;
+
+
+            document.getElementById(
+                "humanCaptures"
+            ).textContent =
+                state.humanCaptures;
+
+
+            document.getElementById(
+                "aiCaptures"
+            ).textContent =
+                state.aiCaptures;
+
+        }
+
+
+        /* =====================================================
+           LOG
+        ===================================================== */
+
+        function addLog(
+            message
+        ) {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "log-item";
+
+
+            item.textContent =
+                message;
+
+
+            gameLog.prepend(
+                item
+            );
+
+
+            while (
+                gameLog.children.length >
+                20
+            ) {
+
+                gameLog.lastElementChild.remove();
+
+            }
+
+        }
+
+
+        /* =====================================================
+           WINNER MODAL
+        ===================================================== */
+
+        function showWinner(
+            title,
+            text
+        ) {
+
+            document.getElementById(
+                "winnerTitle"
+            ).textContent =
+                title;
+
+
+            document.getElementById(
+                "winnerText"
+            ).textContent =
+                text;
+
+
+            document.getElementById(
+                "winnerModal"
+            ).classList.add(
+                "show"
+            );
+
+        }
+
+
+        /* =====================================================
+           NEW GAME
+        ===================================================== */
+
+        function newGame() {
+
+            state = {
+
+                turn:
+                    PLAYER,
+
+                dice:
+                    0,
+
+                rolling:
+                    false,
+
+                gameOver:
+                    false,
+
+                humanTokens:
+                    [-1,-1,-1,-1],
+
+                aiTokens:
+                    [-1,-1,-1,-1],
+
+                humanCaptures:
+                    0,
+
+                aiCaptures:
+                    0,
+
+                moves:
+                    0
+
+            };
+
+
+            dice.textContent =
+                diceFaces[1];
+
+
+            gameLog.innerHTML =
+                `<div class="log-item">
+                    নতুন Game শুরু হয়েছে।
+                </div>`;
+
+
+            gameStatus.textContent =
+                "আপনার Turn। Dice Roll করুন।";
+
+
+            document.getElementById(
+                "winnerModal"
+            ).classList.remove(
+                "show"
+            );
+
+
+            rollButton.disabled =
+                false;
+
+
+            updateTurnUI();
+
+            createBoard();
+
+        }
+
+
+        /* =====================================================
+           UTILITIES
+        ===================================================== */
+
+        function sleep(
+            ms
+        ) {
+
+            return new Promise(
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        ms
+                    )
+            );
+
+        }
+
+
+        function randomItem(
+            array
+        ) {
+
+            return array[
+                Math.floor(
+                    Math.random() *
+                    array.length
+                )
+            ];
+
+        }
+
+
+        /* =====================================================
+           EVENTS
+        ===================================================== */
+
+        rollButton.addEventListener(
+            "click",
+            rollDice
         );
+
+
+        document.getElementById(
+            "newGameButton"
+        ).addEventListener(
+            "click",
+            newGame
+        );
+
+
+        document.getElementById(
+            "modalNewGame"
+        ).addEventListener(
+            "click",
+            newGame
+        );
+
+
+        /* =====================================================
+           START
+        ===================================================== */
+
+        createBoard();
+
+        updateTurnUI();
+
+        updateStats();
 
     </script>
 
