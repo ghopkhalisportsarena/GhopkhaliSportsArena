@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0b1020"
+    >
+
+    <meta
+        name="description"
+        content="Ghopkhali Sports Arena Ludo Tournament"
+    >
+
+    <title>Ludo Tournament — Ghopkhali Sports Arena</title>
+
+
+    <style>
+
+        /* =====================================================
+           ROOT
+        ===================================================== */
+
+        :root {
+
+            --bg:
+                #070b16;
+
+            --bg-secondary:
+                #0d1324;
+
+            --card:
+                rgba(255, 255, 255, 0.065);
+
+            --card-border:
+                rgba(255, 255, 255, 0.11);
+
+            --text:
+                #ffffff;
+
+            --muted:
+                #9da7bd;
+
+            --single:
+                #5b8cff;
+
+            --double:
+                #a66cff;
+
+            --success:
+                #35d399;
+
+            --shadow:
+                0 25px 70px rgba(0, 0, 0, 0.42);
+
+            --radius:
+                28px;
+
+        }
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+
+            margin:
+                0;
+
+            padding:
+                0;
+
+            box-sizing:
+                border-box;
+
+        }
+
+
+        html {
+
+            scroll-behavior:
+                smooth;
+
+        }
+
+
+        body {
+
+            min-height:
+                100vh;
+
+            color:
+                var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(91, 140, 255, 0.20),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 100% 40%,
+                    rgba(166, 108, 255, 0.13),
+                    transparent 30%
+                ),
+                var(--bg);
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            overflow-x:
+                hidden;
+
+        }
+
+
+        button,
+        a {
+
+            -webkit-tap-highlight-color:
+                transparent;
+
+        }
+
+
+        a {
+
+            color:
+                inherit;
+
+            text-decoration:
+                none;
+
+        }
+
+
+        /* =====================================================
+           BACKGROUND
+        ===================================================== */
+
+        .background {
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            z-index:
+                -1;
+
+            pointer-events:
+                none;
+
+            overflow:
+                hidden;
+
+        }
+
+
+        .orb {
+
+            position:
+                absolute;
+
+            border-radius:
+                50%;
+
+            filter:
+                blur(70px);
+
+            opacity:
+                0.25;
+
+            animation:
+                floatOrb 12s ease-in-out infinite;
+
+        }
+
+
+        .orb-one {
+
+            width:
+                280px;
+
+            height:
+                280px;
+
+            top:
+                8%;
+
+            left:
+                -120px;
+
+            background:
+                #4169e1;
+
+        }
+
+
+        .orb-two {
+
+            width:
+                300px;
+
+            height:
+                300px;
+
+            right:
+                -140px;
+
+            top:
+                35%;
+
+            background:
+                #8a45e8;
+
+            animation-delay:
+                -4s;
+
+        }
+
+
+        .orb-three {
+
+            width:
+                220px;
+
+            height:
+                220px;
+
+            bottom:
+                -100px;
+
+            left:
+                40%;
+
+            background:
+                #147dff;
+
+            animation-delay:
+                -7s;
+
+        }
+
+
+        @keyframes floatOrb {
+
+            0%,
+            100% {
+
+                transform:
+                    translate3d(0, 0, 0)
+                    scale(1);
+
+            }
+
+            50% {
+
+                transform:
+                    translate3d(20px, -25px, 0)
+                    scale(1.08);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           APP
+        ===================================================== */
+
+        .app {
+
+            width:
+                min(100%, 1100px);
+
+            margin:
+                0 auto;
+
+            padding:
+                24px;
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                18px;
+
+            padding:
+                8px 0 28px;
+
+        }
+
+
+        .brand {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                13px;
+
+        }
+
+
+        .logo {
+
+            width:
+                52px;
+
+            height:
+                52px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                17px;
+
+            font-size:
+                28px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #dbe5ff
+                );
+
+            box-shadow:
+                0 10px 35px rgba(91, 140, 255, 0.25);
+
+            animation:
+                logoFloat 4s ease-in-out infinite;
+
+        }
+
+
+        @keyframes logoFloat {
+
+            0%,
+            100% {
+
+                transform:
+                    translateY(0)
+                    rotate(0deg);
+
+            }
+
+            50% {
+
+                transform:
+                    translateY(-4px)
+                    rotate(3deg);
+
+            }
+
+        }
+
+
+        .brand-text h1 {
+
+            font-size:
+                16px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                -0.3px;
+
+        }
+
+
+        .brand-text p {
+
+            margin-top:
+                3px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+        }
+
+
+        .live-badge {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                9px 13px;
+
+            border:
+                1px solid rgba(53, 211, 153, 0.22);
+
+            border-radius:
+                999px;
+
+            color:
+                #8ff0ca;
+
+            background:
+                rgba(53, 211, 153, 0.08);
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .live-dot {
+
+            width:
+                7px;
+
+            height:
+                7px;
+
+            border-radius:
+                50%;
+
+            background:
+                var(--success);
+
+            box-shadow:
+                0 0 12px var(--success);
+
+            animation:
+                livePulse 1.5s infinite;
+
+        }
+
+
+        @keyframes livePulse {
+
+            0%,
+            100% {
+
+                opacity:
+                    1;
+
+                transform:
+                    scale(1);
+
+            }
+
+            50% {
+
+                opacity:
+                    0.45;
+
+                transform:
+                    scale(0.7);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            position:
+                relative;
+
+            padding:
+                42px 20px 35px;
+
+            text-align:
+                center;
+
+        }
+
+
+        .hero-label {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                8px 13px;
+
+            border:
+                1px solid var(--card-border);
+
+            border-radius:
+                999px;
+
+            color:
+                #b8c7ff;
+
+            background:
+                rgba(255, 255, 255, 0.045);
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+            backdrop-filter:
+                blur(12px);
+
+        }
+
+
+        .hero h2 {
+
+            margin-top:
+                18px;
+
+            font-size:
+                clamp(38px, 8vw, 70px);
+
+            line-height:
+                0.98;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                -3px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff 15%,
+                    #a9c1ff 52%,
+                    #caa9ff 90%
+                );
+
+            -webkit-background-clip:
+                text;
+
+            background-clip:
+                text;
+
+            color:
+                transparent;
+
+        }
+
+
+        .hero p {
+
+            max-width:
+                650px;
+
+            margin:
+                18px auto 0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                15px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =====================================================
+           MODE GRID
+        ===================================================== */
+
+        .mode-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap:
+                18px;
+
+            margin-top:
+                20px;
+
+        }
+
+
+        .mode-card {
+
+            position:
+                relative;
+
+            min-height:
+                320px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                space-between;
+
+            padding:
+                28px;
+
+            overflow:
+                hidden;
+
+            border:
+                1px solid var(--card-border);
+
+            border-radius:
+                var(--radius);
+
+            background:
+                var(--card);
+
+            box-shadow:
+                var(--shadow);
+
+            backdrop-filter:
+                blur(20px);
+
+            transition:
+                transform 0.35s ease,
+                border-color 0.35s ease,
+                background 0.35s ease;
+
+        }
+
+
+        .mode-card:hover {
+
+            transform:
+                translateY(-7px);
+
+            background:
+                rgba(255, 255, 255, 0.085);
+
+        }
+
+
+        .mode-card::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                220px;
+
+            height:
+                220px;
+
+            right:
+                -80px;
+
+            top:
+                -80px;
+
+            border-radius:
+                50%;
+
+            filter:
+                blur(10px);
+
+            opacity:
+                0.22;
+
+        }
+
+
+        .single-card::before {
+
+            background:
+                var(--single);
+
+        }
+
+
+        .double-card::before {
+
+            background:
+                var(--double);
+
+        }
+
+
+        .mode-top {
+
+            position:
+                relative;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                flex-start;
+
+        }
+
+
+        .mode-icon {
+
+            width:
+                58px;
+
+            height:
+                58px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                19px;
+
+            font-size:
+                30px;
+
+            background:
+                rgba(255, 255, 255, 0.09);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.10);
+
+        }
+
+
+        .mode-number {
+
+            color:
+                rgba(255, 255, 255, 0.35);
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1px;
+
+        }
+
+
+        .mode-content {
+
+            position:
+                relative;
+
+            margin-top:
+                30px;
+
+        }
+
+
+        .mode-content h3 {
+
+            font-size:
+                28px;
+
+            font-weight:
+                850;
+
+            letter-spacing:
+                -1px;
+
+        }
+
+
+        .mode-content .versus {
+
+            margin-top:
+                7px;
+
+            font-size:
+                14px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                2px;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .single-card .versus {
+
+            color:
+                #91adff;
+
+        }
+
+
+        .double-card .versus {
+
+            color:
+                #c5a5ff;
+
+        }
+
+
+        .mode-content p {
+
+            margin-top:
+                13px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        .mode-bottom {
+
+            position:
+                relative;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                12px;
+
+            margin-top:
+                25px;
+
+        }
+
+
+        .capacity {
+
+            color:
+                #c5ccdb;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .enter-button {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                8px;
+
+            min-width:
+                120px;
+
+            padding:
+                12px 17px;
+
+            border:
+                0;
+
+            border-radius:
+                14px;
+
+            color:
+                #ffffff;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            cursor:
+                pointer;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+
+        }
+
+
+        .single-button {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4e7eff,
+                    #6b9aff
+                );
+
+            box-shadow:
+                0 10px 30px rgba(78, 126, 255, 0.25);
+
+        }
+
+
+        .double-button {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #955cff,
+                    #b37aff
+                );
+
+            box-shadow:
+                0 10px 30px rgba(149, 92, 255, 0.25);
+
+        }
+
+
+        .enter-button:hover {
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        .enter-button:active {
+
+            transform:
+                scale(0.97);
+
+        }
+
+
+        /* =====================================================
+           INFO GRID
+        ===================================================== */
+
+        .info-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap:
+                12px;
+
+            margin-top:
+                18px;
+
+        }
+
+
+        .info-card {
+
+            padding:
+                18px;
+
+            border:
+                1px solid var(--card-border);
+
+            border-radius:
+                20px;
+
+            background:
+                rgba(255, 255, 255, 0.045);
+
+            backdrop-filter:
+                blur(15px);
+
+            text-align:
+                center;
+
+        }
+
+
+        .info-icon {
+
+            font-size:
+                20px;
+
+        }
+
+
+        .info-card strong {
+
+            display:
+                block;
+
+            margin-top:
+                8px;
+
+            font-size:
+                13px;
+
+        }
+
+
+        .info-card span {
+
+            display:
+                block;
+
+            margin-top:
+                4px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            padding:
+                32px 0 10px;
+
+            text-align:
+                center;
+
+            color:
+                #6f7990;
+
+            font-size:
+                11px;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .app {
+
+                padding:
+                    17px;
+
+            }
+
+
+            .header {
+
+                padding-bottom:
+                    15px;
+
+            }
+
+
+            .logo {
+
+                width:
+                    46px;
+
+                height:
+                    46px;
+
+                font-size:
+                    24px;
+
+            }
+
+
+            .live-badge {
+
+                padding:
+                    8px 10px;
+
+            }
+
+
+            .hero {
+
+                padding:
+                    38px 5px 24px;
+
+            }
+
+
+            .hero h2 {
+
+                font-size:
+                    clamp(40px, 13vw, 58px);
+
+                letter-spacing:
+                    -2px;
+
+            }
+
+
+            .hero p {
+
+                font-size:
+                    13px;
+
+            }
+
+
+            .mode-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .mode-card {
+
+                min-height:
+                    285px;
+
+                padding:
+                    23px;
+
+            }
+
+
+            .info-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+        }
+
+
+        @media (max-width: 390px) {
+
+            .brand-text h1 {
+
+                font-size:
+                    14px;
+
+            }
+
+
+            .brand-text p {
+
+                font-size:
+                    10px;
+
+            }
+
+
+            .live-badge {
+
+                font-size:
+                    10px;
+
+            }
+
+
+            .mode-bottom {
+
+                align-items:
+                    stretch;
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .enter-button {
+
+                width:
+                    100%;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+        ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+
+                animation-duration:
+                    0.01ms !important;
+
+                animation-iteration-count:
+                    1 !important;
+
+                transition-duration:
+                    0.01ms !important;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         BACKGROUND
+    ===================================================== -->
+
+    <div class="background">
+
+        <div class="orb orb-one"></div>
+
+        <div class="orb orb-two"></div>
+
+        <div class="orb orb-three"></div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         APP
+    ===================================================== -->
+
+    <main class="app">
+
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <a
+                href="../index.html"
+                class="brand"
+                aria-label="Ghopkhali Sports Arena"
+            >
+
+                <div class="logo">
+                    🎲
+                </div>
+
+                <div class="brand-text">
+
+                    <h1>
+                        Ghopkhali Sports Arena
+                    </h1>
+
+                    <p>
+                        Ludo Tournament
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <div class="live-badge">
+
+                <span class="live-dot"></span>
+
+                Tournament System
+
+            </div>
+
+        </header>
+
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-label">
+
+                🏆 Official Tournament
+
+            </div>
+
+
+            <h2>
+                LUDO
+                <br>
+                TOURNAMENT
+            </h2>
+
+
+            <p>
+
+                আপনার পছন্দের গেম মোড নির্বাচন করুন।
+                Single এবং Double—দুই ধরনের প্রতিযোগিতামূলক
+                Ludo ম্যাচ এখানে পরিচালনা করা হবে।
+
+            </p>
+
+        </section>
+
+
+
+        <!-- GAME MODES -->
+
+        <section class="mode-grid">
+
+
+            <!-- SINGLE -->
+
+            <a
+                href="single.html"
+                class="mode-card single-card"
+                aria-label="Single Ludo Tournament"
+            >
+
+                <div>
+
+                    <div class="mode-top">
+
+                        <div class="mode-icon">
+                            🧑
+                        </div>
+
+                        <span class="mode-number">
+                            MODE 01
+                        </span>
+
+                    </div>
+
+
+                    <div class="mode-content">
+
+                        <h3>
+                            Single
+                        </h3>
+
+                        <div class="versus">
+                            1 VS 1
+                        </div>
+
+                        <p>
+
+                            একজন খেলোয়াড় বনাম একজন খেলোয়াড়।
+                            Individual player হিসেবে tournament-এ
+                            অংশগ্রহণ করুন।
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mode-bottom">
+
+                    <span class="capacity">
+                        Maximum 50 Players
+                    </span>
+
+                    <span class="enter-button single-button">
+                        Enter
+                        <span>→</span>
+                    </span>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- DOUBLE -->
+
+            <a
+                href="double.html"
+                class="mode-card double-card"
+                aria-label="Double Ludo Tournament"
+            >
+
+                <div>
+
+                    <div class="mode-top">
+
+                        <div class="mode-icon">
+                            👥
+                        </div>
+
+                        <span class="mode-number">
+                            MODE 02
+                        </span>
+
+                    </div>
+
+
+                    <div class="mode-content">
+
+                        <h3>
+                            Double
+                        </h3>
+
+                        <div class="versus">
+                            2 VS 2
+                        </div>
+
+                        <p>
+
+                            দুইজনের একটি Team বনাম
+                            দুইজনের অন্য একটি Team।
+                            Team-based tournament system।
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mode-bottom">
+
+                    <span class="capacity">
+                        50 Players / 25 Teams
+                    </span>
+
+                    <span class="enter-button double-button">
+                        Enter
+                        <span>→</span>
+                    </span>
+
+                </div>
+
+            </a>
+
+
+        </section>
+
+
+
+        <!-- INFORMATION -->
+
+        <section class="info-grid">
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    🏆
+                </div>
+
+                <strong>
+                    Tournament
+                </strong>
+
+                <span>
+                    Organized Matches
+                </span>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    📅
+                </div>
+
+                <strong>
+                    Fixture
+                </strong>
+
+                <span>
+                    Match Schedule
+                </span>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    📊
+                </div>
+
+                <strong>
+                    Points Table
+                </strong>
+
+                <span>
+                    Live Standings
+                </span>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    👥
+                </div>
+
+                <strong>
+                    Players
+                </strong>
+
+                <span>
+                    Tournament Players
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- FOOTER -->
+
+        <footer class="footer">
+
+            © 2026 Ghopkhali Sports Arena · Ludo Tournament
+
+        </footer>
+
+
+    </main>
+
+
+</body>
+
+</html>
