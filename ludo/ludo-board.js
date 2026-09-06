@@ -4,6 +4,8 @@
    COMPLETE BOARD + TOKEN + DICE ENGINE
 ========================================================= */
 
+console.log("LUDO JS FILE LOADED");
+
 "use strict";
 
 
@@ -2816,3 +2818,5 @@ document.addEventListener(
 
     }
 );
+
+console.log("LUDO JS FILE LOADED");
