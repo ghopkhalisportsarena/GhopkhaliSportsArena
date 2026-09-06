@@ -1,9 +1,41 @@
 /* =========================================================
    GHOPKHALI SPORTS ARENA
-   ORIGINAL LUDO BOARD
+   ONLINE LUDO TOURNAMENT
+   LUDO KING STYLE BOARD
+========================================================= */
+
+
+/* =========================================================
+   BOARD CONTAINER
+========================================================= */
+
+#ludo-board {
+
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    padding: 0;
+
+}
+
+
+/* =========================================================
+   MAIN BOARD
 ========================================================= */
 
 .ludo-board {
+
+    --red: #e53935;
+
+    --green: #43a047;
+
+    --yellow: #fbc02d;
+
+    --blue: #1e88e5;
+
 
     position: relative;
 
@@ -19,46 +51,113 @@
     grid-template-rows:
         repeat(15, 1fr);
 
+
     overflow: hidden;
 
-    background: #eeeeee;
+
+    background: #ffffff;
+
 
     border:
-        2px solid
-        #1c1e22;
+        3px solid
+        #202124;
+
+
+    border-radius:
+        10px;
+
 
     box-shadow:
-        inset 0 0 0 1px
-        rgba(0,0,0,.25);
 
-    user-select: none;
+        0 10px 30px
+        rgba(0,0,0,.30),
+
+        inset 0 0 0 1px
+        rgba(255,255,255,.8);
 
 }
 
 
 /* =========================================================
-   CELLS
+   CELL
 ========================================================= */
 
-.cell {
+.ludo-cell {
 
     position: relative;
 
+    box-sizing: border-box;
+
     min-width: 0;
+
     min-height: 0;
 
     border:
         1px solid
-        rgba(0,0,0,.16);
+        rgba(0,0,0,.18);
 
-    background: #f7f7f7;
+    background:
+        #ffffff;
 
 }
 
 
-.cell.path {
+/* =========================================================
+   EMPTY AREA
+========================================================= */
 
-    background: #ffffff;
+.ludo-cell[data-type="empty"] {
+
+    background:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   TRACK
+========================================================= */
+
+.ludo-cell.ludo-track {
+
+    background:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   HOME AREA
+========================================================= */
+
+.ludo-cell.ludo-home-red {
+
+    background:
+        var(--red);
+
+}
+
+
+.ludo-cell.ludo-home-green {
+
+    background:
+        var(--green);
+
+}
+
+
+.ludo-cell.ludo-home-yellow {
+
+    background:
+        var(--yellow);
+
+}
+
+
+.ludo-cell.ludo-home-blue {
+
+    background:
+        var(--blue);
 
 }
 
@@ -67,7 +166,7 @@
    HOME YARDS
 ========================================================= */
 
-.yard {
+.ludo-yard {
 
     position: absolute;
 
@@ -75,117 +174,142 @@
 
     height: 40%;
 
-    padding: 4.8%;
+    box-sizing: border-box;
 
-    z-index: 5;
+    padding: 5%;
+
+    z-index: 20;
 
 }
 
 
-.yard.red {
+.ludo-yard-red {
 
     left: 0;
+
     top: 0;
 
     background:
-        var(--red, #ed1c24);
+        var(--red);
 
 }
 
 
-.yard.green {
+.ludo-yard-green {
 
     right: 0;
+
     top: 0;
 
     background:
-        var(--green, #18b66a);
+        var(--green);
 
 }
 
 
-.yard.yellow {
+.ludo-yard-yellow {
 
     right: 0;
+
     bottom: 0;
 
     background:
-        var(--yellow, #f5c400);
+        var(--yellow);
 
 }
 
 
-.yard.blue {
+.ludo-yard-blue {
 
     left: 0;
+
     bottom: 0;
 
     background:
-        var(--blue, #1687ff);
+        var(--blue);
 
 }
 
 
 /* =========================================================
-   INNER HOME
+   INNER WHITE HOME
 ========================================================= */
 
-.yard-inner {
+.ludo-yard-inner {
 
     width: 100%;
+
     height: 100%;
 
-    padding: 10%;
+    box-sizing: border-box;
+
+    padding: 12%;
+
 
     display: grid;
 
     grid-template-columns:
-        1fr 1fr;
+        repeat(2, 1fr);
 
     grid-template-rows:
-        1fr 1fr;
+        repeat(2, 1fr);
 
-    gap: 7%;
 
-    border-radius: 8px;
+    gap: 13%;
 
-    background: #ffffff;
+
+    background:
+        #ffffff;
+
+
+    border-radius:
+        7px;
+
 
     box-shadow:
-        inset 0 2px 4px
-        rgba(0,0,0,.14),
 
-        0 1px 0
-        rgba(255,255,255,.5);
+        inset 0 2px 5px
+        rgba(0,0,0,.16),
+
+        0 1px 2px
+        rgba(0,0,0,.12);
 
 }
 
 
 /* =========================================================
-   TOKEN SLOTS
+   TOKEN SLOT
 ========================================================= */
 
-.slot {
+.ludo-token-slot {
 
     position: relative;
 
-    border-radius: 50%;
+    width: 100%;
+
+    height: 100%;
+
+
+    border-radius:
+        50%;
+
 
     background:
-        radial-gradient(
-            circle at 35% 30%,
-            #ffffff,
-            #d8d8d8 65%,
-            #bdbdbd
-        );
+        #eeeeee;
+
+
+    border:
+        2px solid
+        rgba(0,0,0,.15);
+
 
     box-shadow:
 
-        inset 0 2px 3px
-        rgba(0,0,0,.16),
+        inset 0 3px 5px
+        rgba(0,0,0,.18),
 
         0 1px 2px
-        rgba(0,0,0,.18);
+        rgba(0,0,0,.12);
 
 }
 
@@ -194,41 +318,34 @@
    HOME LANES
 ========================================================= */
 
-.home-lane {
+.ludo-cell.ludo-lane-red {
 
-    position: relative;
+    background:
+        var(--red);
 
 }
 
 
-.home-red {
+.ludo-cell.ludo-lane-green {
 
     background:
-        var(--red, #ed1c24) !important;
+        var(--green);
 
 }
 
 
-.home-green {
+.ludo-cell.ludo-lane-yellow {
 
     background:
-        var(--green, #18b66a) !important;
+        var(--yellow);
 
 }
 
 
-.home-yellow {
+.ludo-cell.ludo-lane-blue {
 
     background:
-        var(--yellow, #f5c400) !important;
-
-}
-
-
-.home-blue {
-
-    background:
-        var(--blue, #1687ff) !important;
+        var(--blue);
 
 }
 
@@ -237,247 +354,316 @@
    START CELLS
 ========================================================= */
 
-.start-red {
+.ludo-cell.ludo-start-red {
 
     background:
-        linear-gradient(
-            145deg,
-            #ff555d,
-            #d90f17
-        ) !important;
+        var(--red);
 
 }
 
 
-.start-green {
+.ludo-cell.ludo-start-green {
 
     background:
-        linear-gradient(
-            145deg,
-            #4adf91,
-            #07964f
-        ) !important;
+        var(--green);
 
 }
 
 
-.start-yellow {
+.ludo-cell.ludo-start-yellow {
 
     background:
-        linear-gradient(
-            145deg,
-            #ffe75d,
-            #e2a900
-        ) !important;
+        var(--yellow);
 
 }
 
 
-.start-blue {
+.ludo-cell.ludo-start-blue {
 
     background:
-        linear-gradient(
-            145deg,
-            #62b4ff,
-            #0872df
-        ) !important;
+        var(--blue);
 
 }
 
 
 /* =========================================================
-   START MARK
+   START CELL INNER MARK
 ========================================================= */
 
-.start-mark {
+.ludo-cell.ludo-start::before {
+
+    content: "";
 
     position: absolute;
 
-    inset: 18%;
+    left: 16%;
+
+    right: 16%;
+
+    top: 16%;
+
+    bottom: 16%;
+
+
+    border-radius:
+        50%;
+
 
     border:
         2px solid
         rgba(255,255,255,.9);
 
-    border-radius: 50%;
 
     pointer-events: none;
 
 }
 
 
-.start-mark::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 30%;
-
-    border-radius: 50%;
-
-    background:
-        rgba(255,255,255,.9);
-
-}
-
-
 /* =========================================================
-   SAFE CELLS
+   SAFE CELL
 ========================================================= */
 
-.safe {
+.ludo-cell.ludo-safe {
 
     background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #e7e7e7
-        ) !important;
+        #ffffff;
 
 }
 
 
-.safe::after {
-
-    content: "★";
+.ludo-safe-star {
 
     position: absolute;
 
     inset: 0;
 
-    display: grid;
 
-    place-items: center;
+    display: flex;
 
-    color: #3a3d43;
+    align-items: center;
+
+    justify-content: center;
+
+
+    color:
+        #4b5563;
+
 
     font-size:
         clamp(
             8px,
-            1.7vw,
+            2vw,
             17px
         );
 
-    text-shadow:
-        0 1px 1px
-        rgba(255,255,255,.8);
 
-    animation:
-        safeGlow
-        2.2s
-        ease-in-out
-        infinite;
-
-}
-
-
-@keyframes safeGlow {
-
-    0%,
-    100% {
-
-        transform:
-            scale(.92);
-
-        opacity: .65;
-
-    }
-
-    50% {
-
-        transform:
-            scale(1.08);
-
-        opacity: 1;
-
-    }
+    line-height: 1;
 
 }
 
 
 /* =========================================================
-   CENTER FINISH
+   CENTER
 ========================================================= */
 
-.home-center {
+.ludo-center {
 
     position: absolute;
 
     left: 40%;
+
     top: 40%;
 
+
     width: 20%;
+
     height: 20%;
 
-    z-index: 10;
+
+    z-index: 30;
+
+
+    overflow: hidden;
+
 
     background:
+        #ffffff;
 
-        conic-gradient(
 
-            from 45deg,
+    border:
+        1px solid
+        rgba(0,0,0,.18);
 
-            var(--green, #18b66a)
-            0 25%,
+}
 
-            var(--yellow, #f5c400)
-            25% 50%,
 
-            var(--blue, #1687ff)
-            50% 75%,
+/* =========================================================
+   CENTER COLORS
+========================================================= */
 
-            var(--red, #ed1c24)
-            75% 100%
+.ludo-center-red {
 
-        );
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    width: 50%;
+
+    height: 100%;
+
+
+    background:
+        var(--red);
+
 
     clip-path:
-
         polygon(
-
             0 0,
-            50% 50%,
-            100% 0,
-            100% 100%,
-            50% 50%,
+            100% 50%,
             0 100%
-
-        );
-
-    filter:
-
-        drop-shadow(
-            0 3px 2px
-            rgba(0,0,0,.25)
         );
 
 }
 
 
-.home-center::after {
+.ludo-center-green {
 
-    content: "";
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    width: 100%;
+
+    height: 50%;
+
+
+    background:
+        var(--green);
+
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            50% 100%
+        );
+
+}
+
+
+.ludo-center-yellow {
+
+    position: absolute;
+
+    right: 0;
+
+    top: 0;
+
+    width: 50%;
+
+    height: 100%;
+
+
+    background:
+        var(--yellow);
+
+
+    clip-path:
+        polygon(
+            100% 0,
+            100% 100%,
+            0 50%
+        );
+
+}
+
+
+.ludo-center-blue {
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: 0;
+
+    width: 100%;
+
+    height: 50%;
+
+
+    background:
+        var(--blue);
+
+
+    clip-path:
+        polygon(
+            0 100%,
+            100% 100%,
+            50% 0
+        );
+
+}
+
+
+/* =========================================================
+   FINISH STAR
+========================================================= */
+
+.ludo-finish {
 
     position: absolute;
 
     left: 50%;
+
     top: 50%;
 
-    width: 15%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+
+    width: 30%;
 
     aspect-ratio: 1;
 
-    transform:
-        translate(-50%, -50%);
 
-    border-radius: 50%;
+    display: flex;
 
-    background: #ffffff;
+    align-items: center;
+
+    justify-content: center;
+
+
+    border-radius:
+        50%;
+
+
+    background:
+        rgba(255,255,255,.92);
+
+
+    color:
+        #333;
+
+
+    font-size:
+        clamp(
+            9px,
+            2vw,
+            18px
+        );
+
 
     box-shadow:
-        0 0 12px
-        rgba(255,255,255,.8);
+        0 2px 5px
+        rgba(0,0,0,.22);
 
 }
 
@@ -486,15 +672,18 @@
    TOKEN LAYER
 ========================================================= */
 
-.token-layer {
+.ludo-token-layer {
 
     position: absolute;
 
     inset: 0;
 
-    z-index: 30;
 
-    pointer-events: none;
+    z-index: 100;
+
+
+    pointer-events:
+        none;
 
 }
 
@@ -505,21 +694,45 @@
 
 @media (max-width: 600px) {
 
+    #ludo-board {
+
+        max-width:
+            100%;
+
+    }
+
+
     .ludo-board {
 
-        border-width: 1px;
+        border-width:
+            2px;
+
+        border-radius:
+            8px;
 
     }
 
-    .cell {
 
-        border-width: .5px;
+    .ludo-cell {
+
+        border-width:
+            .6px;
 
     }
 
-    .start-mark {
 
-        border-width: 1px;
+    .ludo-token-slot {
+
+        border-width:
+            1px;
+
+    }
+
+
+    .ludo-cell.ludo-start::before {
+
+        border-width:
+            1px;
 
     }
 
