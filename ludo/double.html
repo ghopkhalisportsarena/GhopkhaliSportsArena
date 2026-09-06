@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0b0818"
+    >
+
+    <meta
+        name="description"
+        content="Ghopkhali Sports Arena Double Ludo Tournament"
+    >
+
+    <title>Double Tournament — Ludo</title>
+
+
+    <style>
+
+        /* =====================================================
+           ROOT
+        ===================================================== */
+
+        :root {
+
+            --bg:
+                #080711;
+
+            --surface:
+                rgba(255, 255, 255, 0.055);
+
+            --surface-hover:
+                rgba(255, 255, 255, 0.085);
+
+            --border:
+                rgba(255, 255, 255, 0.10);
+
+            --text:
+                #ffffff;
+
+            --muted:
+                #9da4b8;
+
+            --purple:
+                #a66cff;
+
+            --purple-light:
+                #c5a5ff;
+
+            --green:
+                #35d399;
+
+            --yellow:
+                #ffd166;
+
+            --radius:
+                24px;
+
+        }
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+
+            margin:
+                0;
+
+            padding:
+                0;
+
+            box-sizing:
+                border-box;
+
+        }
+
+
+        html {
+
+            scroll-behavior:
+                smooth;
+
+        }
+
+
+        body {
+
+            min-height:
+                100vh;
+
+            color:
+                var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(166, 108, 255, 0.20),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 0% 50%,
+                    rgba(91, 72, 190, 0.10),
+                    transparent 32%
+                ),
+                var(--bg);
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            overflow-x:
+                hidden;
+
+        }
+
+
+        a {
+
+            color:
+                inherit;
+
+            text-decoration:
+                none;
+
+        }
+
+
+        button,
+        input {
+
+            font:
+                inherit;
+
+        }
+
+
+        /* =====================================================
+           BACKGROUND
+        ===================================================== */
+
+        .background {
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            z-index:
+                -1;
+
+            pointer-events:
+                none;
+
+            overflow:
+                hidden;
+
+        }
+
+
+        .orb {
+
+            position:
+                absolute;
+
+            border-radius:
+                50%;
+
+            filter:
+                blur(80px);
+
+            opacity:
+                0.18;
+
+            animation:
+                floatOrb 12s ease-in-out infinite;
+
+        }
+
+
+        .orb-one {
+
+            width:
+                290px;
+
+            height:
+                290px;
+
+            top:
+                12%;
+
+            left:
+                -140px;
+
+            background:
+                #7a45e6;
+
+        }
+
+
+        .orb-two {
+
+            width:
+                320px;
+
+            height:
+                320px;
+
+            right:
+                -160px;
+
+            top:
+                42%;
+
+            background:
+                #a052e8;
+
+            animation-delay:
+                -5s;
+
+        }
+
+
+        .orb-three {
+
+            width:
+                210px;
+
+            height:
+                210px;
+
+            bottom:
+                -100px;
+
+            left:
+                42%;
+
+            background:
+                #5935c7;
+
+            animation-delay:
+                -8s;
+
+        }
+
+
+        @keyframes floatOrb {
+
+            0%,
+            100% {
+
+                transform:
+                    translate(0, 0);
+
+            }
+
+            50% {
+
+                transform:
+                    translate(25px, -25px);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           APP
+        ===================================================== */
+
+        .app {
+
+            width:
+                min(100%, 1100px);
+
+            margin:
+                0 auto;
+
+            padding:
+                18px 22px 35px;
+
+        }
+
+
+        /* =====================================================
+           TOP BAR
+        ===================================================== */
+
+        .topbar {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            padding:
+                8px 0 22px;
+
+        }
+
+
+        .back-button {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            padding:
+                10px 14px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(255, 255, 255, 0.05);
+
+            color:
+                #e0e4f0;
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+            transition:
+                0.25s ease;
+
+        }
+
+
+        .back-button:hover {
+
+            transform:
+                translateX(-2px);
+
+            background:
+                rgba(255, 255, 255, 0.09);
+
+        }
+
+
+        .status {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                9px 13px;
+
+            border:
+                1px solid rgba(53, 211, 153, 0.20);
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(53, 211, 153, 0.07);
+
+            color:
+                #8ef0ca;
+
+            font-size:
+                11px;
+
+            font-weight:
+                750;
+
+        }
+
+
+        .status-dot {
+
+            width:
+                7px;
+
+            height:
+                7px;
+
+            border-radius:
+                50%;
+
+            background:
+                var(--green);
+
+            box-shadow:
+                0 0 12px var(--green);
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            padding:
+                24px 0 24px;
+
+        }
+
+
+        .hero-label {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            color:
+                var(--purple-light);
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .hero h1 {
+
+            margin-top:
+                10px;
+
+            font-size:
+                clamp(34px, 7vw, 58px);
+
+            line-height:
+                1;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                -2.5px;
+
+        }
+
+
+        .hero h1 span {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #c3a4ff
+                );
+
+            -webkit-background-clip:
+                text;
+
+            background-clip:
+                text;
+
+            color:
+                transparent;
+
+        }
+
+
+        .hero p {
+
+            max-width:
+                680px;
+
+            margin-top:
+                14px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                14px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        .stats {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap:
+                12px;
+
+            margin:
+                15px 0 20px;
+
+        }
+
+
+        .stat {
+
+            padding:
+                18px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                20px;
+
+            background:
+                var(--surface);
+
+            backdrop-filter:
+                blur(15px);
+
+        }
+
+
+        .stat-icon {
+
+            font-size:
+                20px;
+
+        }
+
+
+        .stat strong {
+
+            display:
+                block;
+
+            margin-top:
+                8px;
+
+            font-size:
+                22px;
+
+        }
+
+
+        .stat span {
+
+            display:
+                block;
+
+            margin-top:
+                3px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+        }
+
+
+        /* =====================================================
+           MAIN GRID
+        ===================================================== */
+
+        .main-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(0, 1.4fr)
+                minmax(300px, 0.6fr);
+
+            gap:
+                18px;
+
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius);
+
+            background:
+                var(--surface);
+
+            backdrop-filter:
+                blur(20px);
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.25);
+
+        }
+
+
+        /* =====================================================
+           TEAM JOIN CARD
+        ===================================================== */
+
+        .join-card {
+
+            padding:
+                28px;
+
+        }
+
+
+        .section-title {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                12px;
+
+        }
+
+
+        .section-title h2 {
+
+            font-size:
+                19px;
+
+            font-weight:
+                850;
+
+        }
+
+
+        .section-title span {
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+        }
+
+
+        .join-description {
+
+            margin-top:
+                10px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.65;
+
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form {
+
+            margin-top:
+                24px;
+
+        }
+
+
+        .field {
+
+            margin-bottom:
+                15px;
+
+        }
+
+
+        .field label {
+
+            display:
+                block;
+
+            margin-bottom:
+                8px;
+
+            color:
+                #ccd2e0;
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .input {
+
+            width:
+                100%;
+
+            height:
+                50px;
+
+            padding:
+                0 15px;
+
+            outline:
+                none;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                15px;
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(0, 0, 0, 0.16);
+
+            transition:
+                0.25s ease;
+
+        }
+
+
+        .input::placeholder {
+
+            color:
+                #687287;
+
+        }
+
+
+        .input:focus {
+
+            border-color:
+                rgba(166, 108, 255, 0.65);
+
+            background:
+                rgba(166, 108, 255, 0.055);
+
+        }
+
+
+        .join-button {
+
+            width:
+                100%;
+
+            height:
+                52px;
+
+            margin-top:
+                5px;
+
+            border:
+                0;
+
+            border-radius:
+                15px;
+
+            color:
+                #ffffff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #9259f4,
+                    #b078ff
+                );
+
+            font-size:
+                13px;
+
+            font-weight:
+                850;
+
+            cursor:
+                pointer;
+
+            box-shadow:
+                0 14px 35px rgba(146, 89, 244, 0.22);
+
+            transition:
+                0.25s ease;
+
+        }
+
+
+        .join-button:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 18px 42px rgba(146, 89, 244, 0.30);
+
+        }
+
+
+        .join-button:active {
+
+            transform:
+                scale(0.98);
+
+        }
+
+
+        /* =====================================================
+           NOTICE
+        ===================================================== */
+
+        .notice {
+
+            display:
+                flex;
+
+            gap:
+                10px;
+
+            margin-top:
+                15px;
+
+            padding:
+                13px;
+
+            border:
+                1px solid rgba(255, 209, 102, 0.14);
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(255, 209, 102, 0.05);
+
+            color:
+                #c7cdd9;
+
+            font-size:
+                11px;
+
+            line-height:
+                1.55;
+
+        }
+
+
+        /* =====================================================
+           TEAM PREVIEW
+        ===================================================== */
+
+        .team-preview {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                10px;
+
+            margin-top:
+                18px;
+
+        }
+
+
+        .player-slot {
+
+            padding:
+                14px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.065);
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+        }
+
+
+        .player-slot small {
+
+            display:
+                block;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+        }
+
+
+        .player-slot strong {
+
+            display:
+                block;
+
+            margin-top:
+                5px;
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* =====================================================
+           RIGHT COLUMN
+        ===================================================== */
+
+        .side-card {
+
+            padding:
+                23px;
+
+        }
+
+
+        .side-list {
+
+            display:
+                grid;
+
+            gap:
+                10px;
+
+            margin-top:
+                18px;
+
+        }
+
+
+        .side-item {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            padding:
+                13px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.065);
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+        }
+
+
+        .side-item-icon {
+
+            width:
+                38px;
+
+            height:
+                38px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(166, 108, 255, 0.09);
+
+            font-size:
+                17px;
+
+        }
+
+
+        .side-item strong {
+
+            display:
+                block;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .side-item span {
+
+            display:
+                block;
+
+            margin-top:
+                3px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+        }
+
+
+        /* =====================================================
+           FORMAT
+        ===================================================== */
+
+        .format-card {
+
+            margin-top:
+                18px;
+
+            padding:
+                23px;
+
+        }
+
+
+        .format-display {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr
+                auto
+                1fr;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
+
+            margin-top:
+                18px;
+
+        }
+
+
+        .team-box {
+
+            padding:
+                18px 12px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            border-radius:
+                17px;
+
+            text-align:
+                center;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+        }
+
+
+        .team-box .emoji {
+
+            font-size:
+                25px;
+
+        }
+
+
+        .team-box strong {
+
+            display:
+                block;
+
+            margin-top:
+                7px;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .team-box span {
+
+            display:
+                block;
+
+            margin-top:
+                4px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+        }
+
+
+        .vs {
+
+            color:
+                var(--purple-light);
+
+            font-size:
+                12px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                1px;
+
+        }
+
+
+        /* =====================================================
+           RULES
+        ===================================================== */
+
+        .rules {
+
+            margin-top:
+                18px;
+
+            padding:
+                23px;
+
+        }
+
+
+        .rules-list {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap:
+                10px;
+
+            margin-top:
+                18px;
+
+        }
+
+
+        .rule {
+
+            padding:
+                14px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.065);
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+        }
+
+
+        .rule strong {
+
+            display:
+                block;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .rule span {
+
+            display:
+                block;
+
+            margin-top:
+                5px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            line-height:
+                1.5;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            padding:
+                30px 0 5px;
+
+            text-align:
+                center;
+
+            color:
+                #687288;
+
+            font-size:
+                10px;
+
+        }
+
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 760px) {
+
+            .app {
+
+                padding:
+                    15px;
+
+            }
+
+
+            .main-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .join-card {
+
+                padding:
+                    22px;
+
+            }
+
+
+            .rules-list {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 480px) {
+
+            .hero h1 {
+
+                font-size:
+                    40px;
+
+            }
+
+
+            .stats {
+
+                gap:
+                    8px;
+
+            }
+
+
+            .stat {
+
+                padding:
+                    14px 9px;
+
+                text-align:
+                    center;
+
+            }
+
+
+            .stat strong {
+
+                font-size:
+                    18px;
+
+            }
+
+
+            .stat span {
+
+                font-size:
+                    9px;
+
+            }
+
+
+            .team-preview {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .rules-list {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .format-display {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .vs {
+
+                text-align:
+                    center;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           REDUCED MOTION
+        ===================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+
+                animation:
+                    none !important;
+
+                transition:
+                    none !important;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         BACKGROUND
+    ===================================================== -->
+
+    <div class="background">
+
+        <div class="orb orb-one"></div>
+
+        <div class="orb orb-two"></div>
+
+        <div class="orb orb-three"></div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         APP
+    ===================================================== -->
+
+    <main class="app">
+
+
+        <!-- =================================================
+             TOP BAR
+        ================================================== -->
+
+        <header class="topbar">
+
+            <a
+                href="index.html"
+                class="back-button"
+            >
+
+                ← Ludo Home
+
+            </a>
+
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                Double Tournament
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <section class="hero">
+
+            <div class="hero-label">
+
+                👥 TEAM MODE
+
+            </div>
+
+
+            <h1>
+
+                <span>Double</span>
+                Tournament
+
+            </h1>
+
+
+            <p>
+
+                দুইজন খেলোয়াড়ের একটি Team বনাম
+                দুইজন খেলোয়াড়ের অন্য Team।
+                প্রতিটি ম্যাচে মোট চারজন Player
+                একই Ludo Game-এ অংশগ্রহণ করবে।
+
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATS
+        ================================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+                <strong>
+                    50
+                </strong>
+
+                <span>
+                    Maximum Players
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    🏆
+                </div>
+
+                <strong>
+                    25
+                </strong>
+
+                <span>
+                    Maximum Teams
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon">
+                    ⚔️
+                </div>
+
+                <strong>
+                    2 VS 2
+                </strong>
+
+                <span>
+                    Match Format
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             MAIN GRID
+        ================================================== -->
+
+        <section class="main-grid">
+
+
+            <!-- =============================================
+                 TEAM JOIN
+            ============================================== -->
+
+            <div class="card join-card">
+
+
+                <div class="section-title">
+
+                    <h2>
+                        Team Registration
+                    </h2>
+
+                    <span>
+                        2 Players
+                    </span>
+
+                </div>
+
+
+                <p class="join-description">
+
+                    Tournament Director-এর দেওয়া
+                    Join Link বা Team Code ব্যবহার করে
+                    আপনার Team-এর তথ্য প্রদান করুন।
+
+                </p>
+
+
+
+                <form
+                    class="form"
+                    id="doubleJoinForm"
+                >
+
+
+                    <div class="field">
+
+                        <label for="teamName">
+                            Team Name
+                        </label>
+
+                        <input
+                            id="teamName"
+                            class="input"
+                            type="text"
+                            maxlength="40"
+                            placeholder="আপনার Team-এর নাম"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="team-preview">
+
+
+                        <div class="player-slot">
+
+                            <small>
+                                Player 01
+                            </small>
+
+                            <strong>
+                                Player One
+                            </strong>
+
+                        </div>
+
+
+                        <div class="player-slot">
+
+                            <small>
+                                Player 02
+                            </small>
+
+                            <strong>
+                                Player Two
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label for="playerOne">
+                            Player 01-এর নাম
+                        </label>
+
+                        <input
+                            id="playerOne"
+                            class="input"
+                            type="text"
+                            maxlength="40"
+                            placeholder="প্রথম খেলোয়াড়ের নাম"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label for="playerTwo">
+                            Player 02-এর নাম
+                        </label>
+
+                        <input
+                            id="playerTwo"
+                            class="input"
+                            type="text"
+                            maxlength="40"
+                            placeholder="দ্বিতীয় খেলোয়াড়ের নাম"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="field">
+
+                        <label for="teamCode">
+                            Team Code
+                        </label>
+
+                        <input
+                            id="teamCode"
+                            class="input"
+                            type="text"
+                            maxlength="20"
+                            placeholder="Director-এর দেওয়া Code"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <button
+                        type="submit"
+                        class="join-button"
+                    >
+
+                        JOIN DOUBLE TOURNAMENT
+                        <span>→</span>
+
+                    </button>
+
+
+                </form>
+
+
+
+                <div class="notice">
+
+                    <span>
+                        ℹ️
+                    </span>
+
+                    <span>
+
+                        একটি Team-এ অবশ্যই ২ জন Player
+                        থাকতে হবে। সর্বোচ্চ ৫০ জন Player
+                        এবং ২৫টি Team রাখা যাবে।
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =============================================
+                 INFORMATION
+            ============================================== -->
+
+            <aside class="card side-card">
+
+
+                <div class="section-title">
+
+                    <h2>
+                        Tournament
+                    </h2>
+
+                    <span>
+                        Information
+                    </span>
+
+                </div>
+
+
+                <div class="side-list">
+
+
+                    <div class="side-item">
+
+                        <div class="side-item-icon">
+                            📅
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Fixture
+                            </strong>
+
+                            <span>
+                                Team Match Schedule
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="side-item">
+
+                        <div class="side-item-icon">
+                            📊
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Points Table
+                            </strong>
+
+                            <span>
+                                Team Standings
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="side-item">
+
+                        <div class="side-item-icon">
+                            👥
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Teams
+                            </strong>
+
+                            <span>
+                                Registered Teams
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="side-item">
+
+                        <div class="side-item-icon">
+                            🎮
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Game Room
+                            </strong>
+
+                            <span>
+                                2 VS 2 Live Match
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </aside>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             MATCH FORMAT
+        ================================================== -->
+
+        <section class="card format-card">
+
+
+            <div class="section-title">
+
+                <h2>
+                    Match Format
+                </h2>
+
+                <span>
+                    2 VS 2
+                </span>
+
+            </div>
+
+
+            <div class="format-display">
+
+
+                <div class="team-box">
+
+                    <div class="emoji">
+                        👥
+                    </div>
+
+                    <strong>
+                        Team A
+                    </strong>
+
+                    <span>
+                        Player 1 + Player 2
+                    </span>
+
+                </div>
+
+
+                <div class="vs">
+                    VS
+                </div>
+
+
+                <div class="team-box">
+
+                    <div class="emoji">
+                        👥
+                    </div>
+
+                    <strong>
+                        Team B
+                    </strong>
+
+                    <span>
+                        Player 1 + Player 2
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             RULES
+        ================================================== -->
+
+        <section class="card rules">
+
+
+            <div class="section-title">
+
+                <h2>
+                    Double Tournament Format
+                </h2>
+
+                <span>
+                    2 VS 2
+                </span>
+
+            </div>
+
+
+            <div class="rules-list">
+
+
+                <div class="rule">
+
+                    <strong>
+                        👥 Team Size
+                    </strong>
+
+                    <span>
+                        প্রতিটি Team-এ ঠিক
+                        ২ জন Player থাকবে।
+                    </span>
+
+                </div>
+
+
+                <div class="rule">
+
+                    <strong>
+                        ⚔️ Match
+                    </strong>
+
+                    <span>
+                        ২ জন বনাম ২ জন।
+                        মোট ৪ জন Player একই Match-এ।
+                    </span>
+
+                </div>
+
+
+                <div class="rule">
+
+                    <strong>
+                        🏆 Capacity
+                    </strong>
+
+                    <span>
+                        সর্বোচ্চ ৫০ Player,
+                        অর্থাৎ সর্বোচ্চ ২৫ Team।
+                    </span>
+
+                </div>
+
+
+                <div class="rule">
+
+                    <strong>
+                        📋 Fixture
+                    </strong>
+
+                    <span>
+                        Tournament Director
+                        Team Fixture নির্ধারণ করবেন।
+                    </span>
+
+                </div>
+
+
+                <div class="rule">
+
+                    <strong>
+                        📊 Points
+                    </strong>
+
+                    <span>
+                        Match result অনুযায়ী
+                        Team Points Table পরিচালিত হবে।
+                    </span>
+
+                </div>
+
+
+                <div class="rule">
+
+                    <strong>
+                        🎮 Game
+                    </strong>
+
+                    <span>
+                        নির্ধারিত Game Room-এ
+                        ৪ জন Player অংশগ্রহণ করবে।
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <footer>
+
+            © 2026 Ghopkhali Sports Arena
+            · Ludo Tournament
+
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         TEMPORARY FRONTEND LOGIC
+         Supabase will be connected later.
+    ===================================================== -->
+
+    <script>
+
+        "use strict";
+
+
+        const form =
+            document.getElementById(
+                "doubleJoinForm"
+            );
+
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+
+                const teamName =
+                    document
+                        .getElementById(
+                            "teamName"
+                        )
+                        .value
+                        .trim();
+
+
+                const playerOne =
+                    document
+                        .getElementById(
+                            "playerOne"
+                        )
+                        .value
+                        .trim();
+
+
+                const playerTwo =
+                    document
+                        .getElementById(
+                            "playerTwo"
+                        )
+                        .value
+                        .trim();
+
+
+                const teamCode =
+                    document
+                        .getElementById(
+                            "teamCode"
+                        )
+                        .value
+                        .trim();
+
+
+                if (
+                    !teamName ||
+                    !playerOne ||
+                    !playerTwo ||
+                    !teamCode
+                ) {
+
+                    return;
+
+                }
+
+
+                alert(
+                    "Team registration system পরবর্তী ধাপে Supabase-এর সঙ্গে যুক্ত হবে।"
+                );
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
