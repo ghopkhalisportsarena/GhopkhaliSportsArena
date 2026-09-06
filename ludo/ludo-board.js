@@ -1,19 +1,25 @@
 /* =========================================================
    GHOPKHALI SPORTS ARENA
    ONLINE LUDO
-   STEP 2 — TOKEN SYSTEM
+   STEP 3 — TOKEN MOVEMENT ENGINE
 ========================================================= */
 
 "use strict";
 
 
 /* =========================================================
-   BOARD CONSTANTS
+   CONSTANTS
 ========================================================= */
 
 const LUDO_SIZE = 15;
 
 const TOKEN_COUNT = 4;
+
+const TRACK_LENGTH = 52;
+
+const HOME_ENTRY_STEP = 51;
+
+const FINISH_STEP = 57;
 
 
 /* =========================================================
@@ -34,7 +40,7 @@ const LUDO_COLORS = {
 
 
 /* =========================================================
-   PLAYER CONFIGURATION
+   PLAYER CONFIG
 ========================================================= */
 
 const LUDO_PLAYERS = {
@@ -44,8 +50,6 @@ const LUDO_PLAYERS = {
         name: "Player 1",
 
         color: "red",
-
-        homeClass: "red-home",
 
         startIndex: 0
 
@@ -57,9 +61,27 @@ const LUDO_PLAYERS = {
 
         color: "blue",
 
-        homeClass: "blue-home",
-
         startIndex: 39
+
+    },
+
+    green: {
+
+        name: "Player 3",
+
+        color: "green",
+
+        startIndex: 13
+
+    },
+
+    yellow: {
+
+        name: "Player 4",
+
+        color: "yellow",
+
+        startIndex: 26
 
     }
 
@@ -67,12 +89,10 @@ const LUDO_PLAYERS = {
 
 
 /* =========================================================
-   STANDARD 52-CELL TRACK
+   52 CELL TRACK
 ========================================================= */
 
 const LUDO_TRACK = [
-
-    /* Red side */
 
     [6, 1],
     [6, 2],
@@ -87,10 +107,9 @@ const LUDO_TRACK = [
     [1, 6],
     [0, 6],
 
-    /* Green side */
-
     [0, 7],
     [0, 8],
+
     [1, 8],
     [2, 8],
     [3, 8],
@@ -104,9 +123,8 @@ const LUDO_TRACK = [
     [6, 13],
     [6, 14],
 
-    /* Yellow side */
-
     [7, 14],
+
     [8, 14],
     [8, 13],
     [8, 12],
@@ -121,9 +139,8 @@ const LUDO_TRACK = [
     [13, 8],
     [14, 8],
 
-    /* Blue side */
-
     [14, 7],
+
     [14, 6],
     [13, 6],
     [12, 6],
@@ -138,8 +155,7 @@ const LUDO_TRACK = [
     [8, 1],
     [8, 0],
 
-    [7, 0],
-    [6, 0]
+    [7, 0]
 
 ];
 
@@ -217,7 +233,7 @@ const LUDO_SAFE_CELLS = [
 
 
 /* =========================================================
-   TOKEN HOME SLOTS
+   HOME SLOTS
 ========================================================= */
 
 const LUDO_HOME_SLOTS = {
@@ -262,69 +278,32 @@ const LUDO_HOME_SLOTS = {
 
 
 /* =========================================================
-   GAME BOARD STATE
-   STEP 2 ONLY
+   GAME STATE
 ========================================================= */
 
-const ludoBoardState = {
+const ludoGameState = {
+
+    currentPlayer: "red",
+
+    dice: null,
+
+    diceRolled: false,
+
+    waitingForToken: false,
+
+    gameStarted: false,
+
+    winner: null,
 
     tokens: {
 
-        red: [
+        red: createTokens("red"),
 
-            {
-                id: "red-1",
-                state: "home",
-                position: -1
-            },
+        blue: createTokens("blue"),
 
-            {
-                id: "red-2",
-                state: "home",
-                position: -1
-            },
+        green: createTokens("green"),
 
-            {
-                id: "red-3",
-                state: "home",
-                position: -1
-            },
-
-            {
-                id: "red-4",
-                state: "home",
-                position: -1
-            }
-
-        ],
-
-        blue: [
-
-            {
-                id: "blue-1",
-                state: "home",
-                position: -1
-            },
-
-            {
-                id: "blue-2",
-                state: "home",
-                position: -1
-            },
-
-            {
-                id: "blue-3",
-                state: "home",
-                position: -1
-            },
-
-            {
-                id: "blue-4",
-                state: "home",
-                position: -1
-            }
-
-        ]
+        yellow: createTokens("yellow")
 
     }
 
@@ -332,184 +311,63 @@ const ludoBoardState = {
 
 
 /* =========================================================
-   UTILITY
+   CREATE TOKENS
 ========================================================= */
 
-function cellKey(row, col) {
+function createTokens(color) {
 
-    return `${row}-${col}`;
+    return [
+
+        createToken(
+            `${color}-1`
+        ),
+
+        createToken(
+            `${color}-2`
+        ),
+
+        createToken(
+            `${color}-3`
+        ),
+
+        createToken(
+            `${color}-4`
+        )
+
+    ];
+
+}
+
+
+function createToken(id) {
+
+    return {
+
+        id: id,
+
+        state: "home",
+
+        position: -1,
+
+        progress: -1,
+
+        finished: false
+
+    };
 
 }
 
 
 /* =========================================================
-   CREATE BOARD
+   CELL KEY
 ========================================================= */
 
-function createLudoBoard(container) {
+function cellKey(
+    row,
+    col
+) {
 
-    if (!container) {
-
-        return;
-
-    }
-
-
-    container.innerHTML = "";
-
-
-    const board =
-        document.createElement("div");
-
-
-    board.className =
-        "ludo-board";
-
-
-    board.setAttribute(
-        "data-board",
-        "ludo"
-    );
-
-
-    /* -----------------------------------------------------
-       CREATE 15 × 15 CELLS
-    ----------------------------------------------------- */
-
-    for (
-        let row = 0;
-        row < LUDO_SIZE;
-        row++
-    ) {
-
-        for (
-            let col = 0;
-            col < LUDO_SIZE;
-            col++
-        ) {
-
-            const cell =
-                document.createElement("div");
-
-
-            cell.className =
-                "cell";
-
-
-            cell.dataset.row =
-                row;
-
-
-            cell.dataset.col =
-                col;
-
-
-            const type =
-                getCellType(
-                    row,
-                    col
-                );
-
-
-            cell.classList.add(
-                type
-            );
-
-
-            /* Safe cell */
-
-            if (
-                isSafeCell(
-                    row,
-                    col
-                )
-            ) {
-
-                cell.classList.add(
-                    "safe"
-                );
-
-            }
-
-
-            /* Start cells */
-
-            const startColor =
-                getStartColor(
-                    row,
-                    col
-                );
-
-
-            if (startColor) {
-
-                cell.classList.add(
-                    `start-${startColor}`
-                );
-
-            }
-
-
-            board.appendChild(
-                cell
-            );
-
-        }
-
-    }
-
-
-    /* -----------------------------------------------------
-       HOME YARDS
-    ----------------------------------------------------- */
-
-    createHomeYards(
-        board
-    );
-
-
-    /* -----------------------------------------------------
-       CENTER
-    ----------------------------------------------------- */
-
-    createHomeCenter(
-        board
-    );
-
-
-    /* -----------------------------------------------------
-       TOKEN LAYER
-    ----------------------------------------------------- */
-
-    const tokenLayer =
-        document.createElement(
-            "div"
-        );
-
-
-    tokenLayer.className =
-        "token-layer";
-
-
-    tokenLayer.id =
-        "ludo-token-layer";
-
-
-    board.appendChild(
-        tokenLayer
-    );
-
-
-    container.appendChild(
-        board
-    );
-
-
-    /* -----------------------------------------------------
-       INITIAL TOKEN RENDER
-    ----------------------------------------------------- */
-
-    renderTokens();
+    return `${row}-${col}`;
 
 }
 
@@ -518,10 +376,10 @@ function createLudoBoard(container) {
    CELL TYPE
 ========================================================= */
 
-function getCellType(row, col) {
-
-
-    /* Red home */
+function getCellType(
+    row,
+    col
+) {
 
     if (
         row < 6 &&
@@ -533,8 +391,6 @@ function getCellType(row, col) {
     }
 
 
-    /* Green home */
-
     if (
         row < 6 &&
         col > 8
@@ -544,8 +400,6 @@ function getCellType(row, col) {
 
     }
 
-
-    /* Yellow home */
 
     if (
         row > 8 &&
@@ -557,8 +411,6 @@ function getCellType(row, col) {
     }
 
 
-    /* Blue home */
-
     if (
         row > 8 &&
         col < 6
@@ -568,8 +420,6 @@ function getCellType(row, col) {
 
     }
 
-
-    /* Center */
 
     if (
         row >= 6 &&
@@ -583,22 +433,15 @@ function getCellType(row, col) {
     }
 
 
-    /* Home lanes */
-
     for (
         const color of Object.keys(
             LUDO_HOME_LANES
         )
     ) {
 
-        const lane =
-            LUDO_HOME_LANES[
-                color
-            ];
-
-
         for (
-            const coordinate of lane
+            const coordinate
+            of LUDO_HOME_LANES[color]
         ) {
 
             if (
@@ -615,15 +458,13 @@ function getCellType(row, col) {
     }
 
 
-    /* Track */
-
     return "track";
 
 }
 
 
 /* =========================================================
-   SAFE CELL CHECK
+   SAFE CELL
 ========================================================= */
 
 function isSafeCell(
@@ -643,7 +484,7 @@ function isSafeCell(
 
 
 /* =========================================================
-   START COLOR
+   START CELL
 ========================================================= */
 
 function getStartColor(
@@ -690,13 +531,162 @@ function getStartColor(
 
 
 /* =========================================================
+   CREATE BOARD
+========================================================= */
+
+function createLudoBoard(
+    container
+) {
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    const board =
+        document.createElement(
+            "div"
+        );
+
+
+    board.className =
+        "ludo-board";
+
+
+    board.setAttribute(
+        "data-board",
+        "ludo"
+    );
+
+
+    for (
+        let row = 0;
+        row < LUDO_SIZE;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < LUDO_SIZE;
+            col++
+        ) {
+
+            const cell =
+                document.createElement(
+                    "div"
+                );
+
+
+            cell.className =
+                "cell";
+
+
+            cell.dataset.row =
+                row;
+
+
+            cell.dataset.col =
+                col;
+
+
+            cell.classList.add(
+                getCellType(
+                    row,
+                    col
+                )
+            );
+
+
+            if (
+                isSafeCell(
+                    row,
+                    col
+                )
+            ) {
+
+                cell.classList.add(
+                    "safe"
+                );
+
+            }
+
+
+            const startColor =
+                getStartColor(
+                    row,
+                    col
+                );
+
+
+            if (startColor) {
+
+                cell.classList.add(
+                    `start-${startColor}`
+                );
+
+            }
+
+
+            board.appendChild(
+                cell
+            );
+
+        }
+
+    }
+
+
+    createHomeYards(
+        board
+    );
+
+
+    createHomeCenter(
+        board
+    );
+
+
+    const tokenLayer =
+        document.createElement(
+            "div"
+        );
+
+
+    tokenLayer.className =
+        "token-layer";
+
+
+    tokenLayer.id =
+        "ludo-token-layer";
+
+
+    board.appendChild(
+        tokenLayer
+    );
+
+
+    container.appendChild(
+        board
+    );
+
+
+    renderTokens();
+
+}
+
+
+/* =========================================================
    HOME YARDS
 ========================================================= */
 
 function createHomeYards(
     board
 ) {
-
 
     const yards = [
 
@@ -730,7 +720,6 @@ function createHomeYards(
     yards.forEach(
         yardData => {
 
-
             const yard =
                 document.createElement(
                     "div"
@@ -749,8 +738,6 @@ function createHomeYards(
                 `${yardData.col + 1} / span 6`;
 
 
-            /* Inner yard */
-
             const inner =
                 document.createElement(
                     "div"
@@ -761,17 +748,13 @@ function createHomeYards(
                 "yard-inner";
 
 
-            /* Four token slots */
-
-            const slots =
-                LUDO_HOME_SLOTS[
-                    yardData.color
-                ];
-
-
-            slots.forEach(
-                (slot, index) => {
-
+            LUDO_HOME_SLOTS[
+                yardData.color
+            ].forEach(
+                (
+                    slot,
+                    index
+                ) => {
 
                     const tokenSlot =
                         document.createElement(
@@ -815,7 +798,7 @@ function createHomeYards(
 
 
 /* =========================================================
-   HOME CENTER
+   CENTER
 ========================================================= */
 
 function createHomeCenter(
@@ -840,44 +823,30 @@ function createHomeCenter(
         "7 / span 3";
 
 
-    const red =
-        document.createElement(
-            "div"
-        );
+    [
+        "red",
+        "green",
+        "yellow",
+        "blue"
+    ].forEach(
+        color => {
+
+            const triangle =
+                document.createElement(
+                    "div"
+                );
 
 
-    red.className =
-        "center-triangle center-red";
+            triangle.className =
+                `center-triangle center-${color}`;
 
 
-    const green =
-        document.createElement(
-            "div"
-        );
+            center.appendChild(
+                triangle
+            );
 
-
-    green.className =
-        "center-triangle center-green";
-
-
-    const yellow =
-        document.createElement(
-            "div"
-        );
-
-
-    yellow.className =
-        "center-triangle center-yellow";
-
-
-    const blue =
-        document.createElement(
-            "div"
-        );
-
-
-    blue.className =
-        "center-triangle center-blue";
+        }
+    );
 
 
     const star =
@@ -892,26 +861,6 @@ function createHomeCenter(
 
     star.textContent =
         "★";
-
-
-    center.appendChild(
-        red
-    );
-
-
-    center.appendChild(
-        green
-    );
-
-
-    center.appendChild(
-        yellow
-    );
-
-
-    center.appendChild(
-        blue
-    );
 
 
     center.appendChild(
@@ -959,12 +908,16 @@ function createTokenElement(
 
 
     element.setAttribute(
+        "role",
+        "button"
+    );
+
+
+    element.setAttribute(
         "aria-label",
         `${color} token ${index + 1}`
     );
 
-
-    /* Token inner circle */
 
     const inner =
         document.createElement(
@@ -975,8 +928,6 @@ function createTokenElement(
     inner.className =
         "token-inner";
 
-
-    /* Token number */
 
     const number =
         document.createElement(
@@ -1013,7 +964,6 @@ function createTokenElement(
 
 function renderTokens() {
 
-
     const layer =
         document.getElementById(
             "ludo-token-layer"
@@ -1031,19 +981,17 @@ function renderTokens() {
 
 
     Object.keys(
-        ludoBoardState.tokens
+        ludoGameState.tokens
     ).forEach(
         color => {
 
-
-            ludoBoardState.tokens[
+            ludoGameState.tokens[
                 color
             ].forEach(
                 (
                     token,
                     index
                 ) => {
-
 
                     const element =
                         createTokenElement(
@@ -1059,6 +1007,33 @@ function renderTokens() {
                         color,
                         index
                     );
+
+
+                    if (
+                        isValidTokenChoice(
+                            color,
+                            index
+                        )
+                    ) {
+
+                        element.classList.add(
+                            "token-selectable"
+                        );
+
+
+                        element.addEventListener(
+                            "click",
+                            () => {
+
+                                moveSelectedToken(
+                                    color,
+                                    index
+                                );
+
+                            }
+                        );
+
+                    }
 
 
                     layer.appendChild(
@@ -1085,11 +1060,6 @@ function positionToken(
     index
 ) {
 
-
-    /* -----------------------------------------------------
-       TOKEN IN HOME YARD
-    ----------------------------------------------------- */
-
     if (
         token.state ===
         "home"
@@ -1101,20 +1071,12 @@ function positionToken(
             ][index];
 
 
-        const row =
-            slot[0];
-
-
-        const col =
-            slot[1];
-
-
         element.style.gridRow =
-            row + 1;
+            slot[0] + 1;
 
 
         element.style.gridColumn =
-            col + 1;
+            slot[1] + 1;
 
 
         element.classList.add(
@@ -1126,10 +1088,6 @@ function positionToken(
 
     }
 
-
-    /* -----------------------------------------------------
-       TOKEN ON TRACK
-    ----------------------------------------------------- */
 
     if (
         token.state ===
@@ -1166,10 +1124,6 @@ function positionToken(
 
     }
 
-
-    /* -----------------------------------------------------
-       TOKEN IN HOME LANE
-    ----------------------------------------------------- */
 
     if (
         token.state ===
@@ -1213,10 +1167,6 @@ function positionToken(
     }
 
 
-    /* -----------------------------------------------------
-       TOKEN FINISHED
-    ----------------------------------------------------- */
-
     if (
         token.state ===
         "finished"
@@ -1240,34 +1190,270 @@ function positionToken(
 
 
 /* =========================================================
-   PUBLIC TOKEN API
+   GET ABSOLUTE TRACK INDEX
 ========================================================= */
 
-function getLudoTokenState() {
+function getTrackIndex(
+    color,
+    progress
+) {
 
-    return structuredClone(
-        ludoBoardState.tokens
+    const player =
+        LUDO_PLAYERS[
+            color
+        ];
+
+
+    return (
+        player.startIndex +
+        progress
+    ) % TRACK_LENGTH;
+
+}
+
+
+/* =========================================================
+   GET TOKEN COORDINATE
+========================================================= */
+
+function getTokenCoordinate(
+    color,
+    token
+) {
+
+    if (
+        token.state ===
+        "track"
+    ) {
+
+        return LUDO_TRACK[
+            token.position
+        ];
+
+    }
+
+
+    if (
+        token.state ===
+        "lane"
+    ) {
+
+        return LUDO_HOME_LANES[
+            color
+        ][
+            token.position
+        ];
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   CAN TOKEN LEAVE HOME?
+========================================================= */
+
+function canTokenLeaveHome(
+    color,
+    token,
+    dice
+) {
+
+    if (
+        token.state !==
+        "home"
+    ) {
+
+        return false;
+
+    }
+
+
+    return dice === 6;
+
+}
+
+
+/* =========================================================
+   CAN TOKEN MOVE?
+========================================================= */
+
+function canTokenMove(
+    color,
+    token,
+    dice
+) {
+
+    if (
+        !Number.isInteger(dice) ||
+        dice < 1 ||
+        dice > 6
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        token.state ===
+        "finished"
+    ) {
+
+        return false;
+
+    }
+
+
+    /* Home token */
+
+    if (
+        token.state ===
+        "home"
+    ) {
+
+        return dice === 6;
+
+    }
+
+
+    /* Track token */
+
+    if (
+        token.state ===
+        "track"
+    ) {
+
+        return (
+            token.progress + dice
+            <= FINISH_STEP
+        );
+
+    }
+
+
+    /* Lane token */
+
+    if (
+        token.state ===
+        "lane"
+    ) {
+
+        return (
+            token.position + dice
+            <= LUDO_HOME_LANES[
+                color
+            ].length
+        );
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =========================================================
+   GET VALID TOKENS
+========================================================= */
+
+function getValidTokens(
+    color,
+    dice
+) {
+
+    const tokens =
+        ludoGameState.tokens[
+            color
+        ];
+
+
+    const valid = [];
+
+
+    tokens.forEach(
+        (
+            token,
+            index
+        ) => {
+
+            if (
+                canTokenMove(
+                    color,
+                    token,
+                    dice
+                )
+            ) {
+
+                valid.push(
+                    index
+                );
+
+            }
+
+        }
+    );
+
+
+    return valid;
+
+}
+
+
+/* =========================================================
+   TOKEN CHOICE
+========================================================= */
+
+function isValidTokenChoice(
+    color,
+    index
+) {
+
+    if (
+        ludoGameState.currentPlayer !==
+        color
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        !ludoGameState.diceRolled
+    ) {
+
+        return false;
+
+    }
+
+
+    return getValidTokens(
+        color,
+        ludoGameState.dice
+    ).includes(
+        index
     );
 
 }
 
 
 /* =========================================================
-   MOVE TOKEN — PREPARATION ONLY
+   MOVE SELECTED TOKEN
 ========================================================= */
 
-function setLudoTokenPosition(
+function moveSelectedToken(
     color,
-    tokenIndex,
-    state,
-    position
+    index
 ) {
 
-
     if (
-        !ludoBoardState.tokens[
-            color
-        ]
+        ludoGameState.currentPlayer !==
+        color
     ) {
 
         return false;
@@ -1276,9 +1462,7 @@ function setLudoTokenPosition(
 
 
     if (
-        !ludoBoardState.tokens[
-            color
-        ][tokenIndex]
+        !ludoGameState.diceRolled
     ) {
 
         return false;
@@ -1286,16 +1470,588 @@ function setLudoTokenPosition(
     }
 
 
-    ludoBoardState.tokens[
-        color
-    ][tokenIndex].state =
-        state;
+    const dice =
+        ludoGameState.dice;
 
 
-    ludoBoardState.tokens[
+    const token =
+        ludoGameState.tokens[
+            color
+        ][index];
+
+
+    if (
+        !canTokenMove(
+            color,
+            token,
+            dice
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    /* -----------------------------------------------------
+       TOKEN FROM HOME
+    ----------------------------------------------------- */
+
+    if (
+        token.state ===
+        "home"
+    ) {
+
+        token.state =
+            "track";
+
+
+        token.progress =
+            0;
+
+
+        token.position =
+            LUDO_PLAYERS[
+                color
+            ].startIndex;
+
+    }
+
+
+    /* -----------------------------------------------------
+       TOKEN ON TRACK
+    ----------------------------------------------------- */
+
+    else if (
+        token.state ===
+        "track"
+    ) {
+
+        const newProgress =
+            token.progress +
+            dice;
+
+
+        token.progress =
+            newProgress;
+
+
+        if (
+            newProgress <
+            TRACK_LENGTH
+        ) {
+
+            token.position =
+                getTrackIndex(
+                    color,
+                    newProgress
+                );
+
+        }
+
+
+        /* Enter home lane */
+
+        if (
+            newProgress >=
+            HOME_ENTRY_STEP
+        ) {
+
+            const lanePosition =
+                newProgress -
+                HOME_ENTRY_STEP;
+
+
+            if (
+                lanePosition >= 0 &&
+                lanePosition <
+                LUDO_HOME_LANES[
+                    color
+                ].length
+            ) {
+
+                token.state =
+                    "lane";
+
+
+                token.position =
+                    lanePosition;
+
+            }
+
+        }
+
+
+        /* Finish */
+
+        if (
+            newProgress >=
+            FINISH_STEP
+        ) {
+
+            token.state =
+                "finished";
+
+
+            token.finished =
+                true;
+
+
+            token.position =
+                LUDO_HOME_LANES[
+                    color
+                ].length;
+
+        }
+
+    }
+
+
+    /* -----------------------------------------------------
+       TOKEN IN HOME LANE
+    ----------------------------------------------------- */
+
+    else if (
+        token.state ===
+        "lane"
+    ) {
+
+        const newPosition =
+            token.position +
+            dice;
+
+
+        if (
+            newPosition >=
+            LUDO_HOME_LANES[
+                color
+            ].length
+        ) {
+
+            token.state =
+                "finished";
+
+
+            token.finished =
+                true;
+
+
+            token.position =
+                LUDO_HOME_LANES[
+                    color
+                ].length;
+
+        }
+
+        else {
+
+            token.position =
+                newPosition;
+
+        }
+
+    }
+
+
+    ludoGameState.diceRolled =
+        false;
+
+
+    ludoGameState.waitingForToken =
+        false;
+
+
+    handleCapture(
+        color,
+        token
+    );
+
+
+    checkWinner(
         color
-    ][tokenIndex].position =
-        position;
+    );
+
+
+    renderTokens();
+
+
+    /* Six = extra turn */
+
+    if (
+        dice === 6 &&
+        !ludoGameState.winner
+    ) {
+
+        ludoGameState.dice =
+            null;
+
+
+        ludoGameState.diceRolled =
+            false;
+
+
+        updateGameMessage(
+            `${getPlayerName(color)} — ৬ এসেছে। অতিরিক্ত চাল।`
+        );
+
+
+        return true;
+
+    }
+
+
+    if (
+        !ludoGameState.winner
+    ) {
+
+        changeTurn();
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   CAPTURE
+========================================================= */
+
+function handleCapture(
+    movingColor,
+    movingToken
+) {
+
+    const coordinate =
+        getTokenCoordinate(
+            movingColor,
+            movingToken
+        );
+
+
+    if (!coordinate) {
+
+        return;
+
+    }
+
+
+    if (
+        isSafeCell(
+            coordinate[0],
+            coordinate[1]
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    Object.keys(
+        ludoGameState.tokens
+    ).forEach(
+        color => {
+
+            if (
+                color ===
+                movingColor
+            ) {
+
+                return;
+
+            }
+
+
+            ludoGameState.tokens[
+                color
+            ].forEach(
+                opponent => {
+
+                    const opponentCoordinate =
+                        getTokenCoordinate(
+                            color,
+                            opponent
+                        );
+
+
+                    if (
+                        !opponentCoordinate
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (
+
+                        opponentCoordinate[0] ===
+                            coordinate[0] &&
+
+                        opponentCoordinate[1] ===
+                            coordinate[1]
+
+                    ) {
+
+                        opponent.state =
+                            "home";
+
+
+                        opponent.position =
+                            -1;
+
+
+                        opponent.progress =
+                            -1;
+
+
+                        opponent.finished =
+                            false;
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CHECK WINNER
+========================================================= */
+
+function checkWinner(
+    color
+) {
+
+    const tokens =
+        ludoGameState.tokens[
+            color
+        ];
+
+
+    const finishedCount =
+        tokens.filter(
+            token =>
+                token.finished
+        ).length;
+
+
+    if (
+        finishedCount ===
+        TOKEN_COUNT
+    ) {
+
+        ludoGameState.winner =
+            color;
+
+
+        updateGameMessage(
+            `🏆 ${getPlayerName(color)} বিজয়ী!`
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CHANGE TURN
+========================================================= */
+
+function changeTurn() {
+
+    const order = [
+
+        "red",
+
+        "green",
+
+        "yellow",
+
+        "blue"
+
+    ];
+
+
+    const currentIndex =
+        order.indexOf(
+            ludoGameState.currentPlayer
+        );
+
+
+    let nextIndex =
+        (
+            currentIndex + 1
+        ) % order.length;
+
+
+    /*
+     * Step 3 supports the
+     * complete four-color engine.
+     *
+     * UI will later decide
+     * which players are active
+     * for 1v1 / 2v2.
+     */
+
+
+    ludoGameState.currentPlayer =
+        order[
+            nextIndex
+        ];
+
+
+    ludoGameState.dice =
+        null;
+
+
+    ludoGameState.diceRolled =
+        false;
+
+
+    updateTurnUI();
+
+}
+
+
+/* =========================================================
+   SET DICE RESULT
+========================================================= */
+
+function setDiceResult(
+    result
+) {
+
+    if (
+        ludoGameState.winner
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        ludoGameState.diceRolled
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        !Number.isInteger(result) ||
+        result < 1 ||
+        result > 6
+    ) {
+
+        return false;
+
+    }
+
+
+    ludoGameState.dice =
+        result;
+
+
+    ludoGameState.diceRolled =
+        true;
+
+
+    ludoGameState.gameStarted =
+        true;
+
+
+    const color =
+        ludoGameState.currentPlayer;
+
+
+    const valid =
+        getValidTokens(
+            color,
+            result
+        );
+
+
+    if (
+        valid.length === 0
+    ) {
+
+        updateGameMessage(
+            `${getPlayerName(color)} — ${result} এসেছে, কোনো valid move নেই।`
+        );
+
+
+        if (
+            result === 6
+        ) {
+
+            setTimeout(
+                () => {
+
+                    ludoGameState.dice =
+                        null;
+
+                    ludoGameState.diceRolled =
+                        false;
+
+                    changeTurn();
+
+                },
+                800
+            );
+
+        }
+
+        else {
+
+            setTimeout(
+                () => {
+
+                    ludoGameState.dice =
+                        null;
+
+                    ludoGameState.diceRolled =
+                        false;
+
+                    changeTurn();
+
+                },
+                800
+            );
+
+        }
+
+
+        return true;
+
+    }
+
+
+    if (
+        valid.length === 1
+    ) {
+
+        updateGameMessage(
+            `${getPlayerName(color)} — Token চাল দেওয়ার জন্য প্রস্তুত।`
+        );
+
+    }
+
+    else {
+
+        updateGameMessage(
+            `${getPlayerName(color)} — চাল দেওয়ার জন্য একটি Token নির্বাচন করুন।`
+        );
+
+    }
 
 
     renderTokens();
@@ -1307,7 +2063,251 @@ function setLudoTokenPosition(
 
 
 /* =========================================================
-   BOARD API
+   PLAYER NAME
+========================================================= */
+
+function getPlayerName(
+    color
+) {
+
+    return (
+        LUDO_PLAYERS[
+            color
+        ]?.name ||
+        color
+    );
+
+}
+
+
+/* =========================================================
+   UI TURN UPDATE
+========================================================= */
+
+function updateTurnUI() {
+
+    const turnPlayer =
+        document.getElementById(
+            "turn-player"
+        );
+
+
+    const message =
+        document.getElementById(
+            "game-message"
+        );
+
+
+    if (
+        turnPlayer
+    ) {
+
+        const color =
+            ludoGameState.currentPlayer;
+
+
+        const icons = {
+
+            red: "🔴",
+
+            blue: "🔵",
+
+            green: "🟢",
+
+            yellow: "🟡"
+
+        };
+
+
+        turnPlayer.textContent =
+            `${icons[color]} ${getPlayerName(color)}`;
+
+    }
+
+
+    if (
+        message &&
+        !ludoGameState.diceRolled &&
+        !ludoGameState.winner
+    ) {
+
+        message.textContent =
+            `${getPlayerName(ludoGameState.currentPlayer)}-এর পালা। Dice Roll করুন।`;
+
+    }
+
+
+    updatePlayerCards();
+
+}
+
+
+/* =========================================================
+   PLAYER CARDS
+========================================================= */
+
+function updatePlayerCards() {
+
+    const cards = {
+
+        red:
+            document.getElementById(
+                "player-red-card"
+            ),
+
+        blue:
+            document.getElementById(
+                "player-blue-card"
+            )
+
+    };
+
+
+    Object.keys(cards).forEach(
+        color => {
+
+            if (
+                !cards[color]
+            ) {
+
+                return;
+
+            }
+
+
+            cards[color].classList.toggle(
+                "active",
+                ludoGameState.currentPlayer ===
+                    color
+            );
+
+        }
+    );
+
+
+    const redStatus =
+        document.getElementById(
+            "red-status"
+        );
+
+
+    const blueStatus =
+        document.getElementById(
+            "blue-status"
+        );
+
+
+    if (
+        redStatus
+    ) {
+
+        redStatus.textContent =
+            ludoGameState.currentPlayer ===
+            "red"
+                ? "আপনার পালা"
+                : "অপেক্ষায়";
+
+    }
+
+
+    if (
+        blueStatus
+    ) {
+
+        blueStatus.textContent =
+            ludoGameState.currentPlayer ===
+            "blue"
+                ? "আপনার পালা"
+                : "অপেক্ষায়";
+
+    }
+
+
+    updateTokenCounts();
+
+}
+
+
+/* =========================================================
+   TOKEN COUNTS
+========================================================= */
+
+function updateTokenCounts() {
+
+    const redCount =
+        document.getElementById(
+            "red-home-count"
+        );
+
+
+    const blueCount =
+        document.getElementById(
+            "blue-home-count"
+        );
+
+
+    if (
+        redCount
+    ) {
+
+        redCount.textContent =
+            ludoGameState.tokens.red
+                .filter(
+                    token =>
+                        token.state ===
+                        "home"
+                )
+                .length;
+
+    }
+
+
+    if (
+        blueCount
+    ) {
+
+        blueCount.textContent =
+            ludoGameState.tokens.blue
+                .filter(
+                    token =>
+                        token.state ===
+                        "home"
+                )
+                .length;
+
+    }
+
+}
+
+
+/* =========================================================
+   GAME MESSAGE
+========================================================= */
+
+function updateGameMessage(
+    text
+) {
+
+    const message =
+        document.getElementById(
+            "game-message"
+        );
+
+
+    if (
+        message
+    ) {
+
+        message.textContent =
+            text;
+
+    }
+
+}
+
+
+/* =========================================================
+   PUBLIC API
 ========================================================= */
 
 window.LudoBoard = {
@@ -1318,11 +2318,25 @@ window.LudoBoard = {
     renderTokens:
         renderTokens,
 
-    getTokenState:
-        getLudoTokenState,
+    getState:
+        () => structuredClone(
+            ludoGameState
+        ),
 
-    setTokenPosition:
-        setLudoTokenPosition,
+    setDice:
+        setDiceResult,
+
+    getValidTokens:
+        getValidTokens,
+
+    moveToken:
+        moveSelectedToken,
+
+    canMove:
+        canTokenMove,
+
+    getTrackIndex:
+        getTrackIndex,
 
     track:
         LUDO_TRACK,
@@ -1363,6 +2377,9 @@ document.addEventListener(
         createLudoBoard(
             board
         );
+
+
+        updateTurnUI();
 
     }
 );
