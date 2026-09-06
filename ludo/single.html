@@ -1098,7 +1098,6 @@
 
         }
 
-
         /* =====================================================
            TRACK
         ===================================================== */
@@ -1167,6 +1166,21 @@
             background:
                 #ffffff;
 
+            overflow:
+                hidden;
+
+        }
+
+
+        /* =====================================================
+           SAFE SQUARE
+        ===================================================== */
+
+        .cell.safe {
+
+            background:
+                #f5f7fa;
+
         }
 
 
@@ -1188,18 +1202,47 @@
                 center;
 
             color:
-                #31394a;
+                #303744;
 
             font-size:
-                clamp(10px,2vw,20px);
+                clamp(11px,2.2vw,21px);
+
+            font-weight:
+                700;
+
+            line-height:
+                1;
+
+            z-index:
+                2;
 
         }
 
+
+        /* =====================================================
+           START SQUARE
+           Start is also a Safe Square
+        ===================================================== */
 
         .cell.start-red {
 
             background:
                 #ff4553;
+
+        }
+
+
+        .cell.start-red::before {
+
+            content:
+                "★";
+
+            color:
+                #ffffff;
+
+            text-shadow:
+                0 1px 2px
+                rgba(0,0,0,.25);
 
         }
 
@@ -1212,10 +1255,40 @@
         }
 
 
+        .cell.start-blue::before {
+
+            content:
+                "★";
+
+            color:
+                #ffffff;
+
+            text-shadow:
+                0 1px 2px
+                rgba(0,0,0,.25);
+
+        }
+
+
         .cell.start-green {
 
             background:
                 #31c36d;
+
+        }
+
+
+        .cell.start-green::before {
+
+            content:
+                "★";
+
+            color:
+                #ffffff;
+
+            text-shadow:
+                0 1px 2px
+                rgba(0,0,0,.25);
 
         }
 
@@ -1227,6 +1300,20 @@
 
         }
 
+
+        .cell.start-yellow::before {
+
+            content:
+                "★";
+
+            color:
+                #ffffff;
+
+            text-shadow:
+                0 1px 2px
+                rgba(0,0,0,.25);
+
+        }
 
         /* =====================================================
            CENTER HOME
