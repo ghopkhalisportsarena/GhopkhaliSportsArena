@@ -17,10 +17,10 @@
 
     <meta
         name="description"
-        content="Ghopkhali Sports Arena Premium Single Ludo"
+        content="Ghopkhali Sports Arena Premium 1 VS 1 Ludo"
     >
 
-    <title>Single Ludo — Ghopkhali Sports Arena</title>
+    <title>Premium Ludo — Ghopkhali Sports Arena</title>
 
 
     <style>
@@ -32,43 +32,49 @@
         :root {
 
             --bg:
-                #070b16;
+                #050812;
 
             --surface:
                 rgba(255,255,255,.055);
 
             --surface-2:
-                rgba(255,255,255,.075);
+                rgba(255,255,255,.085);
 
             --border:
-                rgba(255,255,255,.11);
+                rgba(255,255,255,.12);
 
             --text:
                 #ffffff;
 
             --muted:
-                #96a1b7;
-
-            --blue:
-                #5c8dff;
-
-            --blue-light:
-                #9ab6ff;
+                #9aa6bd;
 
             --red:
-                #ff4d67;
+                #ff405c;
 
-            --red-soft:
-                rgba(255,77,103,.16);
-
-            --yellow:
-                #ffd166;
-
-            --yellow-soft:
-                rgba(255,209,102,.16);
+            --red-dark:
+                #c81735;
 
             --green:
-                #35d399;
+                #27d89b;
+
+            --green-dark:
+                #07966c;
+
+            --yellow:
+                #ffd34f;
+
+            --yellow-dark:
+                #d59c13;
+
+            --blue:
+                #4e8cff;
+
+            --blue-dark:
+                #205ac5;
+
+            --gold:
+                #ffd76a;
 
             --radius:
                 24px;
@@ -116,15 +122,21 @@
             background:
 
                 radial-gradient(
-                    circle at 15% 0%,
-                    rgba(92,141,255,.20),
+                    circle at 10% 0%,
+                    rgba(78,140,255,.20),
                     transparent 30%
                 ),
 
                 radial-gradient(
-                    circle at 100% 45%,
-                    rgba(122,68,230,.15),
+                    circle at 100% 50%,
+                    rgba(157,74,255,.16),
                     transparent 32%
+                ),
+
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(255,64,92,.08),
+                    transparent 35%
                 ),
 
                 var(--bg);
@@ -142,8 +154,7 @@
 
 
         button,
-        select,
-        input {
+        select {
 
             font:
                 inherit;
@@ -192,13 +203,15 @@
                 50%;
 
             filter:
-                blur(90px);
+                blur(100px);
 
             opacity:
                 .18;
 
             animation:
-                float 12s ease-in-out infinite;
+                floating 13s
+                ease-in-out
+                infinite;
 
         }
 
@@ -206,19 +219,19 @@
         .orb-one {
 
             width:
-                320px;
+                340px;
 
             height:
-                320px;
+                340px;
 
             left:
-                -160px;
+                -170px;
 
             top:
-                15%;
+                12%;
 
             background:
-                #376de5;
+                var(--blue);
 
         }
 
@@ -226,19 +239,19 @@
         .orb-two {
 
             width:
-                300px;
+                320px;
 
             height:
-                300px;
+                320px;
 
             right:
-                -150px;
+                -160px;
 
             top:
                 55%;
 
             background:
-                #7541df;
+                #8d4fff;
 
             animation-delay:
                 -5s;
@@ -246,7 +259,30 @@
         }
 
 
-        @keyframes float {
+        .orb-three {
+
+            width:
+                240px;
+
+            height:
+                240px;
+
+            left:
+                40%;
+
+            bottom:
+                -120px;
+
+            background:
+                var(--red);
+
+            animation-delay:
+                -8s;
+
+        }
+
+
+        @keyframes floating {
 
             0%,
             100% {
@@ -264,7 +300,7 @@
                 transform:
                     translate(
                         25px,
-                        -25px
+                        -30px
                     );
 
             }
@@ -281,14 +317,14 @@
             width:
                 min(
                     100%,
-                    1180px
+                    1240px
                 );
 
             margin:
                 auto;
 
             padding:
-                16px 18px 40px;
+                15px 18px 40px;
 
         }
 
@@ -312,7 +348,7 @@
                 12px;
 
             padding:
-                4px 0 18px;
+                3px 0 15px;
 
         }
 
@@ -343,11 +379,28 @@
             background:
                 rgba(255,255,255,.045);
 
+            text-decoration:
+                none;
+
             font-size:
                 12px;
 
             font-weight:
-                750;
+                800;
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        .back:hover {
+
+            transform:
+                translateY(-2px);
+
+            background:
+                rgba(255,255,255,.08);
 
         }
 
@@ -361,24 +414,25 @@
                 center;
 
             gap:
-                7px;
+                8px;
 
             padding:
-                9px 13px;
+                9px 14px;
 
             border:
-                1px solid rgba(
+                1px solid
+                rgba(
                     53,
                     211,
                     153,
-                    .20
+                    .22
                 );
 
             border-radius:
                 999px;
 
             color:
-                #8ef0ca;
+                #8ff2ce;
 
             background:
                 rgba(
@@ -389,10 +443,10 @@
                 );
 
             font-size:
-                11px;
+                10px;
 
             font-weight:
-                800;
+                900;
 
         }
 
@@ -412,15 +466,17 @@
                 var(--green);
 
             box-shadow:
-                0 0 12px var(--green);
+                0 0 14px
+                var(--green);
 
             animation:
-                pulse 1.5s infinite;
+                livePulse 1.5s
+                infinite;
 
         }
 
 
-        @keyframes pulse {
+        @keyframes livePulse {
 
             50% {
 
@@ -436,16 +492,16 @@
 
 
         /* =====================================================
-           HEADER
+           HERO
         ===================================================== */
 
         .hero {
 
+            padding:
+                13px 0 22px;
+
             text-align:
                 center;
-
-            padding:
-                15px 0 22px;
 
         }
 
@@ -462,16 +518,16 @@
                 7px;
 
             color:
-                var(--blue-light);
+                #91b1ff;
 
             font-size:
-                11px;
+                10px;
 
             font-weight:
-                850;
+                900;
 
             letter-spacing:
-                .4px;
+                .7px;
 
         }
 
@@ -483,16 +539,16 @@
 
             font-size:
                 clamp(
-                    30px,
+                    31px,
                     6vw,
-                    50px
+                    53px
                 );
 
             line-height:
                 1;
 
             letter-spacing:
-                -2px;
+                -2.5px;
 
             font-weight:
                 950;
@@ -506,7 +562,7 @@
                 linear-gradient(
                     135deg,
                     #ffffff,
-                    #86a8ff
+                    #8eafff
                 );
 
             -webkit-background-clip:
@@ -524,7 +580,7 @@
         .hero p {
 
             max-width:
-                650px;
+                720px;
 
             margin:
                 12px auto 0;
@@ -533,7 +589,7 @@
                 var(--muted);
 
             font-size:
-                12px;
+                11px;
 
             line-height:
                 1.7;
@@ -555,7 +611,7 @@
                     0,
                     1fr
                 )
-                310px;
+                315px;
 
             gap:
                 18px;
@@ -577,16 +633,16 @@
 
             padding:
                 clamp(
-                    10px,
+                    9px,
                     2vw,
-                    22px
+                    21px
                 );
 
             border:
                 1px solid var(--border);
 
             border-radius:
-                28px;
+                29px;
 
             background:
                 rgba(
@@ -597,22 +653,22 @@
                 );
 
             backdrop-filter:
-                blur(22px);
+                blur(25px);
 
             box-shadow:
-                0 25px 80px
+                0 30px 90px
                 rgba(
                     0,
                     0,
                     0,
-                    .35
+                    .40
                 );
 
         }
 
 
         /* =====================================================
-           PLAYER STRIP
+           PLAYERS
         ===================================================== */
 
         .players {
@@ -632,7 +688,7 @@
                 center;
 
             margin-bottom:
-                13px;
+                14px;
 
         }
 
@@ -668,10 +724,57 @@
                     .045
                 );
 
+            transition:
+                .25s ease;
+
         }
 
 
-        .player.ai {
+        .player.active-red {
+
+            border-color:
+                rgba(
+                    255,
+                    64,
+                    92,
+                    .42
+                );
+
+            box-shadow:
+                0 0 25px
+                rgba(
+                    255,
+                    64,
+                    92,
+                    .09
+                );
+
+        }
+
+
+        .player.active-blue {
+
+            border-color:
+                rgba(
+                    78,
+                    140,
+                    255,
+                    .42
+                );
+
+            box-shadow:
+                0 0 25px
+                rgba(
+                    78,
+                    140,
+                    255,
+                    .09
+                );
+
+        }
+
+
+        .player.right {
 
             justify-content:
                 flex-end;
@@ -685,13 +788,13 @@
         .avatar {
 
             width:
-                34px;
+                35px;
 
             height:
-                34px;
+                35px;
 
             flex:
-                0 0 34px;
+                0 0 35px;
 
             display:
                 grid;
@@ -699,11 +802,23 @@
             place-items:
                 center;
 
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .25
+                );
+
             border-radius:
                 12px;
 
+            color:
+                white;
+
             font-size:
-                17px;
+                16px;
 
         }
 
@@ -711,15 +826,41 @@
         .avatar.red {
 
             background:
-                var(--red-soft);
+                linear-gradient(
+                    145deg,
+                    var(--red),
+                    var(--red-dark)
+                );
+
+            box-shadow:
+                0 5px 20px
+                rgba(
+                    255,
+                    64,
+                    92,
+                    .20
+                );
 
         }
 
 
-        .avatar.yellow {
+        .avatar.blue {
 
             background:
-                var(--yellow-soft);
+                linear-gradient(
+                    145deg,
+                    var(--blue),
+                    var(--blue-dark)
+                );
+
+            box-shadow:
+                0 5px 20px
+                rgba(
+                    78,
+                    140,
+                    255,
+                    .20
+                );
 
         }
 
@@ -764,30 +905,30 @@
         .turn-indicator {
 
             min-width:
-                78px;
+                90px;
 
             padding:
-                9px;
+                9px 10px;
 
             border:
                 1px solid
                 rgba(
-                    92,
-                    141,
                     255,
-                    .24
+                    255,
+                    255,
+                    .12
                 );
 
             border-radius:
-                13px;
+                14px;
 
             color:
-                var(--blue-light);
+                #b9caff;
 
             background:
                 rgba(
-                    92,
-                    141,
+                    78,
+                    140,
                     255,
                     .08
                 );
@@ -799,21 +940,27 @@
                 9px;
 
             font-weight:
-                850;
+                900;
+
+            transition:
+                .25s ease;
 
         }
 
 
         /* =====================================================
-           BOARD
+           BOARD WRAP
         ===================================================== */
 
         .board-wrap {
 
+            position:
+                relative;
+
             width:
                 min(
                     100%,
-                    680px
+                    700px
                 );
 
             margin:
@@ -831,31 +978,41 @@
                     255,
                     255,
                     255,
-                    .12
+                    .14
                 );
 
             border-radius:
-                24px;
+                26px;
 
             background:
-                rgba(
-                    0,
-                    0,
-                    0,
-                    .25
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.11),
+                    rgba(255,255,255,.025)
                 );
 
             box-shadow:
-                inset 0 0 40px
+                0 25px 60px
                 rgba(
                     0,
                     0,
                     0,
-                    .35
+                    .38
+                ),
+                inset 0 0 35px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .30
                 );
 
         }
 
+
+        /* =====================================================
+           BOARD
+        ===================================================== */
 
         .board {
 
@@ -867,6 +1024,48 @@
 
             height:
                 100%;
+
+            overflow:
+                hidden;
+
+            border:
+                2px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .25
+                );
+
+            border-radius:
+                21px;
+
+            background:
+                #e8edf3;
+
+            box-shadow:
+                inset 0 0 35px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .20
+                );
+
+        }
+
+
+        /* =====================================================
+           GRID
+        ===================================================== */
+
+        .board-grid {
+
+            position:
+                absolute;
+
+            inset:
+                0;
 
             display:
                 grid;
@@ -883,21 +1082,8 @@
                     1fr
                 );
 
-            overflow:
-                hidden;
-
-            border-radius:
-                20px;
-
-            background:
-                #eef2f7;
-
         }
 
-
-        /* =====================================================
-           BOARD CELLS
-        ===================================================== */
 
         .cell {
 
@@ -907,14 +1093,14 @@
             border:
                 1px solid
                 rgba(
-                    15,
-                    23,
-                    42,
-                    .07
+                    25,
+                    35,
+                    55,
+                    .10
                 );
 
             background:
-                #f8fafc;
+                #f9fafb;
 
         }
 
@@ -926,6 +1112,139 @@
 
         }
 
+
+        .cell.path::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            inset:
+                18%;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .45
+                );
+
+        }
+
+
+        /* =====================================================
+           COLORED LANES
+        ===================================================== */
+
+        .cell.red-lane {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffced7,
+                    #ff9fb0
+                );
+
+        }
+
+
+        .cell.green-lane {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #c9f7e8,
+                    #7ee4bd
+                );
+
+        }
+
+
+        .cell.yellow-lane {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff0af,
+                    #ffd96a
+                );
+
+        }
+
+
+        .cell.blue-lane {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #cbdcff,
+                    #8db2ff
+                );
+
+        }
+
+
+        /* =====================================================
+           START CELLS
+        ===================================================== */
+
+        .cell.red-start {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff536c,
+                    #dc2745
+                );
+
+        }
+
+
+        .cell.green-start {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #36dca4,
+                    #0ba878
+                );
+
+        }
+
+
+        .cell.yellow-start {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffe37b,
+                    #e5ad2e
+                );
+
+        }
+
+
+        .cell.blue-start {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #6197ff,
+                    #2d68dc
+                );
+
+        }
+
+
+        /* =====================================================
+           SAFE
+        ===================================================== */
 
         .cell.safe::after {
 
@@ -946,62 +1265,21 @@
 
             color:
                 rgba(
-                    92,
-                    141,
-                    255,
-                    .30
+                    65,
+                    83,
+                    110,
+                    .32
                 );
 
             font-size:
                 clamp(
                     8px,
-                    1.5vw,
+                    1.6vw,
                     15px
                 );
 
-        }
-
-
-        .cell.red-zone {
-
-            background:
-                #ffe4e9;
-
-        }
-
-
-        .cell.yellow-zone {
-
-            background:
-                #fff2c7;
-
-        }
-
-
-        .cell.red-lane {
-
-            background:
-                #ffd9df;
-
-        }
-
-
-        .cell.yellow-lane {
-
-            background:
-                #ffedb2;
-
-        }
-
-
-        .cell.center {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #ff647b,
-                    #ffd75e
-                );
+            z-index:
+                1;
 
         }
 
@@ -1016,10 +1294,13 @@
                 absolute;
 
             width:
-                26.666%;
+                40%;
 
             height:
-                26.666%;
+                40%;
+
+            z-index:
+                5;
 
             display:
                 grid;
@@ -1028,19 +1309,22 @@
                 center;
 
             border:
-                1px solid
+                2px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .65
+                );
+
+            box-shadow:
+                inset 0 0 30px
                 rgba(
                     0,
                     0,
                     0,
-                    .08
+                    .13
                 );
-
-            border-radius:
-                18px;
-
-            z-index:
-                2;
 
         }
 
@@ -1048,16 +1332,40 @@
         .home-red {
 
             left:
-                3.2%;
+                0;
 
             top:
-                3.2%;
+                0;
+
+            border-radius:
+                19px 0 0 0;
 
             background:
                 linear-gradient(
                     145deg,
-                    #ff566f,
-                    #d92d48
+                    #ff4d68,
+                    #c91d3c
+                );
+
+        }
+
+
+        .home-green {
+
+            right:
+                0;
+
+            top:
+                0;
+
+            border-radius:
+                0 19px 0 0;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #39dca5,
+                    #09966d
                 );
 
         }
@@ -1065,17 +1373,41 @@
 
         .home-yellow {
 
-            right:
-                3.2%;
+            left:
+                0;
 
             bottom:
-                3.2%;
+                0;
+
+            border-radius:
+                0 0 0 19px;
 
             background:
                 linear-gradient(
                     145deg,
-                    #ffe083,
-                    #e6ad32
+                    #ffe27a,
+                    #dda72d
+                );
+
+        }
+
+
+        .home-blue {
+
+            right:
+                0;
+
+            bottom:
+                0;
+
+            border-radius:
+                0 0 19px 0;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #639aff,
+                    #285dc7
                 );
 
         }
@@ -1084,10 +1416,10 @@
         .home-inner {
 
             width:
-                72%;
+                70%;
 
             height:
-                72%;
+                70%;
 
             display:
                 grid;
@@ -1099,13 +1431,22 @@
                 );
 
             gap:
-                8px;
+                8%;
 
             padding:
-                10px;
+                9%;
+
+            border:
+                2px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .62
+                );
 
             border-radius:
-                17px;
+                18px;
 
             background:
                 rgba(
@@ -1121,7 +1462,7 @@
                     0,
                     0,
                     0,
-                    .10
+                    .12
                 );
 
         }
@@ -1129,13 +1470,16 @@
 
         .home-slot {
 
+            position:
+                relative;
+
             border:
                 2px solid
                 rgba(
                     255,
                     255,
                     255,
-                    .60
+                    .72
                 );
 
             border-radius:
@@ -1149,11 +1493,20 @@
                     .20
                 );
 
+            box-shadow:
+                inset 0 4px 10px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .10
+                );
+
         }
 
 
         /* =====================================================
-           CENTER
+           CENTER HOME
         ===================================================== */
 
         .center-home {
@@ -1174,7 +1527,10 @@
                 20%;
 
             z-index:
-                5;
+                8;
+
+            overflow:
+                hidden;
 
             display:
                 grid;
@@ -1182,68 +1538,128 @@
             place-items:
                 center;
 
-            overflow:
-                hidden;
-
             border:
                 2px solid
                 rgba(
                     255,
                     255,
                     255,
-                    .65
+                    .78
                 );
+
+            background:
+                conic-gradient(
+                    var(--green) 0deg 90deg,
+                    var(--red) 90deg 180deg,
+                    var(--blue) 180deg 270deg,
+                    var(--yellow) 270deg 360deg
+                );
+
+            box-shadow:
+                0 7px 25px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .22
+                ),
+                0 0 35px
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .12
+                );
+
+            animation:
+                centerGlow 4s
+                ease-in-out
+                infinite;
+
+        }
+
+
+        .center-home::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                62%;
+
+            height:
+                62%;
 
             border-radius:
                 50%;
 
             background:
-                linear-gradient(
-                    135deg,
-                    #ff556e 0 50%,
-                    #ffd45d 50%
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .16
                 );
 
-            box-shadow:
-                0 8px 25px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    .20
-                );
+            backdrop-filter:
+                blur(5px);
 
         }
 
 
         .center-home span {
 
-            padding:
-                7px;
+            position:
+                relative;
 
-            border-radius:
-                10px;
-
-            color:
-                #fff;
-
-            background:
-                rgba(
-                    0,
-                    0,
-                    0,
-                    .20
-                );
+            z-index:
+                2;
 
             font-size:
                 clamp(
-                    8px,
-                    1.6vw,
-                    15px
+                    13px,
+                    3vw,
+                    29px
                 );
 
-            font-weight:
-                950;
+            filter:
+                drop-shadow(
+                    0 3px 4px
+                    rgba(
+                        0,
+                        0,
+                        0,
+                        .3
+                    )
+                );
+
+        }
+
+
+        @keyframes centerGlow {
+
+            50% {
+
+                box-shadow:
+                    0 7px 25px
+                    rgba(
+                        0,
+                        0,
+                        0,
+                        .22
+                    ),
+                    0 0 50px
+                    rgba(
+                        255,
+                        255,
+                        255,
+                        .22
+                    );
+
+            }
 
         }
 
@@ -1258,19 +1674,19 @@
                 absolute;
 
             z-index:
-                10;
+                30;
 
             width:
-                72%;
+                76%;
 
             height:
-                72%;
+                76%;
 
             left:
-                14%;
+                12%;
 
             top:
-                14%;
+                12%;
 
             display:
                 grid;
@@ -1284,19 +1700,19 @@
                     255,
                     255,
                     255,
-                    .82
+                    .88
                 );
 
             border-radius:
                 50%;
 
             color:
-                #fff;
+                white;
 
             font-size:
                 clamp(
                     7px,
-                    1.5vw,
+                    1.4vw,
                     13px
                 );
 
@@ -1307,12 +1723,19 @@
                 pointer;
 
             box-shadow:
-                0 4px 10px
+                0 5px 11px
                 rgba(
                     0,
                     0,
                     0,
-                    .30
+                    .28
+                ),
+                inset 0 3px 5px
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .22
                 );
 
             transition:
@@ -1322,11 +1745,40 @@
         }
 
 
-        .token:hover {
+        .token::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                35%;
+
+            height:
+                18%;
+
+            left:
+                20%;
+
+            top:
+                14%;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .38
+                );
 
             transform:
-                scale(
-                    1.10
+                rotate(
+                    -25deg
                 );
 
         }
@@ -1335,25 +1787,24 @@
         .token.red {
 
             background:
-                linear-gradient(
-                    145deg,
-                    #ff6378,
-                    #d92343
+                radial-gradient(
+                    circle at 30% 25%,
+                    #ff8799,
+                    #ff405c 45%,
+                    #c81735
                 );
 
         }
 
 
-        .token.yellow {
-
-            color:
-                #5c4610;
+        .token.blue {
 
             background:
-                linear-gradient(
-                    145deg,
-                    #ffe58a,
-                    #e8b43b
+                radial-gradient(
+                    circle at 30% 25%,
+                    #a8c4ff,
+                    #4e8cff 45%,
+                    #205ac5
                 );
 
         }
@@ -1362,29 +1813,42 @@
         .token.movable {
 
             animation:
-                tokenPulse 1s
+                tokenReady
+                1s
+                ease-in-out
                 infinite;
 
             box-shadow:
                 0 0 0 4px
                 rgba(
-                    92,
-                    141,
                     255,
-                    .25
+                    255,
+                    255,
+                    .22
                 ),
-                0 5px 15px
+                0 0 20px
                 rgba(
-                    0,
-                    0,
-                    0,
-                    .25
+                    78,
+                    140,
+                    255,
+                    .60
                 );
 
         }
 
 
-        @keyframes tokenPulse {
+        .token.selected {
+
+            animation:
+                selectedToken
+                .65s
+                ease-in-out
+                infinite;
+
+        }
+
+
+        @keyframes tokenReady {
 
             50% {
 
@@ -1398,8 +1862,25 @@
         }
 
 
+        @keyframes selectedToken {
+
+            50% {
+
+                transform:
+                    scale(
+                        1.18
+                    )
+                    translateY(
+                        -3px
+                    );
+
+            }
+
+        }
+
+
         /* =====================================================
-           DICE PANEL
+           DICE
         ===================================================== */
 
         .dice-panel {
@@ -1408,11 +1889,11 @@
                 grid;
 
             grid-template-columns:
-                100px
+                92px
                 1fr;
 
             gap:
-                13px;
+                14px;
 
             align-items:
                 center;
@@ -1427,14 +1908,14 @@
                 1px solid var(--border);
 
             border-radius:
-                18px;
+                19px;
 
             background:
                 rgba(
                     255,
                     255,
                     255,
-                    .04
+                    .045
                 );
 
         }
@@ -1460,32 +1941,39 @@
                     255,
                     255,
                     255,
-                    .16
+                    .20
                 );
 
             border-radius:
-                18px;
+                19px;
 
             color:
                 #111827;
 
             background:
-                #ffffff;
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #e9eef6
+                );
 
             box-shadow:
-                0 10px 25px
+                0 12px 28px
                 rgba(
                     0,
                     0,
                     0,
-                    .25
+                    .28
                 );
 
             font-size:
-                42px;
+                41px;
 
             font-weight:
                 900;
+
+            user-select:
+                none;
 
         }
 
@@ -1493,13 +1981,14 @@
         .dice.rolling {
 
             animation:
-                diceRoll .55s
+                diceRolling
+                .55s
                 ease-in-out;
 
         }
 
 
-        @keyframes diceRoll {
+        @keyframes diceRolling {
 
             0% {
 
@@ -1513,26 +2002,38 @@
 
             }
 
-            35% {
+            25% {
 
                 transform:
                     rotate(
-                        12deg
+                        20deg
                     )
                     scale(
-                        1.12
+                        1.10
                     );
 
             }
 
-            70% {
+            50% {
 
                 transform:
                     rotate(
-                        -12deg
+                        -20deg
                     )
                     scale(
-                        .94
+                        .92
+                    );
+
+            }
+
+            75% {
+
+                transform:
+                    rotate(
+                        14deg
+                    )
+                    scale(
+                        1.06
                     );
 
             }
@@ -1598,31 +2099,53 @@
                 13px;
 
             color:
-                #fff;
+                #ffffff;
 
             background:
                 linear-gradient(
                     135deg,
-                    #4f7fff,
-                    #6d9cff
+                    #467cff,
+                    #729fff
+                );
+
+            box-shadow:
+                0 10px 28px
+                rgba(
+                    70,
+                    124,
+                    255,
+                    .22
                 );
 
             font-size:
-                12px;
+                11px;
 
             font-weight:
-                850;
+                900;
 
             cursor:
                 pointer;
 
+            transition:
+                .2s ease;
+
+        }
+
+
+        .roll-button:hover:not(:disabled) {
+
+            transform:
+                translateY(
+                    -2px
+                );
+
             box-shadow:
-                0 10px 25px
+                0 14px 32px
                 rgba(
-                    79,
-                    127,
+                    70,
+                    124,
                     255,
-                    .20
+                    .30
                 );
 
         }
@@ -1631,13 +2154,60 @@
         .roll-button:disabled {
 
             opacity:
-                .45;
+                .42;
 
             cursor:
                 not-allowed;
 
             box-shadow:
                 none;
+
+        }
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .game-status {
+
+            margin-top:
+                13px;
+
+            padding:
+                12px 13px;
+
+            border:
+                1px solid
+                rgba(
+                    78,
+                    140,
+                    255,
+                    .18
+                );
+
+            border-radius:
+                14px;
+
+            color:
+                #bfd0ff;
+
+            background:
+                rgba(
+                    78,
+                    140,
+                    255,
+                    .055
+                );
+
+            font-size:
+                10px;
+
+            line-height:
+                1.55;
+
+            text-align:
+                center;
 
         }
 
@@ -1660,7 +2230,7 @@
         .side-card {
 
             padding:
-                19px;
+                18px;
 
             border:
                 1px solid var(--border);
@@ -1682,11 +2252,11 @@
             display:
                 flex;
 
-            justify-content:
-                space-between;
-
             align-items:
                 center;
+
+            justify-content:
+                space-between;
 
             gap:
                 10px;
@@ -1697,10 +2267,10 @@
         .side-title h2 {
 
             font-size:
-                15px;
+                14px;
 
             font-weight:
-                850;
+                900;
 
         }
 
@@ -1711,77 +2281,16 @@
                 var(--muted);
 
             font-size:
-                9px;
-
-        }
-
-
-        /* =====================================================
-           SETTINGS
-        ===================================================== */
-
-        .setting {
-
-            margin-top:
-                14px;
-
-        }
-
-
-        .setting label {
-
-            display:
-                block;
-
-            margin-bottom:
-                7px;
-
-            color:
-                #cbd4e5;
-
-            font-size:
-                10px;
+                8px;
 
             font-weight:
-                700;
-
-        }
-
-
-        .select {
-
-            width:
-                100%;
-
-            height:
-                42px;
-
-            padding:
-                0 12px;
-
-            outline:
-                none;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                12px;
-
-            color:
-                #fff;
-
-            background:
-                #111827;
-
-            font-size:
-                11px;
+                800;
 
         }
 
 
         /* =====================================================
-           MATCH INFO
+           INFO
         ===================================================== */
 
         .info-list {
@@ -1802,6 +2311,9 @@
 
             display:
                 flex;
+
+            align-items:
+                center;
 
             justify-content:
                 space-between;
@@ -1855,13 +2367,129 @@
 
 
         /* =====================================================
-           LOG
+           PLAYER COLOR INFO
+        ===================================================== */
+
+        .color-list {
+
+            display:
+                grid;
+
+            gap:
+                8px;
+
+            margin-top:
+                13px;
+
+        }
+
+
+        .color-item {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                9px;
+
+            padding:
+                9px;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .055
+                );
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .025
+                );
+
+            font-size:
+                9px;
+
+        }
+
+
+        .color-dot {
+
+            width:
+                11px;
+
+            height:
+                11px;
+
+            flex:
+                0 0 11px;
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .35
+                );
+
+            border-radius:
+                50%;
+
+        }
+
+
+        .color-dot.red {
+
+            background:
+                var(--red);
+
+        }
+
+
+        .color-dot.green {
+
+            background:
+                var(--green);
+
+        }
+
+
+        .color-dot.yellow {
+
+            background:
+                var(--yellow);
+
+        }
+
+
+        .color-dot.blue {
+
+            background:
+                var(--blue);
+
+        }
+
+
+        /* =====================================================
+           GAME LOG
         ===================================================== */
 
         .game-log {
 
             max-height:
-                190px;
+                210px;
 
             overflow:
                 auto;
@@ -1904,7 +2532,7 @@
         .log-item:first-child {
 
             color:
-                #fff;
+                #ffffff;
 
         }
 
@@ -1919,7 +2547,7 @@
                 100%;
 
             height:
-                43px;
+                44px;
 
             border:
                 1px solid var(--border);
@@ -1942,10 +2570,13 @@
                 11px;
 
             font-weight:
-                800;
+                850;
 
             cursor:
                 pointer;
+
+            transition:
+                .2s ease;
 
         }
 
@@ -1957,55 +2588,114 @@
                     255,
                     255,
                     255,
-                    .09
+                    .10
                 );
 
         }
 
 
         /* =====================================================
-           STATUS
+           AI CONTROLLER
         ===================================================== */
 
-        .game-status {
+        .controller {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
 
             margin-top:
                 13px;
 
             padding:
-                12px;
+                11px;
 
             border:
                 1px solid
                 rgba(
-                    92,
-                    141,
-                    255,
+                    53,
+                    211,
+                    153,
                     .16
                 );
 
             border-radius:
-                13px;
-
-            color:
-                #b7c8f7;
+                14px;
 
             background:
                 rgba(
-                    92,
-                    141,
-                    255,
-                    .055
+                    53,
+                    211,
+                    153,
+                    .045
                 );
+
+        }
+
+
+        .controller-icon {
+
+            width:
+                32px;
+
+            height:
+                32px;
+
+            flex:
+                0 0 32px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                11px;
+
+            background:
+                rgba(
+                    53,
+                    211,
+                    153,
+                    .12
+                );
+
+            font-size:
+                15px;
+
+        }
+
+
+        .controller strong {
+
+            display:
+                block;
 
             font-size:
                 10px;
 
-            line-height:
-                1.5;
+        }
 
-            text-align:
-                center;
+
+        .controller small {
+
+            display:
+                block;
+
+            margin-top:
+                2px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                8px;
 
         }
 
@@ -2039,11 +2729,11 @@
                     0,
                     0,
                     0,
-                    .65
+                    .70
                 );
 
             backdrop-filter:
-                blur(12px);
+                blur(14px);
 
         }
 
@@ -2061,35 +2751,37 @@
             width:
                 min(
                     100%,
-                    390px
+                    400px
                 );
 
             padding:
-                28px;
+                30px;
 
             border:
                 1px solid var(--border);
 
             border-radius:
-                25px;
+                27px;
 
             background:
                 #101625;
 
             box-shadow:
-                0 30px 90px
+                0 35px 100px
                 rgba(
                     0,
                     0,
                     0,
-                    .55
+                    .60
                 );
 
             text-align:
                 center;
 
             animation:
-                modalIn .25s ease;
+                modalIn
+                .28s
+                ease;
 
         }
 
@@ -2103,10 +2795,10 @@
 
                 transform:
                     translateY(
-                        15px
+                        18px
                     )
                     scale(
-                        .97
+                        .96
                     );
 
             }
@@ -2127,7 +2819,30 @@
         .winner-icon {
 
             font-size:
-                55px;
+                56px;
+
+            animation:
+                trophyFloat
+                1.6s
+                ease-in-out
+                infinite;
+
+        }
+
+
+        @keyframes trophyFloat {
+
+            50% {
+
+                transform:
+                    translateY(
+                        -7px
+                    )
+                    scale(
+                        1.05
+                    );
+
+            }
 
         }
 
@@ -2138,7 +2853,7 @@
                 12px;
 
             font-size:
-                24px;
+                25px;
 
         }
 
@@ -2155,7 +2870,7 @@
                 11px;
 
             line-height:
-                1.6;
+                1.65;
 
         }
 
@@ -2166,29 +2881,29 @@
                 100%;
 
             height:
-                45px;
+                46px;
 
             margin-top:
-                20px;
+                21px;
 
             border-radius:
                 13px;
 
             color:
-                #fff;
+                #ffffff;
 
             background:
                 linear-gradient(
                     135deg,
-                    #4f7fff,
-                    #6d9cff
+                    #477dff,
+                    #709eff
                 );
 
             font-size:
                 11px;
 
             font-weight:
-                850;
+                900;
 
             cursor:
                 pointer;
@@ -2253,15 +2968,7 @@
             .app {
 
                 padding:
-                    12px;
-
-            }
-
-
-            .topbar {
-
-                padding-bottom:
-                    10px;
+                    11px;
 
             }
 
@@ -2269,7 +2976,7 @@
             .hero {
 
                 padding:
-                    10px 0 17px;
+                    9px 0 16px;
 
             }
 
@@ -2284,10 +2991,8 @@
 
             .players {
 
-                grid-template-columns:
-                    1fr
-                    auto
-                    1fr;
+                gap:
+                    6px;
 
             }
 
@@ -2336,7 +3041,7 @@
             .turn-indicator {
 
                 min-width:
-                    65px;
+                    68px;
 
                 padding:
                     7px;
@@ -2350,7 +3055,7 @@
             .dice-panel {
 
                 grid-template-columns:
-                    82px
+                    78px
                     1fr;
 
             }
@@ -2409,7 +3114,7 @@
             .players {
 
                 gap:
-                    5px;
+                    4px;
 
             }
 
@@ -2420,7 +3125,7 @@
                     5px;
 
                 padding:
-                    7px 6px;
+                    7px 5px;
 
             }
 
@@ -2428,7 +3133,7 @@
             .turn-indicator {
 
                 min-width:
-                    56px;
+                    55px;
 
             }
 
@@ -2461,15 +3166,13 @@
 <body>
 
 
-    <!-- =====================================================
-         BACKGROUND
-    ===================================================== -->
-
     <div class="background">
 
         <div class="orb orb-one"></div>
 
         <div class="orb orb-two"></div>
+
+        <div class="orb orb-three"></div>
 
     </div>
 
@@ -2495,7 +3198,7 @@
 
                 <span class="live-dot"></span>
 
-                SINGLE 1 VS 1
+                1 VS 1 LIVE MATCH
 
             </div>
 
@@ -2525,9 +3228,9 @@
 
             <p>
 
-                1 VS 1 Ludo Game · Human vs AI ·
-                Real Dice · Token Capture ·
-                Safe Zone · Home & Winner System
+                Classic Ludo Board · 1 VS 1 Human Match ·
+                Real Dice · Token Capture · Safe Zone ·
+                Home Finish · AI Game Controller
 
             </p>
 
@@ -2541,21 +3244,21 @@
         <section class="game-layout">
 
 
-            <!-- =============================================
+            <!-- =================================================
                  BOARD
-            ============================================== -->
+            ================================================= -->
 
             <div class="board-card">
 
 
-                <!-- PLAYERS -->
-
                 <div class="players">
 
 
+                    <!-- PLAYER A -->
+
                     <div
-                        class="player"
-                        id="humanPlayer"
+                        class="player active-red"
+                        id="playerA"
                     >
 
                         <div
@@ -2567,11 +3270,11 @@
                         <div>
 
                             <strong>
-                                You
+                                Player A
                             </strong>
 
                             <small>
-                                Red Player
+                                🔴 Red
                             </small>
 
                         </div>
@@ -2583,40 +3286,43 @@
                         class="turn-indicator"
                         id="turnIndicator"
                     >
-                        Your Turn
+                        Player A Turn
                     </div>
 
 
+                    <!-- PLAYER B -->
+
                     <div
-                        class="player ai"
-                        id="aiPlayer"
+                        class="player right"
+                        id="playerB"
                     >
 
                         <div>
 
                             <strong>
-                                AI Bot
+                                Player B
                             </strong>
 
                             <small>
-                                Yellow Player
+                                🔵 Blue
                             </small>
 
                         </div>
 
                         <div
-                            class="avatar yellow"
+                            class="avatar blue"
                         >
-                            🤖
+                            👤
                         </div>
 
                     </div>
 
-
                 </div>
 
 
-                <!-- BOARD -->
+                <!-- =================================================
+                     BOARD
+                ================================================= -->
 
                 <div class="board-wrap">
 
@@ -2625,8 +3331,13 @@
                         id="board"
                     >
 
+                        <div
+                            class="board-grid"
+                            id="boardGrid"
+                        ></div>
 
-                        <!-- HOME AREAS -->
+
+                        <!-- RED HOME -->
 
                         <div
                             class="home-area home-red"
@@ -2647,13 +3358,14 @@
                         </div>
 
 
+                        <!-- GREEN HOME -->
+
                         <div
-                            class="home-area home-yellow"
+                            class="home-area home-green"
                         >
 
                             <div
                                 class="home-inner"
-                                id="yellowHome"
                             >
 
                                 <div class="home-slot"></div>
@@ -2666,6 +3378,49 @@
                         </div>
 
 
+                        <!-- YELLOW HOME -->
+
+                        <div
+                            class="home-area home-yellow"
+                        >
+
+                            <div
+                                class="home-inner"
+                            >
+
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- BLUE HOME -->
+
+                        <div
+                            class="home-area home-blue"
+                        >
+
+                            <div
+                                class="home-inner"
+                                id="blueHome"
+                            >
+
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+                                <div class="home-slot"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CENTER -->
+
                         <div
                             class="center-home"
                         >
@@ -2676,13 +3431,14 @@
 
                         </div>
 
-
                     </div>
 
                 </div>
 
 
-                <!-- DICE -->
+                <!-- =================================================
+                     DICE
+                ================================================= -->
 
                 <div class="dice-panel">
 
@@ -2700,13 +3456,15 @@
                         <strong
                             id="diceTitle"
                         >
-                            Your Dice
+                            Player A Dice
                         </strong>
+
 
                         <span
                             id="diceText"
                         >
-                            Roll the dice to begin your turn.
+                            Dice Roll করে আপনার Turn শুরু করুন।
+
                         </span>
 
 
@@ -2719,17 +3477,14 @@
 
                     </div>
 
-
                 </div>
 
-
-                <!-- STATUS -->
 
                 <div
                     class="game-status"
                     id="gameStatus"
                 >
-                    আপনার Turn। Dice Roll করুন।
+                    Player A-এর Turn। Dice Roll করুন।
 
                 </div>
 
@@ -2737,64 +3492,11 @@
             </div>
 
 
-            <!-- =============================================
-                 SIDE PANEL
-            ============================================== -->
+            <!-- =================================================
+                 SIDE
+            ================================================= -->
 
             <aside class="side">
-
-
-                <!-- SETTINGS -->
-
-                <div class="side-card">
-
-                    <div class="side-title">
-
-                        <h2>
-                            🎮 Game Settings
-                        </h2>
-
-                        <span>
-                            LOCAL GAME
-                        </span>
-
-                    </div>
-
-
-                    <div class="setting">
-
-                        <label
-                            for="difficulty"
-                        >
-                            AI Difficulty
-                        </label>
-
-
-                        <select
-                            class="select"
-                            id="difficulty"
-                        >
-
-                            <option value="easy">
-                                Easy
-                            </option>
-
-                            <option
-                                value="medium"
-                                selected
-                            >
-                                Medium
-                            </option>
-
-                            <option value="hard">
-                                Hard
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
 
 
                 <!-- MATCH INFO -->
@@ -2820,11 +3522,11 @@
                         <div class="info-row">
 
                             <span>
-                                Your Tokens
+                                Player A Home
                             </span>
 
                             <strong
-                                id="humanFinished"
+                                id="playerAFinished"
                             >
                                 0 / 4
                             </strong>
@@ -2835,11 +3537,11 @@
                         <div class="info-row">
 
                             <span>
-                                AI Tokens
+                                Player B Home
                             </span>
 
                             <strong
-                                id="aiFinished"
+                                id="playerBFinished"
                             >
                                 0 / 4
                             </strong>
@@ -2850,11 +3552,11 @@
                         <div class="info-row">
 
                             <span>
-                                Your Captures
+                                A Captures
                             </span>
 
                             <strong
-                                id="humanCaptures"
+                                id="playerACaptures"
                             >
                                 0
                             </strong>
@@ -2865,11 +3567,11 @@
                         <div class="info-row">
 
                             <span>
-                                AI Captures
+                                B Captures
                             </span>
 
                             <strong
-                                id="aiCaptures"
+                                id="playerBCaptures"
                             >
                                 0
                             </strong>
@@ -2882,7 +3584,124 @@
                 </div>
 
 
-                <!-- GAME LOG -->
+                <!-- =================================================
+                     BOARD COLORS
+                ================================================= -->
+
+                <div class="side-card">
+
+                    <div class="side-title">
+
+                        <h2>
+                            🎨 Board
+                        </h2>
+
+                        <span>
+                            CLASSIC
+                        </span>
+
+                    </div>
+
+
+                    <div class="color-list">
+
+
+                        <div class="color-item">
+
+                            <span
+                                class="color-dot red"
+                            ></span>
+
+                            Player A
+
+                        </div>
+
+
+                        <div class="color-item">
+
+                            <span
+                                class="color-dot blue"
+                            ></span>
+
+                            Player B
+
+                        </div>
+
+
+                        <div class="color-item">
+
+                            <span
+                                class="color-dot green"
+                            ></span>
+
+                            Green Home
+
+                        </div>
+
+
+                        <div class="color-item">
+
+                            <span
+                                class="color-dot yellow"
+                            ></span>
+
+                            Yellow Home
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     AI CONTROLLER
+                ================================================= -->
+
+                <div class="side-card">
+
+                    <div class="side-title">
+
+                        <h2>
+                            🧠 Game Controller
+                        </h2>
+
+                        <span>
+                            ACTIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="controller">
+
+                        <div
+                            class="controller-icon"
+                        >
+                            🧠
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                AI Rule Engine
+                            </strong>
+
+                            <small>
+                                Rules · Move · Capture · Sync · Winner
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     GAME LOG
+                ================================================= -->
 
                 <div class="side-card">
 
@@ -2905,7 +3724,7 @@
                     >
 
                         <div class="log-item">
-                            Game ready.
+                            Premium Ludo Game ready.
                         </div>
 
                     </div>
@@ -2913,7 +3732,9 @@
                 </div>
 
 
-                <!-- NEW GAME -->
+                <!-- =================================================
+                     NEW GAME
+                ================================================= -->
 
                 <div class="side-card">
 
@@ -2936,7 +3757,7 @@
         <footer>
 
             © 2026 Ghopkhali Sports Arena
-            · Premium Ludo Game
+            · Premium 1 VS 1 Ludo
 
         </footer>
 
@@ -2963,7 +3784,7 @@
             <h2
                 id="winnerTitle"
             >
-                You Win!
+                Player A Wins!
             </h2>
 
 
@@ -2971,6 +3792,7 @@
                 id="winnerText"
             >
                 Congratulations!
+
             </p>
 
 
@@ -2979,6 +3801,7 @@
                 id="modalNewGame"
             >
                 PLAY AGAIN
+
             </button>
 
         </div>
@@ -2999,44 +3822,22 @@
            CONSTANTS
         ===================================================== */
 
-        const PLAYER =
+        const PLAYER_A =
             "red";
 
 
-        const AI =
-            "yellow";
+        const PLAYER_B =
+            "blue";
 
 
         const TOKENS =
             4;
 
 
-        const FINISHED =
-            58;
-
-
-        const HOME_START =
-            52;
-
-
-        const PATH_LENGTH =
-            52;
-
-
-        const diceFaces = {
-
-            1: "⚀",
-            2: "⚁",
-            3: "⚂",
-            4: "⚃",
-            5: "⚄",
-            6: "⚅"
-
-        };
-
-
         /*
-         * Classic 15 × 15 board path.
+         * Traditional-style outer route.
+         *
+         * The visual board is 15 × 15.
          */
 
         const pathCoordinates = [
@@ -3101,9 +3902,12 @@
         ];
 
 
+        const PATH_LENGTH =
+            pathCoordinates.length;
+
+
         /*
-         * Red starts at path index 0.
-         * Yellow starts opposite at index 26.
+         * Each player has a different entry point.
          */
 
         const startIndex = {
@@ -3111,15 +3915,26 @@
             red:
                 0,
 
-            yellow:
-                26
+            blue:
+                Math.floor(
+                    PATH_LENGTH / 2
+                )
 
         };
 
 
         /*
-         * Home lanes.
+         * Six cells are used as the
+         * private finishing lane.
          */
+
+        const HOME_START =
+            PATH_LENGTH;
+
+
+        const FINISH =
+            PATH_LENGTH + 6;
+
 
         const homeLanes = {
 
@@ -3134,7 +3949,7 @@
 
             ],
 
-            yellow: [
+            blue: [
 
                 [8,13],
                 [8,12],
@@ -3152,18 +3967,42 @@
          * Safe cells.
          */
 
-        const safeIndices = new Set([
+        const safeIndices =
+            new Set([
 
-            0,
-            8,
-            13,
-            21,
-            26,
-            34,
-            39,
-            47
+                0,
+                8,
+                14,
+                21,
+                28,
+                34,
+                42,
+                49
 
-        ]);
+            ]);
+
+
+        const diceFaces = {
+
+            1:
+                "⚀",
+
+            2:
+                "⚁",
+
+            3:
+                "⚂",
+
+            4:
+                "⚃",
+
+            5:
+                "⚄",
+
+            6:
+                "⚅"
+
+        };
 
 
         /* =====================================================
@@ -3173,7 +4012,7 @@
         let state = {
 
             turn:
-                PLAYER,
+                PLAYER_A,
 
             dice:
                 0,
@@ -3184,16 +4023,16 @@
             gameOver:
                 false,
 
-            humanTokens:
+            playerATokens:
                 [-1,-1,-1,-1],
 
-            aiTokens:
+            playerBTokens:
                 [-1,-1,-1,-1],
 
-            humanCaptures:
+            playerACaptures:
                 0,
 
-            aiCaptures:
+            playerBCaptures:
                 0,
 
             moves:
@@ -3209,6 +4048,12 @@
         const board =
             document.getElementById(
                 "board"
+            );
+
+
+        const boardGrid =
+            document.getElementById(
+                "boardGrid"
             );
 
 
@@ -3254,9 +4099,15 @@
             );
 
 
-        const difficulty =
+        const playerA =
             document.getElementById(
-                "difficulty"
+                "playerA"
+            );
+
+
+        const playerB =
+            document.getElementById(
+                "playerB"
             );
 
 
@@ -3266,22 +4117,9 @@
 
         function createBoard() {
 
-            /*
-             * Keep overlays.
-             */
+            boardGrid.innerHTML =
+                "";
 
-            const overlays =
-                Array.from(
-                    board.children
-                );
-
-
-            board.innerHTML = "";
-
-
-            /*
-             * 225 cells.
-             */
 
             for (
                 let row = 0;
@@ -3304,10 +4142,6 @@
                     cell.className =
                         "cell";
 
-
-                    /*
-                     * Path cell.
-                     */
 
                     const pathIndex =
                         pathCoordinates.findIndex(
@@ -3338,11 +4172,39 @@
 
                         }
 
+
+                        /*
+                         * Start positions.
+                         */
+
+                        if (
+                            pathIndex ===
+                            startIndex.red
+                        ) {
+
+                            cell.classList.add(
+                                "red-start"
+                            );
+
+                        }
+
+
+                        if (
+                            pathIndex ===
+                            startIndex.blue
+                        ) {
+
+                            cell.classList.add(
+                                "blue-start"
+                            );
+
+                        }
+
                     }
 
 
                     /*
-                     * Home lanes.
+                     * Red finishing lane.
                      */
 
                     if (
@@ -3360,12 +4222,36 @@
                     }
 
 
+                    /*
+                     * Blue finishing lane.
+                     */
+
                     if (
-                        homeLanes.yellow.some(
+                        homeLanes.blue.some(
                             coordinate =>
                                 coordinate[0] === col &&
                                 coordinate[1] === row
                         )
+                    ) {
+
+                        cell.classList.add(
+                            "blue-lane"
+                        );
+
+                    }
+
+
+                    /*
+                     * Decorative green/yellow
+                     * lanes in the unused
+                     * quadrants.
+                     */
+
+                    if (
+                        row >= 6 &&
+                        row <= 8 &&
+                        col >= 1 &&
+                        col <= 5
                     ) {
 
                         cell.classList.add(
@@ -3375,25 +4261,21 @@
                     }
 
 
-                    /*
-                     * Center.
-                     */
-
                     if (
                         row >= 6 &&
                         row <= 8 &&
-                        col >= 6 &&
-                        col <= 8
+                        col >= 9 &&
+                        col <= 13
                     ) {
 
                         cell.classList.add(
-                            "center"
+                            "green-lane"
                         );
 
                     }
 
 
-                    board.appendChild(
+                    boardGrid.appendChild(
                         cell
                     );
 
@@ -3402,45 +4284,29 @@
             }
 
 
-            /*
-             * Add overlays again.
-             */
-
-            overlays.forEach(
-                overlay => {
-
-                    board.appendChild(
-                        overlay
-                    );
-
-                }
-            );
-
-
             renderTokens();
 
         }
 
 
         /* =====================================================
-           CELL INDEX
+           CELL
         ===================================================== */
 
-        function getCellIndex(
+        function getCell(
             row,
             col
         ) {
 
-            return (
-                row * 15 +
-                col
-            );
+            return boardGrid.children[
+                row * 15 + col
+            ];
 
         }
 
 
         /* =====================================================
-           GET COMMON PATH POSITION
+           COMMON PATH INDEX
         ===================================================== */
 
         function getCommonIndex(
@@ -3467,7 +4333,7 @@
 
 
         /* =====================================================
-           TOKEN COORDINATES
+           TOKEN COORDINATE
         ===================================================== */
 
         function getTokenCoordinate(
@@ -3477,7 +4343,7 @@
         ) {
 
             /*
-             * Yard positions.
+             * Yard.
              */
 
             if (
@@ -3488,19 +4354,19 @@
 
                     red: [
 
-                        [4,4],
-                        [4,5],
-                        [5,4],
+                        [3,3],
+                        [3,5],
+                        [5,3],
                         [5,5]
 
                     ],
 
-                    yellow: [
+                    blue: [
 
                         [9,9],
-                        [9,10],
-                        [10,9],
-                        [10,10]
+                        [9,11],
+                        [11,9],
+                        [11,11]
 
                     ]
 
@@ -3515,11 +4381,11 @@
 
 
             /*
-             * Finished tokens.
+             * Finished.
              */
 
             if (
-                progress === FINISHED
+                progress === FINISH
             ) {
 
                 const positions = {
@@ -3533,7 +4399,7 @@
 
                     ],
 
-                    yellow: [
+                    blue: [
 
                         [7,7],
                         [8,7],
@@ -3553,22 +4419,26 @@
 
 
             /*
-             * Home lane.
+             * Private home lane.
              */
 
             if (
                 progress >= HOME_START
             ) {
 
-                const laneIndex =
+                const lane =
+                    homeLanes[player];
+
+
+                const index =
                     progress -
                     HOME_START;
 
 
-                return homeLanes[player][
+                return lane[
                     Math.min(
-                        laneIndex,
-                        homeLanes[player].length - 1
+                        index,
+                        lane.length - 1
                     )
                 ];
 
@@ -3599,7 +4469,7 @@
 
         function clearTokens() {
 
-            document
+            boardGrid
                 .querySelectorAll(
                     ".token"
                 )
@@ -3612,7 +4482,7 @@
 
 
         /* =====================================================
-           RENDER TOKENS
+           RENDER
         ===================================================== */
 
         function renderTokens() {
@@ -3621,14 +4491,14 @@
 
 
             renderPlayerTokens(
-                PLAYER,
-                state.humanTokens
+                PLAYER_A,
+                state.playerATokens
             );
 
 
             renderPlayerTokens(
-                AI,
-                state.aiTokens
+                PLAYER_B,
+                state.playerBTokens
             );
 
 
@@ -3676,12 +4546,10 @@
 
 
                     const cell =
-                        board.children[
-                            getCellIndex(
-                                row,
-                                col
-                            )
-                        ];
+                        getCell(
+                            row,
+                            col
+                        );
 
 
                     if (!cell) {
@@ -3718,17 +4586,17 @@
 
 
                     /*
-                     * Movable human token.
+                     * Only current player's
+                     * valid tokens are clickable.
                      */
 
                     if (
-                        player === PLAYER &&
-                        state.turn === PLAYER &&
+                        state.turn === player &&
                         !state.rolling &&
                         !state.gameOver &&
                         state.dice > 0 &&
                         isValidMove(
-                            PLAYER,
+                            player,
                             tokenIndex,
                             state.dice
                         )
@@ -3742,7 +4610,8 @@
                         token.addEventListener(
                             "click",
                             () =>
-                                moveHumanToken(
+                                movePlayerToken(
+                                    player,
                                     tokenIndex
                                 )
                         );
@@ -3751,7 +4620,7 @@
 
 
                     /*
-                     * Stack offset.
+                     * Stack offsets.
                      */
 
                     const sameTokens =
@@ -3788,9 +4657,9 @@
                     const offsets = [
 
                         [0,0],
-                        [-13,-13],
-                        [13,-13],
-                        [0,13]
+                        [-14,-14],
+                        [14,-14],
+                        [0,14]
 
                     ];
 
@@ -3829,10 +4698,20 @@
             diceValue
         ) {
 
+            if (
+                diceValue < 1 ||
+                diceValue > 6
+            ) {
+
+                return false;
+
+            }
+
+
             const tokens =
-                player === PLAYER
-                    ? state.humanTokens
-                    : state.aiTokens;
+                player === PLAYER_A
+                    ? state.playerATokens
+                    : state.playerBTokens;
 
 
             const progress =
@@ -3844,7 +4723,7 @@
              */
 
             if (
-                progress === FINISHED
+                progress === FINISH
             ) {
 
                 return false;
@@ -3853,7 +4732,8 @@
 
 
             /*
-             * Yard requires 6.
+             * Token in yard.
+             * Six is required to enter.
              */
 
             if (
@@ -3874,14 +4754,14 @@
             return (
                 progress +
                 diceValue <=
-                FINISHED
+                FINISH
             );
 
         }
 
 
         /* =====================================================
-           GET VALID MOVES
+           VALID MOVES
         ===================================================== */
 
         function getValidMoves(
@@ -3890,9 +4770,9 @@
         ) {
 
             const tokens =
-                player === PLAYER
-                    ? state.humanTokens
-                    : state.aiTokens;
+                player === PLAYER_A
+                    ? state.playerATokens
+                    : state.playerBTokens;
 
 
             return tokens
@@ -3918,7 +4798,7 @@
 
 
         /* =====================================================
-           ROLL DICE
+           DICE
         ===================================================== */
 
         async function rollDice() {
@@ -3926,7 +4806,7 @@
             if (
                 state.gameOver ||
                 state.rolling ||
-                state.turn !== PLAYER
+                state.dice !== 0
             ) {
 
                 return;
@@ -3947,17 +4827,35 @@
             );
 
 
+            const player =
+                state.turn;
+
+
+            const playerName =
+                player === PLAYER_A
+                    ? "Player A"
+                    : "Player B";
+
+
+            diceTitle.textContent =
+                `${playerName} Dice`;
+
+
+            diceText.textContent =
+                "Dice rolling...";
+
+
             /*
-             * Dice animation.
+             * Visual rolling animation.
              */
 
             for (
                 let i = 0;
-                i < 7;
+                i < 8;
                 i++
             ) {
 
-                const value =
+                const random =
                     1 +
                     Math.floor(
                         Math.random() * 6
@@ -3965,12 +4863,12 @@
 
 
                 dice.textContent =
-                    diceFaces[value];
+                    diceFaces[random];
 
 
                 await sleep(
-                    70 +
-                    i * 20
+                    65 +
+                    i * 15
                 );
 
             }
@@ -3990,8 +4888,8 @@
             state.moves++;
 
 
-            dice.textContent =
-                diceFaces[value];
+            state.rolling =
+                false;
 
 
             dice.classList.remove(
@@ -3999,69 +4897,86 @@
             );
 
 
-            state.rolling =
-                false;
+            dice.textContent =
+                diceFaces[value];
 
 
             diceTitle.textContent =
-                `You rolled ${value}`;
+                `${playerName} rolled ${value}`;
+
+
+            diceText.textContent =
+                value === 6
+                    ? "৬ পেয়েছেন! Token Board-এ আনতে পারবেন।"
+                    : "একটি Valid Token নির্বাচন করুন।";
 
 
             addLog(
-                `আপনি Dice-এ ${value} পেয়েছেন।`
+                `${playerName} Dice-এ ${value} পেয়েছে।`
             );
 
 
             const validMoves =
                 getValidMoves(
-                    PLAYER,
+                    player,
                     value
                 );
 
+
+            /*
+             * No move.
+             */
 
             if (
                 validMoves.length === 0
             ) {
 
                 gameStatus.textContent =
-                    value === 6
-                        ? "৬ পেয়েছেন, কিন্তু কোনো Valid Move নেই। আবার আপনার Turn হবে।"
-                        : "কোনো Valid Move নেই। AI-এর Turn।";
+                    `${playerName}-এর কোনো Valid Move নেই।`;
 
 
-                renderTokens();
+                addLog(
+                    `${playerName}-এর কোনো Valid Move নেই।`
+                );
 
+
+                state.dice =
+                    0;
+
+
+                /*
+                 * Six = same player gets
+                 * another turn.
+                 */
 
                 if (
-                    value !== 6
+                    value === 6
                 ) {
 
-                    state.dice =
-                        0;
-
                     state.turn =
-                        AI;
+                        player;
+
 
                     updateTurnUI();
 
 
-                    await sleep(
-                        650
-                    );
-
-
-                    aiTurn();
-
-                } else {
-
                     rollButton.disabled =
                         false;
 
+
                     gameStatus.textContent =
-                        "৬ পেয়েছেন। আবার Dice Roll করুন।";
+                        `${playerName} আবার Dice Roll করতে পারবেন।`;
+
+                    return;
 
                 }
 
+
+                /*
+                 * Otherwise switch player.
+                 */
+
+                switchTurn();
 
                 return;
 
@@ -4070,8 +4985,8 @@
 
             gameStatus.textContent =
                 validMoves.length === 1
-                    ? "একটি Token চালানো যাবে।"
-                    : `${validMoves.length}টি Token চালানো যাবে। Token নির্বাচন করুন।`;
+                    ? `${playerName}-এর একটি Valid Token আছে।`
+                    : `${playerName}-এর ${validMoves.length}টি Valid Token আছে। Token নির্বাচন করুন।`;
 
 
             renderTokens();
@@ -4080,31 +4995,19 @@
 
 
         /* =====================================================
-           HUMAN MOVE
+           MOVE PLAYER TOKEN
         ===================================================== */
 
-        async function moveHumanToken(
+        async function movePlayerToken(
+            player,
             tokenIndex
         ) {
 
             if (
-                state.turn !== PLAYER ||
-                state.rolling ||
                 state.gameOver ||
-                state.dice === 0
-            ) {
-
-                return;
-
-            }
-
-
-            if (
-                !isValidMove(
-                    PLAYER,
-                    tokenIndex,
-                    state.dice
-                )
+                state.rolling ||
+                state.dice === 0 ||
+                state.turn !== player
             ) {
 
                 return;
@@ -4116,12 +5019,29 @@
                 state.dice;
 
 
+            if (
+                !isValidMove(
+                    player,
+                    tokenIndex,
+                    value
+                )
+            ) {
+
+                return;
+
+            }
+
+
             state.dice =
                 0;
 
 
+            rollButton.disabled =
+                true;
+
+
             await moveToken(
-                PLAYER,
+                player,
                 tokenIndex,
                 value
             );
@@ -4129,7 +5049,7 @@
 
             if (
                 checkWinner(
-                    PLAYER
+                    player
                 )
             ) {
 
@@ -4147,38 +5067,29 @@
             ) {
 
                 state.turn =
-                    PLAYER;
+                    player;
+
 
                 updateTurnUI();
 
-                gameStatus.textContent =
-                    "৬ পেয়েছেন! আবার Dice Roll করুন।";
 
                 rollButton.disabled =
                     false;
 
+
+                gameStatus.textContent =
+                    `${getPlayerName(player)} ৬ পেয়েছেন! আবার Dice Roll করুন।`;
+
+
                 renderTokens();
+
 
                 return;
 
             }
 
 
-            state.turn =
-                AI;
-
-
-            updateTurnUI();
-
-            renderTokens();
-
-
-            await sleep(
-                600
-            );
-
-
-            aiTurn();
+            switchTurn();
 
         }
 
@@ -4194,40 +5105,43 @@
         ) {
 
             const tokens =
-                player === PLAYER
-                    ? state.humanTokens
-                    : state.aiTokens;
+                player === PLAYER_A
+                    ? state.playerATokens
+                    : state.playerBTokens;
 
 
             let current =
                 tokens[tokenIndex];
 
 
+            const playerName =
+                getPlayerName(
+                    player
+                );
+
+
             /*
-             * Exit yard.
+             * Token leaves yard.
              */
 
             if (
                 current === -1
             ) {
 
-                current =
-                    0;
-
                 tokens[tokenIndex] =
                     0;
 
 
                 addLog(
-                    player === PLAYER
-                        ? `Token ${tokenIndex + 1} Board-এ এসেছে।`
-                        : `AI Token ${tokenIndex + 1} Board-এ এসেছে।`
+                    `${playerName} Token ${tokenIndex + 1} Board-এ এনেছেন।`
                 );
+
 
                 renderTokens();
 
+
                 await sleep(
-                    300
+                    350
                 );
 
             }
@@ -4235,7 +5149,7 @@
             else {
 
                 /*
-                 * Step-by-step movement.
+                 * Smooth step movement.
                  */
 
                 for (
@@ -4246,10 +5160,12 @@
 
                     tokens[tokenIndex]++;
 
+
                     renderTokens();
 
+
                     await sleep(
-                        90
+                        105
                     );
 
                 }
@@ -4258,22 +5174,28 @@
 
 
             /*
-             * Finished.
+             * Exact finish.
              */
 
             if (
-                tokens[tokenIndex] >=
-                FINISHED
+                tokens[tokenIndex] ===
+                FINISH
             ) {
 
-                tokens[tokenIndex] =
-                    FINISHED;
-
-
                 addLog(
-                    player === PLAYER
-                        ? `🎉 আপনার Token ${tokenIndex + 1} Home-এ পৌঁছেছে।`
-                        : `🤖 AI-এর Token ${tokenIndex + 1} Home-এ পৌঁছেছে।`
+                    `🏠 ${playerName} Token ${tokenIndex + 1} Home-এ পৌঁছেছে!`
+                );
+
+
+                gameStatus.textContent =
+                    `🏠 ${playerName} একটি Token Home-এ পৌঁছে দিয়েছেন।`;
+
+
+                renderTokens();
+
+
+                await sleep(
+                    300
                 );
 
             }
@@ -4304,9 +5226,9 @@
         ) {
 
             const tokens =
-                player === PLAYER
-                    ? state.humanTokens
-                    : state.aiTokens;
+                player === PLAYER_A
+                    ? state.playerATokens
+                    : state.playerBTokens;
 
 
             const progress =
@@ -4314,7 +5236,8 @@
 
 
             /*
-             * Only common path can capture.
+             * Only common path can
+             * capture opponent tokens.
              */
 
             if (
@@ -4350,15 +5273,15 @@
 
 
             const opponent =
-                player === PLAYER
-                    ? AI
-                    : PLAYER;
+                player === PLAYER_A
+                    ? PLAYER_B
+                    : PLAYER_A;
 
 
             const opponentTokens =
-                opponent === PLAYER
-                    ? state.humanTokens
-                    : state.aiTokens;
+                opponent === PLAYER_A
+                    ? state.playerATokens
+                    : state.playerBTokens;
 
 
             opponentTokens.forEach(
@@ -4396,23 +5319,25 @@
 
 
                         if (
-                            player === PLAYER
+                            player === PLAYER_A
                         ) {
 
-                            state.humanCaptures++;
+                            state.playerACaptures++;
 
                         } else {
 
-                            state.aiCaptures++;
+                            state.playerBCaptures++;
 
                         }
 
 
                         addLog(
-                            player === PLAYER
-                                ? `💥 আপনি AI-এর Token ${opponentIndex + 1} কাটেছেন!`
-                                : `🤖 AI আপনার Token ${opponentIndex + 1} কেটেছে!`
+                            `💥 ${getPlayerName(player)} Token ${opponentIndex + 1} কেটে দিয়েছেন!`
                         );
+
+
+                        gameStatus.textContent =
+                            `💥 ${getPlayerName(player)} একটি Token Capture করেছেন!`;
 
                     }
 
@@ -4423,173 +5348,19 @@
 
 
         /* =====================================================
-           AI TURN
+           SWITCH TURN
         ===================================================== */
 
-        async function aiTurn() {
-
-            if (
-                state.gameOver
-            ) {
-
-                return;
-
-            }
-
-
-            state.turn =
-                AI;
-
-
-            updateTurnUI();
-
-
-            gameStatus.textContent =
-                "🤖 AI Dice Roll করছে...";
-
-
-            await sleep(
-                600
-            );
-
-
-            const value =
-                await rollAIDice();
-
-
-            if (
-                state.gameOver
-            ) {
-
-                return;
-
-            }
-
-
-            state.dice =
-                value;
-
-
-            const validMoves =
-                getValidMoves(
-                    AI,
-                    value
-                );
-
-
-            addLog(
-                `🤖 AI Dice-এ ${value} পেয়েছে।`
-            );
-
-
-            if (
-                validMoves.length === 0
-            ) {
-
-                gameStatus.textContent =
-                    "🤖 AI-এর কোনো Valid Move নেই।";
-
-
-                state.dice =
-                    0;
-
-
-                if (
-                    value === 6
-                ) {
-
-                    state.turn =
-                        AI;
-
-                    updateTurnUI();
-
-                    await sleep(
-                        500
-                    );
-
-                    aiTurn();
-
-                } else {
-
-                    state.turn =
-                        PLAYER;
-
-                    updateTurnUI();
-
-                    renderTokens();
-
-                }
-
-
-                return;
-
-            }
-
-
-            /*
-             * Choose move according to difficulty.
-             */
-
-            const selected =
-                chooseAIMove(
-                    validMoves,
-                    value
-                );
-
-
-            await sleep(
-                550
-            );
-
+        function switchTurn() {
 
             state.dice =
                 0;
 
 
-            await moveToken(
-                AI,
-                selected,
-                value
-            );
-
-
-            if (
-                checkWinner(
-                    AI
-                )
-            ) {
-
-                return;
-
-            }
-
-
-            /*
-             * Six = another AI turn.
-             */
-
-            if (
-                value === 6
-            ) {
-
-                state.turn =
-                    AI;
-
-                updateTurnUI();
-
-                await sleep(
-                    500
-                );
-
-                aiTurn();
-
-                return;
-
-            }
-
-
             state.turn =
-                PLAYER;
+                state.turn === PLAYER_A
+                    ? PLAYER_B
+                    : PLAYER_A;
 
 
             updateTurnUI();
@@ -4598,393 +5369,89 @@
             renderTokens();
 
 
-            gameStatus.textContent =
-                "আপনার Turn। Dice Roll করুন।";
-
-
             rollButton.disabled =
                 false;
 
+
+            gameStatus.textContent =
+                `${getPlayerName(state.turn)}-এর Turn। Dice Roll করুন।`;
+
         }
 
 
         /* =====================================================
-           AI DICE
+           TURN UI
         ===================================================== */
 
-        async function rollAIDice() {
+        function updateTurnUI() {
 
-            dice.classList.add(
-                "rolling"
-            );
-
-
-            for (
-                let i = 0;
-                i < 5;
-                i++
-            ) {
-
-                const random =
-                    1 +
-                    Math.floor(
-                        Math.random() * 6
-                    );
+            const player =
+                state.turn;
 
 
-                dice.textContent =
-                    diceFaces[random];
+            const isA =
+                player === PLAYER_A;
 
 
-                await sleep(
-                    90
+            const playerName =
+                isA
+                    ? "Player A"
+                    : "Player B";
+
+
+            turnIndicator.textContent =
+                `${playerName} Turn`;
+
+
+            if (isA) {
+
+                turnIndicator.style.color =
+                    "#ff91a1";
+
+                turnIndicator.style.background =
+                    "rgba(255,64,92,.09)";
+
+                turnIndicator.style.borderColor =
+                    "rgba(255,64,92,.25)";
+
+                playerA.classList.add(
+                    "active-red"
+                );
+
+                playerB.classList.remove(
+                    "active-blue"
                 );
 
             }
 
+            else {
 
-            const value =
-                1 +
-                Math.floor(
-                    Math.random() * 6
+                turnIndicator.style.color =
+                    "#9dbaff";
+
+                turnIndicator.style.background =
+                    "rgba(78,140,255,.09)";
+
+                turnIndicator.style.borderColor =
+                    "rgba(78,140,255,.25)";
+
+                playerA.classList.remove(
+                    "active-red"
                 );
 
+                playerB.classList.add(
+                    "active-blue"
+                );
 
-            dice.textContent =
-                diceFaces[value];
-
-
-            dice.classList.remove(
-                "rolling"
-            );
+            }
 
 
             diceTitle.textContent =
-                `AI rolled ${value}`;
+                `${playerName} Dice`;
 
 
             diceText.textContent =
-                "AI is choosing a move...";
-
-
-            return value;
-
-        }
-
-
-        /* =====================================================
-           AI DECISION
-        ===================================================== */
-
-        function chooseAIMove(
-            validMoves,
-            diceValue
-        ) {
-
-            const difficultyValue =
-                difficulty.value;
-
-
-            const tokens =
-                state.aiTokens;
-
-
-            /*
-             * EASY
-             */
-
-            if (
-                difficultyValue ===
-                "easy"
-            ) {
-
-                return randomItem(
-                    validMoves
-                );
-
-            }
-
-
-            /*
-             * Score every move.
-             */
-
-            const scored =
-                validMoves.map(
-                    index => {
-
-                        const progress =
-                            tokens[index];
-
-
-                        const newProgress =
-                            progress === -1
-                                ? 0
-                                : progress +
-                                  diceValue;
-
-
-                        let score =
-                            Math.random() *
-                            8;
-
-
-                        /*
-                         * Bring token out.
-                         */
-
-                        if (
-                            progress === -1 &&
-                            diceValue === 6
-                        ) {
-
-                            score +=
-                                45;
-
-                        }
-
-
-                        /*
-                         * Finish token.
-                         */
-
-                        if (
-                            newProgress >=
-                            FINISHED
-                        ) {
-
-                            score +=
-                                100;
-
-                        }
-
-
-                        /*
-                         * Advance.
-                         */
-
-                        score +=
-                            newProgress *
-                            1.8;
-
-
-                        /*
-                         * Capture opportunity.
-                         */
-
-                        const captureBonus =
-                            calculateCaptureBonus(
-                                AI,
-                                index,
-                                diceValue
-                            );
-
-
-                        score +=
-                            captureBonus;
-
-
-                        /*
-                         * HARD gets stronger
-                         */
-
-                        if (
-                            difficultyValue ===
-                            "hard"
-                        ) {
-
-                            score +=
-                                calculateSafetyBonus(
-                                    AI,
-                                    index,
-                                    diceValue
-                                );
-
-                        }
-
-
-                        return {
-
-                            index,
-                            score
-
-                        };
-
-                    }
-                );
-
-
-            scored.sort(
-                (
-                    a,
-                    b
-                ) =>
-                    b.score -
-                    a.score
-            );
-
-
-            return scored[0].index;
-
-        }
-
-
-        /* =====================================================
-           AI CAPTURE BONUS
-        ===================================================== */
-
-        function calculateCaptureBonus(
-            player,
-            tokenIndex,
-            diceValue
-        ) {
-
-            const tokens =
-                player === PLAYER
-                    ? state.humanTokens
-                    : state.aiTokens;
-
-
-            const current =
-                tokens[tokenIndex];
-
-
-            const next =
-                current === -1
-                    ? 0
-                    : current +
-                      diceValue;
-
-
-            if (
-                next < 0 ||
-                next >= HOME_START
-            ) {
-
-                return 0;
-
-            }
-
-
-            const commonIndex =
-                getCommonIndex(
-                    player,
-                    next
-                );
-
-
-            if (
-                safeIndices.has(
-                    commonIndex
-                )
-            ) {
-
-                return 0;
-
-            }
-
-
-            const opponent =
-                player === PLAYER
-                    ? AI
-                    : PLAYER;
-
-
-            const opponents =
-                opponent === PLAYER
-                    ? state.humanTokens
-                    : state.aiTokens;
-
-
-            const enemy =
-                opponents.some(
-                    progress => {
-
-                        if (
-                            progress < 0 ||
-                            progress >= HOME_START
-                        ) {
-
-                            return false;
-
-                        }
-
-
-                        return (
-                            getCommonIndex(
-                                opponent,
-                                progress
-                            ) ===
-                            commonIndex
-                        );
-
-                    }
-                );
-
-
-            return enemy
-                ? 70
-                : 0;
-
-        }
-
-
-        /* =====================================================
-           SAFETY BONUS
-        ===================================================== */
-
-        function calculateSafetyBonus(
-            player,
-            tokenIndex,
-            diceValue
-        ) {
-
-            const tokens =
-                player === PLAYER
-                    ? state.humanTokens
-                    : state.aiTokens;
-
-
-            const current =
-                tokens[tokenIndex];
-
-
-            const next =
-                current === -1
-                    ? 0
-                    : current +
-                      diceValue;
-
-
-            if (
-                next < 0 ||
-                next >= HOME_START
-            ) {
-
-                return 0;
-
-            }
-
-
-            const commonIndex =
-                getCommonIndex(
-                    player,
-                    next
-                );
-
-
-            if (
-                safeIndices.has(
-                    commonIndex
-                )
-            ) {
-
-                return 20;
-
-            }
-
-
-            return 0;
+                "Dice Roll করে Turn শুরু করুন।";
 
         }
 
@@ -4998,16 +5465,16 @@
         ) {
 
             const tokens =
-                player === PLAYER
-                    ? state.humanTokens
-                    : state.aiTokens;
+                player === PLAYER_A
+                    ? state.playerATokens
+                    : state.playerBTokens;
 
 
             const winner =
                 tokens.every(
                     token =>
                         token ===
-                        FINISHED
+                        FINISH
                 );
 
 
@@ -5022,93 +5489,38 @@
                 true;
 
 
+            state.dice =
+                0;
+
+
             rollButton.disabled =
                 true;
 
 
-            if (
-                player === PLAYER
-            ) {
-
-                gameStatus.textContent =
-                    "🏆 Congratulations! আপনি ম্যাচ জিতেছেন।";
-
-                showWinner(
-                    "🏆 You Win!",
-                    "অসাধারণ! আপনি সবগুলো Token Home-এ পৌঁছে ম্যাচ জিতেছেন।"
+            const playerName =
+                getPlayerName(
+                    player
                 );
 
-                addLog(
-                    "🏆 আপনি ম্যাচ জিতেছেন!"
-                );
 
-            } else {
+            gameStatus.textContent =
+                `🏆 ${playerName} ম্যাচ জিতেছেন!`;
 
-                gameStatus.textContent =
-                    "🤖 AI ম্যাচ জিতেছে।";
 
-                showWinner(
-                    "🤖 AI Wins!",
-                    "AI Bot সবগুলো Token Home-এ পৌঁছে ম্যাচ জিতেছে।"
-                );
+            addLog(
+                `🏆 ${playerName} সবগুলো Token Home-এ পৌঁছে ম্যাচ জিতেছেন!`
+            );
 
-                addLog(
-                    "🤖 AI ম্যাচ জিতেছে।"
-                );
 
-            }
+            showWinner(
+                player === PLAYER_A
+                    ? "🏆 Player A Wins!"
+                    : "🏆 Player B Wins!",
+                `${playerName} সবগুলো Token Home-এ পৌঁছে Premium Ludo Match জিতেছেন।`
+            );
 
 
             return true;
-
-        }
-
-
-        /* =====================================================
-           TURN UI
-        ===================================================== */
-
-        function updateTurnUI() {
-
-            if (
-                state.turn ===
-                PLAYER
-            ) {
-
-                turnIndicator.textContent =
-                    "Your Turn";
-
-
-                turnIndicator.style.color =
-                    "#9ab6ff";
-
-
-                diceTitle.textContent =
-                    "Your Dice";
-
-
-                diceText.textContent =
-                    "Roll the dice to continue.";
-
-
-            } else {
-
-                turnIndicator.textContent =
-                    "AI Turn";
-
-
-                turnIndicator.style.color =
-                    "#ffe08a";
-
-
-                diceTitle.textContent =
-                    "AI Dice";
-
-
-                diceText.textContent =
-                    "AI is playing...";
-
-            }
 
         }
 
@@ -5120,39 +5532,39 @@
         function updateStats() {
 
             document.getElementById(
-                "humanFinished"
+                "playerAFinished"
             ).textContent =
                 `${
-                    state.humanTokens.filter(
+                    state.playerATokens.filter(
                         token =>
                             token ===
-                            FINISHED
+                            FINISH
                     ).length
                 } / 4`;
 
 
             document.getElementById(
-                "aiFinished"
+                "playerBFinished"
             ).textContent =
                 `${
-                    state.aiTokens.filter(
+                    state.playerBTokens.filter(
                         token =>
                             token ===
-                            FINISHED
+                            FINISH
                     ).length
                 } / 4`;
 
 
             document.getElementById(
-                "humanCaptures"
+                "playerACaptures"
             ).textContent =
-                state.humanCaptures;
+                state.playerACaptures;
 
 
             document.getElementById(
-                "aiCaptures"
+                "playerBCaptures"
             ).textContent =
-                state.aiCaptures;
+                state.playerBCaptures;
 
         }
 
@@ -5186,7 +5598,7 @@
 
             while (
                 gameLog.children.length >
-                20
+                25
             ) {
 
                 gameLog.lastElementChild.remove();
@@ -5235,7 +5647,7 @@
             state = {
 
                 turn:
-                    PLAYER,
+                    PLAYER_A,
 
                 dice:
                     0,
@@ -5246,16 +5658,16 @@
                 gameOver:
                     false,
 
-                humanTokens:
+                playerATokens:
                     [-1,-1,-1,-1],
 
-                aiTokens:
+                playerBTokens:
                     [-1,-1,-1,-1],
 
-                humanCaptures:
+                playerACaptures:
                     0,
 
-                aiCaptures:
+                playerBCaptures:
                     0,
 
                 moves:
@@ -5270,12 +5682,12 @@
 
             gameLog.innerHTML =
                 `<div class="log-item">
-                    নতুন Game শুরু হয়েছে।
+                    নতুন Premium Ludo Match শুরু হয়েছে।
                 </div>`;
 
 
             gameStatus.textContent =
-                "আপনার Turn। Dice Roll করুন।";
+                "Player A-এর Turn। Dice Roll করুন।";
 
 
             document.getElementById(
@@ -5297,7 +5709,22 @@
 
 
         /* =====================================================
-           UTILITIES
+           PLAYER NAME
+        ===================================================== */
+
+        function getPlayerName(
+            player
+        ) {
+
+            return player === PLAYER_A
+                ? "Player A"
+                : "Player B";
+
+        }
+
+
+        /* =====================================================
+           UTILITY
         ===================================================== */
 
         function sleep(
@@ -5311,20 +5738,6 @@
                         ms
                     )
             );
-
-        }
-
-
-        function randomItem(
-            array
-        ) {
-
-            return array[
-                Math.floor(
-                    Math.random() *
-                    array.length
-                )
-            ];
 
         }
 
