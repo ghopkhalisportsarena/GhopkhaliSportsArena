@@ -1060,3 +1060,89 @@
     }
 
 }
+
+/* =================================================
+   STEP 5 — DICE CONTROL
+================================================= */
+
+.dice-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 11px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    background: rgba(16, 24, 39, 0.94);
+}
+
+.dice-box {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.dice-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.dice-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(251, 192, 45, 0.28);
+    border-radius: 12px;
+    background: rgba(251, 192, 45, 0.08);
+    color: var(--text);
+    font-size: 28px;
+    line-height: 1;
+}
+
+.roll-button {
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid rgba(251, 192, 45, 0.45);
+    border-radius: 12px;
+    background: var(--accent);
+    color: #111827;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.roll-button:active {
+    transform: scale(0.96);
+}
+
+.roll-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+@media (max-width: 360px) {
+
+    .dice-section {
+        gap: 8px;
+        padding: 9px;
+    }
+
+    .dice-display {
+        width: 42px;
+        height: 42px;
+        font-size: 25px;
+    }
+
+    .roll-button {
+        padding: 0 13px;
+        font-size: 12px;
+    }
+
+}
