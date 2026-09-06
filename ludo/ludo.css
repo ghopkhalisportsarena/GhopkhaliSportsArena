@@ -1146,3 +1146,105 @@
     }
 
 }
+
+/* =========================================================
+   STEP 7 — TOKEN HIGHLIGHT
+========================================================= */
+
+.token {
+
+    cursor:
+        default;
+
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease,
+        box-shadow 0.15s ease;
+
+}
+
+
+/* ---------------------------------------------------------
+   VALID TOKEN
+--------------------------------------------------------- */
+
+.token.token-valid {
+
+    cursor:
+        pointer;
+
+    animation:
+        ludoTokenPulse 1s
+        ease-in-out
+        infinite;
+
+    filter:
+        brightness(1.18);
+
+}
+
+
+/* ---------------------------------------------------------
+   VALID TOKEN HOVER
+--------------------------------------------------------- */
+
+.token.token-valid:hover {
+
+    transform:
+        scale(1.12);
+
+}
+
+
+/* ---------------------------------------------------------
+   INVALID TOKEN
+--------------------------------------------------------- */
+
+.token.token-disabled {
+
+    cursor:
+        not-allowed;
+
+    opacity:
+        0.65;
+
+}
+
+
+/* ---------------------------------------------------------
+   TOKEN PULSE
+--------------------------------------------------------- */
+
+@keyframes ludoTokenPulse {
+
+    0%,
+    100% {
+
+        transform:
+            scale(1);
+
+    }
+
+    50% {
+
+        transform:
+            scale(1.08);
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE TOUCH
+--------------------------------------------------------- */
+
+.token.token-valid {
+
+    -webkit-tap-highlight-color:
+        transparent;
+
+    touch-action:
+        manipulation;
+
+}
