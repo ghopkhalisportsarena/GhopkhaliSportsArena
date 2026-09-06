@@ -7,176 +7,282 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     >
 
     <meta
         name="theme-color"
-        content="#05070b"
+        content="#070b16"
+    >
+
+    <meta
+        name="description"
+        content="Ghopkhali Sports Arena Single Ludo"
     >
 
     <title>
-        Single Tournament — Ghopkhali Sports Arena
+        Single Ludo | Ghopkhali Sports Arena
     </title>
 
 
+    <!-- =================================================
+         LUDO CSS
+    ================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="ludu.css"
+    >
+
+
+    <!-- =================================================
+         PAGE STYLE
+    ================================================== -->
+
     <style>
 
-        /* =====================================================
+        /* =================================================
            ROOT
-        ===================================================== */
+        ================================================= */
 
         :root {
 
             --bg:
-                #05070b;
+                #070b16;
 
             --panel:
-                rgba(255,255,255,0.055);
+                #101827;
 
-            --panel-strong:
-                rgba(255,255,255,0.085);
+            --panel-2:
+                #151f31;
 
-            --border:
-                rgba(255,255,255,0.11);
+            --line:
+                #263246;
 
             --text:
-                #f5f7fb;
+                #f8fafc;
 
             --muted:
-                #9299a8;
+                #94a3b8;
+
+            --accent:
+                #fbc02d;
 
             --red:
-                #ff3b30;
-
-            --blue:
-                #0a84ff;
+                #e53935;
 
             --green:
-                #30d158;
+                #43a047;
 
             --yellow:
-                #ffd60a;
+                #fbc02d;
 
-            --shadow:
-                0 25px 70px rgba(0,0,0,0.48);
-
-            --radius:
-                24px;
+            --blue:
+                #1e88e5;
 
         }
 
 
-        * {
+        /* =================================================
+           BODY
+        ================================================= */
 
-            box-sizing:
-                border-box;
+        html {
 
-            -webkit-tap-highlight-color:
-                transparent;
+            margin: 0;
 
-        }
-
-
-        html,
-        body {
-
-            margin:
-                0;
-
-            padding:
-                0;
-
-            min-height:
-                100%;
+            padding: 0;
 
             background:
                 var(--bg);
 
-            color:
-                var(--text);
-
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
-                "Segoe UI",
-                sans-serif;
-
         }
 
 
         body {
 
-            overflow-x:
-                hidden;
+            margin: 0;
+
+            padding: 0;
+
+            min-height: 100vh;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            color:
+                var(--text);
 
             background:
-
                 radial-gradient(
-                    circle at 15% 10%,
-                    rgba(10,132,255,0.12),
-                    transparent 30%
-                ),
-
-                radial-gradient(
-                    circle at 85% 15%,
-                    rgba(255,59,48,0.10),
-                    transparent 30%
-                ),
-
-                radial-gradient(
-                    circle at 50% 90%,
-                    rgba(48,209,88,0.07),
-                    transparent 35%
-                ),
-
-                #05070b;
+                    circle at top,
+                    #17233b 0%,
+                    #070b16 48%,
+                    #04060c 100%
+                );
 
         }
 
 
-        button,
-        select {
+        /* =================================================
+           PAGE
+        ================================================= */
 
-            font:
-                inherit;
+        .ludo-page {
 
-        }
+            width: 100%;
 
-
-        button {
-
-            cursor:
-                pointer;
-
-        }
-
-
-        /* =====================================================
-           APP
-        ===================================================== */
-
-        .app {
-
-            width:
-                min(1400px, 100%);
-
-            margin:
-                auto;
+            min-height: 100vh;
 
             padding:
-                18px;
+                20px 12px 35px;
 
         }
 
 
-        /* =====================================================
-           TOP BAR
-        ===================================================== */
+        /* =================================================
+           HEADER
+        ================================================= */
 
-        .topbar {
+        .ludo-header {
+
+            width: 100%;
+
+            max-width: 900px;
+
+            margin:
+                0 auto 15px;
+
+            text-align: center;
+
+        }
+
+
+        .brand {
+
+            margin: 0;
+
+            font-size:
+                clamp(20px, 5vw, 30px);
+
+            font-weight: 800;
+
+            letter-spacing:
+                0.5px;
+
+        }
+
+
+        .brand-subtitle {
+
+            margin:
+                4px 0 0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+        }
+
+
+        .game-title {
+
+            margin:
+                12px 0 0;
+
+            font-size:
+                clamp(17px, 4vw, 22px);
+
+            font-weight: 700;
+
+        }
+
+
+        /* =================================================
+           GAME CONTAINER
+        ================================================= */
+
+        .game-container {
+
+            width: 100%;
+
+            max-width: 900px;
+
+            margin: 0 auto;
+
+        }
+
+
+        /* =================================================
+           PLAYER PANELS
+        ================================================= */
+
+        .players {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                10px;
+
+            margin-bottom:
+                12px;
+
+        }
+
+
+        .player-card {
+
+            position: relative;
+
+            padding:
+                12px;
+
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:
+                15px;
+
+            background:
+                rgba(16, 24, 39, 0.92);
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.18);
+
+            transition:
+                0.2s ease;
+
+        }
+
+
+        .player-card.active {
+
+            border-color:
+                var(--accent);
+
+            box-shadow:
+                0 0 0 1px
+                rgba(251, 192, 45, 0.18),
+                0 8px 28px
+                rgba(0, 0, 0, 0.25);
+
+        }
+
+
+        .player-top {
 
             display:
                 flex;
@@ -188,129 +294,12 @@
                 space-between;
 
             gap:
-                14px;
-
-            padding:
-                14px 16px;
-
-            border:
-                1px solid var(--border);
-
-            background:
-                rgba(12,15,22,0.76);
-
-            backdrop-filter:
-                blur(24px);
-
-            -webkit-backdrop-filter:
-                blur(24px);
-
-            border-radius:
-                20px;
-
-            box-shadow:
-                var(--shadow);
-
-            position:
-                sticky;
-
-            top:
-                10px;
-
-            z-index:
-                50;
+                8px;
 
         }
 
 
-        .brand {
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            gap:
-                11px;
-
-            min-width:
-                0;
-
-        }
-
-
-        .brand-icon {
-
-            width:
-                42px;
-
-            height:
-                42px;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-            border-radius:
-                14px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,0.16),
-                    rgba(255,255,255,0.035)
-                );
-
-            border:
-                1px solid var(--border);
-
-            font-size:
-                21px;
-
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.08);
-
-        }
-
-
-        .brand-title {
-
-            font-size:
-                14px;
-
-            font-weight:
-                800;
-
-            white-space:
-                nowrap;
-
-            overflow:
-                hidden;
-
-            text-overflow:
-                ellipsis;
-
-        }
-
-
-        .brand-sub {
-
-            margin-top:
-                2px;
-
-            font-size:
-                10px;
-
-            color:
-                var(--muted);
-
-        }
-
-
-        .top-status {
+        .player-name {
 
             display:
                 flex;
@@ -321,156 +310,122 @@
             gap:
                 8px;
 
-            padding:
-                9px 12px;
-
-            border:
-                1px solid rgba(48,209,88,0.18);
-
-            border-radius:
-                13px;
-
-            background:
-                rgba(48,209,88,0.06);
-
-            color:
-                #a8efbd;
-
             font-size:
-                10px;
+                14px;
 
             font-weight:
-                800;
-
-            white-space:
-                nowrap;
+                700;
 
         }
 
 
-        .status-dot {
+        .player-dot {
 
             width:
-                7px;
+                11px;
 
             height:
-                7px;
+                11px;
 
             border-radius:
                 50%;
 
+            flex:
+                0 0 auto;
+
+        }
+
+
+        .player-dot.red {
+
             background:
-                var(--green);
-
-            box-shadow:
-                0 0 12px rgba(48,209,88,0.85);
-
-            animation:
-                pulse 1.8s infinite;
+                var(--red);
 
         }
 
 
-        @keyframes pulse {
+        .player-dot.blue {
 
-            0%,
-            100% {
-
-                opacity:
-                    1;
-
-                transform:
-                    scale(1);
-
-            }
-
-            50% {
-
-                opacity:
-                    .45;
-
-                transform:
-                    scale(.72);
-
-            }
+            background:
+                var(--blue);
 
         }
 
 
-        /* =====================================================
-           HERO
-        ===================================================== */
-
-        .hero {
-
-            text-align:
-                center;
-
-            padding:
-                34px 12px 22px;
-
-        }
-
-
-        .hero-kicker {
-
-            font-size:
-                10px;
-
-            font-weight:
-                900;
-
-            letter-spacing:
-                2px;
-
-            color:
-                #8f9aad;
-
-        }
-
-
-        .hero h1 {
-
-            margin:
-                8px 0 7px;
-
-            font-size:
-                clamp(27px, 5vw, 48px);
-
-            line-height:
-                1.02;
-
-            letter-spacing:
-                -1.7px;
-
-        }
-
-
-        .hero p {
-
-            margin:
-                0 auto;
-
-            max-width:
-                680px;
+        .player-status {
 
             color:
                 var(--muted);
 
             font-size:
-                13px;
-
-            line-height:
-                1.7;
+                11px;
 
         }
 
 
-        /* =====================================================
-           PLAYER BAR
-        ===================================================== */
+        .token-count {
 
-        .players {
+            margin-top:
+                7px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* =================================================
+           BOARD WRAPPER
+        ================================================= */
+
+        .board-section {
+
+            padding:
+                8px;
+
+            border:
+                1px solid
+                rgba(148, 163, 184, 0.14);
+
+            border-radius:
+                20px;
+
+            background:
+                rgba(15, 23, 42, 0.78);
+
+            box-shadow:
+                0 18px 50px
+                rgba(0, 0, 0, 0.28);
+
+        }
+
+
+        /* =================================================
+           BOARD CONTAINER OVERRIDE
+        ================================================= */
+
+        #ludo-board {
+
+            max-width:
+                650px;
+
+            margin:
+                0 auto;
+
+            padding:
+                0;
+
+        }
+
+
+        /* =================================================
+           DICE AREA
+        ================================================= */
+
+        .control-panel {
 
             display:
                 grid;
@@ -478,200 +433,35 @@
             grid-template-columns:
                 1fr auto 1fr;
 
-            gap:
-                12px;
-
-            align-items:
-                center;
-
-            margin:
-                8px auto 20px;
-
-            max-width:
-                920px;
-
-        }
-
-
-        .player-card {
-
-            position:
-                relative;
-
-            display:
-                flex;
-
             align-items:
                 center;
 
             gap:
-                11px;
-
-            min-width:
-                0;
-
-            padding:
                 12px;
-
-            border:
-                1px solid var(--border);
-
-            background:
-                var(--panel);
-
-            border-radius:
-                18px;
-
-            transition:
-                .25s ease;
-
-        }
-
-
-        .player-card.active {
-
-            transform:
-                translateY(-2px);
-
-            box-shadow:
-                0 15px 35px rgba(0,0,0,0.25);
-
-        }
-
-
-        .player-card.red.active {
-
-            border-color:
-                rgba(255,59,48,0.5);
-
-            box-shadow:
-                0 0 0 1px rgba(255,59,48,0.08),
-                0 15px 40px rgba(255,59,48,0.12);
-
-        }
-
-
-        .player-card.blue.active {
-
-            border-color:
-                rgba(10,132,255,0.5);
-
-            box-shadow:
-                0 0 0 1px rgba(10,132,255,0.08),
-                0 15px 40px rgba(10,132,255,0.12);
-
-        }
-
-
-        .avatar {
-
-            width:
-                42px;
-
-            height:
-                42px;
-
-            flex:
-                0 0 42px;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-            border-radius:
-                14px;
-
-            font-size:
-                20px;
-
-            background:
-                rgba(255,255,255,0.06);
-
-            border:
-                1px solid var(--border);
-
-        }
-
-
-        .red .avatar {
-
-            background:
-                rgba(255,59,48,0.12);
-
-        }
-
-
-        .blue .avatar {
-
-            background:
-                rgba(10,132,255,0.12);
-
-        }
-
-
-        .player-info {
-
-            min-width:
-                0;
-
-        }
-
-
-        .player-name {
-
-            font-size:
-                13px;
-
-            font-weight:
-                900;
-
-            white-space:
-                nowrap;
-
-            overflow:
-                hidden;
-
-            text-overflow:
-                ellipsis;
-
-        }
-
-
-        .player-color {
 
             margin-top:
-                3px;
+                15px;
 
-            font-size:
-                10px;
+            padding:
+                13px;
 
-            color:
-                var(--muted);
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:
+                17px;
+
+            background:
+                rgba(16, 24, 39, 0.95);
 
         }
 
 
-        .turn-indicator {
+        .turn-info {
 
             min-width:
-                130px;
-
-            padding:
-                10px 13px;
-
-            text-align:
-                center;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                16px;
-
-            background:
-                rgba(255,255,255,0.045);
+                0;
 
         }
 
@@ -682,10 +472,7 @@
                 var(--muted);
 
             font-size:
-                9px;
-
-            font-weight:
-                800;
+                11px;
 
         }
 
@@ -696,771 +483,25 @@
                 3px;
 
             font-size:
-                11px;
+                15px;
 
             font-weight:
-                900;
+                800;
 
         }
 
 
-        /* =====================================================
-           MAIN GAME AREA
-        ===================================================== */
+        /* =================================================
+           DICE
+        ================================================= */
 
-        .game-layout {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                minmax(0, 1fr) 320px;
-
-            gap:
-                18px;
-
-            align-items:
-                start;
-
-        }
-
-
-        /* =====================================================
-           BOARD WRAPPER
-        ===================================================== */
-
-        .board-shell {
-
-            position:
-                relative;
+        .dice {
 
             width:
-                min(780px, 100%);
-
-            margin:
-                auto;
-
-            padding:
-                12px;
-
-            border:
-                1px solid rgba(255,255,255,0.13);
-
-            border-radius:
-                31px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(255,255,255,0.075),
-                    rgba(255,255,255,0.025)
-                );
-
-            box-shadow:
-                0 35px 90px rgba(0,0,0,0.55),
-                inset 0 1px 0 rgba(255,255,255,0.06);
-
-        }
-
-
-        .board {
-
-            position:
-                relative;
-
-            width:
-                100%;
-
-            aspect-ratio:
-                1 / 1;
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(15, 1fr);
-
-            grid-template-rows:
-                repeat(15, 1fr);
-
-            overflow:
-                hidden;
-
-            border-radius:
-                23px;
-
-            background:
-                #f6f7fa;
-
-            box-shadow:
-                inset 0 0 0 2px rgba(0,0,0,0.08);
-
-        }
-
-
-        /* =====================================================
-           BOARD CELLS
-        ===================================================== */
-
-        .cell {
-
-            position:
-                relative;
-
-            border:
-                1px solid rgba(15,18,25,0.08);
-
-            background:
-                #ffffff;
-
-        }
-
-
-        .cell.track {
-
-            background:
-                #fbfbfd;
-
-        }
-
-
-        .cell.red-home {
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #ff6259,
-                    #ff3b30
-                );
-
-        }
-
-
-        .cell.blue-home {
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #2b96ff,
-                    #0a84ff
-                );
-
-        }
-
-
-        .cell.green-home {
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #45df70,
-                    #30d158
-                );
-
-        }
-
-
-        .cell.yellow-home {
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #ffe46a,
-                    #ffd60a
-                );
-
-        }
-
-
-        .cell.red-lane {
-
-            background:
-                rgba(255,59,48,0.76);
-
-        }
-
-
-        .cell.blue-lane {
-
-            background:
-                rgba(10,132,255,0.76);
-
-        }
-
-
-        .cell.green-lane {
-
-            background:
-                rgba(48,209,88,0.76);
-
-        }
-
-
-        .cell.yellow-lane {
-
-            background:
-                rgba(255,214,10,0.76);
-
-        }
-
-
-        .cell.safe::after {
-
-            content:
-                "★";
-
-            position:
-                absolute;
-
-            inset:
-                0;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-            color:
-                rgba(30,35,45,0.45);
-
-            font-size:
-                clamp(7px, 1.5vw, 15px);
-
-        }
-
-
-        .cell.start-red {
-
-            background:
-                #ff3b30;
-
-        }
-
-
-        .cell.start-blue {
-
-            background:
-                #0a84ff;
-
-        }
-
-
-        .cell.start-green {
-
-            background:
-                #30d158;
-
-        }
-
-
-        .cell.start-yellow {
-
-            background:
-                #ffd60a;
-
-        }
-
-
-        /* =====================================================
-           HOME ZONES
-        ===================================================== */
-
-        .home-zone {
-
-            position:
-                absolute;
-
-            z-index:
-                2;
-
-            width:
-                40%;
+                60px;
 
             height:
-                40%;
-
-            padding:
-                5%;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-        }
-
-
-        .home-zone.red {
-
-            left:
-                0;
-
-            top:
-                0;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #ff5c54,
-                    #ff2d20
-                );
-
-        }
-
-
-        .home-zone.green {
-
-            right:
-                0;
-
-            top:
-                0;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #48e878,
-                    #24c94d
-                );
-
-        }
-
-
-        .home-zone.yellow {
-
-            right:
-                0;
-
-            bottom:
-                0;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #ffe66b,
-                    #ffd000
-                );
-
-        }
-
-
-        .home-zone.blue {
-
-            left:
-                0;
-
-            bottom:
-                0;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #319bff,
-                    #0879ef
-                );
-
-        }
-
-
-        .home-inner {
-
-            width:
-                100%;
-
-            height:
-                100%;
-
-            padding:
-                12%;
-
-            border-radius:
-                18%;
-
-            background:
-                rgba(255,255,255,0.94);
-
-            box-shadow:
-                0 10px 25px rgba(0,0,0,0.18),
-                inset 0 0 0 1px rgba(0,0,0,0.05);
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            grid-template-rows:
-                1fr 1fr;
-
-            gap:
-                12%;
-
-        }
-
-
-        .home-slot {
-
-            position:
-                relative;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-            border-radius:
-                50%;
-
-            background:
-                rgba(20,25,35,0.07);
-
-            box-shadow:
-                inset 0 2px 6px rgba(0,0,0,0.08);
-
-        }
-
-
-        .inactive-home .home-inner {
-
-            opacity:
-                .78;
-
-        }
-
-
-        /* =====================================================
-           CENTER
-        ===================================================== */
-
-        .center-home {
-
-            position:
-                absolute;
-
-            z-index:
-                6;
-
-            left:
-                40%;
-
-            top:
-                40%;
-
-            width:
-                20%;
-
-            height:
-                20%;
-
-            overflow:
-                hidden;
-
-            background:
-                #ffffff;
-
-            clip-path:
-                polygon(
-                    0 0,
-                    50% 50%,
-                    100% 0,
-                    100% 100%,
-                    50% 50%,
-                    0 100%
-                );
-
-            box-shadow:
-                0 0 0 2px rgba(0,0,0,0.07);
-
-        }
-
-
-        .center-home::before {
-
-            content:
-                "";
-
-            position:
-                absolute;
-
-            inset:
-                0;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--red) 0 25%,
-                    var(--green) 25% 50%,
-                    var(--yellow) 50% 75%,
-                    var(--blue) 75% 100%
-                );
-
-            opacity:
-                .92;
-
-        }
-
-
-        /* =====================================================
-           TOKENS
-        ===================================================== */
-
-        .token {
-
-            width:
-                68%;
-
-            aspect-ratio:
-                1;
-
-            border-radius:
-                50%;
-
-            position:
-                absolute;
-
-            z-index:
-                20;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-            font-size:
-                clamp(7px, 1.3vw, 12px);
-
-            font-weight:
-                900;
-
-            color:
-                #ffffff;
-
-            border:
-                2px solid rgba(255,255,255,0.82);
-
-            box-shadow:
-                0 5px 12px rgba(0,0,0,0.28),
-                inset 0 2px 4px rgba(255,255,255,0.45);
-
-            transform:
-                translate(-50%, -50%);
-
-            transition:
-                left .32s cubic-bezier(.22,.61,.36,1),
-                top .32s cubic-bezier(.22,.61,.36,1),
-                transform .18s ease,
-                box-shadow .18s ease;
-
-            pointer-events:
-                auto;
-
-        }
-
-
-        .token.red {
-
-            background:
-                radial-gradient(
-                    circle at 30% 25%,
-                    #ff938c,
-                    #ff3b30 52%,
-                    #d91e16
-                );
-
-        }
-
-
-        .token.blue {
-
-            background:
-                radial-gradient(
-                    circle at 30% 25%,
-                    #91caff,
-                    #0a84ff 52%,
-                    #0061c9
-                );
-
-        }
-
-
-        .token.selectable {
-
-            cursor:
-                pointer;
-
-            animation:
-                tokenGlow 1.15s infinite;
-
-        }
-
-
-        .token.selectable:hover {
-
-            transform:
-                translate(-50%, -50%) scale(1.12);
-
-        }
-
-
-        @keyframes tokenGlow {
-
-            0%,
-            100% {
-
-                box-shadow:
-                    0 5px 12px rgba(0,0,0,0.28),
-                    0 0 0 0 rgba(255,255,255,0.4);
-
-            }
-
-            50% {
-
-                box-shadow:
-                    0 5px 12px rgba(0,0,0,0.28),
-                    0 0 0 8px rgba(255,255,255,0.12);
-
-            }
-
-        }
-
-
-        .token.pop {
-
-            animation:
-                tokenPop .35s ease;
-
-        }
-
-
-        @keyframes tokenPop {
-
-            50% {
-
-                transform:
-                    translate(-50%, -50%) scale(1.22);
-
-            }
-
-        }
-
-
-        /* =====================================================
-           BOARD OVERLAY
-        ===================================================== */
-
-        .board-overlay {
-
-            position:
-                absolute;
-
-            z-index:
-                40;
-
-            left:
-                50%;
-
-            top:
-                50%;
-
-            transform:
-                translate(-50%, -50%);
-
-            pointer-events:
-                none;
-
-            text-align:
-                center;
-
-        }
-
-
-        .board-badge {
-
-            display:
-                inline-flex;
-
-            align-items:
-                center;
-
-            gap:
-                7px;
-
-            padding:
-                8px 12px;
-
-            border:
-                1px solid rgba(255,255,255,0.35);
-
-            border-radius:
-                999px;
-
-            background:
-                rgba(10,12,17,0.74);
-
-            backdrop-filter:
-                blur(12px);
-
-            color:
-                #ffffff;
-
-            font-size:
-                clamp(7px, 1.3vw, 11px);
-
-            font-weight:
-                900;
-
-            box-shadow:
-                0 10px 25px rgba(0,0,0,0.22);
-
-        }
-
-
-        /* =====================================================
-           SIDE PANEL
-        ===================================================== */
-
-        .side-panel {
-
-            display:
-                flex;
-
-            flex-direction:
-                column;
-
-            gap:
-                13px;
-
-        }
-
-
-        .panel {
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                21px;
-
-            background:
-                var(--panel);
-
-            padding:
-                16px;
-
-            box-shadow:
-                0 18px 45px rgba(0,0,0,0.22);
-
-            backdrop-filter:
-                blur(20px);
-
-        }
-
-
-        .panel-title {
+                60px;
 
             display:
                 flex;
@@ -1469,180 +510,30 @@
                 center;
 
             justify-content:
-                space-between;
-
-            gap:
-                10px;
-
-            margin-bottom:
-                13px;
-
-            font-size:
-                12px;
-
-            font-weight:
-                900;
-
-        }
-
-
-        .controller {
-
-            display:
-                flex;
-
-            align-items:
                 center;
 
-            gap:
-                10px;
-
-            padding:
-                11px;
-
             border:
-                1px solid rgba(48,209,88,0.18);
+                1px solid
+                #475569;
 
             border-radius:
                 15px;
 
             background:
-                rgba(48,209,88,0.055);
+                #ffffff;
 
-        }
-
-
-        .controller-icon {
-
-            width:
-                38px;
-
-            height:
-                38px;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-            border-radius:
-                12px;
-
-            background:
-                rgba(48,209,88,0.10);
+            color:
+                #111827;
 
             font-size:
-                18px;
-
-        }
-
-
-        .controller-name {
-
-            font-size:
-                11px;
+                30px;
 
             font-weight:
                 900;
-
-        }
-
-
-        .controller-desc {
-
-            margin-top:
-                3px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                9px;
-
-            line-height:
-                1.4;
-
-        }
-
-
-        .controller-state {
-
-            margin-left:
-                auto;
-
-            font-size:
-                9px;
-
-            font-weight:
-                900;
-
-            color:
-                #78e997;
-
-        }
-
-
-        /* =====================================================
-           DICE
-        ===================================================== */
-
-        .dice-area {
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                space-between;
-
-            gap:
-                12px;
-
-        }
-
-
-        .dice {
-
-            width:
-                76px;
-
-            height:
-                76px;
-
-            flex:
-                0 0 76px;
-
-            border-radius:
-                20px;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-            font-size:
-                36px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #ffffff,
-                    #dfe4eb
-                );
-
-            color:
-                #11151d;
 
             box-shadow:
-                0 12px 25px rgba(0,0,0,0.25),
-                inset 0 2px 0 rgba(255,255,255,0.95);
-
-            user-select:
-                none;
+                0 7px 20px
+                rgba(0, 0, 0, 0.3);
 
         }
 
@@ -1650,7 +541,9 @@
         .dice.rolling {
 
             animation:
-                diceRoll .55s ease;
+                diceRoll
+                0.5s
+                ease;
 
         }
 
@@ -1665,19 +558,27 @@
 
             }
 
-            30% {
+            25% {
 
                 transform:
-                    rotate(18deg)
+                    rotate(-12deg)
                     scale(1.08);
 
             }
 
-            65% {
+            50% {
 
                 transform:
-                    rotate(-18deg)
-                    scale(.94);
+                    rotate(12deg)
+                    scale(1.12);
+
+            }
+
+            75% {
+
+                transform:
+                    rotate(-8deg)
+                    scale(1.06);
 
             }
 
@@ -1692,555 +593,234 @@
         }
 
 
-        .roll-btn {
+        /* =================================================
+           DICE BUTTON
+        ================================================= */
 
-            width:
-                100%;
+        .roll-button {
+
+            min-width:
+                105px;
 
             min-height:
-                48px;
+                46px;
+
+            padding:
+                0 15px;
 
             border:
                 0;
 
             border-radius:
-                15px;
-
-            color:
-                #ffffff;
-
-            font-size:
                 12px;
 
-            font-weight:
-                900;
-
             background:
-                linear-gradient(
-                    135deg,
-                    #0a84ff,
-                    #006fe6
-                );
+                var(--accent);
 
-            box-shadow:
-                0 10px 25px rgba(10,132,255,0.23);
+            color:
+                #111827;
 
-            transition:
-                .2s ease;
-
-        }
-
-
-        .roll-btn:hover {
-
-            transform:
-                translateY(-1px);
-
-        }
-
-
-        .roll-btn:disabled {
-
-            opacity:
-                .42;
-
-            cursor:
-                not-allowed;
-
-            transform:
-                none;
-
-        }
-
-
-        /* =====================================================
-           STATS
-        ===================================================== */
-
-        .stats {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            gap:
-                8px;
-
-        }
-
-
-        .stat {
-
-            padding:
-                11px 8px;
-
-            text-align:
-                center;
-
-            border:
-                1px solid rgba(255,255,255,0.07);
-
-            border-radius:
+            font-size:
                 14px;
-
-            background:
-                rgba(255,255,255,0.035);
-
-        }
-
-
-        .stat-value {
-
-            font-size:
-                16px;
-
-            font-weight:
-                900;
-
-        }
-
-
-        .stat-label {
-
-            margin-top:
-                3px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                8px;
-
-        }
-
-
-        /* =====================================================
-           LOG
-        ===================================================== */
-
-        .game-log {
-
-            max-height:
-                230px;
-
-            overflow:
-                auto;
-
-            display:
-                flex;
-
-            flex-direction:
-                column;
-
-            gap:
-                7px;
-
-        }
-
-
-        .log-item {
-
-            padding:
-                9px 10px;
-
-            border-radius:
-                11px;
-
-            background:
-                rgba(255,255,255,0.035);
-
-            color:
-                #cdd2dc;
-
-            font-size:
-                9px;
-
-            line-height:
-                1.45;
-
-        }
-
-
-        .log-item strong {
-
-            color:
-                #ffffff;
-
-        }
-
-
-        /* =====================================================
-           ACTIONS
-        ===================================================== */
-
-        .actions {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap:
-                9px;
-
-        }
-
-
-        .action-btn {
-
-            min-height:
-                44px;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                14px;
-
-            background:
-                rgba(255,255,255,0.045);
-
-            color:
-                #dce1e9;
-
-            font-size:
-                10px;
-
-            font-weight:
-                900;
-
-        }
-
-
-        .action-btn.primary {
-
-            background:
-                rgba(255,255,255,0.10);
-
-        }
-
-
-        /* =====================================================
-           RULES
-        ===================================================== */
-
-        .rules {
-
-            display:
-                grid;
-
-            gap:
-                7px;
-
-        }
-
-
-        .rule {
-
-            display:
-                flex;
-
-            gap:
-                8px;
-
-            color:
-                #b8beca;
-
-            font-size:
-                9px;
-
-            line-height:
-                1.45;
-
-        }
-
-
-        .rule b {
-
-            color:
-                #ffffff;
-
-        }
-
-
-        /* =====================================================
-           MODAL
-        ===================================================== */
-
-        .modal {
-
-            position:
-                fixed;
-
-            inset:
-                0;
-
-            z-index:
-                200;
-
-            display:
-                none;
-
-            place-items:
-                center;
-
-            padding:
-                20px;
-
-            background:
-                rgba(0,0,0,0.68);
-
-            backdrop-filter:
-                blur(14px);
-
-        }
-
-
-        .modal.show {
-
-            display:
-                grid;
-
-        }
-
-
-        .modal-card {
-
-            width:
-                min(420px,100%);
-
-            padding:
-                24px;
-
-            border:
-                1px solid rgba(255,255,255,0.14);
-
-            border-radius:
-                25px;
-
-            background:
-                #11151d;
-
-            box-shadow:
-                0 30px 100px rgba(0,0,0,0.55);
-
-            text-align:
-                center;
-
-            animation:
-                modalIn .25s ease;
-
-        }
-
-
-        @keyframes modalIn {
-
-            from {
-
-                opacity:
-                    0;
-
-                transform:
-                    translateY(12px)
-                    scale(.96);
-
-            }
-
-            to {
-
-                opacity:
-                    1;
-
-                transform:
-                    translateY(0)
-                    scale(1);
-
-            }
-
-        }
-
-
-        .winner-icon {
-
-            width:
-                72px;
-
-            height:
-                72px;
-
-            margin:
-                0 auto 13px;
-
-            display:
-                grid;
-
-            place-items:
-                center;
-
-            border-radius:
-                22px;
-
-            background:
-                rgba(255,214,10,0.10);
-
-            font-size:
-                36px;
-
-        }
-
-
-        .modal-card h2 {
-
-            margin:
-                0;
-
-            font-size:
-                24px;
-
-        }
-
-
-        .modal-card p {
-
-            margin:
-                8px 0 20px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-
-        }
-
-
-        .modal-buttons {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1fr;
-
-            gap:
-                9px;
-
-        }
-
-
-        /* =====================================================
-           TOAST
-        ===================================================== */
-
-        .toast {
-
-            position:
-                fixed;
-
-            left:
-                50%;
-
-            bottom:
-                24px;
-
-            z-index:
-                300;
-
-            transform:
-                translate(-50%, 20px);
-
-            opacity:
-                0;
-
-            pointer-events:
-                none;
-
-            padding:
-                11px 16px;
-
-            border:
-                1px solid rgba(255,255,255,0.12);
-
-            border-radius:
-                14px;
-
-            background:
-                rgba(18,21,28,0.92);
-
-            backdrop-filter:
-                blur(18px);
-
-            color:
-                #ffffff;
-
-            font-size:
-                10px;
 
             font-weight:
                 800;
 
+            cursor:
+                pointer;
+
             transition:
-                .25s ease;
+                transform 0.15s ease,
+                opacity 0.15s ease;
 
         }
 
 
-        .toast.show {
-
-            opacity:
-                1;
+        .roll-button:active {
 
             transform:
-                translate(-50%, 0);
+                scale(0.96);
 
         }
 
 
-        /* =====================================================
+        .roll-button:disabled {
+
+            opacity:
+                0.45;
+
+            cursor:
+                not-allowed;
+
+        }
+
+
+        /* =================================================
+           MESSAGE
+        ================================================= */
+
+        .game-message {
+
+            margin-top:
+                10px;
+
+            padding:
+                11px 13px;
+
+            border-radius:
+                12px;
+
+            background:
+                rgba(30, 41, 59, 0.72);
+
+            color:
+                #cbd5e1;
+
+            text-align:
+                center;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.5;
+
+        }
+
+
+        /* =================================================
+           RULES
+        ================================================= */
+
+        .rules {
+
+            margin-top:
+                15px;
+
+            padding:
+                15px;
+
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:
+                16px;
+
+            background:
+                rgba(16, 24, 39, 0.88);
+
+        }
+
+
+        .rules-title {
+
+            margin:
+                0 0 10px;
+
+            font-size:
+                14px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        .rules-list {
+
+            margin:
+                0;
+
+            padding-left:
+                19px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        .ludo-footer {
+
+            margin:
+                20px auto 0;
+
+            text-align:
+                center;
+
+            color:
+                #64748b;
+
+            font-size:
+                11px;
+
+        }
+
+
+        /* =================================================
            RESPONSIVE
-        ===================================================== */
+        ================================================= */
 
-        @media (max-width: 1050px) {
+        @media (max-width: 600px) {
 
-            .game-layout {
+            .ludo-page {
+
+                padding:
+                    12px 8px 25px;
+
+            }
+
+
+            .players {
+
+                gap:
+                    7px;
+
+            }
+
+
+            .player-card {
+
+                padding:
+                    10px;
+
+                border-radius:
+                    13px;
+
+            }
+
+
+            .board-section {
+
+                padding:
+                    5px;
+
+                border-radius:
+                    16px;
+
+            }
+
+
+            .control-panel {
 
                 grid-template-columns:
+                    1fr
+                    auto
                     1fr;
 
-            }
-
-            .side-panel {
-
-                width:
-                    min(780px,100%);
-
-                margin:
-                    auto;
-
-                display:
-                    grid;
-
-                grid-template-columns:
-                    repeat(2,1fr);
-
-            }
-
-            .side-panel .panel:last-child {
-
-                grid-column:
-                    1 / -1;
-
-            }
-
-        }
-
-
-        @media (max-width: 700px) {
-
-            .app {
+                gap:
+                    7px;
 
                 padding:
                     10px;
@@ -2248,183 +828,50 @@
             }
 
 
-            .topbar {
-
-                top:
-                    6px;
-
-                padding:
-                    11px;
-
-            }
-
-
-            .brand-icon {
+            .dice {
 
                 width:
-                    38px;
+                    54px;
 
                 height:
-                    38px;
+                    54px;
+
+                font-size:
+                    27px;
 
             }
 
 
-            .brand-title {
+            .roll-button {
+
+                min-width:
+                    90px;
 
                 font-size:
                     12px;
 
             }
 
-
-            .top-status {
-
-                padding:
-                    8px 9px;
-
-                font-size:
-                    8px;
-
-            }
-
-
-            .hero {
-
-                padding:
-                    27px 8px 17px;
-
-            }
-
-
-            .hero h1 {
-
-                font-size:
-                    29px;
-
-            }
-
-
-            .hero p {
-
-                font-size:
-                    11px;
-
-            }
-
-
-            .players {
-
-                grid-template-columns:
-                    1fr 1fr;
-
-            }
-
-
-            .turn-indicator {
-
-                grid-column:
-                    1 / -1;
-
-                grid-row:
-                    2;
-
-                min-width:
-                    0;
-
-            }
-
-
-            .board-shell {
-
-                padding:
-                    7px;
-
-                border-radius:
-                    22px;
-
-            }
-
-
-            .board {
-
-                border-radius:
-                    17px;
-
-            }
-
-
-            .side-panel {
-
-                grid-template-columns:
-                    1fr;
-
-            }
-
-
-            .side-panel .panel:last-child {
-
-                grid-column:
-                    auto;
-
-            }
-
         }
 
 
-        @media (max-width: 420px) {
+        @media (max-width: 360px) {
 
-            .player-card {
+            .control-panel {
+
+                grid-template-columns:
+                    1fr 54px 1fr;
+
+            }
+
+
+            .roll-button {
+
+                min-width:
+                    78px;
 
                 padding:
-                    9px;
-
-            }
-
-
-            .avatar {
-
-                width:
-                    36px;
-
-                height:
-                    36px;
-
-                flex-basis:
-                    36px;
-
-                font-size:
-                    17px;
-
-            }
-
-
-            .player-name {
-
-                font-size:
-                    11px;
-
-            }
-
-
-            .player-color {
-
-                font-size:
-                    8px;
-
-            }
-
-
-            .dice {
-
-                width:
-                    66px;
-
-                height:
-                    66px;
-
-                flex-basis:
-                    66px;
+                    0 8px;
 
             }
 
@@ -2438,3290 +885,682 @@
 <body>
 
 
-<div class="app">
+    <!-- =================================================
+         PAGE
+    ================================================== -->
+
+    <main class="ludo-page">
 
 
-    <!-- =====================================================
-         TOP BAR
-    ====================================================== -->
+        <!-- =============================================
+             HEADER
+        ============================================== -->
 
-    <header class="topbar">
+        <header class="ludo-header">
 
-        <div class="brand">
+            <h1 class="brand">
+                GHOPKHALI SPORTS ARENA
+            </h1>
 
-            <div class="brand-icon">
-                🎲
-            </div>
+            <p class="brand-subtitle">
+                ঘোপখালী স্পোর্টস অ্যারিনা
+            </p>
 
-            <div>
+            <h2 class="game-title">
+                🎲 Single Ludo
+            </h2>
 
-                <div class="brand-title">
-                    Ghopkhali Sports Arena
-                </div>
-
-                <div class="brand-sub">
-                    Premium Ludo Tournament
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="top-status">
-
-            <span class="status-dot"></span>
-
-            AI GAME CONTROLLER ON
-
-        </div>
-
-    </header>
-
-
-
-    <!-- =====================================================
-         HERO
-    ====================================================== -->
-
-    <section class="hero">
-
-        <div class="hero-kicker">
-            SINGLE TOURNAMENT
-        </div>
-
-        <h1>
-            Premium Ludo
-        </h1>
-
-        <p>
-            Classic 4-colour Ludo board · 2 Human Players ·
-            Advanced AI Game Controller · Real Dice ·
-            Safe Zone · Capture · Home & Winner System
-        </p>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         PLAYERS
-    ====================================================== -->
-
-    <section class="players">
-
-
-        <div
-            class="player-card red active"
-            id="playerRedCard"
-        >
-
-            <div class="avatar">
-                👤
-            </div>
-
-            <div class="player-info">
-
-                <div class="player-name">
-                    Player 1
-                </div>
-
-                <div class="player-color">
-                    🔴 Red Player
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="turn-indicator">
-
-            <div class="turn-label">
-                CURRENT TURN
-            </div>
-
-            <div
-                class="turn-player"
-                id="turnPlayer"
-            >
-                🔴 Player 1
-            </div>
-
-        </div>
-
-
-
-        <div
-            class="player-card blue"
-            id="playerBlueCard"
-        >
-
-            <div class="avatar">
-                👤
-            </div>
-
-            <div class="player-info">
-
-                <div class="player-name">
-                    Player 2
-                </div>
-
-                <div class="player-color">
-                    🔵 Blue Player
-                </div>
-
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =====================================================
-         GAME
-    ====================================================== -->
-
-    <main class="game-layout">
+        </header>
 
 
         <!-- =================================================
-             BOARD
+             GAME
         ================================================== -->
 
-        <section class="board-shell">
-
-            <div
-                class="board"
-                id="board"
-            ></div>
+        <section class="game-container">
 
 
-            <div class="board-overlay">
+            <!-- =============================================
+                 PLAYERS
+            ============================================== -->
 
-                <div class="board-badge">
+            <div class="players">
 
-                    🧠
-                    AI RULE ENGINE
+
+                <!-- PLAYER 1 -->
+
+                <div
+                    class="player-card active"
+                    id="player-red-card"
+                >
+
+                    <div class="player-top">
+
+                        <div class="player-name">
+
+                            <span
+                                class="player-dot red"
+                            ></span>
+
+                            Player 1
+
+                        </div>
+
+                        <span
+                            class="player-status"
+                            id="red-status"
+                        >
+                            আপনার পালা
+                        </span>
+
+                    </div>
+
+                    <div class="token-count">
+
+                        ঘরে:
+                        <strong id="red-home-count">
+                            4
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PLAYER 2 -->
+
+                <div
+                    class="player-card"
+                    id="player-blue-card"
+                >
+
+                    <div class="player-top">
+
+                        <div class="player-name">
+
+                            <span
+                                class="player-dot blue"
+                            ></span>
+
+                            Player 2
+
+                        </div>
+
+                        <span
+                            class="player-status"
+                            id="blue-status"
+                        >
+                            অপেক্ষায়
+                        </span>
+
+                    </div>
+
+                    <div class="token-count">
+
+                        ঘরে:
+                        <strong id="blue-home-count">
+                            4
+                        </strong>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </section>
 
+            <!-- =============================================
+                 BOARD
+            ============================================== -->
 
+            <section class="board-section">
 
-        <!-- =================================================
-             SIDE PANEL
-        ================================================== -->
-
-        <aside class="side-panel">
-
-
-            <!-- AI CONTROLLER -->
-
-            <section class="panel">
-
-                <div class="panel-title">
-
-                    <span>
-                        🧠 Game Controller
-                    </span>
-
-                    <span
-                        style="
-                            color:#70e991;
-                            font-size:9px;
-                        "
-                    >
-                        ACTIVE
-                    </span>
-
-                </div>
-
-
-                <div class="controller">
-
-                    <div class="controller-icon">
-                        🧠
-                    </div>
-
-                    <div>
-
-                        <div class="controller-name">
-                            Advanced AI Engine
-                        </div>
-
-                        <div class="controller-desc">
-                            Controls rules, turns, legal moves,
-                            capture, safe zones and winner logic.
-                        </div>
-
-                    </div>
-
-                    <div class="controller-state">
-                        ON
-                    </div>
-
-                </div>
+                <div id="ludo-board"></div>
 
             </section>
 
 
+            <!-- =============================================
+                 CONTROLS
+            ============================================== -->
 
-            <!-- DICE -->
-
-            <section class="panel">
-
-                <div class="panel-title">
-
-                    <span>
-                        🎲 Dice
-                    </span>
-
-                    <span
-                        id="diceHint"
-                        style="
-                            color:#8f97a6;
-                            font-size:9px;
-                        "
-                    >
-                        Roll to play
-                    </span>
-
-                </div>
+            <section class="control-panel">
 
 
-                <div class="dice-area">
+                <div class="turn-info">
+
+                    <div class="turn-label">
+                        বর্তমান চাল
+                    </div>
 
                     <div
-                        class="dice"
-                        id="dice"
+                        class="turn-player"
+                        id="turn-player"
                     >
-                        ⚀
+                        🔴 Player 1
                     </div>
 
-
-                    <button
-                        class="roll-btn"
-                        id="rollBtn"
-                    >
-                        🎲 Roll Dice
-                    </button>
-
-                </div>
-
-            </section>
-
-
-
-            <!-- STATS -->
-
-            <section class="panel">
-
-                <div class="panel-title">
-                    Match Stats
-                </div>
-
-
-                <div class="stats">
-
-                    <div class="stat">
-
-                        <div
-                            class="stat-value"
-                            id="redTokens"
-                        >
-                            0
-                        </div>
-
-                        <div class="stat-label">
-                            RED HOME
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <div
-                            class="stat-value"
-                            id="blueTokens"
-                        >
-                            0
-                        </div>
-
-                        <div class="stat-label">
-                            BLUE HOME
-                        </div>
-
-                    </div>
-
-
-                    <div class="stat">
-
-                        <div
-                            class="stat-value"
-                            id="captures"
-                        >
-                            0
-                        </div>
-
-                        <div class="stat-label">
-                            CAPTURES
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-
-            <!-- GAME LOG -->
-
-            <section class="panel">
-
-                <div class="panel-title">
-                    Game Log
                 </div>
 
 
                 <div
-                    class="game-log"
-                    id="gameLog"
-                ></div>
-
-            </section>
-
-
-
-            <!-- ACTIONS -->
-
-            <section class="panel">
-
-                <div class="actions">
-
-                    <button
-                        class="action-btn primary"
-                        id="newGameBtn"
-                    >
-                        ↻ New Game
-                    </button>
-
-                    <button
-                        class="action-btn"
-                        id="rulesBtn"
-                    >
-                        ℹ Rules
-                    </button>
-
+                    class="dice"
+                    id="dice"
+                    aria-label="Dice"
+                >
+                    1
                 </div>
 
+
+                <button
+                    type="button"
+                    class="roll-button"
+                    id="roll-button"
+                >
+                    🎲 Dice Roll
+                </button>
+
+
             </section>
 
 
-        </aside>
+            <!-- =============================================
+                 MESSAGE
+            ============================================== -->
+
+            <div
+                class="game-message"
+                id="game-message"
+            >
+                Dice Roll করুন এবং খেলা শুরু করুন।
+            </div>
+
+
+            <!-- =============================================
+                 RULES
+            ============================================== -->
+
+            <section class="rules">
+
+                <h3 class="rules-title">
+                    🎯 খেলার নিয়ম
+                </h3>
+
+                <ul class="rules-list">
+
+                    <li>
+                        প্রথমে Dice Roll করে চাল শুরু করতে হবে।
+                    </li>
+
+                    <li>
+                        Dice-এ ৬ এলে ঘর থেকে Token বের করার সুযোগ থাকবে।
+                    </li>
+
+                    <li>
+                        ৬ এলে অতিরিক্ত চাল পাওয়া যায়।
+                    </li>
+
+                    <li>
+                        প্রতিপক্ষের Token কাটলে নির্দিষ্ট নিয়ম অনুযায়ী আবার চাল পাওয়া যায়।
+                    </li>
+
+                    <li>
+                        Safe ঘরে থাকা Token কাটা যাবে না।
+                    </li>
+
+                    <li>
+                        সব Token Home-এ পৌঁছানো Player বিজয়ী হবে।
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+        </section>
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <footer class="ludo-footer">
+
+            ©
+            <span id="footer-year"></span>
+            Ghopkhali Sports Arena
+
+        </footer>
+
 
     </main>
 
-</div>
 
+    <!-- =================================================
+         LUDO BOARD ENGINE
+         External File
+    ================================================== -->
 
+    <script
+        src="ludu-board.js"
+    ></script>
 
-<!-- =========================================================
-     RULES MODAL
-========================================================= -->
 
-<div
-    class="modal"
-    id="rulesModal"
->
+    <!-- =================================================
+         SINGLE GAME CONTROLLER
+    ================================================== -->
 
-    <div class="modal-card">
+    <script>
 
-        <div class="winner-icon">
-            📜
-        </div>
+        "use strict";
 
-        <h2>
-            Ludo Rules
-        </h2>
 
-        <p>
-            Classic rules are enforced by the AI Game Controller.
-        </p>
+        /* =================================================
+           ELEMENTS
+        ================================================= */
 
-
-        <div
-            class="rules"
-            style="text-align:left;"
-        >
-
-            <div class="rule">
-                🎲
-                <span>
-                    <b>6 Roll:</b>
-                    A token can leave the yard only after rolling 6.
-                </span>
-            </div>
-
-            <div class="rule">
-                ➡️
-                <span>
-                    <b>Movement:</b>
-                    Tokens move according to the dice number.
-                </span>
-            </div>
-
-            <div class="rule">
-                🛡️
-                <span>
-                    <b>Safe Zone:</b>
-                    Safe cells protect tokens from capture.
-                </span>
-            </div>
-
-            <div class="rule">
-                ⚔️
-                <span>
-                    <b>Capture:</b>
-                    Landing on an opponent's unsafe token
-                    sends it back to its yard.
-                </span>
-            </div>
-
-            <div class="rule">
-                🏠
-                <span>
-                    <b>Home:</b>
-                    Exact movement is required to finish a token.
-                </span>
-            </div>
-
-            <div class="rule">
-                🏆
-                <span>
-                    <b>Winner:</b>
-                    The first player to bring all four tokens
-                    home wins.
-                </span>
-            </div>
-
-        </div>
-
-
-        <div
-            class="modal-buttons"
-            style="margin-top:20px;"
-        >
-
-            <button
-                class="action-btn primary"
-                id="closeRulesBtn"
-            >
-                Close
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-<!-- =========================================================
-     WINNER MODAL
-========================================================= -->
-
-<div
-    class="modal"
-    id="winnerModal"
->
-
-    <div class="modal-card">
-
-        <div class="winner-icon">
-            🏆
-        </div>
-
-        <h2 id="winnerTitle">
-            Player Wins
-        </h2>
-
-        <p id="winnerText">
-            Congratulations!
-        </p>
-
-
-        <div class="modal-buttons">
-
-            <button
-                class="action-btn primary"
-                id="winnerNewGameBtn"
-            >
-                ↻ New Game
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-<div
-    class="toast"
-    id="toast"
-></div>
-
-
-<script>
-
-"use strict";
-
-
-/* =========================================================
-   GHOPKHALI SPORTS ARENA
-   PREMIUM LUDO GAME ENGINE
-   ---------------------------------------------------------
-   2 HUMAN PLAYERS
-   RED  = PLAYER 1
-   BLUE = PLAYER 2
-
-   AI = GAME CONTROLLER / REFEREE ONLY
-
-   AI DOES NOT PLAY.
-========================================================= */
-
-
-/* =========================================================
-   BOARD CONSTANTS
-========================================================= */
-
-const BOARD_SIZE = 15;
-
-const TRACK_LENGTH = 52;
-
-/*
-    Progress:
-
-    -1  = Yard
-     0  = Starting cell
-     1  = Track
-    ...
-    51 = Last outer-track cell
-    52-57 = Home lane
-    57 = Final home position
-*/
-const FINAL_POSITION = 57;
-
-
-/* =========================================================
-   CLASSIC 52 CELL OUTER TRACK
-
-   This coordinate system is arranged so that:
-
-   RED:
-       start = (6,0)
-       home lane = row 7
-
-   BLUE:
-       start = (8,14)
-       home lane = row 7
-========================================================= */
-
-const PATH = [
-
-    [6,0],
-    [6,1],
-    [6,2],
-    [6,3],
-    [6,4],
-    [6,5],
-
-    [5,6],
-    [4,6],
-    [3,6],
-    [2,6],
-    [1,6],
-    [0,6],
-
-    [0,7],
-
-    [0,8],
-    [1,8],
-    [2,8],
-    [3,8],
-    [4,8],
-    [5,8],
-
-    [6,9],
-    [6,10],
-    [6,11],
-    [6,12],
-    [6,13],
-    [6,14],
-
-    [7,14],
-
-    [8,14],
-    [8,13],
-    [8,12],
-    [8,11],
-    [8,10],
-    [8,9],
-
-    [9,8],
-    [10,8],
-    [11,8],
-    [12,8],
-    [13,8],
-    [14,8],
-
-    [14,7],
-
-    [14,6],
-    [13,6],
-    [12,6],
-    [11,6],
-    [10,6],
-    [9,6],
-
-    [8,5],
-    [8,4],
-    [8,3],
-    [8,2],
-    [8,1],
-    [8,0],
-
-    [7,0]
-
-];
-
-
-/* =========================================================
-   PLAYER START POSITIONS
-
-   Red starts at path 0.
-   Blue starts exactly opposite at path 26.
-========================================================= */
-
-const START_INDEX = {
-
-    red: 0,
-
-    blue: 26
-
-};
-
-
-/* =========================================================
-   SAFE CELLS
-
-   Starting cells + traditional safe/star positions.
-========================================================= */
-
-const SAFE_CELLS = new Set([
-
-    0,
-    8,
-    13,
-    21,
-    26,
-    34,
-    39,
-    47
-
-]);
-
-
-/* =========================================================
-   HOME LANES
-
-   Progress 52 -> first home cell
-   Progress 57 -> final home cell
-========================================================= */
-
-const HOME_LANES = {
-
-    red: [
-
-        [7,1],
-        [7,2],
-        [7,3],
-        [7,4],
-        [7,5],
-        [7,6]
-
-    ],
-
-    blue: [
-
-        [7,13],
-        [7,12],
-        [7,11],
-        [7,10],
-        [7,9],
-        [7,8]
-
-    ]
-
-};
-
-
-/* =========================================================
-   CENTER FINISH POSITIONS
-========================================================= */
-
-const FINISH_SLOTS = {
-
-    red: [
-
-        [6.55,6.55],
-        [6.55,7.45],
-        [7.45,6.55],
-        [7.45,7.45]
-
-    ],
-
-    blue: [
-
-        [7.55,7.55],
-        [7.55,8.45],
-        [8.45,7.55],
-        [8.45,8.45]
-
-    ]
-
-};
-
-
-/* =========================================================
-   YARD POSITIONS
-
-   These are visual positions inside each active home.
-========================================================= */
-
-const YARD_SLOTS = {
-
-    red: [
-
-        [2.5,2.5],
-        [2.5,5.5],
-        [5.5,2.5],
-        [5.5,5.5]
-
-    ],
-
-    blue: [
-
-        [9.5,9.5],
-        [9.5,12.5],
-        [12.5,9.5],
-        [12.5,12.5]
-
-    ]
-
-};
-
-
-/* =========================================================
-   DICE
-========================================================= */
-
-const DICE_FACES = {
-
-    1: "⚀",
-    2: "⚁",
-    3: "⚂",
-    4: "⚃",
-    5: "⚄",
-    6: "⚅"
-
-};
-
-
-/* =========================================================
-   GAME STATE
-========================================================= */
-
-let currentPlayer = "red";
-
-let diceValue = 0;
-
-let diceRolled = false;
-
-let gameOver = false;
-
-let captureCount = 0;
-
-let sixChain = 0;
-
-let tokenSequence = 1;
-
-
-/* =========================================================
-   PLAYERS
-========================================================= */
-
-const players = {
-
-    red: {
-
-        name: "Player 1",
-
-        color: "red",
-
-        tokens: []
-
-    },
-
-    blue: {
-
-        name: "Player 2",
-
-        color: "blue",
-
-        tokens: []
-
-    }
-
-};
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const board =
-    document.getElementById("board");
-
-const dice =
-    document.getElementById("dice");
-
-const rollBtn =
-    document.getElementById("rollBtn");
-
-const turnPlayer =
-    document.getElementById("turnPlayer");
-
-const redCard =
-    document.getElementById("playerRedCard");
-
-const blueCard =
-    document.getElementById("playerBlueCard");
-
-const gameLog =
-    document.getElementById("gameLog");
-
-const toast =
-    document.getElementById("toast");
-
-const redTokensEl =
-    document.getElementById("redTokens");
-
-const blueTokensEl =
-    document.getElementById("blueTokens");
-
-const capturesEl =
-    document.getElementById("captures");
-
-const diceHint =
-    document.getElementById("diceHint");
-
-const winnerModal =
-    document.getElementById("winnerModal");
-
-const rulesModal =
-    document.getElementById("rulesModal");
-
-
-/* =========================================================
-   UTILITY
-========================================================= */
-
-function showToast(message) {
-
-    if (!toast) {
-        return;
-    }
-
-    toast.textContent =
-        message;
-
-    toast.classList.add(
-        "show"
-    );
-
-    clearTimeout(
-        showToast.timer
-    );
-
-    showToast.timer =
-        setTimeout(
-            () => {
-
-                toast.classList.remove(
-                    "show"
-                );
-
-            },
-            1800
-        );
-
-}
-
-
-function addLog(message) {
-
-    if (!gameLog) {
-        return;
-    }
-
-    const item =
-        document.createElement(
-            "div"
-        );
-
-    item.className =
-        "log-item";
-
-    item.innerHTML =
-        message;
-
-    gameLog.prepend(
-        item
-    );
-
-
-    while (
-        gameLog.children.length > 30
-    ) {
-
-        gameLog.removeChild(
-            gameLog.lastChild
-        );
-
-    }
-
-}
-
-
-function getPlayerName(
-    player = currentPlayer
-) {
-
-    return players[player].name;
-
-}
-
-
-function getOpponent(
-    player
-) {
-
-    return player === "red"
-        ? "blue"
-        : "red";
-
-}
-
-
-function getCell(
-    row,
-    col
-) {
-
-    return document.querySelector(
-        `.cell[data-row="${row}"][data-col="${col}"]`
-    );
-
-}
-
-
-/* =========================================================
-   BOARD
-========================================================= */
-
-function buildBoard() {
-
-    board.innerHTML = "";
-
-
-    /*
-        Create 15 × 15 cells.
-    */
-
-    for (
-        let row = 0;
-        row < BOARD_SIZE;
-        row++
-    ) {
-
-        for (
-            let col = 0;
-            col < BOARD_SIZE;
-            col++
-        ) {
-
-            const cell =
-                document.createElement(
-                    "div"
-                );
-
-            cell.className =
-                "cell";
-
-            cell.dataset.row =
-                row;
-
-            cell.dataset.col =
-                col;
-
-            board.appendChild(
-                cell
-            );
-
-        }
-
-    }
-
-
-    /*
-        Home quadrants.
-    */
-
-    for (
-        let row = 0;
-        row < 6;
-        row++
-    ) {
-
-        for (
-            let col = 0;
-            col < 6;
-            col++
-        ) {
-
-            getCell(
-                row,
-                col
-            )?.classList.add(
-                "red-home"
-            );
-
-        }
-
-    }
-
-
-    for (
-        let row = 0;
-        row < 6;
-        row++
-    ) {
-
-        for (
-            let col = 9;
-            col < 15;
-            col++
-        ) {
-
-            getCell(
-                row,
-                col
-            )?.classList.add(
-                "green-home"
-            );
-
-        }
-
-    }
-
-
-    for (
-        let row = 9;
-        row < 15;
-        row++
-    ) {
-
-        for (
-            let col = 9;
-            col < 15;
-            col++
-        ) {
-
-            getCell(
-                row,
-                col
-            )?.classList.add(
-                "yellow-home"
-            );
-
-        }
-
-    }
-
-
-    for (
-        let row = 9;
-        row < 15;
-        row++
-    ) {
-
-        for (
-            let col = 0;
-            col < 6;
-            col++
-        ) {
-
-            getCell(
-                row,
-                col
-            )?.classList.add(
-                "blue-home"
-            );
-
-        }
-
-    }
-
-
-    /*
-        Outer path.
-    */
-
-    PATH.forEach(
-        (
-            [row, col],
-            index
-        ) => {
-
-            const cell =
-                getCell(
-                    row,
-                    col
-                );
-
-            if (!cell) {
-                return;
-            }
-
-            cell.classList.remove(
-                "red-home",
-                "green-home",
-                "yellow-home",
-                "blue-home"
-            );
-
-            cell.classList.add(
-                "track"
+        const dice =
+            document.getElementById(
+                "dice"
             );
 
 
-            if (
-                SAFE_CELLS.has(index)
-            ) {
-
-                cell.classList.add(
-                    "safe"
-                );
-
-            }
-
-
-            if (
-                index ===
-                START_INDEX.red
-            ) {
-
-                cell.classList.add(
-                    "start-red"
-                );
-
-            }
-
-
-            if (
-                index ===
-                START_INDEX.blue
-            ) {
-
-                cell.classList.add(
-                    "start-blue"
-                );
-
-            }
-
-        }
-    );
-
-
-    /*
-        Red home lane.
-    */
-
-    HOME_LANES.red.forEach(
-        ([row,col]) => {
-
-            getCell(
-                row,
-                col
-            )?.classList.add(
-                "red-lane"
+        const rollButton =
+            document.getElementById(
+                "roll-button"
             );
 
-        }
-    );
 
-
-    /*
-        Blue home lane.
-    */
-
-    HOME_LANES.blue.forEach(
-        ([row,col]) => {
-
-            getCell(
-                row,
-                col
-            )?.classList.add(
-                "blue-lane"
+        const turnPlayer =
+            document.getElementById(
+                "turn-player"
             );
 
-        }
-    );
 
-
-    /*
-        Green home lane.
-    */
-
-    const greenLane = [
-
-        [1,7],
-        [2,7],
-        [3,7],
-        [4,7],
-        [5,7]
-
-    ];
-
-    greenLane.forEach(
-        ([row,col]) => {
-
-            getCell(
-                row,
-                col
-            )?.classList.add(
-                "green-lane"
+        const gameMessage =
+            document.getElementById(
+                "game-message"
             );
 
-        }
-    );
 
-
-    /*
-        Yellow home lane.
-    */
-
-    const yellowLane = [
-
-        [13,7],
-        [12,7],
-        [11,7],
-        [10,7],
-        [9,7]
-
-    ];
-
-    yellowLane.forEach(
-        ([row,col]) => {
-
-            getCell(
-                row,
-                col
-            )?.classList.add(
-                "yellow-lane"
+        const redCard =
+            document.getElementById(
+                "player-red-card"
             );
 
-        }
-    );
+
+        const blueCard =
+            document.getElementById(
+                "player-blue-card"
+            );
 
 
-    /*
-        Center.
-    */
-
-    const center =
-        document.createElement(
-            "div"
-        );
-
-    center.className =
-        "center-home";
-
-    board.appendChild(
-        center
-    );
-
-}
+        const redStatus =
+            document.getElementById(
+                "red-status"
+            );
 
 
-/* =========================================================
-   TOKENS
-========================================================= */
-
-function createToken(
-    player,
-    index
-) {
-
-    return {
-
-        id:
-            tokenSequence++,
-
-        player,
-
-        slot:
-            index,
-
-        progress:
-            -1,
-
-        finished:
-            false,
-
-        element:
-            null
-
-    };
-
-}
+        const blueStatus =
+            document.getElementById(
+                "blue-status"
+            );
 
 
-function createTokens() {
-
-    players.red.tokens =
-        [];
-
-    players.blue.tokens =
-        [];
+        const footerYear =
+            document.getElementById(
+                "footer-year"
+            );
 
 
-    for (
-        let i = 0;
-        i < 4;
-        i++
-    ) {
+        /* =================================================
+           GAME STATE
+        ================================================= */
 
-        players.red.tokens.push(
-            createToken(
+        const gameState = {
+
+            currentPlayer:
                 "red",
-                i
-            )
-        );
 
-        players.blue.tokens.push(
-            createToken(
-                "blue",
-                i
-            )
-        );
+            dice:
+                1,
 
-    }
+            rolling:
+                false,
 
-}
-
-
-/* =========================================================
-   TOKEN ELEMENT
-========================================================= */
-
-function createTokenElement(
-    token
-) {
-
-    const element =
-        document.createElement(
-            "div"
-        );
-
-    element.className =
-        `token ${token.player}`;
-
-    element.textContent =
-        "●";
-
-    element.dataset.tokenId =
-        token.id;
-
-
-    element.addEventListener(
-        "click",
-        () => {
-
-            handleTokenClick(
-                token
-            );
-
-        }
-    );
-
-
-    board.appendChild(
-        element
-    );
-
-
-    token.element =
-        element;
-
-}
-
-
-/* =========================================================
-   TRACK POSITION
-========================================================= */
-
-function getGlobalTrackIndex(
-    token
-) {
-
-    if (
-        token.progress < 0 ||
-        token.progress > 51 ||
-        token.finished
-    ) {
-
-        return null;
-
-    }
-
-
-    return (
-        START_INDEX[token.player] +
-        token.progress
-    ) % TRACK_LENGTH;
-
-}
-
-
-/* =========================================================
-   VISUAL POSITION
-========================================================= */
-
-function getBasePosition(
-    token
-) {
-
-    /*
-        Yard.
-    */
-
-    if (
-        token.progress === -1
-    ) {
-
-        const slot =
-            YARD_SLOTS[token.player][
-                token.slot
-            ];
-
-        return {
-
-            row:
-                slot[0],
-
-            col:
-                slot[1]
+            gameStarted:
+                false
 
         };
 
-    }
 
+        /* =================================================
+           DICE SYMBOLS
+        ================================================= */
 
-    /*
-        Finished.
-    */
+        const diceSymbols = {
 
-    if (
-        token.finished
-    ) {
+            1: "⚀",
 
-        const slot =
-            FINISH_SLOTS[token.player][
-                token.slot
-            ];
+            2: "⚁",
 
-        return {
+            3: "⚂",
 
-            row:
-                slot[0],
+            4: "⚃",
 
-            col:
-                slot[1]
+            5: "⚄",
+
+            6: "⚅"
 
         };
 
-    }
 
+        /* =================================================
+           UPDATE TURN UI
+        ================================================= */
 
-    /*
-        Home lane.
-    */
-
-    if (
-        token.progress >= 52
-    ) {
-
-        const laneIndex =
-            token.progress - 52;
-
-        const coord =
-            HOME_LANES[token.player][
-                laneIndex
-            ];
-
-        return {
-
-            row:
-                coord[0] + .5,
-
-            col:
-                coord[1] + .5
-
-        };
-
-    }
-
-
-    /*
-        Outer track.
-    */
-
-    const globalIndex =
-        getGlobalTrackIndex(
-            token
-        );
-
-    const coord =
-        PATH[globalIndex];
-
-    return {
-
-        row:
-            coord[0] + .5,
-
-        col:
-            coord[1] + .5
-
-    };
-
-}
-
-
-/* =========================================================
-   STACKING
-========================================================= */
-
-function getStackOffset(
-    token
-) {
-
-    const sameLocation =
-        getTokensAtSameLocation(
-            token
-        );
-
-
-    const count =
-        sameLocation.length;
-
-
-    if (
-        count <= 1
-    ) {
-
-        return {
-
-            x: 0,
-
-            y: 0
-
-        };
-
-    }
-
-
-    const position =
-        sameLocation.indexOf(
-            token
-        );
-
-
-    const offsets = [
-
-        [-0.16,-0.16],
-        [ 0.16,-0.16],
-        [-0.16, 0.16],
-        [ 0.16, 0.16]
-
-    ];
-
-
-    return {
-
-        x:
-            offsets[
-                position % offsets.length
-            ][0],
-
-        y:
-            offsets[
-                position % offsets.length
-            ][1]
-
-    };
-
-}
-
-
-/* =========================================================
-   SAME LOCATION
-========================================================= */
-
-function getTokensAtSameLocation(
-    token
-) {
-
-    const all =
-        players.red.tokens.concat(
-            players.blue.tokens
-        );
-
-
-    return all.filter(
-        other => {
-
-            if (
-                other.finished
-            ) {
-
-                return false;
-
-            }
+        function updateTurnUI() {
 
 
             if (
-                other.progress === -1
+                gameState.currentPlayer ===
+                "red"
             ) {
 
-                return false;
+                turnPlayer.textContent =
+                    "🔴 Player 1";
+
+
+                redCard.classList.add(
+                    "active"
+                );
+
+
+                blueCard.classList.remove(
+                    "active"
+                );
+
+
+                redStatus.textContent =
+                    "আপনার পালা";
+
+
+                blueStatus.textContent =
+                    "অপেক্ষায়";
 
             }
 
+            else {
 
-            /*
-                Home lane positions.
-            */
+                turnPlayer.textContent =
+                    "🔵 Player 2";
 
-            if (
-                token.progress >= 52 ||
-                other.progress >= 52
-            ) {
 
-                return (
-                    token.player ===
-                    other.player &&
-                    token.progress ===
-                    other.progress
+                blueCard.classList.add(
+                    "active"
                 );
+
+
+                redCard.classList.remove(
+                    "active"
+                );
+
+
+                blueStatus.textContent =
+                    "আপনার পালা";
+
+
+                redStatus.textContent =
+                    "অপেক্ষায়";
 
             }
-
-
-            const a =
-                getGlobalTrackIndex(
-                    token
-                );
-
-            const b =
-                getGlobalTrackIndex(
-                    other
-                );
-
-            return a === b;
 
         }
-    );
-
-}
 
 
-/* =========================================================
-   RENDER TOKENS
-========================================================= */
+        /* =================================================
+           CHANGE TURN
+        ================================================= */
 
-function renderTokens() {
-
-    const allTokens =
-        players.red.tokens.concat(
-            players.blue.tokens
-        );
-
-
-    allTokens.forEach(
-        token => {
+        function changeTurn() {
 
             if (
-                !token.element
+                gameState.currentPlayer ===
+                "red"
             ) {
 
-                createTokenElement(
-                    token
-                );
+                gameState.currentPlayer =
+                    "blue";
+
+            }
+
+            else {
+
+                gameState.currentPlayer =
+                    "red";
 
             }
 
 
-            const base =
-                getBasePosition(
-                    token
-                );
+            updateTurnUI();
+
+        }
 
 
-            const offset =
-                getStackOffset(
-                    token
-                );
+        /* =================================================
+           ROLL DICE
+        ================================================= */
 
-
-            const row =
-                base.row +
-                offset.y;
-
-
-            const col =
-                base.col +
-                offset.x;
-
-
-            token.element.style.left =
-                `${(
-                    col /
-                    BOARD_SIZE
-                ) * 100}%`;
-
-
-            token.element.style.top =
-                `${(
-                    row /
-                    BOARD_SIZE
-                ) * 100}%`;
-
-
-            token.element.classList.remove(
-                "selectable"
-            );
+        function rollDice() {
 
 
             if (
-                diceRolled &&
-                token.player ===
-                currentPlayer &&
-                isLegalMove(token)
+                gameState.rolling
             ) {
 
-                token.element.classList.add(
-                    "selectable"
-                );
+                return;
 
             }
 
-        }
-    );
+
+            gameState.rolling =
+                true;
 
 
-    updateStats();
-
-}
-
-
-/* =========================================================
-   BLOCKADE
-========================================================= */
-
-function getOpponentTokensOnCell(
-    movingToken,
-    globalIndex
-) {
-
-    const opponent =
-        getOpponent(
-            movingToken.player
-        );
+            rollButton.disabled =
+                true;
 
 
-    return players[opponent]
-        .tokens
-        .filter(
-            token => {
-
-                if (
-                    token.finished ||
-                    token.progress < 0 ||
-                    token.progress > 51
-                ) {
-
-                    return false;
-
-                }
-
-
-                return (
-                    getGlobalTrackIndex(
-                        token
-                    ) ===
-                    globalIndex
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   CHECK BLOCKADE
-========================================================= */
-
-function isBlockedByOpponent(
-    token,
-    dice
-) {
-
-    if (
-        token.progress < 0
-    ) {
-
-        return false;
-
-    }
-
-
-    /*
-        Check every track cell crossed.
-    */
-
-    for (
-        let step = 1;
-        step <= dice;
-        step++
-    ) {
-
-        const nextProgress =
-            token.progress +
-            step;
-
-
-        if (
-            nextProgress >
-            51
-        ) {
-
-            break;
-
-        }
-
-
-        const globalIndex =
-            (
-                START_INDEX[token.player] +
-                nextProgress
-            ) % TRACK_LENGTH;
-
-
-        const enemies =
-            getOpponentTokensOnCell(
-                token,
-                globalIndex
+            dice.classList.remove(
+                "rolling"
             );
 
 
-        /*
-            Two or more opponent tokens
-            create a blockade.
-        */
-
-        if (
-            enemies.length >= 2
-        ) {
-
-            return true;
-
-        }
-
-    }
+            void dice.offsetWidth;
 
 
-    return false;
-
-}
-
-
-/* =========================================================
-   LEGAL MOVE
-========================================================= */
-
-function isLegalMove(
-    token
-) {
-
-    if (
-        gameOver
-    ) {
-
-        return false;
-
-    }
-
-
-    if (
-        token.player !==
-        currentPlayer
-    ) {
-
-        return false;
-
-    }
-
-
-    if (
-        token.finished
-    ) {
-
-        return false;
-
-    }
-
-
-    if (
-        !diceRolled ||
-        diceValue < 1
-    ) {
-
-        return false;
-
-    }
-
-
-    /*
-        Yard -> Board
-        Requires 6.
-    */
-
-    if (
-        token.progress === -1
-    ) {
-
-        if (
-            diceValue !== 6
-        ) {
-
-            return false;
-
-        }
-
-
-        /*
-            Starting cell may be occupied
-            by an opponent blockade.
-        */
-
-        const start =
-            START_INDEX[token.player];
-
-
-        const enemies =
-            getOpponentTokensOnCell(
-                token,
-                start
+            dice.classList.add(
+                "rolling"
             );
 
 
-        if (
-            enemies.length >= 2
-        ) {
-
-            return false;
-
-        }
-
-
-        return true;
-
-    }
-
-
-    /*
-        Exact finish validation.
-    */
-
-    if (
-        token.progress +
-        diceValue >
-        FINAL_POSITION
-    ) {
-
-        return false;
-
-    }
-
-
-    /*
-        Blockade validation.
-    */
-
-    if (
-        isBlockedByOpponent(
-            token,
-            diceValue
-        )
-    ) {
-
-        return false;
-
-    }
-
-
-    return true;
-
-}
-
-
-/* =========================================================
-   LEGAL TOKEN LIST
-========================================================= */
-
-function getLegalTokens() {
-
-    return players[currentPlayer]
-        .tokens
-        .filter(
-            token =>
-                isLegalMove(
-                    token
-                )
-        );
-
-}
-
-
-/* =========================================================
-   AI GAME CONTROLLER
-========================================================= */
-
-const AIController = {
-
-    validateDice() {
-
-        if (
-            gameOver
-        ) {
-
-            return false;
-
-        }
-
-        if (
-            diceRolled
-        ) {
-
-            return false;
-
-        }
-
-        return true;
-
-    },
-
-
-    validateToken(
-        token
-    ) {
-
-        return isLegalMove(
-            token
-        );
-
-    },
-
-
-    validateTurn(
-        player
-    ) {
-
-        return (
-            player ===
-            currentPlayer
-        );
-
-    },
-
-
-    validateWinner(
-        player
-    ) {
-
-        return players[player]
-            .tokens
-            .every(
-                token =>
-                    token.finished
-            );
-
-    },
-
-
-    logAction(
-        message
-    ) {
-
-        addLog(
-            `🧠 ${message}`
-        );
-
-    }
-
-};
-
-
-/* =========================================================
-   ROLL DICE
-========================================================= */
-
-rollBtn.addEventListener(
-    "click",
-    rollDice
-);
-
-
-function rollDice() {
-
-    if (
-        !AIController.validateDice()
-    ) {
-
-        if (
-            diceRolled
-        ) {
-
-            showToast(
-                "আগের Dice-এর move সম্পূর্ণ করুন।"
-            );
-
-        }
-
-        return;
-
-    }
-
-
-    rollBtn.disabled =
-        true;
-
-
-    dice.classList.add(
-        "rolling"
-    );
-
-
-    let animationCount =
-        0;
-
-
-    const animation =
-        setInterval(
-            () => {
-
-                const temporary =
-                    Math.floor(
-                        Math.random() * 6
-                    ) + 1;
-
-
-                dice.textContent =
-                    DICE_FACES[
-                        temporary
-                    ];
-
-
-                animationCount++;
-
-
-                if (
-                    animationCount >= 8
-                ) {
-
-                    clearInterval(
-                        animation
-                    );
-
-
-                    dice.classList.remove(
-                        "rolling"
-                    );
-
-
-                    completeDiceRoll();
-
-                }
-
-            },
-            65
-        );
-
-}
-
-
-/* =========================================================
-   COMPLETE DICE ROLL
-========================================================= */
-
-function completeDiceRoll() {
-
-    diceValue =
-        Math.floor(
-            Math.random() * 6
-        ) + 1;
-
-
-    dice.textContent =
-        DICE_FACES[
-            diceValue
-        ];
-
-
-    diceRolled =
-        true;
-
-
-    const legalTokens =
-        getLegalTokens();
-
-
-    if (
-        diceValue === 6
-    ) {
-
-        sixChain++;
-
-    } else {
-
-        sixChain = 0;
-
-    }
-
-
-    addLog(
-        `<strong>${getPlayerName()}</strong>
-         🎲 rolled
-         <strong>${diceValue}</strong>.`
-    );
-
-
-    AIController.logAction(
-        `Dice result ${diceValue} validated.`
-    );
-
-
-    /*
-        Three consecutive sixes:
-        cancel this turn.
-    */
-
-    if (
-        sixChain >= 3
-    ) {
-
-        addLog(
-            `⚠️ Three consecutive 6s.
-             Turn forfeited.`
-        );
-
-
-        showToast(
-            "পরপর ৩ বার ৬ — Turn বাতিল।"
-        );
-
-
-        diceRolled =
-            false;
-
-        diceValue =
-            0;
-
-        sixChain =
-            0;
-
-
-        setTimeout(
-            nextTurn,
-            650
-        );
-
-
-        return;
-
-    }
-
-
-    /*
-        No legal move.
-    */
-
-    if (
-        legalTokens.length === 0
-    ) {
-
-        diceRolled =
-            false;
-
-
-        if (
-            diceValue === 6
-        ) {
-
-            /*
-                Six gives another roll.
-            */
-
-            diceValue =
+            let animationCount =
                 0;
 
-            diceHint.textContent =
-                "Bonus Roll";
+
+            const animation =
+                setInterval(
+                    () => {
 
 
-            rollBtn.disabled =
+                        const temporary =
+                            Math.floor(
+                                Math.random() * 6
+                            ) + 1;
+
+
+                        dice.textContent =
+                            diceSymbols[
+                                temporary
+                            ];
+
+
+                        animationCount++;
+
+
+                        if (
+                            animationCount >=
+                            8
+                        ) {
+
+                            clearInterval(
+                                animation
+                            );
+
+
+                            finishDiceRoll();
+
+                        }
+
+                    },
+                    70
+                );
+
+        }
+
+
+        /* =================================================
+           FINISH DICE
+        ================================================= */
+
+        function finishDiceRoll() {
+
+
+            const result =
+                Math.floor(
+                    Math.random() * 6
+                ) + 1;
+
+
+            gameState.dice =
+                result;
+
+
+            dice.textContent =
+                diceSymbols[
+                    result
+                ];
+
+
+            gameState.gameStarted =
+                true;
+
+
+            gameState.rolling =
                 false;
 
 
-            addLog(
-                `🎁
-                 <strong>${getPlayerName()}</strong>
-                 gets another roll.`
+            rollButton.disabled =
+                false;
+
+
+            handleDiceResult(
+                result
             );
-
-
-            showToast(
-                "6 এসেছে — আবার Dice Roll করুন।"
-            );
-
-
-            renderTokens();
-
-            return;
 
         }
 
 
-        addLog(
-            `⚠️ No legal move.
-             Turn passed.`
-        );
-
-
-        diceHint.textContent =
-            "No legal move";
-
-
-        setTimeout(
-            nextTurn,
-            700
-        );
-
-
-        return;
-
-    }
-
-
-    diceHint.textContent =
-        legalTokens.length === 1
-            ? "1 legal move"
-            : `${legalTokens.length} legal moves`;
-
-
-    renderTokens();
-
-
-    AIController.logAction(
-        `${legalTokens.length} legal token move(s) found.`
-    );
-
-
-    showToast(
-        legalTokens.length === 1
-            ? "Highlighted Token-এ চাপ দিন।"
-            : "একটি highlighted Token নির্বাচন করুন।"
-    );
-
-}
-
-
-/* =========================================================
-   TOKEN CLICK
-========================================================= */
-
-function handleTokenClick(
-    token
-) {
-
-    if (
-        gameOver
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        !AIController.validateTurn(
-            token.player
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        !diceRolled
-    ) {
-
-        showToast(
-            "আগে Dice Roll করুন।"
-        );
-
-        return;
-
-    }
-
-
-    if (
-        !AIController.validateToken(
-            token
-        )
-    ) {
-
-        showToast(
-            "এই Token-এর legal move নেই।"
-        );
-
-        return;
-
-    }
-
-
-    moveToken(
-        token
-    );
-
-}
-
-
-/* =========================================================
-   MOVE TOKEN
-========================================================= */
-
-function moveToken(
-    token
-) {
-
-    /*
-        AI validates again immediately
-        before changing state.
-    */
-
-    if (
-        !AIController.validateToken(
-            token
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    const rolled =
-        diceValue;
-
-
-    const wasInYard =
-        token.progress === -1;
-
-
-    /*
-        Remove selection first.
-    */
-
-    diceRolled =
-        false;
-
-    rollBtn.disabled =
-        true;
-
-
-    token.element?.classList.remove(
-        "selectable"
-    );
-
-
-    /*
-        Enter from yard.
-    */
-
-    if (
-        wasInYard
-    ) {
-
-        token.progress =
-            0;
-
-
-        addLog(
-            `<strong>${getPlayerName()}</strong>
-             entered a Token from Yard.`
-        );
-
-    } else {
-
-        token.progress +=
-            rolled;
-
-
-        addLog(
-            `<strong>${getPlayerName()}</strong>
-             moved a Token
-             <strong>${rolled}</strong>
-             steps.`
-        );
-
-    }
-
-
-    /*
-        Home reached.
-    */
-
-    if (
-        token.progress ===
-        FINAL_POSITION
-    ) {
-
-        token.finished =
-            true;
-
-
-        addLog(
-            `🏠
-             <strong>${getPlayerName()}</strong>
-             brought a Token Home.`
-        );
-
-
-        showToast(
-            "Token reached Home! 🏠"
-        );
-
-    }
-
-
-    renderTokens();
-
-
-    /*
-        Capture.
-    */
-
-    if (
-        !token.finished &&
-        token.progress >= 0 &&
-        token.progress <= 51
-    ) {
-
-        processCapture(
-            token
-        );
-
-    }
-
-
-    /*
-        Winner check.
-    */
-
-    if (
-        AIController.validateWinner(
-            currentPlayer
-        )
-    ) {
-
-        finishGame();
-
-        return;
-
-    }
-
-
-    /*
-        Six = bonus turn.
-    */
-
-    if (
-        rolled === 6
-    ) {
-
-        diceValue =
-            0;
-
-        diceRolled =
-            false;
-
-        rollBtn.disabled =
-            false;
-
-        diceHint.textContent =
-            "Bonus Roll";
-
-
-        addLog(
-            `🎁
-             <strong>${getPlayerName()}</strong>
-             gets another roll.`
-        );
-
-
-        showToast(
-            "6 এসেছে — Bonus Roll!"
-        );
-
-
-        renderTokens();
-
-        return;
-
-    }
-
-
-    /*
-        Normal turn change.
-    */
-
-    diceValue =
-        0;
-
-    sixChain =
-        0;
-
-
-    setTimeout(
-        nextTurn,
-        350
-    );
-
-}
-
-
-/* =========================================================
-   CAPTURE
-========================================================= */
-
-function processCapture(
-    movingToken
-) {
-
-    const globalIndex =
-        getGlobalTrackIndex(
-            movingToken
-        );
-
-
-    if (
-        globalIndex === null
-    ) {
-
-        return;
-
-    }
-
-
-    /*
-        Safe cells cannot be captured.
-    */
-
-    if (
-        SAFE_CELLS.has(
-            globalIndex
-        )
-    ) {
-
-        AIController.logAction(
-            "Safe cell detected — capture blocked."
-        );
-
-        return;
-
-    }
-
-
-    const opponent =
-        getOpponent(
-            movingToken.player
-        );
-
-
-    const enemies =
-        players[opponent]
-            .tokens
-            .filter(
-                token => {
-
-                    if (
-                        token.finished ||
-                        token.progress < 0 ||
-                        token.progress > 51
-                    ) {
-
-                        return false;
-
-                    }
-
-
-                    return (
-                        getGlobalTrackIndex(
-                            token
-                        ) ===
-                        globalIndex
-                    );
-
-                }
-            );
-
-
-    /*
-        Two or more opponent tokens
-        form a blockade and cannot be captured.
-    */
-
-    if (
-        enemies.length >= 2
-    ) {
-
-        AIController.logAction(
-            "Opponent blockade protected."
-        );
-
-        return;
-
-    }
-
-
-    /*
-        Capture exactly one enemy.
-    */
-
-    if (
-        enemies.length === 1
-    ) {
-
-        const enemy =
-            enemies[0];
-
-
-        enemy.progress =
-            -1;
-
-        enemy.finished =
-            false;
-
-
-        captureCount++;
-
-
-        addLog(
-            `⚔️
-             <strong>${getPlayerName()}</strong>
-             captured an opponent Token.`
-        );
-
-
-        AIController.logAction(
-            "Capture validated and applied."
-        );
-
-
-        showToast(
-            "Token Captured! ⚔️"
-        );
-
-
-        if (
-            enemy.element
+        /* =================================================
+           HANDLE DICE RESULT
+        ================================================= */
+
+        function handleDiceResult(
+            result
         ) {
 
-            enemy.element.classList.add(
-                "pop"
-            );
 
+            const player =
+                gameState.currentPlayer ===
+                "red"
+                    ? "🔴 Player 1"
+                    : "🔵 Player 2";
+
+
+            if (
+                result === 6
+            ) {
+
+                gameMessage.textContent =
+                    player +
+                    " — ৬ এসেছে! Token বের করার অথবা চাল দেওয়ার সুযোগ আছে। অতিরিক্ত চাল পাবেন।";
+
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * Actual token movement will be
+                 * controlled by ludu-board.js
+                 * after Step 2.
+                 */
+
+                return;
+
+            }
+
+
+            gameMessage.textContent =
+                player +
+                " — Dice-এ " +
+                result +
+                " এসেছে। Token চাল দেওয়ার পালা।";
+
+
+            /*
+             * Temporary turn handling.
+             *
+             * Actual Ludo movement engine will
+             * replace this in the next step.
+             */
 
             setTimeout(
                 () => {
 
-                    enemy.element?.classList.remove(
-                        "pop"
-                    );
+                    changeTurn();
 
                 },
-                400
+                900
             );
 
         }
 
-    }
 
+        /* =================================================
+           BUTTON EVENT
+        ================================================= */
 
-    renderTokens();
-
-}
-
-
-/* =========================================================
-   WINNER
-========================================================= */
-
-function finishGame() {
-
-    gameOver =
-        true;
-
-    diceRolled =
-        false;
-
-    diceValue =
-        0;
-
-
-    rollBtn.disabled =
-        true;
-
-
-    const winner =
-        players[currentPlayer];
-
-
-    document.getElementById(
-        "winnerTitle"
-    ).textContent =
-        `🏆 ${winner.name} Wins`;
-
-
-    document.getElementById(
-        "winnerText"
-    ).textContent =
-        `${winner.name} successfully brought all four Tokens Home.`;
-
-
-    winnerModal.classList.add(
-        "show"
-    );
-
-
-    addLog(
-        `🏆
-         <strong>${winner.name}</strong>
-         won the match!`
-    );
-
-
-    AIController.logAction(
-        "Winner validated. Match closed."
-    );
-
-
-    renderTokens();
-
-}
-
-
-/* =========================================================
-   NEXT TURN
-========================================================= */
-
-function nextTurn() {
-
-    if (
-        gameOver
-    ) {
-
-        return;
-
-    }
-
-
-    currentPlayer =
-        getOpponent(
-            currentPlayer
+        rollButton.addEventListener(
+            "click",
+            rollDice
         );
 
 
-    diceValue =
-        0;
+        /* =================================================
+           INITIAL UI
+        ================================================= */
 
-    diceRolled =
-        false;
+        updateTurnUI();
 
-    sixChain =
-        0;
 
+        /* =================================================
+           FOOTER YEAR
+        ================================================= */
 
-    rollBtn.disabled =
-        false;
+        footerYear.textContent =
+            new Date().getFullYear();
 
 
-    diceHint.textContent =
-        "Roll to play";
-
-
-    updateTurnUI();
-
-    renderTokens();
-
-
-    addLog(
-        `🔄 Turn:
-         <strong>${getPlayerName()}</strong>`
-    );
-
-
-    AIController.logAction(
-        `Turn changed to ${getPlayerName()}.`
-    );
-
-}
-
-
-/* =========================================================
-   TURN UI
-========================================================= */
-
-function updateTurnUI() {
-
-    const redActive =
-        currentPlayer ===
-        "red";
-
-
-    turnPlayer.textContent =
-        redActive
-            ? "🔴 Player 1"
-            : "🔵 Player 2";
-
-
-    redCard.classList.toggle(
-        "active",
-        redActive
-    );
-
-
-    blueCard.classList.toggle(
-        "active",
-        !redActive
-    );
-
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-function updateStats() {
-
-    const redHome =
-        players.red.tokens
-            .filter(
-                token =>
-                    token.finished
-            )
-            .length;
-
-
-    const blueHome =
-        players.blue.tokens
-            .filter(
-                token =>
-                    token.finished
-            )
-            .length;
-
-
-    redTokensEl.textContent =
-        redHome;
-
-
-    blueTokensEl.textContent =
-        blueHome;
-
-
-    capturesEl.textContent =
-        captureCount;
-
-}
-
-
-/* =========================================================
-   NEW GAME
-========================================================= */
-
-function newGame() {
-
-    currentPlayer =
-        "red";
-
-    diceValue =
-        0;
-
-    diceRolled =
-        false;
-
-    gameOver =
-        false;
-
-    captureCount =
-        0;
-
-    sixChain =
-        0;
-
-    tokenSequence =
-        1;
-
-
-    dice.textContent =
-        "⚀";
-
-
-    diceHint.textContent =
-        "Roll to play";
-
-
-    rollBtn.disabled =
-        false;
-
-
-    gameLog.innerHTML =
-        "";
-
-
-    /*
-        Remove existing tokens.
-    */
-
-    document
-        .querySelectorAll(
-            ".token"
-        )
-        .forEach(
-            element =>
-                element.remove()
-        );
-
-
-    createTokens();
-
-    updateTurnUI();
-
-    renderTokens();
-
-
-    winnerModal.classList.remove(
-        "show"
-    );
-
-
-    addLog(
-        `🎮
-         <strong>Player 1 vs Player 2</strong>
-         match started.`
-    );
-
-
-    addLog(
-        `🧠
-         Advanced AI Game Controller:
-         <strong>ACTIVE</strong>`
-    );
-
-
-    addLog(
-        `🔴
-         Player 1 starts the match.`
-    );
-
-
-    showToast(
-        "New Ludo Match Started!"
-    );
-
-}
-
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-document
-    .getElementById(
-        "newGameBtn"
-    )
-    .addEventListener(
-        "click",
-        newGame
-    );
-
-
-document
-    .getElementById(
-        "winnerNewGameBtn"
-    )
-    .addEventListener(
-        "click",
-        newGame
-    );
-
-
-/* =========================================================
-   RULES MODAL
-========================================================= */
-
-document
-    .getElementById(
-        "rulesBtn"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            rulesModal.classList.add(
-                "show"
-            );
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "closeRulesBtn"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            rulesModal.classList.remove(
-                "show"
-            );
-
-        }
-    );
-
-
-rulesModal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            rulesModal
-        ) {
-
-            rulesModal.classList.remove(
-                "show"
-            );
-
-        }
-
-    }
-);
-
-
-winnerModal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            winnerModal
-        ) {
-
-            winnerModal.classList.remove(
-                "show"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-buildBoard();
-
-createTokens();
-
-updateTurnUI();
-
-renderTokens();
-
-
-addLog(
-    `🎮
-     <strong>Player 1 vs Player 2</strong>
-     ready.`
-);
-
-
-addLog(
-    `🧠
-     AI Game Controller:
-     <strong>ACTIVE</strong>`
-);
-
-
-addLog(
-    `🔴
-     Player 1 starts.`
-);
-
-</script>
+    </script>
 
 
 </body>
