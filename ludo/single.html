@@ -1,1070 +1,3777 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#070b16">
-
-<title>Single Ludo — Ghopkhali Sports Arena</title>
-
-<style>
-:root{
-    --bg:#070b16;
-    --panel:#0e1424;
-    --panel2:#121a2d;
-    --text:#f8fafc;
-    --muted:#94a3b8;
-
-    --red:#ef4444;
-    --green:#22c55e;
-    --yellow:#facc15;
-    --blue:#3b82f6;
-
-    --cell:#f8fafc;
-    --line:#cbd5e1;
-
-    --shadow:
-        0 20px 50px rgba(0,0,0,.45),
-        inset 0 1px 0 rgba(255,255,255,.08);
-}
-
-*{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
-}
-
-html,
-body{
-    margin:0;
-    min-height:100%;
-    background:
-        radial-gradient(circle at top,#18233c 0,#070b16 48%,#03050a 100%);
-    color:var(--text);
-    font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-}
-
-body{
-    display:flex;
-    justify-content:center;
-    padding:18px 10px 35px;
-}
-
-.app{
-    width:min(760px,100%);
-}
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-.header{
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.brand{
-    font-size:clamp(21px,5vw,30px);
-    font-weight:900;
-    letter-spacing:.3px;
-}
-
-.brand span{
-    display:block;
-    margin-top:3px;
-    font-size:12px;
-    color:#94a3b8;
-    font-weight:600;
-}
-
-.live{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    margin-top:9px;
-    padding:6px 11px;
-    border-radius:999px;
-    background:rgba(239,68,68,.10);
-    border:1px solid rgba(239,68,68,.25);
-    color:#fca5a5;
-    font-size:11px;
-    font-weight:800;
-}
-
-.live i{
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:#ef4444;
-    box-shadow:0 0 12px #ef4444;
-    animation:pulse 1.2s infinite;
-}
-
-@keyframes pulse{
-    50%{opacity:.35;transform:scale(.7)}
-}
-
-/* =====================================================
-   PLAYER STANDS
-===================================================== */
-
-.stands{
-    display:grid;
-    grid-template-columns:1fr auto 1fr;
-    gap:10px;
-    align-items:center;
-    margin-bottom:13px;
-}
-
-.player{
-    position:relative;
-    min-height:67px;
-    padding:10px 12px;
-    border-radius:18px;
-    background:linear-gradient(145deg,#121b2e,#0a101e);
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:var(--shadow);
-    overflow:hidden;
-}
-
-.player::after{
-    content:"";
-    position:absolute;
-    inset:auto -20px -30px auto;
-    width:75px;
-    height:75px;
-    border-radius:50%;
-    opacity:.13;
-}
-
-.player.red::after{
-    background:var(--red);
-}
-
-.player.blue::after{
-    background:var(--blue);
-}
-
-.player.active{
-    border-color:rgba(255,255,255,.35);
-    transform:translateY(-1px);
-}
-
-.player.active.red{
-    box-shadow:
-        0 0 0 1px rgba(239,68,68,.22),
-        0 14px 40px rgba(239,68,68,.16);
-}
-
-.player.active.blue{
-    box-shadow:
-        0 0 0 1px rgba(59,130,246,.22),
-        0 14px 40px rgba(59,130,246,.16);
-}
-
-.player-top{
-    display:flex;
-    align-items:center;
-    gap:9px;
-}
-
-.avatar{
-    width:37px;
-    height:37px;
-    flex:none;
-    border-radius:50%;
-    display:grid;
-    place-items:center;
-    color:white;
-    font-weight:900;
-    box-shadow:
-        inset 0 2px 3px rgba(255,255,255,.3),
-        0 5px 12px rgba(0,0,0,.35);
-}
-
-.red .avatar{
-    background:linear-gradient(145deg,#ff6262,#b91c1c);
-}
-
-.blue .avatar{
-    background:linear-gradient(145deg,#60a5fa,#1d4ed8);
-}
-
-.player-name{
-    font-size:13px;
-    font-weight:900;
-}
-
-.player-status{
-    margin-top:2px;
-    color:var(--muted);
-    font-size:10px;
-}
-
-.turn-badge{
-    position:absolute;
-    right:9px;
-    top:9px;
-    padding:3px 6px;
-    border-radius:6px;
-    background:rgba(255,255,255,.07);
-    color:#64748b;
-    font-size:8px;
-    font-weight:900;
-    opacity:0;
-}
-
-.player.active .turn-badge{
-    opacity:1;
-    color:#fff;
-}
-
-.vs{
-    width:43px;
-    height:43px;
-    display:grid;
-    place-items:center;
-    border-radius:50%;
-    background:#0c1322;
-    border:1px solid rgba(255,255,255,.08);
-    color:#64748b;
-    font-size:11px;
-    font-weight:900;
-}
-
-/* =====================================================
-   GAME CARD
-===================================================== */
-
-.game-card{
-    padding:10px;
-    border-radius:27px;
-    background:
-        linear-gradient(145deg,#141d31,#090f1d);
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.45),
-        inset 0 1px 0 rgba(255,255,255,.06);
-}
-
-/* =====================================================
-   LUDO BOARD
-===================================================== */
-
-.board{
-    position:relative;
-    width:100%;
-    aspect-ratio:1;
-    display:grid;
-    grid-template-columns:repeat(15,1fr);
-    grid-template-rows:repeat(15,1fr);
-    overflow:hidden;
-    border-radius:20px;
-    background:#eef2f7;
-    box-shadow:
-        inset 0 0 0 3px rgba(0,0,0,.13),
-        0 15px 35px rgba(0,0,0,.28);
-}
-
-/* Cells */
-
-.cell{
-    position:relative;
-    border:1px solid rgba(30,41,59,.15);
-    background:#f8fafc;
-}
-
-/* =====================================================
-   FOUR HOME BASES
-===================================================== */
-
-.base{
-    position:absolute;
-    width:40%;
-    height:40%;
-    padding:5.2%;
-    z-index:2;
-}
-
-.base.red{
-    left:0;
-    top:0;
-    background:linear-gradient(145deg,#ff5b5b,#dc2626);
-}
-
-.base.green{
-    right:0;
-    top:0;
-    background:linear-gradient(145deg,#4ade80,#16a34a);
-}
-
-.base.blue{
-    right:0;
-    bottom:0;
-    background:linear-gradient(145deg,#60a5fa,#2563eb);
-}
-
-.base.yellow{
-    left:0;
-    bottom:0;
-    background:linear-gradient(145deg,#fde047,#eab308);
-}
-
-.base-inner{
-    width:100%;
-    height:100%;
-    border-radius:18%;
-    background:#fff;
-    box-shadow:
-        inset 0 5px 12px rgba(0,0,0,.13),
-        0 4px 10px rgba(0,0,0,.12);
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    grid-template-rows:1fr 1fr;
-    gap:14%;
-    padding:15%;
-}
-
-.base-slot{
-    border-radius:50%;
-    background:#e5e7eb;
-    box-shadow:
-        inset 0 3px 7px rgba(0,0,0,.22),
-        0 1px 1px rgba(255,255,255,.8);
-}
-
-/* =====================================================
-   TRACK / COLORED PATHS
-===================================================== */
-
-.track-red{
-    background:#fecaca;
-}
-
-.track-green{
-    background:#bbf7d0;
-}
-
-.track-blue{
-    background:#bfdbfe;
-}
-
-.track-yellow{
-    background:#fef08a;
-}
-
-.start-red{
-    background:#ef4444 !important;
-}
-
-.start-green{
-    background:#22c55e !important;
-}
-
-.start-blue{
-    background:#3b82f6 !important;
-}
-
-.start-yellow{
-    background:#eab308 !important;
-}
-
-/* =====================================================
-   SAFE CELLS
-===================================================== */
-
-.safe::before{
-    content:"★";
-    position:absolute;
-    inset:0;
-    display:grid;
-    place-items:center;
-    color:#64748b;
-    opacity:.55;
-    font-size:clamp(8px,2.3vw,15px);
-}
-
-.start-red.safe::before,
-.start-green.safe::before,
-.start-blue.safe::before,
-.start-yellow.safe::before{
-    color:#fff;
-    opacity:.9;
-}
-
-/* =====================================================
-   HOME LANES
-===================================================== */
-
-.home-red{
-    background:#ef4444 !important;
-}
-
-.home-green{
-    background:#22c55e !important;
-}
-
-.home-blue{
-    background:#3b82f6 !important;
-}
-
-.home-yellow{
-    background:#eab308 !important;
-}
-
-/* =====================================================
-   CENTER FINISH
-===================================================== */
-
-.center{
-    position:absolute;
-    left:40%;
-    top:40%;
-    width:20%;
-    height:20%;
-    z-index:6;
-    overflow:hidden;
-    background:#fff;
-    clip-path:polygon(
-        0 0,
-        50% 50%,
-        0 100%
-    );
-}
-
-.center::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:#22c55e;
-    clip-path:polygon(
-        0 0,
-        100% 0,
-        50% 50%
-    );
-}
-
-.center::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:#3b82f6;
-    clip-path:polygon(
-        100% 100%,
-        0 100%,
-        50% 50%
-    );
-}
-
-.center-red{
-    position:absolute;
-    inset:0;
-    background:#ef4444;
-    clip-path:polygon(
-        0 0,
-        50% 50%,
-        100% 0
-    );
-    z-index:2;
-}
-
-.center-yellow{
-    position:absolute;
-    inset:0;
-    background:#eab308;
-    clip-path:polygon(
-        0 100%,
-        50% 50%,
-        100% 100%
-    );
-    z-index:3;
-}
-
-/* =====================================================
-   TOKENS
-===================================================== */
-
-.token{
-    position:absolute;
-    width:5.4%;
-    aspect-ratio:1;
-    z-index:20;
-
-    border-radius:50%;
-
-    border:2px solid rgba(255,255,255,.85);
-
-    box-shadow:
-        inset 0 4px 4px rgba(255,255,255,.38),
-        inset 0 -5px 7px rgba(0,0,0,.25),
-        0 4px 8px rgba(0,0,0,.38);
-
-    transform:
-        translate(-50%,-50%)
-        scale(1);
-
-    transition:
-        left .16s ease,
-        top .16s ease,
-        transform .18s ease;
-
-    cursor:pointer;
-}
-
-.token.red{
-    background:
-        radial-gradient(circle at 32% 25%,#ffb0b0 0 12%,transparent 13%),
-        linear-gradient(145deg,#ff5555,#b91c1c);
-}
-
-.token.blue{
-    background:
-        radial-gradient(circle at 32% 25%,#dbeafe 0 12%,transparent 13%),
-        linear-gradient(145deg,#60a5fa,#1d4ed8);
-}
-
-.token.selectable{
-    animation:
-        tokenPulse 1s infinite;
-}
-
-@keyframes tokenPulse{
-    50%{
-        transform:
-            translate(-50%,-50%)
-            scale(1.22);
-        filter:brightness(1.18);
-    }
-}
-
-.token.moving{
-    transform:
-        translate(-50%,-50%)
-        scale(1.22);
-    z-index:40;
-}
-
-.token.capture{
-    animation:capture .45s ease;
-}
-
-@keyframes capture{
-    30%{
-        transform:translate(-50%,-50%) scale(1.5) rotate(15deg);
-    }
-    100%{
-        transform:translate(-50%,-50%) scale(1) rotate(0);
-    }
-}
-
-/* =====================================================
-   DICE AREA
-===================================================== */
-
-.control{
-    margin-top:13px;
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:12px;
-    align-items:center;
-}
-
-.turn-info{
-    min-height:70px;
-    padding:11px 14px;
-    border-radius:17px;
-    background:#0c1424;
-    border:1px solid rgba(255,255,255,.07);
-}
-
-.turn-title{
-    color:#64748b;
-    font-size:9px;
-    font-weight:900;
-    letter-spacing:.7px;
-    text-transform:uppercase;
-}
-
-.turn-player{
-    margin-top:3px;
-    font-size:16px;
-    font-weight:900;
-}
-
-.turn-help{
-    margin-top:2px;
-    color:#94a3b8;
-    font-size:10px;
-}
-
-.dice-wrap{
-    display:flex;
-    align-items:center;
-    gap:9px;
-}
-
-.dice{
-    width:65px;
-    height:65px;
-    display:grid;
-    place-items:center;
-    border-radius:17px;
-    background:
-        linear-gradient(145deg,#ffffff,#dce3ec);
-    color:#111827;
-    box-shadow:
-        0 10px 20px rgba(0,0,0,.3),
-        inset 0 2px 2px rgba(255,255,255,.8);
-    font-size:35px;
-    font-weight:900;
-    user-select:none;
-}
-
-.dice.rolling{
-    animation:diceRoll .55s ease;
-}
-
-@keyframes diceRoll{
-    0%{transform:rotate(0) scale(1)}
-    20%{transform:rotate(18deg) scale(1.08)}
-    45%{transform:rotate(-18deg) scale(.92)}
-    70%{transform:rotate(12deg) scale(1.06)}
-    100%{transform:rotate(0) scale(1)}
-}
-
-.roll-btn{
-    min-width:92px;
-    height:65px;
-    border:0;
-    border-radius:17px;
-    background:
-        linear-gradient(145deg,#f8fafc,#cbd5e1);
-    color:#0f172a;
-    font-size:12px;
-    font-weight:1000;
-    cursor:pointer;
-    box-shadow:
-        0 10px 20px rgba(0,0,0,.25),
-        inset 0 2px 2px rgba(255,255,255,.8);
-}
-
-.roll-btn:active{
-    transform:translateY(2px) scale(.98);
-}
-
-.roll-btn:disabled{
-    opacity:.35;
-    cursor:not-allowed;
-}
-
-/* =====================================================
-   MESSAGE
-===================================================== */
-
-.message{
-    margin-top:11px;
-    padding:10px 12px;
-    border-radius:13px;
-    text-align:center;
-    background:rgba(255,255,255,.035);
-    color:#94a3b8;
-    font-size:11px;
-    font-weight:700;
-}
-
-/* =====================================================
-   RESULT MODAL
-===================================================== */
-
-.modal{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:rgba(0,0,0,.72);
-    backdrop-filter:blur(10px);
-}
-
-.modal.show{
-    display:flex;
-}
-
-.result{
-    width:min(360px,100%);
-    padding:28px 22px;
-    border-radius:28px;
-    text-align:center;
-    background:
-        linear-gradient(145deg,#172238,#0a101d);
-    border:1px solid rgba(255,255,255,.1);
-    box-shadow:0 30px 90px rgba(0,0,0,.55);
-}
-
-.trophy{
-    font-size:52px;
-}
-
-.result h2{
-    margin:8px 0 4px;
-    font-size:25px;
-}
-
-.result p{
-    margin:0 0 18px;
-    color:#94a3b8;
-    font-size:12px;
-}
-
-.restart{
-    width:100%;
-    height:48px;
-    border:0;
-    border-radius:14px;
-    background:#fff;
-    color:#0f172a;
-    font-weight:900;
-    cursor:pointer;
-}
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media(max-width:480px){
-
-    body{
-        padding:10px 6px 25px;
-    }
-
-    .game-card{
-        padding:7px;
-        border-radius:22px;
-    }
-
-    .board{
-        border-radius:16px;
-    }
-
-    .stands{
-        gap:6px;
-    }
-
-    .player{
-        min-height:61px;
-        padding:8px;
-        border-radius:15px;
-    }
-
-    .avatar{
-        width:32px;
-        height:32px;
-        font-size:11px;
-    }
-
-    .player-name{
-        font-size:11px;
-    }
-
-    .player-status{
-        font-size:8px;
-    }
-
-    .vs{
-        width:36px;
-        height:36px;
-        font-size:9px;
-    }
-
-    .control{
-        grid-template-columns:1fr;
-    }
-
-    .dice-wrap{
-        justify-content:center;
-    }
-
-    .turn-info{
-        text-align:center;
-    }
-
-    .dice{
-        width:61px;
-        height:61px;
-    }
-
-    .roll-btn{
-        height:61px;
-    }
-}
-</style>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <meta
+        name="theme-color"
+        content="#070b16"
+    >
+
+    <meta
+        name="description"
+        content="Ghopkhali Sports Arena Premium Single Ludo"
+    >
+
+    <title>Single Ludo — Ghopkhali Sports Arena</title>
+
+    <style>
+
+        /* =========================================================
+           ROOT
+        ========================================================= */
+
+        :root {
+
+            --bg:
+                #070b16;
+
+            --panel:
+                rgba(16, 23, 39, .92);
+
+            --panel-2:
+                rgba(22, 31, 51, .96);
+
+            --text:
+                #f7f9ff;
+
+            --muted:
+                #8e9ab2;
+
+            --border:
+                rgba(255,255,255,.09);
+
+            --red:
+                #ef3340;
+
+            --red-dark:
+                #a91521;
+
+            --blue:
+                #2787f5;
+
+            --blue-dark:
+                #0753a8;
+
+            --green:
+                #19b86a;
+
+            --green-dark:
+                #087b43;
+
+            --yellow:
+                #f6c945;
+
+            --yellow-dark:
+                #bd8d00;
+
+            --gold:
+                #f5c451;
+
+            --shadow:
+                0 20px 55px rgba(0,0,0,.38);
+
+            --radius:
+                24px;
+
+            --cell:
+                6.666666%;
+
+        }
+
+
+        * {
+            box-sizing:
+                border-box;
+            -webkit-tap-highlight-color:
+                transparent;
+        }
+
+
+        html,
+        body {
+            margin:
+                0;
+            padding:
+                0;
+            width:
+                100%;
+            min-height:
+                100%;
+            background:
+                var(--bg);
+            color:
+                var(--text);
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+
+        body {
+            overflow-x:
+                hidden;
+        }
+
+
+        button {
+            font:
+                inherit;
+        }
+
+
+        /* =========================================================
+           APP
+        ========================================================= */
+
+        .app {
+
+            width:
+                100%;
+
+            min-height:
+                100vh;
+
+            padding:
+                14px;
+
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(45,100,190,.22),
+                    transparent 38%
+                );
+        }
+
+
+        .container {
+
+            width:
+                min(1180px, 100%);
+
+            margin:
+                0 auto;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .topbar {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                14px;
+
+            padding:
+                14px 16px;
+
+            margin-bottom:
+                14px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(12,18,31,.88);
+
+            backdrop-filter:
+                blur(18px);
+
+            box-shadow:
+                var(--shadow);
+        }
+
+
+        .brand {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            min-width:
+                0;
+        }
+
+
+        .brand-logo {
+
+            width:
+                46px;
+
+            height:
+                46px;
+
+            border-radius:
+                15px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            flex:
+                0 0 auto;
+
+            font-size:
+                20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #263957,
+                    #0e1524
+                );
+
+            box-shadow:
+                inset 2px 2px 5px rgba(255,255,255,.08),
+                inset -4px -4px 8px rgba(0,0,0,.5),
+                0 8px 20px rgba(0,0,0,.3);
+        }
+
+
+        .brand-text {
+            min-width:
+                0;
+        }
+
+
+        .brand-title {
+
+            margin:
+                0;
+
+            font-size:
+                clamp(15px, 3vw, 21px);
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                -.4px;
+
+            white-space:
+                nowrap;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+        }
+
+
+        .brand-sub {
+
+            margin-top:
+                2px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+        }
+
+
+        .live-badge {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                8px 11px;
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(239,51,64,.12);
+
+            border:
+                1px solid rgba(239,51,64,.28);
+
+            color:
+                #ff7380;
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                .7px;
+
+            white-space:
+                nowrap;
+        }
+
+
+        .live-dot {
+
+            width:
+                7px;
+
+            height:
+                7px;
+
+            border-radius:
+                50%;
+
+            background:
+                #ff4454;
+
+            box-shadow:
+                0 0 0 5px rgba(255,68,84,.08),
+                0 0 15px rgba(255,68,84,.7);
+
+            animation:
+                livePulse 1.5s infinite;
+        }
+
+
+        @keyframes livePulse {
+
+            50% {
+                opacity:
+                    .35;
+            }
+
+        }
+
+
+        /* =========================================================
+           GAME LAYOUT
+        ========================================================= */
+
+        .game-layout {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                330px;
+
+            gap:
+                14px;
+
+            align-items:
+                start;
+        }
+
+
+        @media (max-width: 900px) {
+
+            .game-layout {
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+
+        /* =========================================================
+           BOARD PANEL
+        ========================================================= */
+
+        .board-panel {
+
+            padding:
+                12px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                28px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(25,35,56,.94),
+                    rgba(9,14,25,.98)
+                );
+
+            box-shadow:
+                var(--shadow);
+
+            overflow:
+                hidden;
+        }
+
+
+        .board-head {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            margin:
+                0 3px 10px;
+        }
+
+
+        .match-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                .5px;
+        }
+
+
+        .theme-label {
+
+            padding:
+                6px 9px;
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(255,255,255,.055);
+
+            border:
+                1px solid rgba(255,255,255,.07);
+
+            color:
+                #c8d2e6;
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+        }
+
+
+        /* =========================================================
+           LUDO BOARD
+        ========================================================= */
+
+        .board-wrap {
+
+            width:
+                min(720px, 100%);
+
+            margin:
+                0 auto;
+
+            aspect-ratio:
+                1;
+
+            padding:
+                7px;
+
+            border-radius:
+                30px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #f1f4f8,
+                    #c9d0d8
+                );
+
+            box-shadow:
+                10px 10px 24px rgba(0,0,0,.42),
+                inset 3px 3px 6px rgba(255,255,255,.9),
+                inset -5px -5px 9px rgba(0,0,0,.18);
+        }
+
+
+        .board {
+
+            position:
+                relative;
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            overflow:
+                hidden;
+
+            border-radius:
+                25px;
+
+            background:
+                #eef1f4;
+
+            box-shadow:
+                inset 0 0 0 2px rgba(0,0,0,.1);
+        }
+
+
+        /* =========================================================
+           15x15 GRID
+        ========================================================= */
+
+        .grid {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(15, 1fr);
+
+            grid-template-rows:
+                repeat(15, 1fr);
+        }
+
+
+        .cell {
+
+            position:
+                relative;
+
+            border:
+                1px solid rgba(22,29,39,.13);
+
+            background:
+                #f8fafc;
+
+            overflow:
+                visible;
+        }
+
+
+        .cell.track {
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #e7ebef
+                );
+        }
+
+
+        .cell.path-red {
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff6971,
+                    #e52b38
+                );
+        }
+
+
+        .cell.path-blue {
+            background:
+                linear-gradient(
+                    145deg,
+                    #62b0ff,
+                    #237fe9
+                );
+        }
+
+
+        .cell.path-green {
+            background:
+                linear-gradient(
+                    145deg,
+                    #58dc9a,
+                    #16aa61
+                );
+        }
+
+
+        .cell.path-yellow {
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffe785,
+                    #f0bd25
+                );
+        }
+
+
+        .cell.start-red {
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff3d4b,
+                    #c91828
+                );
+        }
+
+
+        .cell.start-blue {
+            background:
+                linear-gradient(
+                    145deg,
+                    #3195ff,
+                    #075db9
+                );
+        }
+
+
+        .cell.start-green {
+            background:
+                linear-gradient(
+                    145deg,
+                    #20ca77,
+                    #087a43
+                );
+        }
+
+
+        .cell.start-yellow {
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffd83f,
+                    #c99705
+                );
+        }
+
+
+        .cell.safe::after {
+
+            content:
+                "★";
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            color:
+                rgba(50,61,78,.58);
+
+            font-size:
+                clamp(9px, 2vw, 17px);
+
+            text-shadow:
+                0 1px 1px rgba(255,255,255,.8);
+        }
+
+
+        .cell.start-red.safe::after,
+        .cell.start-blue.safe::after,
+        .cell.start-green.safe::after,
+        .cell.start-yellow.safe::after {
+            color:
+                rgba(255,255,255,.78);
+        }
+
+
+        /* =========================================================
+           HOME BASES
+        ========================================================= */
+
+        .yard {
+
+            position:
+                absolute;
+
+            width:
+                40%;
+
+            height:
+                40%;
+
+            padding:
+                5%;
+
+            border-radius:
+                22%;
+
+            z-index:
+                10;
+
+            box-shadow:
+                inset 5px 5px 10px rgba(255,255,255,.16),
+                inset -8px -8px 15px rgba(0,0,0,.18),
+                8px 8px 18px rgba(0,0,0,.2);
+        }
+
+
+        .yard-red {
+
+            left:
+                2%;
+
+            top:
+                2%;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ff5260,
+                    #b91d2b
+                );
+        }
+
+
+        .yard-green {
+
+            right:
+                2%;
+
+            top:
+                2%;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #45d78e,
+                    #07804a
+                );
+        }
+
+
+        .yard-blue {
+
+            right:
+                2%;
+
+            bottom:
+                2%;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #48a7ff,
+                    #0755a9
+                );
+        }
+
+
+        .yard-yellow {
+
+            left:
+                2%;
+
+            bottom:
+                2%;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffdf50,
+                    #b88800
+                );
+        }
+
+
+        .yard-inner {
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            border-radius:
+                18%;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            grid-template-rows:
+                1fr 1fr;
+
+            gap:
+                8%;
+
+            padding:
+                12%;
+
+            background:
+                rgba(255,255,255,.09);
+
+            box-shadow:
+                inset 3px 3px 7px rgba(255,255,255,.12),
+                inset -4px -4px 8px rgba(0,0,0,.12);
+        }
+
+
+        .yard-slot {
+
+            position:
+                relative;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(255,255,255,.17);
+
+            box-shadow:
+                inset 3px 3px 6px rgba(0,0,0,.16),
+                inset -2px -2px 4px rgba(255,255,255,.13);
+        }
+
+
+        /* =========================================================
+           CENTER HOME
+        ========================================================= */
+
+        .home-center {
+
+            position:
+                absolute;
+
+            left:
+                40%;
+
+            top:
+                40%;
+
+            width:
+                20%;
+
+            height:
+                20%;
+
+            z-index:
+                20;
+
+            clip-path:
+                polygon(
+                    0 0,
+                    100% 0,
+                    100% 100%,
+                    0 100%
+                );
+
+            background:
+                conic-gradient(
+                    from 45deg,
+                    var(--green) 0 25%,
+                    var(--blue) 25% 50%,
+                    var(--yellow) 50% 75%,
+                    var(--red) 75% 100%
+                );
+
+            box-shadow:
+                0 0 0 2px rgba(255,255,255,.32),
+                0 7px 15px rgba(0,0,0,.3);
+        }
+
+
+        .home-center::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            inset:
+                18%;
+
+            background:
+                rgba(255,255,255,.12);
+
+            clip-path:
+                polygon(
+                    50% 0,
+                    100% 50%,
+                    50% 100%,
+                    0 50%
+                );
+
+        }
+
+
+        /* =========================================================
+           TOKENS
+        ========================================================= */
+
+        .token-layer {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            z-index:
+                50;
+
+            pointer-events:
+                none;
+        }
+
+
+        .token {
+
+            position:
+                absolute;
+
+            width:
+                30px;
+
+            height:
+                38px;
+
+            transform:
+                translate(-50%, -72%);
+
+            transition:
+                left .16s linear,
+                top .16s linear,
+                transform .16s linear;
+
+            filter:
+                drop-shadow(3px 5px 4px rgba(0,0,0,.32));
+
+            pointer-events:
+                auto;
+
+            cursor:
+                pointer;
+
+            z-index:
+                2;
+        }
+
+
+        .token.selectable {
+
+            animation:
+                tokenBounce .8s infinite alternate;
+        }
+
+
+        @keyframes tokenBounce {
+
+            from {
+                transform:
+                    translate(-50%, -72%);
+            }
+
+            to {
+                transform:
+                    translate(-50%, -84%);
+            }
+
+        }
+
+
+        .pawn {
+
+            position:
+                absolute;
+
+            left:
+                50%;
+
+            bottom:
+                0;
+
+            width:
+                100%;
+
+            height:
+                100%;
+        }
+
+
+        .pawn::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            left:
+                50%;
+
+            bottom:
+                0;
+
+            width:
+                100%;
+
+            height:
+                36%;
+
+            transform:
+                translateX(-50%);
+
+            border-radius:
+                50%;
+
+            background:
+                var(--token-color);
+
+            box-shadow:
+                inset 3px 3px 4px rgba(255,255,255,.42),
+                inset -4px -4px 6px rgba(0,0,0,.3);
+        }
+
+
+        .pawn::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            left:
+                50%;
+
+            top:
+                3%;
+
+            width:
+                58%;
+
+            height:
+                62%;
+
+            transform:
+                translateX(-50%);
+
+            border-radius:
+                48% 48% 43% 43%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(0,0,0,.14),
+                    rgba(255,255,255,.32) 35%,
+                    rgba(255,255,255,.08) 60%,
+                    rgba(0,0,0,.2)
+                ),
+                var(--token-color);
+
+            box-shadow:
+                inset 3px 3px 5px rgba(255,255,255,.42),
+                inset -4px -5px 7px rgba(0,0,0,.28);
+        }
+
+
+        .token.red {
+            --token-color:
+                #ef3340;
+        }
+
+
+        .token.blue {
+            --token-color:
+                #2388f4;
+        }
+
+
+        .token.green {
+            --token-color:
+                #18b969;
+        }
+
+
+        .token.yellow {
+            --token-color:
+                #f3c52e;
+        }
+
+
+        .token-number {
+
+            position:
+                absolute;
+
+            left:
+                50%;
+
+            top:
+                42%;
+
+            transform:
+                translate(-50%,-50%);
+
+            z-index:
+                5;
+
+            font-size:
+                9px;
+
+            font-weight:
+                1000;
+
+            color:
+                rgba(255,255,255,.9);
+
+            text-shadow:
+                0 1px 2px rgba(0,0,0,.6);
+        }
+
+
+        /* =========================================================
+           TOKEN STACK
+        ========================================================= */
+
+        .token-stack {
+
+            position:
+                absolute;
+
+            transform:
+                translate(-50%, -50%);
+
+            z-index:
+                45;
+
+            pointer-events:
+                none;
+        }
+
+
+        /* =========================================================
+           3D DICE
+        ========================================================= */
+
+        .dice-area {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+
+            padding:
+                17px;
+
+            border-radius:
+                24px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #202b42,
+                    #0c1322
+                );
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            box-shadow:
+                inset 2px 2px 6px rgba(255,255,255,.05),
+                inset -5px -5px 12px rgba(0,0,0,.38);
+        }
+
+
+        .dice-button {
+
+            position:
+                relative;
+
+            width:
+                82px;
+
+            height:
+                82px;
+
+            border:
+                0;
+
+            padding:
+                0;
+
+            border-radius:
+                19px;
+
+            background:
+                transparent;
+
+            cursor:
+                pointer;
+
+            perspective:
+                500px;
+        }
+
+
+        .dice-button:disabled {
+            cursor:
+                not-allowed;
+            opacity:
+                .55;
+        }
+
+
+        .dice-cube {
+
+            position:
+                relative;
+
+            width:
+                64px;
+
+            height:
+                64px;
+
+            margin:
+                9px;
+
+            transform-style:
+                preserve-3d;
+
+            transform:
+                rotateX(-8deg)
+                rotateY(8deg);
+
+            transition:
+                transform .18s ease;
+
+            filter:
+                drop-shadow(7px 10px 7px rgba(0,0,0,.38));
+        }
+
+
+        .dice-face {
+
+            position:
+                absolute;
+
+            width:
+                64px;
+
+            height:
+                64px;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            grid-template-rows:
+                repeat(3, 1fr);
+
+            padding:
+                8px;
+
+            border-radius:
+                12px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #dfe4ea
+                );
+
+            border:
+                1px solid rgba(0,0,0,.12);
+
+            box-shadow:
+                inset 3px 3px 4px rgba(255,255,255,.9),
+                inset -4px -4px 7px rgba(0,0,0,.14);
+        }
+
+
+        .dice-front {
+            transform:
+                translateZ(32px);
+        }
+
+
+        .dice-back {
+            transform:
+                rotateY(180deg)
+                translateZ(32px);
+        }
+
+
+        .dice-right {
+            transform:
+                rotateY(90deg)
+                translateZ(32px);
+        }
+
+
+        .dice-left {
+            transform:
+                rotateY(-90deg)
+                translateZ(32px);
+        }
+
+
+        .dice-top {
+            transform:
+                rotateX(90deg)
+                translateZ(32px);
+        }
+
+
+        .dice-bottom {
+            transform:
+                rotateX(-90deg)
+                translateZ(32px);
+        }
+
+
+        .pip {
+
+            width:
+                9px;
+
+            height:
+                9px;
+
+            border-radius:
+                50%;
+
+            align-self:
+                center;
+
+            justify-self:
+                center;
+
+            background:
+                #10131a;
+
+            box-shadow:
+                inset 1px 1px 1px rgba(255,255,255,.12),
+                1px 2px 2px rgba(0,0,0,.25);
+        }
+
+
+        .dice-rolling .dice-cube {
+
+            animation:
+                diceRoll .85s cubic-bezier(.2,.8,.2,1);
+        }
+
+
+        @keyframes diceRoll {
+
+            0% {
+                transform:
+                    rotateX(0deg)
+                    rotateY(0deg)
+                    rotateZ(0deg)
+                    translateY(-8px);
+            }
+
+            25% {
+                transform:
+                    rotateX(190deg)
+                    rotateY(115deg)
+                    rotateZ(40deg)
+                    translateY(-22px);
+            }
+
+            55% {
+                transform:
+                    rotateX(370deg)
+                    rotateY(250deg)
+                    rotateZ(100deg)
+                    translateY(4px);
+            }
+
+            80% {
+                transform:
+                    rotateX(525deg)
+                    rotateY(375deg)
+                    rotateZ(160deg)
+                    translateY(-5px);
+            }
+
+            100% {
+                transform:
+                    rotateX(720deg)
+                    rotateY(540deg)
+                    rotateZ(180deg)
+                    translateY(0);
+            }
+
+        }
+
+
+        .roll-text {
+
+            color:
+                #cdd6e7;
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            text-align:
+                center;
+        }
+
+
+        .roll-hint {
+
+            color:
+                #7f8ba1;
+
+            font-size:
+                10px;
+
+            text-align:
+                center;
+        }
+
+
+        /* =========================================================
+           SIDE PANEL
+        ========================================================= */
+
+        .side {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                12px;
+        }
+
+
+        /* =========================================================
+           PLAYER STANDS
+        ========================================================= */
+
+        .player-card {
+
+            position:
+                relative;
+
+            padding:
+                14px;
+
+            border-radius:
+                22px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(26,36,57,.98),
+                    rgba(10,16,28,.98)
+                );
+
+            box-shadow:
+                0 14px 35px rgba(0,0,0,.25);
+
+            overflow:
+                hidden;
+
+            transition:
+                .25s ease;
+        }
+
+
+        .player-card.active {
+
+            border-color:
+                var(--player-color);
+
+            box-shadow:
+                0 0 0 1px var(--player-color),
+                0 12px 35px rgba(0,0,0,.35);
+        }
+
+
+        .player-card.active::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            left:
+                0;
+
+            top:
+                0;
+
+            width:
+                4px;
+
+            height:
+                100%;
+
+            background:
+                var(--player-color);
+
+            box-shadow:
+                0 0 15px var(--player-color);
+        }
+
+
+        .player-card.red {
+            --player-color:
+                var(--red);
+        }
+
+
+        .player-card.blue {
+            --player-color:
+                var(--blue);
+        }
+
+
+        .player-top {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+        }
+
+
+        .player-info {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                10px;
+
+            min-width:
+                0;
+        }
+
+
+        .player-avatar {
+
+            width:
+                44px;
+
+            height:
+                44px;
+
+            flex:
+                0 0 auto;
+
+            border-radius:
+                14px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            color:
+                white;
+
+            font-size:
+                18px;
+
+            font-weight:
+                1000;
+
+            background:
+                var(--player-color);
+
+            box-shadow:
+                inset 3px 3px 5px rgba(255,255,255,.3),
+                inset -4px -4px 7px rgba(0,0,0,.27),
+                0 7px 15px rgba(0,0,0,.25);
+        }
+
+
+        .player-name {
+
+            font-size:
+                14px;
+
+            font-weight:
+                900;
+
+            white-space:
+                nowrap;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+        }
+
+
+        .player-role {
+
+            margin-top:
+                3px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+        }
+
+
+        .turn-pill {
+
+            padding:
+                6px 8px;
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(255,255,255,.055);
+
+            color:
+                #7f8ca4;
+
+            font-size:
+                9px;
+
+            font-weight:
+                900;
+
+            white-space:
+                nowrap;
+        }
+
+
+        .player-card.active .turn-pill {
+
+            color:
+                var(--player-color);
+
+            background:
+                color-mix(
+                    in srgb,
+                    var(--player-color) 13%,
+                    transparent
+                );
+        }
+
+
+        .token-status {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            margin-top:
+                13px;
+
+            padding-top:
+                11px;
+
+            border-top:
+                1px solid rgba(255,255,255,.06);
+        }
+
+
+        .status-label {
+
+            color:
+                #8996ad;
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+        }
+
+
+        .status-value {
+
+            color:
+                #e9eef8;
+
+            font-size:
+                12px;
+
+            font-weight:
+                900;
+        }
+
+
+        .mini-tokens {
+
+            display:
+                flex;
+
+            gap:
+                5px;
+        }
+
+
+        .mini-token {
+
+            width:
+                12px;
+
+            height:
+                12px;
+
+            border-radius:
+                50%;
+
+            background:
+                var(--player-color);
+
+            box-shadow:
+                inset 2px 2px 2px rgba(255,255,255,.35),
+                1px 2px 3px rgba(0,0,0,.3);
+        }
+
+
+        .mini-token.home {
+            opacity:
+                .28;
+        }
+
+
+        /* =========================================================
+           TIMER
+        ========================================================= */
+
+        .timer-card {
+
+            padding:
+                14px;
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid rgba(255,255,255,.065);
+        }
+
+
+        .timer-head {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            margin-bottom:
+                8px;
+        }
+
+
+        .timer-title {
+
+            color:
+                #929eb4;
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+        }
+
+
+        .timer-number {
+
+            font-variant-numeric:
+                tabular-nums;
+
+            font-size:
+                17px;
+
+            font-weight:
+                1000;
+
+            color:
+                #f4f7fc;
+        }
+
+
+        .timer-track {
+
+            height:
+                7px;
+
+            overflow:
+                hidden;
+
+            border-radius:
+                99px;
+
+            background:
+                rgba(255,255,255,.07);
+        }
+
+
+        .timer-progress {
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            border-radius:
+                inherit;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--blue),
+                    #7ebcff
+                );
+
+            transition:
+                width .25s linear;
+        }
+
+
+        .timer-card.danger .timer-progress {
+            background:
+                linear-gradient(
+                    90deg,
+                    #ef3340,
+                    #ff7a84
+                );
+        }
+
+
+        /* =========================================================
+           GAME INFO
+        ========================================================= */
+
+        .info-card {
+
+            padding:
+                15px;
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid rgba(255,255,255,.065);
+        }
+
+
+        .info-title {
+
+            font-size:
+                12px;
+
+            font-weight:
+                900;
+
+            margin-bottom:
+                10px;
+        }
+
+
+        .rule-row {
+
+            display:
+                flex;
+
+            align-items:
+                flex-start;
+
+            gap:
+                8px;
+
+            margin:
+                8px 0;
+
+            color:
+                #9ba7bb;
+
+            font-size:
+                10px;
+
+            line-height:
+                1.45;
+        }
+
+
+        .rule-icon {
+
+            width:
+                18px;
+
+            height:
+                18px;
+
+            flex:
+                0 0 auto;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                6px;
+
+            background:
+                rgba(255,255,255,.06);
+
+            color:
+                #d8e0ee;
+
+            font-size:
+                9px;
+
+            font-weight:
+                900;
+        }
+
+
+        /* =========================================================
+           CONTROLS
+        ========================================================= */
+
+        .controls {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                9px;
+        }
+
+
+        .control-button {
+
+            min-height:
+                44px;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius:
+                14px;
+
+            color:
+                #e9eef8;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #202c43,
+                    #0d1524
+                );
+
+            cursor:
+                pointer;
+
+            font-size:
+                11px;
+
+            font-weight:
+                900;
+
+            box-shadow:
+                4px 5px 10px rgba(0,0,0,.3),
+                inset 1px 1px 2px rgba(255,255,255,.06);
+        }
+
+
+        .control-button:active {
+            transform:
+                translateY(1px);
+        }
+
+
+        .control-button:disabled {
+            opacity:
+                .4;
+            cursor:
+                not-allowed;
+        }
+
+
+        .control-button.primary {
+
+            color:
+                white;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #287fe0,
+                    #0754a6
+                );
+
+            border-color:
+                rgba(76,160,255,.35);
+        }
+
+
+        /* =========================================================
+           MESSAGE
+        ========================================================= */
+
+        .message {
+
+            min-height:
+                44px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            padding:
+                10px 13px;
+
+            border-radius:
+                16px;
+
+            color:
+                #b8c4d8;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid rgba(255,255,255,.06);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            text-align:
+                center;
+
+            line-height:
+                1.4;
+        }
+
+
+        /* =========================================================
+           CAPTURE EFFECT
+        ========================================================= */
+
+        .capture-burst {
+
+            position:
+                fixed;
+
+            width:
+                20px;
+
+            height:
+                20px;
+
+            border-radius:
+                50%;
+
+            pointer-events:
+                none;
+
+            z-index:
+                9999;
+
+            animation:
+                burst .55s ease-out forwards;
+        }
+
+
+        .capture-burst::before,
+        .capture-burst::after {
+
+            content:
+                "✦";
+
+            position:
+                absolute;
+
+            left:
+                50%;
+
+            top:
+                50%;
+
+            color:
+                #ffd85a;
+
+            font-size:
+                22px;
+
+            transform:
+                translate(-50%,-50%);
+        }
+
+
+        .capture-burst::after {
+
+            color:
+                white;
+
+            font-size:
+                12px;
+
+            animation:
+                spark .55s ease-out forwards;
+        }
+
+
+        @keyframes burst {
+
+            0% {
+                opacity:
+                    1;
+                transform:
+                    translate(-50%,-50%) scale(.4);
+                box-shadow:
+                    0 0 0 0 rgba(255,214,74,.7);
+            }
+
+            100% {
+                opacity:
+                    0;
+                transform:
+                    translate(-50%,-50%) scale(3.5);
+                box-shadow:
+                    0 0 0 22px rgba(255,214,74,0);
+            }
+
+        }
+
+
+        @keyframes spark {
+
+            100% {
+                transform:
+                    translate(-50%,-50%)
+                    rotate(180deg)
+                    scale(2.4);
+                opacity:
+                    0;
+            }
+
+        }
+
+
+        /* =========================================================
+           THEME STORE
+        ========================================================= */
+
+        .theme-modal {
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            z-index:
+                10000;
+
+            display:
+                none;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            padding:
+                18px;
+
+            background:
+                rgba(0,0,0,.68);
+
+            backdrop-filter:
+                blur(10px);
+        }
+
+
+        .theme-modal.show {
+            display:
+                flex;
+        }
+
+
+        .theme-box {
+
+            width:
+                min(560px,100%);
+
+            max-height:
+                88vh;
+
+            overflow:
+                auto;
+
+            padding:
+                18px;
+
+            border-radius:
+                26px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #1a253a,
+                    #0b111f
+                );
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,.55);
+        }
+
+
+        .theme-header {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            margin-bottom:
+                14px;
+        }
+
+
+        .theme-header h2 {
+
+            margin:
+                0;
+
+            font-size:
+                17px;
+        }
+
+
+        .close-theme {
+
+            width:
+                36px;
+
+            height:
+                36px;
+
+            border:
+                0;
+
+            border-radius:
+                12px;
+
+            color:
+                white;
+
+            background:
+                rgba(255,255,255,.07);
+
+            cursor:
+                pointer;
+        }
+
+
+        .theme-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap:
+                10px;
+        }
+
+
+        @media (max-width: 430px) {
+
+            .theme-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+
+        .theme-option {
+
+            position:
+                relative;
+
+            padding:
+                14px;
+
+            min-height:
+                125px;
+
+            text-align:
+                left;
+
+            border:
+                1px solid rgba(255,255,255,.08);
+
+            border-radius:
+                18px;
+
+            color:
+                white;
+
+            background:
+                rgba(255,255,255,.035);
+
+            cursor:
+                pointer;
+        }
+
+
+        .theme-option.active {
+            border-color:
+                #5da7ff;
+            box-shadow:
+                0 0 0 1px #5da7ff;
+        }
+
+
+        .theme-preview {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                13px;
+
+            margin-bottom:
+                10px;
+        }
+
+
+        .preview-token {
+
+            width:
+                28px;
+
+            height:
+                36px;
+
+            position:
+                relative;
+
+            border-radius:
+                50% 50% 43% 43%;
+
+            background:
+                var(--preview);
+
+            box-shadow:
+                inset 3px 3px 4px rgba(255,255,255,.4),
+                inset -4px -4px 5px rgba(0,0,0,.25);
+        }
+
+
+        .preview-dice {
+
+            width:
+                34px;
+
+            height:
+                34px;
+
+            border-radius:
+                8px;
+
+            background:
+                #fff;
+
+            box-shadow:
+                inset -3px -3px 5px rgba(0,0,0,.15);
+        }
+
+
+        .theme-name {
+            font-size:
+                12px;
+            font-weight:
+                900;
+        }
+
+
+        .theme-description {
+
+            margin-top:
+                3px;
+
+            color:
+                #8592a8;
+
+            font-size:
+                9px;
+
+            line-height:
+                1.4;
+        }
+
+
+        .locked {
+
+            position:
+                absolute;
+
+            right:
+                11px;
+
+            top:
+                11px;
+
+            font-size:
+                12px;
+
+            opacity:
+                .75;
+        }
+
+
+        /* =========================================================
+           THEMES
+        ========================================================= */
+
+        body.theme-wood .token .pawn::before,
+        body.theme-wood .token .pawn::after {
+            background:
+                linear-gradient(
+                    90deg,
+                    #583a20,
+                    #b47a3c,
+                    #68431f
+                );
+        }
+
+
+        body.theme-wood .board-wrap {
+            background:
+                linear-gradient(
+                    145deg,
+                    #d7b27a,
+                    #80562d
+                );
+        }
+
+
+        body.theme-neon .token {
+            filter:
+                drop-shadow(0 0 7px var(--token-color))
+                drop-shadow(3px 5px 4px rgba(0,0,0,.3));
+        }
+
+
+        body.theme-neon .token .pawn::before,
+        body.theme-neon .token .pawn::after {
+            background:
+                var(--token-color);
+            box-shadow:
+                0 0 12px var(--token-color),
+                inset 2px 2px 5px rgba(255,255,255,.4);
+        }
+
+
+        body.theme-neon .dice-face {
+            background:
+                #101923;
+            border-color:
+                #53e5ff;
+        }
+
+
+        body.theme-neon .pip {
+            background:
+                #53e5ff;
+            box-shadow:
+                0 0 8px #53e5ff;
+        }
+
+
+        body.theme-candy .token .pawn::before,
+        body.theme-candy .token .pawn::after {
+            border-radius:
+                45% 45% 55% 55%;
+            background:
+                linear-gradient(
+                    145deg,
+                    #fff,
+                    var(--token-color) 38%,
+                    #b72f75
+                );
+        }
+
+
+        body.theme-pirate .token .pawn::before,
+        body.theme-pirate .token .pawn::after {
+            background:
+                linear-gradient(
+                    145deg,
+                    #e6b83c,
+                    #8b5815,
+                    #d49b28
+                );
+        }
+
+
+        body.theme-egypt .token .pawn::before,
+        body.theme-egypt .token .pawn::after {
+            background:
+                linear-gradient(
+                    145deg,
+                    #f0d58a,
+                    #b1843d,
+                    #6f4c1d
+                );
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 600px) {
+
+            .app {
+                padding:
+                    8px;
+            }
+
+
+            .topbar {
+                border-radius:
+                    18px;
+
+                padding:
+                    11px;
+            }
+
+
+            .brand-logo {
+                width:
+                    40px;
+
+                height:
+                    40px;
+
+                border-radius:
+                    13px;
+            }
+
+
+            .board-panel {
+                padding:
+                    8px;
+
+                border-radius:
+                    22px;
+            }
+
+
+            .board-wrap {
+                padding:
+                    5px;
+
+                border-radius:
+                    22px;
+            }
+
+
+            .board {
+                border-radius:
+                    18px;
+            }
+
+
+            .yard {
+                border-radius:
+                    18%;
+            }
+
+
+            .player-card {
+                padding:
+                    12px;
+            }
+
+
+            .dice-area {
+                padding:
+                    12px;
+            }
+
+        }
+
+
+        /* =========================================================
+           WINNER MODAL
+        ========================================================= */
+
+        .winner-modal {
+
+            position:
+                fixed;
+
+            inset:
+                0;
+
+            z-index:
+                11000;
+
+            display:
+                none;
+
+            place-items:
+                center;
+
+            padding:
+                18px;
+
+            background:
+                rgba(0,0,0,.75);
+
+            backdrop-filter:
+                blur(12px);
+        }
+
+
+        .winner-modal.show {
+            display:
+                grid;
+        }
+
+
+        .winner-box {
+
+            width:
+                min(400px,100%);
+
+            padding:
+                30px 22px;
+
+            text-align:
+                center;
+
+            border-radius:
+                30px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #1e2c46,
+                    #0b1220
+                );
+
+            border:
+                1px solid rgba(255,255,255,.1);
+
+            box-shadow:
+                0 35px 90px rgba(0,0,0,.55);
+
+            animation:
+                winnerIn .45s cubic-bezier(.2,1.3,.4,1);
+        }
+
+
+        @keyframes winnerIn {
+
+            from {
+                opacity:
+                    0;
+                transform:
+                    scale(.75)
+                    translateY(20px);
+            }
+
+            to {
+                opacity:
+                    1;
+                transform:
+                    scale(1)
+                    translateY(0);
+            }
+
+        }
+
+
+        .winner-icon {
+            font-size:
+                50px;
+        }
+
+
+        .winner-title {
+            margin:
+                10px 0 5px;
+            font-size:
+                24px;
+            font-weight:
+                1000;
+        }
+
+
+        .winner-sub {
+            color:
+                #8997ad;
+            font-size:
+                12px;
+        }
+
+
+        /* =========================================================
+           NO SELECT
+        ========================================================= */
+
+        .no-select {
+            user-select:
+                none;
+            -webkit-user-select:
+                none;
+        }
+
+    </style>
+
 </head>
 
-<body>
+
+<body class="theme-classic no-select">
 
 <div class="app">
 
-    <!-- HEADER -->
-    <header class="header">
+    <div class="container">
 
-        <div class="brand">
-            Ghopkhali Sports Arena
-            <span>Single Ludo Tournament</span>
-        </div>
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
 
-        <div class="live">
-            <i></i>
-            TOURNAMENT MATCH
-        </div>
+        <header class="topbar">
 
-    </header>
+            <div class="brand">
 
-
-    <!-- PLAYERS -->
-    <section class="stands">
-
-        <div
-            class="player red active"
-            id="playerRed"
-        >
-
-            <div class="player-top">
-
-                <div class="avatar">
-                    A
+                <div class="brand-logo">
+                    🎲
                 </div>
 
-                <div>
-                    <div class="player-name">
-                        Player A
+                <div class="brand-text">
+
+                    <h1 class="brand-title">
+                        Ghopkhali Sports Arena
+                    </h1>
+
+                    <div class="brand-sub">
+                        Premium Single Ludo • Tournament Mode
                     </div>
 
-                    <div class="player-status">
-                        Red • 4 Tokens
-                    </div>
                 </div>
 
             </div>
 
-            <div class="turn-badge">
-                TURN
+
+            <div class="live-badge">
+                <span class="live-dot"></span>
+                LIVE MATCH
             </div>
 
-        </div>
+        </header>
 
 
-        <div class="vs">
-            VS
-        </div>
+        <!-- =====================================================
+             GAME
+        ====================================================== -->
+
+        <main class="game-layout">
 
 
-        <div
-            class="player blue"
-            id="playerBlue"
-        >
+            <!-- =================================================
+                 BOARD
+            ================================================== -->
 
-            <div class="player-top">
+            <section class="board-panel">
 
-                <div class="avatar">
-                    B
-                </div>
+                <div class="board-head">
 
-                <div>
-                    <div class="player-name">
-                        Player B
+                    <div class="match-label">
+                        1 VS 1 • CLASSIC RULES
                     </div>
 
-                    <div class="player-status">
-                        Blue • 4 Tokens
+                    <div
+                        class="theme-label"
+                        id="currentThemeLabel"
+                    >
+                        Classic Theme
                     </div>
-                </div>
-
-            </div>
-
-            <div class="turn-badge">
-                TURN
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- GAME -->
-    <main class="game-card">
-
-        <div
-            class="board"
-            id="board"
-        >
-
-            <!-- 15 x 15 CELLS GENERATED BY JS -->
-
-
-            <!-- RED BASE -->
-            <div class="base red">
-
-                <div class="base-inner">
-
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
 
                 </div>
 
-            </div>
+
+                <div class="board-wrap">
+
+                    <div
+                        class="board"
+                        id="board"
+                    >
+
+                        <div
+                            class="grid"
+                            id="boardGrid"
+                        ></div>
 
 
-            <!-- GREEN BASE -->
-            <div class="base green">
+                        <!-- HOME YARDS -->
 
-                <div class="base-inner">
+                        <div class="yard yard-red">
 
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
+                            <div class="yard-inner">
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="red-0"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="red-1"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="red-2"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="red-3"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="yard yard-green">
+
+                            <div class="yard-inner">
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="green-0"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="green-1"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="green-2"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="green-3"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="yard yard-blue">
+
+                            <div class="yard-inner">
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="blue-0"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="blue-1"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="blue-2"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="blue-3"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="yard yard-yellow">
+
+                            <div class="yard-inner">
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="yellow-0"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="yellow-1"
+                                ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="yellow-2"
+                                    ></div>
+
+                                <div
+                                    class="yard-slot"
+                                    data-yard="yellow-3"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CENTER -->
+
+                        <div
+                            class="home-center"
+                            id="homeCenter"
+                        ></div>
+
+
+                        <!-- TOKENS -->
+
+                        <div
+                            class="token-layer"
+                            id="tokenLayer"
+                        ></div>
+
+                    </div>
 
                 </div>
 
-            </div>
+            </section>
 
 
-            <!-- BLUE BASE -->
-            <div class="base blue">
+            <!-- =================================================
+                 SIDE
+            ================================================== -->
 
-                <div class="base-inner">
-
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-
-                </div>
-
-            </div>
+            <aside class="side">
 
 
-            <!-- YELLOW BASE -->
-            <div class="base yellow">
-
-                <div class="base-inner">
-
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-                    <div class="base-slot"></div>
-
-                </div>
-
-            </div>
-
-
-            <!-- CENTER -->
-            <div class="center">
-
-                <div class="center-red"></div>
-                <div class="center-yellow"></div>
-
-            </div>
-
-        </div>
-
-
-        <!-- CONTROL -->
-        <section class="control">
-
-            <div class="turn-info">
-
-                <div class="turn-title">
-                    Current Turn
-                </div>
+                <!-- PLAYER RED -->
 
                 <div
-                    class="turn-player"
-                    id="turnPlayer"
+                    class="player-card red active"
+                    id="player-red"
                 >
-                    Player A
+
+                    <div class="player-top">
+
+                        <div class="player-info">
+
+                            <div class="player-avatar">
+                                A
+                            </div>
+
+                            <div>
+
+                                <div
+                                    class="player-name"
+                                    id="redName"
+                                >
+                                    Player A
+                                </div>
+
+                                <div class="player-role">
+                                    🔴 Red Player
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="turn-pill"
+                            id="redTurn"
+                        >
+                            YOUR TURN
+                        </div>
+
+                    </div>
+
+
+                    <div class="token-status">
+
+                        <div>
+
+                            <div class="status-label">
+                                Home Tokens
+                            </div>
+
+                            <div
+                                class="status-value"
+                                id="redStatus"
+                            >
+                                0 / 4
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="mini-tokens"
+                            id="redMiniTokens"
+                        ></div>
+
+                    </div>
+
                 </div>
+
+
+                <!-- PLAYER BLUE -->
 
                 <div
-                    class="turn-help"
-                    id="turnHelp"
+                    class="player-card blue"
+                    id="player-blue"
                 >
-                    Dice roll করুন
+
+                    <div class="player-top">
+
+                        <div class="player-info">
+
+                            <div class="player-avatar">
+                                B
+                            </div>
+
+                            <div>
+
+                                <div
+                                    class="player-name"
+                                    id="blueName"
+                                >
+                                    Player B
+                                </div>
+
+                                <div class="player-role">
+                                    🔵 Blue Player
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="turn-pill"
+                            id="blueTurn"
+                        >
+                            WAITING
+                        </div>
+
+                    </div>
+
+
+                    <div class="token-status">
+
+                        <div>
+
+                            <div class="status-label">
+                                Home Tokens
+                            </div>
+
+                            <div
+                                class="status-value"
+                                id="blueStatus"
+                            >
+                                0 / 4
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="mini-tokens"
+                            id="blueMiniTokens"
+                        ></div>
+
+                    </div>
+
                 </div>
 
-            </div>
 
-
-            <div class="dice-wrap">
+                <!-- TIMER -->
 
                 <div
-                    class="dice"
-                    id="dice"
+                    class="timer-card"
+                    id="timerCard"
                 >
-                    ⚄
+
+                    <div class="timer-head">
+
+                        <div class="timer-title">
+                            TURN TIMER
+                        </div>
+
+                        <div
+                            class="timer-number"
+                            id="timerNumber"
+                        >
+                            30s
+                        </div>
+
+                    </div>
+
+
+                    <div class="timer-track">
+
+                        <div
+                            class="timer-progress"
+                            id="timerProgress"
+                        ></div>
+
+                    </div>
+
                 </div>
 
-                <button
-                    class="roll-btn"
-                    id="rollBtn"
-                    type="button"
+
+                <!-- DICE -->
+
+                <div class="dice-area">
+
+                    <button
+                        class="dice-button"
+                        id="rollButton"
+                        type="button"
+                        aria-label="Roll Dice"
+                    >
+
+                        <div
+                            class="dice-cube"
+                            id="diceCube"
+                        >
+
+                            <div class="dice-face dice-front">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <div class="dice-face dice-back">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <div class="dice-face dice-right">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <div class="dice-face dice-left">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <div class="dice-face dice-top">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <div class="dice-face dice-bottom">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                        </div>
+
+                    </button>
+
+
+                    <div
+                        class="roll-text"
+                        id="rollText"
+                    >
+                        Roll the Dice
+                    </div>
+
+                    <div class="roll-hint">
+                        6 = Token বের হবে • Capture = Bonus Roll
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    class="message"
+                    id="message"
                 >
-                    ROLL DICE
-                </button>
-
-            </div>
-
-        </section>
+                    🔴 Player A-এর turn — Dice Roll করুন
+                </div>
 
 
-        <div
-            class="message"
-            id="message"
-        >
-            Player A-এর turn — Dice Roll করুন
-        </div>
+                <!-- CONTROLS -->
 
-    </main>
+                <div class="controls">
+
+                    <button
+                        class="control-button"
+                        id="themeButton"
+                        type="button"
+                    >
+                        🎨 Themes
+                    </button>
+
+                    <button
+                        class="control-button primary"
+                        id="restartButton"
+                        type="button"
+                    >
+                        ↻ Restart
+                    </button>
+
+                </div>
+
+
+                <!-- RULES -->
+
+                <div class="info-card">
+
+                    <div class="info-title">
+                        🎯 Match Rules
+                    </div>
+
+
+                    <div class="rule-row">
+
+                        <div class="rule-icon">
+                            6
+                        </div>
+
+                        <div>
+                            ৬ পেলে Base থেকে Guti বের করা যাবে এবং Extra Roll পাবেন।
+                        </div>
+
+                    </div>
+
+
+                    <div class="rule-row">
+
+                        <div class="rule-icon">
+                            ★
+                        </div>
+
+                        <div>
+                            Star/Safe Square-এ থাকা Guti Capture করা যাবে না।
+                        </div>
+
+                    </div>
+
+
+                    <div class="rule-row">
+
+                        <div class="rule-icon">
+                            ⚔
+                        </div>
+
+                        <div>
+                            Opponent-এর উপর ঠিকভাবে Landing করলে Capture হবে এবং Bonus Roll পাবেন।
+                        </div>
+
+                    </div>
+
+
+                    <div class="rule-row">
+
+                        <div class="rule-icon">
+                            3×
+                        </div>
+
+                        <div>
+                            পরপর ৩ বার ৬ হলে Turn সঙ্গে সঙ্গে শেষ হবে।
+                        </div>
+
+                    </div>
+
+
+                    <div class="rule-row">
+
+                        <div class="rule-icon">
+                            🏠
+                        </div>
+
+                        <div>
+                            Home-এ ঢুকতে Exact Number প্রয়োজন।
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </main>
+
+    </div>
 
 </div>
 
 
-<!-- RESULT -->
+<!-- ============================================================
+     THEME MODAL
+============================================================= -->
+
 <div
-    class="modal"
-    id="modal"
+    class="theme-modal"
+    id="themeModal"
 >
 
-    <div class="result">
+    <div class="theme-box">
 
-        <div class="trophy">
+        <div class="theme-header">
+
+            <h2>
+                🎨 Dice & Guti Themes
+            </h2>
+
+            <button
+                class="close-theme"
+                id="closeTheme"
+                type="button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="theme-grid">
+
+
+            <button
+                class="theme-option active"
+                data-theme="classic"
+                type="button"
+            >
+
+                <div class="theme-preview">
+
+                    <div
+                        class="preview-token"
+                        style="--preview:#ef3340"
+                    ></div>
+
+                    <div class="preview-dice"></div>
+
+                </div>
+
+                <div class="theme-name">
+                    Classic
+                </div>
+
+                <div class="theme-description">
+                    Traditional glossy Ludo pawn এবং white 3D dice.
+                </div>
+
+            </button>
+
+
+            <button
+                class="theme-option"
+                data-theme="wood"
+                type="button"
+            >
+
+                <span class="locked">
+                    🔒
+                </span>
+
+                <div class="theme-preview">
+
+                    <div
+                        class="preview-token"
+                        style="--preview:#9b6a34"
+                    ></div>
+
+                    <div
+                        class="preview-dice"
+                        style="background:#9b6a34"
+                    ></div>
+
+                </div>
+
+                <div class="theme-name">
+                    🌳 Wood / Nature
+                </div>
+
+                <div class="theme-description">
+                    Wooden carved token এবং rustic dice.
+                </div>
+
+            </button>
+
+
+            <button
+                class="theme-option"
+                data-theme="egypt"
+                type="button"
+            >
+
+                <span class="locked">
+                    🔒
+                </span>
+
+                <div class="theme-preview">
+
+                    <div
+                        class="preview-token"
+                        style="--preview:#c39a4d"
+                    ></div>
+
+                    <div
+                        class="preview-dice"
+                        style="background:#c9a55e"
+                    ></div>
+
+                </div>
+
+                <div class="theme-name">
+                    🏺 Egypt
+                </div>
+
+                <div class="theme-description">
+                    Ancient sandstone inspired visual style.
+                </div>
+
+            </button>
+
+
+            <button
+                class="theme-option"
+                data-theme="candy"
+                type="button"
+            >
+
+                <span class="locked">
+                    🔒
+                </span>
+
+                <div class="theme-preview">
+
+                    <div
+                        class="preview-token"
+                        style="--preview:#ed4b9b"
+                    ></div>
+
+                    <div
+                        class="preview-dice"
+                        style="background:#ffb3d7"
+                    ></div>
+
+                </div>
+
+                <div class="theme-name">
+                    🍬 Candy
+                </div>
+
+                <div class="theme-description">
+                    Sweet gumdrop style token এবং colorful dice.
+                </div>
+
+            </button>
+
+
+            <button
+                class="theme-option"
+                data-theme="neon"
+                type="button"
+            >
+
+                <span class="locked">
+                    🔒
+                </span>
+
+                <div class="theme-preview">
+
+                    <div
+                        class="preview-token"
+                        style="--preview:#39e6ff"
+                    ></div>
+
+                    <div
+                        class="preview-dice"
+                        style="background:#101923"
+                    ></div>
+
+                </div>
+
+                <div class="theme-name">
+                    🌈 Disco / Neon
+                </div>
+
+                <div class="theme-description">
+                    Glowing futuristic token এবং digital dice.
+                </div>
+
+            </button>
+
+
+            <button
+                class="theme-option"
+                data-theme="pirate"
+                type="button"
+            >
+
+                <span class="locked">
+                    🔒
+                </span>
+
+                <div class="theme-preview">
+
+                    <div
+                        class="preview-token"
+                        style="--preview:#d49b28"
+                    ></div>
+
+                    <div
+                        class="preview-dice"
+                        style="background:#8b5815"
+                    ></div>
+
+                </div>
+
+                <div class="theme-name">
+                    🏴‍☠️ Pirate
+                </div>
+
+                <div class="theme-description">
+                    Gold/coin inspired pirate theme.
+                </div>
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     WINNER MODAL
+============================================================= -->
+
+<div
+    class="winner-modal"
+    id="winnerModal"
+>
+
+    <div class="winner-box">
+
+        <div class="winner-icon">
             🏆
         </div>
 
-        <h2 id="winnerText">
+        <div
+            class="winner-title"
+            id="winnerTitle"
+        >
             Player A Wins!
-        </h2>
+        </div>
 
-        <p>
-            Tournament Match Completed
-        </p>
+        <div
+            class="winner-sub"
+            id="winnerSub"
+        >
+            All four tokens reached Home.
+        </div>
+
+        <br>
 
         <button
-            class="restart"
-            id="restartBtn"
+            class="control-button primary"
+            id="winnerRestart"
             type="button"
         >
-            PLAY AGAIN
+            Play Again
         </button>
 
     </div>
@@ -1073,130 +3780,153 @@ body{
 
 
 <script>
+
 "use strict";
 
-/* =====================================================
-   BOARD CONFIG
-===================================================== */
 
-const board =
-    document.getElementById("board");
+/* =========================================================
+   GAME CONFIGURATION
+========================================================= */
 
-const diceEl =
-    document.getElementById("dice");
+const CONFIG = {
 
-const rollBtn =
-    document.getElementById("rollBtn");
+    turnSeconds: 30,
 
-const message =
-    document.getElementById("message");
+    players: [
+        "red",
+        "blue"
+    ],
 
-const turnPlayer =
-    document.getElementById("turnPlayer");
+    colors: {
 
-const turnHelp =
-    document.getElementById("turnHelp");
+        red: "#ef3340",
 
-const playerRed =
-    document.getElementById("playerRed");
+        blue: "#2388f4",
 
-const playerBlue =
-    document.getElementById("playerBlue");
+        green: "#18b969",
 
-const modal =
-    document.getElementById("modal");
+        yellow: "#f3c52e"
 
-const winnerText =
-    document.getElementById("winnerText");
+    }
 
-const restartBtn =
-    document.getElementById("restartBtn");
+};
 
+
+/* =========================================================
+   BOARD GEOMETRY
+========================================================= */
 
 /*
-    Classic 15 x 15 Ludo outer path.
+    Standard 15 × 15 Ludo-style ring.
 
-    Index 0 = Red start
-    Index 26 = Blue start
+    52 main track cells.
 */
 
-const ring = [
+const RING = [
 
     [6,0],
     [6,1],
     [6,2],
     [6,3],
     [6,4],
+
     [5,6],
     [4,6],
     [3,6],
     [2,6],
     [1,6],
     [0,6],
+
     [0,7],
     [0,8],
+
     [1,8],
     [2,8],
     [3,8],
     [4,8],
     [5,8],
+
     [6,9],
     [6,10],
     [6,11],
     [6,12],
     [6,13],
     [6,14],
+
     [7,14],
+
     [8,14],
     [8,13],
     [8,12],
     [8,11],
     [8,10],
     [8,9],
+
     [9,8],
     [10,8],
     [11,8],
     [12,8],
     [13,8],
     [14,8],
+
     [14,7],
     [14,6],
+
     [13,6],
     [12,6],
     [11,6],
     [10,6],
     [9,6],
+
     [8,5],
     [8,4],
     [8,3],
     [8,2],
     [8,1],
     [8,0],
-    [7,0],
-    [6,0]
+
+    [7,0]
+
 ];
 
 
+const START_INDEX = {
+
+    red:
+        0,
+
+    green:
+        13,
+
+    blue:
+        26,
+
+    yellow:
+        39
+
+};
+
+
 /*
-    Remove duplicated closing point.
+    Each player has five home-column cells.
+
+    Progress model:
+
+    -1  = Base
+     0  = Start
+     1..51 = main ring
+     52..56 = home column
+     57 = Home / finished
 */
 
-ring.pop();
-
-
-/* =====================================================
-   HOME PATHS
-===================================================== */
-
-const homePaths = {
+const HOME_LANES = {
 
     red: [
         [7,1],
         [7,2],
         [7,3],
         [7,4],
-        [7,5],
-        [7,6]
+        [7,5]
     ],
 
     green: [
@@ -1204,8 +3934,7 @@ const homePaths = {
         [2,7],
         [3,7],
         [4,7],
-        [5,7],
-        [6,7]
+        [5,7]
     ],
 
     blue: [
@@ -1213,8 +3942,7 @@ const homePaths = {
         [7,12],
         [7,11],
         [7,10],
-        [7,9],
-        [7,8]
+        [7,9]
     ],
 
     yellow: [
@@ -1222,32 +3950,18 @@ const homePaths = {
         [12,7],
         [11,7],
         [10,7],
-        [9,7],
-        [8,7]
+        [9,7]
     ]
 
 };
 
 
-/* =====================================================
-   START INDEX
-===================================================== */
+/* =========================================================
+   SAFE SQUARES
+========================================================= */
 
-const startIndex = {
+const SAFE_INDEXES = new Set([
 
-    red:0,
-    green:13,
-    blue:26,
-    yellow:39
-
-};
-
-
-/* =====================================================
-   SAFE CELLS
-===================================================== */
-
-const safeIndexes = new Set([
     0,
     8,
     13,
@@ -1256,1141 +3970,956 @@ const safeIndexes = new Set([
     34,
     39,
     47
+
 ]);
 
 
-/* =====================================================
-   ACTIVE PLAYERS
-===================================================== */
+/* =========================================================
+   YARD POSITIONS
+========================================================= */
 
-const players = {
+const YARD_POSITIONS = {
 
-    red:{
-        name:"Player A",
-        color:"red",
-        tokens:[-1,-1,-1,-1]
-    },
+    red: [
 
-    blue:{
-        name:"Player B",
-        color:"blue",
-        tokens:[-1,-1,-1,-1]
-    }
+        [15,15],
+        [35,15],
+        [15,35],
+        [35,35]
 
-};
-
-
-/*
-    Progress:
-
-    -1 = Base
-     0-51 = Main track
-    52-57 = Home path
-    58 = Finished
-*/
-
-
-let currentPlayer = "red";
-let currentDice = null;
-let gameOver = false;
-
-
-/* =====================================================
-   CREATE GRID
-===================================================== */
-
-const cells = {};
-
-for(let r=0;r<15;r++){
-
-    for(let c=0;c<15;c++){
-
-        const cell =
-            document.createElement("div");
-
-        cell.className = "cell";
-
-        cell.dataset.row = r;
-        cell.dataset.col = c;
-
-        board.insertBefore(
-            cell,
-            board.firstElementChild
-        );
-
-        cells[`${r}-${c}`] = cell;
-    }
-}
-
-
-/* =====================================================
-   COLOR TRACK CELLS
-===================================================== */
-
-function paintCell(
-    r,
-    c,
-    className
-){
-
-    const cell =
-        cells[`${r}-${c}`];
-
-    if(cell){
-        cell.classList.add(className);
-    }
-}
-
-
-/* =====================================================
-   MAIN TRACK
-===================================================== */
-
-ring.forEach(
-    ([r,c], index)=>{
-
-        const cell =
-            cells[`${r}-${c}`];
-
-        if(!cell){
-            return;
-        }
-
-        if(index === startIndex.red){
-            cell.classList.add("start-red");
-        }
-
-        if(index === startIndex.green){
-            cell.classList.add("start-green");
-        }
-
-        if(index === startIndex.blue){
-            cell.classList.add("start-blue");
-        }
-
-        if(index === startIndex.yellow){
-            cell.classList.add("start-yellow");
-        }
-
-        if(safeIndexes.has(index)){
-            cell.classList.add("safe");
-        }
-
-    }
-);
-
-
-/* =====================================================
-   HOME PATH PAINT
-===================================================== */
-
-Object.entries(homePaths)
-.forEach(
-    ([color,path])=>{
-
-        path.forEach(
-            ([r,c])=>{
-
-                paintCell(
-                    r,
-                    c,
-                    `home-${color}`
-                );
-
-            }
-        );
-
-    }
-);
-
-
-/* =====================================================
-   TOKEN ELEMENTS
-===================================================== */
-
-const tokenElements = {
-
-    red:[],
-    blue:[]
-
-};
-
-
-for(
-    const color of ["red","blue"]
-){
-
-    for(let i=0;i<4;i++){
-
-        const token =
-            document.createElement("div");
-
-        token.className =
-            `token ${color}`;
-
-        token.dataset.color =
-            color;
-
-        token.dataset.index =
-            i;
-
-        token.addEventListener(
-            "click",
-            ()=>{
-                handleTokenClick(
-                    color,
-                    i
-                );
-            }
-        );
-
-        board.appendChild(token);
-
-        tokenElements[color].push(token);
-
-    }
-
-}
-
-
-/* =====================================================
-   BASE TOKEN POSITIONS
-===================================================== */
-
-const basePositions = {
-
-    red:[
-        [3.0,3.0],
-        [3.0,12.0],
-        [12.0,3.0],
-        [12.0,12.0]
     ],
 
-    blue:[
-        [88.0,88.0],
-        [88.0,97.0],
-        [97.0,88.0],
-        [97.0,97.0]
+    green: [
+
+        [65,15],
+        [85,15],
+        [65,35],
+        [85,35]
+
+    ],
+
+    blue: [
+
+        [65,65],
+        [85,65],
+        [65,85],
+        [85,85]
+
+    ],
+
+    yellow: [
+
+        [15,65],
+        [35,65],
+        [15,85],
+        [35,85]
+
     ]
 
 };
 
 
-/*
-    These are adjusted after first render.
-*/
+/* =========================================================
+   FINISH POSITIONS
+========================================================= */
 
-function setTokenPosition(
-    token,
+const FINISH_POSITIONS = {
+
+    red: [
+        [43,43],
+        [46,43],
+        [43,46],
+        [46,46]
+    ],
+
+    blue: [
+        [54,54],
+        [57,54],
+        [54,57],
+        [57,57]
+    ]
+
+};
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const board =
+    document.getElementById("board");
+
+const boardGrid =
+    document.getElementById("boardGrid");
+
+const tokenLayer =
+    document.getElementById("tokenLayer");
+
+const rollButton =
+    document.getElementById("rollButton");
+
+const diceCube =
+    document.getElementById("diceCube");
+
+const rollText =
+    document.getElementById("rollText");
+
+const message =
+    document.getElementById("message");
+
+const timerNumber =
+    document.getElementById("timerNumber");
+
+const timerProgress =
+    document.getElementById("timerProgress");
+
+const timerCard =
+    document.getElementById("timerCard");
+
+const themeButton =
+    document.getElementById("themeButton");
+
+const themeModal =
+    document.getElementById("themeModal");
+
+const closeTheme =
+    document.getElementById("closeTheme");
+
+const restartButton =
+    document.getElementById("restartButton");
+
+const winnerModal =
+    document.getElementById("winnerModal");
+
+const winnerTitle =
+    document.getElementById("winnerTitle");
+
+const winnerSub =
+    document.getElementById("winnerSub");
+
+const winnerRestart =
+    document.getElementById("winnerRestart");
+
+const currentThemeLabel =
+    document.getElementById("currentThemeLabel");
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let state;
+
+
+let timerInterval =
+    null;
+
+
+let diceRolling =
+    false;
+
+
+/* =========================================================
+   RESET STATE
+========================================================= */
+
+function createInitialState() {
+
+    return {
+
+        currentPlayer:
+            "red",
+
+        dice:
+            null,
+
+        consecutiveSixes:
+            0,
+
+        waitingForMove:
+            false,
+
+        winner:
+            null,
+
+        turnSeconds:
+            CONFIG.turnSeconds,
+
+        tokens: {
+
+            red: [
+
+                {
+                    id: "red-0",
+                    progress: -1
+                },
+
+                {
+                    id: "red-1",
+                    progress: -1
+                },
+
+                {
+                    id: "red-2",
+                    progress: -1
+                },
+
+                {
+                    id: "red-3",
+                    progress: -1
+                }
+
+            ],
+
+            blue: [
+
+                {
+                    id: "blue-0",
+                    progress: -1
+                },
+
+                {
+                    id: "blue-1",
+                    progress: -1
+                },
+
+                {
+                    id: "blue-2",
+                    progress: -1
+                },
+
+                {
+                    id: "blue-3",
+                    progress: -1
+                }
+
+            ]
+
+        }
+
+    };
+
+}
+
+
+state =
+    createInitialState();
+
+
+/* =========================================================
+   BUILD BOARD
+========================================================= */
+
+function buildBoard() {
+
+    boardGrid.innerHTML =
+        "";
+
+
+    const ringMap =
+        new Map();
+
+
+    RING.forEach(
+        ([row, col], index) => {
+
+            ringMap.set(
+                `${row}-${col}`,
+                index
+            );
+
+        }
+    );
+
+
+    for (
+        let row = 0;
+        row < 15;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < 15;
+            col++
+        ) {
+
+            const cell =
+                document.createElement("div");
+
+            cell.className =
+                "cell";
+
+
+            const key =
+                `${row}-${col}`;
+
+
+            if (
+                ringMap.has(key)
+            ) {
+
+                const index =
+                    ringMap.get(key);
+
+                cell.classList.add(
+                    "track"
+                );
+
+
+                if (
+                    SAFE_INDEXES.has(index)
+                ) {
+
+                    cell.classList.add(
+                        "safe"
+                    );
+
+                }
+
+
+                if (
+                    index === START_INDEX.red
+                ) {
+
+                    cell.classList.add(
+                        "start-red"
+                    );
+
+                }
+
+
+                if (
+                    index === START_INDEX.green
+                ) {
+
+                    cell.classList.add(
+                        "start-green"
+                    );
+
+                }
+
+
+                if (
+                    index === START_INDEX.blue
+                ) {
+
+                    cell.classList.add(
+                        "start-blue"
+                    );
+
+                }
+
+
+                if (
+                    index === START_INDEX.yellow
+                ) {
+
+                    cell.classList.add(
+                        "start-yellow"
+                    );
+
+                }
+
+            }
+
+
+            if (
+                isHomeLaneCell(
+                    row,
+                    col,
+                    "red"
+                )
+            ) {
+
+                cell.classList.add(
+                    "path-red"
+                );
+
+            }
+
+
+            if (
+                isHomeLaneCell(
+                    row,
+                    col,
+                    "green"
+                )
+            ) {
+
+                cell.classList.add(
+                    "path-green"
+                );
+
+            }
+
+
+            if (
+                isHomeLaneCell(
+                    row,
+                    col,
+                    "blue"
+                )
+            ) {
+
+                cell.classList.add(
+                    "path-blue"
+                );
+
+            }
+
+
+            if (
+                isHomeLaneCell(
+                    row,
+                    col,
+                    "yellow"
+                )
+            ) {
+
+                cell.classList.add(
+                    "path-yellow"
+                );
+
+            }
+
+
+            boardGrid.appendChild(
+                cell
+            );
+
+        }
+
+    }
+
+}
+
+
+function isHomeLaneCell(
     row,
-    col
-){
+    col,
+    color
+) {
 
-    token.style.left =
-        `${((col + .5)/15)*100}%`;
-
-    token.style.top =
-        `${((row + .5)/15)*100}%`;
-
-}
-
-
-/* =====================================================
-   BASE POSITION USING PERCENTAGE
-===================================================== */
-
-function setBasePosition(
-    token,
-    color,
-    index
-){
-
-    const positions =
-        basePositions[color];
-
-    const [x,y] =
-        positions[index];
-
-    token.style.left =
-        `${x}%`;
-
-    token.style.top =
-        `${y}%`;
+    return HOME_LANES[color]
+        .some(
+            ([r,c]) =>
+                r === row &&
+                c === col
+        );
 
 }
 
 
-/* =====================================================
-   GET TOKEN BOARD POSITION
-===================================================== */
+/* =========================================================
+   PLAYER RELATIVE POSITION
+========================================================= */
 
-function getTokenCoordinate(
+function getAbsoluteRingIndex(
     color,
     progress
-){
+) {
 
-    if(progress < 0){
+    if (
+        progress < 0 ||
+        progress > 51
+    ) {
+
         return null;
-    }
-
-
-    if(progress >= 0 && progress <= 51){
-
-        const start =
-            startIndex[color];
-
-        const index =
-            (start + progress) % 52;
-
-        return ring[index];
 
     }
 
 
-    if(progress >= 52 && progress <= 57){
+    return (
+        START_INDEX[color] +
+        progress
+    ) % 52;
 
-        return homePaths[color][
-            progress - 52
+}
+
+
+/* =========================================================
+   TOKEN POSITION
+========================================================= */
+
+function getTokenCoordinates(
+    color,
+    token
+) {
+
+    const progress =
+        token.progress;
+
+
+    if (
+        progress === -1
+    ) {
+
+        return YARD_POSITIONS[color][
+            Number(
+                token.id.split("-")[1]
+            )
         ];
 
     }
 
 
-    return null;
+    if (
+        progress >= 52 &&
+        progress <= 56
+    ) {
+
+        const lane =
+            HOME_LANES[color];
+
+        const position =
+            lane[progress - 52];
+
+        return [
+
+            ((position[1] + .5) / 15) * 100,
+
+            ((position[0] + .5) / 15) * 100
+
+        ];
+
+    }
+
+
+    if (
+        progress === 57
+    ) {
+
+        const index =
+            Number(
+                token.id.split("-")[1]
+            );
+
+        return FINISH_POSITIONS[color][
+            index
+        ];
+
+    }
+
+
+    const ringIndex =
+        getAbsoluteRingIndex(
+            color,
+            progress
+        );
+
+
+    if (
+        ringIndex === null
+    ) {
+
+        return [50,50];
+
+    }
+
+
+    const [
+        row,
+        col
+    ] =
+        RING[ringIndex];
+
+
+    return [
+
+        ((col + .5) / 15) * 100,
+
+        ((row + .5) / 15) * 100
+
+    ];
+
 }
 
 
-/* =====================================================
-   RENDER TOKEN
-===================================================== */
+/* =========================================================
+   RENDER TOKENS
+========================================================= */
 
-function renderTokens(){
+function renderTokens() {
 
-    for(
-        const color of ["red","blue"]
-    ){
+    tokenLayer.innerHTML =
+        "";
 
-        players[color]
-        .tokens
-        .forEach(
-            (progress,index)=>{
 
-                const token =
-                    tokenElements[color][index];
+    for (
+        const color of CONFIG.players
+    ) {
 
-                token.classList.remove(
-                    "selectable"
+        state.tokens[color]
+            .forEach(
+                token => {
+
+                    const tokenElement =
+                        createTokenElement(
+                            color,
+                            token
+                        );
+
+                    tokenLayer.appendChild(
+                        tokenElement
+                    );
+
+                }
+            );
+
+    }
+
+}
+
+
+function createTokenElement(
+    color,
+    token
+) {
+
+    const element =
+        document.createElement("div");
+
+
+    element.className =
+        `token ${color}`;
+
+
+    element.dataset.tokenId =
+        token.id;
+
+
+    const [
+        left,
+        top
+    ] =
+        getTokenCoordinates(
+            color,
+            token
+        );
+
+
+    element.style.left =
+        `${left}%`;
+
+    element.style.top =
+        `${top}%`;
+
+
+    const pawn =
+        document.createElement("div");
+
+    pawn.className =
+        "pawn";
+
+
+    const number =
+        document.createElement("span");
+
+    number.className =
+        "token-number";
+
+    number.textContent =
+        Number(
+            token.id.split("-")[1]
+        ) + 1;
+
+
+    pawn.appendChild(
+        number
+    );
+
+
+    element.appendChild(
+        pawn
+    );
+
+
+    if (
+        state.waitingForMove &&
+        color === state.currentPlayer &&
+        isValidMove(
+            color,
+            token,
+            state.dice
+        )
+    ) {
+
+        element.classList.add(
+            "selectable"
+        );
+
+
+        element.addEventListener(
+            "click",
+            () => {
+
+                moveToken(
+                    color,
+                    token.id
                 );
-
-                if(progress === -1){
-
-                    setBasePosition(
-                        token,
-                        color,
-                        index
-                    );
-
-                    return;
-                }
-
-
-                if(progress === 58){
-
-                    /*
-                        Finished tokens stay
-                        near the center.
-                    */
-
-                    const finish =
-                        color === "red"
-                        ? [7,7]
-                        : [7,7];
-
-                    setTokenPosition(
-                        token,
-                        finish[0],
-                        finish[1]
-                    );
-
-                    token.style.opacity =
-                        ".65";
-
-                    return;
-                }
-
-
-                token.style.opacity =
-                    "1";
-
-                const coord =
-                    getTokenCoordinate(
-                        color,
-                        progress
-                    );
-
-                if(coord){
-
-                    setTokenPosition(
-                        token,
-                        coord[0],
-                        coord[1]
-                    );
-
-                }
 
             }
         );
 
     }
 
+
+    return element;
+
 }
 
 
-/* =====================================================
-   GET ABSOLUTE POSITION
-===================================================== */
+/* =========================================================
+   VALID MOVE
+========================================================= */
 
-function absolutePosition(
+function isValidMove(
     color,
-    progress
-){
-
-    if(progress < 0){
-        return null;
-    }
-
-    if(progress >= 52){
-
-        const coord =
-            homePaths[color][
-                progress - 52
-            ];
-
-        return coord;
-    }
-
-    const index =
-        (
-            startIndex[color] +
-            progress
-        ) % 52;
-
-    return ring[index];
-}
-
-
-/* =====================================================
-   CHECK POSSIBLE MOVE
-===================================================== */
-
-function canMove(
-    color,
-    index,
+    token,
     dice
-){
+) {
 
-    const progress =
-        players[color].tokens[index];
+    if (
+        !dice ||
+        state.winner
+    ) {
 
-
-    /*
-        Finished token cannot move.
-    */
-
-    if(progress === 58){
         return false;
+
+    }
+
+
+    if (
+        token.progress === 57
+    ) {
+
+        return false;
+
     }
 
 
     /*
-        Base token requires 6.
+       Base token requires 6.
     */
 
-    if(progress === -1){
+    if (
+        token.progress === -1
+    ) {
 
         return dice === 6;
 
     }
 
 
-    /*
-        Cannot exceed finish.
-    */
-
-    return progress + dice <= 58;
-}
-
-
-/* =====================================================
-   GET POSSIBLE TOKENS
-===================================================== */
-
-function possibleTokens(
-    color,
-    dice
-){
-
-    const result = [];
-
-    players[color]
-    .tokens
-    .forEach(
-        (_,index)=>{
-
-            if(
-                canMove(
-                    color,
-                    index,
-                    dice
-                )
-            ){
-
-                result.push(index);
-
-            }
-
-        }
+    return (
+        token.progress + dice <= 57
     );
 
-    return result;
 }
 
 
-/* =====================================================
-   DICE FACE
-===================================================== */
+/* =========================================================
+   GET VALID TOKENS
+========================================================= */
 
-const diceFaces = [
-    "",
-    "⚀",
-    "⚁",
-    "⚂",
-    "⚃",
-    "⚄",
-    "⚅"
-];
+function getValidTokens(
+    color,
+    dice
+) {
+
+    return state.tokens[color]
+        .filter(
+            token =>
+                isValidMove(
+                    color,
+                    token,
+                    dice
+                )
+        );
+
+}
 
 
-/* =====================================================
+/* =========================================================
    ROLL DICE
-===================================================== */
+========================================================= */
 
-rollBtn.addEventListener(
+rollButton.addEventListener(
     "click",
     rollDice
 );
 
 
-function rollDice(){
+async function rollDice() {
 
-    if(gameOver){
+    if (
+        diceRolling ||
+        state.winner ||
+        state.waitingForMove
+    ) {
+
         return;
+
     }
 
-    if(currentDice !== null){
-        return;
-    }
 
+    diceRolling =
+        true;
 
-    rollBtn.disabled = true;
-
-    diceEl.classList.add(
-        "rolling"
-    );
-
-
-    let count = 0;
-
-    const animation =
-        setInterval(
-            ()=>{
-
-                const random =
-                    Math.floor(
-                        Math.random()*6
-                    ) + 1;
-
-                diceEl.textContent =
-                    diceFaces[random];
-
-                count++;
-
-                if(count >= 8){
-
-                    clearInterval(
-                        animation
-                    );
-
-                    const result =
-                        Math.floor(
-                            Math.random()*6
-                        ) + 1;
-
-                    finishRoll(
-                        result
-                    );
-
-                }
-
-            },
-            70
-        );
-
-}
-
-
-/* =====================================================
-   FINISH ROLL
-===================================================== */
-
-function finishRoll(
-    value
-){
-
-    currentDice =
-        value;
-
-    diceEl.textContent =
-        diceFaces[value];
-
-    diceEl.classList.remove(
-        "rolling"
-    );
+    rollButton.disabled =
+        true;
 
 
     const color =
-        currentPlayer;
+        state.currentPlayer;
 
-    const moves =
-        possibleTokens(
+
+    const value =
+        Math.floor(
+            Math.random() * 6
+        ) + 1;
+
+
+    state.dice =
+        value;
+
+
+    if (
+        value === 6
+    ) {
+
+        state.consecutiveSixes++;
+
+    } else {
+
+        state.consecutiveSixes =
+            0;
+
+    }
+
+
+    diceCube.parentElement
+        .classList.add(
+            "dice-rolling"
+        );
+
+
+    rollText.textContent =
+        "Rolling…";
+
+
+    await sleep(
+        850
+    );
+
+
+    diceCube.parentElement
+        .classList.remove(
+            "dice-rolling"
+        );
+
+
+    renderDice(
+        value
+    );
+
+
+    diceRolling =
+        false;
+
+
+    /*
+       Three consecutive sixes:
+       third roll forfeited.
+    */
+
+    if (
+        state.consecutiveSixes >= 3
+    ) {
+
+        showMessage(
+            "⚠️ পরপর ৩ বার ৬ হয়েছে। এই Turn বাতিল।"
+        );
+
+
+        state.dice =
+            null;
+
+        state.waitingForMove =
+            false;
+
+
+        await sleep(
+            900
+        );
+
+
+        switchTurn();
+
+        return;
+
+    }
+
+
+    const valid =
+        getValidTokens(
             color,
             value
         );
 
 
-    if(moves.length === 0){
+    if (
+        valid.length === 0
+    ) {
 
-        message.textContent =
-            `${players[color].name} — এই Dice-এ কোনো valid move নেই`;
-
-        turnHelp.textContent =
-            "Turn পরিবর্তন হচ্ছে...";
-
-        setTimeout(
-            ()=>{
-
-                if(value === 6){
-
-                    /*
-                        Classic rule:
-                        6 = extra turn,
-                        even if no move.
-                    */
-
-                    currentDice = null;
-
-                    rollBtn.disabled =
-                        false;
-
-                    turnHelp.textContent =
-                        "আবার Dice Roll করুন";
-
-                    message.textContent =
-                        `${players[color].name} — 6 পেয়েছেন, আবার Roll করুন`;
-
-                }else{
-
-                    changeTurn();
-
-                }
-
-            },
-            850
+        showMessage(
+            value === 6
+                ? "🎲 ৬ এসেছে, কিন্তু কোনো বৈধ Guti নেই।"
+                : `🎲 ${value} এসেছে — কোনো বৈধ Move নেই।`
         );
 
-        return;
-    }
 
+        await sleep(
+            700
+        );
 
-    message.textContent =
-        `${players[color].name} — একটি Token নির্বাচন করুন`;
-
-    turnHelp.textContent =
-        moves.length === 1
-        ? "Highlighted Token-এ চাপ দিন"
-        : "যে Token চালাতে চান সেটিতে চাপ দিন";
-
-
-    moves.forEach(
-        index=>{
-
-            tokenElements[color][index]
-            .classList.add(
-                "selectable"
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   TOKEN CLICK
-===================================================== */
-
-function handleTokenClick(
-    color,
-    index
-){
-
-    if(gameOver){
-        return;
-    }
-
-    if(color !== currentPlayer){
-        return;
-    }
-
-    if(currentDice === null){
-        return;
-    }
-
-    if(
-        !canMove(
-            color,
-            index,
-            currentDice
-        )
-    ){
-        return;
-    }
-
-
-    const dice =
-        currentDice;
-
-
-    tokenElements[color][index]
-    .classList.add(
-        "moving"
-    );
-
-
-    moveToken(
-        color,
-        index,
-        dice
-    );
-
-}
-
-
-/* =====================================================
-   MOVE TOKEN
-===================================================== */
-
-async function moveToken(
-    color,
-    index,
-    dice
-){
-
-    const token =
-        tokenElements[color][index];
-
-    token.classList.remove(
-        "selectable"
-    );
-
-
-    let progress =
-        players[color].tokens[index];
-
-
-    /*
-        Base -> Start
-    */
-
-    if(progress === -1){
-
-        players[color].tokens[index] =
-            0;
-
-        renderTokens();
-
-        await wait(260);
-
-    }else{
 
         /*
-            Animate each step
+           Six gives another roll even if no move.
         */
 
-        for(
-            let step=1;
-            step<=dice;
-            step++
-        ){
+        if (
+            value === 6
+        ) {
 
-            players[color].tokens[index] =
-                progress + step;
-
-            renderTokens();
-
-            token.classList.add(
-                "moving"
+            prepareExtraRoll(
+                "৬ এসেছে — আবার Dice Roll করুন।"
             );
 
-            await wait(145);
+        } else {
+
+            switchTurn();
 
         }
 
-    }
-
-
-    token.classList.remove(
-        "moving"
-    );
-
-
-    /*
-        Capture
-    */
-
-    const currentProgress =
-        players[color].tokens[index];
-
-
-    if(
-        currentProgress >= 0 &&
-        currentProgress <= 51
-    ){
-
-        captureOpponents(
-            color,
-            currentProgress
-        );
-
-    }
-
-
-    /*
-        Winner check
-    */
-
-    if(
-        checkWinner(color)
-    ){
-
-        gameOver = true;
-
-        showWinner(
-            color
-        );
-
-        return;
-    }
-
-
-    /*
-        6 = extra turn
-    */
-
-    currentDice = null;
-
-
-    if(dice === 6){
-
-        rollBtn.disabled =
-            false;
-
-        turnHelp.textContent =
-            "6 পেয়েছেন — আবার Roll করুন";
-
-        message.textContent =
-            `${players[color].name} — আবার আপনার turn`;
-
-        updatePlayerStand();
 
         return;
 
     }
 
 
-    changeTurn();
-
-}
-
-
-/* =====================================================
-   CAPTURE
-===================================================== */
-
-function captureOpponents(
-    color,
-    progress
-){
-
-    const coord =
-        absolutePosition(
-            color,
-            progress
-        );
-
-    if(!coord){
-        return;
-    }
-
-
-    /*
-        Safe cell cannot capture.
-    */
-
-    const globalIndex =
-        (
-            startIndex[color] +
-            progress
-        ) % 52;
-
-
-    if(
-        safeIndexes.has(
-            globalIndex
-        )
-    ){
-        return;
-    }
-
-
-    const opponent =
-        color === "red"
-        ? "blue"
-        : "red";
-
-
-    players[opponent]
-    .tokens
-    .forEach(
-        (opProgress,index)=>{
-
-            if(opProgress < 0){
-                return;
-            }
-
-            if(opProgress > 51){
-                return;
-            }
-
-
-            const opGlobal =
-                (
-                    startIndex[opponent] +
-                    opProgress
-                ) % 52;
-
-
-            if(
-                opGlobal === globalIndex
-            ){
-
-                players[opponent]
-                .tokens[index] =
-                    -1;
-
-
-                const token =
-                    tokenElements[
-                        opponent
-                    ][index];
-
-
-                token.classList.add(
-                    "capture"
-                );
-
-
-                setTimeout(
-                    ()=>{
-                        token.classList.remove(
-                            "capture"
-                        );
-                    },
-                    500
-                );
-
-
-                message.textContent =
-                    `${players[color].name} — Opponent Token কেটেছেন!`;
-
-
-                renderTokens();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   WINNER
-===================================================== */
-
-function checkWinner(
-    color
-){
-
-    return players[color]
-        .tokens
-        .every(
-            progress =>
-                progress === 58
-        );
-
-}
-
-
-/* =====================================================
-   CHANGE TURN
-===================================================== */
-
-function changeTurn(){
-
-    currentDice =
-        null;
-
-    currentPlayer =
-        currentPlayer === "red"
-        ? "blue"
-        : "red";
-
-
-    updatePlayerStand();
-
-
-    rollBtn.disabled =
-        false;
-
-
-    const name =
-        players[currentPlayer].name;
-
-
-    turnHelp.textContent =
-        "Dice roll করুন";
-
-
-    message.textContent =
-        `${name}-এর turn — Dice Roll করুন`;
-
-}
-
-
-/* =====================================================
-   UPDATE PLAYER STAND
-===================================================== */
-
-function updatePlayerStand(){
-
-    playerRed.classList.toggle(
-        "active",
-        currentPlayer === "red"
-    );
-
-    playerBlue.classList.toggle(
-        "active",
-        currentPlayer === "blue"
-    );
-
-
-    turnPlayer.textContent =
-        players[currentPlayer].name;
-
-}
-
-
-/* =====================================================
-   SHOW WINNER
-===================================================== */
-
-function showWinner(
-    color
-){
-
-    const name =
-        players[color].name;
-
-
-    winnerText.textContent =
-        `${name} Wins!`;
-
-
-    modal.classList.add(
-        "show"
-    );
-
-
-    rollBtn.disabled =
+    state.waitingForMove =
         true;
 
 
-    message.textContent =
-        `🏆 ${name} Tournament Match জিতেছেন`;
-
-}
+    rollText.textContent =
+        `🎲 ${value} — Guti নির্বাচন করুন`;
 
 
-/* =====================================================
-   RESTART
-===================================================== */
-
-restartBtn.addEventListener(
-    "click",
-    restartGame
-);
-
-
-function restartGame(){
-
-    players.red.tokens =
-        [-1,-1,-1,-1];
-
-    players.blue.tokens =
-        [-1,-1,-1,-1];
-
-
-    currentPlayer =
-        "red";
-
-    currentDice =
-        null;
-
-    gameOver =
-        false;
-
-
-    diceEl.textContent =
-        "⚄";
-
-
-    modal.classList.remove(
-        "show"
+    showMessage(
+        `${getPlayerName(color)}-এর ${value} এসেছে। Move করার জন্য Guti নির্বাচন করুন।`
     );
-
-
-    rollBtn.disabled =
-        false;
-
-
-    updatePlayerStand();
-
-    turnHelp.textContent =
-        "Dice roll করুন";
-
-    message.textContent =
-        "Player A-এর turn — Dice Roll করুন";
 
 
     renderTokens();
@@ -2398,11 +4927,1217 @@ function restartGame(){
 }
 
 
-/* =====================================================
-   WAIT
-===================================================== */
+/* =========================================================
+   DICE VISUAL
+========================================================= */
 
-function wait(ms){
+function renderDice(
+    value
+) {
+
+    const faces =
+        document.querySelectorAll(
+            ".dice-face"
+        );
+
+
+    faces.forEach(
+        face => {
+
+            face.innerHTML =
+                "";
+
+            const positions =
+                dicePositions[value];
+
+
+            positions.forEach(
+                index => {
+
+                    const pip =
+                        document.createElement(
+                            "span"
+                        );
+
+                    pip.className =
+                        "pip";
+
+
+                    face.appendChild(
+                        pip
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    /*
+       Front face represents result.
+    */
+
+    setFace(
+        faces[0],
+        value
+    );
+
+}
+
+
+const dicePositions = {
+
+    1: [4],
+
+    2: [0,8],
+
+    3: [0,4,8],
+
+    4: [0,2,6,8],
+
+    5: [0,2,4,6,8],
+
+    6: [0,2,3,5,6,8]
+
+};
+
+
+function setFace(
+    face,
+    value
+) {
+
+    face.innerHTML =
+        "";
+
+
+    const positions =
+        dicePositions[value];
+
+
+    for (
+        let i = 0;
+        i < 9;
+        i++
+    ) {
+
+        const pip =
+            document.createElement(
+                "span"
+            );
+
+
+        if (
+            positions.includes(i)
+        ) {
+
+            pip.className =
+                "pip";
+
+        }
+
+
+        face.appendChild(
+            pip
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   MOVE TOKEN
+========================================================= */
+
+async function moveToken(
+    color,
+    tokenId
+) {
+
+    if (
+        !state.waitingForMove ||
+        state.currentPlayer !== color ||
+        !state.dice
+    ) {
+
+        return;
+
+    }
+
+
+    const token =
+        state.tokens[color]
+            .find(
+                item =>
+                    item.id === tokenId
+            );
+
+
+    if (
+        !token ||
+        !isValidMove(
+            color,
+            token,
+            state.dice
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const dice =
+        state.dice;
+
+
+    state.waitingForMove =
+        false;
+
+
+    rollButton.disabled =
+        true;
+
+
+    /*
+       Base -> Start
+    */
+
+    if (
+        token.progress === -1 &&
+        dice === 6
+    ) {
+
+        token.progress =
+            0;
+
+    } else {
+
+        /*
+           Normal movement.
+        */
+
+        for (
+            let step = 0;
+            step < dice;
+            step++
+        ) {
+
+            token.progress++;
+
+            renderTokens();
+
+            await sleep(
+                110
+            );
+
+        }
+
+    }
+
+
+    /*
+       If token started from base,
+       animate onto Start.
+    */
+
+    renderTokens();
+
+
+    /*
+       Capture
+    */
+
+    const captured =
+        checkCapture(
+            color,
+            token
+        );
+
+
+    if (
+        captured
+    ) {
+
+        createCaptureEffect(
+            token
+        );
+
+    }
+
+
+    /*
+       Home
+    */
+
+    if (
+        token.progress === 57
+    ) {
+
+        showMessage(
+            `🏠 ${getPlayerName(color)} একটি Guti Home-এ পৌঁছেছে!`
+        );
+
+    } else if (
+        captured
+    ) {
+
+        showMessage(
+            `⚔️ Capture! ${getPlayerName(color)} Bonus Roll পেয়েছে।`
+        );
+
+    } else {
+
+        showMessage(
+            `${getPlayerName(color)} Guti move করেছে।`
+        );
+
+    }
+
+
+    updatePlayerStats();
+
+
+    /*
+       Winner check.
+    */
+
+    if (
+        checkWinner(color)
+    ) {
+
+        return;
+
+    }
+
+
+    const wasSix =
+        dice === 6;
+
+
+    state.dice =
+        null;
+
+
+    /*
+       Capture gives extra roll.
+    */
+
+    if (
+        captured
+    ) {
+
+        state.consecutiveSixes =
+            0;
+
+        prepareExtraRoll(
+            "⚔️ Capture-এর জন্য Bonus Roll!"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Six gives extra roll.
+    */
+
+    if (
+        wasSix
+    ) {
+
+        prepareExtraRoll(
+            "🎲 ৬ এসেছে — Extra Roll!"
+        );
+
+        return;
+
+    }
+
+
+    switchTurn();
+
+}
+
+
+/* =========================================================
+   CAPTURE
+========================================================= */
+
+function checkCapture(
+    color,
+    movedToken
+) {
+
+    const absolute =
+        getAbsoluteRingIndex(
+            color,
+            movedToken.progress
+        );
+
+
+    if (
+        absolute === null
+    ) {
+
+        return false;
+
+    }
+
+
+    /*
+       Safe square.
+    */
+
+    if (
+        SAFE_INDEXES.has(
+            absolute
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    let captured =
+        false;
+
+
+    for (
+        const opponent of CONFIG.players
+    ) {
+
+        if (
+            opponent === color
+        ) {
+
+            continue;
+
+        }
+
+
+        state.tokens[opponent]
+            .forEach(
+                token => {
+
+                    if (
+                        token.progress < 0 ||
+                        token.progress >= 52
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const opponentAbsolute =
+                        getAbsoluteRingIndex(
+                            opponent,
+                            token.progress
+                        );
+
+
+                    if (
+                        opponentAbsolute === absolute
+                    ) {
+
+                        token.progress =
+                            -1;
+
+                        captured =
+                            true;
+
+                    }
+
+                }
+            );
+
+    }
+
+
+    return captured;
+
+}
+
+
+/* =========================================================
+   EXTRA ROLL
+========================================================= */
+
+function prepareExtraRoll(
+    text
+) {
+
+    state.dice =
+        null;
+
+    state.waitingForMove =
+        false;
+
+
+    rollButton.disabled =
+        false;
+
+
+    rollText.textContent =
+        "Extra Roll";
+
+
+    showMessage(
+        text
+    );
+
+
+    resetTimer();
+
+}
+
+
+/* =========================================================
+   SWITCH TURN
+========================================================= */
+
+function switchTurn() {
+
+    state.dice =
+        null;
+
+    state.waitingForMove =
+        false;
+
+    state.consecutiveSixes =
+        0;
+
+
+    state.currentPlayer =
+        state.currentPlayer === "red"
+            ? "blue"
+            : "red";
+
+
+    rollButton.disabled =
+        false;
+
+
+    rollText.textContent =
+        "Roll the Dice";
+
+
+    updatePlayerCards();
+
+    renderTokens();
+
+    resetTimer();
+
+
+    showMessage(
+        `${getPlayerName(state.currentPlayer)}-এর turn — Dice Roll করুন`
+    );
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function resetTimer() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    state.turnSeconds =
+        CONFIG.turnSeconds;
+
+
+    updateTimer();
+
+
+    timerInterval =
+        setInterval(
+            timerTick,
+            1000
+        );
+
+}
+
+
+function timerTick() {
+
+    if (
+        state.winner
+    ) {
+
+        return;
+
+    }
+
+
+    state.turnSeconds--;
+
+    updateTimer();
+
+
+    if (
+        state.turnSeconds <= 0
+    ) {
+
+        clearInterval(
+            timerInterval
+        );
+
+
+        autoPlayTurn();
+
+    }
+
+}
+
+
+function updateTimer() {
+
+    const seconds =
+        Math.max(
+            0,
+            state.turnSeconds
+        );
+
+
+    timerNumber.textContent =
+        `${seconds}s`;
+
+
+    const percentage =
+        (
+            seconds /
+            CONFIG.turnSeconds
+        ) * 100;
+
+
+    timerProgress.style.width =
+        `${percentage}%`;
+
+
+    timerCard.classList.toggle(
+        "danger",
+        seconds <= 8
+    );
+
+}
+
+
+/* =========================================================
+   AUTO PLAY
+========================================================= */
+
+async function autoPlayTurn() {
+
+    if (
+        state.winner ||
+        diceRolling
+    ) {
+
+        return;
+
+    }
+
+
+    showMessage(
+        `⏱️ সময় শেষ — Auto-Play চালু হয়েছে।`
+    );
+
+
+    /*
+       If waiting for move, automatically
+       choose a valid token.
+    */
+
+    if (
+        state.waitingForMove &&
+        state.dice
+    ) {
+
+        const valid =
+            getValidTokens(
+                state.currentPlayer,
+                state.dice
+            );
+
+
+        if (
+            valid.length
+        ) {
+
+            /*
+               Prefer home-progress token.
+            */
+
+            valid.sort(
+                (a,b) =>
+                    b.progress -
+                    a.progress
+            );
+
+
+            await sleep(
+                450
+            );
+
+
+            moveToken(
+                state.currentPlayer,
+                valid[0].id
+            );
+
+
+            return;
+
+        }
+
+    }
+
+
+    /*
+       Otherwise automatically roll.
+    */
+
+    await sleep(
+        500
+    );
+
+
+    rollDice();
+
+}
+
+
+/* =========================================================
+   WINNER
+========================================================= */
+
+function checkWinner(
+    color
+) {
+
+    const finished =
+        state.tokens[color]
+            .filter(
+                token =>
+                    token.progress === 57
+            )
+            .length;
+
+
+    if (
+        finished !== 4
+    ) {
+
+        return false;
+
+    }
+
+
+    state.winner =
+        color;
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    rollButton.disabled =
+        true;
+
+
+    winnerTitle.textContent =
+        `${getPlayerName(color)} Wins!`;
+
+
+    winnerSub.textContent =
+        "🏆 সব ৪টি Guti Home-এ পৌঁছে গেছে।";
+
+
+    winnerModal.classList.add(
+        "show"
+    );
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   PLAYER UI
+========================================================= */
+
+function updatePlayerCards() {
+
+    CONFIG.players.forEach(
+        color => {
+
+            const card =
+                document.getElementById(
+                    `player-${color}`
+                );
+
+
+            const turn =
+                document.getElementById(
+                    `${color}Turn`
+                );
+
+
+            const active =
+                state.currentPlayer === color;
+
+
+            card.classList.toggle(
+                "active",
+                active
+            );
+
+
+            turn.textContent =
+                active
+                    ? "YOUR TURN"
+                    : "WAITING";
+
+        }
+    );
+
+}
+
+
+function updatePlayerStats() {
+
+    CONFIG.players.forEach(
+        color => {
+
+            const finished =
+                state.tokens[color]
+                    .filter(
+                        token =>
+                            token.progress === 57
+                    )
+                    .length;
+
+
+            document.getElementById(
+                `${color}Status`
+            ).textContent =
+                `${finished} / 4`;
+
+
+            const mini =
+                document.getElementById(
+                    `${color}MiniTokens`
+                );
+
+
+            mini.innerHTML =
+                "";
+
+
+            state.tokens[color]
+                .forEach(
+                    token => {
+
+                        const item =
+                            document.createElement(
+                                "span"
+                            );
+
+
+                        item.className =
+                            "mini-token";
+
+
+                        if (
+                            token.progress === 57
+                        ) {
+
+                            item.classList.add(
+                                "home"
+                            );
+
+                        }
+
+
+                        mini.appendChild(
+                            item
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PLAYER NAME
+========================================================= */
+
+function getPlayerName(
+    color
+) {
+
+    return color === "red"
+        ? document.getElementById(
+            "redName"
+        ).textContent
+        : document.getElementById(
+            "blueName"
+        ).textContent;
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function showMessage(
+    text
+) {
+
+    message.textContent =
+        text;
+
+}
+
+
+/* =========================================================
+   CAPTURE EFFECT
+========================================================= */
+
+function createCaptureEffect(
+    token
+) {
+
+    const [
+        left,
+        top
+    ] =
+        getTokenCoordinates(
+            state.currentPlayer,
+            token
+        );
+
+
+    const rect =
+        board.getBoundingClientRect();
+
+
+    const x =
+        rect.left +
+        (
+            left /
+            100
+        ) *
+        rect.width;
+
+
+    const y =
+        rect.top +
+        (
+            top /
+            100
+        ) *
+        rect.height;
+
+
+    const burst =
+        document.createElement(
+            "div"
+        );
+
+
+    burst.className =
+        "capture-burst";
+
+
+    burst.style.left =
+        `${x}px`;
+
+    burst.style.top =
+        `${y}px`;
+
+
+    document.body.appendChild(
+        burst
+    );
+
+
+    setTimeout(
+        () => {
+
+            burst.remove();
+
+        },
+        650
+    );
+
+}
+
+
+/* =========================================================
+   THEMES
+========================================================= */
+
+const THEMES = {
+
+    classic: {
+        name:
+            "Classic Theme"
+    },
+
+    wood: {
+        name:
+            "Wood / Nature"
+    },
+
+    egypt: {
+        name:
+            "Egypt Theme"
+    },
+
+    candy: {
+        name:
+            "Candy Theme"
+    },
+
+    neon: {
+        name:
+            "Disco / Neon"
+    },
+
+    pirate: {
+        name:
+            "Pirate Theme"
+    }
+
+};
+
+
+let currentTheme =
+    "classic";
+
+
+function applyTheme(
+    theme
+) {
+
+    if (
+        !THEMES[theme]
+    ) {
+
+        return;
+
+    }
+
+
+    currentTheme =
+        theme;
+
+
+    document.body.className =
+        `theme-${theme} no-select`;
+
+
+    currentThemeLabel.textContent =
+        THEMES[theme].name;
+
+
+    document
+        .querySelectorAll(
+            ".theme-option"
+        )
+        .forEach(
+            option => {
+
+                option.classList.toggle(
+                    "active",
+                    option.dataset.theme === theme
+                );
+
+            }
+        );
+
+}
+
+
+themeButton.addEventListener(
+    "click",
+    () => {
+
+        themeModal.classList.add(
+            "show"
+        );
+
+    }
+);
+
+
+closeTheme.addEventListener(
+    "click",
+    () => {
+
+        themeModal.classList.remove(
+            "show"
+        );
+
+    }
+);
+
+
+themeModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target === themeModal
+        ) {
+
+            themeModal.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+document
+    .querySelectorAll(
+        ".theme-option"
+    )
+    .forEach(
+        option => {
+
+            option.addEventListener(
+                "click",
+                () => {
+
+                    const theme =
+                        option.dataset.theme;
+
+
+                    /*
+                       Classic is available.
+                       Other themes are prepared
+                       for future store/unlock system.
+                    */
+
+                    if (
+                        theme !== "classic"
+                    ) {
+
+                        showMessage(
+                            "🔒 এই Theme এখনো Locked — Theme Store থেকে Unlock করা যাবে।"
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    applyTheme(
+                        theme
+                    );
+
+
+                    themeModal.classList.remove(
+                        "show"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   RESTART
+========================================================= */
+
+function restartGame() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    state =
+        createInitialState();
+
+
+    winnerModal.classList.remove(
+        "show"
+    );
+
+
+    renderDice(
+        1
+    );
+
+
+    renderTokens();
+
+    updatePlayerCards();
+
+    updatePlayerStats();
+
+    resetTimer();
+
+
+    rollButton.disabled =
+        false;
+
+
+    rollText.textContent =
+        "Roll the Dice";
+
+
+    showMessage(
+        "🔴 Player A-এর turn — Dice Roll করুন"
+    );
+
+}
+
+
+restartButton.addEventListener(
+    "click",
+    restartGame
+);
+
+
+winnerRestart.addEventListener(
+    "click",
+    restartGame
+);
+
+
+/* =========================================================
+   UTILITY
+========================================================= */
+
+function sleep(
+    ms
+) {
 
     return new Promise(
         resolve =>
@@ -2415,15 +6150,53 @@ function wait(ms){
 }
 
 
-/* =====================================================
-   INITIAL RENDER
-===================================================== */
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+buildBoard();
+
+renderDice(
+    1
+);
 
 renderTokens();
 
-updatePlayerStand();
+updatePlayerCards();
+
+updatePlayerStats();
+
+resetTimer();
+
+applyTheme(
+    "classic"
+);
+
+
+/* =========================================================
+   PREVENT ACCIDENTAL PAGE ZOOM / LONG PRESS
+========================================================= */
+
+document.addEventListener(
+    "contextmenu",
+    event => {
+
+        if (
+            event.target.closest(
+                ".token,.dice-button"
+            )
+        ) {
+
+            event.preventDefault();
+
+        }
+
+    }
+);
+
 
 </script>
 
 </body>
+
 </html>
