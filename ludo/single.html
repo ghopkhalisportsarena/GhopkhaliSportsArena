@@ -17,16 +17,16 @@
 
     <meta
         name="description"
-        content="Ghopkhali Sports Arena Single Ludo"
+        content="Ghopkhali Sports Arena Online Ludo Tournament"
     >
 
     <title>
-        Single Ludo | Ghopkhali Sports Arena
+        Online Ludo | Ghopkhali Sports Arena
     </title>
 
 
     <!-- =================================================
-         LUDO CSS
+         LUDO BOARD CSS
     ================================================== -->
 
     <link
@@ -43,7 +43,7 @@
 
         /* =================================================
            ROOT
-        ================================================= */
+        ================================================== */
 
         :root {
 
@@ -84,28 +84,46 @@
 
 
         /* =================================================
-           BODY
-        ================================================= */
+           RESET
+        ================================================== */
+
+        *,
+        *::before,
+        *::after {
+
+            box-sizing:
+                border-box;
+
+        }
+
 
         html {
 
-            margin: 0;
+            margin:
+                0;
 
-            padding: 0;
+            padding:
+                0;
 
             background:
                 var(--bg);
+
+            -webkit-text-size-adjust:
+                100%;
 
         }
 
 
         body {
 
-            margin: 0;
+            margin:
+                0;
 
-            padding: 0;
+            padding:
+                0;
 
-            min-height: 100vh;
+            min-height:
+                100vh;
 
             font-family:
                 -apple-system,
@@ -129,48 +147,70 @@
         }
 
 
+        button {
+
+            font:
+                inherit;
+
+        }
+
+
         /* =================================================
            PAGE
-        ================================================= */
+        ================================================== */
 
         .ludo-page {
 
-            width: 100%;
+            width:
+                100%;
 
-            min-height: 100vh;
+            min-height:
+                100vh;
 
             padding:
-                20px 12px 35px;
+                18px 10px 30px;
 
         }
 
 
         /* =================================================
            HEADER
-        ================================================= */
+        ================================================== */
 
         .ludo-header {
 
-            width: 100%;
+            width:
+                100%;
 
-            max-width: 900px;
+            max-width:
+                900px;
 
             margin:
-                0 auto 15px;
+                0 auto 14px;
 
-            text-align: center;
+            text-align:
+                center;
 
         }
 
 
         .brand {
 
-            margin: 0;
+            margin:
+                0;
 
             font-size:
-                clamp(20px, 5vw, 30px);
+                clamp(
+                    20px,
+                    5vw,
+                    30px
+                );
 
-            font-weight: 800;
+            line-height:
+                1.2;
+
+            font-weight:
+                850;
 
             letter-spacing:
                 0.5px;
@@ -195,34 +235,91 @@
         .game-title {
 
             margin:
-                12px 0 0;
+                11px 0 0;
 
             font-size:
-                clamp(17px, 4vw, 22px);
+                clamp(
+                    17px,
+                    4vw,
+                    22px
+                );
 
-            font-weight: 700;
+            font-weight:
+                750;
+
+        }
+
+
+        .game-mode {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            margin-top:
+                7px;
+
+            padding:
+                5px 10px;
+
+            border:
+                1px solid
+                rgba(
+                    251,
+                    192,
+                    45,
+                    0.22
+                );
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(
+                    251,
+                    192,
+                    45,
+                    0.08
+                );
+
+            color:
+                #fde68a;
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
 
         }
 
 
         /* =================================================
            GAME CONTAINER
-        ================================================= */
+        ================================================== */
 
         .game-container {
 
-            width: 100%;
+            width:
+                100%;
 
-            max-width: 900px;
+            max-width:
+                900px;
 
-            margin: 0 auto;
+            margin:
+                0 auto;
 
         }
 
 
         /* =================================================
-           PLAYER PANELS
-        ================================================= */
+           PLAYERS
+        ================================================== */
 
         .players {
 
@@ -233,20 +330,24 @@
                 1fr 1fr;
 
             gap:
-                10px;
+                9px;
 
             margin-bottom:
-                12px;
+                11px;
 
         }
 
 
         .player-card {
 
-            position: relative;
+            position:
+                relative;
+
+            min-width:
+                0;
 
             padding:
-                12px;
+                11px;
 
             border:
                 1px solid
@@ -256,13 +357,26 @@
                 15px;
 
             background:
-                rgba(16, 24, 39, 0.92);
+                rgba(
+                    16,
+                    24,
+                    39,
+                    0.94
+                );
 
             box-shadow:
                 0 8px 25px
-                rgba(0, 0, 0, 0.18);
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.18
+                );
 
             transition:
+                border-color
+                0.2s ease,
+                box-shadow
                 0.2s ease;
 
         }
@@ -275,9 +389,19 @@
 
             box-shadow:
                 0 0 0 1px
-                rgba(251, 192, 45, 0.18),
+                rgba(
+                    251,
+                    192,
+                    45,
+                    0.18
+                ),
                 0 8px 28px
-                rgba(0, 0, 0, 0.25);
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.25
+                );
 
         }
 
@@ -310,11 +434,14 @@
             gap:
                 8px;
 
+            min-width:
+                0;
+
             font-size:
                 14px;
 
             font-weight:
-                700;
+                750;
 
         }
 
@@ -327,11 +454,11 @@
             height:
                 11px;
 
-            border-radius:
-                50%;
-
             flex:
                 0 0 auto;
+
+            border-radius:
+                50%;
 
         }
 
@@ -341,6 +468,15 @@
             background:
                 var(--red);
 
+            box-shadow:
+                0 0 8px
+                rgba(
+                    229,
+                    57,
+                    53,
+                    0.4
+                );
+
         }
 
 
@@ -348,6 +484,15 @@
 
             background:
                 var(--blue);
+
+            box-shadow:
+                0 0 8px
+                rgba(
+                    30,
+                    136,
+                    229,
+                    0.4
+                );
 
         }
 
@@ -358,7 +503,10 @@
                 var(--muted);
 
             font-size:
-                11px;
+                10px;
+
+            white-space:
+                nowrap;
 
         }
 
@@ -377,37 +525,72 @@
         }
 
 
-        /* =================================================
-           BOARD WRAPPER
-        ================================================= */
+        .token-count strong {
 
-        .board-section {
+            color:
+                var(--text);
 
-            padding:
-                8px;
-
-            border:
-                1px solid
-                rgba(148, 163, 184, 0.14);
-
-            border-radius:
-                20px;
-
-            background:
-                rgba(15, 23, 42, 0.78);
-
-            box-shadow:
-                0 18px 50px
-                rgba(0, 0, 0, 0.28);
+            font-weight:
+                800;
 
         }
 
 
         /* =================================================
-           BOARD CONTAINER OVERRIDE
-        ================================================= */
+           BOARD SECTION
+        ================================================== */
+
+        .board-section {
+
+            width:
+                100%;
+
+            padding:
+                7px;
+
+            border:
+                1px solid
+                rgba(
+                    148,
+                    163,
+                    184,
+                    0.14
+                );
+
+            border-radius:
+                20px;
+
+            background:
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.82
+                );
+
+            box-shadow:
+                0 18px 50px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.28
+                );
+
+            overflow:
+                hidden;
+
+        }
+
+
+        /* =================================================
+           BOARD MOUNT
+        ================================================== */
 
         #ludo-board {
+
+            width:
+                100%;
 
             max-width:
                 650px;
@@ -422,86 +605,10 @@
 
 
         /* =================================================
-           DICE AREA
-        ================================================= */
+           BOARD LOADING
+        ================================================== */
 
-        .control-panel {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1fr auto 1fr;
-
-            align-items:
-                center;
-
-            gap:
-                12px;
-
-            margin-top:
-                15px;
-
-            padding:
-                13px;
-
-            border:
-                1px solid
-                var(--line);
-
-            border-radius:
-                17px;
-
-            background:
-                rgba(16, 24, 39, 0.95);
-
-        }
-
-
-        .turn-info {
-
-            min-width:
-                0;
-
-        }
-
-
-        .turn-label {
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-
-        }
-
-
-        .turn-player {
-
-            margin-top:
-                3px;
-
-            font-size:
-                15px;
-
-            font-weight:
-                800;
-
-        }
-
-
-        /* =================================================
-           DICE
-        ================================================= */
-
-        .dice {
-
-            width:
-                60px;
-
-            height:
-                60px;
+        .board-loading {
 
             display:
                 flex;
@@ -512,113 +619,77 @@
             justify-content:
                 center;
 
-            border:
-                1px solid
-                #475569;
-
-            border-radius:
-                15px;
-
-            background:
-                #ffffff;
+            min-height:
+                80px;
 
             color:
-                #111827;
+                var(--muted);
 
             font-size:
-                30px;
-
-            font-weight:
-                900;
-
-            box-shadow:
-                0 7px 20px
-                rgba(0, 0, 0, 0.3);
-
-        }
-
-
-        .dice.rolling {
-
-            animation:
-                diceRoll
-                0.5s
-                ease;
-
-        }
-
-
-        @keyframes diceRoll {
-
-            0% {
-
-                transform:
-                    rotate(0deg)
-                    scale(1);
-
-            }
-
-            25% {
-
-                transform:
-                    rotate(-12deg)
-                    scale(1.08);
-
-            }
-
-            50% {
-
-                transform:
-                    rotate(12deg)
-                    scale(1.12);
-
-            }
-
-            75% {
-
-                transform:
-                    rotate(-8deg)
-                    scale(1.06);
-
-            }
-
-            100% {
-
-                transform:
-                    rotate(0deg)
-                    scale(1);
-
-            }
+                12px;
 
         }
 
 
         /* =================================================
-           DICE BUTTON
-        ================================================= */
+           GAME INFORMATION
+        ================================================== */
 
-        .roll-button {
+        .game-info {
 
-            min-width:
-                105px;
+            display:
+                grid;
 
-            min-height:
-                46px;
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                9px;
+
+            margin-top:
+                11px;
+
+        }
+
+
+        .info-card {
 
             padding:
-                0 15px;
+                11px 12px;
 
             border:
-                0;
+                1px solid
+                var(--line);
 
             border-radius:
-                12px;
+                14px;
 
             background:
-                var(--accent);
+                rgba(
+                    16,
+                    24,
+                    39,
+                    0.94
+                );
+
+        }
+
+
+        .info-label {
 
             color:
-                #111827;
+                var(--muted);
+
+            font-size:
+                10px;
+
+        }
+
+
+        .info-value {
+
+            margin-top:
+                4px;
 
             font-size:
                 14px;
@@ -626,40 +697,14 @@
             font-weight:
                 800;
 
-            cursor:
-                pointer;
-
-            transition:
-                transform 0.15s ease,
-                opacity 0.15s ease;
-
-        }
-
-
-        .roll-button:active {
-
-            transform:
-                scale(0.96);
-
-        }
-
-
-        .roll-button:disabled {
-
-            opacity:
-                0.45;
-
-            cursor:
-                not-allowed;
-
         }
 
 
         /* =================================================
-           MESSAGE
-        ================================================= */
+           BOARD STATUS
+        ================================================== */
 
-        .game-message {
+        .board-status {
 
             margin-top:
                 10px;
@@ -667,11 +712,20 @@
             padding:
                 11px 13px;
 
+            border:
+                1px solid
+                var(--line);
+
             border-radius:
-                12px;
+                13px;
 
             background:
-                rgba(30, 41, 59, 0.72);
+                rgba(
+                    30,
+                    41,
+                    59,
+                    0.72
+                );
 
             color:
                 #cbd5e1;
@@ -690,15 +744,15 @@
 
         /* =================================================
            RULES
-        ================================================= */
+        ================================================== */
 
         .rules {
 
             margin-top:
-                15px;
+                14px;
 
             padding:
-                15px;
+                14px;
 
             border:
                 1px solid
@@ -708,7 +762,12 @@
                 16px;
 
             background:
-                rgba(16, 24, 39, 0.88);
+                rgba(
+                    16,
+                    24,
+                    39,
+                    0.88
+                );
 
         }
 
@@ -716,7 +775,7 @@
         .rules-title {
 
             margin:
-                0 0 10px;
+                0 0 9px;
 
             font-size:
                 14px;
@@ -747,14 +806,22 @@
         }
 
 
+        .rules-list li + li {
+
+            margin-top:
+                2px;
+
+        }
+
+
         /* =================================================
            FOOTER
-        ================================================= */
+        ================================================== */
 
         .ludo-footer {
 
             margin:
-                20px auto 0;
+                19px auto 0;
 
             text-align:
                 center;
@@ -769,15 +836,15 @@
 
 
         /* =================================================
-           RESPONSIVE
-        ================================================= */
+           SMALL MOBILE
+        ================================================== */
 
         @media (max-width: 600px) {
 
             .ludo-page {
 
                 padding:
-                    12px 8px 25px;
+                    12px 7px 25px;
 
             }
 
@@ -793,7 +860,7 @@
             .player-card {
 
                 padding:
-                    10px;
+                    9px;
 
                 border-radius:
                     13px;
@@ -801,10 +868,26 @@
             }
 
 
+            .player-name {
+
+                font-size:
+                    13px;
+
+            }
+
+
+            .player-status {
+
+                font-size:
+                    9px;
+
+            }
+
+
             .board-section {
 
                 padding:
-                    5px;
+                    4px;
 
                 border-radius:
                     16px;
@@ -812,70 +895,90 @@
             }
 
 
-            .control-panel {
-
-                grid-template-columns:
-                    1fr
-                    auto
-                    1fr;
+            .game-info {
 
                 gap:
                     7px;
+
+            }
+
+
+            .info-card {
 
                 padding:
                     10px;
 
             }
 
+        }
 
-            .dice {
 
-                width:
-                    54px;
+        /* =================================================
+           VERY SMALL MOBILE
+        ================================================== */
 
-                height:
-                    54px;
+        @media (max-width: 360px) {
 
-                font-size:
-                    27px;
+            .ludo-page {
+
+                padding-left:
+                    5px;
+
+                padding-right:
+                    5px;
 
             }
 
 
-            .roll-button {
+            .players {
 
-                min-width:
-                    90px;
+                gap:
+                    5px;
+
+            }
+
+
+            .player-card {
+
+                padding:
+                    8px;
+
+            }
+
+
+            .player-name {
 
                 font-size:
                     12px;
 
             }
 
-        }
 
+            .player-status {
 
-        @media (max-width: 360px) {
-
-            .control-panel {
-
-                grid-template-columns:
-                    1fr 54px 1fr;
+                font-size:
+                    8px;
 
             }
 
 
-            .roll-button {
+            .token-count {
 
-                min-width:
-                    78px;
+                font-size:
+                    11px;
+
+            }
+
+
+            .board-section {
 
                 padding:
-                    0 8px;
+                    3px;
 
             }
 
         }
+
 
     </style>
 
@@ -892,9 +995,9 @@
     <main class="ludo-page">
 
 
-        <!-- =============================================
+        <!-- =================================================
              HEADER
-        ============================================== -->
+        ================================================== -->
 
         <header class="ludo-header">
 
@@ -907,8 +1010,12 @@
             </p>
 
             <h2 class="game-title">
-                🎲 Single Ludo
+                🎲 Online Ludo
             </h2>
+
+            <div class="game-mode">
+                🏆 Tournament Match
+            </div>
 
         </header>
 
@@ -920,14 +1027,16 @@
         <section class="game-container">
 
 
-            <!-- =============================================
+            <!-- =================================================
                  PLAYERS
-            ============================================== -->
+            ================================================== -->
 
             <div class="players">
 
 
-                <!-- PLAYER 1 -->
+                <!-- =============================================
+                     PLAYER 1
+                ============================================== -->
 
                 <div
                     class="player-card active"
@@ -967,7 +1076,9 @@
                 </div>
 
 
-                <!-- PLAYER 2 -->
+                <!-- =============================================
+                     PLAYER 2
+                ============================================== -->
 
                 <div
                     class="player-card"
@@ -1006,35 +1117,45 @@
 
                 </div>
 
+
             </div>
 
 
-            <!-- =============================================
+            <!-- =================================================
                  BOARD
-            ============================================== -->
+            ================================================== -->
 
-            <section class="board-section">
+            <section
+                class="board-section"
+                aria-label="Ludo Board"
+            >
 
-                <div id="ludo-board"></div>
+                <div id="ludo-board">
+
+                    <div class="board-loading">
+                        Ludo Board প্রস্তুত হচ্ছে...
+                    </div>
+
+                </div>
 
             </section>
 
 
-            <!-- =============================================
-                 CONTROLS
-            ============================================== -->
+            <!-- =================================================
+                 MATCH INFORMATION
+            ================================================== -->
 
-            <section class="control-panel">
+            <section class="game-info">
 
 
-                <div class="turn-info">
+                <div class="info-card">
 
-                    <div class="turn-label">
+                    <div class="info-label">
                         বর্তমান চাল
                     </div>
 
                     <div
-                        class="turn-player"
+                        class="info-value"
                         id="turn-player"
                     >
                         🔴 Player 1
@@ -1043,42 +1164,37 @@
                 </div>
 
 
-                <div
-                    class="dice"
-                    id="dice"
-                    aria-label="Dice"
-                >
-                    1
+                <div class="info-card">
+
+                    <div class="info-label">
+                        ম্যাচ
+                    </div>
+
+                    <div class="info-value">
+                        Online Match
+                    </div>
+
                 </div>
-
-
-                <button
-                    type="button"
-                    class="roll-button"
-                    id="roll-button"
-                >
-                    🎲 Dice Roll
-                </button>
 
 
             </section>
 
 
-            <!-- =============================================
-                 MESSAGE
-            ============================================== -->
+            <!-- =================================================
+                 STATUS
+            ================================================== -->
 
             <div
-                class="game-message"
+                class="board-status"
                 id="game-message"
             >
-                Dice Roll করুন এবং খেলা শুরু করুন।
+                ম্যাচের বর্তমান অবস্থা এখানে দেখা যাবে।
             </div>
 
 
-            <!-- =============================================
+            <!-- =================================================
                  RULES
-            ============================================== -->
+            ================================================== -->
 
             <section class="rules">
 
@@ -1089,19 +1205,19 @@
                 <ul class="rules-list">
 
                     <li>
-                        প্রথমে Dice Roll করে চাল শুরু করতে হবে।
+                        এই বোর্ডটি Online Tournament ম্যাচের জন্য।
                     </li>
 
                     <li>
-                        Dice-এ ৬ এলে ঘর থেকে Token বের করার সুযোগ থাকবে।
+                        ম্যাচের অবস্থা সার্ভার থেকে নিয়ন্ত্রিত হবে।
                     </li>
 
                     <li>
-                        ৬ এলে অতিরিক্ত চাল পাওয়া যায়।
+                        Dice ও Token movement পরবর্তী Game Engine দ্বারা নিয়ন্ত্রিত হবে।
                     </li>
 
                     <li>
-                        প্রতিপক্ষের Token কাটলে নির্দিষ্ট নিয়ম অনুযায়ী আবার চাল পাওয়া যায়।
+                        Dice-এ ৬ এলে Token বের করার সুযোগ থাকবে।
                     </li>
 
                     <li>
@@ -1109,7 +1225,7 @@
                     </li>
 
                     <li>
-                        সব Token Home-এ পৌঁছানো Player বিজয়ী হবে।
+                        সকল Token Home-এ পৌঁছানো Player বা Team বিজয়ী হবে।
                     </li>
 
                 </ul>
@@ -1138,7 +1254,7 @@
 
     <!-- =================================================
          LUDO BOARD ENGINE
-         External File
+         STEP 1
     ================================================== -->
 
     <script
@@ -1147,7 +1263,7 @@
 
 
     <!-- =================================================
-         SINGLE GAME CONTROLLER
+         PAGE INITIALIZATION
     ================================================== -->
 
     <script>
@@ -1156,56 +1272,8 @@
 
 
         /* =================================================
-           ELEMENTS
-        ================================================= */
-
-        const dice =
-            document.getElementById(
-                "dice"
-            );
-
-
-        const rollButton =
-            document.getElementById(
-                "roll-button"
-            );
-
-
-        const turnPlayer =
-            document.getElementById(
-                "turn-player"
-            );
-
-
-        const gameMessage =
-            document.getElementById(
-                "game-message"
-            );
-
-
-        const redCard =
-            document.getElementById(
-                "player-red-card"
-            );
-
-
-        const blueCard =
-            document.getElementById(
-                "player-blue-card"
-            );
-
-
-        const redStatus =
-            document.getElementById(
-                "red-status"
-            );
-
-
-        const blueStatus =
-            document.getElementById(
-                "blue-status"
-            );
-
+           FOOTER YEAR
+        ================================================== */
 
         const footerYear =
             document.getElementById(
@@ -1213,352 +1281,57 @@
             );
 
 
-        /* =================================================
-           GAME STATE
-        ================================================= */
+        if (footerYear) {
 
-        const gameState = {
-
-            currentPlayer:
-                "red",
-
-            dice:
-                1,
-
-            rolling:
-                false,
-
-            gameStarted:
-                false
-
-        };
-
-
-        /* =================================================
-           DICE SYMBOLS
-        ================================================= */
-
-        const diceSymbols = {
-
-            1: "⚀",
-
-            2: "⚁",
-
-            3: "⚂",
-
-            4: "⚃",
-
-            5: "⚄",
-
-            6: "⚅"
-
-        };
-
-
-        /* =================================================
-           UPDATE TURN UI
-        ================================================= */
-
-        function updateTurnUI() {
-
-
-            if (
-                gameState.currentPlayer ===
-                "red"
-            ) {
-
-                turnPlayer.textContent =
-                    "🔴 Player 1";
-
-
-                redCard.classList.add(
-                    "active"
-                );
-
-
-                blueCard.classList.remove(
-                    "active"
-                );
-
-
-                redStatus.textContent =
-                    "আপনার পালা";
-
-
-                blueStatus.textContent =
-                    "অপেক্ষায়";
-
-            }
-
-            else {
-
-                turnPlayer.textContent =
-                    "🔵 Player 2";
-
-
-                blueCard.classList.add(
-                    "active"
-                );
-
-
-                redCard.classList.remove(
-                    "active"
-                );
-
-
-                blueStatus.textContent =
-                    "আপনার পালা";
-
-
-                redStatus.textContent =
-                    "অপেক্ষায়";
-
-            }
+            footerYear.textContent =
+                new Date().getFullYear();
 
         }
 
 
         /* =================================================
-           CHANGE TURN
-        ================================================= */
+           BOARD CHECK
+        ================================================== */
 
-        function changeTurn() {
+        document.addEventListener(
+            "DOMContentLoaded",
+            () => {
 
-            if (
-                gameState.currentPlayer ===
-                "red"
-            ) {
+                const board =
+                    document.getElementById(
+                        "ludo-board"
+                    );
 
-                gameState.currentPlayer =
-                    "blue";
 
-            }
+                if (
+                    !board
+                ) {
 
-            else {
+                    return;
 
-                gameState.currentPlayer =
-                    "red";
-
-            }
-
-
-            updateTurnUI();
-
-        }
-
-
-        /* =================================================
-           ROLL DICE
-        ================================================= */
-
-        function rollDice() {
-
-
-            if (
-                gameState.rolling
-            ) {
-
-                return;
-
-            }
-
-
-            gameState.rolling =
-                true;
-
-
-            rollButton.disabled =
-                true;
-
-
-            dice.classList.remove(
-                "rolling"
-            );
-
-
-            void dice.offsetWidth;
-
-
-            dice.classList.add(
-                "rolling"
-            );
-
-
-            let animationCount =
-                0;
-
-
-            const animation =
-                setInterval(
-                    () => {
-
-
-                        const temporary =
-                            Math.floor(
-                                Math.random() * 6
-                            ) + 1;
-
-
-                        dice.textContent =
-                            diceSymbols[
-                                temporary
-                            ];
-
-
-                        animationCount++;
-
-
-                        if (
-                            animationCount >=
-                            8
-                        ) {
-
-                            clearInterval(
-                                animation
-                            );
-
-
-                            finishDiceRoll();
-
-                        }
-
-                    },
-                    70
-                );
-
-        }
-
-
-        /* =================================================
-           FINISH DICE
-        ================================================= */
-
-        function finishDiceRoll() {
-
-
-            const result =
-                Math.floor(
-                    Math.random() * 6
-                ) + 1;
-
-
-            gameState.dice =
-                result;
-
-
-            dice.textContent =
-                diceSymbols[
-                    result
-                ];
-
-
-            gameState.gameStarted =
-                true;
-
-
-            gameState.rolling =
-                false;
-
-
-            rollButton.disabled =
-                false;
-
-
-            handleDiceResult(
-                result
-            );
-
-        }
-
-
-        /* =================================================
-           HANDLE DICE RESULT
-        ================================================= */
-
-        function handleDiceResult(
-            result
-        ) {
-
-
-            const player =
-                gameState.currentPlayer ===
-                "red"
-                    ? "🔴 Player 1"
-                    : "🔵 Player 2";
-
-
-            if (
-                result === 6
-            ) {
-
-                gameMessage.textContent =
-                    player +
-                    " — ৬ এসেছে! Token বের করার অথবা চাল দেওয়ার সুযোগ আছে। অতিরিক্ত চাল পাবেন।";
+                }
 
 
                 /*
-                 * IMPORTANT:
+                 * ludu-board.js is responsible for
+                 * creating the actual board.
                  *
-                 * Actual token movement will be
-                 * controlled by ludu-board.js
-                 * after Step 2.
+                 * No local game state is created here.
+                 *
+                 * No New Game.
+                 *
+                 * No Reset.
+                 *
+                 * No Match Change.
+                 *
+                 * No localStorage.
+                 *
+                 * Supabase/game state integration
+                 * will be added in later steps.
                  */
 
-                return;
-
             }
-
-
-            gameMessage.textContent =
-                player +
-                " — Dice-এ " +
-                result +
-                " এসেছে। Token চাল দেওয়ার পালা।";
-
-
-            /*
-             * Temporary turn handling.
-             *
-             * Actual Ludo movement engine will
-             * replace this in the next step.
-             */
-
-            setTimeout(
-                () => {
-
-                    changeTurn();
-
-                },
-                900
-            );
-
-        }
-
-
-        /* =================================================
-           BUTTON EVENT
-        ================================================= */
-
-        rollButton.addEventListener(
-            "click",
-            rollDice
         );
-
-
-        /* =================================================
-           INITIAL UI
-        ================================================= */
-
-        updateTurnUI();
-
-
-        /* =================================================
-           FOOTER YEAR
-        ================================================= */
-
-        footerYear.textContent =
-            new Date().getFullYear();
-
 
     </script>
 
