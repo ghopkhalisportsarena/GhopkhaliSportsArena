@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
 
     <meta charset="UTF-8">
@@ -9,816 +10,2294 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Double Tournament — Team Join</title>
+    <meta
+        name="theme-color"
+        content="#0b1020"
+    >
+
+    <meta
+        name="description"
+        content="Ghopkhali Sports Arena Double Ludo Tournament Team Registration"
+    >
+
+    <title>
+        Double Tournament Join — Ghopkhali Sports Arena
+    </title>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
     <style>
 
-        * {
-            box-sizing: border-box;
+        :root {
+
+            --bg:
+                #070b16;
+
+            --card:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.065
+                );
+
+            --border:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
+
+            --text:
+                #ffffff;
+
+            --muted:
+                #9da7bd;
+
+            --purple:
+                #a66cff;
+
+            --purple-light:
+                #c7a8ff;
+
+            --success:
+                #35d399;
+
+            --danger:
+                #ff667d;
+
         }
 
+
+        * {
+
+            margin:
+                0;
+
+            padding:
+                0;
+
+            box-sizing:
+                border-box;
+
+        }
+
+
         body {
-            margin: 0;
-            min-height: 100vh;
+
+            min-height:
+                100vh;
+
+            color:
+                var(--text);
+
+            background:
+
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(
+                        166,
+                        108,
+                        255,
+                        0.22
+                    ),
+                    transparent 38%
+                ),
+
+                radial-gradient(
+                    circle at 100% 70%,
+                    rgba(
+                        91,
+                        140,
+                        255,
+                        0.12
+                    ),
+                    transparent 30%
+                ),
+
+                var(--bg);
 
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
-                "SF Pro Display",
-                "SF Pro Text",
                 "Segoe UI",
+                Roboto,
+                Arial,
                 sans-serif;
 
-            background:
-                radial-gradient(
-                    circle at top,
-                    #fff0d8 0%,
-                    #f8fafc 45%,
-                    #ffffff 100%
+        }
+
+
+        a {
+
+            color:
+                inherit;
+
+            text-decoration:
+                none;
+
+        }
+
+
+        .page {
+
+            width:
+                min(
+                    100%,
+                    650px
                 );
 
-            color: #111827;
+            margin:
+                0 auto;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding:
+                22px 17px 45px;
 
-            padding: 20px;
         }
+
+
+        /* =====================================================
+           TOP BAR
+        ===================================================== */
+
+        .topbar {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                12px;
+
+            margin-bottom:
+                28px;
+
+        }
+
+
+        .back {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                9px 13px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.045
+                );
+
+            color:
+                #c9d0df;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .badge {
+
+            padding:
+                8px 12px;
+
+            border:
+                1px solid rgba(
+                    166,
+                    108,
+                    255,
+                    0.25
+                );
+
+            border-radius:
+                999px;
+
+            color:
+                var(--purple-light);
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.08
+                );
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            text-align:
+                center;
+
+            margin-bottom:
+                25px;
+
+        }
+
+
+        .hero-icon {
+
+            width:
+                70px;
+
+            height:
+                70px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            margin:
+                0 auto 16px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                23px;
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.10
+                );
+
+            font-size:
+                35px;
+
+            box-shadow:
+                0 15px 45px rgba(
+                    166,
+                    108,
+                    255,
+                    0.13
+                );
+
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(
+                    29px,
+                    8vw,
+                    42px
+                );
+
+            letter-spacing:
+                -1.5px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .hero p {
+
+            margin-top:
+                9px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
 
         .card {
-            width: 100%;
-            max-width: 520px;
 
-            background: rgba(255,255,255,.84);
+            padding:
+                25px;
 
-            border-radius: 30px;
+            border:
+                1px solid var(--border);
 
-            padding: 30px;
+            border-radius:
+                28px;
+
+            background:
+                var(--card);
 
             box-shadow:
-                0 25px 70px rgba(0,0,0,.10);
+                0 25px 70px rgba(
+                    0,
+                    0,
+                    0,
+                    0.40
+                );
 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter:
+                blur(22px);
+
         }
 
-        .logo {
-            width: 70px;
-            height: 70px;
 
-            margin: 0 auto 18px;
+        /* =====================================================
+           TOURNAMENT INFO
+        ===================================================== */
 
-            border-radius: 22px;
+        .tournament-info {
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding:
+                15px 16px;
 
-            font-size: 32px;
+            margin-bottom:
+                23px;
 
-            background: #111827;
-            color: white;
+            border:
+                1px solid rgba(
+                    166,
+                    108,
+                    255,
+                    0.16
+                );
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.065
+                );
+
         }
 
-        h1 {
-            text-align: center;
 
-            margin: 0;
+        .info-label {
 
-            font-size: 28px;
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
         }
 
-        .subtitle {
-            text-align: center;
 
-            color: #6b7280;
+        #tournamentName {
 
-            margin: 8px 0 25px;
+            margin-top:
+                5px;
 
-            font-size: 14px;
+            font-size:
+                15px;
+
+            font-weight:
+                800;
+
         }
 
-        .tournament {
-            background: #f3f4f6;
 
-            border-radius: 18px;
+        #capacityInfo {
 
-            padding: 16px;
+            margin-top:
+                5px;
 
-            margin-bottom: 22px;
+            color:
+                #bda7e8;
 
-            text-align: center;
+            font-size:
+                11px;
+
         }
 
-        .tournament strong {
-            display: block;
 
-            font-size: 17px;
+        /* =====================================================
+           FORM
+        ===================================================== */
 
-            margin-bottom: 5px;
+        .form-title {
+
+            margin-bottom:
+                18px;
+
+            font-size:
+                18px;
+
+            font-weight:
+                850;
+
         }
 
-        .tournament span {
-            color: #6b7280;
-
-            font-size: 13px;
-        }
 
         .field {
-            margin-bottom: 16px;
+
+            margin-bottom:
+                17px;
+
         }
 
-        label {
-            display: block;
 
-            margin-bottom: 8px;
+        .field label {
 
-            font-size: 14px;
+            display:
+                block;
 
-            font-weight: 600;
+            margin-bottom:
+                8px;
+
+            color:
+                #dce2ee;
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
         }
 
-        input {
-            width: 100%;
 
-            border: 1px solid #d1d5db;
+        .field input {
 
-            border-radius: 16px;
+            width:
+                100%;
 
-            padding: 15px;
+            height:
+                50px;
 
-            font-size: 16px;
+            padding:
+                0 15px;
 
-            outline: none;
+            outline:
+                none;
+
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
+
+            border-radius:
+                15px;
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.055
+                );
+
+            font-size:
+                14px;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+
         }
 
-        input:focus {
-            border-color: #111827;
+
+        .field input::placeholder {
+
+            color:
+                #667086;
+
+        }
+
+
+        .field input:focus {
+
+            border-color:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.65
+                );
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.075
+                );
 
             box-shadow:
-                0 0 0 4px rgba(17,24,39,.08);
+                0 0 0 4px rgba(
+                    166,
+                    108,
+                    255,
+                    0.08
+                );
+
         }
 
-        .join-btn {
-            width: 100%;
 
-            border: 0;
+        /* =====================================================
+           PLAYER BOX
+        ===================================================== */
 
-            border-radius: 17px;
+        .player-box {
 
-            padding: 16px;
+            padding:
+                18px;
 
-            margin-top: 5px;
+            margin-bottom:
+                17px;
 
-            background: #111827;
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
 
-            color: white;
+            border-radius:
+                20px;
 
-            font-size: 16px;
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.035
+                );
 
-            font-weight: 700;
-
-            cursor: pointer;
         }
 
-        .join-btn:disabled {
-            opacity: .55;
 
-            cursor: not-allowed;
+        .player-heading {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                9px;
+
+            margin-bottom:
+                14px;
+
         }
+
+
+        .player-number {
+
+            width:
+                29px;
+
+            height:
+                29px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                10px;
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.18
+                );
+
+            font-size:
+                12px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .player-heading strong {
+
+            font-size:
+                13px;
+
+        }
+
+
+        /* =====================================================
+           SUBMIT
+        ===================================================== */
+
+        .submit-btn {
+
+            width:
+                100%;
+
+            min-height:
+                54px;
+
+            margin-top:
+                5px;
+
+            border:
+                0;
+
+            border-radius:
+                17px;
+
+            color:
+                #ffffff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #9358ff,
+                    #b079ff
+                );
+
+            box-shadow:
+                0 15px 35px rgba(
+                    149,
+                    92,
+                    255,
+                    0.25
+                );
+
+            font-size:
+                14px;
+
+            font-weight:
+                850;
+
+            cursor:
+                pointer;
+
+            transition:
+                transform 0.2s ease,
+                opacity 0.2s ease;
+
+        }
+
+
+        .submit-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        .submit-btn:active {
+
+            transform:
+                scale(0.98);
+
+        }
+
+
+        .submit-btn:disabled {
+
+            opacity:
+                0.55;
+
+            cursor:
+                not-allowed;
+
+            transform:
+                none;
+
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
 
         .message {
-            display: none;
 
-            margin-top: 18px;
+            display:
+                none;
 
-            padding: 14px;
+            margin-top:
+                17px;
 
-            border-radius: 15px;
+            padding:
+                13px 15px;
 
-            font-size: 14px;
+            border-radius:
+                15px;
 
-            line-height: 1.5;
+            font-size:
+                12px;
+
+            line-height:
+                1.6;
+
         }
+
 
         .message.show {
-            display: block;
+
+            display:
+                block;
+
         }
 
-        .success {
-            background: #ecfdf5;
 
-            color: #047857;
+        .message.error {
+
+            border:
+                1px solid rgba(
+                    255,
+                    102,
+                    125,
+                    0.20
+                );
+
+            color:
+                #ff9aaa;
+
+            background:
+                rgba(
+                    255,
+                    102,
+                    125,
+                    0.07
+                );
+
         }
 
-        .error {
-            background: #fef2f2;
 
-            color: #b91c1c;
+        .message.success {
+
+            border:
+                1px solid rgba(
+                    53,
+                    211,
+                    153,
+                    0.20
+                );
+
+            color:
+                #8ff0ca;
+
+            background:
+                rgba(
+                    53,
+                    211,
+                    153,
+                    0.07
+                );
+
         }
 
-        .team-code {
-            display: none;
 
-            margin-top: 20px;
+        /* =====================================================
+           RESULT
+        ===================================================== */
 
-            text-align: center;
+        .result {
 
-            background: #f3f4f6;
+            display:
+                none;
 
-            border-radius: 20px;
+            margin-top:
+                22px;
 
-            padding: 18px;
+            padding:
+                21px;
+
+            border:
+                1px solid rgba(
+                    53,
+                    211,
+                    153,
+                    0.20
+                );
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(
+                    53,
+                    211,
+                    153,
+                    0.055
+                );
+
         }
 
-        .team-code.show {
-            display: block;
+
+        .result.show {
+
+            display:
+                block;
+
         }
 
-        .team-code small {
-            color: #6b7280;
+
+        .result-title {
+
+            text-align:
+                center;
+
+            color:
+                #8ff0ca;
+
+            font-size:
+                16px;
+
+            font-weight:
+                900;
+
         }
 
-        .team-code strong {
-            display: block;
 
-            margin-top: 6px;
+        .code-label {
 
-            font-size: 25px;
+            margin-top:
+                17px;
 
-            letter-spacing: 2px;
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
         }
+
+
+        .code {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            margin-top:
+                7px;
+
+            padding:
+                13px 14px;
+
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.09
+                );
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.18
+                );
+
+        }
+
+
+        .code strong {
+
+            font-size:
+                14px;
+
+            letter-spacing:
+                1px;
+
+            word-break:
+                break-all;
+
+        }
+
+
+        .copy-btn {
+
+            flex:
+                0 0 auto;
+
+            padding:
+                8px 10px;
+
+            border:
+                0;
+
+            border-radius:
+                10px;
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.09
+                );
+
+            font-size:
+                10px;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .players-result {
+
+            margin-top:
+                15px;
+
+            padding-top:
+                15px;
+
+            border-top:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
+
+        }
+
+
+        .player-result-row {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            padding:
+                8px 0;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .player-result-row span {
+
+            color:
+                var(--muted);
+
+        }
+
+
+        .player-result-row strong {
+
+            color:
+                #ffffff;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
 
         .footer {
-            text-align: center;
 
-            margin-top: 24px;
+            margin-top:
+                25px;
 
-            color: #9ca3af;
+            text-align:
+                center;
 
-            font-size: 12px;
+            color:
+                #687289;
+
+            font-size:
+                10px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .loading {
+
+            text-align:
+                center;
+
+            padding:
+                12px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 520px) {
+
+            .page {
+
+                padding:
+                    17px 13px 35px;
+
+            }
+
+
+            .card {
+
+                padding:
+                    19px;
+
+                border-radius:
+                    23px;
+
+            }
+
+
+            .topbar {
+
+                margin-bottom:
+                    22px;
+
+            }
+
+
+            .back {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .badge {
+
+                font-size:
+                    10px;
+
+                padding:
+                    7px 9px;
+
+            }
+
         }
 
     </style>
 
 </head>
 
+
 <body>
 
-<div class="card">
 
-    <div class="logo">
-        🎲
-    </div>
-
-    <h1>
-        Double Tournament
-    </h1>
-
-    <div class="subtitle">
-        Team Registration
-    </div>
+    <main class="page">
 
 
-    <div class="tournament">
+        <!-- =================================================
+             TOP BAR
+        ================================================= -->
 
-        <strong id="tournamentName">
-            Ludo Double Tournament
-        </strong>
+        <div class="topbar">
 
-        <span>
-            ২ Player = ১ Team • সর্বোচ্চ ২৫ Team
-        </span>
-
-    </div>
-
-
-    <form id="joinForm">
-
-        <div class="field">
-
-            <label>
-                Team Name
-            </label>
-
-            <input
-                id="teamName"
-                type="text"
-                placeholder="আপনার Team Name"
-                maxlength="60"
-                required
+            <a
+                href="index.html"
+                class="back"
             >
+
+                ← Back
+
+            </a>
+
+
+            <span class="badge">
+
+                DOUBLE · 2 VS 2
+
+            </span>
 
         </div>
 
 
-        <div class="field">
+        <!-- =================================================
+             HERO
+        ================================================= -->
 
-            <label>
-                Player 1
-            </label>
+        <section class="hero">
 
-            <input
-                id="player1"
-                type="text"
-                placeholder="প্রথম Player-এর নাম"
-                maxlength="80"
-                required
+            <div class="hero-icon">
+
+                👥
+
+            </div>
+
+
+            <h1>
+
+                Double Tournament
+
+            </h1>
+
+
+            <p>
+
+                ২ জন Player-এর একটি Team তৈরি করে
+                2 VS 2 Ludo Tournament-এ অংশগ্রহণ করুন।
+
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             CARD
+        ================================================= -->
+
+        <section class="card">
+
+
+            <!-- =================================================
+                 TOURNAMENT
+            ================================================= -->
+
+            <div class="tournament-info">
+
+                <div class="info-label">
+
+                    Tournament
+
+                </div>
+
+
+                <div id="tournamentName">
+
+                    Loading...
+
+                </div>
+
+
+                <div id="capacityInfo">
+
+                    Registration তথ্য লোড হচ্ছে...
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FORM
+            ================================================= -->
+
+            <form id="joinForm">
+
+
+                <h2 class="form-title">
+
+                    📝 Team Registration
+
+                </h2>
+
+
+                <!-- TEAM NAME -->
+
+                <div class="field">
+
+                    <label for="teamName">
+
+                        Team Name
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="teamName"
+                        maxlength="40"
+                        autocomplete="off"
+                        placeholder="আপনার Team Name লিখুন"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PLAYER 1 -->
+
+                <div class="player-box">
+
+                    <div class="player-heading">
+
+                        <div class="player-number">
+                            1
+                        </div>
+
+                        <strong>
+                            Player 1
+                        </strong>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="player1Name">
+
+                            Player 1 Name
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="player1Name"
+                            maxlength="40"
+                            autocomplete="off"
+                            placeholder="প্রথম Player-এর নাম"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PLAYER 2 -->
+
+                <div class="player-box">
+
+                    <div class="player-heading">
+
+                        <div class="player-number">
+                            2
+                        </div>
+
+                        <strong>
+                            Player 2
+                        </strong>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="player2Name">
+
+                            Player 2 Name
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="player2Name"
+                            maxlength="40"
+                            autocomplete="off"
+                            placeholder="দ্বিতীয় Player-এর নাম"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    id="joinButton"
+                >
+
+                    📝 Join Tournament
+
+                </button>
+
+
+            </form>
+
+
+            <!-- =================================================
+                 MESSAGE
+            ================================================= -->
+
+            <div
+                class="message"
+                id="message"
+            ></div>
+
+
+            <!-- =================================================
+                 RESULT
+            ================================================= -->
+
+            <div
+                class="result"
+                id="result"
             >
 
-        </div>
+                <div class="result-title">
+
+                    🎉 Registration Successful
+
+                </div>
 
 
-        <div class="field">
+                <!-- TEAM CODE -->
 
-            <label>
-                Player 2
-            </label>
+                <div class="code-label">
 
-            <input
-                id="player2"
-                type="text"
-                placeholder="দ্বিতীয় Player-এর নাম"
-                maxlength="80"
-                required
-            >
+                    TEAM CODE
 
-        </div>
+                </div>
 
 
-        <button
-            class="join-btn"
-            id="joinBtn"
-            type="submit"
-        >
-            🎲 Team-এ Join করুন
-        </button>
+                <div class="code">
 
-    </form>
+                    <strong id="teamCode">
+                        —
+                    </strong>
 
 
-    <div
-        class="message"
-        id="message"
-    ></div>
+                    <button
+                        type="button"
+                        class="copy-btn"
+                        data-copy="teamCode"
+                    >
+
+                        Copy
+
+                    </button>
+
+                </div>
 
 
-    <div
-        class="team-code"
-        id="codeBox"
-    >
+                <!-- PLAYER 1 CODE -->
 
-        <small>
-            আপনার Team Code
-        </small>
+                <div class="code-label">
 
-        <strong id="teamCode">
-            —
-        </strong>
+                    PLAYER 1 CODE
 
-    </div>
+                </div>
 
 
-    <div class="footer">
-        Ghopkhali Sports Arena
-    </div>
+                <div class="code">
 
-</div>
-
-
-<script>
-
-    const SUPABASE_URL =
-        "https://cmygmswzokyrmgdnuszq.supabase.co";
-
-    const SUPABASE_KEY =
-        "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+                    <strong id="player1Code">
+                        —
+                    </strong>
 
 
-    const {
-        createClient
-    } = window.supabase;
+                    <button
+                        type="button"
+                        class="copy-btn"
+                        data-copy="player1Code"
+                    >
+
+                        Copy
+
+                    </button>
+
+                </div>
 
 
-    const supabaseClient =
-        createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+                <!-- PLAYER 2 CODE -->
+
+                <div class="code-label">
+
+                    PLAYER 2 CODE
+
+                </div>
 
 
-    const form =
-        document.getElementById(
-            "joinForm"
-        );
+                <div class="code">
 
-    const teamName =
-        document.getElementById(
-            "teamName"
-        );
-
-    const player1 =
-        document.getElementById(
-            "player1"
-        );
-
-    const player2 =
-        document.getElementById(
-            "player2"
-        );
-
-    const joinBtn =
-        document.getElementById(
-            "joinBtn"
-        );
-
-    const message =
-        document.getElementById(
-            "message"
-        );
-
-    const codeBox =
-        document.getElementById(
-            "codeBox"
-        );
-
-    const teamCode =
-        document.getElementById(
-            "teamCode"
-        );
-
-    const tournamentName =
-        document.getElementById(
-            "tournamentName"
-        );
+                    <strong id="player2Code">
+                        —
+                    </strong>
 
 
-    function showMessage(
-        text,
-        type
-    ) {
+                    <button
+                        type="button"
+                        class="copy-btn"
+                        data-copy="player2Code"
+                    >
 
-        message.textContent =
-            text;
+                        Copy
 
-        message.className =
-            "message show " +
-            type;
-    }
+                    </button>
 
-
-    function generateCode() {
-
-        const chars =
-            "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-        let code = "";
-
-        for (
-            let i = 0;
-            i < 6;
-            i++
-        ) {
-
-            code +=
-                chars[
-                    Math.floor(
-                        Math.random() *
-                        chars.length
-                    )
-                ];
-        }
-
-        return "D-" + code;
-    }
+                </div>
 
 
-    async function loadTournament() {
+                <!-- PLAYER INFO -->
+
+                <div class="players-result">
+
+                    <div class="player-result-row">
+
+                        <span>
+                            Team
+                        </span>
+
+                        <strong id="resultTeamName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="player-result-row">
+
+                        <span>
+                            Player 1
+                        </span>
+
+                        <strong id="resultPlayer1">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="player-result-row">
+
+                        <span>
+                            Player 2
+                        </span>
+
+                        <strong id="resultPlayer2">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <footer class="footer">
+
+            Ghopkhali Sports Arena
+            ·
+            Double Ludo Tournament
+
+            <br>
+
+            আপনার Team Code সংরক্ষণ করে রাখুন।
+
+        </footer>
+
+
+    </main>
+
+
+    <script>
+
+        "use strict";
+
+
+        /* =====================================================
+           SUPABASE
+        ===================================================== */
+
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+        const SUPABASE_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
 
         const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from(
-                    "ludo_tournaments"
-                )
-                .select("*")
-                .eq(
-                    "tournament_type",
-                    "double"
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: true
-                    }
-                )
-                .limit(1)
-                .maybeSingle();
+            createClient
+        } = window.supabase;
 
 
-        if (error) {
-
-            console.error(error);
-
-            showMessage(
-                "Tournament তথ্য লোড করা যায়নি।",
-                "error"
+        const supabaseClient =
+            createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
             );
 
-            return null;
-        }
 
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
 
-        if (!data) {
-
-            showMessage(
-                "কোনো Double Tournament পাওয়া যায়নি।",
-                "error"
+        const tournamentName =
+            document.getElementById(
+                "tournamentName"
             );
 
-            return null;
-        }
+
+        const capacityInfo =
+            document.getElementById(
+                "capacityInfo"
+            );
 
 
-        tournamentName.textContent =
-            data.tournament_name;
+        const joinForm =
+            document.getElementById(
+                "joinForm"
+            );
 
 
-        if (
-            data.status !==
-            "registration"
+        const joinButton =
+            document.getElementById(
+                "joinButton"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        const result =
+            document.getElementById(
+                "result"
+            );
+
+
+        /* =====================================================
+           STATE
+        ===================================================== */
+
+        let currentTournament =
+            null;
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        function showMessage(
+            text,
+            type = "error"
         ) {
 
-            showMessage(
-                "এই Tournament-এ বর্তমানে Registration বন্ধ আছে।",
-                "error"
-            );
+            message.textContent =
+                text;
 
-            joinBtn.disabled = true;
+            message.className =
+                "message show " +
+                type;
 
-            return null;
         }
 
 
-        return data;
-    }
+        function hideMessage() {
 
+            message.className =
+                "message";
 
-    async function checkCapacity(
-        tournamentId
-    ) {
+            message.textContent =
+                "";
 
-        const {
-            count,
-            error
-        } =
-            await supabaseClient
-                .from(
-                    "ludo_teams"
-                )
-                .select(
-                    "id",
-                    {
-                        count: "exact",
-                        head: true
-                    }
-                )
-                .eq(
-                    "tournament_id",
-                    tournamentId
-                );
-
-
-        if (error) {
-
-            console.error(error);
-
-            throw error;
         }
 
 
-        return count || 0;
-    }
+        /* =====================================================
+           LOAD TOURNAMENT
+        ===================================================== */
 
+        async function loadTournament() {
 
-    form.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-
-            const team =
-                teamName.value.trim();
-
-            const p1 =
-                player1.value.trim();
-
-            const p2 =
-                player2.value.trim();
-
-
-            if (
-                !team ||
-                !p1 ||
-                !p2
-            ) {
-
-                showMessage(
-                    "Team Name এবং দুইজন Player-এর নাম পূরণ করুন।",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            joinBtn.disabled = true;
-
-            joinBtn.textContent =
-                "Team Join করা হচ্ছে...";
+            tournamentName.textContent =
+                "Loading...";
 
 
             try {
 
-                const tournament =
-                    await loadTournament();
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from(
+                            "ludo_tournaments"
+                        )
+                        .select(
+                            "id,tournament_name,status,max_players"
+                        )
+                        .eq(
+                            "tournament_type",
+                            "double"
+                        )
+                        .order(
+                            "created_at",
+                            {
+                                ascending:
+                                    true
+                            }
+                        )
+                        .limit(1)
+                        .maybeSingle();
 
 
-                if (!tournament) {
+                if (error) {
+
+                    console.error(
+                        error
+                    );
+
+                    tournamentName.textContent =
+                        "Tournament পাওয়া যায়নি।";
+
+                    capacityInfo.textContent =
+                        "দয়া করে পরে আবার চেষ্টা করুন।";
+
+                    joinButton.disabled =
+                        true;
+
                     return;
+
                 }
 
 
-                const count =
-                    await checkCapacity(
-                        tournament.id
+                if (!data) {
+
+                    tournamentName.textContent =
+                        "Double Tournament পাওয়া যায়নি।";
+
+                    capacityInfo.textContent =
+                        "";
+
+                    joinButton.disabled =
+                        true;
+
+                    return;
+
+                }
+
+
+                currentTournament =
+                    data;
+
+
+                tournamentName.textContent =
+                    data.tournament_name;
+
+
+                await updateCapacity();
+
+
+                if (
+                    data.status !==
+                    "registration" &&
+                    data.status !==
+                    "upcoming"
+                ) {
+
+                    joinButton.disabled =
+                        true;
+
+                    showMessage(
+                        "এই Tournament-এ বর্তমানে Registration নেওয়া হচ্ছে না।",
+                        "error"
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+                tournamentName.textContent =
+                    "Connection Error";
+
+                joinButton.disabled =
+                    true;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           CAPACITY
+        ===================================================== */
+
+        async function updateCapacity() {
+
+            if (!currentTournament) {
+                return;
+            }
+
+
+            const {
+                count,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "ludo_teams"
+                    )
+                    .select(
+                        "id",
+                        {
+                            count:
+                                "exact",
+                            head:
+                                true
+                        }
+                    )
+                    .eq(
+                        "tournament_id",
+                        currentTournament.id
                     );
 
 
-                if (count >= 25) {
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+                capacityInfo.textContent =
+                    "সর্বোচ্চ ২৫টি Team";
+
+                return;
+
+            }
+
+
+            const teamCount =
+                count || 0;
+
+
+            const remaining =
+                Math.max(
+                    25 - teamCount,
+                    0
+                );
+
+
+            capacityInfo.textContent =
+                `${teamCount}/25 Team Registered · ${remaining}টি Team-এর জায়গা বাকি`;
+
+
+
+            if (
+                teamCount >= 25
+            ) {
+
+                joinButton.disabled =
+                    true;
+
+                showMessage(
+                    "Double Tournament-এর ২৫টি Team পূর্ণ হয়ে গেছে।",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           SUBMIT
+        ===================================================== */
+
+        joinForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                hideMessage();
+
+
+                if (
+                    !currentTournament
+                ) {
 
                     showMessage(
-                        "দুঃখিত, Double Tournament-এর ২৫টি Team পূর্ণ হয়ে গেছে।",
+                        "Tournament তথ্য পাওয়া যায়নি।",
                         "error"
                     );
 
                     return;
+
                 }
 
 
-                const generatedTeamCode =
-                    generateCode();
-
-
-                const {
-                    data:
-                        createdTeam,
-                    error:
-                        teamError
-                } =
-                    await supabaseClient
-                        .from(
-                            "ludo_teams"
+                const teamName =
+                    document
+                        .getElementById(
+                            "teamName"
                         )
-                        .insert({
-                            tournament_id:
-                                tournament.id,
-
-                            team_name:
-                                team,
-
-                            team_code:
-                                generatedTeamCode,
-
-                            status:
-                                "active"
-                        })
-                        .select()
-                        .single();
+                        .value
+                        .trim();
 
 
-                if (teamError) {
+                const player1Name =
+                    document
+                        .getElementById(
+                            "player1Name"
+                        )
+                        .value
+                        .trim();
 
-                    console.error(
-                        teamError
+
+                const player2Name =
+                    document
+                        .getElementById(
+                            "player2Name"
+                        )
+                        .value
+                        .trim();
+
+
+                /* =============================================
+                   VALIDATION
+                ============================================= */
+
+                if (!teamName) {
+
+                    showMessage(
+                        "Team Name দিন।",
+                        "error"
                     );
 
-                    throw teamError;
+                    return;
+
                 }
 
 
-                const {
-                    error:
-                        playersError
-                } =
-                    await supabaseClient
-                        .from(
-                            "ludo_team_players"
-                        )
-                        .insert([
-                            {
-                                team_id:
-                                    createdTeam.id,
+                if (!player1Name) {
 
-                                player_name:
-                                    p1,
-
-                                player_number:
-                                    1
-                            },
-
-                            {
-                                team_id:
-                                    createdTeam.id,
-
-                                player_name:
-                                    p2,
-
-                                player_number:
-                                    2
-                            }
-                        ]);
-
-
-                if (playersError) {
-
-                    console.error(
-                        playersError
+                    showMessage(
+                        "Player 1-এর নাম দিন।",
+                        "error"
                     );
 
-                    await supabaseClient
-                        .from(
-                            "ludo_teams"
-                        )
-                        .delete()
-                        .eq(
-                            "id",
-                            createdTeam.id
+                    return;
+
+                }
+
+
+                if (!player2Name) {
+
+                    showMessage(
+                        "Player 2-এর নাম দিন।",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    player1Name
+                        .toLowerCase() ===
+                    player2Name
+                        .toLowerCase()
+                ) {
+
+                    showMessage(
+                        "Player 1 এবং Player 2-এর নাম আলাদা হতে হবে।",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                /* =============================================
+                   LOADING
+                ============================================= */
+
+                joinButton.disabled =
+                    true;
+
+                joinButton.textContent =
+                    "⏳ Registration হচ্ছে...";
+
+
+                try {
+
+
+                    /* =========================================
+                       RPC
+                    ========================================= */
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient
+                            .rpc(
+                                "join_ludo_double",
+                                {
+                                    p_tournament_id:
+                                        currentTournament.id,
+
+                                    p_team_name:
+                                        teamName,
+
+                                    p_player_1_name:
+                                        player1Name,
+
+                                    p_player_2_name:
+                                        player2Name
+                                }
+                            );
+
+
+                    if (error) {
+
+                        console.error(
+                            "Double Join Error:",
+                            error
                         );
 
-                    throw playersError;
+                        throw error;
+
+                    }
+
+
+                    if (
+                        !data ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            "Registration সম্পন্ন হয়নি।"
+                        );
+
+                    }
+
+
+                    /* =========================================
+                       RESULT
+                    ========================================= */
+
+                    document.getElementById(
+                        "teamCode"
+                    ).textContent =
+                        data.team_code;
+
+
+                    document.getElementById(
+                        "player1Code"
+                    ).textContent =
+                        data.player_1_code;
+
+
+                    document.getElementById(
+                        "player2Code"
+                    ).textContent =
+                        data.player_2_code;
+
+
+                    document.getElementById(
+                        "resultTeamName"
+                    ).textContent =
+                        teamName;
+
+
+                    document.getElementById(
+                        "resultPlayer1"
+                    ).textContent =
+                        player1Name;
+
+
+                    document.getElementById(
+                        "resultPlayer2"
+                    ).textContent =
+                        player2Name;
+
+
+                    result.classList.add(
+                        "show"
+                    );
+
+
+                    joinForm.style.display =
+                        "none";
+
+
+                    showMessage(
+                        "🎉 আপনার Team সফলভাবে Tournament-এ যুক্ত হয়েছে।",
+                        "success"
+                    );
+
+
+                    await updateCapacity();
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    let errorMessage =
+                        "Registration করা যায়নি।";
+
+
+                    if (
+                        error?.message
+                    ) {
+
+                        errorMessage =
+                            error.message;
+
+                    }
+
+
+                    if (
+                        errorMessage
+                            .toLowerCase()
+                            .includes(
+                                "team name"
+                            )
+                    ) {
+
+                        errorMessage =
+                            "এই Team Name ইতোমধ্যে নেওয়া হয়েছে।";
+
+                    }
+
+
+                    if (
+                        errorMessage
+                            .toLowerCase()
+                            .includes(
+                                "২৫"
+                            )
+                    ) {
+
+                        errorMessage =
+                            "Double Tournament-এর ২৫টি Team পূর্ণ হয়ে গেছে।";
+
+                    }
+
+
+                    showMessage(
+                        errorMessage,
+                        "error"
+                    );
+
+
+                } finally {
+
+                    if (
+                        !result.classList.contains(
+                            "show"
+                        )
+                    ) {
+
+                        joinButton.disabled =
+                            false;
+
+                        joinButton.textContent =
+                            "📝 Join Tournament";
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           COPY CODE
+        ===================================================== */
+
+        document.addEventListener(
+            "click",
+            async function(event) {
+
+                const button =
+                    event.target.closest(
+                        "[data-copy]"
+                    );
+
+
+                if (!button) {
+                    return;
                 }
 
 
-                teamCode.textContent =
-                    createdTeam.team_code;
+                const targetId =
+                    button.dataset.copy;
 
 
-                codeBox.classList.add(
-                    "show"
-                );
+                const target =
+                    document.getElementById(
+                        targetId
+                    );
 
 
-                showMessage(
-                    "🎉 অভিনন্দন! আপনার Team সফলভাবে Double Tournament-এ Join করেছে।",
-                    "success"
-                );
+                if (!target) {
+                    return;
+                }
 
 
-                teamName.disabled = true;
+                const value =
+                    target.textContent.trim();
 
-                player1.disabled = true;
 
-                player2.disabled = true;
+                if (
+                    !value ||
+                    value === "—"
+                ) {
 
-                joinBtn.textContent =
-                    "✓ Successfully Joined";
+                    return;
+
+                }
+
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        value
+                    );
+
+
+                    const oldText =
+                        button.textContent;
+
+
+                    button.textContent =
+                        "✓ Copied";
+
+
+                    setTimeout(
+                        () => {
+
+                            button.textContent =
+                                oldText;
+
+                        },
+                        1400
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+                }
 
             }
-
-            catch (error) {
-
-                console.error(error);
-
-                showMessage(
-                    "Team Join করা যায়নি: " +
-                    (
-                        error.message ||
-                        "Unknown error"
-                    ),
-                    "error"
-                );
-
-                joinBtn.disabled =
-                    false;
-
-                joinBtn.textContent =
-                    "🎲 Team-এ Join করুন";
-            }
-
-        }
-    );
+        );
 
 
-    loadTournament();
+        /* =====================================================
+           INIT
+        ===================================================== */
 
-</script>
+        loadTournament();
+
+    </script>
+
 
 </body>
+
 </html>
