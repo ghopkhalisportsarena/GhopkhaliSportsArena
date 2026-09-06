@@ -1,0 +1,161 @@
+/* =====================================================
+   GHOPKHALI SPORTS ARENA
+   LUDO BOARD
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   BOARD CONTAINER
+===================================================== */
+
+#ludo-board {
+
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: 20px auto;
+
+    padding: 10px;
+
+}
+
+
+/* =====================================================
+   LUDO BOARD
+===================================================== */
+
+.ludo-board {
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(15, 1fr);
+
+    grid-template-rows:
+        repeat(15, 1fr);
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 2px solid #111827;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0, 0, 0, 0.15);
+
+}
+
+
+/* =====================================================
+   CELL
+===================================================== */
+
+.ludo-cell {
+
+    position: relative;
+
+    border:
+        1px solid
+        #cbd5e1;
+
+    min-width: 0;
+
+    min-height: 0;
+
+}
+
+
+/* =====================================================
+   HOMES
+===================================================== */
+
+.red-home {
+
+    background:
+        #e53935;
+
+}
+
+
+.green-home {
+
+    background:
+        #43a047;
+
+}
+
+
+.yellow-home {
+
+    background:
+        #fbc02d;
+
+}
+
+
+.blue-home {
+
+    background:
+        #1e88e5;
+
+}
+
+
+/* =====================================================
+   TRACK
+===================================================== */
+
+.track {
+
+    background:
+        #ffffff;
+
+}
+
+
+/* =====================================================
+   CENTER
+===================================================== */
+
+.center {
+
+    background:
+        #f8fafc;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 600px) {
+
+    #ludo-board {
+
+        padding: 5px;
+
+        margin: 10px auto;
+
+    }
+
+
+    .ludo-board {
+
+        border-radius: 12px;
+
+    }
+
+}
