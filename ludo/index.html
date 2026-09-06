@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
 
     <meta charset="UTF-8">
@@ -19,7 +20,9 @@
         content="Ghopkhali Sports Arena Ludo Tournament"
     >
 
-    <title>Ludo Tournament — Ghopkhali Sports Arena</title>
+    <title>
+        Ludo Tournament — Ghopkhali Sports Arena
+    </title>
 
 
     <style>
@@ -101,16 +104,19 @@
                 var(--text);
 
             background:
+
                 radial-gradient(
                     circle at 50% -10%,
                     rgba(91, 140, 255, 0.20),
                     transparent 35%
                 ),
+
                 radial-gradient(
                     circle at 100% 40%,
                     rgba(166, 108, 255, 0.13),
                     transparent 30%
                 ),
+
                 var(--bg);
 
             font-family:
@@ -437,7 +443,12 @@
                 9px 13px;
 
             border:
-                1px solid rgba(53, 211, 153, 0.22);
+                1px solid rgba(
+                    53,
+                    211,
+                    153,
+                    0.22
+                );
 
             border-radius:
                 999px;
@@ -446,7 +457,12 @@
                 #8ff0ca;
 
             background:
-                rgba(53, 211, 153, 0.08);
+                rgba(
+                    53,
+                    211,
+                    153,
+                    0.08
+                );
 
             font-size:
                 12px;
@@ -548,7 +564,12 @@
                 #b8c7ff;
 
             background:
-                rgba(255, 255, 255, 0.045);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.045
+                );
 
             font-size:
                 12px;
@@ -568,7 +589,11 @@
                 18px;
 
             font-size:
-                clamp(38px, 8vw, 70px);
+                clamp(
+                    38px,
+                    8vw,
+                    70px
+                );
 
             line-height:
                 0.98;
@@ -629,7 +654,13 @@
                 grid;
 
             grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+                repeat(
+                    2,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
 
             gap:
                 18px;
@@ -640,13 +671,17 @@
         }
 
 
+        /* =====================================================
+           MODE CARD
+        ===================================================== */
+
         .mode-card {
 
             position:
                 relative;
 
             min-height:
-                320px;
+                340px;
 
             display:
                 flex;
@@ -692,7 +727,12 @@
                 translateY(-7px);
 
             background:
-                rgba(255, 255, 255, 0.085);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.085
+                );
 
         }
 
@@ -725,6 +765,9 @@
 
             opacity:
                 0.22;
+
+            pointer-events:
+                none;
 
         }
 
@@ -783,10 +826,20 @@
                 30px;
 
             background:
-                rgba(255, 255, 255, 0.09);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.09
+                );
 
             border:
-                1px solid rgba(255, 255, 255, 0.10);
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.10
+                );
 
         }
 
@@ -794,7 +847,12 @@
         .mode-number {
 
             color:
-                rgba(255, 255, 255, 0.35);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.35
+                );
 
             font-size:
                 12px;
@@ -886,6 +944,10 @@
         }
 
 
+        /* =====================================================
+           MODE BOTTOM
+        ===================================================== */
+
         .mode-bottom {
 
             position:
@@ -901,7 +963,7 @@
                 space-between;
 
             gap:
-                12px;
+                15px;
 
             margin-top:
                 25px;
@@ -917,8 +979,36 @@
             font-size:
                 12px;
 
+            line-height:
+                1.5;
+
         }
 
+
+        /* =====================================================
+           MODE ACTIONS
+        ===================================================== */
+
+        .mode-actions {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                flex-end;
+
+            gap:
+                8px;
+
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
 
         .enter-button {
 
@@ -932,13 +1022,13 @@
                 center;
 
             gap:
-                8px;
+                7px;
 
             min-width:
-                120px;
+                110px;
 
             padding:
-                12px 17px;
+                12px 15px;
 
             border:
                 0;
@@ -950,7 +1040,7 @@
                 #ffffff;
 
             font-size:
-                13px;
+                12px;
 
             font-weight:
                 800;
@@ -960,37 +1050,11 @@
 
             transition:
                 transform 0.25s ease,
-                box-shadow 0.25s ease;
+                box-shadow 0.25s ease,
+                background 0.25s ease;
 
-        }
-
-
-        .single-button {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #4e7eff,
-                    #6b9aff
-                );
-
-            box-shadow:
-                0 10px 30px rgba(78, 126, 255, 0.25);
-
-        }
-
-
-        .double-button {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #955cff,
-                    #b37aff
-                );
-
-            box-shadow:
-                0 10px 30px rgba(149, 92, 255, 0.25);
+            white-space:
+                nowrap;
 
         }
 
@@ -1012,6 +1076,107 @@
 
 
         /* =====================================================
+           JOIN BUTTON
+        ===================================================== */
+
+        .join-button {
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.075
+                );
+
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.14
+                );
+
+            box-shadow:
+                none;
+
+        }
+
+
+        .join-button:hover {
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.13
+                );
+
+        }
+
+
+        .single-join-button {
+
+            color:
+                #c9d7ff;
+
+        }
+
+
+        .double-join-button {
+
+            color:
+                #dfccff;
+
+        }
+
+
+        /* =====================================================
+           ENTER BUTTON
+        ===================================================== */
+
+        .single-button {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4e7eff,
+                    #6b9aff
+                );
+
+            box-shadow:
+                0 10px 30px rgba(
+                    78,
+                    126,
+                    255,
+                    0.25
+                );
+
+        }
+
+
+        .double-button {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #955cff,
+                    #b37aff
+                );
+
+            box-shadow:
+                0 10px 30px rgba(
+                    149,
+                    92,
+                    255,
+                    0.25
+                );
+
+        }
+
+
+        /* =====================================================
            INFO GRID
         ===================================================== */
 
@@ -1021,7 +1186,13 @@
                 grid;
 
             grid-template-columns:
-                repeat(4, minmax(0, 1fr));
+                repeat(
+                    4,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
 
             gap:
                 12px;
@@ -1044,7 +1215,12 @@
                 20px;
 
             background:
-                rgba(255, 255, 255, 0.045);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.045
+                );
 
             backdrop-filter:
                 blur(15px);
@@ -1170,7 +1346,11 @@
             .hero h2 {
 
                 font-size:
-                    clamp(40px, 13vw, 58px);
+                    clamp(
+                        40px,
+                        13vw,
+                        58px
+                    );
 
                 letter-spacing:
                     -2px;
@@ -1197,7 +1377,7 @@
             .mode-card {
 
                 min-height:
-                    285px;
+                    300px;
 
                 padding:
                     23px;
@@ -1208,7 +1388,50 @@
             .info-grid {
 
                 grid-template-columns:
-                    repeat(2, 1fr);
+                    repeat(
+                        2,
+                        1fr
+                    );
+
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .mode-bottom {
+
+                align-items:
+                    stretch;
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .mode-actions {
+
+                width:
+                    100%;
+
+                display:
+                    grid;
+
+                grid-template-columns:
+                    1fr 1fr;
+
+            }
+
+
+            .mode-actions .enter-button {
+
+                width:
+                    100%;
+
+                min-width:
+                    0;
 
             }
 
@@ -1241,21 +1464,29 @@
             }
 
 
-            .mode-bottom {
+            .mode-card {
 
-                align-items:
-                    stretch;
+                padding:
+                    20px;
 
-                flex-direction:
-                    column;
+            }
+
+
+            .mode-actions {
+
+                gap:
+                    7px;
 
             }
 
 
             .enter-button {
 
-                width:
-                    100%;
+                padding:
+                    11px 8px;
+
+                font-size:
+                    11px;
 
             }
 
@@ -1308,7 +1539,6 @@
     </div>
 
 
-
     <!-- =====================================================
          APP
     ===================================================== -->
@@ -1316,7 +1546,9 @@
     <main class="app">
 
 
-        <!-- HEADER -->
+        <!-- =================================================
+             HEADER
+        ================================================= -->
 
         <header class="header">
 
@@ -1356,8 +1588,9 @@
         </header>
 
 
-
-        <!-- HERO -->
+        <!-- =================================================
+             HERO
+        ================================================= -->
 
         <section class="hero">
 
@@ -1369,9 +1602,13 @@
 
 
             <h2>
+
                 LUDO
+
                 <br>
+
                 TOURNAMENT
+
             </h2>
 
 
@@ -1386,16 +1623,18 @@
         </section>
 
 
-
-        <!-- GAME MODES -->
+        <!-- =================================================
+             GAME MODES
+        ================================================= -->
 
         <section class="mode-grid">
 
 
-            <!-- SINGLE -->
+            <!-- =================================================
+                 SINGLE
+            ================================================= -->
 
-            <a
-                href="single.html"
+            <article
                 class="mode-card single-card"
                 aria-label="Single Ludo Tournament"
             >
@@ -1421,9 +1660,11 @@
                             Single
                         </h3>
 
+
                         <div class="versus">
                             1 VS 1
                         </div>
+
 
                         <p>
 
@@ -1441,24 +1682,61 @@
                 <div class="mode-bottom">
 
                     <span class="capacity">
-                        Up to 50 Players
+
+                        ২–৫০ জন Player
+
                     </span>
 
-                    <span class="enter-button single-button">
-                        Enter
-                        <span>→</span>
-                    </span>
+
+                    <div class="mode-actions">
+
+
+                        <!-- JOIN -->
+
+                        <a
+                            href="single-join.html"
+                            class="enter-button join-button single-join-button"
+                            aria-label="Single Tournament Join"
+                        >
+
+                            📝 Join
+
+                            <span>
+                                →
+                            </span>
+
+                        </a>
+
+
+                        <!-- ENTER -->
+
+                        <a
+                            href="single.html"
+                            class="enter-button single-button"
+                            aria-label="Enter Single Tournament"
+                        >
+
+                            🎲 Enter
+
+                            <span>
+                                →
+                            </span>
+
+                        </a>
+
+
+                    </div>
 
                 </div>
 
-            </a>
+            </article>
 
 
+            <!-- =================================================
+                 DOUBLE
+            ================================================= -->
 
-            <!-- DOUBLE -->
-
-            <a
-                href="double.html"
+            <article
                 class="mode-card double-card"
                 aria-label="Double Ludo Tournament"
             >
@@ -1484,9 +1762,11 @@
                             Double
                         </h3>
 
+
                         <div class="versus">
                             2 VS 2
                         </div>
+
 
                         <p>
 
@@ -1504,24 +1784,62 @@
                 <div class="mode-bottom">
 
                     <span class="capacity">
-                       Up to 50 Players / 25 Teams
+
+                        ৪–৫০ জন / ২৫টি Team
+
                     </span>
 
-                    <span class="enter-button double-button">
-                        Enter
-                        <span>→</span>
-                    </span>
+
+                    <div class="mode-actions">
+
+
+                        <!-- JOIN -->
+
+                        <a
+                            href="double-join.html"
+                            class="enter-button join-button double-join-button"
+                            aria-label="Double Tournament Join"
+                        >
+
+                            📝 Join
+
+                            <span>
+                                →
+                            </span>
+
+                        </a>
+
+
+                        <!-- ENTER -->
+
+                        <a
+                            href="double.html"
+                            class="enter-button double-button"
+                            aria-label="Enter Double Tournament"
+                        >
+
+                            🎲 Enter
+
+                            <span>
+                                →
+                            </span>
+
+                        </a>
+
+
+                    </div>
 
                 </div>
 
-            </a>
+            </article>
 
 
         </section>
 
 
-
-        <!-- INFORMATION -->
+        <!-- =================================================
+             INFORMATION
+        ================================================= -->
 
         <section class="info-grid">
 
@@ -1597,12 +1915,15 @@
         </section>
 
 
-
-        <!-- FOOTER -->
+        <!-- =================================================
+             FOOTER
+        ================================================= -->
 
         <footer class="footer">
 
-            © 2026 Ghopkhali Sports Arena · Ludo Tournament
+            © 2026 Ghopkhali Sports Arena
+            ·
+            Ludo Tournament
 
         </footer>
 
