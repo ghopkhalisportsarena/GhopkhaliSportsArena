@@ -4797,6 +4797,56 @@ async function loadFixtures() {
 }
 
 /* =====================================================
+   GET PARTICIPANT NAME
+===================================================== */
+
+function getParticipantName(participantId) {
+
+    if (!participantId) {
+        return "—";
+    }
+
+
+    /*
+     * SINGLE TOURNAMENT
+     */
+
+    if (currentMode === "single") {
+
+        const player =
+            players.find(
+                player =>
+                    player.id === participantId
+            );
+
+        return player
+            ? player.player_name
+            : "Unknown Player";
+    }
+
+
+    /*
+     * DOUBLE TOURNAMENT
+     */
+
+    if (currentMode === "double") {
+
+        const team =
+            teams.find(
+                team =>
+                    team.id === participantId
+            );
+
+        return team
+            ? team.team_name
+            : "Unknown Team";
+    }
+
+
+    return "Unknown";
+}
+    
+/* =====================================================
    RENDER FIXTURES + MATCH RESULT BUTTON
 ===================================================== */
 
