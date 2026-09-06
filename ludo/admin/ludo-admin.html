@@ -2640,44 +2640,170 @@ document
 
 
 /* =========================================================
-   START ADMIN
+   START ADMIN — AUTHORIZED LUDO ADMIN ONLY
 ========================================================= */
 
 async function startAdmin() {
 
-    loginScreen.style.display =
-        "none";
+    try {
 
-    app.classList.add(
-        "active"
-    );
+        /* ---------------------------------------------
+           GET CURRENT AUTHENTICATED USER
+        --------------------------------------------- */
+
+        const {
+            data: userData,
+            error: userError
+        } =
+            await supabaseClient
+                .auth
+                .getUser();
 
 
-    const {
-        data
-    } =
-        await supabaseClient.auth.getUser();
+        if (
+            userError ||
+            !userData ||
+            !userData.user
+        ) {
+
+            loginError.textContent =
+                "Admin session পাওয়া যায়নি।";
+
+            loginScreen.style.display =
+                "flex";
+
+            app.classList.remove(
+                "active"
+            );
+
+            return;
+
+        }
 
 
-    if (
-        data &&
-        data.user
-    ) {
+        const user =
+            userData.user;
 
-        document
-            .getElementById(
+
+        /* ---------------------------------------------
+           CHECK LUDO ADMIN AUTHORIZATION
+        --------------------------------------------- */
+
+        const {
+            data: ludoAdmin,
+            error: ludoAdminError
+        } =
+            await supabaseClient
+                .from("ludo_admins")
+                .select("id")
+                .eq(
+                    "user_id",
+                    user.id
+                )
+                .maybeSingle();
+
+
+        if (ludoAdminError) {
+
+            console.error(
+                "Ludo Admin Authorization Error:",
+                ludoAdminError
+            );
+
+            loginError.textContent =
+                "Ludo Admin authorization যাচাই করা যায়নি।";
+
+            loginScreen.style.display =
+                "flex";
+
+            app.classList.remove(
+                "active"
+            );
+
+            return;
+
+        }
+
+
+        /* ---------------------------------------------
+           USER IS NOT LUDO ADMIN
+        --------------------------------------------- */
+
+        if (!ludoAdmin) {
+
+            loginError.textContent =
+                "এই account-এর Ludo Tournament Director access নেই।";
+
+            await supabaseClient
+                .auth
+                .signOut();
+
+            loginScreen.style.display =
+                "flex";
+
+            app.classList.remove(
+                "active"
+            );
+
+            return;
+
+        }
+
+
+        /* ---------------------------------------------
+           AUTHORIZED
+        --------------------------------------------- */
+
+        loginScreen.style.display =
+            "none";
+
+        app.classList.add(
+            "active"
+        );
+
+
+        const identity =
+            document.getElementById(
                 "adminIdentity"
-            )
-            .textContent =
-            data.user.email;
+            );
+
+
+        if (identity) {
+
+            identity.textContent =
+                user.email || "Ludo Admin";
+
+        }
+
+
+        /* ---------------------------------------------
+           LOAD TOURNAMENT
+        --------------------------------------------- */
+
+        await loadTournament();
+
+
+    } catch (error) {
+
+        console.error(
+            "Ludo Admin Start Error:",
+            error
+        );
+
+
+        loginError.textContent =
+            "Ludo Admin চালু করা সম্ভব হয়নি।";
+
+        loginScreen.style.display =
+            "flex";
+
+        app.classList.remove(
+            "active"
+        );
 
     }
 
-
-    await loadTournament();
-
 }
-
 
 /* =========================================================
    SESSION CHECK
@@ -2685,26 +2811,50 @@ async function startAdmin() {
 
 async function checkSession() {
 
-    const {
-        data
-    } =
-        await supabaseClient.auth.getSession();
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
 
 
-    if (
-        data &&
-        data.session
-    ) {
+        if (error) {
 
-        await startAdmin();
+            console.error(
+                "Session Error:",
+                error
+            );
+
+            return;
+
+        }
+
+
+        if (
+            data &&
+            data.session
+        ) {
+
+            await startAdmin();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Session Check Error:",
+            error
+        );
 
     }
 
 }
 
-
 checkSession();
-
 
 /* =========================================================
    MODE SWITCH
