@@ -1203,10 +1203,18 @@ function getTrackIndex(
 ) {
 
     const player =
-        LUDO_PLAYERS[
-            color
-        ];
+        LUDO_PLAYERS[color];
 
+    if (!player) {
+        return null;
+    }
+
+    if (
+        progress < 0 ||
+        progress >= TRACK_LENGTH
+    ) {
+        return null;
+    }
 
     return (
         player.startIndex +
@@ -1214,7 +1222,6 @@ function getTrackIndex(
     ) % TRACK_LENGTH;
 
 }
-
 
 /* =========================================================
    GET TOKEN COORDINATE
@@ -1296,27 +1303,32 @@ function canTokenMove(
         dice < 1 ||
         dice > 6
     ) {
-
         return false;
-
     }
 
 
     if (
-        token.state ===
-        "finished"
+        !ACTIVE_PLAYERS.includes(color)
     ) {
-
         return false;
-
     }
 
 
-    /* Home token */
+    if (
+        !token ||
+        token.state === "finished"
+    ) {
+        return false;
+    }
+
+
+    /* -----------------------------------------
+       TOKEN IN HOME
+       Only 6 can bring token out
+    ----------------------------------------- */
 
     if (
-        token.state ===
-        "home"
+        token.state === "home"
     ) {
 
         return dice === 6;
@@ -1324,33 +1336,56 @@ function canTokenMove(
     }
 
 
-    /* Track token */
+    /* -----------------------------------------
+       TOKEN ON MAIN TRACK
+    ----------------------------------------- */
 
     if (
-        token.state ===
-        "track"
+        token.state === "track"
     ) {
 
+        /*
+         * Main track progress:
+         *
+         * 0 → starting cell
+         * 0–51 → 52 main cells
+         *
+         * After the final main-track cell,
+         * token enters its own home lane.
+         */
+
+        const targetProgress =
+            token.progress + dice;
+
+
+        /*
+         * Maximum progress:
+         *
+         * 52–57 = six home-lane cells
+         */
+
         return (
-            token.progress + dice
-            <= FINISH_STEP
+            targetProgress <= 57
         );
 
     }
 
 
-    /* Lane token */
+    /* -----------------------------------------
+       TOKEN IN HOME LANE
+    ----------------------------------------- */
 
     if (
-        token.state ===
-        "lane"
+        token.state === "lane"
     ) {
 
+        const targetPosition =
+            token.position + dice;
+
+
         return (
-            token.position + dice
-            <= LUDO_HOME_LANES[
-                color
-            ].length
+            targetPosition <=
+            HOME_LANE_LENGTH
         );
 
     }
@@ -1359,7 +1394,6 @@ function canTokenMove(
     return false;
 
 }
-
 
 /* =========================================================
    GET VALID TOKENS
@@ -1506,6 +1540,11 @@ function moveSelectedToken(
         "home"
     ) {
 
+        /*
+         * Token can leave home only
+         * when dice = 6.
+         */
+
         token.state =
             "track";
 
@@ -1536,14 +1575,19 @@ function moveSelectedToken(
             dice;
 
 
-        token.progress =
-            newProgress;
-
+        /*
+         * Token is still on
+         * the main 52-cell track.
+         */
 
         if (
             newProgress <
-            TRACK_LENGTH
+            HOME_ENTRY_STEP
         ) {
+
+            token.progress =
+                newProgress;
+
 
             token.position =
                 getTrackIndex(
@@ -1554,17 +1598,21 @@ function moveSelectedToken(
         }
 
 
-        /* Enter home lane */
+        /*
+         * Token enters its
+         * own home lane.
+         */
 
-        if (
-            newProgress >=
-            HOME_ENTRY_STEP
-        ) {
+        else {
 
             const lanePosition =
                 newProgress -
                 HOME_ENTRY_STEP;
 
+
+            /*
+             * Still inside home lane
+             */
 
             if (
                 lanePosition >= 0 &&
@@ -1578,33 +1626,40 @@ function moveSelectedToken(
                     "lane";
 
 
+                token.progress =
+                    newProgress;
+
+
                 token.position =
                     lanePosition;
 
             }
 
-        }
+
+            /*
+             * Reached final home
+             */
+
+            else {
+
+                token.state =
+                    "finished";
 
 
-        /* Finish */
-
-        if (
-            newProgress >=
-            FINISH_STEP
-        ) {
-
-            token.state =
-                "finished";
+                token.finished =
+                    true;
 
 
-            token.finished =
-                true;
+                token.progress =
+                    FINISH_STEP;
 
 
-            token.position =
-                LUDO_HOME_LANES[
-                    color
-                ].length;
+                token.position =
+                    LUDO_HOME_LANES[
+                        color
+                    ].length;
+
+            }
 
         }
 
@@ -1625,12 +1680,33 @@ function moveSelectedToken(
             dice;
 
 
+        /*
+         * Still inside home lane
+         */
+
         if (
-            newPosition >=
+            newPosition <
             LUDO_HOME_LANES[
                 color
             ].length
         ) {
+
+            token.position =
+                newPosition;
+
+
+            token.progress =
+                HOME_ENTRY_STEP +
+                newPosition;
+
+        }
+
+
+        /*
+         * Token reaches final home
+         */
+
+        else {
 
             token.state =
                 "finished";
@@ -1640,6 +1716,10 @@ function moveSelectedToken(
                 true;
 
 
+            token.progress =
+                FINISH_STEP;
+
+
             token.position =
                 LUDO_HOME_LANES[
                     color
@@ -1647,15 +1727,12 @@ function moveSelectedToken(
 
         }
 
-        else {
-
-            token.position =
-                newPosition;
-
-        }
-
     }
 
+
+    /* -----------------------------------------------------
+       AFTER MOVEMENT
+    ----------------------------------------------------- */
 
     ludoGameState.diceRolled =
         false;
@@ -1665,21 +1742,37 @@ function moveSelectedToken(
         false;
 
 
+    /*
+     * Capture opponent token
+     * if landing on a non-safe cell.
+     */
+
     handleCapture(
         color,
         token
     );
 
 
+    /*
+     * Check whether this player
+     * has finished all tokens.
+     */
+
     checkWinner(
         color
     );
 
 
+    /*
+     * Re-render board.
+     */
+
     renderTokens();
 
 
-    /* Six = extra turn */
+    /* -----------------------------------------------------
+       SIX = EXTRA TURN
+    ----------------------------------------------------- */
 
     if (
         dice === 6 &&
@@ -1703,6 +1796,10 @@ function moveSelectedToken(
 
     }
 
+
+    /* -----------------------------------------------------
+       NORMAL TURN CHANGE
+    ----------------------------------------------------- */
 
     if (
         !ludoGameState.winner
@@ -1899,6 +1996,10 @@ function setDiceResult(
     result
 ) {
 
+    /* -----------------------------------------------------
+       GAME ALREADY FINISHED
+    ----------------------------------------------------- */
+
     if (
         ludoGameState.winner
     ) {
@@ -1908,6 +2009,10 @@ function setDiceResult(
     }
 
 
+    /* -----------------------------------------------------
+       DICE ALREADY ROLLED
+    ----------------------------------------------------- */
+
     if (
         ludoGameState.diceRolled
     ) {
@@ -1916,6 +2021,10 @@ function setDiceResult(
 
     }
 
+
+    /* -----------------------------------------------------
+       VALIDATE DICE
+    ----------------------------------------------------- */
 
     if (
         !Number.isInteger(result) ||
@@ -1927,6 +2036,10 @@ function setDiceResult(
 
     }
 
+
+    /* -----------------------------------------------------
+       SAVE DICE RESULT
+    ----------------------------------------------------- */
 
     ludoGameState.dice =
         result;
@@ -1940,9 +2053,17 @@ function setDiceResult(
         true;
 
 
+    ludoGameState.waitingForToken =
+        false;
+
+
     const color =
         ludoGameState.currentPlayer;
 
+
+    /* -----------------------------------------------------
+       FIND VALID TOKENS
+    ----------------------------------------------------- */
 
     const valid =
         getValidTokens(
@@ -1951,60 +2072,69 @@ function setDiceResult(
         );
 
 
+    /* -----------------------------------------------------
+       NO VALID MOVE
+    ----------------------------------------------------- */
+
     if (
         valid.length === 0
     ) {
 
         updateGameMessage(
-            `${getPlayerName(color)} — ${result} এসেছে, কোনো valid move নেই।`
+            `${getPlayerName(color)} — ${result} এসেছে, কোনো বৈধ চাল নেই।`
         );
 
 
-        if (
-            result === 6
-        ) {
+        ludoGameState.waitingForToken =
+            false;
 
-            setTimeout(
-                () => {
 
-                    ludoGameState.dice =
-                        null;
+        /*
+         * No token can move.
+         *
+         * Even if dice = 6, there is
+         * no playable token, so turn
+         * moves to the next player.
+         */
 
-                    ludoGameState.diceRolled =
-                        false;
+        setTimeout(
+            () => {
 
-                    changeTurn();
+                ludoGameState.dice =
+                    null;
 
-                },
-                800
-            );
 
-        }
+                ludoGameState.diceRolled =
+                    false;
 
-        else {
 
-            setTimeout(
-                () => {
+                ludoGameState.waitingForToken =
+                    false;
 
-                    ludoGameState.dice =
-                        null;
 
-                    ludoGameState.diceRolled =
-                        false;
+                changeTurn();
 
-                    changeTurn();
-
-                },
-                800
-            );
-
-        }
+            },
+            800
+        );
 
 
         return true;
 
     }
 
+
+    /* -----------------------------------------------------
+       VALID MOVE AVAILABLE
+    ----------------------------------------------------- */
+
+    ludoGameState.waitingForToken =
+        true;
+
+
+    /* -----------------------------------------------------
+       ONLY ONE TOKEN CAN MOVE
+    ----------------------------------------------------- */
 
     if (
         valid.length === 1
@@ -2016,6 +2146,11 @@ function setDiceResult(
 
     }
 
+
+    /* -----------------------------------------------------
+       MULTIPLE TOKENS CAN MOVE
+    ----------------------------------------------------- */
+
     else {
 
         updateGameMessage(
@@ -2024,6 +2159,10 @@ function setDiceResult(
 
     }
 
+
+    /* -----------------------------------------------------
+       RENDER TOKEN STATES
+    ----------------------------------------------------- */
 
     renderTokens();
 
