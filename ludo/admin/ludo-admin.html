@@ -2878,7 +2878,12 @@ async function startAdmin() {
 
 
         loginError.textContent =
-            "Ludo Admin চালু করা সম্ভব হয়নি।";
+    "ERROR: " +
+    (
+        error?.message ||
+        error ||
+        "Unknown error"
+    );
 
         loginScreen.style.display =
             "flex";
