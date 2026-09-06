@@ -1304,194 +1304,165 @@
 <!-- =================================================
      PAGE INITIALIZATION
 ================================================== -->
-
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-    "use strict";
+    console.log("GSA LUDO: DOM READY");
+
+    const board =
+        document.getElementById("ludo-board");
+
+    const rollButton =
+        document.getElementById("roll-button");
+
+    const dice =
+        document.getElementById("dice");
 
 
-    /* =================================================
-       FOOTER YEAR
-    ================================================== */
+    /* =====================================================
+       BOARD CHECK
+    ===================================================== */
 
-    const footerYear =
-        document.getElementById(
-            "footer-year"
+    if (!board) {
+
+        console.error(
+            "GSA LUDO: #ludo-board পাওয়া যায়নি"
         );
 
-
-    if (footerYear) {
-
-        footerYear.textContent =
-            new Date().getFullYear();
+        return;
 
     }
 
 
-    /* =================================================
-       LUDO PAGE INITIALIZATION
-    ================================================== */
+    /* =====================================================
+       LUDO ENGINE CHECK
+    ===================================================== */
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        () => {
+    if (
+        !window.LudoBoard ||
+        typeof window.LudoBoard.create !== "function"
+    ) {
 
+        console.error(
+            "GSA LUDO: ludu-board.js load হয়নি অথবা LudoBoard তৈরি হয়নি"
+        );
 
-            /* -----------------------------------------
-               BOARD
-            ----------------------------------------- */
+        board.innerHTML = `
+            <div style="
+                min-height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                padding:30px;
+                text-align:center;
+                color:#fca5a5;
+                font-size:14px;
+                line-height:1.7;
+            ">
+                Ludo Board Engine Load হয়নি।
+                <br>
+                ludu-board.js পরীক্ষা করুন।
+            </div>
+        `;
 
-            const board =
-                document.getElementById(
-                    "ludo-board"
-                );
+        return;
 
-
-            if (!board) {
-
-                return;
-
-            }
-
-
-            /* -----------------------------------------
-               DICE BUTTON
-            ----------------------------------------- */
-
-            const rollButton =
-                document.getElementById(
-                    "roll-button"
-                );
-
-
-            /* -----------------------------------------
-               DICE DISPLAY
-            ----------------------------------------- */
-
-            const dice =
-                document.getElementById(
-                    "dice"
-                );
+    }
 
 
-            /* -----------------------------------------
-               INITIAL DICE STATE
-            ----------------------------------------- */
+    /* =====================================================
+       CREATE BOARD
+    ===================================================== */
 
-            if (dice) {
+    try {
 
-                dice.textContent = "—";
+        window.LudoBoard.create(board);
 
-            }
+        console.log(
+            "GSA LUDO: Board successfully created"
+        );
 
+    } catch (error) {
 
-            /* -----------------------------------------
-               ROLL DICE
-            ----------------------------------------- */
+        console.error(
+            "GSA LUDO BOARD ERROR:",
+            error
+        );
 
-            if (rollButton) {
+        board.innerHTML = `
+            <div style="
+                min-height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                padding:30px;
+                text-align:center;
+                color:#fca5a5;
+                font-size:14px;
+                line-height:1.7;
+            ">
+                Board তৈরি করতে সমস্যা হয়েছে।
+                <br>
+                Console-এ Error দেখুন।
+            </div>
+        `;
 
-                rollButton.addEventListener(
-                    "click",
-                    () => {
-
-
-                        /*
-                         * LudoBoard handles
-                         * the actual game engine.
-                         */
-
-                        if (
-                            typeof window.LudoBoard ===
-                            "undefined"
-                        ) {
-
-                            console.error(
-                                "LudoBoard is not loaded."
-                            );
-
-                            return;
-
-                        }
-
-
-                        /*
-                         * Dice roll is currently
-                         * local for Step 5 testing.
-                         *
-                         * Supabase authoritative
-                         * dice will be added later.
-                         */
-
-                        const result =
-                            Math.floor(
-                                Math.random() * 6
-                            ) + 1;
+    }
 
 
-                        /*
-                         * Send result to
-                         * Ludo movement engine.
-                         */
+    /* =====================================================
+       DICE
+    ===================================================== */
 
-                        const accepted =
-                            window.LudoBoard.setDice(
-                                result
-                            );
+    if (rollButton && dice) {
 
+        rollButton.addEventListener(
+            "click",
+            function () {
 
-                        if (
-                            accepted === false
-                        ) {
-
-                            return;
-
-                        }
+                const result =
+                    Math.floor(
+                        Math.random() * 6
+                    ) + 1;
 
 
-                        /* ---------------------------------
-                           DISPLAY DICE
-                        --------------------------------- */
+                const diceFaces = {
 
-                        if (dice) {
+                    1: "⚀",
+                    2: "⚁",
+                    3: "⚂",
+                    4: "⚃",
+                    5: "⚄",
+                    6: "⚅"
 
-                            const diceFaces = {
-
-                                1: "⚀",
-                                2: "⚁",
-                                3: "⚂",
-                                4: "⚃",
-                                5: "⚄",
-                                6: "⚅"
-
-                            };
+                };
 
 
-                            dice.textContent =
-                                diceFaces[result] ||
-                                result;
-
-                        }
+                dice.textContent =
+                    diceFaces[result];
 
 
-                    }
+                if (
+                    window.LudoBoard &&
+                    typeof window.LudoBoard.setDice === "function"
+                ) {
+
+                    window.LudoBoard.setDice(result);
+
+                }
+
+
+                console.log(
+                    "GSA LUDO DICE:",
+                    result
                 );
 
             }
+        );
 
+    }
 
-            /* -----------------------------------------
-               BOARD READY
-            ----------------------------------------- */
-
-            console.log(
-                "Ghopkhali Sports Arena — Ludo Board Ready"
-            );
-
-
-        }
-    );
-
+});
 </script>
 
 </body>
