@@ -4245,7 +4245,6 @@ async function saveTournament() {
 
 }
 
-
 /* =========================================================
    DELETE PLAYER
 ========================================================= */
@@ -4255,14 +4254,178 @@ async function (
     id
 ) {
 
-    if (
-        !confirm(
-            "এই Player-কে delete করতে চান?"
-        )
-    ) {
+    if (!currentTournament) {
+
+        showToast(
+            "Tournament পাওয়া যায়নি।",
+            "error"
+        );
+
         return;
+
     }
 
+
+    const player =
+        players.find(
+            p =>
+                p.id === id
+        );
+
+
+    if (!player) {
+
+        showToast(
+            "Player পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       -------------------------------------------------------
+       CHECK LIVE / COMPLETED FIXTURES
+       -------------------------------------------------------
+    */
+
+    const {
+        data: protectedFixtures,
+        error: fixtureCheckError
+    } =
+        await supabaseClient
+            .from(
+                "ludo_fixtures"
+            )
+            .select(
+                "id,status"
+            )
+            .eq(
+                "tournament_id",
+                currentTournament.id
+            )
+            .or(
+                `participant_a_id.eq.${id},participant_b_id.eq.${id}`
+            )
+            .in(
+                "status",
+                [
+                    "live",
+                    "completed"
+                ]
+            );
+
+
+    if (fixtureCheckError) {
+
+        console.error(
+            "Player Fixture Check Error:",
+            fixtureCheckError
+        );
+
+
+        showToast(
+            "Player delete করার আগে Fixture check করা যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        protectedFixtures &&
+        protectedFixtures.length > 0
+    ) {
+
+        showToast(
+            "এই Player-এর Live/Completed Fixture আছে। Player delete করা যাবে না। আগে Status Inactive/Eliminated করুন।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       -------------------------------------------------------
+       CONFIRM
+       -------------------------------------------------------
+    */
+
+    const confirmed =
+        confirm(
+            `Player: ${player.player_name}\n\n` +
+            "এই Player-কে permanently delete করতে চান?\n\n" +
+            "তার Scheduled/Cancelled Fixture সম্পর্কিত রেকর্ডও মুছে যেতে পারে।\n\n" +
+            "আপনি কি নিশ্চিত?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    /*
+       -------------------------------------------------------
+       DELETE SCHEDULED / CANCELLED FIXTURES
+       -------------------------------------------------------
+    */
+
+    const {
+        error: fixtureDeleteError
+    } =
+        await supabaseClient
+            .from(
+                "ludo_fixtures"
+            )
+            .delete()
+            .eq(
+                "tournament_id",
+                currentTournament.id
+            )
+            .or(
+                `participant_a_id.eq.${id},participant_b_id.eq.${id}`
+            )
+            .in(
+                "status",
+                [
+                    "scheduled",
+                    "cancelled"
+                ]
+            );
+
+
+    if (fixtureDeleteError) {
+
+        console.error(
+            "Player Fixture Delete Error:",
+            fixtureDeleteError
+        );
+
+
+        showToast(
+            "Player-এর Fixture delete করা যায়নি। Player delete বন্ধ করা হয়েছে।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       -------------------------------------------------------
+       DELETE PLAYER
+       -------------------------------------------------------
+    */
 
     const {
         error
@@ -4275,13 +4438,25 @@ async function (
             .eq(
                 "id",
                 id
+            )
+            .eq(
+                "tournament_id",
+                currentTournament.id
             );
 
 
     if (error) {
 
+        console.error(
+            "Delete Player Error:",
+            error
+        );
+
+
         showToast(
-            error.message
+            "Player delete করা যায়নি: " +
+            error.message,
+            "error"
         );
 
         return;
@@ -4290,7 +4465,8 @@ async function (
 
 
     showToast(
-        "Player deleted."
+        "✓ Player deleted.",
+        "success"
     );
 
 
@@ -4308,14 +4484,183 @@ async function (
     id
 ) {
 
-    if (
-        !confirm(
-            "এই Team-কে delete করতে চান?"
-        )
-    ) {
+    if (!currentTournament) {
+
+        showToast(
+            "Tournament পাওয়া যায়নি।",
+            "error"
+        );
+
         return;
+
     }
 
+
+    const team =
+        teams.find(
+            t =>
+                t.id === id
+        );
+
+
+    if (!team) {
+
+        showToast(
+            "Team পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       -------------------------------------------------------
+       CHECK LIVE / COMPLETED FIXTURES
+       -------------------------------------------------------
+    */
+
+    const {
+        data: protectedFixtures,
+        error: fixtureCheckError
+    } =
+        await supabaseClient
+            .from(
+                "ludo_fixtures"
+            )
+            .select(
+                "id,status"
+            )
+            .eq(
+                "tournament_id",
+                currentTournament.id
+            )
+            .or(
+                `participant_a_id.eq.${id},participant_b_id.eq.${id}`
+            )
+            .in(
+                "status",
+                [
+                    "live",
+                    "completed"
+                ]
+            );
+
+
+    if (fixtureCheckError) {
+
+        console.error(
+            "Team Fixture Check Error:",
+            fixtureCheckError
+        );
+
+
+        showToast(
+            "Team delete করার আগে Fixture check করা যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        protectedFixtures &&
+        protectedFixtures.length > 0
+    ) {
+
+        showToast(
+            "এই Team-এর Live/Completed Fixture আছে। Team delete করা যাবে না। আগে Status Inactive/Eliminated করুন।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       -------------------------------------------------------
+       CONFIRM
+       -------------------------------------------------------
+    */
+
+    const confirmed =
+        confirm(
+            `Team: ${team.team_name}\n\n` +
+            "এই Team-কে permanently delete করতে চান?\n\n" +
+            "তার Scheduled/Cancelled Fixture এবং Team Players সম্পর্কিত রেকর্ড মুছে যাবে।\n\n" +
+            "আপনি কি নিশ্চিত?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    /*
+       -------------------------------------------------------
+       DELETE SCHEDULED / CANCELLED FIXTURES
+       -------------------------------------------------------
+    */
+
+    const {
+        error: fixtureDeleteError
+    } =
+        await supabaseClient
+            .from(
+                "ludo_fixtures"
+            )
+            .delete()
+            .eq(
+                "tournament_id",
+                currentTournament.id
+            )
+            .or(
+                `participant_a_id.eq.${id},participant_b_id.eq.${id}`
+            )
+            .in(
+                "status",
+                [
+                    "scheduled",
+                    "cancelled"
+                ]
+            );
+
+
+    if (fixtureDeleteError) {
+
+        console.error(
+            "Team Fixture Delete Error:",
+            fixtureDeleteError
+        );
+
+
+        showToast(
+            "Team-এর Fixture delete করা যায়নি। Team delete বন্ধ করা হয়েছে।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       -------------------------------------------------------
+       DELETE TEAM
+       -------------------------------------------------------
+       
+       ludo_team_players-এর foreign key-তে
+       ON DELETE CASCADE থাকলে Player records
+       automatically delete হবে।
+       -------------------------------------------------------
+    */
 
     const {
         error
@@ -4328,13 +4673,25 @@ async function (
             .eq(
                 "id",
                 id
+            )
+            .eq(
+                "tournament_id",
+                currentTournament.id
             );
 
 
     if (error) {
 
+        console.error(
+            "Delete Team Error:",
+            error
+        );
+
+
         showToast(
-            error.message
+            "Team delete করা যায়নি: " +
+            error.message,
+            "error"
         );
 
         return;
@@ -4343,14 +4700,14 @@ async function (
 
 
     showToast(
-        "Team deleted."
+        "✓ Team deleted.",
+        "success"
     );
 
 
     await loadAllData();
 
 };
-
 
 /* =========================================================
    EDIT PLAYER
@@ -4555,8 +4912,39 @@ async function saveParticipant() {
             .getElementById(
                 "editParticipantId"
             )
-            .value;
+            .value
+            .trim();
 
+
+    if (!id) {
+
+        showToast(
+            "Participant ID পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!currentTournament) {
+
+        showToast(
+            "Tournament পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       -------------------------------------------------------
+       SINGLE PLAYER
+       -------------------------------------------------------
+    */
 
     if (
         currentMode ===
@@ -4584,7 +4972,8 @@ async function saveParticipant() {
         if (!name) {
 
             showToast(
-                "Player name দিন।"
+                "Player name দিন।",
+                "error"
             );
 
             return;
@@ -4615,20 +5004,41 @@ async function saveParticipant() {
                 .eq(
                     "id",
                     id
+                )
+                .eq(
+                    "tournament_id",
+                    currentTournament.id
                 );
 
 
         if (error) {
 
+            console.error(
+                "Edit Player Error:",
+                error
+            );
+
+
             showToast(
-                error.message
+                "Player update করা যায়নি: " +
+                error.message,
+                "error"
             );
 
             return;
 
         }
 
-    } else {
+    }
+
+
+    /*
+       -------------------------------------------------------
+       DOUBLE TEAM
+       -------------------------------------------------------
+    */
+
+    else {
 
         const name =
             document
@@ -4673,13 +5083,33 @@ async function saveParticipant() {
         ) {
 
             showToast(
-                "Team এবং দুইজন Player-এর নাম দিন।"
+                "Team এবং দুইজন Player-এর নাম দিন।",
+                "error"
             );
 
             return;
 
         }
 
+
+        if (
+            p1.toLowerCase() ===
+            p2.toLowerCase()
+        ) {
+
+            showToast(
+                "Player 1 এবং Player 2-এর নাম আলাদা হতে হবে।",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        /*
+           UPDATE TEAM
+        */
 
         const {
             error: teamError
@@ -4704,19 +5134,35 @@ async function saveParticipant() {
                 .eq(
                     "id",
                     id
+                )
+                .eq(
+                    "tournament_id",
+                    currentTournament.id
                 );
 
 
         if (teamError) {
 
+            console.error(
+                "Edit Team Error:",
+                teamError
+            );
+
+
             showToast(
-                teamError.message
+                "Team update করা যায়নি: " +
+                teamError.message,
+                "error"
             );
 
             return;
 
         }
 
+
+        /*
+           UPDATE TEAM PLAYERS
+        */
 
         const {
             error: playerError
@@ -4758,8 +5204,16 @@ async function saveParticipant() {
 
         if (playerError) {
 
+            console.error(
+                "Edit Team Players Error:",
+                playerError
+            );
+
+
             showToast(
-                playerError.message
+                "Team Player update করা যায়নি: " +
+                playerError.message,
+                "error"
             );
 
             return;
@@ -4769,20 +5223,26 @@ async function saveParticipant() {
     }
 
 
+    /*
+       -------------------------------------------------------
+       CLOSE + REFRESH
+       -------------------------------------------------------
+    */
+
     closeModal(
         "participantModal"
     );
 
 
     showToast(
-        "Changes saved."
+        "✓ Changes saved.",
+        "success"
     );
 
 
     await loadAllData();
 
 }
-
 
 /* =========================================================
    ADD FIXTURE
@@ -5784,90 +6244,97 @@ async function generateFixtures() {
 
 
     /*
-     * Current participants
+     * -----------------------------------------------------
+     * ACTIVE PARTICIPANTS ONLY
+     * -----------------------------------------------------
      */
 
-    /* =====================================================
-   ACTIVE PARTICIPANTS ONLY
-===================================================== */
-
-const participants =
-    currentMode === "single"
-
-        ? players
-            .filter(
-                player =>
-                    player.status ===
-                    "active"
-            )
-            .map(
-                player => ({
-                    id:
-                        player.id,
-
-                    name:
-                        player.player_name
-                })
-            )
-
-        : teams
-            .filter(
-                team =>
-                    team.status ===
-                    "active"
-            )
-            .map(
-                team => ({
-                    id:
-                        team.id,
-
-                    name:
-                        team.team_name
-                })
-            );
-    
-const totalParticipants =
-    currentMode === "single"
-        ? players.length
-        : teams.length;
-
-
-const inactiveParticipants =
-    totalParticipants -
-    participants.length;
-    
-    /*
-     * Minimum participants
-     */
-
-    const minimum =
+    const participants =
         currentMode === "single"
-            ? 2
-            : 2;
+
+            ? players
+                .filter(
+                    player =>
+                        player.status ===
+                        "active"
+                )
+                .map(
+                    player => ({
+                        id:
+                            player.id,
+
+                        name:
+                            player.player_name
+                    })
+                )
+
+            : teams
+                .filter(
+                    team =>
+                        team.status ===
+                        "active"
+                )
+                .map(
+                    team => ({
+                        id:
+                            team.id,
+
+                        name:
+                            team.team_name
+                    })
+                );
+
+
+    /*
+     * -----------------------------------------------------
+     * PARTICIPANT COUNT
+     * -----------------------------------------------------
+     */
+
+    const totalParticipants =
+        currentMode === "single"
+            ? players.length
+            : teams.length;
+
+
+    const inactiveParticipants =
+        totalParticipants -
+        participants.length;
+
+
+    /*
+     * -----------------------------------------------------
+     * MINIMUM PARTICIPANTS
+     * -----------------------------------------------------
+     */
+
+    const minimum = 2;
 
 
     if (
-    participants.length <
-    minimum
-) {
+        participants.length <
+        minimum
+    ) {
 
-    showToast(
+        showToast(
 
-        currentMode === "single"
+            currentMode === "single"
 
-            ? "Fixture তৈরির জন্য কমপক্ষে ২ জন Active Player প্রয়োজন।"
+                ? "Fixture তৈরির জন্য কমপক্ষে ২ জন Active Player প্রয়োজন।"
 
-            : "Fixture তৈরির জন্য কমপক্ষে ২টি Active Team প্রয়োজন।",
+                : "Fixture তৈরির জন্য কমপক্ষে ২টি Active Team প্রয়োজন।",
 
-        "error"
-    );
+            "error"
+        );
 
-    return;
+        return;
+    }
 
-}
 
     /*
-     * Maximum validation
+     * -----------------------------------------------------
+     * MAXIMUM VALIDATION
+     * -----------------------------------------------------
      */
 
     if (
@@ -5899,29 +6366,32 @@ const inactiveParticipants =
 
 
     /*
-     * Existing fixtures check
+     * -----------------------------------------------------
+     * LOAD EXISTING FIXTURES
+     * -----------------------------------------------------
      */
 
     const {
         data: existingFixtures,
         error: existingError
-    } = await supabaseClient
-
-        .from("ludo_fixtures")
-
-        .select(
-            "id,status"
-        )
-
-        .eq(
-            "tournament_id",
-            currentTournament.id
-        );
+    } =
+        await supabaseClient
+            .from(
+                "ludo_fixtures"
+            )
+            .select(
+                "id,status"
+            )
+            .eq(
+                "tournament_id",
+                currentTournament.id
+            );
 
 
     if (existingError) {
 
         console.error(
+            "Existing Fixture Error:",
             existingError
         );
 
@@ -5935,16 +6405,22 @@ const inactiveParticipants =
 
 
     /*
-     * Live / Completed fixture থাকলে
-     * Generator বন্ধ
+     * -----------------------------------------------------
+     * LIVE / COMPLETED PROTECTION
+     *
+     * Live অথবা Completed থাকলে
+     * নতুন Fixture Generate করা যাবে না।
+     * -----------------------------------------------------
      */
 
     const protectedFixtures =
         (existingFixtures || [])
             .filter(
                 fixture =>
-                    fixture.status === "live" ||
-                    fixture.status === "completed"
+                    fixture.status ===
+                        "live" ||
+                    fixture.status ===
+                        "completed"
             );
 
 
@@ -5962,8 +6438,9 @@ const inactiveParticipants =
 
 
     /*
-     * Scheduled / Cancelled fixture থাকলে
-     * confirmation
+     * -----------------------------------------------------
+     * EXISTING SCHEDULED / CANCELLED FIXTURES
+     * -----------------------------------------------------
      */
 
     if (
@@ -5972,13 +6449,25 @@ const inactiveParticipants =
     ) {
 
         const confirmed =
-    confirm(
-        `Active ${currentMode === "single" ? "Player" : "Team"}: ${participants.length}\n` +
-        `Inactive/Eliminated: ${inactiveParticipants}\n\n` +
-        `এই Active participant-দের নিয়ে নতুন Round Robin Fixture তৈরি হবে।\n\n` +
-        `আগের Scheduled Fixture মুছে ফেলা হবে।\n\n` +
-        `আপনি কি নিশ্চিত?`
-    );
+            confirm(
+                `Active ${
+                    currentMode === "single"
+                        ? "Player"
+                        : "Team"
+                }: ${participants.length}\n` +
+
+                `Inactive/Eliminated: ${
+                    inactiveParticipants
+                }\n\n` +
+
+                `এই Active participant-দের নিয়ে নতুন Round Robin Fixture তৈরি হবে।\n\n` +
+
+                `আগের Scheduled Fixture মুছে ফেলা হবে।\n` +
+
+                `Cancelled Fixture history থাকবে।\n\n` +
+
+                `আপনি কি নিশ্চিত?`
+            );
 
 
         if (!confirmed) {
@@ -5987,28 +6476,41 @@ const inactiveParticipants =
         }
 
 
+        /*
+         * -------------------------------------------------
+         * DELETE ONLY SCHEDULED FIXTURES
+         *
+         * Cancelled history রাখা হবে।
+         * -------------------------------------------------
+         */
+
         const {
             error: deleteError
-        } = await supabaseClient
-
-            .from("ludo_fixtures")
-
-            .delete()
-
-            .eq(
-                "tournament_id",
-                currentTournament.id
-            );
+        } =
+            await supabaseClient
+                .from(
+                    "ludo_fixtures"
+                )
+                .delete()
+                .eq(
+                    "tournament_id",
+                    currentTournament.id
+                )
+                .eq(
+                    "status",
+                    "scheduled"
+                );
 
 
         if (deleteError) {
 
             console.error(
+                "Old Scheduled Fixture Delete Error:",
                 deleteError
             );
 
             showToast(
-                "পুরোনো Fixture মুছে ফেলা যায়নি।",
+                "পুরোনো Scheduled Fixture মুছে ফেলা যায়নি।",
                 "error"
             );
 
@@ -6018,17 +6520,23 @@ const inactiveParticipants =
 
 
     /*
-     * Participant order randomize
+     * -----------------------------------------------------
+     * RANDOMIZE PARTICIPANTS
+     * -----------------------------------------------------
      */
 
     const shuffled =
         [...participants].sort(
-            () => Math.random() - 0.5
+            () =>
+                Math.random() -
+                0.5
         );
 
 
     /*
-     * Odd number হলে BYE যোগ
+     * -----------------------------------------------------
+     * ODD PARTICIPANT হলে BYE
+     * -----------------------------------------------------
      */
 
     if (
@@ -6036,21 +6544,24 @@ const inactiveParticipants =
     ) {
 
         shuffled.push(null);
-
     }
 
 
     const total =
         shuffled.length;
 
+
     const totalRounds =
         total - 1;
+
 
     const matches = [];
 
 
     /*
-     * Round Robin
+     * -----------------------------------------------------
+     * ROUND ROBIN GENERATION
+     * -----------------------------------------------------
      */
 
     let rotation =
@@ -6072,6 +6583,7 @@ const inactiveParticipants =
             const participantA =
                 rotation[i];
 
+
             const participantB =
                 rotation[
                     total - 1 - i
@@ -6088,7 +6600,6 @@ const inactiveParticipants =
             ) {
 
                 continue;
-
             }
 
 
@@ -6113,16 +6624,18 @@ const inactiveParticipants =
                     "scheduled"
 
             });
-
         }
 
 
         /*
-         * Circle method rotation
+         * -------------------------------------------------
+         * CIRCLE METHOD ROTATION
+         * -------------------------------------------------
          */
 
         const fixed =
             rotation[0];
+
 
         const rotating =
             rotation.slice(1);
@@ -6137,12 +6650,13 @@ const inactiveParticipants =
             fixed,
             ...rotating
         ];
-
     }
 
 
     /*
-     * No matches
+     * -----------------------------------------------------
+     * NO MATCHES
+     * -----------------------------------------------------
      */
 
     if (
@@ -6159,16 +6673,21 @@ const inactiveParticipants =
 
 
     /*
-     * Insert fixtures
+     * -----------------------------------------------------
+     * INSERT NEW FIXTURES
+     * -----------------------------------------------------
      */
 
     const {
         error: insertError
-    } = await supabaseClient
-
-        .from("ludo_fixtures")
-
-        .insert(matches);
+    } =
+        await supabaseClient
+            .from(
+                "ludo_fixtures"
+            )
+            .insert(
+                matches
+            );
 
 
     if (insertError) {
@@ -6192,13 +6711,23 @@ const inactiveParticipants =
 
 
     /*
-     * Reload
+     * -----------------------------------------------------
+     * RELOAD
+     * -----------------------------------------------------
      */
 
     await loadFixtures();
 
     renderFixtures();
 
+    updateStats();
+
+
+    /*
+     * -----------------------------------------------------
+     * SUCCESS
+     * -----------------------------------------------------
+     */
 
     showToast(
         `⚡ ${matches.length}টি Fixture সফলভাবে তৈরি হয়েছে!`,
@@ -6219,7 +6748,8 @@ document
         "click",
         generateFixtures
     );
-    
+
+
 /* =========================================================
    DELETE FIXTURE
 ========================================================= */
@@ -6229,17 +6759,132 @@ async function (
     id
 ) {
 
-    if (
-        !confirm(
-            "এই Fixture delete করতে চান?"
-        )
-    ) {
+    if (!currentTournament) {
+
+        showToast(
+            "Tournament পাওয়া যায়নি।",
+            "error"
+        );
+
         return;
     }
 
 
+    /*
+     * -----------------------------------------------------
+     * GET FIXTURE
+     * -----------------------------------------------------
+     */
+
     const {
-        error
+        data: fixture,
+        error: fetchError
+    } =
+        await supabaseClient
+            .from(
+                "ludo_fixtures"
+            )
+            .select(
+                "id,status,round_name,match_number"
+            )
+            .eq(
+                "id",
+                id
+            )
+            .eq(
+                "tournament_id",
+                currentTournament.id
+            )
+            .maybeSingle();
+
+
+    if (fetchError) {
+
+        console.error(
+            "Fixture Fetch Error:",
+            fetchError
+        );
+
+        showToast(
+            "Fixture তথ্য পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!fixture) {
+
+        showToast(
+            "Fixture পাওয়া যায়নি।",
+            "error"
+        );
+
+        return;
+    }
+
+
+    /*
+     * -----------------------------------------------------
+     * LIVE / COMPLETED PROTECTION
+     * -----------------------------------------------------
+     */
+
+    if (
+        fixture.status === "live" ||
+        fixture.status === "completed"
+    ) {
+
+        showToast(
+            "Live বা Completed Fixture delete করা যাবে না।",
+            "error"
+        );
+
+        return;
+    }
+
+
+    /*
+     * -----------------------------------------------------
+     * CONFIRM DELETE
+     * -----------------------------------------------------
+     */
+
+    const confirmed =
+        confirm(
+            `Round: ${
+                fixture.round_name
+            }\n` +
+
+            `Match: ${
+                fixture.match_number
+            }\n` +
+
+            `Status: ${
+                fixture.status
+            }\n\n` +
+
+            "এই Fixture delete করতে চান?\n\n" +
+
+            "আপনি কি নিশ্চিত?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+    }
+
+
+    /*
+     * -----------------------------------------------------
+     * DELETE FIXTURE
+     * -----------------------------------------------------
+     */
+
+    const {
+        error: deleteError
     } =
         await supabaseClient
             .from(
@@ -6249,28 +6894,45 @@ async function (
             .eq(
                 "id",
                 id
+            )
+            .eq(
+                "tournament_id",
+                currentTournament.id
             );
 
 
-    if (error) {
+    if (deleteError) {
+
+        console.error(
+            "Delete Fixture Error:",
+            deleteError
+        );
 
         showToast(
-            error.message
+            "Fixture delete করা যায়নি: " +
+            deleteError.message,
+            "error"
         );
 
         return;
-
     }
 
 
-    showToast(
-        "Fixture deleted."
-    );
-
+    /*
+     * -----------------------------------------------------
+     * RELOAD
+     * -----------------------------------------------------
+     */
 
     await loadFixtures();
 
     updateStats();
+
+
+    showToast(
+        "✓ Fixture deleted.",
+        "success"
+    );
 
 };
 
