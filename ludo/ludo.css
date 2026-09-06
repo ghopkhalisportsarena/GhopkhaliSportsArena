@@ -1,12 +1,25 @@
 /* =========================================================
    GHOPKHALI SPORTS ARENA
    LUDO BOARD
-   STEP 2 — TOKEN DESIGN
+   COMPLETE BOARD + TOKEN + DICE STYLES
 ========================================================= */
 
 
 /* =========================================================
-   BOARD
+   BOARD WRAPPER
+========================================================= */
+
+#ludo-board {
+
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+
+}
+
+
+/* =========================================================
+   MAIN LUDO BOARD
 ========================================================= */
 
 .ludo-board {
@@ -52,7 +65,6 @@
     position: relative;
 
     min-width: 0;
-
     min-height: 0;
 
     border:
@@ -62,11 +74,26 @@
     background:
         #ffffff;
 
+    box-sizing:
+        border-box;
+
 }
 
 
 /* =========================================================
-   YARDS
+   TRACK
+========================================================= */
+
+.track {
+
+    background:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   COLORED YARDS
 ========================================================= */
 
 .red-yard {
@@ -97,18 +124,6 @@
 
     background:
         #1e88e5;
-
-}
-
-
-/* =========================================================
-   TRACK
-========================================================= */
-
-.track {
-
-    background:
-        #ffffff;
 
 }
 
@@ -189,6 +204,14 @@
    SAFE CELLS
 ========================================================= */
 
+.safe {
+
+    position:
+        relative;
+
+}
+
+
 .safe::after {
 
     content:
@@ -229,13 +252,13 @@
 
 
 /* =========================================================
-   HOME YARD OVERLAY
+   YARD OVERLAY
 ========================================================= */
 
 .yard-overlay {
 
     position:
-        relative;
+        absolute;
 
     z-index:
         4;
@@ -249,14 +272,18 @@
     justify-content:
         center;
 
-    padding:
-        12%;
+    box-sizing:
+        border-box;
 
     pointer-events:
         none;
 
 }
 
+
+/* =========================================================
+   RED YARD
+========================================================= */
 
 .red-yard-overlay {
 
@@ -266,6 +293,10 @@
 }
 
 
+/* =========================================================
+   GREEN YARD
+========================================================= */
+
 .green-yard-overlay {
 
     background:
@@ -274,6 +305,10 @@
 }
 
 
+/* =========================================================
+   YELLOW YARD
+========================================================= */
+
 .yellow-yard-overlay {
 
     background:
@@ -281,6 +316,10 @@
 
 }
 
+
+/* =========================================================
+   BLUE YARD
+========================================================= */
 
 .blue-yard-overlay {
 
@@ -291,7 +330,7 @@
 
 
 /* =========================================================
-   INNER YARD
+   YARD INNER
 ========================================================= */
 
 .yard-inner {
@@ -319,6 +358,9 @@
 
     padding:
         12%;
+
+    box-sizing:
+        border-box;
 
     border-radius:
         10%;
@@ -372,6 +414,165 @@
             163,
             184,
             0.16
+        );
+
+}
+
+
+/* =========================================================
+   CENTER
+========================================================= */
+
+.home-center {
+
+    position:
+        absolute;
+
+    z-index:
+        8;
+
+    overflow:
+        hidden;
+
+    background:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   CENTER TRIANGLES
+========================================================= */
+
+.center-triangle {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+}
+
+
+/* RED */
+
+.center-red {
+
+    background:
+        #e53935;
+
+    clip-path:
+        polygon(
+            0 0,
+            50% 50%,
+            0 100%
+        );
+
+}
+
+
+/* GREEN */
+
+.center-green {
+
+    background:
+        #43a047;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            50% 50%
+        );
+
+}
+
+
+/* YELLOW */
+
+.center-yellow {
+
+    background:
+        #fbc02d;
+
+    clip-path:
+        polygon(
+            100% 0,
+            100% 100%,
+            50% 50%
+        );
+
+}
+
+
+/* BLUE */
+
+.center-blue {
+
+    background:
+        #1e88e5;
+
+    clip-path:
+        polygon(
+            0 100%,
+            100% 100%,
+            50% 50%
+        );
+
+}
+
+
+/* =========================================================
+   CENTER STAR
+========================================================= */
+
+.center-star {
+
+    position:
+        absolute;
+
+    top:
+        50%;
+
+    left:
+        50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    z-index:
+        5;
+
+    color:
+        #ffffff;
+
+    font-size:
+        clamp(
+            13px,
+            4vw,
+            25px
+        );
+
+    line-height:
+        1;
+
+    text-shadow:
+        0 2px 4px
+        rgba(
+            0,
+            0,
+            0,
+            0.35
         );
 
 }
@@ -440,6 +641,9 @@
     justify-content:
         center;
 
+    box-sizing:
+        border-box;
+
     border-radius:
         50%;
 
@@ -459,7 +663,18 @@
 
     transition:
         transform
+        0.15s ease,
+        filter
         0.15s ease;
+
+    user-select:
+        none;
+
+    -webkit-user-select:
+        none;
+
+    cursor:
+        default;
 
 }
 
@@ -540,6 +755,9 @@
     justify-content:
         center;
 
+    box-sizing:
+        border-box;
+
     border-radius:
         50%;
 
@@ -608,7 +826,7 @@
 
 
 /* =========================================================
-   HOME TOKEN
+   TOKEN STATES
 ========================================================= */
 
 .token-in-home {
@@ -619,10 +837,6 @@
 }
 
 
-/* =========================================================
-   TRACK TOKEN
-========================================================= */
-
 .token-on-track {
 
     z-index:
@@ -631,292 +845,24 @@
 }
 
 
-/* =========================================================
-   LANE TOKEN
-========================================================= */
-
 .token-in-lane {
 
     z-index:
-        45;
+        46;
 
 }
 
-
-/* =========================================================
-   FINISHED TOKEN
-========================================================= */
 
 .token-finished {
 
     z-index:
         50;
 
-}
-
-
-/* =========================================================
-   HOME CENTER
-========================================================= */
-
-.home-center {
-
-    position:
-        relative;
-
-    z-index:
-        8;
-
-    overflow:
-        hidden;
-
-    background:
-        #ffffff;
-
-}
-
-
-/* =========================================================
-   CENTER TRIANGLES
-========================================================= */
-
-.center-triangle {
-
-    position:
-        absolute;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-}
-
-
-/* Red */
-
-.center-red {
-
-    background:
-        #e53935;
-
-    clip-path:
-        polygon(
-            0 0,
-            50% 50%,
-            0 100%
-        );
-
-}
-
-
-/* Green */
-
-.center-green {
-
-    background:
-        #43a047;
-
-    clip-path:
-        polygon(
-            0 0,
-            100% 0,
-            50% 50%
-        );
-
-}
-
-
-/* Yellow */
-
-.center-yellow {
-
-    background:
-        #fbc02d;
-
-    clip-path:
-        polygon(
-            100% 0,
-            100% 100%,
-            50% 50%
-        );
-
-}
-
-
-/* Blue */
-
-.center-blue {
-
-    background:
-        #1e88e5;
-
-    clip-path:
-        polygon(
-            0 100%,
-            100% 100%,
-            50% 50%
-        );
-
-}
-
-
-/* =========================================================
-   CENTER STAR
-========================================================= */
-
-.center-star {
-
-    position:
-        absolute;
-
-    top:
-        50%;
-
-    left:
-        50%;
-
     transform:
-        translate(
-            -50%,
-            -50%
-        );
+        scale(0.7);
 
-    z-index:
-        5;
-
-    color:
-        #ffffff;
-
-    font-size:
-        clamp(
-            13px,
-            4vw,
-            25px
-        );
-
-    line-height:
-        1;
-
-    text-shadow:
-        0 2px 4px
-        rgba(
-            0,
-            0,
-            0,
-            0.35
-        );
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .ludo-board {
-
-        border-width:
-            2px;
-
-        border-radius:
-            5px;
-
-    }
-
-
-    .yard-inner {
-
-        gap:
-            7%;
-
-        padding:
-            10%;
-
-    }
-
-
-    .ludo-token {
-
-        width:
-            78%;
-
-        height:
-            78%;
-
-        border-width:
-            1px;
-
-    }
-
-
-    .token-number {
-
-        font-size:
-            7px;
-
-    }
-
-}
-
-
-/* =========================================================
-   VERY SMALL SCREEN
-========================================================= */
-
-@media (max-width: 360px) {
-
-    .yard-inner {
-
-        gap:
-            5%;
-
-        padding:
-            8%;
-
-    }
-
-
-    .ludo-token {
-
-        width:
-            80%;
-
-        height:
-            80%;
-
-    }
-
-
-    .token-inner {
-
-        width:
-            62%;
-
-        height:
-            62%;
-
-    }
-
-}
-
-/* =========================================================
-   STEP 3 — TOKEN MOVEMENT STATES
-========================================================= */
-
-.ludo-token {
-
-    cursor:
-        default;
-
-    user-select:
-        none;
-
-    -webkit-user-select:
-        none;
+    opacity:
+        0.95;
 
 }
 
@@ -993,49 +939,7 @@
 
 
 /* =========================================================
-   TOKEN ON TRACK
-========================================================= */
-
-.token-on-track {
-
-    z-index:
-        45;
-
-}
-
-
-/* =========================================================
-   TOKEN IN HOME LANE
-========================================================= */
-
-.token-in-lane {
-
-    z-index:
-        46;
-
-}
-
-
-/* =========================================================
-   FINISHED TOKEN
-========================================================= */
-
-.token-finished {
-
-    z-index:
-        50;
-
-    transform:
-        scale(0.7);
-
-    opacity:
-        0.95;
-
-}
-
-
-/* =========================================================
-   TOKEN MOVEMENT FEEDBACK
+   TOKEN ACTIVE
 ========================================================= */
 
 .ludo-token.token-selectable:active {
@@ -1047,108 +951,7 @@
 
 
 /* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .ludo-token.token-selectable {
-
-        animation-duration:
-            0.85s;
-
-    }
-
-}
-
-/* =================================================
-   STEP 5 — DICE CONTROL
-================================================= */
-
-.dice-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 11px;
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: 15px;
-    background: rgba(16, 24, 39, 0.94);
-}
-
-.dice-box {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-}
-
-.dice-label {
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 700;
-}
-
-.dice-display {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    height: 46px;
-    border: 1px solid rgba(251, 192, 45, 0.28);
-    border-radius: 12px;
-    background: rgba(251, 192, 45, 0.08);
-    color: var(--text);
-    font-size: 28px;
-    line-height: 1;
-}
-
-.roll-button {
-    min-height: 44px;
-    padding: 0 18px;
-    border: 1px solid rgba(251, 192, 45, 0.45);
-    border-radius: 12px;
-    background: var(--accent);
-    color: #111827;
-    font-size: 13px;
-    font-weight: 800;
-    cursor: pointer;
-    transition:
-        transform 0.15s ease,
-        opacity 0.15s ease;
-}
-
-.roll-button:active {
-    transform: scale(0.96);
-}
-
-.roll-button:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-}
-
-@media (max-width: 360px) {
-
-    .dice-section {
-        gap: 8px;
-        padding: 9px;
-    }
-
-    .dice-display {
-        width: 42px;
-        height: 42px;
-        font-size: 25px;
-    }
-
-    .roll-button {
-        padding: 0 13px;
-        font-size: 12px;
-    }
-
-}
-
-/* =========================================================
-   STEP 7 — TOKEN HIGHLIGHT
+   TOKEN GENERIC CLASS
 ========================================================= */
 
 .token {
@@ -1157,16 +960,19 @@
         default;
 
     transition:
-        transform 0.15s ease,
-        filter 0.15s ease,
-        box-shadow 0.15s ease;
+        transform
+        0.15s ease,
+        filter
+        0.15s ease,
+        box-shadow
+        0.15s ease;
 
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    VALID TOKEN
---------------------------------------------------------- */
+========================================================= */
 
 .token.token-valid {
 
@@ -1174,7 +980,8 @@
         pointer;
 
     animation:
-        ludoTokenPulse 1s
+        ludoTokenPulse
+        1s
         ease-in-out
         infinite;
 
@@ -1184,9 +991,9 @@
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    VALID TOKEN HOVER
---------------------------------------------------------- */
+========================================================= */
 
 .token.token-valid:hover {
 
@@ -1196,9 +1003,9 @@
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    INVALID TOKEN
---------------------------------------------------------- */
+========================================================= */
 
 .token.token-disabled {
 
@@ -1211,9 +1018,9 @@
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    TOKEN PULSE
---------------------------------------------------------- */
+========================================================= */
 
 @keyframes ludoTokenPulse {
 
@@ -1235,9 +1042,336 @@
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
+   DICE SECTION
+========================================================= */
+
+.dice-section {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        12px;
+
+    margin-top:
+        11px;
+
+    padding:
+        12px;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(
+            16,
+            24,
+            39,
+            0.94
+        );
+
+}
+
+
+/* =========================================================
+   DICE BOX
+========================================================= */
+
+.dice-box {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+}
+
+
+.dice-label {
+
+    color:
+        var(--muted);
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+}
+
+
+.dice-display {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        46px;
+
+    height:
+        46px;
+
+    border:
+        1px solid
+        rgba(
+            251,
+            192,
+            45,
+            0.28
+        );
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(
+            251,
+            192,
+            45,
+            0.08
+        );
+
+    color:
+        var(--text);
+
+    font-size:
+        28px;
+
+    line-height:
+        1;
+
+}
+
+
+/* =========================================================
+   ROLL BUTTON
+========================================================= */
+
+.roll-button {
+
+    min-height:
+        44px;
+
+    padding:
+        0 18px;
+
+    border:
+        1px solid
+        rgba(
+            251,
+            192,
+            45,
+            0.45
+        );
+
+    border-radius:
+        12px;
+
+    background:
+        var(--accent);
+
+    color:
+        #111827;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform
+        0.15s ease,
+        opacity
+        0.15s ease;
+
+}
+
+
+.roll-button:active {
+
+    transform:
+        scale(0.96);
+
+}
+
+
+.roll-button:disabled {
+
+    opacity:
+        0.45;
+
+    cursor:
+        not-allowed;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .ludo-board {
+
+        border-width:
+            2px;
+
+        border-radius:
+            5px;
+
+    }
+
+
+    .yard-inner {
+
+        gap:
+            7%;
+
+        padding:
+            10%;
+
+    }
+
+
+    .ludo-token {
+
+        width:
+            78%;
+
+        height:
+            78%;
+
+        border-width:
+            1px;
+
+    }
+
+
+    .token-number {
+
+        font-size:
+            7px;
+
+    }
+
+
+    .ludo-token.token-selectable {
+
+        animation-duration:
+            0.85s;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL SCREEN
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .yard-inner {
+
+        gap:
+            5%;
+
+        padding:
+            8%;
+
+    }
+
+
+    .ludo-token {
+
+        width:
+            80%;
+
+        height:
+            80%;
+
+    }
+
+
+    .token-inner {
+
+        width:
+            62%;
+
+        height:
+            62%;
+
+    }
+
+
+    .dice-section {
+
+        gap:
+            8px;
+
+        padding:
+            9px;
+
+    }
+
+
+    .dice-display {
+
+        width:
+            42px;
+
+        height:
+            42px;
+
+        font-size:
+            25px;
+
+    }
+
+
+    .roll-button {
+
+        padding:
+            0 13px;
+
+        font-size:
+            12px;
+
+    }
+
+}
+
+
+/* =========================================================
    MOBILE TOUCH
---------------------------------------------------------- */
+========================================================= */
 
 .token.token-valid {
 
