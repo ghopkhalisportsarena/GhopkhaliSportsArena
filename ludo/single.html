@@ -1140,6 +1140,38 @@
 
             </section>
 
+<!-- =================================================
+     DICE CONTROL
+================================================= -->
+
+<section class="dice-section">
+
+    <div class="dice-box">
+
+        <div class="dice-label">
+            Dice
+        </div>
+
+        <div
+            class="dice-display"
+            id="dice"
+            aria-live="polite"
+        >
+            —
+        </div>
+
+    </div>
+
+
+    <button
+        type="button"
+        id="roll-button"
+        class="roll-button"
+    >
+        🎲 Dice Roll
+    </button>
+
+</section>
 
             <!-- =================================================
                  MATCH INFORMATION
@@ -1261,80 +1293,198 @@
         src="ludu-board.js"
     ></script>
 
+<!-- =================================================
+     PAGE INITIALIZATION
+================================================== -->
 
-    <!-- =================================================
-         PAGE INITIALIZATION
-    ================================================== -->
+<script>
 
-    <script>
-
-        "use strict";
+    "use strict";
 
 
-        /* =================================================
-           FOOTER YEAR
-        ================================================== */
+    /* =================================================
+       FOOTER YEAR
+    ================================================== */
 
-        const footerYear =
-            document.getElementById(
-                "footer-year"
+    const footerYear =
+        document.getElementById(
+            "footer-year"
+        );
+
+
+    if (footerYear) {
+
+        footerYear.textContent =
+            new Date().getFullYear();
+
+    }
+
+
+    /* =================================================
+       LUDO PAGE INITIALIZATION
+    ================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+
+            /* -----------------------------------------
+               BOARD
+            ----------------------------------------- */
+
+            const board =
+                document.getElementById(
+                    "ludo-board"
+                );
+
+
+            if (!board) {
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               DICE BUTTON
+            ----------------------------------------- */
+
+            const rollButton =
+                document.getElementById(
+                    "roll-button"
+                );
+
+
+            /* -----------------------------------------
+               DICE DISPLAY
+            ----------------------------------------- */
+
+            const dice =
+                document.getElementById(
+                    "dice"
+                );
+
+
+            /* -----------------------------------------
+               INITIAL DICE STATE
+            ----------------------------------------- */
+
+            if (dice) {
+
+                dice.textContent = "—";
+
+            }
+
+
+            /* -----------------------------------------
+               ROLL DICE
+            ----------------------------------------- */
+
+            if (rollButton) {
+
+                rollButton.addEventListener(
+                    "click",
+                    () => {
+
+
+                        /*
+                         * LudoBoard handles
+                         * the actual game engine.
+                         */
+
+                        if (
+                            typeof window.LudoBoard ===
+                            "undefined"
+                        ) {
+
+                            console.error(
+                                "LudoBoard is not loaded."
+                            );
+
+                            return;
+
+                        }
+
+
+                        /*
+                         * Dice roll is currently
+                         * local for Step 5 testing.
+                         *
+                         * Supabase authoritative
+                         * dice will be added later.
+                         */
+
+                        const result =
+                            Math.floor(
+                                Math.random() * 6
+                            ) + 1;
+
+
+                        /*
+                         * Send result to
+                         * Ludo movement engine.
+                         */
+
+                        const accepted =
+                            window.LudoBoard.setDice(
+                                result
+                            );
+
+
+                        if (
+                            accepted === false
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        /* ---------------------------------
+                           DISPLAY DICE
+                        --------------------------------- */
+
+                        if (dice) {
+
+                            const diceFaces = {
+
+                                1: "⚀",
+                                2: "⚁",
+                                3: "⚂",
+                                4: "⚃",
+                                5: "⚄",
+                                6: "⚅"
+
+                            };
+
+
+                            dice.textContent =
+                                diceFaces[result] ||
+                                result;
+
+                        }
+
+
+                    }
+                );
+
+            }
+
+
+            /* -----------------------------------------
+               BOARD READY
+            ----------------------------------------- */
+
+            console.log(
+                "Ghopkhali Sports Arena — Ludo Board Ready"
             );
 
 
-        if (footerYear) {
-
-            footerYear.textContent =
-                new Date().getFullYear();
-
         }
+    );
 
-
-        /* =================================================
-           BOARD CHECK
-        ================================================== */
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            () => {
-
-                const board =
-                    document.getElementById(
-                        "ludo-board"
-                    );
-
-
-                if (
-                    !board
-                ) {
-
-                    return;
-
-                }
-
-
-                /*
-                 * ludu-board.js is responsible for
-                 * creating the actual board.
-                 *
-                 * No local game state is created here.
-                 *
-                 * No New Game.
-                 *
-                 * No Reset.
-                 *
-                 * No Match Change.
-                 *
-                 * No localStorage.
-                 *
-                 * Supabase/game state integration
-                 * will be added in later steps.
-                 */
-
-            }
-        );
-
-    </script>
-
+</script>
 
 </body>
 
