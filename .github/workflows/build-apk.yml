@@ -24,11 +24,15 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install dependencies & Sync
+      - name: Install dependencies
+        working-directory: ./ludo-app
+        run: npm install
+
+      - name: Add Android platform & Sync
         working-directory: ./ludo-app
         run: |
-          npm install
-          npx cap sync android
+          npx cap add android
+          npx cap sync
 
       - name: Build Debug APK
         working-directory: ./ludo-app/android
