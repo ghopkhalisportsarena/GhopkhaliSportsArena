@@ -1458,24 +1458,31 @@ const GSA_SUPABASE_URL =
 const GSA_SUPABASE_KEY =
     "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
+const GSA_PARAMS = new URLSearchParams(location.search);
+
 const GSA_MATCH_ID =
-    new URLSearchParams(location.search).get("match") ||
+    GSA_PARAMS.get("match") ||
     localStorage.getItem("gsa_ludo_match_id");
 
 const GSA_PLAYER_CODE =
-    new URLSearchParams(location.search).get("code") ||
+    GSA_PARAMS.get("code") ||
     localStorage.getItem("gsa_ludo_player_code");
 
 let gsaSupabase = null;
 let gsaMatch = null;
 let gsaPolling = null;
+let gsaLastRemoteState = "";
+let gsaSaving = false;
+
+window.gsaMatch = null;
 
 function gsaLog(...args) {
     console.log("[GSA LUDO]", ...args);
 }
 
 function gsaShowStatus(text) {
-    let box = document.getElementById("gsa-online-status");
+    let box =
+        document.getElementById("gsa-online-status");
 
     if (!box) {
         box = document.createElement("div");
@@ -1495,6 +1502,8 @@ function gsaShowStatus(text) {
             font-weight:700;
             box-shadow:0 5px 20px rgba(0,0,0,.25);
             pointer-events:none;
+            max-width:90%;
+            text-align:center;
         `;
 
         document.body.appendChild(box);
@@ -1503,30 +1512,63 @@ function gsaShowStatus(text) {
     box.textContent = text;
 }
 
+function gsaMyPlayerId() {
+    return (
+        localStorage.getItem(
+            "gsa_ludo_player_id"
+        ) || ""
+    );
+}
+
+function gsaIsMyTurn(match) {
+    if (!match) return false;
+
+    const me = gsaMyPlayerId();
+
+    if (!me) return true;
+
+    return (
+        String(match.current_turn || "") ===
+        String(me)
+    );
+}
+
 async function gsaLoadMatch() {
     if (!GSA_MATCH_ID) {
         gsaShowStatus("Match পাওয়া যায়নি");
         return null;
     }
 
-    const { data, error } = await gsaSupabase
-        .from("ludo_matches")
-        .select("*")
-        .eq("id", GSA_MATCH_ID)
-        .maybeSingle();
+    const { data, error } =
+        await gsaSupabase
+            .from("ludo_matches")
+            .select("*")
+            .eq("id", GSA_MATCH_ID)
+            .maybeSingle();
 
     if (error) {
-        console.error("Match load error:", error);
-        gsaShowStatus("Match load error");
+        console.error(
+            "Match load error:",
+            error
+        );
+
+        gsaShowStatus(
+            "Match load error"
+        );
+
         return null;
     }
 
     if (!data) {
-        gsaShowStatus("Match পাওয়া যায়নি");
+        gsaShowStatus(
+            "Match পাওয়া যায়নি"
+        );
+
         return null;
     }
 
     gsaMatch = data;
+    window.gsaMatch = data;
 
     localStorage.setItem(
         "gsa_ludo_match_id",
@@ -1546,187 +1588,519 @@ async function gsaLoadMatch() {
 function gsaUpdateStatus(match) {
     if (!match) return;
 
-    if (match.status === "waiting") {
-        gsaShowStatus("Opponent-এর জন্য অপেক্ষা...");
-        return;
-    }
+    const players =
+        Array.isArray(match.players)
+            ? match.players
+            : [];
 
     if (
         match.status === "ready" ||
         match.status === "playing"
     ) {
-        const players = Array.isArray(match.players)
-            ? match.players
-            : [];
-
-        const names = players
-            .map(p => p.player_name)
-            .filter(Boolean);
-
-        if (names.length >= 2) {
+        if (
+            players.length >= 2 &&
+            gsaIsMyTurn(match)
+        ) {
             gsaShowStatus(
-                "ONLINE • " +
-                names.join(" VS ")
+                "YOUR TURN"
+            );
+        } else if (
+            players.length >= 2
+        ) {
+            gsaShowStatus(
+                "OPPONENT'S TURN"
             );
         } else {
-            gsaShowStatus("ONLINE • Match Ready");
+            gsaShowStatus(
+                "ONLINE • MATCH READY"
+            );
         }
 
         return;
     }
 
     if (match.status === "finished") {
-        gsaShowStatus("MATCH FINISHED");
+        gsaShowStatus(
+            "MATCH FINISHED"
+        );
         return;
     }
 
     gsaShowStatus(
-        "MATCH: " +
-        String(match.status || "unknown").toUpperCase()
+        String(
+            match.status || "ONLINE"
+        ).toUpperCase()
     );
 }
 
-async function gsaRefreshMatch() {
-    if (!GSA_MATCH_ID || !gsaSupabase) return;
-
-    const { data, error } = await gsaSupabase
-        .from("ludo_matches")
-        .select("*")
-        .eq("id", GSA_MATCH_ID)
-        .maybeSingle();
-
-    if (error) {
-        console.error("Match refresh error:", error);
-        return;
-    }
-
-    if (!data) return;
-
-    const previous = gsaMatch;
-    gsaMatch = data;
-
-    gsaUpdateStatus(data);
-
-    /*
-       Match state is deliberately kept in Supabase.
-       This makes refresh/reconnect possible without
-       destroying the match.
-    */
-
+function gsaNormaliseState(state) {
     if (
-        previous &&
-        JSON.stringify(previous.game_state) !==
-        JSON.stringify(data.game_state)
+        !state ||
+        typeof state !== "object"
     ) {
-        gsaApplyRemoteState(data.game_state);
+        return {};
     }
+
+    return state;
 }
 
 function gsaApplyRemoteState(state) {
-    if (!state || typeof state !== "object") return;
+    state =
+        gsaNormaliseState(state);
+
+    if (!window.LudoBoard) return;
 
     /*
-       The existing LudoBoard engine remains the owner
-       of the visual board.
-
-       We only apply dice when a remote dice value exists.
-    */
-
+     * Restore dice on remote clients.
+     */
     if (
-        window.LudoBoard &&
         Number.isInteger(state.dice) &&
         state.dice >= 1 &&
         state.dice <= 6
     ) {
         try {
-            window.LudoBoard.setDice(state.dice);
+            window.LudoBoard.setDice(
+                state.dice
+            );
+
+            const dice =
+                document.getElementById(
+                    "dice"
+                );
+
+            if (dice) {
+                dice.textContent =
+                    state.dice;
+            }
         } catch (e) {
-            console.warn("Remote dice apply skipped:", e);
+            console.warn(
+                "Remote dice restore skipped:",
+                e
+            );
         }
+    }
+
+    /*
+     * If the board engine exposes a state
+     * restore function in the future, use it.
+     */
+    if (
+        typeof window.LudoBoard
+            .loadState === "function" &&
+        state.board
+    ) {
+        try {
+            window.LudoBoard.loadState(
+                state.board
+            );
+        } catch (e) {
+            console.warn(
+                "Remote board restore skipped:",
+                e
+            );
+        }
+    }
+}
+
+async function gsaGetLocalState() {
+    if (
+        !window.LudoBoard ||
+        typeof window.LudoBoard.getState !==
+            "function"
+    ) {
+        return {};
+    }
+
+    try {
+        return (
+            window.LudoBoard.getState() ||
+            {}
+        );
+    } catch (e) {
+        console.warn(
+            "Board state unavailable:",
+            e
+        );
+
+        return {};
     }
 }
 
 async function gsaSaveGameState(extra = {}) {
-    if (!GSA_MATCH_ID || !gsaSupabase || !window.LudoBoard) {
+    if (
+        !GSA_MATCH_ID ||
+        !gsaSupabase ||
+        gsaSaving
+    ) {
+        return false;
+    }
+
+    if (gsaMatch && !gsaIsMyTurn(gsaMatch)) {
+        return false;
+    }
+
+    gsaSaving = true;
+
+    try {
+        const localState =
+            await gsaGetLocalState();
+
+        const state = {
+            ...localState,
+            ...extra,
+            sync_time:
+                new Date().toISOString()
+        };
+
+        const update = {
+            game_state: state,
+            updated_at:
+                new Date().toISOString()
+        };
+
+        if (
+            extra.current_turn
+        ) {
+            update.current_turn =
+                extra.current_turn;
+        }
+
+        if (
+            Number.isInteger(
+                extra.dice
+            )
+        ) {
+            update.dice_value =
+                extra.dice;
+        }
+
+        const { data, error } =
+            await gsaSupabase
+                .from("ludo_matches")
+                .update(update)
+                .eq("id", GSA_MATCH_ID)
+                .select()
+                .maybeSingle();
+
+        if (error) {
+            console.error(
+                "Game state save error:",
+                error
+            );
+
+            return false;
+        }
+
+        if (data) {
+            gsaMatch = data;
+            window.gsaMatch = data;
+            gsaUpdateStatus(data);
+        }
+
+        return true;
+
+    } finally {
+        gsaSaving = false;
+    }
+}
+
+function gsaGetNextPlayerId() {
+    if (!gsaMatch) return "";
+
+    const players =
+        Array.isArray(
+            gsaMatch.players
+        )
+            ? gsaMatch.players
+            : [];
+
+    if (players.length < 2) {
+        return "";
+    }
+
+    const ids =
+        players
+            .map(p =>
+                String(
+                    p.player_id || ""
+                )
+            )
+            .filter(Boolean);
+
+    const me =
+        String(
+            gsaMyPlayerId()
+        );
+
+    const index =
+        ids.indexOf(me);
+
+    if (index === -1) {
+        return ids[0] || "";
+    }
+
+    return (
+        ids[
+            (index + 1) %
+            ids.length
+        ] || ""
+    );
+}
+
+async function gsaPassTurn() {
+    const next =
+        gsaGetNextPlayerId();
+
+    if (!next) return;
+
+    await gsaSaveGameState({
+        current_turn: next,
+        dice: 0
+    });
+
+    gsaShowStatus(
+        next === gsaMyPlayerId()
+            ? "YOUR TURN"
+            : "OPPONENT'S TURN"
+    );
+}
+
+async function gsaRefreshMatch() {
+    if (
+        !GSA_MATCH_ID ||
+        !gsaSupabase
+    ) {
         return;
     }
 
-    let state = {};
+    const { data, error } =
+        await gsaSupabase
+            .from("ludo_matches")
+            .select("*")
+            .eq("id", GSA_MATCH_ID)
+            .maybeSingle();
 
-    try {
-        if (typeof window.LudoBoard.getState === "function") {
-            state = window.LudoBoard.getState() || {};
+    if (error || !data) {
+        return;
+    }
+
+    const oldState =
+        gsaLastRemoteState;
+
+    const newState =
+        JSON.stringify(
+            data.game_state || {}
+        );
+
+    gsaMatch = data;
+    window.gsaMatch = data;
+
+    gsaUpdateStatus(data);
+
+    if (
+        newState &&
+        newState !== oldState
+    ) {
+        gsaLastRemoteState =
+            newState;
+
+        /*
+         * Do not re-apply our own state.
+         * Only restore a remote update.
+         */
+        const remotePlayer =
+            data.game_state &&
+            data.game_state.last_player_id;
+
+        if (
+            remotePlayer &&
+            String(remotePlayer) !==
+                String(gsaMyPlayerId())
+        ) {
+            gsaApplyRemoteState(
+                data.game_state
+            );
         }
-    } catch (e) {
-        console.warn("Could not read LudoBoard state:", e);
+    }
+}
+
+function gsaHookRollButton() {
+    const rollButton =
+        document.getElementById(
+            "roll-button"
+        );
+
+    if (!rollButton) {
+        return;
     }
 
-    state = {
-        ...state,
-        ...extra
-    };
-
-    const { error } = await gsaSupabase
-        .from("ludo_matches")
-        .update({
-            game_state: state,
-            updated_at: new Date().toISOString()
-        })
-        .eq("id", GSA_MATCH_ID);
-
-    if (error) {
-        console.error("Game state save error:", error);
+    if (
+        rollButton.dataset
+            .gsaMultiplayerHooked === "1"
+    ) {
+        return;
     }
+
+    rollButton.dataset
+        .gsaMultiplayerHooked = "1";
+
+    rollButton.addEventListener(
+        "click",
+        async () => {
+
+            if (!gsaMatch) {
+                return;
+            }
+
+            if (
+                !gsaIsMyTurn(gsaMatch)
+            ) {
+                gsaShowStatus(
+                    "OPPONENT'S TURN"
+                );
+
+                return;
+            }
+
+            /*
+             * Wait for existing board logic
+             * to generate the dice.
+             */
+            setTimeout(
+                async () => {
+
+                    const dice =
+                        document.getElementById(
+                            "dice"
+                        );
+
+                    const value =
+                        Number(
+                            dice
+                                ? dice.textContent
+                                : 0
+                        );
+
+                    if (
+                        value >= 1 &&
+                        value <= 6
+                    ) {
+                        await gsaSaveGameState({
+                            dice: value,
+                            last_player_id:
+                                gsaMyPlayerId()
+                        });
+                    }
+
+                },
+                150
+            );
+        },
+        true
+    );
+}
+
+function gsaInstallBoardObserver() {
+    const board =
+        document.getElementById(
+            "ludo-board"
+        );
+
+    if (!board) return;
+
+    let last =
+        "";
+
+    setInterval(
+        async () => {
+
+            if (!gsaMatch) return;
+
+            /*
+             * Only the active player can publish
+             * local board changes.
+             */
+            if (
+                !gsaIsMyTurn(gsaMatch)
+            ) {
+                return;
+            }
+
+            const state =
+                await gsaGetLocalState();
+
+            const serialized =
+                JSON.stringify(state);
+
+            if (
+                serialized &&
+                serialized !== last
+            ) {
+                last = serialized;
+
+                await gsaSaveGameState({
+                    last_player_id:
+                        gsaMyPlayerId()
+                });
+            }
+
+        },
+        1000
+    );
 }
 
 async function gsaStartMultiplayer() {
     if (!window.supabase) {
-        console.error("Supabase library missing");
-        gsaShowStatus("Supabase unavailable");
+        gsaShowStatus(
+            "Supabase unavailable"
+        );
         return;
     }
 
     if (!GSA_MATCH_ID) {
-        gsaShowStatus("Match link missing");
+        gsaShowStatus(
+            "Match link missing"
+        );
         return;
     }
 
-    const { createClient } = window.supabase;
+    const { createClient } =
+        window.supabase;
 
-    gsaSupabase = createClient(
-        GSA_SUPABASE_URL,
-        GSA_SUPABASE_KEY
+    gsaSupabase =
+        createClient(
+            GSA_SUPABASE_URL,
+            GSA_SUPABASE_KEY
+        );
+
+    gsaShowStatus(
+        "CONNECTING..."
     );
-
-    gsaShowStatus("Connecting...");
 
     await gsaLoadMatch();
 
-    if (!gsaMatch) return;
-
-    /*
-       Polling is used as a reliable fallback.
-       It also works if Supabase Realtime has not
-       yet been enabled for ludo_matches.
-    */
-
-    if (gsaPolling) {
-        clearInterval(gsaPolling);
+    if (!gsaMatch) {
+        return;
     }
 
-    gsaPolling = setInterval(
-        gsaRefreshMatch,
-        1500
-    );
+    if (gsaPolling) {
+        clearInterval(
+            gsaPolling
+        );
+    }
 
-    /*
-       Realtime subscription.
-    */
+    gsaPolling =
+        setInterval(
+            gsaRefreshMatch,
+            1200
+        );
 
     try {
+
         gsaSupabase
             .channel(
-                "gsa-ludo-match-" + GSA_MATCH_ID
+                "gsa-ludo-" +
+                GSA_MATCH_ID
             )
             .on(
                 "postgres_changes",
@@ -1735,145 +2109,78 @@ async function gsaStartMultiplayer() {
                     schema: "public",
                     table: "ludo_matches",
                     filter:
-                        "id=eq." + GSA_MATCH_ID
+                        "id=eq." +
+                        GSA_MATCH_ID
                 },
                 payload => {
-                    gsaLog(
-                        "Realtime update",
-                        payload.eventType
+
+                    if (!payload.new) {
+                        return;
+                    }
+
+                    gsaMatch =
+                        payload.new;
+
+                    window.gsaMatch =
+                        payload.new;
+
+                    gsaUpdateStatus(
+                        payload.new
                     );
 
-                    if (payload.new) {
-                        gsaMatch = payload.new;
-                        gsaUpdateStatus(gsaMatch);
+                    const state =
+                        payload.new
+                            .game_state ||
+                        {};
 
-                        if (payload.new.game_state) {
-                            gsaApplyRemoteState(
-                                payload.new.game_state
-                            );
-                        }
+                    const remotePlayer =
+                        state.last_player_id;
+
+                    if (
+                        remotePlayer &&
+                        String(remotePlayer) !==
+                            String(
+                                gsaMyPlayerId()
+                            )
+                    ) {
+                        gsaApplyRemoteState(
+                            state
+                        );
                     }
                 }
             )
             .subscribe();
+
     } catch (e) {
         console.warn(
-            "Realtime unavailable, polling continues.",
+            "Realtime unavailable. Polling active.",
             e
         );
     }
 
+    gsaHookRollButton();
+    gsaInstallBoardObserver();
+
     gsaLog(
-        "Connected to match:",
+        "ONLINE MATCH:",
         GSA_MATCH_ID
-    );
-
-    gsaLog(
-        "Player code:",
-        GSA_PLAYER_CODE
-    );
-}
-
-/*
-   Intercept the existing Roll button without
-   replacing the existing board engine.
-*/
-
-function gsaHookRollButton() {
-    const rollButton =
-        document.getElementById("roll-button");
-
-    if (!rollButton) return;
-
-    if (rollButton.dataset.gsaHooked === "1") {
-        return;
-    }
-
-    rollButton.dataset.gsaHooked = "1";
-
-    rollButton.addEventListener(
-        "click",
-        async () => {
-            /*
-               Existing single.html roll handler
-               remains responsible for generating
-               the visual/local dice result.
-
-               After the click we capture the board
-               state and save it.
-            */
-
-            setTimeout(
-                async () => {
-                    await gsaSaveGameState();
-                },
-                100
-            );
-        },
-        true
-    );
-}
-
-/*
-   Observe token movement / board changes.
-*/
-
-function gsaInstallBoardObserver() {
-    const board =
-        document.getElementById("ludo-board");
-
-    if (!board) return;
-
-    let lastState = "";
-
-    setInterval(
-        async () => {
-            if (!window.LudoBoard) return;
-            if (!gsaMatch) return;
-
-            try {
-                const state =
-                    window.LudoBoard.getState();
-
-                const serialized =
-                    JSON.stringify(state);
-
-                if (
-                    serialized &&
-                    serialized !== lastState
-                ) {
-                    lastState = serialized;
-
-                    await gsaSaveGameState();
-                }
-            } catch (e) {
-                console.warn(
-                    "Board sync skipped:",
-                    e
-                );
-            }
-        },
-        1200
     );
 }
 
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+
         setTimeout(
-            async () => {
-                await gsaStartMultiplayer();
-
-                gsaHookRollButton();
-
-                gsaInstallBoardObserver();
-            },
+            gsaStartMultiplayer,
             700
         );
+
     }
 );
 
 /* GSA SINGLE MULTIPLAYER END */
+
 
 </body>
 
