@@ -1272,7 +1272,77 @@
                     ------------------------------------- */
 
                     const tournament =
-                        await loadTournament();
+                        await 
+async function findOrCreateMatch(playerId, tournamentId, playerCode) {
+    showMessage("Opponent খোঁজা হচ্ছে...", "info");
+
+    for (let i = 0; i < 60; i++) {
+        const { data, error } = await supabaseClient.rpc(
+            "create_single_ludo_match",
+            {
+                p_tournament_id: tournamentId,
+                p_player_id: playerId
+            }
+        );
+
+        if (error) {
+            console.error(error);
+            showMessage("Match তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।", "error");
+            return;
+        }
+
+        if (data && data.matched) {
+            localStorage.setItem("gsa_ludo_player_id", playerId);
+            localStorage.setItem("gsa_ludo_player_code", playerCode);
+            localStorage.setItem("gsa_ludo_match_id", data.match_id);
+            localStorage.setItem("gsa_ludo_match_code", data.match_code);
+
+            showMessage("Opponent পাওয়া গেছে! Game শুরু হচ্ছে...", "success");
+
+            setTimeout(() => {
+                location.href =
+                    "./single.html?match=" +
+                    encodeURIComponent(data.match_id) +
+                    "&code=" +
+                    encodeURIComponent(playerCode);
+            }, 800);
+
+            return;
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    showMessage("Opponent পাওয়া যায়নি। Join page-এ অপেক্ষা করুন।", "info");
+}
+
+const originalSubmitHandler = joinForm ? joinForm.onsubmit : null;
+
+if (joinForm) {
+    joinForm.addEventListener("submit", async function () {
+        setTimeout(async () => {
+            const code = playerCode?.textContent?.trim();
+
+            if (!code || !code.startsWith("S-")) return;
+
+            const { data: player } = await supabaseClient
+                .from("ludo_players")
+                .select("id,tournament_id,player_code")
+                .eq("player_code", code)
+                .maybeSingle();
+
+            if (!player) return;
+
+            await findOrCreateMatch(
+                player.id,
+                player.tournament_id,
+                player.player_code
+            );
+        }, 1200);
+    });
+}
+
+loadTournament();
 
 
                     if (!tournament) {
@@ -1466,7 +1536,77 @@
            INITIAL LOAD
         ================================================= */
 
-        loadTournament();
+        
+async function findOrCreateMatch(playerId, tournamentId, playerCode) {
+    showMessage("Opponent খোঁজা হচ্ছে...", "info");
+
+    for (let i = 0; i < 60; i++) {
+        const { data, error } = await supabaseClient.rpc(
+            "create_single_ludo_match",
+            {
+                p_tournament_id: tournamentId,
+                p_player_id: playerId
+            }
+        );
+
+        if (error) {
+            console.error(error);
+            showMessage("Match তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।", "error");
+            return;
+        }
+
+        if (data && data.matched) {
+            localStorage.setItem("gsa_ludo_player_id", playerId);
+            localStorage.setItem("gsa_ludo_player_code", playerCode);
+            localStorage.setItem("gsa_ludo_match_id", data.match_id);
+            localStorage.setItem("gsa_ludo_match_code", data.match_code);
+
+            showMessage("Opponent পাওয়া গেছে! Game শুরু হচ্ছে...", "success");
+
+            setTimeout(() => {
+                location.href =
+                    "./single.html?match=" +
+                    encodeURIComponent(data.match_id) +
+                    "&code=" +
+                    encodeURIComponent(playerCode);
+            }, 800);
+
+            return;
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    showMessage("Opponent পাওয়া যায়নি। Join page-এ অপেক্ষা করুন।", "info");
+}
+
+const originalSubmitHandler = joinForm ? joinForm.onsubmit : null;
+
+if (joinForm) {
+    joinForm.addEventListener("submit", async function () {
+        setTimeout(async () => {
+            const code = playerCode?.textContent?.trim();
+
+            if (!code || !code.startsWith("S-")) return;
+
+            const { data: player } = await supabaseClient
+                .from("ludo_players")
+                .select("id,tournament_id,player_code")
+                .eq("player_code", code)
+                .maybeSingle();
+
+            if (!player) return;
+
+            await findOrCreateMatch(
+                player.id,
+                player.tournament_id,
+                player.player_code
+            );
+        }, 1200);
+    });
+}
+
+loadTournament();
 
 
     </script>
