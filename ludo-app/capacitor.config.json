@@ -1,0 +1,8 @@
+{
+  "appId": "com.ghopkhalisportsarena.ludo",
+  "appName": "Ghopkhali Ludo",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

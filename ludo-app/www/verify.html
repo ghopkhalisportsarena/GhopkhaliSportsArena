@@ -1,0 +1,2318 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#080c18"
+    >
+
+    <meta
+        name="description"
+        content="Ludo Tournament Player and Team Verification"
+    >
+
+    <title>
+        Ludo Verification — Ghopkhali Sports Arena
+    </title>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <style>
+
+        :root {
+
+            --bg:
+                #070b16;
+
+            --card:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.065
+                );
+
+            --border:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
+
+            --text:
+                #ffffff;
+
+            --muted:
+                #9da7bd;
+
+            --blue:
+                #5b8cff;
+
+            --purple:
+                #a66cff;
+
+            --green:
+                #35d399;
+
+            --red:
+                #ff657c;
+
+            --orange:
+                #ffb45c;
+
+        }
+
+
+        * {
+
+            margin:
+                0;
+
+            padding:
+                0;
+
+            box-sizing:
+                border-box;
+
+        }
+
+
+        body {
+
+            min-height:
+                100vh;
+
+            color:
+                var(--text);
+
+            background:
+
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(
+                        91,
+                        140,
+                        255,
+                        0.20
+                    ),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at 100% 70%,
+                    rgba(
+                        166,
+                        108,
+                        255,
+                        0.15
+                    ),
+                    transparent 30%
+                ),
+
+                var(--bg);
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+        }
+
+
+        a {
+
+            color:
+                inherit;
+
+            text-decoration:
+                none;
+
+        }
+
+
+        .page {
+
+            width:
+                min(
+                    100%,
+                    650px
+                );
+
+            margin:
+                0 auto;
+
+            padding:
+                22px 16px 45px;
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .topbar {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            margin-bottom:
+                35px;
+
+        }
+
+
+        .back {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                9px 13px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.045
+                );
+
+            color:
+                #c9d0df;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .brand {
+
+            color:
+                #aeb8ca;
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            text-align:
+                center;
+
+            margin-bottom:
+                26px;
+
+        }
+
+
+        .hero-icon {
+
+            width:
+                72px;
+
+            height:
+                72px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            margin:
+                0 auto 17px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                24px;
+
+            background:
+                rgba(
+                    91,
+                    140,
+                    255,
+                    0.09
+                );
+
+            font-size:
+                34px;
+
+            box-shadow:
+                0 18px 50px rgba(
+                    91,
+                    140,
+                    255,
+                    0.12
+                );
+
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(
+                    30px,
+                    8vw,
+                    43px
+                );
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                -1.7px;
+
+        }
+
+
+        .hero p {
+
+            max-width:
+                520px;
+
+            margin:
+                10px auto 0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            padding:
+                24px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                28px;
+
+            background:
+                var(--card);
+
+            box-shadow:
+                0 25px 70px rgba(
+                    0,
+                    0,
+                    0,
+                    0.40
+                );
+
+            backdrop-filter:
+                blur(22px);
+
+        }
+
+
+        /* =====================================================
+           TYPE SWITCH
+        ===================================================== */
+
+        .type-switch {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap:
+                8px;
+
+            padding:
+                5px;
+
+            margin-bottom:
+                22px;
+
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
+
+            border-radius:
+                16px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.16
+                );
+
+        }
+
+
+        .type-btn {
+
+            height:
+                42px;
+
+            border:
+                0;
+
+            border-radius:
+                12px;
+
+            color:
+                #8792a8;
+
+            background:
+                transparent;
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.25s ease;
+
+        }
+
+
+        .type-btn.active {
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(
+                    91,
+                    140,
+                    255,
+                    0.16
+                );
+
+            box-shadow:
+                0 5px 20px rgba(
+                    91,
+                    140,
+                    255,
+                    0.08
+                );
+
+        }
+
+
+        .type-btn.double.active {
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.16
+                );
+
+        }
+
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
+        .label {
+
+            display:
+                block;
+
+            margin-bottom:
+                8px;
+
+            color:
+                #dbe1ed;
+
+            font-size:
+                12px;
+
+            font-weight:
+                750;
+
+        }
+
+
+        .search-box {
+
+            display:
+                flex;
+
+            gap:
+                8px;
+
+        }
+
+
+        .search-box input {
+
+            flex:
+                1;
+
+            min-width:
+                0;
+
+            height:
+                51px;
+
+            padding:
+                0 15px;
+
+            outline:
+                none;
+
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
+
+            border-radius:
+                15px;
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.055
+                );
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .search-box input:focus {
+
+            border-color:
+                rgba(
+                    91,
+                    140,
+                    255,
+                    0.60
+                );
+
+            box-shadow:
+                0 0 0 4px rgba(
+                    91,
+                    140,
+                    255,
+                    0.08
+                );
+
+        }
+
+
+        .search-box input::placeholder {
+
+            color:
+                #667086;
+
+            text-transform:
+                none;
+
+        }
+
+
+        .search-btn {
+
+            flex:
+                0 0 auto;
+
+            height:
+                51px;
+
+            padding:
+                0 18px;
+
+            border:
+                0;
+
+            border-radius:
+                15px;
+
+            color:
+                #ffffff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4e7eff,
+                    #6c99ff
+                );
+
+            font-size:
+                12px;
+
+            font-weight:
+                850;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .double-mode .search-btn {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #955cff,
+                    #b079ff
+                );
+
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        .message {
+
+            display:
+                none;
+
+            margin-top:
+                15px;
+
+            padding:
+                13px 15px;
+
+            border-radius:
+                15px;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        .message.show {
+
+            display:
+                block;
+
+        }
+
+
+        .message.error {
+
+            color:
+                #ff9aaa;
+
+            border:
+                1px solid rgba(
+                    255,
+                    101,
+                    124,
+                    0.20
+                );
+
+            background:
+                rgba(
+                    255,
+                    101,
+                    124,
+                    0.07
+                );
+
+        }
+
+
+        /* =====================================================
+           RESULT
+        ===================================================== */
+
+        .result {
+
+            display:
+                none;
+
+            margin-top:
+                20px;
+
+            overflow:
+                hidden;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.035
+                );
+
+        }
+
+
+        .result.show {
+
+            display:
+                block;
+
+            animation:
+                resultIn 0.35s ease;
+
+        }
+
+
+        @keyframes resultIn {
+
+            from {
+
+                opacity:
+                    0;
+
+                transform:
+                    translateY(8px);
+
+            }
+
+            to {
+
+                opacity:
+                    1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        .result-head {
+
+            padding:
+                18px;
+
+            border-bottom:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.07
+                );
+
+        }
+
+
+        .result-type {
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1px;
+
+        }
+
+
+        .result-name {
+
+            margin-top:
+                6px;
+
+            font-size:
+                21px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .result-body {
+
+            padding:
+                18px;
+
+        }
+
+
+        .info-row {
+
+            display:
+                flex;
+
+            align-items:
+                flex-start;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            padding:
+                12px 0;
+
+            border-bottom:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.055
+                );
+
+        }
+
+
+        .info-row:last-child {
+
+            border-bottom:
+                0;
+
+        }
+
+
+        .info-row span {
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+        }
+
+
+        .info-row strong {
+
+            text-align:
+                right;
+
+            font-size:
+                12px;
+
+            word-break:
+                break-word;
+
+        }
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        .status {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                6px;
+
+            padding:
+                7px 10px;
+
+            border-radius:
+                999px;
+
+            font-size:
+                10px;
+
+            font-weight:
+                850;
+
+        }
+
+
+        .status.active {
+
+            color:
+                #8ff0ca;
+
+            background:
+                rgba(
+                    53,
+                    211,
+                    153,
+                    0.10
+                );
+
+            border:
+                1px solid rgba(
+                    53,
+                    211,
+                    153,
+                    0.18
+                );
+
+        }
+
+
+        .status.inactive {
+
+            color:
+                #ffd18e;
+
+            background:
+                rgba(
+                    255,
+                    180,
+                    92,
+                    0.09
+                );
+
+            border:
+                1px solid rgba(
+                    255,
+                    180,
+                    92,
+                    0.17
+                );
+
+        }
+
+
+        .status.eliminated {
+
+            color:
+                #ff9aaa;
+
+            background:
+                rgba(
+                    255,
+                    101,
+                    124,
+                    0.09
+                );
+
+            border:
+                1px solid rgba(
+                    255,
+                    101,
+                    124,
+                    0.17
+                );
+
+        }
+
+
+        .status.unknown {
+
+            color:
+                #b9c2d2;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.07
+                );
+
+        }
+
+
+        /* =====================================================
+           PLAYERS
+        ===================================================== */
+
+        .players {
+
+            margin-top:
+                5px;
+
+        }
+
+
+        .players-title {
+
+            margin-bottom:
+                7px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                0.6px;
+
+        }
+
+
+        .player {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            padding:
+                11px 12px;
+
+            margin-top:
+                6px;
+
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.07
+                );
+
+            border-radius:
+                13px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.035
+                );
+
+        }
+
+
+        .player-left {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                9px;
+
+            min-width:
+                0;
+
+        }
+
+
+        .player-number {
+
+            width:
+                27px;
+
+            height:
+                27px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            flex:
+                0 0 auto;
+
+            border-radius:
+                9px;
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.15
+                );
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .player-name {
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
+            white-space:
+                nowrap;
+
+            font-size:
+                12px;
+
+            font-weight:
+                750;
+
+        }
+
+
+        .player-code {
+
+            color:
+                #8792a8;
+
+            font-size:
+                9px;
+
+            white-space:
+                nowrap;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            margin-top:
+                25px;
+
+            color:
+                #687289;
+
+            text-align:
+                center;
+
+            font-size:
+                10px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 520px) {
+
+            .page {
+
+                padding:
+                    17px 13px 35px;
+
+            }
+
+
+            .card {
+
+                padding:
+                    19px;
+
+                border-radius:
+                    23px;
+
+            }
+
+
+            .search-box {
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .search-btn {
+
+                width:
+                    100%;
+
+            }
+
+
+            .info-row {
+
+                gap:
+                    10px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <main class="page">
+
+
+        <!-- =================================================
+             TOP BAR
+        ================================================= -->
+
+        <div class="topbar">
+
+            <a
+                href="index.html"
+                class="back"
+            >
+
+                ← Ludo
+
+            </a>
+
+
+            <span class="brand">
+
+                GHOPKHALI SPORTS ARENA
+
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             HERO
+        ================================================= -->
+
+        <section class="hero">
+
+            <div class="hero-icon">
+
+                🔎
+
+            </div>
+
+
+            <h1>
+
+                Verification
+
+            </h1>
+
+
+            <p>
+
+                Player Code অথবা Team Code দিয়ে
+                Tournament Registration ও Status যাচাই করুন।
+
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             CARD
+        ================================================= -->
+
+        <section class="card">
+
+
+            <!-- TYPE -->
+
+            <div class="type-switch">
+
+
+                <button
+                    type="button"
+                    class="type-btn active"
+                    id="singleTypeBtn"
+                >
+
+                    🧑 Single Player
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="type-btn double"
+                    id="doubleTypeBtn"
+                >
+
+                    👥 Double Team
+
+                </button>
+
+
+            </div>
+
+
+            <!-- SEARCH -->
+
+            <label
+                class="label"
+                id="searchLabel"
+                for="codeInput"
+            >
+
+                Player Code
+
+            </label>
+
+
+            <div
+                class="search-box"
+                id="searchBox"
+            >
+
+                <input
+                    type="text"
+                    id="codeInput"
+                    maxlength="40"
+                    autocomplete="off"
+                    placeholder="যেমন: P-XXXXXX"
+                >
+
+
+                <button
+                    type="button"
+                    class="search-btn"
+                    id="searchBtn"
+                >
+
+                    🔎 Verify
+
+                </button>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                class="message"
+                id="message"
+            ></div>
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <div class="result-head">
+
+                    <div
+                        class="result-type"
+                        id="resultType"
+                    >
+                        SINGLE PLAYER
+                    </div>
+
+
+                    <div
+                        class="result-name"
+                        id="resultName"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="result-body">
+
+
+                    <!-- CODE -->
+
+                    <div class="info-row">
+
+                        <span>
+                            Code
+                        </span>
+
+                        <strong id="resultCode">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TOURNAMENT -->
+
+                    <div class="info-row">
+
+                        <span>
+                            Tournament
+                        </span>
+
+                        <strong id="resultTournament">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="info-row">
+
+                        <span>
+                            Status
+                        </span>
+
+                        <strong>
+
+                            <span
+                                class="status unknown"
+                                id="resultStatus"
+                            >
+                                —
+                            </span>
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- DOUBLE PLAYERS -->
+
+                    <div
+                        class="players"
+                        id="playersSection"
+                        style="display:none;"
+                    >
+
+                        <div class="players-title">
+
+                            TEAM PLAYERS
+
+                        </div>
+
+
+                        <div
+                            class="player"
+                            id="playerOne"
+                        >
+
+                            <div class="player-left">
+
+                                <div class="player-number">
+                                    1
+                                </div>
+
+                                <div>
+
+                                    <div
+                                        class="player-name"
+                                        id="playerOneName"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="player-code"
+                                id="playerOneCode"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="player"
+                            id="playerTwo"
+                        >
+
+                            <div class="player-left">
+
+                                <div class="player-number">
+                                    2
+                                </div>
+
+                                <div>
+
+                                    <div
+                                        class="player-name"
+                                        id="playerTwoName"
+                                    >
+                                        —
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="player-code"
+                                id="playerTwoCode"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <footer class="footer">
+
+            Ghopkhali Sports Arena
+            ·
+            Official Ludo Tournament Verification
+
+            <br>
+
+            Tournament Director-এর তথ্যই চূড়ান্ত।
+
+        </footer>
+
+
+    </main>
+
+
+    <script>
+
+        "use strict";
+
+
+        /* =====================================================
+           SUPABASE
+        ===================================================== */
+
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+        const SUPABASE_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+        const {
+            createClient
+        } = window.supabase;
+
+
+        const supabaseClient =
+            createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
+
+        const singleTypeBtn =
+            document.getElementById(
+                "singleTypeBtn"
+            );
+
+
+        const doubleTypeBtn =
+            document.getElementById(
+                "doubleTypeBtn"
+            );
+
+
+        const searchLabel =
+            document.getElementById(
+                "searchLabel"
+            );
+
+
+        const codeInput =
+            document.getElementById(
+                "codeInput"
+            );
+
+
+        const searchBtn =
+            document.getElementById(
+                "searchBtn"
+            );
+
+
+        const searchBox =
+            document.getElementById(
+                "searchBox"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        const result =
+            document.getElementById(
+                "result"
+            );
+
+
+        const resultType =
+            document.getElementById(
+                "resultType"
+            );
+
+
+        const resultName =
+            document.getElementById(
+                "resultName"
+            );
+
+
+        const resultCode =
+            document.getElementById(
+                "resultCode"
+            );
+
+
+        const resultTournament =
+            document.getElementById(
+                "resultTournament"
+            );
+
+
+        const resultStatus =
+            document.getElementById(
+                "resultStatus"
+            );
+
+
+        const playersSection =
+            document.getElementById(
+                "playersSection"
+            );
+
+
+        const playerOneName =
+            document.getElementById(
+                "playerOneName"
+            );
+
+
+        const playerOneCode =
+            document.getElementById(
+                "playerOneCode"
+            );
+
+
+        const playerTwoName =
+            document.getElementById(
+                "playerTwoName"
+            );
+
+
+        const playerTwoCode =
+            document.getElementById(
+                "playerTwoCode"
+            );
+
+
+        let currentType =
+            "single";
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        function showError(text) {
+
+            message.textContent =
+                text;
+
+            message.className =
+                "message show error";
+
+        }
+
+
+        function hideMessage() {
+
+            message.textContent =
+                "";
+
+            message.className =
+                "message";
+
+        }
+
+
+        /* =====================================================
+           CLEAR RESULT
+        ===================================================== */
+
+        function clearResult() {
+
+            result.classList.remove(
+                "show"
+            );
+
+            resultName.textContent =
+                "—";
+
+            resultCode.textContent =
+                "—";
+
+            resultTournament.textContent =
+                "—";
+
+            resultStatus.textContent =
+                "—";
+
+            resultStatus.className =
+                "status unknown";
+
+            playersSection.style.display =
+                "none";
+
+        }
+
+
+        /* =====================================================
+           TYPE SWITCH
+        ===================================================== */
+
+        function setType(type) {
+
+            currentType =
+                type;
+
+            clearResult();
+
+            hideMessage();
+
+            codeInput.value =
+                "";
+
+
+            if (
+                type ===
+                "single"
+            ) {
+
+                singleTypeBtn.classList.add(
+                    "active"
+                );
+
+                doubleTypeBtn.classList.remove(
+                    "active"
+                );
+
+                searchLabel.textContent =
+                    "Player Code";
+
+                codeInput.placeholder =
+                    "যেমন: P-XXXXXX";
+
+                searchBox.classList.remove(
+                    "double-mode"
+                );
+
+            } else {
+
+                doubleTypeBtn.classList.add(
+                    "active"
+                );
+
+                singleTypeBtn.classList.remove(
+                    "active"
+                );
+
+                searchLabel.textContent =
+                    "Team Code";
+
+                codeInput.placeholder =
+                    "যেমন: GSA-D-XXXXXX";
+
+                searchBox.classList.add(
+                    "double-mode"
+                );
+
+            }
+
+        }
+
+
+        singleTypeBtn.addEventListener(
+            "click",
+            () => setType("single")
+        );
+
+
+        doubleTypeBtn.addEventListener(
+            "click",
+            () => setType("double")
+        );
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        function setStatus(status) {
+
+            const safeStatus =
+                String(
+                    status || ""
+                ).toLowerCase();
+
+
+            resultStatus.className =
+                "status";
+
+
+            if (
+                safeStatus ===
+                "active"
+            ) {
+
+                resultStatus.textContent =
+                    "● Active";
+
+                resultStatus.classList.add(
+                    "active"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                safeStatus ===
+                "inactive"
+            ) {
+
+                resultStatus.textContent =
+                    "● Inactive";
+
+                resultStatus.classList.add(
+                    "inactive"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                safeStatus ===
+                "eliminated"
+            ) {
+
+                resultStatus.textContent =
+                    "● Eliminated";
+
+                resultStatus.classList.add(
+                    "eliminated"
+                );
+
+                return;
+
+            }
+
+
+            resultStatus.textContent =
+                status || "Unknown";
+
+            resultStatus.classList.add(
+                "unknown"
+            );
+
+        }
+
+
+        /* =====================================================
+           SINGLE VERIFY
+        ===================================================== */
+
+        async function verifySingle(
+            code
+        ) {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "ludo_players"
+                    )
+                    .select(
+                        `
+                        id,
+                        tournament_id,
+                        player_name,
+                        player_code,
+                        status,
+                        ludo_tournaments(
+                            tournament_name,
+                            tournament_type
+                        )
+                        `
+                    )
+                    .eq(
+                        "player_code",
+                        code
+                    )
+                    .maybeSingle();
+
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+                throw new Error(
+                    "Player তথ্য যাচাই করা যায়নি।"
+                );
+
+            }
+
+
+            if (!data) {
+
+                throw new Error(
+                    "এই Player Code-এর কোনো Registration পাওয়া যায়নি।"
+                );
+
+            }
+
+
+            resultType.textContent =
+                "SINGLE PLAYER";
+
+
+            resultName.textContent =
+                data.player_name;
+
+
+            resultCode.textContent =
+                data.player_code;
+
+
+            resultTournament.textContent =
+                data.ludo_tournaments
+                    ?.tournament_name ||
+                "—";
+
+
+            setStatus(
+                data.status
+            );
+
+
+            playersSection.style.display =
+                "none";
+
+
+            result.classList.add(
+                "show"
+            );
+
+        }
+
+
+        /* =====================================================
+           DOUBLE VERIFY
+        ===================================================== */
+
+        async function verifyDouble(
+            code
+        ) {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "ludo_teams"
+                    )
+                    .select(
+                        `
+                        id,
+                        tournament_id,
+                        team_name,
+                        team_code,
+                        status,
+                        ludo_tournaments(
+                            tournament_name,
+                            tournament_type
+                        ),
+                        ludo_team_players(
+                            player_name,
+                            player_code,
+                            player_number
+                        )
+                        `
+                    )
+                    .eq(
+                        "team_code",
+                        code
+                    )
+                    .maybeSingle();
+
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+                throw new Error(
+                    "Team তথ্য যাচাই করা যায়নি।"
+                );
+
+            }
+
+
+            if (!data) {
+
+                throw new Error(
+                    "এই Team Code-এর কোনো Registration পাওয়া যায়নি।"
+                );
+
+            }
+
+
+            resultType.textContent =
+                "DOUBLE TEAM";
+
+
+            resultName.textContent =
+                data.team_name;
+
+
+            resultCode.textContent =
+                data.team_code;
+
+
+            resultTournament.textContent =
+                data.ludo_tournaments
+                    ?.tournament_name ||
+                "—";
+
+
+            setStatus(
+                data.status
+            );
+
+
+            const teamPlayers =
+                Array.isArray(
+                    data.ludo_team_players
+                )
+                    ? [
+                        ...data.ludo_team_players
+                    ].sort(
+                        (
+                            a,
+                            b
+                        ) =>
+                            a.player_number -
+                            b.player_number
+                    )
+                    : [];
+
+
+            const firstPlayer =
+                teamPlayers.find(
+                    player =>
+                        player.player_number ===
+                        1
+                );
+
+
+            const secondPlayer =
+                teamPlayers.find(
+                    player =>
+                        player.player_number ===
+                        2
+                );
+
+
+            playerOneName.textContent =
+                firstPlayer
+                    ?.player_name ||
+                "—";
+
+
+            playerOneCode.textContent =
+                firstPlayer
+                    ?.player_code ||
+                "—";
+
+
+            playerTwoName.textContent =
+                secondPlayer
+                    ?.player_name ||
+                "—";
+
+
+            playerTwoCode.textContent =
+                secondPlayer
+                    ?.player_code ||
+                "—";
+
+
+            playersSection.style.display =
+                "block";
+
+
+            result.classList.add(
+                "show"
+            );
+
+        }
+
+
+        /* =====================================================
+           VERIFY
+        ===================================================== */
+
+        async function verify() {
+
+            hideMessage();
+
+            clearResult();
+
+
+            const code =
+                codeInput.value
+                    .trim()
+                    .toUpperCase();
+
+
+            if (!code) {
+
+                showError(
+                    currentType ===
+                    "single"
+
+                        ? "Player Code দিন।"
+
+                        : "Team Code দিন।"
+                );
+
+                return;
+
+            }
+
+
+            searchBtn.disabled =
+                true;
+
+            searchBtn.textContent =
+                "⏳ Checking...";
+
+
+            try {
+
+                if (
+                    currentType ===
+                    "single"
+                ) {
+
+                    await verifySingle(
+                        code
+                    );
+
+                } else {
+
+                    await verifyDouble(
+                        code
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+                showError(
+                    error.message ||
+                    "Verification failed."
+                );
+
+            } finally {
+
+                searchBtn.disabled =
+                    false;
+
+                searchBtn.textContent =
+                    "🔎 Verify";
+
+            }
+
+        }
+
+
+        searchBtn.addEventListener(
+            "click",
+            verify
+        );
+
+
+        codeInput.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    verify();
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           INIT
+        ===================================================== */
+
+        setType(
+            "single"
+        );
+
+    </script>
+
+
+</body>
+
+</html>

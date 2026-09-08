@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0b1020"
+    >
+
+    <meta
+        name="description"
+        content="Ghopkhali Sports Arena Double Ludo Tournament Team Registration"
+    >
+
+    <title>
+        Double Tournament Join — Ghopkhali Sports Arena
+    </title>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <style>
+
+        :root {
+
+            --bg:
+                #070b16;
+
+            --card:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.065
+                );
+
+            --border:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
+
+            --text:
+                #ffffff;
+
+            --muted:
+                #9da7bd;
+
+            --purple:
+                #a66cff;
+
+            --purple-light:
+                #c7a8ff;
+
+            --success:
+                #35d399;
+
+            --danger:
+                #ff667d;
+
+        }
+
+
+        * {
+
+            margin:
+                0;
+
+            padding:
+                0;
+
+            box-sizing:
+                border-box;
+
+        }
+
+
+        body {
+
+            min-height:
+                100vh;
+
+            color:
+                var(--text);
+
+            background:
+
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(
+                        166,
+                        108,
+                        255,
+                        0.22
+                    ),
+                    transparent 38%
+                ),
+
+                radial-gradient(
+                    circle at 100% 70%,
+                    rgba(
+                        91,
+                        140,
+                        255,
+                        0.12
+                    ),
+                    transparent 30%
+                ),
+
+                var(--bg);
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+        }
+
+
+        a {
+
+            color:
+                inherit;
+
+            text-decoration:
+                none;
+
+        }
+
+
+        .page {
+
+            width:
+                min(
+                    100%,
+                    650px
+                );
+
+            margin:
+                0 auto;
+
+            padding:
+                22px 17px 45px;
+
+        }
+
+
+        /* =====================================================
+           TOP BAR
+        ===================================================== */
+
+        .topbar {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                12px;
+
+            margin-bottom:
+                28px;
+
+        }
+
+
+        .back {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            padding:
+                9px 13px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                999px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.045
+                );
+
+            color:
+                #c9d0df;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .badge {
+
+            padding:
+                8px 12px;
+
+            border:
+                1px solid rgba(
+                    166,
+                    108,
+                    255,
+                    0.25
+                );
+
+            border-radius:
+                999px;
+
+            color:
+                var(--purple-light);
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.08
+                );
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            text-align:
+                center;
+
+            margin-bottom:
+                25px;
+
+        }
+
+
+        .hero-icon {
+
+            width:
+                70px;
+
+            height:
+                70px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            margin:
+                0 auto 16px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                23px;
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.10
+                );
+
+            font-size:
+                35px;
+
+            box-shadow:
+                0 15px 45px rgba(
+                    166,
+                    108,
+                    255,
+                    0.13
+                );
+
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                clamp(
+                    29px,
+                    8vw,
+                    42px
+                );
+
+            letter-spacing:
+                -1.5px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .hero p {
+
+            margin-top:
+                9px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            padding:
+                25px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                28px;
+
+            background:
+                var(--card);
+
+            box-shadow:
+                0 25px 70px rgba(
+                    0,
+                    0,
+                    0,
+                    0.40
+                );
+
+            backdrop-filter:
+                blur(22px);
+
+        }
+
+
+        /* =====================================================
+           TOURNAMENT INFO
+        ===================================================== */
+
+        .tournament-info {
+
+            padding:
+                15px 16px;
+
+            margin-bottom:
+                23px;
+
+            border:
+                1px solid rgba(
+                    166,
+                    108,
+                    255,
+                    0.16
+                );
+
+            border-radius:
+                18px;
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.065
+                );
+
+        }
+
+
+        .info-label {
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+
+        }
+
+
+        #tournamentName {
+
+            margin-top:
+                5px;
+
+            font-size:
+                15px;
+
+            font-weight:
+                800;
+
+        }
+
+
+        #capacityInfo {
+
+            margin-top:
+                5px;
+
+            color:
+                #bda7e8;
+
+            font-size:
+                11px;
+
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-title {
+
+            margin-bottom:
+                18px;
+
+            font-size:
+                18px;
+
+            font-weight:
+                850;
+
+        }
+
+
+        .field {
+
+            margin-bottom:
+                17px;
+
+        }
+
+
+        .field label {
+
+            display:
+                block;
+
+            margin-bottom:
+                8px;
+
+            color:
+                #dce2ee;
+
+            font-size:
+                12px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .field input {
+
+            width:
+                100%;
+
+            height:
+                50px;
+
+            padding:
+                0 15px;
+
+            outline:
+                none;
+
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
+
+            border-radius:
+                15px;
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.055
+                );
+
+            font-size:
+                14px;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+
+        }
+
+
+        .field input::placeholder {
+
+            color:
+                #667086;
+
+        }
+
+
+        .field input:focus {
+
+            border-color:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.65
+                );
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.075
+                );
+
+            box-shadow:
+                0 0 0 4px rgba(
+                    166,
+                    108,
+                    255,
+                    0.08
+                );
+
+        }
+
+
+        /* =====================================================
+           PLAYER BOX
+        ===================================================== */
+
+        .player-box {
+
+            padding:
+                18px;
+
+            margin-bottom:
+                17px;
+
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
+
+            border-radius:
+                20px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.035
+                );
+
+        }
+
+
+        .player-heading {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                9px;
+
+            margin-bottom:
+                14px;
+
+        }
+
+
+        .player-number {
+
+            width:
+                29px;
+
+            height:
+                29px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border-radius:
+                10px;
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(
+                    166,
+                    108,
+                    255,
+                    0.18
+                );
+
+            font-size:
+                12px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .player-heading strong {
+
+            font-size:
+                13px;
+
+        }
+
+
+        /* =====================================================
+           SUBMIT
+        ===================================================== */
+
+        .submit-btn {
+
+            width:
+                100%;
+
+            min-height:
+                54px;
+
+            margin-top:
+                5px;
+
+            border:
+                0;
+
+            border-radius:
+                17px;
+
+            color:
+                #ffffff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #9358ff,
+                    #b079ff
+                );
+
+            box-shadow:
+                0 15px 35px rgba(
+                    149,
+                    92,
+                    255,
+                    0.25
+                );
+
+            font-size:
+                14px;
+
+            font-weight:
+                850;
+
+            cursor:
+                pointer;
+
+            transition:
+                transform 0.2s ease,
+                opacity 0.2s ease;
+
+        }
+
+
+        .submit-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        .submit-btn:active {
+
+            transform:
+                scale(0.98);
+
+        }
+
+
+        .submit-btn:disabled {
+
+            opacity:
+                0.55;
+
+            cursor:
+                not-allowed;
+
+            transform:
+                none;
+
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        .message {
+
+            display:
+                none;
+
+            margin-top:
+                17px;
+
+            padding:
+                13px 15px;
+
+            border-radius:
+                15px;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        .message.show {
+
+            display:
+                block;
+
+        }
+
+
+        .message.error {
+
+            border:
+                1px solid rgba(
+                    255,
+                    102,
+                    125,
+                    0.20
+                );
+
+            color:
+                #ff9aaa;
+
+            background:
+                rgba(
+                    255,
+                    102,
+                    125,
+                    0.07
+                );
+
+        }
+
+
+        .message.success {
+
+            border:
+                1px solid rgba(
+                    53,
+                    211,
+                    153,
+                    0.20
+                );
+
+            color:
+                #8ff0ca;
+
+            background:
+                rgba(
+                    53,
+                    211,
+                    153,
+                    0.07
+                );
+
+        }
+
+
+        /* =====================================================
+           RESULT
+        ===================================================== */
+
+        .result {
+
+            display:
+                none;
+
+            margin-top:
+                22px;
+
+            padding:
+                21px;
+
+            border:
+                1px solid rgba(
+                    53,
+                    211,
+                    153,
+                    0.20
+                );
+
+            border-radius:
+                22px;
+
+            background:
+                rgba(
+                    53,
+                    211,
+                    153,
+                    0.055
+                );
+
+        }
+
+
+        .result.show {
+
+            display:
+                block;
+
+        }
+
+
+        .result-title {
+
+            text-align:
+                center;
+
+            color:
+                #8ff0ca;
+
+            font-size:
+                16px;
+
+            font-weight:
+                900;
+
+        }
+
+
+        .code-label {
+
+            margin-top:
+                17px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .code {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            margin-top:
+                7px;
+
+            padding:
+                13px 14px;
+
+            border:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.09
+                );
+
+            border-radius:
+                14px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.18
+                );
+
+        }
+
+
+        .code strong {
+
+            font-size:
+                14px;
+
+            letter-spacing:
+                1px;
+
+            word-break:
+                break-all;
+
+        }
+
+
+        .copy-btn {
+
+            flex:
+                0 0 auto;
+
+            padding:
+                8px 10px;
+
+            border:
+                0;
+
+            border-radius:
+                10px;
+
+            color:
+                #ffffff;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.09
+                );
+
+            font-size:
+                10px;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .players-result {
+
+            margin-top:
+                15px;
+
+            padding-top:
+                15px;
+
+            border-top:
+                1px solid rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
+
+        }
+
+
+        .player-result-row {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            gap:
+                10px;
+
+            padding:
+                8px 0;
+
+            font-size:
+                12px;
+
+        }
+
+
+        .player-result-row span {
+
+            color:
+                var(--muted);
+
+        }
+
+
+        .player-result-row strong {
+
+            color:
+                #ffffff;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            margin-top:
+                25px;
+
+            text-align:
+                center;
+
+            color:
+                #687289;
+
+            font-size:
+                10px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .loading {
+
+            text-align:
+                center;
+
+            padding:
+                12px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 520px) {
+
+            .page {
+
+                padding:
+                    17px 13px 35px;
+
+            }
+
+
+            .card {
+
+                padding:
+                    19px;
+
+                border-radius:
+                    23px;
+
+            }
+
+
+            .topbar {
+
+                margin-bottom:
+                    22px;
+
+            }
+
+
+            .back {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .badge {
+
+                font-size:
+                    10px;
+
+                padding:
+                    7px 9px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <main class="page">
+
+
+        <!-- =================================================
+             TOP BAR
+        ================================================= -->
+
+        <div class="topbar">
+
+            <a
+                href="index.html"
+                class="back"
+            >
+
+                ← Back
+
+            </a>
+
+
+            <span class="badge">
+
+                DOUBLE · 2 VS 2
+
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             HERO
+        ================================================= -->
+
+        <section class="hero">
+
+            <div class="hero-icon">
+
+                👥
+
+            </div>
+
+
+            <h1>
+
+                Double Tournament
+
+            </h1>
+
+
+            <p>
+
+                ২ জন Player-এর একটি Team তৈরি করে
+                2 VS 2 Ludo Tournament-এ অংশগ্রহণ করুন।
+
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             CARD
+        ================================================= -->
+
+        <section class="card">
+
+
+            <!-- =================================================
+                 TOURNAMENT
+            ================================================= -->
+
+            <div class="tournament-info">
+
+                <div class="info-label">
+
+                    Tournament
+
+                </div>
+
+
+                <div id="tournamentName">
+
+                    Loading...
+
+                </div>
+
+
+                <div id="capacityInfo">
+
+                    Registration তথ্য লোড হচ্ছে...
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FORM
+            ================================================= -->
+
+            <form id="joinForm">
+
+
+                <h2 class="form-title">
+
+                    📝 Team Registration
+
+                </h2>
+
+
+                <!-- TEAM NAME -->
+
+                <div class="field">
+
+                    <label for="teamName">
+
+                        Team Name
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="teamName"
+                        maxlength="40"
+                        autocomplete="off"
+                        placeholder="আপনার Team Name লিখুন"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PLAYER 1 -->
+
+                <div class="player-box">
+
+                    <div class="player-heading">
+
+                        <div class="player-number">
+                            1
+                        </div>
+
+                        <strong>
+                            Player 1
+                        </strong>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="player1Name">
+
+                            Player 1 Name
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="player1Name"
+                            maxlength="40"
+                            autocomplete="off"
+                            placeholder="প্রথম Player-এর নাম"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PLAYER 2 -->
+
+                <div class="player-box">
+
+                    <div class="player-heading">
+
+                        <div class="player-number">
+                            2
+                        </div>
+
+                        <strong>
+                            Player 2
+                        </strong>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="player2Name">
+
+                            Player 2 Name
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="player2Name"
+                            maxlength="40"
+                            autocomplete="off"
+                            placeholder="দ্বিতীয় Player-এর নাম"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    id="joinButton"
+                >
+
+                    📝 Join Tournament
+
+                </button>
+
+
+            </form>
+
+
+            <!-- =================================================
+                 MESSAGE
+            ================================================= -->
+
+            <div
+                class="message"
+                id="message"
+            ></div>
+
+
+            <!-- =================================================
+                 RESULT
+            ================================================= -->
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <div class="result-title">
+
+                    🎉 Registration Successful
+
+                </div>
+
+
+                <!-- TEAM CODE -->
+
+                <div class="code-label">
+
+                    TEAM CODE
+
+                </div>
+
+
+                <div class="code">
+
+                    <strong id="teamCode">
+                        —
+                    </strong>
+
+
+                    <button
+                        type="button"
+                        class="copy-btn"
+                        data-copy="teamCode"
+                    >
+
+                        Copy
+
+                    </button>
+
+                </div>
+
+
+                <!-- PLAYER 1 CODE -->
+
+                <div class="code-label">
+
+                    PLAYER 1 CODE
+
+                </div>
+
+
+                <div class="code">
+
+                    <strong id="player1Code">
+                        —
+                    </strong>
+
+
+                    <button
+                        type="button"
+                        class="copy-btn"
+                        data-copy="player1Code"
+                    >
+
+                        Copy
+
+                    </button>
+
+                </div>
+
+
+                <!-- PLAYER 2 CODE -->
+
+                <div class="code-label">
+
+                    PLAYER 2 CODE
+
+                </div>
+
+
+                <div class="code">
+
+                    <strong id="player2Code">
+                        —
+                    </strong>
+
+
+                    <button
+                        type="button"
+                        class="copy-btn"
+                        data-copy="player2Code"
+                    >
+
+                        Copy
+
+                    </button>
+
+                </div>
+
+
+                <!-- PLAYER INFO -->
+
+                <div class="players-result">
+
+                    <div class="player-result-row">
+
+                        <span>
+                            Team
+                        </span>
+
+                        <strong id="resultTeamName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="player-result-row">
+
+                        <span>
+                            Player 1
+                        </span>
+
+                        <strong id="resultPlayer1">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="player-result-row">
+
+                        <span>
+                            Player 2
+                        </span>
+
+                        <strong id="resultPlayer2">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <footer class="footer">
+
+            Ghopkhali Sports Arena
+            ·
+            Double Ludo Tournament
+
+            <br>
+
+            আপনার Team Code সংরক্ষণ করে রাখুন।
+
+        </footer>
+
+
+    </main>
+
+
+    <script>
+
+        "use strict";
+
+
+        /* =====================================================
+           SUPABASE
+        ===================================================== */
+
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+        const SUPABASE_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+        const {
+            createClient
+        } = window.supabase;
+
+
+        const supabaseClient =
+            createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
+
+        const tournamentName =
+            document.getElementById(
+                "tournamentName"
+            );
+
+
+        const capacityInfo =
+            document.getElementById(
+                "capacityInfo"
+            );
+
+
+        const joinForm =
+            document.getElementById(
+                "joinForm"
+            );
+
+
+        const joinButton =
+            document.getElementById(
+                "joinButton"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        const result =
+            document.getElementById(
+                "result"
+            );
+
+
+        /* =====================================================
+           STATE
+        ===================================================== */
+
+        let currentTournament =
+            null;
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        function showMessage(
+            text,
+            type = "error"
+        ) {
+
+            message.textContent =
+                text;
+
+            message.className =
+                "message show " +
+                type;
+
+        }
+
+
+        function hideMessage() {
+
+            message.className =
+                "message";
+
+            message.textContent =
+                "";
+
+        }
+
+
+        /* =====================================================
+           LOAD TOURNAMENT
+        ===================================================== */
+
+        async function loadTournament() {
+
+            tournamentName.textContent =
+                "Loading...";
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .from(
+                            "ludo_tournaments"
+                        )
+                        .select(
+                            "id,tournament_name,status,max_players"
+                        )
+                        .eq(
+                            "tournament_type",
+                            "double"
+                        )
+                        .order(
+                            "created_at",
+                            {
+                                ascending:
+                                    true
+                            }
+                        )
+                        .limit(1)
+                        .maybeSingle();
+
+
+                if (error) {
+
+                    console.error(
+                        error
+                    );
+
+                    tournamentName.textContent =
+                        "Tournament পাওয়া যায়নি।";
+
+                    capacityInfo.textContent =
+                        "দয়া করে পরে আবার চেষ্টা করুন।";
+
+                    joinButton.disabled =
+                        true;
+
+                    return;
+
+                }
+
+
+                if (!data) {
+
+                    tournamentName.textContent =
+                        "Double Tournament পাওয়া যায়নি।";
+
+                    capacityInfo.textContent =
+                        "";
+
+                    joinButton.disabled =
+                        true;
+
+                    return;
+
+                }
+
+
+                currentTournament =
+                    data;
+
+
+                tournamentName.textContent =
+                    data.tournament_name;
+
+
+                await updateCapacity();
+
+
+                if (
+                    data.status !==
+                    "registration" &&
+                    data.status !==
+                    "upcoming"
+                ) {
+
+                    joinButton.disabled =
+                        true;
+
+                    showMessage(
+                        "এই Tournament-এ বর্তমানে Registration নেওয়া হচ্ছে না।",
+                        "error"
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+                tournamentName.textContent =
+                    "Connection Error";
+
+                joinButton.disabled =
+                    true;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           CAPACITY
+        ===================================================== */
+
+        async function updateCapacity() {
+
+            if (!currentTournament) {
+                return;
+            }
+
+
+            const {
+                count,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "ludo_teams"
+                    )
+                    .select(
+                        "id",
+                        {
+                            count:
+                                "exact",
+                            head:
+                                true
+                        }
+                    )
+                    .eq(
+                        "tournament_id",
+                        currentTournament.id
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+                capacityInfo.textContent =
+                    "সর্বোচ্চ ২৫টি Team";
+
+                return;
+
+            }
+
+
+            const teamCount =
+                count || 0;
+
+
+            const remaining =
+                Math.max(
+                    25 - teamCount,
+                    0
+                );
+
+
+            capacityInfo.textContent =
+                `${teamCount}/25 Team Registered · ${remaining}টি Team-এর জায়গা বাকি`;
+
+
+
+            if (
+                teamCount >= 25
+            ) {
+
+                joinButton.disabled =
+                    true;
+
+                showMessage(
+                    "Double Tournament-এর ২৫টি Team পূর্ণ হয়ে গেছে।",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           SUBMIT
+        ===================================================== */
+
+        joinForm.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                hideMessage();
+
+
+                if (
+                    !currentTournament
+                ) {
+
+                    showMessage(
+                        "Tournament তথ্য পাওয়া যায়নি।",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                const teamName =
+                    document
+                        .getElementById(
+                            "teamName"
+                        )
+                        .value
+                        .trim();
+
+
+                const player1Name =
+                    document
+                        .getElementById(
+                            "player1Name"
+                        )
+                        .value
+                        .trim();
+
+
+                const player2Name =
+                    document
+                        .getElementById(
+                            "player2Name"
+                        )
+                        .value
+                        .trim();
+
+
+                /* =============================================
+                   VALIDATION
+                ============================================= */
+
+                if (!teamName) {
+
+                    showMessage(
+                        "Team Name দিন।",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (!player1Name) {
+
+                    showMessage(
+                        "Player 1-এর নাম দিন।",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (!player2Name) {
+
+                    showMessage(
+                        "Player 2-এর নাম দিন।",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    player1Name
+                        .toLowerCase() ===
+                    player2Name
+                        .toLowerCase()
+                ) {
+
+                    showMessage(
+                        "Player 1 এবং Player 2-এর নাম আলাদা হতে হবে।",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                /* =============================================
+                   LOADING
+                ============================================= */
+
+                joinButton.disabled =
+                    true;
+
+                joinButton.textContent =
+                    "⏳ Registration হচ্ছে...";
+
+
+                try {
+
+
+                    /* =========================================
+                       RPC
+                    ========================================= */
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient
+                            .rpc(
+                                "join_ludo_double",
+                                {
+                                    p_tournament_id:
+                                        currentTournament.id,
+
+                                    p_team_name:
+                                        teamName,
+
+                                    p_player_1_name:
+                                        player1Name,
+
+                                    p_player_2_name:
+                                        player2Name
+                                }
+                            );
+
+
+                    if (error) {
+
+                        console.error(
+                            "Double Join Error:",
+                            error
+                        );
+
+                        throw error;
+
+                    }
+
+
+                    if (
+                        !data ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            "Registration সম্পন্ন হয়নি।"
+                        );
+
+                    }
+
+
+                    /* =========================================
+                       RESULT
+                    ========================================= */
+
+                    document.getElementById(
+                        "teamCode"
+                    ).textContent =
+                        data.team_code;
+
+
+                    document.getElementById(
+                        "player1Code"
+                    ).textContent =
+                        data.player_1_code;
+
+
+                    document.getElementById(
+                        "player2Code"
+                    ).textContent =
+                        data.player_2_code;
+
+
+                    document.getElementById(
+                        "resultTeamName"
+                    ).textContent =
+                        teamName;
+
+
+                    document.getElementById(
+                        "resultPlayer1"
+                    ).textContent =
+                        player1Name;
+
+
+                    document.getElementById(
+                        "resultPlayer2"
+                    ).textContent =
+                        player2Name;
+
+
+                    result.classList.add(
+                        "show"
+                    );
+
+
+                    joinForm.style.display =
+                        "none";
+
+
+                    showMessage(
+                        "🎉 আপনার Team সফলভাবে Tournament-এ যুক্ত হয়েছে।",
+                        "success"
+                    );
+
+
+                    await updateCapacity();
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    let errorMessage =
+                        "Registration করা যায়নি।";
+
+
+                    if (
+                        error?.message
+                    ) {
+
+                        errorMessage =
+                            error.message;
+
+                    }
+
+
+                    if (
+                        errorMessage
+                            .toLowerCase()
+                            .includes(
+                                "team name"
+                            )
+                    ) {
+
+                        errorMessage =
+                            "এই Team Name ইতোমধ্যে নেওয়া হয়েছে।";
+
+                    }
+
+
+                    if (
+                        errorMessage
+                            .toLowerCase()
+                            .includes(
+                                "২৫"
+                            )
+                    ) {
+
+                        errorMessage =
+                            "Double Tournament-এর ২৫টি Team পূর্ণ হয়ে গেছে।";
+
+                    }
+
+
+                    showMessage(
+                        errorMessage,
+                        "error"
+                    );
+
+
+                } finally {
+
+                    if (
+                        !result.classList.contains(
+                            "show"
+                        )
+                    ) {
+
+                        joinButton.disabled =
+                            false;
+
+                        joinButton.textContent =
+                            "📝 Join Tournament";
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           COPY CODE
+        ===================================================== */
+
+        document.addEventListener(
+            "click",
+            async function(event) {
+
+                const button =
+                    event.target.closest(
+                        "[data-copy]"
+                    );
+
+
+                if (!button) {
+                    return;
+                }
+
+
+                const targetId =
+                    button.dataset.copy;
+
+
+                const target =
+                    document.getElementById(
+                        targetId
+                    );
+
+
+                if (!target) {
+                    return;
+                }
+
+
+                const value =
+                    target.textContent.trim();
+
+
+                if (
+                    !value ||
+                    value === "—"
+                ) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        value
+                    );
+
+
+                    const oldText =
+                        button.textContent;
+
+
+                    button.textContent =
+                        "✓ Copied";
+
+
+                    setTimeout(
+                        () => {
+
+                            button.textContent =
+                                oldText;
+
+                        },
+                        1400
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           INIT
+        ===================================================== */
+
+        loadTournament();
+
+    </script>
+
+
+</body>
+
+</html>
