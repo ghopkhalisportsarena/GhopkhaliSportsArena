@@ -1107,94 +1107,28 @@
 
 
         /* =================================================
-           CHECK PLAYER CODE
-        ================================================= */
-
-        async function playerCodeExists(
-            code
-        ) {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from(
-                        "ludo_players"
-                    )
-                    .select(
-                        "id"
-                    )
-                    .eq(
-                        "player_code",
-                        code
-                    )
-                    .maybeSingle();
-
-
-            if (error) {
-
-                console.error(
-                    "Player Code Check Error:",
-                    error
-                );
-
-
-                throw error;
-
-            }
-
-
-            return !!data;
-
-        }
-
-
-
-        /* =================================================
            CREATE UNIQUE PLAYER CODE
         ================================================= */
 
-        async function createUniquePlayerCode() {
+        function createUniquePlayerCode() {
 
-            let code;
+            const chars =
+                "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-            let exists =
-                true;
+            let code =
+                "S-";
 
+            for (let i = 0; i < 6; i++) {
 
-            let attempts =
-                0;
-
-
-            while (
-                exists &&
-                attempts < 20
-            ) {
-
-                code =
-                    generatePlayerCode();
-
-
-                exists =
-                    await playerCodeExists(
-                        code
+                code +=
+                    chars.charAt(
+                        Math.floor(
+                            Math.random() *
+                            chars.length
+                        )
                     );
 
-
-                attempts++;
-
             }
-
-
-            if (exists) {
-
-                throw new Error(
-                    "Unique Player Code তৈরি করা সম্ভব হয়নি।"
-                );
-
-            }
-
 
             return code;
 
@@ -1503,24 +1437,30 @@ loadTournament();
                 catch (error) {
 
                     console.error(
-                        "Player Join Error:",
+                        "LUDO JOIN ERROR:",
                         error
                     );
 
+                    const errorInfo = [
+                        "code=" + (error?.code || ""),
+                        "message=" + (error?.message || ""),
+                        "details=" + (error?.details || ""),
+                        "hint=" + (error?.hint || ""),
+                        "status=" + (error?.status || "")
+                    ].join(" | ");
+
+                    console.error(
+                        "LUDO JOIN ERROR DETAILS:",
+                        errorInfo
+                    );
 
                     showMessage(
-                        "Join করা যায়নি: " +
-                        (
-                            error?.message ||
-                            "Unknown error"
-                        ),
+                        "Join করা যায়নি: " + errorInfo,
                         "error"
                     );
 
-
                     joinBtn.disabled =
                         false;
-
 
                     joinBtn.textContent =
                         "🎲 Tournament-এ Join করুন";
