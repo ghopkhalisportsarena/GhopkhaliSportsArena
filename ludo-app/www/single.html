@@ -1381,49 +1381,68 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (rollButton && dice) {
 
-        rollButton.addEventListener(
-            "click",
-            function () {
+        rollButton.addEventListener("click", async () => {
 
-                const result =
-                    Math.floor(
-                        Math.random() * 6
-                    ) + 1;
+        if (window.gsaMatch) {
 
+            const match = window.gsaMatch;
 
-                const diceFaces = {
+            const currentPlayer =
+                String(match.current_turn || "");
 
-                    1: "⚀",
-                    2: "⚁",
-                    3: "⚂",
-                    4: "⚃",
-                    5: "⚄",
-                    6: "⚅"
+            const myPlayerId =
+                localStorage.getItem("gsa_ludo_player_id") || "";
 
-                };
-
-
-                dice.textContent =
-                    diceFaces[result];
-
-
+            if (
+                currentPlayer &&
+                myPlayerId &&
+                currentPlayer !== myPlayerId
+            ) {
                 if (
-                    window.LudoBoard &&
-                    typeof window.LudoBoard.setDice === "function"
+                    typeof gsaShowStatus === "function"
                 ) {
-
-                    window.LudoBoard.setDice(result);
-
+                    gsaShowStatus("Opponent-এর turn");
                 }
 
-
-                console.log(
-                    "GSA LUDO DICE:",
-                    result
-                );
-
+                return;
             }
-        );
+
+            const result =
+                Math.floor(Math.random() * 6) + 1;
+
+            dice.textContent = result;
+
+            if (
+                window.LudoBoard &&
+                typeof window.LudoBoard.setDice === "function"
+            ) {
+                window.LudoBoard.setDice(result);
+            }
+
+            if (
+                typeof gsaSaveGameState === "function"
+            ) {
+                await gsaSaveGameState({
+                    dice: result,
+                    current_turn: myPlayerId
+                });
+            }
+
+            return;
+        }
+
+        const result =
+            Math.floor(Math.random() * 6) + 1;
+
+        dice.textContent = result;
+
+        if (
+            window.LudoBoard &&
+            typeof window.LudoBoard.setDice === "function"
+        ) {
+            window.LudoBoard.setDice(result);
+        }
+    });
 
     }
 
