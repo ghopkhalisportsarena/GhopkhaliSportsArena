@@ -973,65 +973,184 @@ function createToken(
    RENDER
 ===================================================== */
 
+/*
+============================================================
+STACKED TOKENS
+============================================================
+*/
+
+function getStackOffset(index, total){
+
+    if(total <= 1){
+        return [0,0];
+    }
+
+    const patterns = {
+
+        2:[
+            [-0.17,0],
+            [ 0.17,0]
+        ],
+
+        3:[
+            [-0.17,-0.14],
+            [ 0.17,-0.14],
+            [ 0,     0.16]
+        ],
+
+        4:[
+            [-0.17,-0.17],
+            [ 0.17,-0.17],
+            [-0.17, 0.17],
+            [ 0.17, 0.17]
+        ]
+    };
+
+    if(patterns[total]){
+        return patterns[total][index];
+    }
+
+    const columns = 3;
+
+    const row =
+        Math.floor(index / columns);
+
+    const column =
+        index % columns;
+
+    return [
+        (column - 1) * 0.14,
+        (row - 1) * 0.14
+    ];
+}
+
 function render(){
 
     const layer =
-        document.getElementById(
-            "tokenLayer"
-        );
+        document.getElementById("tokenLayer");
 
     layer.innerHTML = "";
 
+    /*
+       First calculate all token positions.
+       Tokens on the same cell are grouped together.
+    */
+
+    const groups = new Map();
 
     ["red","yellow"].forEach(
-        color=>{
+        color => {
 
-            game.tokens[color]
-                .forEach(
-                    (_,index)=>{
+            game.tokens[color].forEach(
+                (token,index) => {
 
-                        layer.appendChild(
-                            createToken(
-                                color,
-                                index
-                            )
+                    const position =
+                        coordinateFor(
+                            color,
+                            token,
+                            index
                         );
 
-                    }
-                );
+                    const key =
+                        position[0] + "," +
+                        position[1];
 
+                    if(!groups.has(key)){
+                        groups.set(key,[]);
+                    }
+
+                    groups.get(key).push({
+                        color:color,
+                        index:index,
+                        token:token,
+                        position:position
+                    });
+                }
+            );
         }
     );
 
+    /*
+       Render grouped tokens.
+    */
+
+    groups.forEach(
+        group => {
+
+            const total =
+                group.length;
+
+            group.forEach(
+                (item,stackIndex) => {
+
+                    const element =
+                        createToken(
+                            item.color,
+                            item.index
+                        );
+
+                    const offset =
+                        getStackOffset(
+                            stackIndex,
+                            total
+                        );
+
+                    const p =
+                        percent(
+                            item.position[0],
+                            item.position[1]
+                        );
+
+                    /*
+                       Convert grid offset into
+                       percentage offset.
+                    */
+
+                    const cellPercent =
+                        100 / 15;
+
+                    element.style.left =
+                        "calc(" +
+                        p.left +
+                        " + " +
+                        (offset[1] * cellPercent) +
+                        "%)";
+
+                    element.style.top =
+                        "calc(" +
+                        p.top +
+                        " + " +
+                        (offset[0] * cellPercent) +
+                        "%)";
+
+                    element.style.zIndex =
+                        String(
+                            20 + stackIndex
+                        );
+
+                    layer.appendChild(element);
+                }
+            );
+        }
+    );
 
     const dice =
-        document.getElementById(
-            "dice"
-        );
-
+        document.getElementById("dice");
 
     if(game.dice === null){
-
         dice.textContent = "🎲";
-
     }else{
-
         dice.textContent =
             diceEmoji(game.dice);
-
     }
 
-
     const rollButton =
-        document.getElementById(
-            "rollButton"
-        );
+        document.getElementById("rollButton");
 
     rollButton.disabled =
         game.rolled ||
         game.moving ||
         !!game.winner;
-
 
     document.getElementById(
         "redStatus"
@@ -1040,7 +1159,6 @@ function render(){
         ? "Your turn"
         : "Waiting";
 
-
     document.getElementById(
         "yellowStatus"
     ).textContent =
@@ -1048,12 +1166,8 @@ function render(){
         ? "Your turn"
         : "Waiting";
 
-
     const message =
-        document.getElementById(
-            "message"
-        );
-
+        document.getElementById("message");
 
     if(game.winner){
 
@@ -1072,12 +1186,9 @@ function render(){
             game.current === "red"
             ? "Red player's turn. Roll the dice."
             : "Yellow player's turn. Roll the dice.";
-
     }
 
-
     saveGame();
-
 }
 
 
@@ -1417,98 +1528,67 @@ function wait(ms){
    CAPTURE
 ===================================================== */
 
-function captureOpponents(
-    color,
-    movedToken
-){
-
-    if(
-        movedToken.progress < 0 ||
-        movedToken.progress >= 52
-    ){
-
-        return false;
-
-    }
-
-
-    const index =
-        (
-            START[color] +
-            movedToken.progress
-        ) % 52;
-
+function captureOpponents(color, token){
 
     /*
-       Standard safe positions.
+       Tokens outside the main track cannot capture.
     */
-
-    const safe = [
-
-        0,
-        8,
-        13,
-        21,
-        26,
-        34,
-        39,
-        47
-
-    ];
-
-
     if(
-        safe.includes(index)
+        token.progress < 0 ||
+        token.progress >= 52
     ){
-
         return false;
-
     }
 
+    const myIndex =
+        (START[color] + token.progress) % 52;
+
+    /*
+       START exit cell is SAFE.
+       Opponent tokens on this cell cannot be captured.
+    */
+    const exitIndex =
+        (START[color] + 1) % 52;
+
+    if(myIndex === exitIndex){
+        return false;
+    }
+
+    /*
+       Standard safe cells cannot be captured.
+    */
+    if(SAFE.has(myIndex)){
+        return false;
+    }
+
+    let captured = false;
 
     const opponent =
-        color === "red"
-        ? "yellow"
-        : "red";
+        color === "red" ? "yellow" : "red";
 
+    game.tokens[opponent].forEach(
+        opponentToken => {
 
-    let captured=false;
+            if(
+                opponentToken.progress >= 0 &&
+                opponentToken.progress < 52
+            ){
 
+                const opponentIndex =
+                    (START[opponent] +
+                     opponentToken.progress) % 52;
 
-    game.tokens[opponent]
-        .forEach(
-            token=>{
+                if(opponentIndex === myIndex){
 
-                if(
-                    token.progress >= 0 &&
-                    token.progress < 52
-                ){
+                    opponentToken.progress = -1;
 
-                    const otherIndex =
-                        (
-                            START[opponent] +
-                            token.progress
-                        ) % 52;
-
-
-                    if(
-                        otherIndex === index
-                    ){
-
-                        token.progress=-1;
-
-                        captured=true;
-
-                    }
-
+                    captured = true;
                 }
-
             }
-        );
-
+        }
+    );
 
     return captured;
-
 }
 
 
