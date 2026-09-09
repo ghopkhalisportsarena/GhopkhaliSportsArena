@@ -1331,7 +1331,17 @@ loadTournament();
                     ------------------------------------- */
 
                     const generatedPlayerCode =
-                        await createUniquePlayerCode();
+                        createUniquePlayerCode();
+
+                    console.log(
+                        "LUDO: generated player code =",
+                        generatedPlayerCode
+                    );
+
+                    console.log(
+                        "LUDO: tournament id =",
+                        tournament.id
+                    );
 
 
 
@@ -1339,44 +1349,64 @@ loadTournament();
                        INSERT PLAYER
                     ------------------------------------- */
 
-                    const {
-                        data,
-                        error
-                    } =
-                        await supabaseClient
-                            .from(
-                                "ludo_players"
-                            )
-                            .insert({
+                    let insertResult;
 
-                                tournament_id:
-                                    tournament.id,
+                    try {
 
-                                player_name:
-                                    name,
+                        insertResult =
+                            await supabaseClient
+                                .from("ludo_players")
+                                .insert({
+                                    tournament_id:
+                                        tournament.id,
 
-                                player_code:
-                                    generatedPlayerCode,
+                                    player_name:
+                                        name,
 
-                                status:
-                                    "active"
+                                    player_code:
+                                        generatedPlayerCode,
 
-                            })
-                            .select()
-                            .single();
+                                    status:
+                                        "active"
+                                });
 
+                    } catch (insertException) {
 
-                    if (error) {
+                        console.error(
+                            "LUDO INSERT EXCEPTION:",
+                            insertException
+                        );
+
+                        throw new Error(
+                            "Player insert exception: " +
+                            String(insertException)
+                        );
+
+                    }
+
+                    console.log(
+                        "LUDO INSERT RESULT:",
+                        insertResult
+                    );
+
+                    if (insertResult.error) {
 
                         console.error(
                             "Player Insert Error:",
-                            error
+                            insertResult.error
                         );
 
-
-                        throw error;
+                        throw new Error(
+                            "Supabase insert failed: " +
+                            JSON.stringify(
+                                insertResult.error
+                            )
+                        );
 
                     }
+
+                    const data =
+                        insertResult.data;
 
 
 
