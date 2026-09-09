@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Ghopkhali Sports Arena - Ludo</title>
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+body {
+
+    min-height: 100vh;
+
+    background: #070b16;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: #ffffff;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 12px;
+}
+
+
+/* =====================================================
+   GAME
+===================================================== */
+
+.game {
+
+    width: 100%;
+
+    max-width: 620px;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header {
+
+    margin-bottom: 12px;
+}
+
+.header h1 {
+
+    font-size: 21px;
+
+    letter-spacing: .5px;
+
+    margin-bottom: 4px;
+}
+
+.header p {
+
+    font-size: 12px;
+
+    opacity: .65;
+
+    letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   LUDO BOARD
+===================================================== */
+
+.board {
+
+    position: relative;
+
+    width: min(94vw, 600px);
+
+    aspect-ratio: 1 / 1;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(15, 1fr);
+
+    grid-template-rows:
+        repeat(15, 1fr);
+
+    background: #ffffff;
+
+    border: 4px solid #111827;
+
+    border-radius: 6px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0,0,0,.55);
+}
+
+
+/* =====================================================
+   GRID CELL
+===================================================== */
+
+.cell {
+
+    position: relative;
+
+    border: 1px solid #1f2937;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #ffffff;
+}
+
+
+/* =====================================================
+   TRACK
+===================================================== */
+
+.track {
+
+    background: #ffffff;
+
+    border:
+        1px solid #1f2937;
+}
+
+
+/* =====================================================
+   HOME QUADRANTS
+===================================================== */
+
+.home {
+
+    position: absolute;
+
+    width: 40%;
+
+    height: 40%;
+
+    padding: 5%;
+
+    z-index: 20;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* =====================================================
+   HOME COLORS
+===================================================== */
+
+.red-home {
+
+    top: 0;
+
+    left: 0;
+
+    background: #e53935;
+}
+
+.green-home {
+
+    top: 0;
+
+    right: 0;
+
+    background: #43a047;
+}
+
+.yellow-home {
+
+    right: 0;
+
+    bottom: 0;
+
+    background: #fbc02d;
+}
+
+.blue-home {
+
+    left: 0;
+
+    bottom: 0;
+
+    background: #1e88e5;
+}
+
+
+/* =====================================================
+   HOME INNER
+===================================================== */
+
+.home-inner {
+
+    width: 100%;
+
+    height: 100%;
+
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    padding: 13%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    grid-template-rows:
+        repeat(2, 1fr);
+
+    gap: 12%;
+
+    box-shadow:
+        inset 0 0 0 2px
+        rgba(0,0,0,.15);
+}
+
+
+/* =====================================================
+   TOKEN BASES
+===================================================== */
+
+.base {
+
+    width: 100%;
+
+    height: 100%;
+
+    min-width: 0;
+
+    min-height: 0;
+
+    border-radius: 50%;
+
+    background: #f8fafc;
+
+    border:
+        3px solid #374151;
+
+    box-shadow:
+        inset 0 2px 5px
+        rgba(0,0,0,.20);
+}
+
+
+/* =====================================================
+   MAIN TRACK CELLS
+===================================================== */
+
+.track {
+
+    background: #ffffff;
+}
+
+
+/* =====================================================
+   COLOURED HOME PATHS
+===================================================== */
+
+.red-lane {
+
+    background: #ef5350 !important;
+
+    border-color: #b71c1c !important;
+}
+
+.green-lane {
+
+    background: #66bb6a !important;
+
+    border-color: #2e7d32 !important;
+}
+
+.yellow-lane {
+
+    background: #fdd835 !important;
+
+    border-color: #f57f17 !important;
+}
+
+.blue-lane {
+
+    background: #42a5f5 !important;
+
+    border-color: #0d47a1 !important;
+}
+
+
+/* =====================================================
+   START CELLS
+===================================================== */
+
+.start {
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: .1px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 1px 2px
+        rgba(0,0,0,.7);
+
+    z-index: 5;
+}
+
+
+.red-start {
+
+    background: #c62828 !important;
+
+    border-color: #8e0000 !important;
+}
+
+.green-start {
+
+    background: #2e7d32 !important;
+
+    border-color: #1b5e20 !important;
+}
+
+.yellow-start {
+
+    background: #f9a825 !important;
+
+    border-color: #f57f17 !important;
+
+    color: #111827;
+
+    text-shadow: none;
+}
+
+.blue-start {
+
+    background: #1565c0 !important;
+
+    border-color: #0d47a1 !important;
+}
+
+
+/* =====================================================
+   SAFE CELLS
+===================================================== */
+
+.safe {
+
+    background: #f1f5f9 !important;
+
+    color: #334155;
+
+    font-size: 15px;
+
+    font-weight: 900;
+
+    z-index: 4;
+}
+
+
+.safe::after {
+
+    content: "★";
+
+    font-size: 15px;
+
+    color: #475569;
+}
+
+
+/* =====================================================
+   CENTER FINISH
+===================================================== */
+
+.center {
+
+    position: absolute;
+
+    left: 40%;
+
+    top: 40%;
+
+    width: 20%;
+
+    height: 20%;
+
+    z-index: 30;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    grid-template-rows:
+        repeat(2, 1fr);
+
+    border: 2px solid #111827;
+
+    overflow: hidden;
+}
+
+
+.center-red {
+
+    background: #e53935;
+}
+
+.center-green {
+
+    background: #43a047;
+}
+
+.center-yellow {
+
+    background: #fbc02d;
+}
+
+.center-blue {
+
+    background: #1e88e5;
+}
+
+
+/* =====================================================
+   CENTER FINISH WHITE DIAMOND
+===================================================== */
+
+.center::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 28%;
+
+    height: 28%;
+
+    left: 36%;
+
+    top: 36%;
+
+    background: #ffffff;
+
+    transform: rotate(45deg);
+
+    border:
+        1px solid #111827;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+
+    margin-top: 12px;
+
+    padding: 10px;
+
+    background: #111827;
+
+    border:
+        1px solid #334155;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+    body {
+
+        padding: 6px;
+    }
+
+    .header h1 {
+
+        font-size: 18px;
+    }
+
+    .board {
+
+        width: 96vw;
+
+        border-width: 2px;
+    }
+
+    .cell {
+
+        border-width: .7px;
+    }
+
+    .start {
+
+        font-size: 4px;
+    }
+
+    .safe,
+    .safe::after {
+
+        font-size: 10px;
+    }
+
+    .base {
+
+        border-width: 2px;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="game">
+
+
+    <div class="header">
+
+        <h1>
+            GHOPKHALI SPORTS ARENA
+        </h1>
+
+        <p>
+            ONLINE LUDO
+        </p>
+
+    </div>
+
+
+    <div
+        id="board"
+        class="board">
+    </div>
+
+
+    <div
+        id="status"
+        class="status">
+
+        STANDARD LUDO BOARD READY
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   BOARD
+===================================================== */
+
+const board =
+    document.getElementById("board");
+
+
+/* =====================================================
+   STANDARD 52 CELL TRACK
+===================================================== */
+
+/*
+    15 × 15 STANDARD LUDO
+
+    The four homes occupy:
+
+    RED    = top-left
+    GREEN  = top-right
+    YELLOW = bottom-right
+    BLUE   = bottom-left
+
+    The playable outer track runs
+    around the four homes.
+*/
+
+const track = [
+
+    /* -----------------------------------------------
+       RED SECTION
+    ----------------------------------------------- */
+
+    [7,2],
+    [7,3],
+    [7,4],
+    [7,5],
+    [7,6],
+
+    [6,7],
+    [5,7],
+    [4,7],
+    [3,7],
+    [2,7],
+
+    [1,7],
+    [1,8],
+    [1,9],
+
+    /* -----------------------------------------------
+       GREEN SECTION
+    ----------------------------------------------- */
+
+    [2,9],
+    [3,9],
+    [4,9],
+    [5,9],
+    [6,9],
+
+    [7,10],
+    [7,11],
+    [7,12],
+    [7,13],
+    [7,14],
+
+    [8,14],
+
+    /* -----------------------------------------------
+       YELLOW SECTION
+    ----------------------------------------------- */
+
+    [9,14],
+    [10,14],
+    [11,14],
+    [12,14],
+    [13,14],
+
+    [14,14],
+    [14,13],
+    [14,12],
+    [14,11],
+    [14,10],
+
+    [14,9],
+
+    /* -----------------------------------------------
+       BLUE SECTION
+    ----------------------------------------------- */
+
+    [13,9],
+    [12,9],
+    [11,9],
+    [10,9],
+
+    [9,8],
+    [9,7],
+
+    [10,7],
+    [11,7],
+    [12,7],
+    [13,7],
+    [14,7],
+
+    [14,6],
+    [14,5],
+    [14,4],
+    [14,3],
+    [14,2],
+
+    [13,2],
+    [12,2],
+    [11,2],
+    [10,2],
+    [9,2],
+
+    [8,2]
+
+];
+
+
+/* =====================================================
+   TRACK MAP
+===================================================== */
+
+const trackMap =
+    new Map();
+
+
+track.forEach(
+    ([row, col]) => {
+
+        trackMap.set(
+            `${row}-${col}`,
+            true
+        );
+
+    }
+);
+
+
+/* =====================================================
+   COLOURED HOME LANES
+===================================================== */
+
+const lanes = {
+
+    red: [
+
+        [8,2],
+        [8,3],
+        [8,4],
+        [8,5],
+        [8,6]
+
+    ],
+
+    green: [
+
+        [2,8],
+        [3,8],
+        [4,8],
+        [5,8],
+        [6,8]
+
+    ],
+
+    yellow: [
+
+        [8,9],
+        [8,10],
+        [8,11],
+        [8,12],
+        [8,13]
+
+    ],
+
+    blue: [
+
+        [9,8],
+        [10,8],
+        [11,8],
+        [12,8],
+        [13,8]
+
+    ]
+
+};
+
+
+/* =====================================================
+   SAFE CELLS
+===================================================== */
+
+const safeCells = [
+
+    [7,4],
+    [4,7],
+    [9,12],
+    [12,9]
+
+];
+
+
+/* =====================================================
+   START CELLS
+===================================================== */
+
+const startCells = [
+
+    {
+        row: 7,
+        col: 2,
+        color: "red"
+    },
+
+    {
+        row: 2,
+        col: 9,
+        color: "green"
+    },
+
+    {
+        row: 9,
+        col: 14,
+        color: "yellow"
+    },
+
+    {
+        row: 14,
+        col: 7,
+        color: "blue"
+    }
+
+];
+
+
+/* =====================================================
+   CREATE HOME
+===================================================== */
+
+function createHome(className) {
+
+    const home =
+        document.createElement("div");
+
+    home.className =
+        `home ${className}`;
+
+
+    const inner =
+        document.createElement("div");
+
+    inner.className =
+        "home-inner";
+
+
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
+
+        const base =
+            document.createElement("div");
+
+        base.className =
+            "base";
+
+        inner.appendChild(
+            base
+        );
+
+    }
+
+
+    home.appendChild(
+        inner
+    );
+
+
+    board.appendChild(
+        home
+    );
+
+}
+
+
+/* =====================================================
+   CREATE HOMES
+===================================================== */
+
+createHome("red-home");
+
+createHome("green-home");
+
+createHome("yellow-home");
+
+createHome("blue-home");
+
+
+/* =====================================================
+   LANE MAP
+===================================================== */
+
+const laneMap =
+    new Map();
+
+
+Object.entries(lanes)
+    .forEach(
+        ([color, cells]) => {
+
+            cells.forEach(
+                ([row, col]) => {
+
+                    laneMap.set(
+                        `${row}-${col}`,
+                        color
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   START MAP
+===================================================== */
+
+const startMap =
+    new Map();
+
+
+startCells.forEach(
+    start => {
+
+        startMap.set(
+            `${start.row}-${start.col}`,
+            start.color
+        );
+
+    }
+);
+
+
+/* =====================================================
+   SAFE MAP
+===================================================== */
+
+const safeMap =
+    new Map();
+
+
+safeCells.forEach(
+    ([row, col]) => {
+
+        safeMap.set(
+            `${row}-${col}`,
+            true
+        );
+
+    }
+);
+
+
+/* =====================================================
+   BUILD 15 × 15 BOARD
+===================================================== */
+
+for (
+    let row = 1;
+    row <= 15;
+    row++
+) {
+
+    for (
+        let col = 1;
+        col <= 15;
+        col++
+    ) {
+
+        const key =
+            `${row}-${col}`;
+
+
+        /* ---------------------------------------------
+           HOME AREAS
+        --------------------------------------------- */
+
+        const topLeft =
+            row <= 6 &&
+            col <= 6;
+
+
+        const topRight =
+            row <= 6 &&
+            col >= 10;
+
+
+        const bottomLeft =
+            row >= 10 &&
+            col <= 6;
+
+
+        const bottomRight =
+            row >= 10 &&
+            col >= 10;
+
+
+        /* ---------------------------------------------
+           CENTER
+        --------------------------------------------- */
+
+        const centerArea =
+            row >= 7 &&
+            row <= 9 &&
+            col >= 7 &&
+            col <= 9;
+
+
+        if (
+            topLeft ||
+            topRight ||
+            bottomLeft ||
+            bottomRight ||
+            centerArea
+        ) {
+
+            continue;
+
+        }
+
+
+        /* ---------------------------------------------
+           CREATE CELL
+        --------------------------------------------- */
+
+        const cell =
+            document.createElement("div");
+
+
+        cell.className =
+            "cell";
+
+
+        cell.style.gridRow =
+            row;
+
+
+        cell.style.gridColumn =
+            col;
+
+
+        /* ---------------------------------------------
+           TRACK
+        --------------------------------------------- */
+
+        if (
+            trackMap.has(key)
+        ) {
+
+            cell.classList.add(
+                "track"
+            );
+
+        }
+
+
+        /* ---------------------------------------------
+           COLOUR LANE
+        --------------------------------------------- */
+
+        if (
+            laneMap.has(key)
+        ) {
+
+            const laneColor =
+                laneMap.get(key);
+
+
+            cell.classList.add(
+                `${laneColor}-lane`
+            );
+
+        }
+
+
+        /* ---------------------------------------------
+           SAFE CELL
+        --------------------------------------------- */
+
+        if (
+            safeMap.has(key)
+        ) {
+
+            cell.classList.add(
+                "safe"
+            );
+
+        }
+
+
+        /* ---------------------------------------------
+           START CELL
+        --------------------------------------------- */
+
+        if (
+            startMap.has(key)
+        ) {
+
+            const startColor =
+                startMap.get(key);
+
+
+            cell.classList.add(
+                "start"
+            );
+
+
+            cell.classList.add(
+                `${startColor}-start`
+            );
+
+
+            cell.textContent =
+                "START";
+
+        }
+
+
+        board.appendChild(
+            cell
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CENTER FINISH
+===================================================== */
+
+const center =
+    document.createElement("div");
+
+
+center.className =
+    "center";
+
+
+/* RED */
+
+const centerRed =
+    document.createElement("div");
+
+centerRed.className =
+    "center-red";
+
+
+/* GREEN */
+
+const centerGreen =
+    document.createElement("div");
+
+centerGreen.className =
+    "center-green";
+
+
+/* YELLOW */
+
+const centerYellow =
+    document.createElement("div");
+
+centerYellow.className =
+    "center-yellow";
+
+
+/* BLUE */
+
+const centerBlue =
+    document.createElement("div");
+
+centerBlue.className =
+    "center-blue";
+
+
+center.appendChild(
+    centerRed
+);
+
+center.appendChild(
+    centerGreen
+);
+
+center.appendChild(
+    centerYellow
+);
+
+center.appendChild(
+    centerBlue
+);
+
+
+board.appendChild(
+    center
+);
+
+
+/* =====================================================
+   READY
+===================================================== */
+
+document.getElementById("status")
+    .textContent =
+    "STANDARD LUDO BOARD READY";
+
+</script>
+
+</body>
+
+</html>
+EOF
+pwd

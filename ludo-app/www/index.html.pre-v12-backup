@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ghopkhali Sports Arena - Ludo</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:#070b16;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:430px;
+    text-align:center;
+}
+
+.logo{
+    width:82px;
+    height:82px;
+    margin:0 auto 18px;
+    border-radius:22px;
+    background:linear-gradient(145deg,#2563eb,#7c3aed);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:38px;
+    font-weight:900;
+    box-shadow:0 12px 35px rgba(37,99,235,.30);
+}
+
+h1{
+    font-size:25px;
+    margin-bottom:7px;
+}
+
+.subtitle{
+    font-size:13px;
+    color:#94a3b8;
+    margin-bottom:28px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+button{
+    width:100%;
+    border:0;
+    border-radius:16px;
+    padding:18px 16px;
+    color:#fff;
+    font-size:17px;
+    font-weight:700;
+    cursor:pointer;
+    background:#111827;
+    border:1px solid #263244;
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+.single{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    border:0;
+}
+
+.double{
+    background:linear-gradient(135deg,#16a34a,#15803d);
+    border:0;
+}
+
+.verify{
+    background:#111827;
+}
+
+.footer{
+    margin-top:28px;
+    font-size:11px;
+    color:#64748b;
+}
+
+@media(max-width:360px){
+    h1{
+        font-size:22px;
+    }
+
+    button{
+        padding:16px;
+        font-size:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">L</div>
+
+    <h1>Ghopkhali Sports Arena</h1>
+
+    <div class="subtitle">
+        Online Ludo Tournament
+    </div>
+
+    <div class="menu">
+
+        <button
+            class="single"
+            onclick="location.href='single-join.html'">
+            Single 1 vs 1
+        </button>
+
+        <button
+            class="double"
+            onclick="location.href='double-join.html'">
+            Double 2 vs 2
+        </button>
+
+        <button
+            class="verify"
+            onclick="location.href='verify.html'">
+            Verify Player / Match
+        </button>
+
+    </div>
+
+    <div class="footer">
+        Ghopkhali Sports Arena
+    </div>
+
+</div>
+
+</body>
+</html>

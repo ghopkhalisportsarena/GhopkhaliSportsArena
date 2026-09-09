@@ -1,11 +1,8 @@
-cat > .github/workflows/build-apk.yml <<'EOF'
+
 name: Build Ghopkhali Sports Arena APK
 
 on:
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   build:
@@ -31,23 +28,41 @@ jobs:
           mkdir apk-app
           cd apk-app
           npm init -y
-          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/app @capacitor/assets
+          npm install @capacitor/core @capacitor/cli @capacitor/android
 
-      - name: Copy main website
+      - name: Copy website files
         run: |
           mkdir -p apk-app/www
 
-          rsync -av ./ apk-app/www/ \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='apk-app' \
-            --exclude='ludo-app' \
-            --exclude='node_modules'
+          cp index.html apk-app/www/
+          cp style.css apk-app/www/
+          cp script.js apk-app/www/
+
+          cp -r Images apk-app/www/ || true
+          cp -r admin apk-app/www/ || true
+          cp -r ludo apk-app/www/ || true
+
+          cp about.html apk-app/www/ || true
+          cp activities.html apk-app/www/ || true
+          cp club-membership-application.html apk-app/www/ || true
+          cp committee.html apk-app/www/ || true
+          cp complaint.html apk-app/www/ || true
+          cp fixture.html apk-app/www/ || true
+          cp friendly-match.html apk-app/www/ || true
+          cp notice.html apk-app/www/ || true
+          cp point-table.html apk-app/www/ || true
+          cp rules.html apk-app/www/ || true
+          cp tournament-details.html apk-app/www/ || true
+
+          cp gsa.png apk-app/www/ || true
+          cp advisor.jpg apk-app/www/ || true
+          cp president.jpeg apk-app/www/ || true
+          cp secretary.jpg apk-app/www/ || true
 
       - name: Create Capacitor configuration
         working-directory: ./apk-app
         run: |
-          cat > capacitor.config.json <<'CONFIG'
+          cat > capacitor.config.json <<'EOF'
           {
             "appId": "com.ghopkhalisportsarena.app",
             "appName": "Ghopkhali Sports Arena",
@@ -56,45 +71,24 @@ jobs:
               "androidScheme": "https"
             }
           }
-          CONFIG
+          EOF
 
       - name: Add Android platform
         working-directory: ./apk-app
         run: npx cap add android
 
-      - name: Generate app icon
-        working-directory: ./apk-app
-        run: |
-          mkdir -p resources
-          cp www/gsa.png resources/icon.png
-          npx capacitor-assets generate --android
-
-      - name: Sync website and plugins
+      - name: Sync website
         working-directory: ./apk-app
         run: npx cap sync android
 
-      - name: Build Debug APK
+      - name: Build APK
         working-directory: ./apk-app/android
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Rename APK
-        run: |
-          cp apk-app/android/app/build/outputs/apk/debug/app-debug.apk \
-          Ghopkhali-Sports-Arena.apk
-
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Ghopkhali-Sports-Arena-APK
-          path: Ghopkhali-Sports-Arena.apk
-
-      - name: Publish APK Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: apk-latest
-          name: Ghopkhali Sports Arena APK
-          prerelease: false
-          make_latest: true
-          files: Ghopkhali-Sports-Arena.apk
+          path: apk-app/android/app/build/outputs/apk/debug/app-debug.apk

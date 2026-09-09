@@ -1058,3 +1058,17 @@ document.addEventListener(
 
   }
 );
+
+/* =========================================================
+   ANDROID BACK BUTTON SUPPORT
+========================================================= */
+
+if (window.Capacitor?.Plugins?.App) {
+  window.Capacitor.Plugins.App.addListener("backButton", ({ canGoBack }) => {
+    if (canGoBack) {
+      window.history.back();
+    } else {
+      window.Capacitor.Plugins.App.exitApp();
+    }
+  });
+}

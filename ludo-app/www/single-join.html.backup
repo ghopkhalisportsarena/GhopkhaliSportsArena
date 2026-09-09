@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Single Tournament — Player Join</title>
+
+
+    <!-- =====================================================
+         SUPABASE
+    ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- =====================================================
+         STYLE
+    ====================================================== -->
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top,
+                    #e8f0ff 0%,
+                    #f7f9fc 45%,
+                    #ffffff 100%
+                );
+
+            color: #111827;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+        }
+
+
+        /* =================================================
+           CARD
+        ================================================= */
+
+        .card {
+
+            width: 100%;
+
+            max-width: 480px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .84
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .9
+                );
+
+            border-radius: 30px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 25px 70px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .10
+                ),
+
+                inset 0 1px 0
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .9
+                );
+
+            backdrop-filter:
+                blur(20px);
+
+            -webkit-backdrop-filter:
+                blur(20px);
+
+            animation:
+                cardEnter
+                .45s
+                ease;
+
+        }
+
+
+        @keyframes cardEnter {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(18px)
+                    scale(.98);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+            }
+
+        }
+
+
+        /* =================================================
+           LOGO
+        ================================================= */
+
+        .logo {
+
+            width: 70px;
+
+            height: 70px;
+
+            margin:
+                0 auto 18px;
+
+            border-radius: 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 34px;
+
+            background:
+                #111827;
+
+            color:
+                #ffffff;
+
+            box-shadow:
+                0 12px 30px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .15
+                );
+
+        }
+
+
+        /* =================================================
+           TITLE
+        ================================================= */
+
+        h1 {
+
+            text-align: center;
+
+            margin: 0;
+
+            font-size: 28px;
+
+            letter-spacing:
+                -.7px;
+
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            color:
+                #6b7280;
+
+            margin:
+                8px 0 28px;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =================================================
+           TOURNAMENT INFO
+        ================================================= */
+
+        .tournament {
+
+            background:
+                #f3f4f6;
+
+            border-radius:
+                18px;
+
+            padding:
+                16px;
+
+            margin-bottom:
+                22px;
+
+            text-align:
+                center;
+
+        }
+
+
+        .tournament strong {
+
+            display:
+                block;
+
+            font-size:
+                17px;
+
+            margin-bottom:
+                5px;
+
+        }
+
+
+        .tournament span {
+
+            font-size:
+                13px;
+
+            color:
+                #6b7280;
+
+        }
+
+
+        /* =================================================
+           FORM
+        ================================================= */
+
+        label {
+
+            display:
+                block;
+
+            margin-bottom:
+                8px;
+
+            font-weight:
+                600;
+
+            font-size:
+                14px;
+
+        }
+
+
+        input {
+
+            width:
+                100%;
+
+            border:
+                1px solid
+                #d1d5db;
+
+            background:
+                #ffffff;
+
+            border-radius:
+                16px;
+
+            padding:
+                15px 16px;
+
+            font-size:
+                16px;
+
+            outline:
+                none;
+
+            transition:
+                .2s;
+
+        }
+
+
+        input:focus {
+
+            border-color:
+                #111827;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(
+                    17,
+                    24,
+                    39,
+                    .08
+                );
+
+        }
+
+
+        input:disabled {
+
+            background:
+                #f3f4f6;
+
+            color:
+                #6b7280;
+
+        }
+
+
+        /* =================================================
+           JOIN BUTTON
+        ================================================= */
+
+        .join-btn {
+
+            width:
+                100%;
+
+            margin-top:
+                20px;
+
+            border:
+                0;
+
+            border-radius:
+                17px;
+
+            padding:
+                16px;
+
+            background:
+                #111827;
+
+            color:
+                #ffffff;
+
+            font-size:
+                16px;
+
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
+
+            transition:
+                .2s;
+
+        }
+
+
+        .join-btn:hover {
+
+            transform:
+                translateY(-1px);
+
+            opacity:
+                .92;
+
+        }
+
+
+        .join-btn:active {
+
+            transform:
+                scale(.98);
+
+        }
+
+
+        .join-btn:disabled {
+
+            opacity:
+                .55;
+
+            cursor:
+                not-allowed;
+
+        }
+
+
+        /* =================================================
+           MESSAGE
+        ================================================= */
+
+        .message {
+
+            margin-top:
+                18px;
+
+            padding:
+                13px 15px;
+
+            border-radius:
+                14px;
+
+            display:
+                none;
+
+            font-size:
+                14px;
+
+            line-height:
+                1.5;
+
+        }
+
+
+        .message.show {
+
+            display:
+                block;
+
+        }
+
+
+        .success {
+
+            background:
+                #ecfdf5;
+
+            color:
+                #047857;
+
+        }
+
+
+        .error {
+
+            background:
+                #fef2f2;
+
+            color:
+                #b91c1c;
+
+        }
+
+
+        /* =================================================
+           PLAYER CODE
+        ================================================= */
+
+        .code-box {
+
+            display:
+                none;
+
+            margin-top:
+                20px;
+
+            text-align:
+                center;
+
+            padding:
+                20px;
+
+            border-radius:
+                20px;
+
+            background:
+                #f3f4f6;
+
+            animation:
+                codeEnter
+                .35s
+                ease;
+
+        }
+
+
+        .code-box.show {
+
+            display:
+                block;
+
+        }
+
+
+        @keyframes codeEnter {
+
+            from {
+
+                opacity:
+                    0;
+
+                transform:
+                    translateY(8px);
+
+            }
+
+            to {
+
+                opacity:
+                    1;
+
+                transform:
+                    translateY(0);
+
+            }
+
+        }
+
+
+        .code-label {
+
+            color:
+                #6b7280;
+
+            font-size:
+                13px;
+
+        }
+
+
+        .player-code {
+
+            margin-top:
+                7px;
+
+            font-size:
+                27px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                3px;
+
+            color:
+                #111827;
+
+            word-break:
+                break-all;
+
+        }
+
+
+        .code-note {
+
+            margin-top:
+                8px;
+
+            color:
+                #6b7280;
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        .footer {
+
+            text-align:
+                center;
+
+            margin-top:
+                24px;
+
+            color:
+                #9ca3af;
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* =================================================
+           MOBILE
+        ================================================= */
+
+        @media (
+            max-width: 480px
+        ) {
+
+            body {
+
+                padding:
+                    14px;
+
+            }
+
+
+            .card {
+
+                padding:
+                    24px 20px;
+
+                border-radius:
+                    25px;
+
+            }
+
+
+            h1 {
+
+                font-size:
+                    25px;
+
+            }
+
+
+            .logo {
+
+                width:
+                    64px;
+
+                height:
+                    64px;
+
+                font-size:
+                    30px;
+
+            }
+
+
+            .player-code {
+
+                font-size:
+                    24px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         MAIN CARD
+    ====================================================== -->
+
+    <div class="card">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+            🎲
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h1>
+            Single Tournament
+        </h1>
+
+
+        <div class="subtitle">
+            Player Registration
+        </div>
+
+
+        <!-- TOURNAMENT -->
+
+        <div class="tournament">
+
+            <strong id="tournamentName">
+                Ludo Single Tournament
+            </strong>
+
+            <span>
+                ন্যূনতম ২ জন • সর্বোচ্চ ৫০ জন
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             JOIN FORM
+        ================================================== -->
+
+        <form
+            id="joinForm"
+        >
+
+
+            <label
+                for="playerName"
+            >
+                আপনার নাম
+            </label>
+
+
+            <input
+                id="playerName"
+                type="text"
+                placeholder="আপনার পূর্ণ নাম লিখুন"
+                maxlength="80"
+                required
+                autocomplete="name"
+            >
+
+
+            <button
+                class="join-btn"
+                id="joinBtn"
+                type="submit"
+            >
+
+                🎲 Tournament-এ Join করুন
+
+            </button>
+
+
+        </form>
+
+
+        <!-- =================================================
+             MESSAGE
+        ================================================== -->
+
+        <div
+            class="message"
+            id="message"
+        ></div>
+
+
+        <!-- =================================================
+             PLAYER CODE
+        ================================================== -->
+
+        <div
+            class="code-box"
+            id="codeBox"
+        >
+
+            <div class="code-label">
+                আপনার Player Code
+            </div>
+
+
+            <div
+                class="player-code"
+                id="playerCode"
+            >
+                —
+            </div>
+
+
+            <div class="code-note">
+                এই Code-টি সংরক্ষণ করে রাখুন।
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+            Ghopkhali Sports Arena
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+
+        /* =================================================
+           SUPABASE CONFIG
+        ================================================= */
+
+        const SUPABASE_URL =
+            "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+
+        const SUPABASE_KEY =
+            "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+
+        const {
+            createClient
+        } = window.supabase;
+
+
+        const supabaseClient =
+            createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+
+        /* =================================================
+           ELEMENTS
+        ================================================= */
+
+        const form =
+            document.getElementById(
+                "joinForm"
+            );
+
+
+        const playerNameInput =
+            document.getElementById(
+                "playerName"
+            );
+
+
+        const joinBtn =
+            document.getElementById(
+                "joinBtn"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        const codeBox =
+            document.getElementById(
+                "codeBox"
+            );
+
+
+        const playerCodeElement =
+            document.getElementById(
+                "playerCode"
+            );
+
+
+        const tournamentNameElement =
+            document.getElementById(
+                "tournamentName"
+            );
+
+
+
+        /* =================================================
+           SHOW MESSAGE
+        ================================================= */
+
+        function showMessage(
+            text,
+            type
+        ) {
+
+            message.textContent =
+                text;
+
+
+            message.className =
+                "message show " +
+                type;
+
+        }
+
+
+
+        /* =================================================
+           GENERATE PLAYER CODE
+        ================================================= */
+
+        function generatePlayerCode() {
+
+            const chars =
+                "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+
+            let code =
+                "";
+
+
+            for (
+                let i = 0;
+                i < 6;
+                i++
+            ) {
+
+                code +=
+                    chars[
+                        Math.floor(
+                            Math.random() *
+                            chars.length
+                        )
+                    ];
+
+            }
+
+
+            return "S-" + code;
+
+        }
+
+
+
+        /* =================================================
+           LOAD TOURNAMENT
+        ================================================= */
+
+        async function loadTournament() {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "ludo_tournaments"
+                    )
+                    .select(
+                        "*"
+                    )
+                    .eq(
+                        "tournament_type",
+                        "single"
+                    )
+                    .order(
+                        "created_at",
+                        {
+                            ascending:
+                                true
+                        }
+                    )
+                    .limit(
+                        1
+                    )
+                    .maybeSingle();
+
+
+            if (error) {
+
+                console.error(
+                    "Tournament Load Error:",
+                    error
+                );
+
+
+                showMessage(
+                    "Tournament তথ্য লোড করা যায়নি।",
+                    "error"
+                );
+
+
+                return null;
+
+            }
+
+
+            if (!data) {
+
+                showMessage(
+                    "কোনো Single Tournament পাওয়া যায়নি।",
+                    "error"
+                );
+
+
+                return null;
+
+            }
+
+
+            tournamentNameElement.textContent =
+                data.tournament_name;
+
+
+            if (
+                data.status !==
+                "registration"
+            ) {
+
+                showMessage(
+                    "এই Tournament-এ বর্তমানে Registration বন্ধ আছে।",
+                    "error"
+                );
+
+
+                joinBtn.disabled =
+                    true;
+
+
+                return null;
+
+            }
+
+
+            return data;
+
+        }
+
+
+
+        /* =================================================
+           CHECK CAPACITY
+        ================================================= */
+
+        async function checkCapacity(
+            tournamentId
+        ) {
+
+            const {
+                count,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "ludo_players"
+                    )
+                    .select(
+                        "id",
+                        {
+                            count:
+                                "exact",
+
+                            head:
+                                true
+                        }
+                    )
+                    .eq(
+                        "tournament_id",
+                        tournamentId
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Capacity Error:",
+                    error
+                );
+
+
+                throw error;
+
+            }
+
+
+            return count || 0;
+
+        }
+
+
+
+        /* =================================================
+           CHECK PLAYER CODE
+        ================================================= */
+
+        async function playerCodeExists(
+            code
+        ) {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "ludo_players"
+                    )
+                    .select(
+                        "id"
+                    )
+                    .eq(
+                        "player_code",
+                        code
+                    )
+                    .maybeSingle();
+
+
+            if (error) {
+
+                console.error(
+                    "Player Code Check Error:",
+                    error
+                );
+
+
+                throw error;
+
+            }
+
+
+            return !!data;
+
+        }
+
+
+
+        /* =================================================
+           CREATE UNIQUE PLAYER CODE
+        ================================================= */
+
+        async function createUniquePlayerCode() {
+
+            let code;
+
+            let exists =
+                true;
+
+
+            let attempts =
+                0;
+
+
+            while (
+                exists &&
+                attempts < 20
+            ) {
+
+                code =
+                    generatePlayerCode();
+
+
+                exists =
+                    await playerCodeExists(
+                        code
+                    );
+
+
+                attempts++;
+
+            }
+
+
+            if (exists) {
+
+                throw new Error(
+                    "Unique Player Code তৈরি করা সম্ভব হয়নি।"
+                );
+
+            }
+
+
+            return code;
+
+        }
+
+
+
+        /* =================================================
+           PLAYER JOIN
+        ================================================= */
+
+        form.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                const name =
+                    playerNameInput
+                        .value
+                        .trim();
+
+
+                /* -----------------------------------------
+                   NAME VALIDATION
+                ----------------------------------------- */
+
+                if (!name) {
+
+                    showMessage(
+                        "আপনার নাম লিখুন।",
+                        "error"
+                    );
+
+
+                    return;
+
+                }
+
+
+                if (
+                    name.length <
+                    2
+                ) {
+
+                    showMessage(
+                        "অনুগ্রহ করে সঠিক নাম লিখুন।",
+                        "error"
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* -----------------------------------------
+                   LOADING
+                ----------------------------------------- */
+
+                joinBtn.disabled =
+                    true;
+
+
+                joinBtn.textContent =
+                    "Join করা হচ্ছে...";
+
+
+                try {
+
+
+                    /* -------------------------------------
+                       LOAD TOURNAMENT
+                    ------------------------------------- */
+
+                    const tournament =
+                        await loadTournament();
+
+
+                    if (!tournament) {
+
+                        joinBtn.disabled =
+                            false;
+
+
+                        joinBtn.textContent =
+                            "🎲 Tournament-এ Join করুন";
+
+
+                        return;
+
+                    }
+
+
+
+                    /* -------------------------------------
+                       CHECK CAPACITY
+                    ------------------------------------- */
+
+                    const count =
+                        await checkCapacity(
+                            tournament.id
+                        );
+
+
+                    if (
+                        count >=
+                        50
+                    ) {
+
+                        showMessage(
+                            "দুঃখিত, Single Tournament-এর ৫০ জন Player পূর্ণ হয়ে গেছে।",
+                            "error"
+                        );
+
+
+                        joinBtn.disabled =
+                            true;
+
+
+                        return;
+
+                    }
+
+
+
+                    /* -------------------------------------
+                       CREATE PLAYER CODE
+                    ------------------------------------- */
+
+                    const generatedPlayerCode =
+                        await createUniquePlayerCode();
+
+
+
+                    /* -------------------------------------
+                       INSERT PLAYER
+                    ------------------------------------- */
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient
+                            .from(
+                                "ludo_players"
+                            )
+                            .insert({
+
+                                tournament_id:
+                                    tournament.id,
+
+                                player_name:
+                                    name,
+
+                                player_code:
+                                    generatedPlayerCode,
+
+                                status:
+                                    "active"
+
+                            })
+                            .select()
+                            .single();
+
+
+                    if (error) {
+
+                        console.error(
+                            "Player Insert Error:",
+                            error
+                        );
+
+
+                        throw error;
+
+                    }
+
+
+
+                    /* -------------------------------------
+                       SHOW PLAYER CODE
+                    ------------------------------------- */
+
+                    playerCodeElement.textContent =
+                        data.player_code;
+
+
+                    codeBox.classList.add(
+                        "show"
+                    );
+
+
+
+                    /* -------------------------------------
+                       SUCCESS MESSAGE
+                    ------------------------------------- */
+
+                    showMessage(
+                        "🎉 অভিনন্দন! আপনি সফলভাবে Single Tournament-এ Join করেছেন।",
+                        "success"
+                    );
+
+
+
+                    /* -------------------------------------
+                       LOCK FORM
+                    ------------------------------------- */
+
+                    playerNameInput.disabled =
+                        true;
+
+
+                    joinBtn.disabled =
+                        true;
+
+
+                    joinBtn.textContent =
+                        "✓ Successfully Joined";
+
+
+
+                    /* -------------------------------------
+                       CONSOLE
+                    ------------------------------------- */
+
+                    console.log(
+                        "Player Joined Successfully:",
+                        data
+                    );
+
+                }
+
+
+                catch (error) {
+
+                    console.error(
+                        "Player Join Error:",
+                        error
+                    );
+
+
+                    showMessage(
+                        "Join করা যায়নি: " +
+                        (
+                            error?.message ||
+                            "Unknown error"
+                        ),
+                        "error"
+                    );
+
+
+                    joinBtn.disabled =
+                        false;
+
+
+                    joinBtn.textContent =
+                        "🎲 Tournament-এ Join করুন";
+
+                }
+
+            }
+        );
+
+
+
+        /* =================================================
+           INITIAL LOAD
+        ================================================= */
+
+        loadTournament();
+
+
+    </script>
+
+
+</body>
+
+</html>
