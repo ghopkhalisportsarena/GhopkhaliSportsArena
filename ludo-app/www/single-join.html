@@ -1107,28 +1107,94 @@
 
 
         /* =================================================
+           CHECK PLAYER CODE
+        ================================================= */
+
+        async function playerCodeExists(
+            code
+        ) {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "ludo_players"
+                    )
+                    .select(
+                        "id"
+                    )
+                    .eq(
+                        "player_code",
+                        code
+                    )
+                    .maybeSingle();
+
+
+            if (error) {
+
+                console.error(
+                    "Player Code Check Error:",
+                    error
+                );
+
+
+                throw error;
+
+            }
+
+
+            return !!data;
+
+        }
+
+
+
+        /* =================================================
            CREATE UNIQUE PLAYER CODE
         ================================================= */
 
-        function createUniquePlayerCode() {
+        async function createUniquePlayerCode() {
 
-            const chars =
-                "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            let code;
 
-            let code =
-                "S-";
+            let exists =
+                true;
 
-            for (let i = 0; i < 6; i++) {
 
-                code +=
-                    chars.charAt(
-                        Math.floor(
-                            Math.random() *
-                            chars.length
-                        )
+            let attempts =
+                0;
+
+
+            while (
+                exists &&
+                attempts < 20
+            ) {
+
+                code =
+                    generatePlayerCode();
+
+
+                exists =
+                    await playerCodeExists(
+                        code
                     );
 
+
+                attempts++;
+
             }
+
+
+            if (exists) {
+
+                throw new Error(
+                    "Unique Player Code তৈরি করা সম্ভব হয়নি।"
+                );
+
+            }
+
 
             return code;
 
@@ -1206,77 +1272,7 @@
                     ------------------------------------- */
 
                     const tournament =
-                        await 
-async function findOrCreateMatch(playerId, tournamentId, playerCode) {
-    showMessage("Opponent খোঁজা হচ্ছে...", "info");
-
-    for (let i = 0; i < 60; i++) {
-        const { data, error } = await supabaseClient.rpc(
-            "create_single_ludo_match",
-            {
-                p_tournament_id: tournamentId,
-                p_player_id: playerId
-            }
-        );
-
-        if (error) {
-            console.error(error);
-            showMessage("Match তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।", "error");
-            return;
-        }
-
-        if (data && data.matched) {
-            localStorage.setItem("gsa_ludo_player_id", playerId);
-            localStorage.setItem("gsa_ludo_player_code", playerCode);
-            localStorage.setItem("gsa_ludo_match_id", data.match_id);
-            localStorage.setItem("gsa_ludo_match_code", data.match_code);
-
-            showMessage("Opponent পাওয়া গেছে! Game শুরু হচ্ছে...", "success");
-
-            setTimeout(() => {
-                location.href =
-                    "./single.html?match=" +
-                    encodeURIComponent(data.match_id) +
-                    "&code=" +
-                    encodeURIComponent(playerCode);
-            }, 800);
-
-            return;
-        }
-
-        await new Promise(resolve => setTimeout(resolve, 2000));
-    }
-
-    showMessage("Opponent পাওয়া যায়নি। Join page-এ অপেক্ষা করুন।", "info");
-}
-
-const originalSubmitHandler = joinForm ? joinForm.onsubmit : null;
-
-if (joinForm) {
-    joinForm.addEventListener("submit", async function () {
-        setTimeout(async () => {
-            const code = playerCode?.textContent?.trim();
-
-            if (!code || !code.startsWith("S-")) return;
-
-            const { data: player } = await supabaseClient
-                .from("ludo_players")
-                .select("id,tournament_id,player_code")
-                .eq("player_code", code)
-                .maybeSingle();
-
-            if (!player) return;
-
-            await findOrCreateMatch(
-                player.id,
-                player.tournament_id,
-                player.player_code
-            );
-        }, 1200);
-    });
-}
-
-loadTournament();
+                        await loadTournament();
 
 
                     if (!tournament) {
@@ -1334,13 +1330,13 @@ loadTournament();
                         createUniquePlayerCode();
 
                     console.log(
-                        "LUDO: generated player code =",
-                        generatedPlayerCode
+                        "LUDO JOIN: tournament =",
+                        tournament.id
                     );
 
                     console.log(
-                        "LUDO: tournament id =",
-                        tournament.id
+                        "LUDO JOIN: player code =",
+                        generatedPlayerCode
                     );
 
 
@@ -1349,64 +1345,43 @@ loadTournament();
                        INSERT PLAYER
                     ------------------------------------- */
 
-                    let insertResult;
+                    const result =
+                        await supabaseClient
+                            .from("ludo_players")
+                            .insert({
+                                tournament_id:
+                                    tournament.id,
 
-                    try {
+                                player_name:
+                                    name,
 
-                        insertResult =
-                            await supabaseClient
-                                .from("ludo_players")
-                                .insert({
-                                    tournament_id:
-                                        tournament.id,
+                                player_code:
+                                    generatedPlayerCode,
 
-                                    player_name:
-                                        name,
+                                status:
+                                    "active"
+                            })
+                            .select()
+                            .single();
 
-                                    player_code:
-                                        generatedPlayerCode,
 
-                                    status:
-                                        "active"
-                                });
-
-                    } catch (insertException) {
+                    if (result.error) {
 
                         console.error(
-                            "LUDO INSERT EXCEPTION:",
-                            insertException
+                            "LUDO PLAYER INSERT ERROR:",
+                            result.error
                         );
 
                         throw new Error(
-                            "Player insert exception: " +
-                            String(insertException)
+                            "Player insert failed: " +
+                            result.error.message
                         );
 
                     }
 
-                    console.log(
-                        "LUDO INSERT RESULT:",
-                        insertResult
-                    );
-
-                    if (insertResult.error) {
-
-                        console.error(
-                            "Player Insert Error:",
-                            insertResult.error
-                        );
-
-                        throw new Error(
-                            "Supabase insert failed: " +
-                            JSON.stringify(
-                                insertResult.error
-                            )
-                        );
-
-                    }
 
                     const data =
-                        insertResult.data;
+                        result.data;
 
 
 
@@ -1467,30 +1442,24 @@ loadTournament();
                 catch (error) {
 
                     console.error(
-                        "LUDO JOIN ERROR:",
+                        "Player Join Error:",
                         error
                     );
 
-                    const errorInfo = [
-                        "code=" + (error?.code || ""),
-                        "message=" + (error?.message || ""),
-                        "details=" + (error?.details || ""),
-                        "hint=" + (error?.hint || ""),
-                        "status=" + (error?.status || "")
-                    ].join(" | ");
-
-                    console.error(
-                        "LUDO JOIN ERROR DETAILS:",
-                        errorInfo
-                    );
 
                     showMessage(
-                        "Join করা যায়নি: " + errorInfo,
+                        "Join করা যায়নি: " +
+                        (
+                            error?.message ||
+                            "Unknown error"
+                        ),
                         "error"
                     );
 
+
                     joinBtn.disabled =
                         false;
+
 
                     joinBtn.textContent =
                         "🎲 Tournament-এ Join করুন";
@@ -1506,77 +1475,7 @@ loadTournament();
            INITIAL LOAD
         ================================================= */
 
-        
-async function findOrCreateMatch(playerId, tournamentId, playerCode) {
-    showMessage("Opponent খোঁজা হচ্ছে...", "info");
-
-    for (let i = 0; i < 60; i++) {
-        const { data, error } = await supabaseClient.rpc(
-            "create_single_ludo_match",
-            {
-                p_tournament_id: tournamentId,
-                p_player_id: playerId
-            }
-        );
-
-        if (error) {
-            console.error(error);
-            showMessage("Match তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।", "error");
-            return;
-        }
-
-        if (data && data.matched) {
-            localStorage.setItem("gsa_ludo_player_id", playerId);
-            localStorage.setItem("gsa_ludo_player_code", playerCode);
-            localStorage.setItem("gsa_ludo_match_id", data.match_id);
-            localStorage.setItem("gsa_ludo_match_code", data.match_code);
-
-            showMessage("Opponent পাওয়া গেছে! Game শুরু হচ্ছে...", "success");
-
-            setTimeout(() => {
-                location.href =
-                    "./single.html?match=" +
-                    encodeURIComponent(data.match_id) +
-                    "&code=" +
-                    encodeURIComponent(playerCode);
-            }, 800);
-
-            return;
-        }
-
-        await new Promise(resolve => setTimeout(resolve, 2000));
-    }
-
-    showMessage("Opponent পাওয়া যায়নি। Join page-এ অপেক্ষা করুন।", "info");
-}
-
-const originalSubmitHandler = joinForm ? joinForm.onsubmit : null;
-
-if (joinForm) {
-    joinForm.addEventListener("submit", async function () {
-        setTimeout(async () => {
-            const code = playerCode?.textContent?.trim();
-
-            if (!code || !code.startsWith("S-")) return;
-
-            const { data: player } = await supabaseClient
-                .from("ludo_players")
-                .select("id,tournament_id,player_code")
-                .eq("player_code", code)
-                .maybeSingle();
-
-            if (!player) return;
-
-            await findOrCreateMatch(
-                player.id,
-                player.tournament_id,
-                player.player_code
-            );
-        }, 1200);
-    });
-}
-
-loadTournament();
+        loadTournament();
 
 
     </script>
