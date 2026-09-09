@@ -25,371 +25,6 @@
            SINGLE 1 VS 1 AUTOMATIC MATCHMAKING
         ===================================================== */
 
-        async function startSingleMatchmaking(
-            playerId,
-            tournamentId,
-            playerCode
-        ) {
-
-            const maxWaitTime =
-                10 * 60 * 1000;
-
-            const startedAt =
-                Date.now();
-
-            let checking = false;
-
-            function showMatchStatus(text) {
-
-                let status =
-                    document.getElementById(
-                        "matchStatus"
-                    );
-
-                if (!status) {
-
-                    status =
-                        document.createElement(
-                            "div"
-                        );
-
-                    status.id =
-                        "matchStatus";
-
-                    status.style.marginTop =
-                        "15px";
-
-                    status.style.padding =
-                        "12px";
-
-                    status.style.borderRadius =
-                        "10px";
-
-                    status.style.background =
-                        "#f1f5f9";
-
-                    status.style.color =
-                        "#334155";
-
-                    status.style.textAlign =
-                        "center";
-
-                    const parent =
-                        playerCodeElement
-                            ?.parentElement ||
-                        document.body;
-
-                    parent.appendChild(
-                        status
-                    );
-                }
-
-                status.textContent =
-                    text;
-            }
-
-
-            async function checkForMatch() {
-
-                if (checking) {
-                    return;
-                }
-
-                checking = true;
-
-                try {
-
-                    /* -----------------------------------------
-                       FIRST: CHECK WHETHER PLAYER ALREADY HAS
-                       A MATCH
-                    ----------------------------------------- */
-
-                    const existing =
-                        await supabaseClient
-                            .from("ludo_matches")
-                            .select(
-                                "id, match_code, status, players"
-                            )
-                            .eq(
-                                "tournament_id",
-                                tournamentId
-                            )
-                            .in(
-                                "status",
-                                [
-                                    "ready",
-                                    "playing"
-                                ]
-                            )
-                            .contains(
-                                "players",
-                                [
-                                    {
-                                        player_id:
-                                            String(
-                                                playerId
-                                            )
-                                    }
-                                ]
-                            )
-                            .limit(1);
-
-                    if (
-                        existing.data &&
-                        existing.data.length
-                    ) {
-
-                        const match =
-                            existing.data[0];
-
-                        openSingleMatch(
-                            match,
-                            playerCode
-                        );
-
-                        return;
-                    }
-
-
-                    /* -----------------------------------------
-                       ASK SERVER TO MATCH PLAYER
-                    ----------------------------------------- */
-
-                    const rpc =
-                        await supabaseClient
-                            .rpc(
-                                "create_single_ludo_match",
-                                {
-                                    p_tournament_id:
-                                        tournamentId,
-
-                                    p_player_id:
-                                        playerId
-                                }
-                            );
-
-
-                    if (rpc.error) {
-
-                        console.error(
-                            "MATCHMAKING RPC ERROR:",
-                            rpc.error
-                        );
-
-                        showMatchStatus(
-                            "Opponent খোঁজা হচ্ছে..."
-                        );
-
-                    } else {
-
-                        const result =
-                            rpc.data;
-
-                        console.log(
-                            "MATCHMAKING RESULT:",
-                            result
-                        );
-
-
-                        if (
-                            result &&
-                            result.matched === true
-                        ) {
-
-                            openSingleMatch(
-                                result,
-                                playerCode
-                            );
-
-                            return;
-                        }
-
-
-                        showMatchStatus(
-                            "Opponent খোঁজা হচ্ছে..."
-                        );
-                    }
-
-
-                    /* -----------------------------------------
-                       CHECK AGAIN AFTER RPC
-                    ----------------------------------------- */
-
-                    const afterRpc =
-                        await supabaseClient
-                            .from("ludo_matches")
-                            .select(
-                                "id, match_code, status, players"
-                            )
-                            .eq(
-                                "tournament_id",
-                                tournamentId
-                            )
-                            .in(
-                                "status",
-                                [
-                                    "ready",
-                                    "playing"
-                                ]
-                            )
-                            .contains(
-                                "players",
-                                [
-                                    {
-                                        player_id:
-                                            String(
-                                                playerId
-                                            )
-                                    }
-                                ]
-                            )
-                            .limit(1);
-
-
-                    if (
-                        afterRpc.data &&
-                        afterRpc.data.length
-                    ) {
-
-                        openSingleMatch(
-                            afterRpc.data[0],
-                            playerCode
-                        );
-
-                        return;
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        "MATCHMAKING ERROR:",
-                        error
-                    );
-
-                    showMatchStatus(
-                        "Opponent খোঁজা হচ্ছে..."
-                    );
-
-                } finally {
-
-                    checking = false;
-                }
-            }
-
-
-            function openSingleMatch(
-                match,
-                code
-            ) {
-
-                if (!match) {
-                    return;
-                }
-
-
-                const matchId =
-                    match.id ||
-                    match.match_id;
-
-                const matchCode =
-                    match.match_code ||
-                    match.code ||
-                    "";
-
-
-                if (!matchId) {
-
-                    console.error(
-                        "MATCH ID NOT FOUND:",
-                        match
-                    );
-
-                    return;
-                }
-
-
-                localStorage.setItem(
-                    "gsa_ludo_match_id",
-                    String(matchId)
-                );
-
-                localStorage.setItem(
-                    "gsa_ludo_match_code",
-                    String(matchCode)
-                );
-
-                localStorage.setItem(
-                    "gsa_ludo_player_id",
-                    String(playerId)
-                );
-
-                localStorage.setItem(
-                    "gsa_ludo_player_code",
-                    String(code)
-                );
-
-
-                showMatchStatus(
-                    "✓ Opponent পাওয়া গেছে! Match শুরু হচ্ছে..."
-                );
-
-
-                setTimeout(
-                    function () {
-
-                        window.location.href =
-                            "./single.html?match=" +
-                            encodeURIComponent(
-                                matchId
-                            ) +
-                            "&code=" +
-                            encodeURIComponent(
-                                matchCode
-                            );
-
-                    },
-                    700
-                );
-            }
-
-
-            showMatchStatus(
-                "Opponent খোঁজা হচ্ছে..."
-            );
-
-
-            await checkForMatch();
-
-
-            const timer =
-                setInterval(
-                    async function () {
-
-                        if (
-                            Date.now() -
-                            startedAt >
-                            maxWaitTime
-                        ) {
-
-                            clearInterval(
-                                timer
-                            );
-
-                            showMatchStatus(
-                                "অনেকক্ষণ ধরে opponent পাওয়া যায়নি। আবার চেষ্টা করুন।"
-                            );
-
-                            return;
-                        }
-
-
-                        await checkForMatch();
-
-                    },
-                    2000
-                );
-        }
 
 
 </script>
@@ -1200,6 +835,374 @@
     ====================================================== -->
 
     <script>
+
+        async function startSingleMatchmaking(
+            playerId,
+            tournamentId,
+            playerCode
+        ) {
+
+            const maxWaitTime =
+                10 * 60 * 1000;
+
+            const startedAt =
+                Date.now();
+
+            let checking = false;
+
+            function showMatchStatus(text) {
+
+                let status =
+                    document.getElementById(
+                        "matchStatus"
+                    );
+
+                if (!status) {
+
+                    status =
+                        document.createElement(
+                            "div"
+                        );
+
+                    status.id =
+                        "matchStatus";
+
+                    status.style.marginTop =
+                        "15px";
+
+                    status.style.padding =
+                        "12px";
+
+                    status.style.borderRadius =
+                        "10px";
+
+                    status.style.background =
+                        "#f1f5f9";
+
+                    status.style.color =
+                        "#334155";
+
+                    status.style.textAlign =
+                        "center";
+
+                    const parent =
+                        playerCodeElement
+                            ?.parentElement ||
+                        document.body;
+
+                    parent.appendChild(
+                        status
+                    );
+                }
+
+                status.textContent =
+                    text;
+            }
+
+
+            async function checkForMatch() {
+
+                if (checking) {
+                    return;
+                }
+
+                checking = true;
+
+                try {
+
+                    /* -----------------------------------------
+                       FIRST: CHECK WHETHER PLAYER ALREADY HAS
+                       A MATCH
+                    ----------------------------------------- */
+
+                    const existing =
+                        await supabaseClient
+                            .from("ludo_matches")
+                            .select(
+                                "id, match_code, status, players"
+                            )
+                            .eq(
+                                "tournament_id",
+                                tournamentId
+                            )
+                            .in(
+                                "status",
+                                [
+                                    "ready",
+                                    "playing"
+                                ]
+                            )
+                            .contains(
+                                "players",
+                                [
+                                    {
+                                        player_id:
+                                            String(
+                                                playerId
+                                            )
+                                    }
+                                ]
+                            )
+                            .limit(1);
+
+                    if (
+                        existing.data &&
+                        existing.data.length
+                    ) {
+
+                        const match =
+                            existing.data[0];
+
+                        openSingleMatch(
+                            match,
+                            playerCode
+                        );
+
+                        return;
+                    }
+
+
+                    /* -----------------------------------------
+                       ASK SERVER TO MATCH PLAYER
+                    ----------------------------------------- */
+
+                    const rpc =
+                        await supabaseClient
+                            .rpc(
+                                "create_single_ludo_match",
+                                {
+                                    p_tournament_id:
+                                        tournamentId,
+
+                                    p_player_id:
+                                        playerId
+                                }
+                            );
+
+
+                    if (rpc.error) {
+
+                        console.error(
+                            "MATCHMAKING RPC ERROR:",
+                            rpc.error
+                        );
+
+                        showMatchStatus(
+                            "Opponent খোঁজা হচ্ছে..."
+                        );
+
+                    } else {
+
+                        const result =
+                            rpc.data;
+
+                        console.log(
+                            "MATCHMAKING RESULT:",
+                            result
+                        );
+
+
+                        if (
+                            result &&
+                            result.matched === true
+                        ) {
+
+                            openSingleMatch(
+                                result,
+                                playerCode
+                            );
+
+                            return;
+                        }
+
+
+                        showMatchStatus(
+                            "Opponent খোঁজা হচ্ছে..."
+                        );
+                    }
+
+
+                    /* -----------------------------------------
+                       CHECK AGAIN AFTER RPC
+                    ----------------------------------------- */
+
+                    const afterRpc =
+                        await supabaseClient
+                            .from("ludo_matches")
+                            .select(
+                                "id, match_code, status, players"
+                            )
+                            .eq(
+                                "tournament_id",
+                                tournamentId
+                            )
+                            .in(
+                                "status",
+                                [
+                                    "ready",
+                                    "playing"
+                                ]
+                            )
+                            .contains(
+                                "players",
+                                [
+                                    {
+                                        player_id:
+                                            String(
+                                                playerId
+                                            )
+                                    }
+                                ]
+                            )
+                            .limit(1);
+
+
+                    if (
+                        afterRpc.data &&
+                        afterRpc.data.length
+                    ) {
+
+                        openSingleMatch(
+                            afterRpc.data[0],
+                            playerCode
+                        );
+
+                        return;
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "MATCHMAKING ERROR:",
+                        error
+                    );
+
+                    showMatchStatus(
+                        "Opponent খোঁজা হচ্ছে..."
+                    );
+
+                } finally {
+
+                    checking = false;
+                }
+            }
+
+
+            function openSingleMatch(
+                match,
+                code
+            ) {
+
+                if (!match) {
+                    return;
+                }
+
+
+                const matchId =
+                    match.id ||
+                    match.match_id;
+
+                const matchCode =
+                    match.match_code ||
+                    match.code ||
+                    "";
+
+
+                if (!matchId) {
+
+                    console.error(
+                        "MATCH ID NOT FOUND:",
+                        match
+                    );
+
+                    return;
+                }
+
+
+                localStorage.setItem(
+                    "gsa_ludo_match_id",
+                    String(matchId)
+                );
+
+                localStorage.setItem(
+                    "gsa_ludo_match_code",
+                    String(matchCode)
+                );
+
+                localStorage.setItem(
+                    "gsa_ludo_player_id",
+                    String(playerId)
+                );
+
+                localStorage.setItem(
+                    "gsa_ludo_player_code",
+                    String(code)
+                );
+
+
+                showMatchStatus(
+                    "✓ Opponent পাওয়া গেছে! Match শুরু হচ্ছে..."
+                );
+
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "./single.html?match=" +
+                            encodeURIComponent(
+                                matchId
+                            ) +
+                            "&code=" +
+                            encodeURIComponent(
+                                matchCode
+                            );
+
+                    },
+                    700
+                );
+            }
+
+
+            showMatchStatus(
+                "Opponent খোঁজা হচ্ছে..."
+            );
+
+
+            await checkForMatch();
+
+
+            const timer =
+                setInterval(
+                    async function () {
+
+                        if (
+                            Date.now() -
+                            startedAt >
+                            maxWaitTime
+                        ) {
+
+                            clearInterval(
+                                timer
+                            );
+
+                            showMatchStatus(
+                                "অনেকক্ষণ ধরে opponent পাওয়া যায়নি। আবার চেষ্টা করুন।"
+                            );
+
+                            return;
+                        }
+
+
+                        await checkForMatch();
+
+                    },
+                    2000
+                );
+        }
+
+
 
 
         /* =================================================
