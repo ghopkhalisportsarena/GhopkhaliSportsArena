@@ -1351,10 +1351,7 @@ function rollDice(){
    MOVE TOKEN ONE CELL AT A TIME
 ===================================================== */
 
-async function moveToken(
-    color,
-    index
-){
+async function moveToken(color,index){
 
     if(
         color !== game.current ||
@@ -1362,63 +1359,84 @@ async function moveToken(
         game.moving ||
         game.winner
     ){
-
         return;
-
     }
-
 
     const token =
         game.tokens[color][index];
 
+    const dice =
+        game.dice;
 
     if(
         !canMove(
             token,
-            game.dice
+            dice
         )
     ){
-
         return;
-
     }
 
-
-    game.moving=true;
-
+    game.moving = true;
     render();
 
-
-    const dice =
-        game.dice;
-
-
     /*
-       HOME -> START
+       HOME -> EXIT
 
-       With a 6, directly place the token
-       on progress 0 = exact START cell.
+       A six does NOT place the token
+       on START.
+
+       It enters the board on the
+       cell immediately AFTER START.
+
+       Because the dice value is 6,
+       the token then continues for
+       the remaining 5 steps.
     */
 
     if(token.progress === -1){
 
-        token.progress=0;
+        if(dice !== 6){
+            game.moving = false;
+            render();
+            return;
+        }
+
+        /*
+           First step:
+           START + 1
+        */
+        token.progress = 1;
 
         render();
-
         soundStart();
 
         await wait(250);
 
+        /*
+           Remaining five steps of the six.
+        */
+        for(let step = 1; step < dice; step++){
+
+            token.progress++;
+
+            render();
+
+            soundStep();
+
+            await wait(150);
+        }
+
     }else{
 
         /*
-           Move exactly one cell at a time.
+           Normal movement.
+           Every step is animated separately.
         */
 
         for(
-            let step=0;
-            step<dice;
+            let step = 0;
+            step < dice;
             step++
         ){
 
@@ -1429,11 +1447,12 @@ async function moveToken(
             soundStep();
 
             await wait(150);
-
         }
-
     }
 
+    /*
+       Capture only after the complete move.
+    */
 
     const captured =
         captureOpponents(
@@ -1441,51 +1460,43 @@ async function moveToken(
             token
         );
 
-
     if(captured){
-
         soundCapture();
-
     }
 
+    /*
+       Check finish.
+    */
 
     const finished =
         token.progress >= 57;
 
-
-    game.dice=null;
-
-    game.rolled=false;
-
-    game.moving=false;
-
+    game.dice = null;
+    game.rolled = false;
+    game.moving = false;
 
     /*
        WIN
     */
 
     if(
-        game.tokens[color]
-        .every(
+        game.tokens[color].every(
             token =>
                 token.progress >= 57
         )
     ){
 
-        game.winner=color;
+        game.winner = color;
 
         soundWin();
 
         render();
 
         return;
-
     }
 
-
     /*
-       6 = extra turn
-       Capture = extra turn
+       Six or capture = extra turn.
     */
 
     if(
@@ -1496,15 +1507,15 @@ async function moveToken(
         render();
 
         return;
-
     }
 
+    /*
+       Normal turn changes.
+    */
 
     switchTurn();
-
-    render();
-
 }
+
 
 
 /* =====================================================
@@ -1528,11 +1539,12 @@ function wait(ms){
    CAPTURE
 ===================================================== */
 
-function captureOpponents(color, token){
+function captureOpponents(color,token){
 
     /*
-       Tokens outside the main track cannot capture.
+       Home / finish lane cannot capture.
     */
+
     if(
         token.progress < 0 ||
         token.progress >= 52
@@ -1541,30 +1553,43 @@ function captureOpponents(color, token){
     }
 
     const myIndex =
-        (START[color] + token.progress) % 52;
+        (
+            START[color] +
+            token.progress
+        ) % 52;
 
     /*
-       START exit cell is SAFE.
-       Opponent tokens on this cell cannot be captured.
+       Exit cell is SAFE.
     */
+
     const exitIndex =
-        (START[color] + 1) % 52;
+        (
+            START[color] + 1
+        ) % 52;
 
-    if(myIndex === exitIndex){
+    if(
+        myIndex === exitIndex
+    ){
         return false;
     }
 
     /*
-       Standard safe cells cannot be captured.
+       Other standard safe cells
+       cannot capture.
     */
-    if(SAFE.has(myIndex)){
+
+    if(
+        SAFE.has(myIndex)
+    ){
         return false;
     }
-
-    let captured = false;
 
     const opponent =
-        color === "red" ? "yellow" : "red";
+        color === "red"
+        ? "yellow"
+        : "red";
+
+    let captured = false;
 
     game.tokens[opponent].forEach(
         opponentToken => {
@@ -1575,10 +1600,14 @@ function captureOpponents(color, token){
             ){
 
                 const opponentIndex =
-                    (START[opponent] +
-                     opponentToken.progress) % 52;
+                    (
+                        START[opponent] +
+                        opponentToken.progress
+                    ) % 52;
 
-                if(opponentIndex === myIndex){
+                if(
+                    opponentIndex === myIndex
+                ){
 
                     opponentToken.progress = -1;
 
@@ -1590,6 +1619,7 @@ function captureOpponents(color, token){
 
     return captured;
 }
+
 
 
 /* =====================================================
