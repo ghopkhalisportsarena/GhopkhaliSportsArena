@@ -1,8 +1,6 @@
-name: Build Android APK
+name: Build Ghopkhali Ludo APK
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -26,13 +24,11 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./ludo-app
-        run: npm install
+        run: npm ci
 
-      - name: Add Android platform & Sync
+      - name: Sync Capacitor
         working-directory: ./ludo-app
-        run: |
-          npx cap add android
-          npx cap sync
+        run: npx cap sync android
 
       - name: Build Debug APK
         working-directory: ./ludo-app/android
