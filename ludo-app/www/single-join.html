@@ -834,7 +834,437 @@
          JAVASCRIPT
     ====================================================== -->
 
-    <script>
+    
+        <!-- V11 PLAYER SEARCH -->
+        <div id="v11PlayerSearch"
+             style="display:none;margin-top:20px;padding:18px;border-radius:16px;background:#f8fafc;border:1px solid #e2e8f0;">
+
+            <h3 style="margin-bottom:10px;">
+                Find Opponent
+            </h3>
+
+            <p style="font-size:13px;color:#64748b;margin-bottom:12px;">
+                Opponent-এর Player Code লিখুন
+            </p>
+
+            <div style="display:flex;gap:8px;">
+
+                <input
+                    id="opponentCodeInput"
+                    type="text"
+                    placeholder="S-XXXXXXXXXXXXXX"
+                    autocomplete="off"
+                    style="flex:1;padding:12px;border:1px solid #cbd5e1;border-radius:10px;"
+                >
+
+                <button
+                    id="searchOpponentBtn"
+                    type="button"
+                    style="padding:12px 16px;border:0;border-radius:10px;cursor:pointer;"
+                >
+                    Search
+                </button>
+
+            </div>
+
+            <div id="opponentSearchResult"
+                 style="margin-top:14px;">
+            </div>
+
+            <div id="incomingRequests"
+                 style="margin-top:14px;">
+            </div>
+
+        </div>
+
+<script>
+
+
+        /* =====================================================
+           V11 PLAYER CODE SEARCH + MATCH REQUEST
+        ===================================================== */
+
+        async function searchOpponentByCode() {
+
+            const input =
+                document.getElementById("opponentCodeInput");
+
+            const result =
+                document.getElementById("opponentSearchResult");
+
+            if (!input || !result) return;
+
+            const code =
+                input.value.trim().toUpperCase();
+
+            if (!code) {
+                result.innerHTML =
+                    '<div style="color:#dc2626;">Player Code দিন।</div>';
+                return;
+            }
+
+            result.innerHTML =
+                '<div>Searching...</div>';
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from("ludo_players")
+                .select("id, player_name, player_code, tournament_id, status")
+                .eq("player_code", code)
+                .eq("status", "active")
+                .maybeSingle();
+
+            if (error) {
+
+                console.error(
+                    "V11 PLAYER SEARCH ERROR:",
+                    error
+                );
+
+                result.innerHTML =
+                    '<div style="color:#dc2626;">Search করা যায়নি।</div>';
+
+                return;
+            }
+
+            if (!data) {
+
+                result.innerHTML =
+                    '<div style="color:#dc2626;">Player পাওয়া যায়নি।</div>';
+
+                return;
+            }
+
+            if (
+                typeof currentPlayerId !== "undefined" &&
+                data.id === currentPlayerId
+            ) {
+
+                result.innerHTML =
+                    '<div style="color:#dc2626;">নিজেকে opponent হিসেবে নির্বাচন করা যাবে না।</div>';
+
+                return;
+            }
+
+            if (
+                typeof tournament !== "undefined" &&
+                data.tournament_id !== tournament.id
+            ) {
+
+                result.innerHTML =
+                    '<div style="color:#dc2626;">এই Player একই Tournament-এ নেই।</div>';
+
+                return;
+            }
+
+            result.innerHTML = `
+                <div style="
+                    padding:14px;
+                    border-radius:12px;
+                    background:#ffffff;
+                    border:1px solid #e2e8f0;
+                ">
+
+                    <strong>${escapeHtml(data.player_name || "Player")}</strong>
+
+                    <div style="
+                        font-size:13px;
+                        color:#64748b;
+                        margin:5px 0 12px;
+                    ">
+                        ${escapeHtml(data.player_code)}
+                    </div>
+
+                    <button
+                        type="button"
+                        onclick="sendMatchRequest('${data.id}')"
+                        style="
+                            width:100%;
+                            padding:11px;
+                            border:0;
+                            border-radius:10px;
+                            cursor:pointer;
+                        "
+                    >
+                        Send Match Request
+                    </button>
+
+                </div>
+            `;
+        }
+
+
+        async function sendMatchRequest(receiverPlayerId) {
+
+            if (
+                typeof currentPlayerId === "undefined" ||
+                !currentPlayerId
+            ) {
+                alert("Player ID পাওয়া যায়নি।");
+                return;
+            }
+
+            if (
+                typeof tournament === "undefined" ||
+                !tournament?.id
+            ) {
+                alert("Tournament পাওয়া যায়নি।");
+                return;
+            }
+
+            const {
+                error
+            } = await supabaseClient
+                .from("ludo_match_requests")
+                .insert({
+                    tournament_id: tournament.id,
+                    sender_player_id: currentPlayerId,
+                    receiver_player_id: receiverPlayerId,
+                    status: "pending"
+                });
+
+            if (error) {
+
+                console.error(
+                    "V11 MATCH REQUEST ERROR:",
+                    error
+                );
+
+                if (error.code === "23505") {
+                    alert("এই Player-কে আগে থেকেই request পাঠানো হয়েছে।");
+                } else {
+                    alert(
+                        "Match request পাঠানো যায়নি: " +
+                        error.message
+                    );
+                }
+
+                return;
+            }
+
+            alert("Match Request পাঠানো হয়েছে।");
+
+            const result =
+                document.getElementById(
+                    "opponentSearchResult"
+                );
+
+            if (result) {
+                result.innerHTML =
+                    '<div style="color:#16a34a;">Match Request পাঠানো হয়েছে।</div>';
+            }
+        }
+
+
+        async function loadIncomingMatchRequests() {
+
+            if (
+                typeof currentPlayerId === "undefined" ||
+                !currentPlayerId
+            ) return;
+
+            const box =
+                document.getElementById(
+                    "incomingRequests"
+                );
+
+            if (!box) return;
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from("ludo_match_requests")
+                .select(`
+                    id,
+                    sender_player_id,
+                    tournament_id,
+                    status,
+                    ludo_players!ludo_match_requests_sender_player_id_fkey (
+                        player_name,
+                        player_code
+                    )
+                `)
+                .eq(
+                    "receiver_player_id",
+                    currentPlayerId
+                )
+                .eq(
+                    "status",
+                    "pending"
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+            if (error) {
+
+                console.error(
+                    "V11 INCOMING REQUEST ERROR:",
+                    error
+                );
+
+                return;
+            }
+
+            if (!data || !data.length) {
+
+                box.innerHTML = "";
+
+                return;
+            }
+
+            box.innerHTML = `
+                <div style="
+                    font-weight:bold;
+                    margin-bottom:8px;
+                ">
+                    Incoming Match Requests
+                </div>
+            `;
+
+            data.forEach(request => {
+
+                const player =
+                    request.ludo_players;
+
+                const div =
+                    document.createElement("div");
+
+                div.style.cssText = `
+                    padding:12px;
+                    margin-bottom:8px;
+                    border-radius:12px;
+                    background:#fff;
+                    border:1px solid #e2e8f0;
+                `;
+
+                div.innerHTML = `
+                    <strong>
+                        ${escapeHtml(player?.player_name || "Player")}
+                    </strong>
+
+                    <div style="
+                        font-size:12px;
+                        color:#64748b;
+                        margin:4px 0 10px;
+                    ">
+                        ${escapeHtml(player?.player_code || "")}
+                    </div>
+
+                    <button
+                        type="button"
+                        onclick="acceptMatchRequest('${request.id}')"
+                        style="
+                            width:100%;
+                            padding:10px;
+                            border:0;
+                            border-radius:9px;
+                            cursor:pointer;
+                        "
+                    >
+                        Accept
+                    </button>
+                `;
+
+                box.appendChild(div);
+            });
+        }
+
+
+        async function acceptMatchRequest(requestId) {
+
+            const {
+                data: request,
+                error: requestError
+            } = await supabaseClient
+                .from("ludo_match_requests")
+                .select("*")
+                .eq("id", requestId)
+                .eq("receiver_player_id", currentPlayerId)
+                .eq("status", "pending")
+                .maybeSingle();
+
+            if (requestError || !request) {
+
+                alert("Match request পাওয়া যায়নি।");
+
+                return;
+            }
+
+            const rpc =
+                await supabaseClient.rpc(
+                    "create_single_ludo_match",
+                    {
+                        p_tournament_id:
+                            request.tournament_id,
+
+                        p_player_id:
+                            currentPlayerId
+                    }
+                );
+
+            if (rpc.error) {
+
+                console.error(
+                    "V11 ACCEPT MATCH ERROR:",
+                    rpc.error
+                );
+
+                alert(
+                    "Match তৈরি করা যায়নি: " +
+                    rpc.error.message
+                );
+
+                return;
+            }
+
+            if (!rpc.data?.matched) {
+
+                alert(
+                    "Opponent এখন available নেই।"
+                );
+
+                return;
+            }
+
+            await supabaseClient
+                .from("ludo_match_requests")
+                .update({
+                    status: "accepted",
+                    updated_at: new Date().toISOString()
+                })
+                .eq("id", requestId);
+
+            const matchCode =
+                rpc.data.match_code;
+
+            localStorage.setItem(
+                "ludo_match_code",
+                matchCode
+            );
+
+            window.location.href =
+                "./single.html?match=" +
+                encodeURIComponent(matchCode);
+        }
+
+
+        function escapeHtml(value) {
+
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
 
         window.startSingleMatchmaking = async function(
             playerId,
