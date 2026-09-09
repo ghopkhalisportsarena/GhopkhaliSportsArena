@@ -1,0 +1,3 @@
+exclude:
+  - ludo-app/node_modules
+  - ludo-app/android
