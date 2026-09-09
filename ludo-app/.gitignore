@@ -1,8 +1,0 @@
-node_modules/
-android/
-.DS_Store
-*.log
-.idea/
-.vscode/
-dist/
-www/.DS_Store
