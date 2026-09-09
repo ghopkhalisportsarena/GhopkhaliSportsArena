@@ -949,8 +949,8 @@
             }
 
             if (
-                typeof tournament !== "undefined" &&
-                data.tournament_id !== tournament.id
+                currentTournament &&
+                data.tournament_id !== currentTournament.id
             ) {
 
                 result.innerHTML =
@@ -1694,6 +1694,9 @@
             );
 
 
+        let currentPlayerId = null;
+        let currentTournament = null;
+
         const playerCodeElement =
             document.getElementById(
                 "playerCode"
@@ -2211,11 +2214,31 @@
                     );
 
 
-                    startSingleMatchmaking(
-                        data.id,
-                        tournament.id,
-                        finalPlayerCode
-                    );
+                    currentPlayerId =
+                        data.id;
+
+                    currentTournament =
+                        tournament;
+
+                    const searchBox =
+                        document.getElementById(
+                            "v11PlayerSearch"
+                        );
+
+                    if (searchBox) {
+                        searchBox.style.display =
+                            "block";
+                    }
+
+                    const matchStatus =
+                        document.getElementById(
+                            "matchStatus"
+                        );
+
+                    if (matchStatus) {
+                        matchStatus.textContent =
+                            "";
+                    }
 
 
 
