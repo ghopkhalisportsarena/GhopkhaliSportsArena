@@ -1389,8 +1389,17 @@
                        SHOW PLAYER CODE
                     ------------------------------------- */
 
+                    const finalPlayerCode =
+                        data?.player_code ||
+                        generatedPlayerCode;
+
                     playerCodeElement.textContent =
-                        data.player_code;
+                        finalPlayerCode;
+
+                    console.log(
+                        "LUDO PLAYER CODE:",
+                        finalPlayerCode
+                    );
 
 
                     codeBox.classList.add(
