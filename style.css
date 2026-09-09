@@ -10545,3 +10545,16 @@ img {
 .premium-nav-download:hover {
   background: rgba(214, 181, 109, .12);
 }
+
+.premium-nav-download {
+  border: 1px solid rgba(214, 181, 109, .45);
+}
+
+.premium-nav-download .premium-nav-icon {
+  color: #d6b56d;
+  font-size: 24px;
+}
+
+.premium-nav-download:hover {
+  background: rgba(214, 181, 109, .12);
+}
