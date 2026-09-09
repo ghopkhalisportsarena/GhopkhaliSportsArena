@@ -3,43 +3,597 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f5f5f7">
-<title>Ghopkhali Ludo · Single</title>
-<link rel="stylesheet" href="ludo-core.css">
+
+<title>Practice Ludo | Ghopkhali Sports Arena</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:#f5f5f7;
+    color:#111;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
+                 "SF Pro Text","Segoe UI",sans-serif;
+}
+
+.app{
+    width:100%;
+    max-width:620px;
+    margin:auto;
+    padding:18px 14px 30px;
+}
+
+.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:16px;
+}
+
+.back{
+    border:0;
+    background:transparent;
+    color:#007aff;
+    font-size:16px;
+    font-weight:700;
+    padding:8px 4px;
+}
+
+.title{
+    font-size:25px;
+    font-weight:800;
+    letter-spacing:-.7px;
+}
+
+.subtitle{
+    margin-top:3px;
+    color:#777;
+    font-size:13px;
+}
+
+.status{
+    margin:14px 0;
+    padding:13px 15px;
+    border-radius:17px;
+    background:rgba(255,255,255,.86);
+    border:1px solid rgba(0,0,0,.06);
+    box-shadow:0 6px 20px rgba(0,0,0,.06);
+    font-size:14px;
+    font-weight:700;
+    text-align:center;
+}
+
+.board-card{
+    padding:8px;
+    background:#fff;
+    border-radius:26px;
+    box-shadow:0 12px 40px rgba(0,0,0,.12);
+}
+
+.board-container{
+    position:relative;
+    width:100%;
+    aspect-ratio:1;
+}
+
+.ludo-board{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:grid;
+    grid-template-columns:repeat(15,1fr);
+    grid-template-rows:repeat(15,1fr);
+    overflow:hidden;
+    border-radius:20px;
+    background:#fff;
+    border:1px solid #ddd;
+}
+
+.ludo-cell{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:.5px solid rgba(0,0,0,.10);
+}
+
+.track{
+    background:#fff;
+}
+
+.safe{
+    background:#eef2f6;
+}
+
+.home-red{
+    background:#ffd9d6;
+}
+
+.home-green{
+    background:#d9f8e1;
+}
+
+.home-yellow{
+    background:#fff2b8;
+}
+
+.home-blue{
+    background:#d9eaff;
+}
+
+.start-red{
+    background:#ff3b30!important;
+}
+
+.start-green{
+    background:#34c759!important;
+}
+
+.start-yellow{
+    background:#ffcc00!important;
+}
+
+.start-blue{
+    background:#007aff!important;
+}
+
+.safe-star{
+    font-size:11px;
+    color:#555;
+    opacity:.8;
+    pointer-events:none;
+}
+
+.token-layer{
+    position:absolute;
+    inset:0;
+    z-index:20;
+    pointer-events:none;
+}
+
+.token{
+    position:absolute;
+    transform:translate(-50%,-50%);
+    width:6.2%;
+    min-width:15px;
+    max-width:31px;
+    aspect-ratio:1;
+    border-radius:50%;
+    border:2px solid #fff;
+    box-shadow:
+        0 3px 8px rgba(0,0,0,.28),
+        inset 0 1px 2px rgba(255,255,255,.55);
+    pointer-events:auto;
+    cursor:pointer;
+    transition:
+        left .18s ease,
+        top .18s ease,
+        transform .18s ease;
+}
+
+.token.red{
+    background:#ff3b30;
+}
+
+.token.green{
+    background:#34c759;
+}
+
+.token.yellow{
+    background:#ffcc00;
+}
+
+.token.blue{
+    background:#007aff;
+}
+
+.token-highlight{
+    animation:tokenPulse .8s infinite alternate;
+    transform:translate(-50%,-50%) scale(1.18);
+    box-shadow:
+        0 0 0 4px rgba(0,122,255,.22),
+        0 5px 14px rgba(0,0,0,.30);
+}
+
+@keyframes tokenPulse{
+    from{
+        filter:brightness(1);
+    }
+    to{
+        filter:brightness(1.22);
+    }
+}
+
+.token-finished{
+    opacity:.92;
+}
+
+.controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:15px;
+}
+
+.dice-button,
+.reset-button{
+    min-height:56px;
+    border:0;
+    border-radius:18px;
+    font-size:17px;
+    font-weight:800;
+}
+
+.dice-button{
+    background:#111;
+    color:#fff;
+    box-shadow:0 8px 20px rgba(0,0,0,.16);
+}
+
+.dice-button:disabled{
+    opacity:.4;
+}
+
+.reset-button{
+    background:#fff;
+    color:#111;
+    border:1px solid rgba(0,0,0,.08);
+}
+
+.dice-result{
+    margin-top:12px;
+    padding:12px;
+    text-align:center;
+    background:#fff;
+    border-radius:16px;
+    font-size:14px;
+    font-weight:700;
+}
+
+.players{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
+}
+
+.player{
+    padding:12px;
+    border-radius:16px;
+    background:#fff;
+    border:2px solid transparent;
+    font-size:13px;
+    font-weight:800;
+}
+
+.player.red{
+    color:#d91e18;
+}
+
+.player.yellow{
+    color:#a07800;
+}
+
+.player.active{
+    border-color:#007aff;
+    box-shadow:0 5px 18px rgba(0,122,255,.12);
+}
+
+.winner{
+    margin-top:14px;
+    padding:16px;
+    border-radius:18px;
+    background:#111;
+    color:#fff;
+    text-align:center;
+    font-weight:800;
+    display:none;
+}
+
+@media(max-width:390px){
+    .app{
+        padding-left:9px;
+        padding-right:9px;
+    }
+
+    .board-card{
+        padding:5px;
+        border-radius:21px;
+    }
+
+    .ludo-board{
+        border-radius:16px;
+    }
+
+    .title{
+        font-size:22px;
+    }
+}
+</style>
 </head>
 
 <body>
+
 <div class="app">
 
-<button class="back" onclick="history.back()">‹ Back</button>
+    <div class="topbar">
+        <div>
+            <div class="title">Practice Ludo</div>
+            <div class="subtitle">1 vs 1 Human</div>
+        </div>
 
-<header class="header">
-<div class="brand">Ludo Match</div>
-<div class="subtitle">1 vs 1 · Human Match</div>
-</header>
+        <button class="back" onclick="goBack()">Back</button>
+    </div>
 
-<div class="board-wrap">
-<div id="board" class="board"></div>
-</div>
+    <div id="status" class="status">
+        Red Player's turn — Roll the dice
+    </div>
 
-<div class="controls">
-<div id="turn" class="turn">Red's turn</div>
-<button id="dice" class="dice">Roll</button>
-</div>
+    <div class="board-card">
+        <div id="boardContainer" class="board-container"></div>
+    </div>
+
+    <div class="players">
+        <div id="redPlayer" class="player red active">
+            RED — Player 1
+        </div>
+
+        <div id="yellowPlayer" class="player yellow">
+            YELLOW — Player 2
+        </div>
+    </div>
+
+    <div class="dice-result">
+        Dice:
+        <span id="diceValue">—</span>
+    </div>
+
+    <div class="controls">
+
+        <button
+            id="rollButton"
+            class="dice-button"
+            onclick="rollGameDice()"
+        >
+            Roll Dice
+        </button>
+
+        <button
+            class="reset-button"
+            onclick="resetPractice()"
+        >
+            New Game
+        </button>
+
+    </div>
+
+    <div id="winner" class="winner"></div>
 
 </div>
 
 <script src="ludo-board-v12.js"></script>
+
 <script>
-const board=document.getElementById("board");
-const turn=document.getElementById("turn");
-const dice=document.getElementById("dice");
 
-LudoV12.renderGame(board,turn,dice);
+let board;
 
-dice.onclick=()=>{
-    LudoV12.rollDice(board,turn,dice);
-};
+function goBack(){
+
+    if(window.history.length > 1){
+        window.history.back();
+    }else{
+        window.location.href = "index.html";
+    }
+}
+
+function init(){
+
+    const container =
+        document.getElementById("boardContainer");
+
+    board =
+        window.LudoBoard.create(container);
+
+    attachTokenClicks();
+
+    updateUI();
+}
+
+function attachTokenClicks(){
+
+    const layer =
+        document.getElementById("ludo-token-layer");
+
+    if(!layer) return;
+
+    layer.addEventListener(
+        "click",
+        function(event){
+
+            const token =
+                event.target.closest(".token");
+
+            if(!token) return;
+
+            const color =
+                token.dataset.color;
+
+            const index =
+                Number(token.dataset.index);
+
+            if(
+                !Number.isInteger(index) ||
+                !color
+            ){
+                return;
+            }
+
+            const moved =
+                window.LudoBoard.moveToken(
+                    color,
+                    index
+                );
+
+            if(moved){
+
+                attachTokenClicks();
+
+                updateUI();
+            }
+
+        }
+    );
+}
+
+function rollGameDice(){
+
+    const state =
+        window.LudoBoard.getState();
+
+    if(
+        state.winner ||
+        state.diceRolled
+    ){
+        return;
+    }
+
+    const value =
+        window.LudoBoard.rollDice();
+
+    attachTokenClicks();
+
+    updateUI();
+
+    if(value === null){
+
+        const latest =
+            window.LudoBoard.getState();
+
+        if(latest.winner){
+
+            showWinner(
+                latest.winner
+            );
+        }
+    }
+}
+
+function updateUI(){
+
+    const state =
+        window.LudoBoard.getState();
+
+    const status =
+        document.getElementById("status");
+
+    const dice =
+        document.getElementById("diceValue");
+
+    const roll =
+        document.getElementById("rollButton");
+
+    const red =
+        document.getElementById("redPlayer");
+
+    const yellow =
+        document.getElementById("yellowPlayer");
+
+    dice.textContent =
+        state.dice ?? "—";
+
+    red.classList.toggle(
+        "active",
+        state.currentPlayer === "red"
+    );
+
+    yellow.classList.toggle(
+        "active",
+        state.currentPlayer === "yellow"
+    );
+
+    if(state.winner){
+
+        status.textContent =
+            state.winner.toUpperCase() +
+            " PLAYER WINS!";
+
+        roll.disabled = true;
+
+        showWinner(state.winner);
+
+        return;
+    }
+
+    const playerName =
+        state.currentPlayer === "red"
+            ? "Red Player"
+            : "Yellow Player";
+
+    if(state.diceRolled){
+
+        status.textContent =
+            playerName +
+            " — Choose a highlighted token";
+
+        roll.disabled = true;
+
+    }else{
+
+        status.textContent =
+            playerName +
+            "'s turn — Roll the dice";
+
+        roll.disabled = false;
+    }
+}
+
+function showWinner(color){
+
+    const box =
+        document.getElementById("winner");
+
+    box.style.display =
+        "block";
+
+    box.textContent =
+        color.toUpperCase() +
+        " PLAYER WINS!";
+}
+
+function resetPractice(){
+
+    window.LudoBoard.reset();
+
+    const box =
+        document.getElementById("winner");
+
+    box.style.display =
+        "none";
+
+    document.getElementById(
+        "diceValue"
+    ).textContent = "—";
+
+    init();
+}
+
+window.addEventListener(
+    "DOMContentLoaded",
+    init
+);
+
+document.addEventListener(
+    "backbutton",
+    goBack,
+    false
+);
+
 </script>
+
 </body>
 </html>
