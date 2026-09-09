@@ -56,7 +56,7 @@
   justify-content: center;
   flex-direction: column;
   background: #071b13;
-  transition: opacity .7s ease, visibility .7s ease;
+  transition: opacity .6s ease, visibility .6s ease;
 }
 
 #gsa-premium-splash img {
@@ -67,14 +67,14 @@
 }
 
 #gsa-premium-splash h2 {
-  margin: 22px 0 6px;
+  margin: 20px 0 6px;
   color: #d6b56d;
-  font-size: 24px;
-  letter-spacing: 1px;
+  font-size: 22px;
+  text-align: center;
 }
 
 #gsa-premium-splash p {
-  color: #fff;
+  color: white;
   opacity: .75;
   font-size: 12px;
   letter-spacing: 2px;
@@ -83,17 +83,12 @@
 #gsa-premium-splash.hide {
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
 }
 
 @keyframes gsaLogoPulse {
-  0%, 100% {
-    transform: scale(.92);
-    filter: drop-shadow(0 0 0 rgba(214,181,109,0));
-  }
-  50% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 22px rgba(214,181,109,.65));
-  }
+  0%, 100% { transform: scale(.92); }
+  50% { transform: scale(1); }
 }
 </style>
 
@@ -102,6 +97,11 @@
   <h2>GHOPKHALI SPORTS ARENA</h2>
   <p>SPORTS • UNITY • COMMUNITY</p>
 </div>
+
+
+
+
+
 
 
 <!-- ==================================================
@@ -4268,13 +4268,32 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 
+
+
+
 <script>
-window.addEventListener("load", function () {
+(function () {
+  const splash = document.getElementById("gsa-premium-splash");
+
+  if (!splash) return;
+
+  const alreadyShown = sessionStorage.getItem("gsaSplashShown");
+
+  if (alreadyShown === "yes") {
+    splash.remove();
+    return;
+  }
+
+  sessionStorage.setItem("gsaSplashShown", "yes");
+
   setTimeout(function () {
-    const splash = document.getElementById("gsa-premium-splash");
-    if (splash) splash.classList.add("hide");
+    splash.classList.add("hide");
+
+    setTimeout(function () {
+      splash.remove();
+    }, 700);
   }, 2200);
-});
+})();
 </script>
 
 </body>

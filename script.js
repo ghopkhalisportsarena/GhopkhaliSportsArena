@@ -1059,16 +1059,37 @@ document.addEventListener(
   }
 );
 
+
 /* =========================================================
    ANDROID BACK BUTTON SUPPORT
 ========================================================= */
 
-if (window.Capacitor?.Plugins?.App) {
-  window.Capacitor.Plugins.App.addListener("backButton", ({ canGoBack }) => {
-    if (canGoBack) {
+(function () {
+  const capacitor = window.Capacitor;
+  const appPlugin = capacitor?.Plugins?.App;
+
+  if (!appPlugin) return;
+
+  appPlugin.addListener("backButton", async function (event) {
+    const currentPath = window.location.pathname;
+
+    if (
+      currentPath.endsWith("index.html") ||
+      currentPath === "/" ||
+      currentPath.endsWith("/")
+    ) {
+      if (event.canGoBack) {
+        window.history.back();
+      } else {
+        await appPlugin.exitApp();
+      }
+      return;
+    }
+
+    if (window.history.length > 1) {
       window.history.back();
     } else {
-      window.Capacitor.Plugins.App.exitApp();
+      window.location.href = "index.html";
     }
   });
-}
+})();
