@@ -867,34 +867,36 @@ function coordinateFor(
    MOVEMENT RULE
 ===================================================== */
 
-function canMove(
-    token,
-    dice
-){
+function canMove(token,dice){
 
     if(
         dice === null ||
         game.moving
     ){
-
         return false;
-
     }
 
+    /*
+       HOME token can only leave
+       when dice = 6.
+    */
 
     if(token.progress === -1){
 
         return dice === 6;
-
     }
 
+    /*
+       Normal token movement.
+
+       57 = final destination.
+    */
 
     return (
-        token.progress + dice
-        <= 57
+        token.progress + dice <= 57
     );
-
 }
+
 
 
 /* =====================================================
@@ -1368,30 +1370,30 @@ async function moveToken(color,index){
     const dice =
         game.dice;
 
-    if(
-        !canMove(
-            token,
-            dice
-        )
-    ){
+    if(!canMove(token,dice)){
         return;
     }
 
     game.moving = true;
-    render();
 
     /*
-       HOME -> EXIT
+    ============================================================
+    STANDARD LUDO
+    ============================================================
 
-       A six does NOT place the token
-       on START.
+    HOME token:
+    Only a 6 can bring it onto START.
 
-       It enters the board on the
-       cell immediately AFTER START.
+    IMPORTANT:
+    The token does NOT travel the remaining
+    five spaces automatically.
 
-       Because the dice value is 6,
-       the token then continues for
-       the remaining 5 steps.
+    The 6 is the dice result for this turn.
+    The token simply enters START.
+
+    Because a 6 was rolled, the same player
+    receives another dice turn.
+    ============================================================
     */
 
     if(token.progress === -1){
@@ -1403,35 +1405,29 @@ async function moveToken(color,index){
         }
 
         /*
-           First step:
-           START + 1
+           START = progress 0
         */
-        token.progress = 1;
+        token.progress = 0;
 
         render();
+
         soundStart();
 
-        await wait(250);
-
-        /*
-           Remaining five steps of the six.
-        */
-        for(let step = 1; step < dice; step++){
-
-            token.progress++;
-
-            render();
-
-            soundStep();
-
-            await wait(150);
-        }
+        await wait(350);
 
     }else{
 
         /*
-           Normal movement.
-           Every step is animated separately.
+        ========================================================
+        NORMAL MOVEMENT
+
+        Dice 1 -> 1 cell
+        Dice 2 -> 2 cells
+        ...
+        Dice 6 -> 6 cells
+
+        Every cell is animated separately.
+        ========================================================
         */
 
         for(
@@ -1451,7 +1447,9 @@ async function moveToken(color,index){
     }
 
     /*
-       Capture only after the complete move.
+    ============================================================
+    CAPTURE
+    ============================================================
     */
 
     const captured =
@@ -1465,24 +1463,24 @@ async function moveToken(color,index){
     }
 
     /*
-       Check finish.
+    ============================================================
+    CLEAR DICE
+    ============================================================
     */
-
-    const finished =
-        token.progress >= 57;
 
     game.dice = null;
     game.rolled = false;
     game.moving = false;
 
     /*
-       WIN
+    ============================================================
+    WIN
+    ============================================================
     */
 
     if(
         game.tokens[color].every(
-            token =>
-                token.progress >= 57
+            t => t.progress >= 57
         )
     ){
 
@@ -1496,7 +1494,16 @@ async function moveToken(color,index){
     }
 
     /*
-       Six or capture = extra turn.
+    ============================================================
+    EXTRA TURN
+    ============================================================
+
+    Standard rule:
+    Rolling 6 gives another turn.
+
+    Capture also gives another turn
+    in this implementation.
+    ============================================================
     */
 
     if(
@@ -1510,11 +1517,14 @@ async function moveToken(color,index){
     }
 
     /*
-       Normal turn changes.
+    ============================================================
+    NORMAL TURN
+    ============================================================
     */
 
     switchTurn();
 }
+
 
 
 
