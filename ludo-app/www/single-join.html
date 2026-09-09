@@ -1155,49 +1155,27 @@
            CREATE UNIQUE PLAYER CODE
         ================================================= */
 
-        async function createUniquePlayerCode() {
+        function createUniquePlayerCode() {
 
-            let code;
+            const chars =
+                "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-            let exists =
-                true;
+            const timePart =
+                Date.now().toString(36).toUpperCase();
 
+            let randomPart = "";
 
-            let attempts =
-                0;
-
-
-            while (
-                exists &&
-                attempts < 20
-            ) {
-
-                code =
-                    generatePlayerCode();
-
-
-                exists =
-                    await playerCodeExists(
-                        code
-                    );
-
-
-                attempts++;
-
-            }
-
-
-            if (exists) {
-
-                throw new Error(
-                    "Unique Player Code তৈরি করা সম্ভব হয়নি।"
+            for (let i = 0; i < 8; i++) {
+                randomPart += chars.charAt(
+                    Math.floor(
+                        Math.random() * chars.length
+                    )
                 );
-
             }
 
-
-            return code;
-
+            return "S-" +
+                timePart.slice(-6) +
+                randomPart;
         }
 
 
