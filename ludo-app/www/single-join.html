@@ -859,6 +859,7 @@
 
                 <button
                     id="searchOpponentBtn"
+                    onclick="searchOpponentByCode()"
                     type="button"
                     style="padding:12px 16px;border:0;border-radius:10px;cursor:pointer;"
                 >
@@ -894,37 +895,55 @@
 
             if (!input || !result) return;
 
-            const code =
-                input.value.trim().toUpperCase();
+            const code = input.value.trim();
 
             if (!code) {
                 result.innerHTML =
-                    '<div style="color:#dc2626;">Player Code দিন।</div>';
+                    '<div style="color:#dc2626;">Player Code / Player ID দিন।</div>';
                 return;
             }
 
             result.innerHTML =
-                '<div>Searching...</div>';
+                '<div style="color:#64748b;">Searching...</div>';
 
-            const {
-                data,
-                error
-            } = await supabaseClient
+            let data = null;
+            let error = null;
+
+            // First: search by Player Code
+            let response = await supabaseClient
                 .from("ludo_players")
                 .select("id, player_name, player_code, tournament_id, status")
-                .eq("player_code", code)
-                .eq("status", "active")
+                .eq("player_code", code.toUpperCase())
                 .maybeSingle();
+
+            data = response.data;
+            error = response.error;
+
+            // Second: search by UUID Player ID
+            if (!data && !error) {
+
+                const uuidPattern =
+                    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+                if (uuidPattern.test(code)) {
+
+                    response = await supabaseClient
+                        .from("ludo_players")
+                        .select("id, player_name, player_code, tournament_id, status")
+                        .eq("id", code)
+                        .maybeSingle();
+
+                    data = response.data;
+                    error = response.error;
+                }
+            }
 
             if (error) {
 
-                console.error(
-                    "V11 PLAYER SEARCH ERROR:",
-                    error
-                );
+                console.error("Player search error:", error);
 
                 result.innerHTML =
-                    '<div style="color:#dc2626;">Search করা যায়নি।</div>';
+                    '<div style="color:#dc2626;">Search করা যায়নি। আবার চেষ্টা করুন।</div>';
 
                 return;
             }
@@ -932,7 +951,7 @@
             if (!data) {
 
                 result.innerHTML =
-                    '<div style="color:#dc2626;">Player পাওয়া যায়নি।</div>';
+                    '<div style="color:#dc2626;">Player পাওয়া যায়নি। সঠিক Player Code বা Player ID দিন।</div>';
 
                 return;
             }
@@ -954,27 +973,43 @@
             ) {
 
                 result.innerHTML =
-                    '<div style="color:#dc2626;">এই Player একই Tournament-এ নেই।</div>';
+                    '<div style="color:#dc2626;">এই Player একই tournament-এর নয়।</div>';
+
+                return;
+            }
+
+            if (data.status !== "active") {
+
+                result.innerHTML =
+                    '<div style="color:#dc2626;">এই Player এখন ম্যাচের জন্য available নয়।</div>';
 
                 return;
             }
 
             result.innerHTML = `
                 <div style="
+                    margin-top:12px;
                     padding:14px;
                     border-radius:12px;
-                    background:#ffffff;
+                    background:#f8fafc;
                     border:1px solid #e2e8f0;
                 ">
 
-                    <strong>${escapeHtml(data.player_name || "Player")}</strong>
+                    <div style="
+                        font-size:17px;
+                        font-weight:700;
+                        color:#0f172a;
+                    ">
+                        ${escapeHtml(data.player_name || "Player")}
+                    </div>
 
                     <div style="
+                        margin-top:5px;
                         font-size:13px;
                         color:#64748b;
-                        margin:5px 0 12px;
                     ">
-                        ${escapeHtml(data.player_code)}
+                        Player Code:
+                        ${escapeHtml(data.player_code || "")}
                     </div>
 
                     <button
@@ -982,10 +1017,14 @@
                         onclick="sendMatchRequest('${data.id}')"
                         style="
                             width:100%;
-                            padding:11px;
+                            margin-top:12px;
+                            padding:12px;
                             border:0;
                             border-radius:10px;
-                            cursor:pointer;
+                            background:#16a34a;
+                            color:white;
+                            font-weight:700;
+                            font-size:15px;
                         "
                     >
                         Send Match Request
@@ -994,7 +1033,6 @@
                 </div>
             `;
         }
-
 
         async function sendMatchRequest(receiverPlayerId) {
 
