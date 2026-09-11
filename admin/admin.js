@@ -23,19 +23,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     const SUPABASE_ANON_KEY =
         "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
-    const supabaseClient =
-        window.supabase.createClient(
+    window.supabaseClient = window.supabase.createClient(
             SUPABASE_URL,
             SUPABASE_ANON_KEY
         );
+    const supabaseClient = window.supabaseClient;
 
 
     /* =====================================================
        HELPERS
     ===================================================== */
 
-    const $ = id =>
-        document.getElementById(id);
+    window.$ = id => document.getElementById(id);
+    const $ = window.$;
 
 
     function escapeHTML(value) {
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     }
                 });
             }
-        }, 100);
+        }, 150);
 
     }
 
@@ -13163,7 +13163,7 @@ async function gsaNocApi(action, extra = {}) {
 
 window.loadNocApplications = async function loadNocApplications() {
 
-    const list = $("nocList");
+    const list = document.getElementById("nocList");
 
     if (!list) {
         console.error("NOC list element not found.");
@@ -13177,7 +13177,7 @@ window.loadNocApplications = async function loadNocApplications() {
     `;
 
     try {
-        const { data, error } = await supabaseClient
+        const { data, error } = await window.supabaseClient
             .from("noc_applications")
             .select("*")
             .order("created_at", { ascending: false });
@@ -13198,7 +13198,7 @@ window.loadNocApplications = async function loadNocApplications() {
         list.innerHTML = `
             <div class="empty-state">
                 Unable to load NOC applications.<br><br>
-                <strong>Error:</strong> ${escapeHTML(error?.message || "Unknown error")}
+                <strong>Error:</strong> ${error?.message || "Unknown error"}
             </div>
         `;
     }
