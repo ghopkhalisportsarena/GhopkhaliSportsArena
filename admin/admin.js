@@ -13176,6 +13176,12 @@ window.loadNocApplications = async function loadNocApplications() {
     try {
         const client = window.supabaseClient || supabaseClient;
 
+        list.innerHTML = `
+            <div class="loading-state">
+                Checking admin session...
+            </div>
+        `;
+
         console.log("NOC: checking admin session...");
 
         const {
@@ -13191,7 +13197,20 @@ window.loadNocApplications = async function loadNocApplications() {
             throw new Error("No active admin session.");
         }
 
+        list.innerHTML = `
+            <div class="loading-state">
+                Admin session confirmed.<br>
+                Loading NOC applications...
+            </div>
+        `;
+
         console.log("NOC: admin session confirmed.");
+
+        list.innerHTML = `
+            <div class="loading-state">
+                Querying NOC applications...
+            </div>
+        `;
 
         console.log("NOC: querying noc_applications...");
 
@@ -13223,6 +13242,13 @@ window.loadNocApplications = async function loadNocApplications() {
         }
 
         console.log("NOC: Supabase response received.");
+
+        list.innerHTML = `
+            <div class="loading-state">
+                Supabase response received.<br>
+                Rendering applications...
+            </div>
+        `;
 
         nocApplications = data || [];
 
