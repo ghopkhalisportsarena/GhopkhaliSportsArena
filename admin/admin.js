@@ -139,16 +139,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function showDashboard() {
 
-        const nocDebug = document.getElementById("nocList");
-
-        if (nocDebug) {
-            nocDebug.innerHTML = `
-                <div class="loading-state">
-                    NOC DEBUG: showDashboard() executed...
-                </div>
-            `;
-        }
-
         if (loginScreen) {
             loginScreen.hidden = true;
         }
@@ -158,40 +148,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         setTimeout(() => {
-
-            const nocDebug2 = document.getElementById("nocList");
-
-            if (nocDebug2) {
-                nocDebug2.innerHTML = `
-                    <div class="loading-state">
-                        NOC DEBUG: setTimeout executed...
-                    </div>
-                `;
+            if (typeof window.loadNocApplications === "function") {
+                window.loadNocApplications().catch(err => {
+                    console.error("NOC load failed:", err);
+                    const list = document.getElementById("nocList");
+                    if (list) {
+                        list.innerHTML = `
+                            <div class="empty-state">
+                                Unable to load NOC applications.<br><br>
+                                <strong>Error:</strong> ${err.message || "Unknown error"}
+                            </div>
+                        `;
+                    }
+                });
             }
-
-            if (nocDebug2) {
-                nocDebug2.innerHTML = `
-                    <div class="loading-state">
-                        NOC DEBUG: calling loadNocApplications()...
-                    </div>
-                `;
-            }
-
-            try {
-                window.loadNocApplications();
-            } catch (error) {
-                if (nocDebug2) {
-                    nocDebug2.innerHTML = `
-                        <div class="empty-state">
-                            NOC DEBUG ERROR:<br>
-                            ${error.message}
-                        </div>
-                    `;
-                }
-                console.error("NOC loader call error:", error);
-            }
-
-        }, 0);
+        }, 100);
 
     }
 
@@ -13192,17 +13163,6 @@ async function gsaNocApi(action, extra = {}) {
 
 window.loadNocApplications = async function loadNocApplications() {
 
-    console.log("NOC DEBUG 1: loadNocApplications() started.");
-
-    const debugList = $("nocList");
-    if (debugList) {
-        debugList.innerHTML = `
-            <div class="loading-state">
-                NOC DEBUG: loader started successfully...
-            </div>
-        `;
-    }
-
     const list = $("nocList");
 
     if (!list) {
@@ -13217,76 +13177,28 @@ window.loadNocApplications = async function loadNocApplications() {
     `;
 
     try {
-
-        console.log("NOC: requesting applications from Supabase...");
-
-        console.log("NOC DEBUG 2: starting Supabase query.");
-
-        const queryPromise = supabaseClient
+        const { data, error } = await supabaseClient
             .from("noc_applications")
             .select("*")
-            .order("created_at", {
-                ascending: false
-            });
+            .order("created_at", { ascending: false });
 
-        console.log("NOC DEBUG 3: query promise created.");
-
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => {
-                reject(
-                    new Error(
-                        "Supabase request timed out after 10 seconds."
-                    )
-                );
-            }, 10000);
-        });
-
-        const {
-            data,
-            error
-        } = await Promise.race([
-            queryPromise,
-            timeoutPromise
-        ]);
-
-        console.log("NOC: Supabase response received.", {
-            data,
-            error
-        });
-
-        if (error) {
-            throw error;
-        }
+        if (error) throw error;
 
         nocApplications = data || [];
-
         updateNocCounts();
         renderNocApplications();
 
-        console.log(
-            "NOC: applications loaded:",
-            nocApplications.length
-        );
+        console.log("NOC applications loaded:", nocApplications.length);
 
     } catch (error) {
-
-        console.error(
-            "NOC loading error:",
-            error
-        );
-
+        console.error("NOC loading error:", error);
         nocApplications = [];
         updateNocCounts();
 
         list.innerHTML = `
             <div class="empty-state">
-                Unable to load NOC applications.
-                <br><br>
-                <strong>Error:</strong>
-                ${escapeHTML(
-                    error?.message ||
-                    "Unknown error"
-                )}
+                Unable to load NOC applications.<br><br>
+                <strong>Error:</strong> ${escapeHTML(error?.message || "Unknown error")}
             </div>
         `;
     }
