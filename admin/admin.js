@@ -139,6 +139,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function showDashboard() {
 
+        const nocDebug = document.getElementById("nocList");
+
+        if (nocDebug) {
+            nocDebug.innerHTML = `
+                <div class="loading-state">
+                    NOC DEBUG: showDashboard() executed...
+                </div>
+            `;
+        }
+
         if (loginScreen) {
             loginScreen.hidden = true;
         }
