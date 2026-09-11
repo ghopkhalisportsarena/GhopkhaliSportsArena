@@ -831,7 +831,9 @@ form.addEventListener(
       );
 
       showStatus(
-        "Application জমা দেওয়া যায়নি। আবার চেষ্টা করুন।",
+        "Application জমা দেওয়া যায়নি।<br><br>" +
+        "<strong>Error:</strong> " +
+        (error?.message || "Unknown error"),
         "error"
       );
 
