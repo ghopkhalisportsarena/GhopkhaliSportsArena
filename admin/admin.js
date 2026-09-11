@@ -13146,8 +13146,7 @@ async function gsaNocApi(action, extra = {}) {
 
 async function loadNocApplications() {
 
-    const list =
-        $("nocList");
+    const list = $("nocList");
 
     if (!list) {
         return;
@@ -13161,11 +13160,36 @@ async function loadNocApplications() {
 
     try {
 
-        const result =
-            await gsaNocApi("list");
+        const {
+            data: sessionData,
+            error: sessionError
+        } = await supabaseClient.auth.getSession();
 
-        nocApplications =
-            result.applications || [];
+        if (sessionError) {
+            throw sessionError;
+        }
+
+        if (!sessionData?.session) {
+            throw new Error(
+                "Your admin session has expired. Please login again."
+            );
+        }
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("noc_applications")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (error) {
+            throw error;
+        }
+
+        nocApplications = data || [];
 
         renderNocApplications();
         updateNocCounts();
@@ -13177,20 +13201,21 @@ async function loadNocApplications() {
             error
         );
 
+        nocApplications = [];
+        updateNocCounts();
+
         list.innerHTML = `
             <div class="empty-state">
                 Unable to load NOC applications.
                 <br><br>
                 ${escapeHTML(
-                    error.message
+                    error?.message ||
+                    "Unknown error"
                 )}
             </div>
         `;
-
     }
-
 }
-
 
 /* -----------------------------------------------------
    COUNTS
