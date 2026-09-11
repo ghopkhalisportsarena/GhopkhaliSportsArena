@@ -318,6 +318,14 @@
     Applications
 </a>
 
+<a
+    href="#noc"
+    class="sidebar-link"
+    data-section="noc"
+>
+    NOC Applications
+</a>
+
         </nav>
 
 
@@ -3607,6 +3615,192 @@
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<!-- =================================================
+     NOC APPLICATIONS
+================================================= -->
+
+<section
+    id="noc"
+    class="admin-section"
+>
+
+    <div class="section-heading">
+
+        <div>
+            <span class="section-label">
+                APPLICATIONS
+            </span>
+
+            <h2>
+                NOC Applications
+            </h2>
+
+            <p>
+                Review, approve or reject No Objection Certificate applications.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="notice-stats">
+
+        <div>
+            <span>Total</span>
+            <strong id="nocTotalCount">0</strong>
+        </div>
+
+        <div>
+            <span>Pending</span>
+            <strong id="nocPendingCount">0</strong>
+        </div>
+
+        <div>
+            <span>Approved</span>
+            <strong id="nocApprovedCount">0</strong>
+        </div>
+
+        <div>
+            <span>Rejected</span>
+            <strong id="nocRejectedCount">0</strong>
+        </div>
+
+    </div>
+
+
+    <div
+        class="noc-filter-bar"
+        style="display:flex;gap:8px;flex-wrap:wrap;margin:20px 0;"
+    >
+
+        <button
+            type="button"
+            class="secondary-button noc-filter active"
+            data-noc-filter="all"
+        >
+            All
+        </button>
+
+        <button
+            type="button"
+            class="secondary-button noc-filter"
+            data-noc-filter="pending"
+        >
+            Pending
+        </button>
+
+        <button
+            type="button"
+            class="secondary-button noc-filter"
+            data-noc-filter="approved"
+        >
+            Approved
+        </button>
+
+        <button
+            type="button"
+            class="secondary-button noc-filter"
+            data-noc-filter="rejected"
+        >
+            Rejected
+        </button>
+
+    </div>
+
+
+    <div
+        id="nocList"
+        class="management-list"
+    >
+
+        <div class="loading-state">
+            Loading NOC applications...
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =================================================
+     NOC DETAIL MODAL
+================================================= -->
+
+<div
+    class="modal"
+    id="nocModal"
+    aria-hidden="true"
+>
+
+    <div class="modal-box large-modal">
+
+        <button
+            type="button"
+            class="modal-close"
+            data-close-modal
+        >
+            ×
+        </button>
+
+        <span class="section-label">
+            GSA NOC APPLICATION
+        </span>
+
+        <h2 id="nocModalTitle">
+            NOC Application
+        </h2>
+
+        <div id="nocDetails"></div>
+
+
+        <div class="noc-admin-note">
+
+            <label for="nocAdminNote">
+                Admin Note
+            </label>
+
+            <textarea
+                id="nocAdminNote"
+                rows="4"
+                placeholder="Write an approval or rejection note..."
+            ></textarea>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="secondary-button"
+                data-close-modal
+            >
+                Close
+            </button>
+
+            <button
+                type="button"
+                class="danger-button"
+                id="nocRejectButton"
+            >
+                Reject
+            </button>
+
+            <button
+                type="button"
+                class="primary-button"
+                id="nocApproveButton"
+            >
+                Approve NOC
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <script src="admin.js"></script>
 
