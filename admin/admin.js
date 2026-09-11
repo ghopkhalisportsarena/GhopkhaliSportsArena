@@ -33,6 +33,103 @@ window.addEventListener("unhandledrejection", (event) => {
     console.error("GSA ADMIN UNHANDLED PROMISE ERROR:", event.reason);
 });
 
+
+/* =====================================================
+   INDEPENDENT NOC BOOTSTRAP
+   This runs independently of the main admin initializer.
+===================================================== */
+
+window.GSA_NOC_BOOTSTRAP = true;
+
+window.gsaStartIndependentNoc = async function () {
+    const list = document.getElementById("nocList");
+
+    if (!list) {
+        return;
+    }
+
+    list.innerHTML = `
+        <div class="loading-state">
+            NOC: Initializing...
+        </div>
+    `;
+
+    let attempts = 0;
+
+    while (attempts < 120) {
+        attempts++;
+
+        try {
+            const client =
+                window.supabaseClient ||
+                window.gsaSupabaseClient ||
+                (typeof supabaseClient !== "undefined"
+                    ? supabaseClient
+                    : null);
+
+            const loader =
+                window.loadNocApplications;
+
+            if (client && typeof loader === "function") {
+                console.log("NOC: Independent bootstrap starting loader.");
+
+                await loader();
+
+                console.log("NOC: Independent bootstrap completed.");
+                return;
+            }
+        } catch (error) {
+            console.error(
+                "NOC: Independent bootstrap error:",
+                error
+            );
+
+            const currentList =
+                document.getElementById("nocList");
+
+            if (currentList) {
+                currentList.innerHTML = `
+                    <div class="empty-state">
+                        <strong>NOC LOAD ERROR</strong><br><br>
+                        ${error?.message || "Unknown error"}
+                    </div>
+                `;
+            }
+
+            return;
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
+    const currentList =
+        document.getElementById("nocList");
+
+    if (currentList) {
+        currentList.innerHTML = `
+            <div class="empty-state">
+                <strong>NOC INITIALIZATION ERROR</strong><br><br>
+                NOC loader was not initialized.
+            </div>
+        `;
+    }
+
+    console.error(
+        "NOC: Independent bootstrap timed out."
+    );
+};
+
+if (document.readyState === "loading") {
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => window.gsaStartIndependentNoc(),
+        { once: true }
+    );
+} else {
+    window.gsaStartIndependentNoc();
+}
+
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     /* =====================================================
