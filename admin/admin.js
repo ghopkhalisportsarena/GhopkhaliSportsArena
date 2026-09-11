@@ -13531,111 +13531,59 @@ function openNocDetails(
         <div class="noc-details-header">
 
             <strong>
+                <div class="noc-detail-item" style="margin-top:10px;">
+            <span>Applicant Type</span>
+            <strong>
                 ${escapeHTML(
-                    application.application_no ||
-                    "NOC Application"
+                    application.applicant_type ||
+                    "—"
                 )}
             </strong>
-
-            <div style="margin-top:7px;">
-
-                <span class="
-                    noc-status
-                    ${escapeHTML(status)}
-                ">
-                    ${getNocStatusLabel(status)}
-                </span>
-
-            </div>
-
         </div>
 
-
-        <div class="noc-details-grid">
-
-            <div class="noc-detail-item">
-                <span>Player Name</span>
-                <strong>
-                    ${escapeHTML(
-                        application.player_name
-                    )}
-                </strong>
-            </div>
-
-            <div class="noc-detail-item">
-                <span>Father's Name</span>
-                <strong>
-                    ${escapeHTML(
-                        application.father_name ||
-                        "—"
-                    )}
-                </strong>
-            </div>
-
-            <div class="noc-detail-item">
-                <span>Sport Type</span>
-                <strong>
-                    ${escapeHTML(
-                        application.sport_type ||
-                        "—"
-                    )}
-                </strong>
-            </div>
-
-            <div class="noc-detail-item">
-                <span>Jersey / Player No.</span>
-                <strong>
-                    ${escapeHTML(
-                        application.jersey_number ||
-                        "—"
-                    )}
-                </strong>
-            </div>
-
-            <div class="noc-detail-item">
-                <span>GSA Player ID</span>
-                <strong>
-                    ${escapeHTML(
-                        application.gsa_player_id ||
-                        "—"
-                    )}
-                </strong>
-            </div>
-
-            <div class="noc-detail-item">
-                <span>Applicant Email</span>
-                <strong>
-                    ${escapeHTML(
-                        application.applicant_email ||
-                        "—"
-                    )}
-                </strong>
-            </div>
-
-            <div class="noc-detail-item">
-                <span>Applicant Phone</span>
-                <strong>
-                    ${escapeHTML(
-                        application.applicant_phone ||
-                        "—"
-                    )}
-                </strong>
-            </div>
-
-            <div class="noc-detail-item">
-                <span>Submitted</span>
-                <strong>
-                    ${formatDate(
-                        application.created_at
-                    )}
-                </strong>
-            </div>
-
+        <div class="noc-detail-item" style="margin-top:10px;">
+            <span>Destination Organization</span>
+            <strong>
+                ${escapeHTML(
+                    application.destination_organization ||
+                    "—"
+                )}
+            </strong>
         </div>
 
+        <div class="noc-detail-item" style="margin-top:10px;">
+            <span>Tournament / Event</span>
+            <strong>
+                ${escapeHTML(
+                    application.tournament_or_event ||
+                    "—"
+                )}
+            </strong>
+        </div>
+
+        <div class="noc-detail-item" style="margin-top:10px;">
+            <span>NOC Reason</span>
+            <strong style="white-space:pre-wrap;">
+                ${escapeHTML(
+                    application.noc_reason ||
+                    "—"
+                )}
+            </strong>
+        </div>
+
+        <div class="noc-detail-item" style="margin-top:10px;">
+            <span>Applicant Statement</span>
+            <strong style="white-space:pre-wrap;">
+                ${escapeHTML(
+                    application.applicant_statement ||
+                    "—"
+                )}
+            </strong>
+        </div>
 
         ${
             application.player_signature
+
                 ? `
                     <div
                         class="noc-detail-item"
