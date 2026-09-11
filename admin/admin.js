@@ -13152,6 +13152,8 @@ async function gsaNocApi(action, extra = {}) {
 
 async function loadNocApplications() {
 
+    console.log("NOC DEBUG 1: loadNocApplications() started.");
+
     const list = $("nocList");
 
     if (!list) {
@@ -13169,12 +13171,16 @@ async function loadNocApplications() {
 
         console.log("NOC: requesting applications from Supabase...");
 
+        console.log("NOC DEBUG 2: starting Supabase query.");
+
         const queryPromise = supabaseClient
             .from("noc_applications")
             .select("*")
             .order("created_at", {
                 ascending: false
             });
+
+        console.log("NOC DEBUG 3: query promise created.");
 
         const timeoutPromise = new Promise((_, reject) => {
             setTimeout(() => {
