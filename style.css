@@ -10571,3 +10571,16 @@ img {
 .premium-nav-download:hover {
   background: rgba(214, 181, 109, .12);
 }
+
+.premium-nav-noc {
+  border: 1px solid rgba(0, 113, 227, .25);
+}
+
+.premium-nav-noc .premium-nav-icon {
+  color: #0071e3;
+  font-size: 21px;
+}
+
+.premium-nav-noc:hover {
+  background: rgba(0, 113, 227, .08);
+}

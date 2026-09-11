@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NOC Application | Ghopkhali Sports Arena</title>
+
+<meta name="description" content="Ghopkhali Sports Arena - No Objection Certificate Application">
+
+<link rel="icon" href="gsa.png">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f5f5f7;
+  --card: rgba(255,255,255,.92);
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --border: rgba(0,0,0,.08);
+  --accent: #0071e3;
+  --success: #16803c;
+  --danger: #d70015;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(0,113,227,.08), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(52,199,89,.07), transparent 30%),
+    var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  min-height: 100vh;
+}
+
+.header {
+  padding: 34px 20px 25px;
+  text-align: center;
+}
+
+.logo {
+  width: 82px;
+  height: 82px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -.5px;
+}
+
+.header h2 {
+  margin: 5px 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+}
+
+.header p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.container {
+  width: min(920px, calc(100% - 28px));
+  margin: 0 auto 50px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 15px 45px rgba(0,0,0,.07);
+  backdrop-filter: blur(18px);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.title h3 {
+  margin: 0;
+  font-size: 27px;
+}
+
+.title p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.section-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 17px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #424245;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid rgba(0,0,0,.12);
+  background: #fff;
+  border-radius: 13px;
+  padding: 14px 15px;
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: .2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(0,113,227,.10);
+}
+
+textarea {
+  min-height: 105px;
+  resize: vertical;
+}
+
+.info {
+  margin-top: 25px;
+  padding: 18px;
+  border-radius: 18px;
+  background: #f5f5f7;
+  color: #424245;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 20px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.check input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 24px;
+  background: var(--accent);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0,113,227,.20);
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.status {
+  display: none;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.status.show {
+  display: block;
+}
+
+.status.success {
+  background: #eaf7ee;
+  color: var(--success);
+}
+
+.status.error {
+  background: #fff0f0;
+  color: var(--danger);
+}
+
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 25px;
+}
+
+@media(max-width: 650px) {
+  .card {
+    padding: 21px;
+    border-radius: 23px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field.full {
+    grid-column: auto;
+  }
+
+  .title h3 {
+    font-size: 23px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <img src="gsa.png" class="logo" alt="Ghopkhali Sports Arena">
+
+  <h1>ঘোপখালী স্পোর্টস অ্যারিনা</h1>
+  <h2>GHOPKHALI SPORTS ARENA</h2>
+
+  <p>“সুস্থ দেহ ও মাদকমুক্ত সমাজ গঠনের লক্ষ্যে”</p>
+  <p>স্থাপিত: ১৯/০৭/২০২৬</p>
+  <p>ঘোপখালী, বেতমোর রাজপাড়া, মঠবাড়িয়া, পিরোজপুর</p>
+</header>
+
+<main class="container">
+
+<section class="card">
+
+  <div class="title">
+    <h3>NO OBJECTION CERTIFICATE</h3>
+    <p>NOC Application</p>
+  </div>
+
+  <form id="nocForm">
+
+    <div class="section">
+      <div class="section-title">খেলোয়াড়ের তথ্য</div>
+
+      <div class="grid">
+
+        <div class="field">
+          <label>খেলোয়াড়ের নাম *</label>
+          <input id="player_name" required>
+        </div>
+
+        <div class="field">
+          <label>পিতার নাম *</label>
+          <input id="father_name" required>
+        </div>
+
+        <div class="field">
+          <label>খেলার ধরন *</label>
+          <input id="sport_type" placeholder="যেমন: Football" required>
+        </div>
+
+        <div class="field">
+          <label>জার্সি/প্লেয়ার নং *</label>
+          <input id="jersey_number" required>
+        </div>
+
+        <div class="field">
+          <label>GSA Player ID *</label>
+          <input id="gsa_player_id" required>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">যোগাযোগের তথ্য</div>
+
+      <div class="grid">
+
+        <div class="field">
+          <label>ই-মেইল *</label>
+          <input type="email" id="applicant_email" required>
+        </div>
+
+        <div class="field">
+          <label>মোবাইল নম্বর</label>
+          <input type="tel" id="applicant_phone">
+        </div>
+
+      </div>
+    </div>
+
+    <div class="info">
+      আমি ঘোষণা করছি যে, উপরে প্রদত্ত তথ্য সঠিক ও সত্য।
+      উক্ত খেলোয়াড় ঘোপখালী স্পোর্টস অ্যারিনা
+      (Ghopkhali Sports Arena)-এর একজন নিবন্ধিত/অনুমোদিত খেলোয়াড়
+      এবং NOC প্রদানের ক্ষেত্রে ক্লাবের বিদ্যমান নিয়ম-কানুন ও
+      শৃঙ্খলা মেনে চলতে সম্মত।
+    </div>
+
+    <label class="check">
+      <input type="checkbox" id="agreement" required>
+      <span>
+        আমি প্রদত্ত তথ্য যাচাই করে নিশ্চিত করছি এবং NOC Application
+        জমা দেওয়ার জন্য সম্মত।
+      </span>
+    </label>
+
+    <button type="submit" id="submitBtn">
+      Submit NOC Application
+    </button>
+
+    <div id="status" class="status"></div>
+
+  </form>
+
+</section>
+
+<div class="footer">
+  <strong>GHOPKHALI SPORTS ARENA</strong><br>
+  ঘোপখালী, বেতমোর রাজপাড়া, মঠবাড়িয়া, পিরোজপুর<br>
+  NOC Application System
+</div>
+
+</main>
+
+<script>
+"use strict";
+
+const SUPABASE_URL =
+  "https://cmygmswzokyrmgdnuszq.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+const form = document.getElementById("nocForm");
+const submitBtn = document.getElementById("submitBtn");
+const statusBox = document.getElementById("status");
+
+function showStatus(message, type) {
+  statusBox.textContent = message;
+  statusBox.className = "status show " + type;
+}
+
+form.addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  try {
+
+    const data = {
+      player_name:
+        document.getElementById("player_name").value.trim(),
+
+      father_name:
+        document.getElementById("father_name").value.trim(),
+
+      sport_type:
+        document.getElementById("sport_type").value.trim(),
+
+      jersey_number:
+        document.getElementById("jersey_number").value.trim(),
+
+      gsa_player_id:
+        document.getElementById("gsa_player_id").value.trim(),
+
+      applicant_email:
+        document.getElementById("applicant_email").value.trim(),
+
+      applicant_phone:
+        document.getElementById("applicant_phone").value.trim()
+    };
+
+    const applicationNo =
+      "GSA/NOC/" +
+      Date.now().toString().slice(-7) +
+      "/2026";
+
+    data.application_no = applicationNo;
+
+    const { error } =
+      await supabaseClient
+        .from("noc_applications")
+        .insert(data);
+
+    if (error) throw error;
+
+    showStatus(
+      "NOC Application সফলভাবে জমা হয়েছে। আপনার Application No: " +
+      applicationNo +
+      "। Confirmation ই-মেইল পরবর্তীতে পাঠানো হবে।",
+      "success"
+    );
+
+    form.reset();
+
+  } catch (error) {
+
+    console.error(error);
+
+    showStatus(
+      "Application জমা দেওয়া যায়নি। আবার চেষ্টা করুন।",
+      "error"
+    );
+
+  } finally {
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit NOC Application";
+
+  }
+
+});
+</script>
+
+</body>
+</html>
