@@ -147,6 +147,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             dashboardScreen.hidden = false;
         }
 
+        setTimeout(() => {
+            if (typeof loadNocApplications === "function") {
+                loadNocApplications();
+            }
+        }, 0);
+
     }
 
 
@@ -14186,13 +14192,6 @@ $("nocRejectButton")
 
         }
     );
-
-
-/* -----------------------------------------------------
-   INITIAL NOC LOAD
------------------------------------------------------ */
-
-loadNocApplications();
 
 
 })();
