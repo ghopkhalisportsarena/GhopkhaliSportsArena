@@ -13167,90 +13167,51 @@ window.loadNocApplications = async function loadNocApplications() {
         return;
     }
 
-    list.innerHTML = `
-        <div class="loading-state">
-            Loading NOC applications...
-        </div>
-    `;
-
-    try {
-        const client = window.supabaseClient || supabaseClient;
-
+    const showStatus = (message) => {
         list.innerHTML = `
             <div class="loading-state">
-                Checking admin session...
+                ${message}
             </div>
         `;
+    };
 
-        console.log("NOC: checking admin session...");
+    try {
+        showStatus("NOC STEP 1: Starting...");
 
-        const {
-            data: sessionData,
-            error: sessionError
-        } = await client.auth.getSession();
+        const client = window.supabaseClient || supabaseClient;
 
-        if (sessionError) {
-            throw sessionError;
+        if (!client) {
+            throw new Error("Supabase client is not available.");
         }
 
-        if (!sessionData?.session) {
+        showStatus("NOC STEP 2: Supabase client found.<br>Checking session...");
+
+        const sessionResult = await client.auth.getSession();
+
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+
+        const session = sessionResult.data?.session;
+
+        if (!session) {
             throw new Error("No active admin session.");
         }
 
-        list.innerHTML = `
-            <div class="loading-state">
-                Admin session confirmed.<br>
-                Loading NOC applications...
-            </div>
-        `;
+        showStatus("NOC STEP 3: Admin session OK.<br>Querying database...");
 
-        console.log("NOC: admin session confirmed.");
-
-        list.innerHTML = `
-            <div class="loading-state">
-                Querying NOC applications...
-            </div>
-        `;
-
-        console.log("NOC: querying noc_applications...");
-
-        const queryPromise = client
+        const result = await client
             .from("noc_applications")
             .select("*")
             .order("created_at", { ascending: false });
 
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => {
-                reject(
-                    new Error(
-                        "NOC applications request timed out after 10 seconds."
-                    )
-                );
-            }, 10000);
-        });
-
-        const {
-            data,
-            error
-        } = await Promise.race([
-            queryPromise,
-            timeoutPromise
-        ]);
-
-        if (error) {
-            throw error;
+        if (result.error) {
+            throw result.error;
         }
 
-        console.log("NOC: Supabase response received.");
+        showStatus("NOC STEP 4: Database response received.<br>Rendering...");
 
-        list.innerHTML = `
-            <div class="loading-state">
-                Supabase response received.<br>
-                Rendering applications...
-            </div>
-        `;
-
-        nocApplications = data || [];
+        nocApplications = result.data || [];
 
         if (typeof updateNocCounts === "function") {
             updateNocCounts();
@@ -13258,6 +13219,8 @@ window.loadNocApplications = async function loadNocApplications() {
 
         if (typeof renderNocApplications === "function") {
             renderNocApplications();
+        } else {
+            throw new Error("renderNocApplications function not found.");
         }
 
         console.log(
@@ -13277,11 +13240,8 @@ window.loadNocApplications = async function loadNocApplications() {
 
         list.innerHTML = `
             <div class="empty-state">
-                Unable to load NOC applications.<br><br>
-                <strong>Error:</strong>
-                ${(error && error.message)
-                    ? error.message
-                    : "Unknown error"}
+                <strong>NOC LOAD ERROR</strong><br><br>
+                ${error?.message || "Unknown error"}
             </div>
         `;
     }
