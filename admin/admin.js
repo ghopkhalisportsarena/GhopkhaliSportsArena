@@ -13149,6 +13149,7 @@ async function loadNocApplications() {
     const list = $("nocList");
 
     if (!list) {
+        console.error("NOC list element not found.");
         return;
     }
 
@@ -13160,20 +13161,7 @@ async function loadNocApplications() {
 
     try {
 
-        const {
-            data: sessionData,
-            error: sessionError
-        } = await supabaseClient.auth.getSession();
-
-        if (sessionError) {
-            throw sessionError;
-        }
-
-        if (!sessionData?.session) {
-            throw new Error(
-                "Your admin session has expired. Please login again."
-            );
-        }
+        console.log("NOC: requesting applications from Supabase...");
 
         const {
             data,
@@ -13185,14 +13173,24 @@ async function loadNocApplications() {
                 ascending: false
             });
 
+        console.log("NOC: Supabase response received.", {
+            data,
+            error
+        });
+
         if (error) {
             throw error;
         }
 
         nocApplications = data || [];
 
-        renderNocApplications();
         updateNocCounts();
+        renderNocApplications();
+
+        console.log(
+            "NOC: applications loaded:",
+            nocApplications.length
+        );
 
     } catch (error) {
 
@@ -13208,6 +13206,7 @@ async function loadNocApplications() {
             <div class="empty-state">
                 Unable to load NOC applications.
                 <br><br>
+                <strong>Error:</strong>
                 ${escapeHTML(
                     error?.message ||
                     "Unknown error"
@@ -13216,7 +13215,6 @@ async function loadNocApplications() {
         `;
     }
 }
-
 /* -----------------------------------------------------
    COUNTS
 ----------------------------------------------------- */
