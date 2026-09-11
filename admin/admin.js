@@ -182,35 +182,8 @@ document.addEventListener("DOMContentLoaded", async () => {
        SESSION PROTECTION
     ===================================================== */
 
-    const {
-        data: {
-            session: currentSession
-        },
-        error: sessionError
-    } =
-        await supabaseClient
-            .auth
-            .getSession();
+    let currentSession = null;
 
-
-    if (sessionError) {
-
-        console.error(
-            "Session error:",
-            sessionError
-        );
-
-        showLogin();
-
-    } else if (currentSession) {
-
-        showDashboard();
-
-    } else {
-
-        showLogin();
-
-    }
 
 /* =====================================================
    LOGIN
@@ -271,11 +244,20 @@ loginForm?.addEventListener(
                 );
             }
 
+            currentSession = data.session;
+
             console.log(
-                "Login successful. Showing dashboard..."
+                "Login successful. Session created."
             );
 
             showDashboard();
+
+            // Load NOC applications after authentication.
+            setTimeout(() => {
+                if (typeof window.loadNocApplications === "function") {
+                    window.loadNocApplications();
+                }
+            }, 100);
 
         } catch (error) {
 
@@ -301,6 +283,38 @@ loginForm?.addEventListener(
 
     }
 );
+
+
+/* =====================================================
+   INITIAL SESSION CHECK
+===================================================== */
+
+try {
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.getSession();
+
+    if (error) {
+        console.error("Session error:", error);
+        currentSession = null;
+        showLogin();
+    } else if (data?.session) {
+        currentSession = data.session;
+        showDashboard();
+    } else {
+        currentSession = null;
+        showLogin();
+    }
+
+} catch (error) {
+
+    console.error("Session initialization error:", error);
+    currentSession = null;
+    showLogin();
+
+}
 
 
 /* =====================================================
