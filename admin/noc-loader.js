@@ -8,7 +8,7 @@
         "sb_publishable_w1Hq5KwIxMjyiWf7HL10qg_9bYRwz1L";
 
     const GSA_NOC_API =
-        "https://script.google.com/macros/s/AKfycbw1-V2VrlBmMb9yK-xfDHDQDzxfiJ2ORCVFTkZPeiqC6ItOmsNFHsXehdfiXahVY-4Q/exec";
+        "https://script.google.com/macros/s/AKfycbw1-V2LrlBmMb9yK-xfDHDQDzxfiJ2ORCVFTkZPeiqC6ItOmsNFHsXehdfiXahVY-4Q/exec";
 
     let applications = [];
     let activeFilter = "all";
