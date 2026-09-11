@@ -13154,6 +13154,15 @@ async function loadNocApplications() {
 
     console.log("NOC DEBUG 1: loadNocApplications() started.");
 
+    const debugList = $("nocList");
+    if (debugList) {
+        debugList.innerHTML = `
+            <div class="loading-state">
+                NOC DEBUG: loader started successfully...
+            </div>
+        `;
+    }
+
     const list = $("nocList");
 
     if (!list) {
