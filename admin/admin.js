@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             try {
-                loadNocApplications();
+                window.loadNocApplications();
             } catch (error) {
                 if (nocDebug2) {
                     nocDebug2.innerHTML = `
