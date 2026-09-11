@@ -13298,196 +13298,217 @@ function getNocStatusLabel(status) {
 
 function renderNocApplications() {
 
-    const list =
-        $("nocList");
+    const list = $("nocList");
 
     if (!list) {
         return;
     }
 
-    const filtered =
-        getFilteredNocApplications();
+    const filtered = getFilteredNocApplications();
 
     if (!filtered.length) {
-
         list.innerHTML = `
             <div class="noc-empty">
                 No NOC applications found.
             </div>
         `;
-
         return;
     }
 
+    list.innerHTML = filtered.map(application => {
 
-    list.innerHTML =
-        filtered.map(
-            application => {
+        const status =
+            String(application.status || "pending").toLowerCase();
 
-                const status =
-                    application.status ||
-                    "pending";
+        const id = escapeHTML(application.id);
 
+        const applicationPdf =
+            application.application_pdf_url || "";
 
-                return `
-                    <article class="noc-card">
+        const approvedPdf =
+            application.approved_noc_pdf_url || "";
 
-                        <div class="noc-card-top">
+        return `
+            <article class="noc-card">
 
-                            <div>
+                <div class="noc-card-top">
+                    <div>
+                        <h3 class="noc-card-title">
+                            ${escapeHTML(
+                                application.player_name ||
+                                "Unnamed Player"
+                            )}
+                        </h3>
 
-                                <h3 class="noc-card-title">
-                                    ${escapeHTML(
-                                        application.player_name ||
-                                        "Unnamed Player"
-                                    )}
-                                </h3>
-
-                                <div class="noc-card-number">
-                                    ${escapeHTML(
-                                        application.application_no ||
-                                        "Application number pending"
-                                    )}
-                                </div>
-
-                            </div>
-
-                            <span class="
-                                noc-status
-                                ${escapeHTML(status)}
-                            ">
-                                ${getNocStatusLabel(status)}
-                            </span>
-
+                        <div class="noc-card-number">
+                            ${escapeHTML(
+                                application.application_no ||
+                                "Application number pending"
+                            )}
                         </div>
+                    </div>
 
+                    <span class="noc-status ${escapeHTML(status)}">
+                        ${getNocStatusLabel(status)}
+                    </span>
+                </div>
 
-                        <div class="noc-card-grid">
+                <div class="noc-card-grid">
 
-                            <div class="noc-info-box">
-                                <span>Sport</span>
-                                <strong>
-                                    ${escapeHTML(
-                                        application.sport_type ||
-                                        "—"
-                                    )}
-                                </strong>
-                            </div>
+                    <div class="noc-info-box">
+                        <span>Applicant Type</span>
+                        <strong>
+                            ${escapeHTML(
+                                application.applicant_type || "—"
+                            )}
+                        </strong>
+                    </div>
 
-                            <div class="noc-info-box">
-                                <span>GSA Player ID</span>
-                                <strong>
-                                    ${escapeHTML(
-                                        application.gsa_player_id ||
-                                        "—"
-                                    )}
-                                </strong>
-                            </div>
+                    <div class="noc-info-box">
+                        <span>Sport</span>
+                        <strong>
+                            ${escapeHTML(
+                                application.sport_type || "—"
+                            )}
+                        </strong>
+                    </div>
 
-                            <div class="noc-info-box">
-                                <span>Email</span>
-                                <strong>
-                                    ${escapeHTML(
-                                        application.applicant_email ||
-                                        "—"
-                                    )}
-                                </strong>
-                            </div>
+                    <div class="noc-info-box">
+                        <span>GSA Player ID</span>
+                        <strong>
+                            ${escapeHTML(
+                                application.gsa_player_id || "—"
+                            )}
+                        </strong>
+                    </div>
 
-                            <div class="noc-info-box">
-                                <span>Submitted</span>
-                                <strong>
-                                    ${formatDate(
-                                        application.created_at
-                                    )}
-                                </strong>
-                            </div>
+                    <div class="noc-info-box">
+                        <span>Destination</span>
+                        <strong>
+                            ${escapeHTML(
+                                application.destination_organization ||
+                                "—"
+                            )}
+                        </strong>
+                    </div>
 
-                        </div>
+                    <div class="noc-info-box">
+                        <span>Email</span>
+                        <strong>
+                            ${escapeHTML(
+                                application.applicant_email || "—"
+                            )}
+                        </strong>
+                    </div>
 
+                    <div class="noc-info-box">
+                        <span>Submitted</span>
+                        <strong>
+                            ${formatDate(application.created_at)}
+                        </strong>
+                    </div>
 
-                        <div class="noc-card-actions">
+                </div>
 
-                            <button
-                                type="button"
-                                class="secondary-button"
-                                data-noc-view="${escapeHTML(
-                                    application.id
-                                )}">
-                                View Details
-                            </button>
+                <div class="noc-card-actions">
 
-                            ${
-                                status === "pending"
-                                    ? `
-                                        <button
-                                            type="button"
-                                            class="primary-button"
-                                            data-noc-approve="${escapeHTML(
-                                                application.id
-                                            )}">
-                                            Approve
-                                        </button>
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        data-noc-view="${id}">
+                        View Details
+                    </button>
 
-                                        <button
-                                            type="button"
-                                            class="danger-button"
-                                            data-noc-reject="${escapeHTML(
-                                                application.id
-                                            )}">
-                                            Reject
-                                        </button>
-                                      `
-                                    : ""
-                            }
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        data-noc-edit="${id}">
+                        Edit
+                    </button>
 
-                            ${
-                                application.application_pdf_url
-                                    ? `
-                                        <a
-                                            class="secondary-button"
-                                            href="${escapeHTML(
-                                                application.application_pdf_url
-                                            )}"
-                                            target="_blank"
-                                            rel="noopener">
-                                            Application PDF
-                                        </a>
-                                      `
-                                    : ""
-                            }
+                    ${
+                        applicationPdf
+                            ? `
+                                <a
+                                    class="secondary-button"
+                                    href="${escapeHTML(applicationPdf)}"
+                                    target="_blank"
+                                    rel="noopener">
+                                    Download Application PDF
+                                </a>
+                              `
+                            : `
+                                <button
+                                    type="button"
+                                    class="secondary-button"
+                                    disabled
+                                    title="Application PDF has not been generated yet">
+                                    Application PDF Pending
+                                </button>
+                              `
+                    }
 
-                            ${
-                                application.approved_noc_pdf_url &&
-                                status === "approved"
+                    ${
+                        status === "approved"
+                            ? (
+                                approvedPdf
                                     ? `
                                         <a
                                             class="primary-button"
-                                            href="${escapeHTML(
-                                                application.approved_noc_pdf_url
-                                            )}"
+                                            href="${escapeHTML(approvedPdf)}"
                                             target="_blank"
                                             rel="noopener">
-                                            Official NOC PDF
+                                            Download Official NOC
                                         </a>
                                       `
-                                    : ""
-                            }
+                                    : `
+                                        <button
+                                            type="button"
+                                            class="primary-button"
+                                            disabled
+                                            title="Approved NOC PDF has not been generated yet">
+                                            Official NOC Pending
+                                        </button>
+                                      `
+                              )
+                            : ""
+                    }
 
-                        </div>
+                    ${
+                        status === "pending"
+                            ? `
+                                <button
+                                    type="button"
+                                    class="primary-button"
+                                    data-noc-approve="${id}">
+                                    Approve
+                                </button>
 
-                    </article>
-                `;
+                                <button
+                                    type="button"
+                                    class="danger-button"
+                                    data-noc-reject="${id}">
+                                    Reject
+                                </button>
+                              `
+                            : ""
+                    }
 
-            }
-        ).join("");
+                </div>
 
+            </article>
+        `;
+
+    }).join("");
 }
 
 
 /* -----------------------------------------------------
    OPEN DETAILS
------------------------------------------------------ */
+-----------------------------------------------------
+*/
+
+
 
 function openNocDetails(
     application
@@ -13783,7 +13804,189 @@ async function processNocApplication(
 }
 
 /* -----------------------------------------------------
+   NOC EDIT VIEW
+----------------------------------------------------- */
+
+function openNocEditModal(application) {
+
+    const modal = $("nocModal");
+
+    const details = $("nocDetails");
+
+    if (!modal || !details) {
+        return;
+    }
+
+    selectedNocApplication = application;
+
+    details.innerHTML = `
+
+        <div class="noc-details-header">
+
+            <h3>Edit NOC Application</h3>
+
+            <div class="noc-detail-item">
+                <span>Application No.</span>
+                <strong>
+                    ${escapeHTML(
+                        application.application_no || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Applicant Type</span>
+                <strong>
+                    ${escapeHTML(
+                        application.applicant_type || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Player Name</span>
+                <strong>
+                    ${escapeHTML(
+                        application.player_name || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Father / Guardian</span>
+                <strong>
+                    ${escapeHTML(
+                        application.father_name || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>GSA Player ID</span>
+                <strong>
+                    ${escapeHTML(
+                        application.gsa_player_id || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Sport</span>
+                <strong>
+                    ${escapeHTML(
+                        application.sport_type || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Jersey / Player No.</span>
+                <strong>
+                    ${escapeHTML(
+                        application.jersey_number || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Destination Organization</span>
+                <strong>
+                    ${escapeHTML(
+                        application.destination_organization || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Tournament / Event</span>
+                <strong>
+                    ${escapeHTML(
+                        application.tournament_or_event || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>NOC Reason</span>
+                <strong style="white-space:pre-wrap;">
+                    ${escapeHTML(
+                        application.noc_reason || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Applicant Statement</span>
+                <strong style="white-space:pre-wrap;">
+                    ${escapeHTML(
+                        application.applicant_statement || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Email</span>
+                <strong>
+                    ${escapeHTML(
+                        application.applicant_email || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Phone</span>
+                <strong>
+                    ${escapeHTML(
+                        application.applicant_phone || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div
+                style="
+                    margin-top:18px;
+                    padding:14px;
+                    border:1px solid #ddd;
+                    border-radius:12px;
+                    background:#fafafa;
+                "
+            >
+                <strong>
+                    Edit mode
+                </strong>
+
+                <p style="margin:8px 0 0;">
+                    Application editing interface is ready.
+                    Saving changes will be connected to the
+                    secure administrator API next.
+                </p>
+            </div>
+
+        </div>
+    `;
+
+    $("nocAdminNote")?.closest(".noc-admin-note")
+        ?.style.setProperty("display", "none");
+
+    $("nocApproveButton")?.style.setProperty(
+        "display",
+        "none"
+    );
+
+    $("nocRejectButton")?.style.setProperty(
+        "display",
+        "none"
+    );
+
+    openModal(modal);
+}
+
+
+/* -----------------------------------------------------
    NOC FILTER EVENTS
+----------------------------------------------------- */
+
+
 ----------------------------------------------------- */
 
 document.addEventListener(
@@ -13835,6 +14038,30 @@ document.addEventListener(
 
             if (application) {
                 openNocDetails(application);
+            }
+
+            return;
+        }
+
+
+        const editButton =
+            event.target.closest(
+                "[data-noc-edit]"
+            );
+
+        if (editButton) {
+
+            const application =
+                nocApplications.find(
+                    item =>
+                        String(item.id) ===
+                        String(
+                            editButton.dataset.nocEdit
+                        )
+                );
+
+            if (application) {
+                openNocEditModal(application);
             }
 
             return;
