@@ -19,7 +19,7 @@
 
 :root {
   --bg: #f5f5f7;
-  --card: rgba(255,255,255,.92);
+  --card: rgba(255,255,255,.94);
   --text: #1d1d1f;
   --muted: #6e6e73;
   --border: rgba(0,0,0,.08);
@@ -114,9 +114,20 @@ body {
 }
 
 .section-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
   font-size: 17px;
   font-weight: 700;
   margin-bottom: 16px;
+}
+
+.section-title::before {
+  content: "";
+  width: 4px;
+  height: 19px;
+  border-radius: 5px;
+  background: var(--accent);
 }
 
 .grid {
@@ -141,6 +152,10 @@ label {
   color: #424245;
 }
 
+.required {
+  color: var(--danger);
+}
+
 input,
 select,
 textarea {
@@ -163,8 +178,23 @@ textarea:focus {
 }
 
 textarea {
-  min-height: 105px;
+  min-height: 115px;
   resize: vertical;
+  line-height: 1.65;
+}
+
+textarea.large {
+  min-height: 145px;
+}
+
+select {
+  appearance: auto;
+}
+
+.helper {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .info {
@@ -190,6 +220,7 @@ textarea {
   width: 18px;
   height: 18px;
   margin-top: 2px;
+  flex: 0 0 auto;
 }
 
 button {
@@ -204,20 +235,26 @@ button {
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 8px 22px rgba(0,113,227,.20);
+  transition: .2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
 }
 
 button:disabled {
   opacity: .6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .status {
   display: none;
   margin-top: 20px;
-  padding: 16px;
+  padding: 17px;
   border-radius: 15px;
-  text-align: center;
   font-size: 14px;
+  line-height: 1.65;
 }
 
 .status.show {
@@ -234,6 +271,13 @@ button:disabled {
   color: var(--danger);
 }
 
+.application-number {
+  display: block;
+  margin-top: 7px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
 .footer {
   text-align: center;
   color: var(--muted);
@@ -243,6 +287,10 @@ button:disabled {
 }
 
 @media(max-width: 650px) {
+  .header {
+    padding-top: 27px;
+  }
+
   .card {
     padding: 21px;
     border-radius: 23px;
@@ -259,6 +307,10 @@ button:disabled {
   .title h3 {
     font-size: 23px;
   }
+
+  .header h1 {
+    font-size: 22px;
+  }
 }
 </style>
 </head>
@@ -266,14 +318,21 @@ button:disabled {
 <body>
 
 <header class="header">
-  <img src="gsa.png" class="logo" alt="Ghopkhali Sports Arena">
+
+  <img
+    src="gsa.png"
+    class="logo"
+    alt="Ghopkhali Sports Arena"
+  >
 
   <h1>ঘোপখালী স্পোর্টস অ্যারিনা</h1>
+
   <h2>GHOPKHALI SPORTS ARENA</h2>
 
   <p>“সুস্থ দেহ ও মাদকমুক্ত সমাজ গঠনের লক্ষ্যে”</p>
   <p>স্থাপিত: ১৯/০৭/২০২৬</p>
   <p>ঘোপখালী, বেতমোর রাজপাড়া, মঠবাড়িয়া, পিরোজপুর</p>
+
 </header>
 
 <main class="container">
@@ -287,87 +346,315 @@ button:disabled {
 
   <form id="nocForm">
 
+    <!-- Applicant Information -->
+
     <div class="section">
-      <div class="section-title">খেলোয়াড়ের তথ্য</div>
+
+      <div class="section-title">
+        আবেদনকারীর পরিচয়
+      </div>
 
       <div class="grid">
 
         <div class="field">
-          <label>খেলোয়াড়ের নাম *</label>
-          <input id="player_name" required>
+
+          <label for="applicant_type">
+            আবেদনকারীর ধরন <span class="required">*</span>
+          </label>
+
+          <select id="applicant_type" required>
+
+            <option value="">
+              নির্বাচন করুন
+            </option>
+
+            <option value="খেলোয়াড়">
+              খেলোয়াড়
+            </option>
+
+            <option value="সদস্য">
+              সদস্য
+            </option>
+
+            <option value="কমিটির পরিচালক">
+              কমিটির পরিচালক
+            </option>
+
+            <option value="অন্যান্য">
+              অন্যান্য
+            </option>
+
+          </select>
+
         </div>
 
         <div class="field">
-          <label>পিতার নাম *</label>
-          <input id="father_name" required>
+
+          <label for="player_name">
+            আবেদনকারীর নাম <span class="required">*</span>
+          </label>
+
+          <input
+            id="player_name"
+            autocomplete="name"
+            required
+          >
+
         </div>
 
         <div class="field">
-          <label>খেলার ধরন *</label>
-          <input id="sport_type" placeholder="যেমন: Football" required>
+
+          <label for="father_name">
+            পিতা/অভিভাবকের নাম
+          </label>
+
+          <input id="father_name">
+
         </div>
 
         <div class="field">
-          <label>জার্সি/প্লেয়ার নং *</label>
-          <input id="jersey_number" required>
-        </div>
 
-        <div class="field">
-          <label>GSA Player ID *</label>
-          <input id="gsa_player_id" required>
+          <label for="gsa_player_id">
+            GSA Player / Member ID
+          </label>
+
+          <input
+            id="gsa_player_id"
+            placeholder="প্রযোজ্য হলে"
+          >
+
         </div>
 
       </div>
+
     </div>
 
+    <!-- Sports / Activity -->
+
     <div class="section">
-      <div class="section-title">যোগাযোগের তথ্য</div>
+
+      <div class="section-title">
+        খেলাধুলা / কার্যক্রমের তথ্য
+      </div>
 
       <div class="grid">
 
         <div class="field">
-          <label>ই-মেইল *</label>
-          <input type="email" id="applicant_email" required>
+
+          <label for="sport_type">
+            খেলার ধরন
+          </label>
+
+          <input
+            id="sport_type"
+            placeholder="যেমন: Football"
+          >
+
         </div>
 
         <div class="field">
-          <label>মোবাইল নম্বর</label>
-          <input type="tel" id="applicant_phone">
+
+          <label for="jersey_number">
+            জার্সি / প্লেয়ার নং
+          </label>
+
+          <input
+            id="jersey_number"
+            placeholder="প্রযোজ্য হলে"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="destination_organization">
+            যে ক্লাব / দল / প্রতিষ্ঠানে যেতে চান
+          </label>
+
+          <input
+            id="destination_organization"
+            placeholder="নাম লিখুন"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="tournament_or_event">
+            টুর্নামেন্ট / লীগ / কার্যক্রম
+          </label>
+
+          <input
+            id="tournament_or_event"
+            placeholder="প্রযোজ্য হলে"
+          >
+
         </div>
 
       </div>
+
+    </div>
+
+    <!-- Reason -->
+
+    <div class="section">
+
+      <div class="section-title">
+        NOC চাওয়ার কারণ
+      </div>
+
+      <div class="grid">
+
+        <div class="field full">
+
+          <label for="noc_reason">
+            আপনি কেন NOC চাইছেন?
+            <span class="required">*</span>
+          </label>
+
+          <textarea
+            id="noc_reason"
+            class="large"
+            placeholder="কেন NOC প্রয়োজন, কোথায় বা কোন উদ্দেশ্যে NOC ব্যবহার করবেন—বিস্তারিত লিখুন।"
+            required
+          ></textarea>
+
+          <div class="helper">
+            আপনার NOC চাওয়ার প্রকৃত কারণ ও প্রয়োজনীয় তথ্য পরিষ্কারভাবে উল্লেখ করুন।
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Personal Statement -->
+
+    <div class="section">
+
+      <div class="section-title">
+        আবেদনকারীর নিজস্ব মতামত ও বক্তব্য
+      </div>
+
+      <div class="grid">
+
+        <div class="field full">
+
+          <label for="applicant_statement">
+            আপনার বক্তব্য <span class="required">*</span>
+          </label>
+
+          <textarea
+            id="applicant_statement"
+            class="large"
+            placeholder="NOC সম্পর্কিত আপনার ব্যক্তিগত মতামত, বক্তব্য, প্রত্যাশা বা অন্য কোনো গুরুত্বপূর্ণ বিষয় লিখুন।"
+            required
+          ></textarea>
+
+          <div class="helper">
+            এই বক্তব্যটি আবেদনটির অংশ হিসেবে সংরক্ষণ করা হবে এবং কর্তৃপক্ষ পর্যালোচনা করতে পারবে।
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Contact -->
+
+    <div class="section">
+
+      <div class="section-title">
+        যোগাযোগের তথ্য
+      </div>
+
+      <div class="grid">
+
+        <div class="field">
+
+          <label for="applicant_email">
+            ই-মেইল <span class="required">*</span>
+          </label>
+
+          <input
+            type="email"
+            id="applicant_email"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="applicant_phone">
+            মোবাইল নম্বর
+          </label>
+
+          <input
+            type="tel"
+            id="applicant_phone"
+            autocomplete="tel"
+          >
+
+        </div>
+
+      </div>
+
     </div>
 
     <div class="info">
-      আমি ঘোষণা করছি যে, উপরে প্রদত্ত তথ্য সঠিক ও সত্য।
-      উক্ত খেলোয়াড় ঘোপখালী স্পোর্টস অ্যারিনা
-      (Ghopkhali Sports Arena)-এর একজন নিবন্ধিত/অনুমোদিত খেলোয়াড়
-      এবং NOC প্রদানের ক্ষেত্রে ক্লাবের বিদ্যমান নিয়ম-কানুন ও
-      শৃঙ্খলা মেনে চলতে সম্মত।
+
+      আমি ঘোষণা করছি যে, উপরে প্রদত্ত তথ্য আমার জ্ঞান ও বিশ্বাস অনুযায়ী
+      সঠিক ও সত্য। NOC প্রদানের ক্ষেত্রে ঘোপখালী স্পোর্টস অ্যারিনা
+      (Ghopkhali Sports Arena)-এর বিদ্যমান নিয়ম-কানুন, শৃঙ্খলা এবং
+      পূর্বনির্ধারিত দায়বদ্ধতা যথাযথভাবে পালন করব।
+
     </div>
 
     <label class="check">
-      <input type="checkbox" id="agreement" required>
+
+      <input
+        type="checkbox"
+        id="agreement"
+        required
+      >
+
       <span>
         আমি প্রদত্ত তথ্য যাচাই করে নিশ্চিত করছি এবং NOC Application
         জমা দেওয়ার জন্য সম্মত।
       </span>
+
     </label>
 
-    <button type="submit" id="submitBtn">
+    <button
+      type="submit"
+      id="submitBtn"
+    >
       Submit NOC Application
     </button>
 
-    <div id="status" class="status"></div>
+    <div
+      id="status"
+      class="status"
+      role="status"
+      aria-live="polite"
+    ></div>
 
   </form>
 
 </section>
 
 <div class="footer">
+
   <strong>GHOPKHALI SPORTS ARENA</strong><br>
+
   ঘোপখালী, বেতমোর রাজপাড়া, মঠবাড়িয়া, পিরোজপুর<br>
+
   NOC Application System
+
 </div>
 
 </main>
@@ -387,87 +674,177 @@ const supabaseClient =
     SUPABASE_ANON_KEY
   );
 
-const form = document.getElementById("nocForm");
-const submitBtn = document.getElementById("submitBtn");
-const statusBox = document.getElementById("status");
+const form =
+  document.getElementById("nocForm");
+
+const submitBtn =
+  document.getElementById("submitBtn");
+
+const statusBox =
+  document.getElementById("status");
 
 function showStatus(message, type) {
-  statusBox.textContent = message;
-  statusBox.className = "status show " + type;
+
+  statusBox.innerHTML = message;
+
+  statusBox.className =
+    "status show " + type;
+
 }
 
-form.addEventListener("submit", async function(event) {
+function generateApplicationNo() {
 
-  event.preventDefault();
+  const timestamp =
+    Date.now().toString().slice(-7);
 
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Submitting...";
+  return "GSA/NOC/" +
+    timestamp +
+    "/2026";
 
-  try {
+}
 
-    const data = {
-      player_name:
-        document.getElementById("player_name").value.trim(),
+form.addEventListener(
+  "submit",
+  async function(event) {
 
-      father_name:
-        document.getElementById("father_name").value.trim(),
+    event.preventDefault();
 
-      sport_type:
-        document.getElementById("sport_type").value.trim(),
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
 
-      jersey_number:
-        document.getElementById("jersey_number").value.trim(),
+    statusBox.className = "status";
 
-      gsa_player_id:
-        document.getElementById("gsa_player_id").value.trim(),
+    try {
 
-      applicant_email:
-        document.getElementById("applicant_email").value.trim(),
+      const data = {
 
-      applicant_phone:
-        document.getElementById("applicant_phone").value.trim()
-    };
+        applicant_type:
+          document
+            .getElementById("applicant_type")
+            .value
+            .trim(),
 
-    const applicationNo =
-      "GSA/NOC/" +
-      Date.now().toString().slice(-7) +
-      "/2026";
+        player_name:
+          document
+            .getElementById("player_name")
+            .value
+            .trim(),
 
-    data.application_no = applicationNo;
+        father_name:
+          document
+            .getElementById("father_name")
+            .value
+            .trim(),
 
-    const { error } =
-      await supabaseClient
-        .from("noc_applications")
-        .insert(data);
+        sport_type:
+          document
+            .getElementById("sport_type")
+            .value
+            .trim(),
 
-    if (error) throw error;
+        jersey_number:
+          document
+            .getElementById("jersey_number")
+            .value
+            .trim(),
 
-    showStatus(
-      "NOC Application সফলভাবে জমা হয়েছে। আপনার Application No: " +
-      applicationNo +
-      "। Confirmation ই-মেইল পরবর্তীতে পাঠানো হবে।",
-      "success"
-    );
+        gsa_player_id:
+          document
+            .getElementById("gsa_player_id")
+            .value
+            .trim(),
 
-    form.reset();
+        applicant_email:
+          document
+            .getElementById("applicant_email")
+            .value
+            .trim(),
 
-  } catch (error) {
+        applicant_phone:
+          document
+            .getElementById("applicant_phone")
+            .value
+            .trim(),
 
-    console.error(error);
+        destination_organization:
+          document
+            .getElementById("destination_organization")
+            .value
+            .trim(),
 
-    showStatus(
-      "Application জমা দেওয়া যায়নি। আবার চেষ্টা করুন।",
-      "error"
-    );
+        tournament_or_event:
+          document
+            .getElementById("tournament_or_event")
+            .value
+            .trim(),
 
-  } finally {
+        noc_reason:
+          document
+            .getElementById("noc_reason")
+            .value
+            .trim(),
 
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Submit NOC Application";
+        applicant_statement:
+          document
+            .getElementById("applicant_statement")
+            .value
+            .trim(),
+
+        application_no:
+          generateApplicationNo()
+
+      };
+
+      const { error } =
+        await supabaseClient
+          .from("noc_applications")
+          .insert(data);
+
+      if (error) {
+        throw error;
+      }
+
+      showStatus(
+        "NOC Application সফলভাবে জমা হয়েছে।" +
+        "<span class=\"application-number\">" +
+        "Application No: " +
+        data.application_no +
+        "</span>" +
+        "<br>" +
+        "আপনার আবেদনটি কর্তৃপক্ষের পর্যালোচনার জন্য পাঠানো হয়েছে।",
+        "success"
+      );
+
+      form.reset();
+
+      window.scrollTo({
+        top:
+          document.querySelector(".card").offsetTop - 20,
+        behavior: "smooth"
+      });
+
+    } catch (error) {
+
+      console.error(
+        "NOC submission error:",
+        error
+      );
+
+      showStatus(
+        "Application জমা দেওয়া যায়নি। আবার চেষ্টা করুন।",
+        "error"
+      );
+
+    } finally {
+
+      submitBtn.disabled = false;
+      submitBtn.textContent =
+        "Submit NOC Application";
+
+    }
 
   }
-
-});
+);
 </script>
 
 </body>
