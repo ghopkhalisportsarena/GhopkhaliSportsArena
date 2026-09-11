@@ -38,16 +38,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const $ = window.$;
 
 
-    function escapeHTML(value) {
-
+    window.escapeHTML = function escapeHTML(value) {
         return String(value ?? "")
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
-
     }
+    const escapeHTML = window.escapeHTML;
 
 
     function formatDate(value) {
@@ -13177,7 +13176,8 @@ window.loadNocApplications = async function loadNocApplications() {
     `;
 
     try {
-        const { data, error } = await window.supabaseClient
+        const client = window.supabaseClient || supabaseClient;
+        const { data, error } = await client
             .from("noc_applications")
             .select("*")
             .order("created_at", { ascending: false });
@@ -13185,27 +13185,25 @@ window.loadNocApplications = async function loadNocApplications() {
         if (error) throw error;
 
         nocApplications = data || [];
-        updateNocCounts();
-        renderNocApplications();
+        
+        if (typeof updateNocCounts === "function") updateNocCounts();
+        if (typeof renderNocApplications === "function") renderNocApplications();
 
         console.log("NOC applications loaded:", nocApplications.length);
 
     } catch (error) {
         console.error("NOC loading error:", error);
         nocApplications = [];
-        updateNocCounts();
+        if (typeof updateNocCounts === "function") updateNocCounts();
 
         list.innerHTML = `
             <div class="empty-state">
                 Unable to load NOC applications.<br><br>
-                <strong>Error:</strong> ${error?.message || "Unknown error"}
+                <strong>Error:</strong> ${(error && error.message) ? error.message : "Unknown error"}
             </div>
         `;
     }
 }
-/* -----------------------------------------------------
-   COUNTS
------------------------------------------------------ */
 
 function updateNocCounts() {
 
