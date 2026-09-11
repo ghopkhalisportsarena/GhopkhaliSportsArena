@@ -158,7 +158,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         setTimeout(() => {
+
+            const nocDebug2 = document.getElementById("nocList");
+
+            if (nocDebug2) {
+                nocDebug2.innerHTML = `
+                    <div class="loading-state">
+                        NOC DEBUG: setTimeout executed...
+                    </div>
+                `;
+            }
+
             loadNocApplications();
+
         }, 0);
 
     }
