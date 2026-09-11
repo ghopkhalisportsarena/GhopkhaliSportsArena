@@ -13417,6 +13417,15 @@ function renderNocApplications() {
                                 View Details
                             </button>
 
+                            <button
+                                type="button"
+                                class="secondary-button"
+                                data-noc-edit="${escapeHTML(
+                                    application.id
+                                )}">
+                                Edit
+                            </button>
+
                             ${
                                 status === "pending"
                                     ? `
@@ -13674,6 +13683,207 @@ function openNocDetails(
 }
 
 
+
+/* -----------------------------------------------------
+   NOC EDIT UI
+   Secure save will be connected through admin API later
+----------------------------------------------------- */
+
+function openNocEditModal(application) {
+
+    selectedNocApplication = application;
+
+    const modal = $("nocModal");
+    const details = $("nocDetails");
+
+    if (!modal || !details) {
+        return;
+    }
+
+    const approve = $("nocApproveButton");
+    const reject = $("nocRejectButton");
+    const note = $("nocAdminNote");
+
+    if (approve) {
+        approve.style.display = "none";
+    }
+
+    if (reject) {
+        reject.style.display = "none";
+    }
+
+    if (note) {
+        note.style.display = "none";
+    }
+
+    details.innerHTML = `
+        <div class="noc-details-header">
+            <h3 style="margin:0 0 16px;">
+                Edit NOC Application
+            </h3>
+
+            <div class="noc-detail-item">
+                <span>Application No</span>
+                <strong>${escapeHTML(
+                    application.application_no || "—"
+                )}</strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Applicant Type</span>
+                <strong>${escapeHTML(
+                    application.applicant_type || "—"
+                )}</strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Player Name</span>
+                <input
+                    id="nocEditPlayerName"
+                    type="text"
+                    value="${escapeHTML(
+                        application.player_name || ""
+                    )}"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Father / Guardian Name</span>
+                <input
+                    id="nocEditFatherName"
+                    type="text"
+                    value="${escapeHTML(
+                        application.father_name || ""
+                    )}"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Sport Type</span>
+                <input
+                    id="nocEditSportType"
+                    type="text"
+                    value="${escapeHTML(
+                        application.sport_type || ""
+                    )}"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Jersey / Player Number</span>
+                <input
+                    id="nocEditJerseyNumber"
+                    type="text"
+                    value="${escapeHTML(
+                        application.jersey_number || ""
+                    )}"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >
+            </div>
+
+            <div class="noc-detail-item">
+                <span>GSA Player ID</span>
+                <input
+                    id="nocEditPlayerId"
+                    type="text"
+                    value="${escapeHTML(
+                        application.gsa_player_id || ""
+                    )}"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Destination Organization</span>
+                <input
+                    id="nocEditDestination"
+                    type="text"
+                    value="${escapeHTML(
+                        application.destination_organization || ""
+                    )}"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Tournament / Event</span>
+                <input
+                    id="nocEditTournament"
+                    type="text"
+                    value="${escapeHTML(
+                        application.tournament_or_event || ""
+                    )}"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Email</span>
+                <input
+                    id="nocEditEmail"
+                    type="email"
+                    value="${escapeHTML(
+                        application.applicant_email || ""
+                    )}"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Phone</span>
+                <input
+                    id="nocEditPhone"
+                    type="text"
+                    value="${escapeHTML(
+                        application.applicant_phone || ""
+                    )}"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >
+            </div>
+
+            <div class="noc-detail-item">
+                <span>NOC Reason</span>
+                <textarea
+                    id="nocEditReason"
+                    rows="4"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >${escapeHTML(
+                    application.noc_reason || ""
+                )}</textarea>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Applicant Statement</span>
+                <textarea
+                    id="nocEditStatement"
+                    rows="4"
+                    style="width:100%;padding:10px;margin-top:6px;"
+                >${escapeHTML(
+                    application.applicant_statement || ""
+                )}</textarea>
+            </div>
+
+            <div style="
+                margin-top:18px;
+                padding:12px;
+                border-radius:12px;
+                background:#f5f5f7;
+                color:#555;
+                font-size:13px;
+            ">
+                Edit interface is ready. Secure database saving will be
+                connected through the administrator API so public users
+                cannot modify NOC applications.
+            </div>
+        </div>
+    `;
+
+    openModal(modal);
+}
+
 /* -----------------------------------------------------
    PROCESS NOC
 ----------------------------------------------------- */
@@ -13835,6 +14045,30 @@ document.addEventListener(
 
             if (application) {
                 openNocDetails(application);
+            }
+
+            return;
+        }
+
+
+        const editButton =
+            event.target.closest(
+                "[data-noc-edit]"
+            );
+
+        if (editButton) {
+
+            const application =
+                nocApplications.find(
+                    item =>
+                        String(item.id) ===
+                        String(
+                            editButton.dataset.nocEdit
+                        )
+                );
+
+            if (application) {
+                openNocEditModal(application);
             }
 
             return;
