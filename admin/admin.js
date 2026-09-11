@@ -169,7 +169,27 @@ document.addEventListener("DOMContentLoaded", async () => {
                 `;
             }
 
-            loadNocApplications();
+            if (nocDebug2) {
+                nocDebug2.innerHTML = `
+                    <div class="loading-state">
+                        NOC DEBUG: calling loadNocApplications()...
+                    </div>
+                `;
+            }
+
+            try {
+                loadNocApplications();
+            } catch (error) {
+                if (nocDebug2) {
+                    nocDebug2.innerHTML = `
+                        <div class="empty-state">
+                            NOC DEBUG ERROR:<br>
+                            ${error.message}
+                        </div>
+                    `;
+                }
+                console.error("NOC loader call error:", error);
+            }
 
         }, 0);
 
