@@ -124,27 +124,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     ===================================================== */
 
     function showLogin() {
+        if (loginScreen) loginScreen.hidden = false;
+        if (dashboardScreen) dashboardScreen.hidden = true;
 
-        if (loginScreen) {
-            loginScreen.hidden = false;
-        }
-
-        if (dashboardScreen) {
-            dashboardScreen.hidden = true;
-        }
-
+        // NOC section যাতে লগইন ছাড়া না দেখায়
+        const nocSection = document.getElementById("noc");
+        if (nocSection) nocSection.style.display = "none";
     }
 
 
     function showDashboard() {
+        if (loginScreen) loginScreen.hidden = true;
+        if (dashboardScreen) dashboardScreen.hidden = false;
 
-        if (loginScreen) {
-            loginScreen.hidden = true;
-        }
-
-        if (dashboardScreen) {
-            dashboardScreen.hidden = false;
-        }
+        const nocSection = document.getElementById("noc");
+        if (nocSection) nocSection.style.display = "";
 
         setTimeout(() => {
             if (typeof window.loadNocApplications === "function") {
@@ -152,17 +146,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     console.error("NOC load failed:", err);
                     const list = document.getElementById("nocList");
                     if (list) {
-                        list.innerHTML = `
-                            <div class="empty-state">
-                                Unable to load NOC applications.<br><br>
-                                <strong>Error:</strong> ${err.message || "Unknown error"}
-                            </div>
-                        `;
+                        list.innerHTML = `<div class="empty-state">Unable to load NOC applications.<br><br><strong>Error:</strong> ${err?.message || "Unknown error"}</div>`;
                     }
                 });
             }
-        }, 150);
-
+        }, 200);
     }
 
 
@@ -14159,4 +14147,4 @@ $("nocRejectButton")
     );
 
 
-})();
+});
