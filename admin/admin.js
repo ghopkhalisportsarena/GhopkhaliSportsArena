@@ -140,17 +140,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         const nocSection = document.getElementById("noc");
         if (nocSection) nocSection.style.display = "";
 
-        setTimeout(() => {
+        const startNocLoader = (attempt = 0) => {
             if (typeof window.loadNocApplications === "function") {
+                console.log("NOC: loader function found. Starting...");
+
                 window.loadNocApplications().catch(err => {
                     console.error("NOC load failed:", err);
+
                     const list = document.getElementById("nocList");
+
                     if (list) {
                         list.innerHTML = `<div class="empty-state">Unable to load NOC applications.<br><br><strong>Error:</strong> ${err?.message || "Unknown error"}</div>`;
                     }
                 });
+
+                return;
             }
-        }, 200);
+
+            if (attempt < 100) {
+                setTimeout(() => startNocLoader(attempt + 1), 50);
+            } else {
+                console.error("NOC: loadNocApplications function was not available.");
+            }
+        };
+
+        startNocLoader();
     }
 
 
