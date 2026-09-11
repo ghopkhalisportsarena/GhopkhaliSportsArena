@@ -13175,29 +13175,87 @@ window.loadNocApplications = async function loadNocApplications() {
 
     try {
         const client = window.supabaseClient || supabaseClient;
-        const { data, error } = await client
+
+        console.log("NOC: checking admin session...");
+
+        const {
+            data: sessionData,
+            error: sessionError
+        } = await client.auth.getSession();
+
+        if (sessionError) {
+            throw sessionError;
+        }
+
+        if (!sessionData?.session) {
+            throw new Error("No active admin session.");
+        }
+
+        console.log("NOC: admin session confirmed.");
+
+        console.log("NOC: querying noc_applications...");
+
+        const queryPromise = client
             .from("noc_applications")
             .select("*")
             .order("created_at", { ascending: false });
 
-        if (error) throw error;
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => {
+                reject(
+                    new Error(
+                        "NOC applications request timed out after 10 seconds."
+                    )
+                );
+            }, 10000);
+        });
+
+        const {
+            data,
+            error
+        } = await Promise.race([
+            queryPromise,
+            timeoutPromise
+        ]);
+
+        if (error) {
+            throw error;
+        }
+
+        console.log("NOC: Supabase response received.");
 
         nocApplications = data || [];
-        
-        if (typeof updateNocCounts === "function") updateNocCounts();
-        if (typeof renderNocApplications === "function") renderNocApplications();
 
-        console.log("NOC applications loaded:", nocApplications.length);
+        if (typeof updateNocCounts === "function") {
+            updateNocCounts();
+        }
+
+        if (typeof renderNocApplications === "function") {
+            renderNocApplications();
+        }
+
+        console.log(
+            "NOC applications loaded:",
+            nocApplications.length
+        );
 
     } catch (error) {
+
         console.error("NOC loading error:", error);
+
         nocApplications = [];
-        if (typeof updateNocCounts === "function") updateNocCounts();
+
+        if (typeof updateNocCounts === "function") {
+            updateNocCounts();
+        }
 
         list.innerHTML = `
             <div class="empty-state">
                 Unable to load NOC applications.<br><br>
-                <strong>Error:</strong> ${(error && error.message) ? error.message : "Unknown error"}
+                <strong>Error:</strong>
+                ${(error && error.message)
+                    ? error.message
+                    : "Unknown error"}
             </div>
         `;
     }
