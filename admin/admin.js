@@ -13066,4 +13066,774 @@ if (currentSession) {
     );
 
 
+
+/* =====================================================
+   GSA NOC APPLICATION MANAGEMENT
+===================================================== */
+
+let nocApplications = [];
+let activeNocFilter = "all";
+let selectedNocApplication = null;
+
+
+/* -----------------------------------------------------
+   LOAD NOC APPLICATIONS
+----------------------------------------------------- */
+
+async function loadNocApplications() {
+
+    const list = $("nocList");
+
+    if (!list) {
+        return;
+    }
+
+    list.innerHTML = `
+        <div class="loading-state">
+            Loading NOC applications...
+        </div>
+    `;
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("noc_applications")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (error) {
+            throw error;
+        }
+
+        nocApplications = data || [];
+
+        renderNocApplications();
+        updateNocCounts();
+
+    } catch (error) {
+
+        console.error(
+            "NOC loading error:",
+            error
+        );
+
+        list.innerHTML = `
+            <div class="empty-state">
+                Unable to load NOC applications.
+                <br><br>
+                ${escapeHTML(error.message)}
+            </div>
+        `;
+    }
+}
+
+
+/* -----------------------------------------------------
+   COUNTS
+----------------------------------------------------- */
+
+function updateNocCounts() {
+
+    const total = nocApplications.length;
+
+    const pending =
+        nocApplications.filter(
+            item => item.status === "pending"
+        ).length;
+
+    const approved =
+        nocApplications.filter(
+            item => item.status === "approved"
+        ).length;
+
+    const rejected =
+        nocApplications.filter(
+            item => item.status === "rejected"
+        ).length;
+
+    if ($("nocCount")) {
+        $("nocCount").textContent = total;
+    }
+
+    if ($("nocTotalCount")) {
+        $("nocTotalCount").textContent = total;
+    }
+
+    if ($("nocPendingCount")) {
+        $("nocPendingCount").textContent = pending;
+    }
+
+    if ($("nocApprovedCount")) {
+        $("nocApprovedCount").textContent = approved;
+    }
+
+    if ($("nocRejectedCount")) {
+        $("nocRejectedCount").textContent = rejected;
+    }
+}
+
+
+/* -----------------------------------------------------
+   FILTER
+----------------------------------------------------- */
+
+function getFilteredNocApplications() {
+
+    if (activeNocFilter === "all") {
+        return nocApplications;
+    }
+
+    return nocApplications.filter(
+        item =>
+            item.status === activeNocFilter
+    );
+}
+
+
+/* -----------------------------------------------------
+   STATUS LABEL
+----------------------------------------------------- */
+
+function getNocStatusLabel(status) {
+
+    if (status === "approved") {
+        return "APPROVED";
+    }
+
+    if (status === "rejected") {
+        return "REJECTED";
+    }
+
+    return "PENDING";
+}
+
+
+/* -----------------------------------------------------
+   RENDER
+----------------------------------------------------- */
+
+function renderNocApplications() {
+
+    const list = $("nocList");
+
+    if (!list) {
+        return;
+    }
+
+    const filtered =
+        getFilteredNocApplications();
+
+    if (!filtered.length) {
+
+        list.innerHTML = `
+            <div class="noc-empty">
+                No NOC applications found.
+            </div>
+        `;
+
+        return;
+    }
+
+    list.innerHTML = filtered.map(
+        application => {
+
+            const status =
+                application.status || "pending";
+
+            return `
+                <article class="noc-card">
+
+                    <div class="noc-card-top">
+
+                        <div>
+
+                            <h3 class="noc-card-title">
+                                ${escapeHTML(
+                                    application.player_name ||
+                                    "Unnamed Player"
+                                )}
+                            </h3>
+
+                            <div class="noc-card-number">
+                                ${escapeHTML(
+                                    application.application_no ||
+                                    "Application number pending"
+                                )}
+                            </div>
+
+                        </div>
+
+                        <span class="
+                            noc-status
+                            ${escapeHTML(status)}
+                        ">
+                            ${getNocStatusLabel(status)}
+                        </span>
+
+                    </div>
+
+
+                    <div class="noc-card-grid">
+
+                        <div class="noc-info-box">
+                            <span>Sport</span>
+                            <strong>
+                                ${escapeHTML(
+                                    application.sport_type || "—"
+                                )}
+                            </strong>
+                        </div>
+
+                        <div class="noc-info-box">
+                            <span>GSA Player ID</span>
+                            <strong>
+                                ${escapeHTML(
+                                    application.gsa_player_id || "—"
+                                )}
+                            </strong>
+                        </div>
+
+                        <div class="noc-info-box">
+                            <span>Email</span>
+                            <strong>
+                                ${escapeHTML(
+                                    application.applicant_email || "—"
+                                )}
+                            </strong>
+                        </div>
+
+                        <div class="noc-info-box">
+                            <span>Submitted</span>
+                            <strong>
+                                ${formatDate(
+                                    application.created_at
+                                )}
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="noc-card-actions">
+
+                        <button
+                            type="button"
+                            class="secondary-button"
+                            data-noc-view="${escapeHTML(
+                                application.id
+                            )}">
+                            View Details
+                        </button>
+
+                        ${
+                            status === "pending"
+                                ? `
+                                    <button
+                                        type="button"
+                                        class="primary-button"
+                                        data-noc-approve="${escapeHTML(
+                                            application.id
+                                        )}">
+                                        Approve
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="danger-button"
+                                        data-noc-reject="${escapeHTML(
+                                            application.id
+                                        )}">
+                                        Reject
+                                    </button>
+                                  `
+                                : ""
+                        }
+
+                        ${
+                            application.application_pdf_url
+                                ? `
+                                    <a
+                                        class="secondary-button"
+                                        href="${escapeHTML(
+                                            application.application_pdf_url
+                                        )}"
+                                        target="_blank"
+                                        rel="noopener">
+                                        Application PDF
+                                    </a>
+                                  `
+                                : ""
+                        }
+
+                        ${
+                            application.approved_noc_pdf_url &&
+                            status === "approved"
+                                ? `
+                                    <a
+                                        class="primary-button"
+                                        href="${escapeHTML(
+                                            application.approved_noc_pdf_url
+                                        )}"
+                                        target="_blank"
+                                        rel="noopener">
+                                        Official NOC PDF
+                                    </a>
+                                  `
+                                : ""
+                        }
+
+                    </div>
+
+                </article>
+            `;
+
+        }
+    ).join("");
+}
+
+
+/* -----------------------------------------------------
+   OPEN DETAILS
+----------------------------------------------------- */
+
+function openNocDetails(application) {
+
+    selectedNocApplication =
+        application;
+
+    const modal = $("nocModal");
+    const details = $("nocDetails");
+
+    if (!modal || !details) {
+        return;
+    }
+
+    const status =
+        application.status || "pending";
+
+    const note =
+        $("nocAdminNote");
+
+    if (note) {
+        note.value =
+            application.admin_note || "";
+    }
+
+    details.innerHTML = `
+
+        <div class="noc-details-header">
+
+            <strong>
+                ${escapeHTML(
+                    application.application_no ||
+                    "NOC Application"
+                )}
+            </strong>
+
+            <div style="margin-top:7px;">
+                <span class="
+                    noc-status
+                    ${escapeHTML(status)}
+                ">
+                    ${getNocStatusLabel(status)}
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="noc-details-grid">
+
+            <div class="noc-detail-item">
+                <span>Player Name</span>
+                <strong>
+                    ${escapeHTML(
+                        application.player_name
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Father's Name</span>
+                <strong>
+                    ${escapeHTML(
+                        application.father_name || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Sport Type</span>
+                <strong>
+                    ${escapeHTML(
+                        application.sport_type || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Jersey / Player No.</span>
+                <strong>
+                    ${escapeHTML(
+                        application.jersey_number || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>GSA Player ID</span>
+                <strong>
+                    ${escapeHTML(
+                        application.gsa_player_id || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Applicant Email</span>
+                <strong>
+                    ${escapeHTML(
+                        application.applicant_email
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Applicant Phone</span>
+                <strong>
+                    ${escapeHTML(
+                        application.applicant_phone || "—"
+                    )}
+                </strong>
+            </div>
+
+            <div class="noc-detail-item">
+                <span>Submitted</span>
+                <strong>
+                    ${formatDate(
+                        application.created_at
+                    )}
+                </strong>
+            </div>
+
+        </div>
+
+        ${
+            application.player_signature
+                ? `
+                    <div class="noc-detail-item" style="margin-top:10px;">
+                        <span>Player Signature</span>
+                        <strong>
+                            ${escapeHTML(
+                                application.player_signature
+                            )}
+                        </strong>
+                    </div>
+                  `
+                : ""
+        }
+
+        ${
+            application.admin_name
+                ? `
+                    <div class="noc-detail-item" style="margin-top:10px;">
+                        <span>Processed By</span>
+                        <strong>
+                            ${escapeHTML(
+                                application.admin_name
+                            )}
+                            ${
+                                application.admin_designation
+                                    ? " — " +
+                                      escapeHTML(
+                                          application.admin_designation
+                                      )
+                                    : ""
+                            }
+                        </strong>
+                    </div>
+                  `
+                : ""
+        }
+
+    `;
+
+    const approve =
+        $("nocApproveButton");
+
+    const reject =
+        $("nocRejectButton");
+
+    if (approve) {
+        approve.style.display =
+            status === "pending"
+                ? ""
+                : "none";
+    }
+
+    if (reject) {
+        reject.style.display =
+            status === "pending"
+                ? ""
+                : "none";
+    }
+
+    openModal(modal);
+}
+
+
+/* -----------------------------------------------------
+   PROCESS NOC
+----------------------------------------------------- */
+
+async function processNocApplication(
+    id,
+    newStatus
+) {
+
+    const application =
+        nocApplications.find(
+            item =>
+                String(item.id) ===
+                String(id)
+        );
+
+    if (!application) {
+        return;
+    }
+
+    if (application.status !== "pending") {
+        alert(
+            "This NOC application has already been processed."
+        );
+        return;
+    }
+
+    const actionText =
+        newStatus === "approved"
+            ? "approve"
+            : "reject";
+
+    const confirmed =
+        confirm(
+            `Are you sure you want to ${actionText} this NOC application?`
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    const note =
+        $("nocAdminNote")?.value.trim() || null;
+
+    try {
+
+        const sessionResult =
+            await supabaseClient.auth.getSession();
+
+        const session =
+            sessionResult?.data?.session;
+
+        const adminEmail =
+            session?.user?.email || null;
+
+        const payload = {
+            status: newStatus,
+            admin_name: adminEmail,
+            admin_designation: "GSA Administrator",
+            admin_note: note
+        };
+
+        if (newStatus === "approved") {
+            payload.approved_at =
+                new Date().toISOString();
+            payload.rejected_at = null;
+        } else {
+            payload.rejected_at =
+                new Date().toISOString();
+            payload.approved_at = null;
+        }
+
+        const {
+            error
+        } = await supabaseClient
+            .from("noc_applications")
+            .update(payload)
+            .eq("id", id)
+            .eq("status", "pending");
+
+        if (error) {
+            throw error;
+        }
+
+        closeModal(
+            $("nocModal")
+        );
+
+        await loadNocApplications();
+
+        alert(
+            newStatus === "approved"
+                ? "NOC application approved."
+                : "NOC application rejected."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "NOC processing error:",
+            error
+        );
+
+        showError(error);
+    }
+}
+
+
+/* -----------------------------------------------------
+   NOC FILTER EVENTS
+----------------------------------------------------- */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const filter =
+            event.target.closest(
+                "[data-noc-filter]"
+            );
+
+        if (filter) {
+
+            activeNocFilter =
+                filter.dataset.nocFilter;
+
+            document
+                .querySelectorAll(
+                    ".noc-filter"
+                )
+                .forEach(button => {
+                    button.classList.toggle(
+                        "active",
+                        button === filter
+                    );
+                });
+
+            renderNocApplications();
+
+            return;
+        }
+
+
+        const viewButton =
+            event.target.closest(
+                "[data-noc-view]"
+            );
+
+        if (viewButton) {
+
+            const application =
+                nocApplications.find(
+                    item =>
+                        String(item.id) ===
+                        String(
+                            viewButton.dataset.nocView
+                        )
+                );
+
+            if (application) {
+                openNocDetails(application);
+            }
+
+            return;
+        }
+
+
+        const approveButton =
+            event.target.closest(
+                "[data-noc-approve]"
+            );
+
+        if (approveButton) {
+
+            processNocApplication(
+                approveButton.dataset.nocApprove,
+                "approved"
+            );
+
+            return;
+        }
+
+
+        const rejectButton =
+            event.target.closest(
+                "[data-noc-reject]"
+            );
+
+        if (rejectButton) {
+
+            processNocApplication(
+                rejectButton.dataset.nocReject,
+                "rejected"
+            );
+
+            return;
+        }
+
+    }
+);
+
+
+/* -----------------------------------------------------
+   NOC MODAL ACTIONS
+----------------------------------------------------- */
+
+$("nocApproveButton")
+    ?.addEventListener(
+        "click",
+        () => {
+
+            if (!selectedNocApplication) {
+                return;
+            }
+
+            processNocApplication(
+                selectedNocApplication.id,
+                "approved"
+            );
+
+        }
+    );
+
+
+$("nocRejectButton")
+    ?.addEventListener(
+        "click",
+        () => {
+
+            if (!selectedNocApplication) {
+                return;
+            }
+
+            processNocApplication(
+                selectedNocApplication.id,
+                "rejected"
+            );
+
+        }
+    );
+
+
+/* -----------------------------------------------------
+   INITIAL NOC LOAD
+----------------------------------------------------- */
+
+loadNocApplications();
+
+
 })();

@@ -71,6 +71,11 @@
             <span>Membership</span>
         </a>
 
+        <a href="#noc" class="sidebar-link" data-section="noc">
+            <span class="nav-icon">▣</span>
+            <span>NOC Applications</span>
+        </a>
+
     </nav>
 
     <div class="sidebar-bottom">
@@ -200,6 +205,20 @@
         <div class="stat-title">APPLICATIONS</div>
 
         <p>Friendly + membership</p>
+
+    </button>
+
+    <button class="stat-card" data-scroll="noc">
+
+        <div class="stat-card-top">
+            <span class="stat-icon">▣</span>
+            <span class="stat-arrow">↗</span>
+        </div>
+
+        <div class="stat-number" id="nocCount">0</div>
+        <div class="stat-title">NOC</div>
+
+        <p>NOC applications</p>
 
     </button>
 
@@ -479,6 +498,90 @@
 </section>
 
 
+
+<!-- =====================================================
+     NOC APPLICATIONS
+===================================================== -->
+
+<section id="noc" class="management-section">
+
+    <div class="management-header">
+
+        <div>
+            <p class="section-mini-label">APPLICATIONS</p>
+            <h2>NOC Applications</h2>
+            <p>Review, approve or reject No Objection Certificate applications.</p>
+        </div>
+
+        <div class="noc-filter-bar">
+
+            <button
+                type="button"
+                class="small-button noc-filter active"
+                data-noc-filter="all">
+                All
+            </button>
+
+            <button
+                type="button"
+                class="small-button noc-filter"
+                data-noc-filter="pending">
+                Pending
+            </button>
+
+            <button
+                type="button"
+                class="small-button noc-filter"
+                data-noc-filter="approved">
+                Approved
+            </button>
+
+            <button
+                type="button"
+                class="small-button noc-filter"
+                data-noc-filter="rejected">
+                Rejected
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="mini-stats">
+
+        <div>
+            <strong id="nocTotalCount">0</strong>
+            <span>Total</span>
+        </div>
+
+        <div>
+            <strong id="nocPendingCount">0</strong>
+            <span>Pending</span>
+        </div>
+
+        <div>
+            <strong id="nocApprovedCount">0</strong>
+            <span>Approved</span>
+        </div>
+
+        <div>
+            <strong id="nocRejectedCount">0</strong>
+            <span>Rejected</span>
+        </div>
+
+    </div>
+
+    <div id="nocList" class="management-list">
+
+        <div class="loading-state">
+            Loading NOC applications...
+        </div>
+
+    </div>
+
+</section>
+
+
 <section class="admin-footer">
     <span>Ghopkhali Sports Arena</span>
     <span>Admin Panel • 2026</span>
@@ -718,6 +821,64 @@ Close
 
 </div>
 </div>
+
+<!-- =====================================================
+     NOC DETAIL MODAL
+===================================================== -->
+
+<div class="modal" id="nocModal" aria-hidden="true">
+
+<div class="modal-box large-modal">
+
+<button class="modal-close" data-close-modal>×</button>
+
+<p class="section-mini-label">GSA NOC APPLICATION</p>
+
+<h2 id="nocModalTitle">NOC Application</h2>
+
+<div id="nocDetails"></div>
+
+<div class="noc-admin-note">
+
+    <label for="nocAdminNote">
+        Admin Note
+    </label>
+
+    <textarea
+        id="nocAdminNote"
+        rows="4"
+        placeholder="Write an approval or rejection note..."></textarea>
+
+</div>
+
+<div class="modal-actions">
+
+    <button
+        type="button"
+        class="secondary-button"
+        data-close-modal>
+        Close
+    </button>
+
+    <button
+        type="button"
+        class="danger-button"
+        id="nocRejectButton">
+        Reject
+    </button>
+
+    <button
+        type="button"
+        class="primary-button"
+        id="nocApproveButton">
+        Approve NOC
+    </button>
+
+</div>
+
+</div>
+</div>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

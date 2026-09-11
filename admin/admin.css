@@ -6740,3 +6740,191 @@ select:focus-visible {
     }
 
 }
+/* =====================================================
+   GSA NOC APPLICATIONS — PREMIUM
+===================================================== */
+
+.noc-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.noc-filter.active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+
+.noc-card {
+    background: rgba(255,255,255,.86);
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 22px;
+    padding: 22px;
+    margin-bottom: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.045);
+}
+
+.noc-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.noc-card-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.noc-card-number {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #6e6e73;
+    letter-spacing: .04em;
+}
+
+.noc-status {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+}
+
+.noc-status.pending {
+    background: #fff4d6;
+    color: #8a6200;
+}
+
+.noc-status.approved {
+    background: #e7f7ed;
+    color: #167344;
+}
+
+.noc-status.rejected {
+    background: #fdeaea;
+    color: #a42b2b;
+}
+
+.noc-card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.noc-info-box {
+    background: #f5f5f7;
+    border-radius: 14px;
+    padding: 13px;
+}
+
+.noc-info-box span {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: #86868b;
+    margin-bottom: 5px;
+}
+
+.noc-info-box strong {
+    display: block;
+    font-size: 14px;
+    word-break: break-word;
+}
+
+.noc-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-top: 1px solid rgba(0,0,0,.07);
+    padding-top: 15px;
+}
+
+.noc-details-header {
+    background: #f5f5f7;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 16px;
+}
+
+.noc-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 10px;
+}
+
+.noc-detail-item {
+    border: 1px solid rgba(0,0,0,.07);
+    border-radius: 14px;
+    padding: 13px;
+    background: #fff;
+}
+
+.noc-detail-item span {
+    display: block;
+    color: #86868b;
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.noc-detail-item strong {
+    display: block;
+    word-break: break-word;
+}
+
+.noc-admin-note {
+    margin-top: 20px;
+}
+
+.noc-admin-note label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.noc-admin-note textarea {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.noc-empty {
+    text-align: center;
+    padding: 55px 20px;
+    color: #6e6e73;
+}
+
+@media (max-width: 900px) {
+    .noc-card-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .noc-card {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .noc-card-top {
+        flex-direction: column;
+    }
+
+    .noc-card-grid,
+    .noc-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .noc-filter-bar {
+        width: 100%;
+    }
+}
+
