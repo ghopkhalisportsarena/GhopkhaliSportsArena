@@ -13190,7 +13190,7 @@ async function gsaNocApi(action, extra = {}) {
    LOAD NOC APPLICATIONS
 ----------------------------------------------------- */
 
-async function loadNocApplications() {
+window.loadNocApplications = async function loadNocApplications() {
 
     console.log("NOC DEBUG 1: loadNocApplications() started.");
 
