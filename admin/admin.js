@@ -189,9 +189,13 @@ document.addEventListener("DOMContentLoaded", async () => {
    LOGIN
 ===================================================== */
 
+console.log("GSA LOGIN SCRIPT: form listener is being registered", loginForm);
+
 loginForm?.addEventListener(
     "submit",
     async event => {
+
+        console.log("GSA LOGIN: SUBMIT EVENT FIRED");
 
         event.preventDefault();
 
@@ -3244,15 +3248,7 @@ document.addEventListener(
    HELPERS
 ----------------------------------------------------- */
 
-function escapeHTML(value) {
 
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
 
 
 function formatFixtureDate(date) {
