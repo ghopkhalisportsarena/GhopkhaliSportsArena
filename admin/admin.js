@@ -13163,15 +13163,30 @@ async function loadNocApplications() {
 
         console.log("NOC: requesting applications from Supabase...");
 
-        const {
-            data,
-            error
-        } = await supabaseClient
+        const queryPromise = supabaseClient
             .from("noc_applications")
             .select("*")
             .order("created_at", {
                 ascending: false
             });
+
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => {
+                reject(
+                    new Error(
+                        "Supabase request timed out after 10 seconds."
+                    )
+                );
+            }, 10000);
+        });
+
+        const {
+            data,
+            error
+        } = await Promise.race([
+            queryPromise,
+            timeoutPromise
+        ]);
 
         console.log("NOC: Supabase response received.", {
             data,
