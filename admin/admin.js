@@ -6,6 +6,33 @@
    Supabase
 ========================================================= */
 
+window.addEventListener("error", (event) => {
+    console.error(
+        "GSA ADMIN RUNTIME ERROR:",
+        event.error || event.message,
+        "at",
+        event.filename,
+        event.lineno,
+        event.colno
+    );
+
+    const list = document.getElementById("nocList");
+
+    if (list && !window.loadNocApplications) {
+        list.innerHTML = `
+            <div class="empty-state">
+                <strong>ADMIN JAVASCRIPT ERROR</strong><br><br>
+                ${event.message || "Unknown JavaScript error"}<br><br>
+                Line: ${event.lineno || "unknown"}
+            </div>
+        `;
+    }
+});
+
+window.addEventListener("unhandledrejection", (event) => {
+    console.error("GSA ADMIN UNHANDLED PROMISE ERROR:", event.reason);
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     /* =====================================================
