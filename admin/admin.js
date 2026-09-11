@@ -158,9 +158,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         setTimeout(() => {
-            if (typeof loadNocApplications === "function") {
-                loadNocApplications();
-            }
+            loadNocApplications();
         }, 0);
 
     }
