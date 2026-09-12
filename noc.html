@@ -11,6 +11,8 @@
 <link rel="icon" href="gsa.png">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 * {
@@ -276,6 +278,34 @@ button:disabled {
   margin-top: 7px;
   font-weight: 700;
   font-size: 15px;
+}
+
+.download-application {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px 18px;
+  border: 1px solid rgba(0,113,227,.18);
+  border-radius: 14px;
+  background: #ffffff;
+  color: #0071e3;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 18px rgba(0,0,0,.06);
+}
+
+.download-application:hover {
+  background: #f5faff;
+  transform: translateY(-1px);
+}
+
+.download-application:disabled {
+  opacity: .6;
+  cursor: wait;
 }
 
 .footer {
@@ -693,126 +723,509 @@ function showStatus(message, type) {
 }
 
 function generateApplicationNo() {
+  const timestamp = Date.now().toString().slice(-7);
+  return "GSA/NOC/" + timestamp + "/2026";
+}
 
-  const timestamp =
-    Date.now().toString().slice(-7);
+function getApplicationData() {
+  return {
+    applicant_type:
+      document.getElementById("applicant_type").value.trim(),
 
-  return "GSA/NOC/" +
-    timestamp +
-    "/2026";
+    player_name:
+      document.getElementById("player_name").value.trim(),
 
+    father_name:
+      document.getElementById("father_name").value.trim(),
+
+    sport_type:
+      document.getElementById("sport_type").value.trim(),
+
+    jersey_number:
+      document.getElementById("jersey_number").value.trim(),
+
+    gsa_player_id:
+      document.getElementById("gsa_player_id").value.trim(),
+
+    applicant_email:
+      document.getElementById("applicant_email").value.trim(),
+
+    applicant_phone:
+      document.getElementById("applicant_phone").value.trim(),
+
+    destination_organization:
+      document.getElementById("destination_organization").value.trim(),
+
+    tournament_or_event:
+      document.getElementById("tournament_or_event").value.trim(),
+
+    noc_reason:
+      document.getElementById("noc_reason").value.trim(),
+
+    applicant_statement:
+      document.getElementById("applicant_statement").value.trim()
+  };
+}
+
+function escapePDFText(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+async function downloadApplicationForm(data) {
+  const button = document.getElementById("downloadApplicationBtn");
+
+  if (button) {
+    button.disabled = true;
+    button.innerHTML = "Preparing Application Form...";
+  }
+
+  try {
+    const wrapper = document.createElement("div");
+
+    wrapper.style.position = "fixed";
+    wrapper.style.left = "-10000px";
+    wrapper.style.top = "0";
+    wrapper.style.width = "794px";
+    wrapper.style.background = "#ffffff";
+    wrapper.style.zIndex = "-1";
+
+    wrapper.innerHTML = `
+      <style>
+        @font-face {
+          font-family: "NotoBengali";
+          src: url("/admin/fonts/NotoSansBengali-Regular.ttf") format("truetype");
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        .pdf-page {
+          width: 794px;
+          min-height: 1123px;
+          padding: 46px;
+          background: #ffffff;
+          color: #1d1d1f;
+          font-family: "NotoBengali", Arial, sans-serif;
+        }
+
+        .topbar {
+          border: 1px solid #e5e5e7;
+          border-radius: 22px;
+          padding: 24px;
+          background: #f5f5f7;
+          margin-bottom: 24px;
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+        }
+
+        .logo {
+          width: 72px;
+          height: 72px;
+          object-fit: contain;
+          border-radius: 16px;
+          background: #ffffff;
+        }
+
+        .brand-title {
+          font-family: Arial, sans-serif;
+          font-size: 24px;
+          font-weight: 800;
+          letter-spacing: 1.5px;
+        }
+
+        .brand-sub {
+          font-family: Arial, sans-serif;
+          margin-top: 5px;
+          font-size: 12px;
+          color: #6e6e73;
+          letter-spacing: .7px;
+        }
+
+        .heading {
+          margin-top: 24px;
+          text-align: center;
+        }
+
+        .heading h1 {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          font-size: 30px;
+          letter-spacing: 2px;
+        }
+
+        .heading h2 {
+          margin: 5px 0;
+          font-family: Arial, sans-serif;
+          font-size: 21px;
+          color: #0071e3;
+          letter-spacing: 2px;
+        }
+
+        .heading p {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          font-size: 12px;
+          color: #6e6e73;
+          letter-spacing: 1px;
+        }
+
+        .application-badge {
+          margin: 24px 0;
+          padding: 12px 18px;
+          border-radius: 14px;
+          background: #eaf4ff;
+          color: #0071e3;
+          font-family: Arial, sans-serif;
+          font-weight: 800;
+          text-align: center;
+          letter-spacing: 1px;
+        }
+
+        .card {
+          border: 1px solid #e5e5e7;
+          border-radius: 18px;
+          padding: 20px;
+          margin-bottom: 15px;
+          background: #ffffff;
+        }
+
+        .card-title {
+          font-family: Arial, sans-serif;
+          font-size: 13px;
+          font-weight: 800;
+          color: #0071e3;
+          letter-spacing: 1px;
+          margin-bottom: 15px;
+        }
+
+        .row {
+          display: flex;
+          gap: 16px;
+          margin-bottom: 12px;
+        }
+
+        .field {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .label {
+          font-family: Arial, sans-serif;
+          font-size: 10px;
+          font-weight: 700;
+          color: #6e6e73;
+          text-transform: uppercase;
+          margin-bottom: 4px;
+        }
+
+        .value {
+          font-size: 14px;
+          line-height: 1.55;
+          overflow-wrap: anywhere;
+          word-break: break-word;
+        }
+
+        .statement {
+          min-height: 90px;
+          line-height: 1.7;
+        }
+
+        .footer {
+          margin-top: 22px;
+          padding-top: 15px;
+          border-top: 1px solid #e5e5e7;
+          font-family: Arial, sans-serif;
+          font-size: 10px;
+          color: #6e6e73;
+          text-align: center;
+          line-height: 1.6;
+        }
+      </style>
+
+      <div class="pdf-page" id="applicationPdf">
+        <div class="topbar">
+          <div class="brand">
+            <img class="logo" src="/gsa.png">
+            <div>
+              <div class="brand-title">GHOPKHALI SPORTS ARENA</div>
+              <div class="brand-sub">OFFICIAL SPORTS ORGANIZATION</div>
+            </div>
+          </div>
+
+          <div class="heading">
+            <h1>NOC</h1>
+            <h2>NO OBJECTION CERTIFICATE</h2>
+            <p>NOC APPLICATION FORM</p>
+          </div>
+        </div>
+
+        <div class="application-badge">
+          APPLICATION FORM — ${escapePDFText(data.application_no)}
+        </div>
+
+        <div class="card">
+          <div class="card-title">APPLICANT INFORMATION</div>
+
+          <div class="row">
+            <div class="field">
+              <div class="label">Applicant Type</div>
+              <div class="value">${escapePDFText(data.applicant_type)}</div>
+            </div>
+
+            <div class="field">
+              <div class="label">Player Name</div>
+              <div class="value">${escapePDFText(data.player_name)}</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <div class="label">Father's Name</div>
+              <div class="value">${escapePDFText(data.father_name)}</div>
+            </div>
+
+            <div class="field">
+              <div class="label">GSA Player ID</div>
+              <div class="value">${escapePDFText(data.gsa_player_id)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">SPORTS INFORMATION</div>
+
+          <div class="row">
+            <div class="field">
+              <div class="label">Sport</div>
+              <div class="value">${escapePDFText(data.sport_type)}</div>
+            </div>
+
+            <div class="field">
+              <div class="label">Jersey Number</div>
+              <div class="value">${escapePDFText(data.jersey_number)}</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <div class="label">Tournament / Event</div>
+              <div class="value">${escapePDFText(data.tournament_or_event)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">NOC REQUEST</div>
+
+          <div class="row">
+            <div class="field">
+              <div class="label">Destination Organization</div>
+              <div class="value">${escapePDFText(data.destination_organization)}</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <div class="label">Reason for NOC</div>
+              <div class="value">${escapePDFText(data.noc_reason)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">APPLICANT STATEMENT</div>
+          <div class="value statement">
+            ${escapePDFText(data.applicant_statement)}
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">CONTACT INFORMATION</div>
+
+          <div class="row">
+            <div class="field">
+              <div class="label">Email</div>
+              <div class="value">${escapePDFText(data.applicant_email)}</div>
+            </div>
+
+            <div class="field">
+              <div class="label">Phone</div>
+              <div class="value">${escapePDFText(data.applicant_phone)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          This document is an NOC Application Form submitted to Ghopkhali Sports Arena.
+          <br>
+          Final NOC approval is subject to review and authorization by the club authority.
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(wrapper);
+
+    const canvas = await html2canvas(
+      document.getElementById("applicationPdf"),
+      {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff"
+      }
+    );
+
+    const { jsPDF } = window.jspdf;
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4"
+    });
+
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 8;
+
+    const usableWidth = pageWidth - margin * 2;
+    const imageHeight =
+      canvas.height * usableWidth / canvas.width;
+
+    pdf.addImage(
+      canvas.toDataURL("image/jpeg", 0.96),
+      "JPEG",
+      margin,
+      margin,
+      usableWidth,
+      imageHeight
+    );
+
+    pdf.save(
+      "GSA-NOC-Application-" +
+      data.application_no.replace(/[\/\\]/g, "-") +
+      ".pdf"
+    );
+
+    wrapper.remove();
+
+  } catch (error) {
+    console.error("Application PDF error:", error);
+    alert(
+      "Application Form তৈরি করা যায়নি.\n\n" +
+      (error?.message || "Unknown error")
+    );
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.innerHTML = "Download Application Form";
+    }
+  }
 }
 
 form.addEventListener(
   "submit",
   async function(event) {
-
     event.preventDefault();
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Submitting...";
-
     statusBox.className = "status";
 
     try {
+      const data = getApplicationData();
 
-      const data = {
+      const requiredFields = [
+        ["player_name", "Player Name"],
+        ["father_name", "Father's Name"],
+        ["sport_type", "Sport"],
+        ["destination_organization", "Destination Organization"],
+        ["noc_reason", "Reason for NOC"],
+        ["applicant_statement", "Applicant Statement"],
+        ["applicant_email", "Email"],
+        ["applicant_phone", "Phone"]
+      ];
 
-        applicant_type:
-          document
-            .getElementById("applicant_type")
-            .value
-            .trim(),
+      for (const [id, label] of requiredFields) {
+        if (!document.getElementById(id).value.trim()) {
+          throw new Error(label + " is required.");
+        }
+      }
 
-        player_name:
-          document
-            .getElementById("player_name")
-            .value
-            .trim(),
+      data.application_no = generateApplicationNo();
 
-        father_name:
-          document
-            .getElementById("father_name")
-            .value
-            .trim(),
-
-        sport_type:
-          document
-            .getElementById("sport_type")
-            .value
-            .trim(),
-
-        jersey_number:
-          document
-            .getElementById("jersey_number")
-            .value
-            .trim(),
-
-        gsa_player_id:
-          document
-            .getElementById("gsa_player_id")
-            .value
-            .trim(),
-
-        applicant_email:
-          document
-            .getElementById("applicant_email")
-            .value
-            .trim(),
-
-        applicant_phone:
-          document
-            .getElementById("applicant_phone")
-            .value
-            .trim(),
-
-        destination_organization:
-          document
-            .getElementById("destination_organization")
-            .value
-            .trim(),
-
-        tournament_or_event:
-          document
-            .getElementById("tournament_or_event")
-            .value
-            .trim(),
-
-        noc_reason:
-          document
-            .getElementById("noc_reason")
-            .value
-            .trim(),
-
-        applicant_statement:
-          document
-            .getElementById("applicant_statement")
-            .value
-            .trim(),
-
-        application_no:
-          generateApplicationNo()
-
-      };
-
-      const { error } =
-        await supabaseClient
+      const insertPromise =
+        supabaseClient
           .from("noc_applications")
-          .insert(data);
+          .insert(data)
+          .select()
+          .single();
 
-      if (error) {
-        throw error;
+      const timeoutPromise =
+        new Promise((_, reject) =>
+          setTimeout(
+            () => reject(
+              new Error(
+                "Submission timed out. Please check your internet connection and try again."
+              )
+            ),
+            20000
+          )
+        );
+
+      const result =
+        await Promise.race([
+          insertPromise,
+          timeoutPromise
+        ]);
+
+      if (result.error) {
+        throw result.error;
       }
 
       showStatus(
-        "NOC Application সফলভাবে জমা হয়েছে।" +
+        "NOC Application সফলভাবে জমা হয়েছে." +
         "<span class=\"application-number\">" +
         "Application No: " +
         data.application_no +
         "</span>" +
         "<br>" +
-        "আপনার আবেদনটি কর্তৃপক্ষের পর্যালোচনার জন্য পাঠানো হয়েছে।",
+        "আপনার আবেদনটি কর্তৃপক্ষের পর্যালোচনার জন্য পাঠানো হয়েছে.",
         "success"
+      );
+
+      const oldButton =
+        document.getElementById("downloadApplicationBtn");
+
+      if (oldButton) {
+        oldButton.remove();
+      }
+
+      const downloadButton =
+        document.createElement("button");
+
+      downloadButton.type = "button";
+      downloadButton.id = "downloadApplicationBtn";
+      downloadButton.className = "download-application";
+      downloadButton.innerHTML =
+        "Download Application Form";
+
+      downloadButton.addEventListener(
+        "click",
+        () => downloadApplicationForm(data)
+      );
+
+      statusBox.insertAdjacentElement(
+        "afterend",
+        downloadButton
       );
 
       form.reset();
@@ -824,29 +1237,26 @@ form.addEventListener(
       });
 
     } catch (error) {
-
       console.error(
         "NOC submission error:",
         error
       );
 
       showStatus(
-        "Application জমা দেওয়া যায়নি।<br><br>" +
+        "Application জমা দেওয়া যায়নি.<br><br>" +
         "<strong>Error:</strong> " +
         (error?.message || "Unknown error"),
         "error"
       );
 
     } finally {
-
       submitBtn.disabled = false;
       submitBtn.textContent =
         "Submit NOC Application";
-
     }
-
   }
 );
+
 </script>
 
 </body>
