@@ -815,817 +815,669 @@
     }
 
     async function downloadPDF(app, official = false) {
+    if (!app) return;
 
-        if (!app) {
-            return;
+    try {
+        if (!window.jspdf || !window.html2canvas) {
+            throw new Error("PDF library is not available.");
         }
 
-        if (
-            !window.jspdf?.jsPDF ||
-            !window.html2canvas
-        ) {
-            alert(
-                "PDF libraries are not loaded. Please refresh the page."
-            );
-            return;
-        }
-
-        const jsPDF =
-            window.jspdf.jsPDF;
+        const { jsPDF } = window.jspdf;
 
         const fontUrl =
-            new URL(
-                "/admin/fonts/NotoSansBengali-Regular.ttf",
-                window.location.origin
-            ).href;
+            "/admin/fonts/NotoSansBengali-Regular.ttf";
 
-        const logoUrl =
-            new URL(
-                "/gsa.png",
-                window.location.origin
-            ).href;
+        const logoUrl = "/gsa.png";
 
-        function escPdf(value) {
-            return esc(
-                value === null ||
-                value === undefined ||
-                value === ""
-                    ? "—"
-                    : value
-            );
-        }
+        const escHtml = (value) =>
+            String(value ?? "—")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
 
-        function makeField(label, value, wide = false) {
+        const value = (key) =>
+            app[key] === null ||
+            app[key] === undefined ||
+            String(app[key]).trim() === ""
+                ? "—"
+                : String(app[key]);
 
-            return `
-                <div class="gsa-pdf-field ${wide ? "wide" : ""}">
-
-                    <div class="gsa-pdf-label">
-                        ${escPdf(label)}
-                    </div>
-
-                    <div class="gsa-pdf-value">
-                        ${escPdf(value)}
-                    </div>
-
-                </div>
-            `;
-        }
+        const safeName =
+            (value("player_name") === "—"
+                ? "Applicant"
+                : value("player_name"))
+                .replace(/[^a-zA-Z0-9-_]+/g, "-")
+                .replace(/^-+|-+$/g, "") ||
+            "Applicant";
 
         const status =
-            String(
-                app.status || "pending"
-            ).toLowerCase();
-
-        const statusText =
-            status === "approved"
-                ? "APPROVED"
-                : status === "rejected"
-                    ? "REJECTED"
-                    : "PENDING";
+            String(app.status || "pending")
+                .toUpperCase();
 
         const statusClass =
-            status === "approved"
+            status === "APPROVED"
                 ? "approved"
-                : status === "rejected"
+                : status === "REJECTED"
                     ? "rejected"
                     : "pending";
 
-        const title =
-            official
-                ? "OFFICIAL NOC"
-                : "NOC APPLICATION";
+        const submitted = app.created_at
+            ? new Date(app.created_at)
+                .toLocaleString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true
+                })
+            : "—";
 
-        const subtitle =
-            official
-                ? "NO OBJECTION CERTIFICATE"
-                : "APPLICATION FORM";
-
-        const statement =
-            app.applicant_statement ||
-            "—";
-
-        const reason =
-            app.noc_reason ||
-            "—";
-
-        const adminNote =
-            app.admin_note ||
-            "—";
-
-        const submittedDate =
-            date(app.created_at);
-
-        const submittedTime =
-            time(app.created_at);
-
-        const pdfContainer =
-            document.createElement("div");
-
-        pdfContainer.style.position =
-            "fixed";
-
-        pdfContainer.style.left =
-            "-100000px";
-
-        pdfContainer.style.top =
-            "0";
-
-        pdfContainer.style.width =
-            "794px";
-
-        pdfContainer.style.background =
-            "#ffffff";
-
-        pdfContainer.style.zIndex =
-            "-9999";
-
-        pdfContainer.innerHTML = `
-
-            <style>
-
-                @font-face {
-                    font-family: "NotoSansBengaliGSA";
-                    src: url("${fontUrl}") format("truetype");
-                    font-style: normal;
-                    font-weight: 400;
-                }
-
-                * {
-                    box-sizing: border-box;
-                }
-
-                .gsa-pdf-page {
-                    width: 794px;
-                    min-height: 1123px;
-                    padding: 42px 48px 46px;
-                    background: #ffffff;
-                    color: #172033;
-                    font-family:
+        if (!document.fonts.check(
+            '16px "NotoSansBengaliGSA"'
+        )) {
+            try {
+                const face =
+                    new FontFace(
                         "NotoSansBengaliGSA",
-                        "Noto Sans Bengali",
-                        Arial,
-                        sans-serif;
-                    position: relative;
-                    overflow: hidden;
-                }
+                        `url(${fontUrl})`
+                    );
 
-                .gsa-pdf-border {
-                    position: absolute;
-                    inset: 20px;
-                    border: 2px solid #b99645;
-                    pointer-events: none;
-                }
+                await face.load();
+                document.fonts.add(face);
+            } catch (fontError) {
+                console.warn(
+                    "Bengali font loading failed:",
+                    fontError
+                );
+            }
+        }
 
-                .gsa-pdf-inner-border {
-                    position: absolute;
-                    inset: 26px;
-                    border: 1px solid #e6d3a0;
-                    pointer-events: none;
-                }
+        const waitImage = (src) =>
+            new Promise((resolve) => {
+                const img = new Image();
+                img.onload = resolve;
+                img.onerror = resolve;
+                img.src = src;
+            });
 
-                .gsa-pdf-header {
-                    position: relative;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 130px;
-                    border-bottom: 2px solid #b99645;
-                    padding-bottom: 22px;
-                    margin-bottom: 24px;
-                }
+        await waitImage(logoUrl);
 
-                .gsa-pdf-logo {
-                    position: absolute;
-                    left: 8px;
-                    top: 4px;
-                    width: 92px;
-                    height: 92px;
-                    object-fit: contain;
-                }
-
-                .gsa-pdf-header-text {
-                    text-align: center;
-                    padding: 0 100px;
-                }
-
-                .gsa-pdf-club {
-                    font-size: 27px;
-                    font-weight: 700;
-                    letter-spacing: .2px;
-                    line-height: 1.35;
-                    color: #15213b;
-                    margin-bottom: 6px;
-                }
-
-                .gsa-pdf-english {
-                    font-family: Arial, sans-serif;
-                    font-size: 12px;
-                    letter-spacing: 2.3px;
-                    color: #6d7687;
-                    margin-bottom: 13px;
-                }
-
-                .gsa-pdf-title {
-                    font-family: Arial, sans-serif;
-                    font-size: 32px;
-                    font-weight: 800;
-                    letter-spacing: 5px;
-                    color: #b28a35;
-                    line-height: 1;
-                }
-
-                .gsa-pdf-subtitle {
-                    font-family: Arial, sans-serif;
-                    font-size: 10px;
-                    letter-spacing: 2px;
-                    color: #7b8494;
-                    margin-top: 7px;
-                }
-
-                .gsa-pdf-status {
-                    position: absolute;
-                    right: 7px;
-                    top: 4px;
-                    padding: 8px 13px;
-                    border-radius: 5px;
-                    font-family: Arial, sans-serif;
-                    font-size: 10px;
-                    font-weight: 800;
-                    letter-spacing: 1px;
-                }
-
-                .gsa-pdf-status.approved {
-                    background: #e8f5ed;
-                    color: #166534;
-                    border: 1px solid #9bd0ad;
-                }
-
-                .gsa-pdf-status.rejected {
-                    background: #fdecec;
-                    color: #991b1b;
-                    border: 1px solid #e7aaaa;
-                }
-
-                .gsa-pdf-status.pending {
-                    background: #fff7df;
-                    color: #856404;
-                    border: 1px solid #dfc77e;
-                }
-
-                .gsa-pdf-meta {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 12px;
-                    margin-bottom: 20px;
-                }
-
-                .gsa-pdf-meta-box {
-                    border: 1px solid #dfe4ec;
-                    border-radius: 7px;
-                    padding: 11px 14px;
-                    background: #f8fafc;
-                }
-
-                .gsa-pdf-meta-label {
-                    font-family: Arial, sans-serif;
-                    font-size: 8px;
-                    font-weight: 700;
-                    letter-spacing: 1px;
-                    color: #7a8495;
-                    text-transform: uppercase;
-                    margin-bottom: 4px;
-                }
-
-                .gsa-pdf-meta-value {
-                    font-size: 13px;
-                    font-weight: 600;
-                    color: #172033;
-                }
-
-                .gsa-pdf-section {
-                    margin-top: 18px;
-                }
-
-                .gsa-pdf-section-title {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    font-family: Arial, sans-serif;
-                    font-size: 11px;
-                    font-weight: 800;
-                    letter-spacing: 1.4px;
-                    color: #26334d;
-                    text-transform: uppercase;
-                    margin-bottom: 10px;
-                }
-
-                .gsa-pdf-section-title::before {
-                    content: "";
-                    display: block;
-                    width: 4px;
-                    height: 18px;
-                    background: #b99645;
-                    border-radius: 2px;
-                }
-
-                .gsa-pdf-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 8px;
-                }
-
-                .gsa-pdf-field {
-                    min-height: 58px;
-                    border: 1px solid #e0e5ed;
-                    border-radius: 6px;
-                    padding: 9px 12px;
-                    background: #ffffff;
-                }
-
-                .gsa-pdf-field.wide {
-                    grid-column: 1 / -1;
-                }
-
-                .gsa-pdf-label {
-                    font-family: Arial, sans-serif;
-                    font-size: 8px;
-                    font-weight: 700;
-                    letter-spacing: .6px;
-                    color: #7b8494;
-                    margin-bottom: 5px;
-                    text-transform: uppercase;
-                }
-
-                .gsa-pdf-value {
-                    font-size: 12px;
-                    line-height: 1.55;
-                    color: #172033;
-                    word-break: break-word;
-                    white-space: pre-wrap;
-                }
-
-                .gsa-pdf-statement {
-                    border: 1px solid #e0e5ed;
-                    border-left: 4px solid #b99645;
-                    border-radius: 6px;
-                    padding: 13px 15px;
-                    background: #fafbfc;
-                    font-size: 12px;
-                    line-height: 1.7;
-                    white-space: pre-wrap;
-                }
-
-                .gsa-pdf-official-box {
-                    margin-top: 20px;
-                    padding: 17px;
-                    border: 1.5px solid #b99645;
-                    border-radius: 8px;
-                    background: #fffdf7;
-                }
-
-                .gsa-pdf-official-heading {
-                    font-family: Arial, sans-serif;
-                    font-size: 12px;
-                    font-weight: 800;
-                    letter-spacing: 1.3px;
-                    color: #8b6a26;
-                    margin-bottom: 8px;
-                }
-
-                .gsa-pdf-official-text {
-                    font-size: 12px;
-                    line-height: 1.7;
-                    color: #30394a;
-                }
-
-                .gsa-pdf-signatures {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 55px;
-                    margin-top: 48px;
-                }
-
-                .gsa-pdf-signature {
-                    text-align: center;
-                    padding-top: 8px;
-                    border-top: 1px solid #6f7785;
-                }
-
-                .gsa-pdf-signature-name {
-                    font-family: Arial, sans-serif;
-                    font-size: 10px;
-                    font-weight: 700;
-                    color: #293247;
-                    margin-top: 7px;
-                }
-
-                .gsa-pdf-signature-role {
-                    font-family: Arial, sans-serif;
-                    font-size: 8px;
-                    color: #7b8494;
-                    margin-top: 3px;
-                }
-
-                .gsa-pdf-footer {
-                    position: absolute;
-                    left: 48px;
-                    right: 48px;
-                    bottom: 31px;
-                    padding-top: 9px;
-                    border-top: 1px solid #e0e5ed;
-                    text-align: center;
-                    font-family: Arial, sans-serif;
-                    font-size: 8px;
-                    color: #7b8494;
-                    letter-spacing: .5px;
-                }
-
-            </style>
-
-            <div class="gsa-pdf-page">
-
-                <div class="gsa-pdf-border"></div>
-                <div class="gsa-pdf-inner-border"></div>
-
-                <div class="gsa-pdf-header">
-
-                    <img
-                        class="gsa-pdf-logo"
-                        src="${logoUrl}"
-                        crossorigin="anonymous"
-                    >
-
-                    <div class="gsa-pdf-header-text">
-
-                        <div class="gsa-pdf-club">
-                            ঘোপখালী স্পোর্টস অ্যারিনা
-                        </div>
-
-                        <div class="gsa-pdf-english">
-                            GHOPKHALI SPORTS ARENA
-                        </div>
-
-                        <div class="gsa-pdf-title">
-                            NOC
-                        </div>
-
-                        <div class="gsa-pdf-subtitle">
-                            ${title}
-                        </div>
-
-                    </div>
-
-                    <div class="gsa-pdf-status ${statusClass}">
-                        ${statusText}
-                    </div>
-
+        const field = (label, val, wide = false) => `
+            <div class="field ${wide ? "wide" : ""}">
+                <div class="field-label">
+                    ${escHtml(label)}
                 </div>
-
-                <div class="gsa-pdf-meta">
-
-                    <div class="gsa-pdf-meta-box">
-                        <div class="gsa-pdf-meta-label">
-                            Application No
-                        </div>
-                        <div class="gsa-pdf-meta-value">
-                            ${escPdf(app.application_no)}
-                        </div>
-                    </div>
-
-                    <div class="gsa-pdf-meta-box">
-                        <div class="gsa-pdf-meta-label">
-                            Submitted
-                        </div>
-                        <div class="gsa-pdf-meta-value">
-                            ${escPdf(submittedDate)}
-                            ${escPdf(submittedTime)}
-                        </div>
-                    </div>
-
+                <div class="field-value">
+                    ${escHtml(val)}
                 </div>
-
-                <div class="gsa-pdf-section">
-
-                    <div class="gsa-pdf-section-title">
-                        Applicant Information
-                    </div>
-
-                    <div class="gsa-pdf-grid">
-
-                        ${makeField(
-                            "Player Name",
-                            app.player_name
-                        )}
-
-                        ${makeField(
-                            "Father / Guardian",
-                            app.father_name
-                        )}
-
-                        ${makeField(
-                            "Applicant Type",
-                            app.applicant_type
-                        )}
-
-                        ${makeField(
-                            "Sport",
-                            app.sport_type
-                        )}
-
-                        ${makeField(
-                            "Jersey / Player Number",
-                            app.jersey_number
-                        )}
-
-                        ${makeField(
-                            "GSA Player ID",
-                            app.gsa_player_id
-                        )}
-
-                        ${makeField(
-                            "Applicant Email",
-                            app.applicant_email
-                        )}
-
-                        ${makeField(
-                            "Applicant Phone",
-                            app.applicant_phone
-                        )}
-
-                    </div>
-
-                </div>
-
-                <div class="gsa-pdf-section">
-
-                    <div class="gsa-pdf-section-title">
-                        NOC Information
-                    </div>
-
-                    <div class="gsa-pdf-grid">
-
-                        ${makeField(
-                            "Destination Organization",
-                            app.destination_organization,
-                            true
-                        )}
-
-                        ${makeField(
-                            "Tournament / Event",
-                            app.tournament_or_event,
-                            true
-                        )}
-
-                        ${makeField(
-                            "NOC Reason",
-                            reason,
-                            true
-                        )}
-
-                        ${makeField(
-                            "Applicant Statement",
-                            statement,
-                            true
-                        )}
-
-                    </div>
-
-                </div>
-
-                ${
-                    official
-                        ? `
-                            <div class="gsa-pdf-official-box">
-
-                                <div class="gsa-pdf-official-heading">
-                                    OFFICIAL NO OBJECTION CERTIFICATE
-                                </div>
-
-                                <div class="gsa-pdf-official-text">
-                                    This document confirms that the above-mentioned
-                                    player has been granted a No Objection Certificate
-                                    by Ghopkhali Sports Arena for the stated purpose,
-                                    subject to the information and conditions recorded
-                                    in the application.
-                                </div>
-
-                            </div>
-
-                            ${
-                                adminNote !== "—"
-                                    ? `
-                                        <div class="gsa-pdf-section">
-
-                                            <div class="gsa-pdf-section-title">
-                                                Administrative Note
-                                            </div>
-
-                                            <div class="gsa-pdf-statement">
-                                                ${escPdf(adminNote)}
-                                            </div>
-
-                                        </div>
-                                    `
-                                    : ""
-                            }
-
-                            <div class="gsa-pdf-signatures">
-
-                                <div class="gsa-pdf-signature">
-                                    <div class="gsa-pdf-signature-name">
-                                        Authorized Representative
-                                    </div>
-                                    <div class="gsa-pdf-signature-role">
-                                        Ghopkhali Sports Arena
-                                    </div>
-                                </div>
-
-                                <div class="gsa-pdf-signature">
-                                    <div class="gsa-pdf-signature-name">
-                                        Official Seal
-                                    </div>
-                                    <div class="gsa-pdf-signature-role">
-                                        Ghopkhali Sports Arena
-                                    </div>
-                                </div>
-
-                            </div>
-                        `
-                        : ""
-                }
-
-                <div class="gsa-pdf-footer">
-                    Ghopkhali Sports Arena • ঘোপখালী, বেতমোর রাজপাড়া, মঠবাড়িয়া, পিরোজপুর
-                    • Official NOC Document
-                </div>
-
             </div>
         `;
 
-        document.body.appendChild(
-            pdfContainer
+        const section = (title, body) => `
+            <section class="section">
+                <div class="section-title">
+                    <span class="section-mark"></span>
+                    <span>${title}</span>
+                </div>
+                ${body}
+            </section>
+        `;
+
+        const page = document.createElement("div");
+
+        page.style.position = "fixed";
+        page.style.left = "-100000px";
+        page.style.top = "0";
+        page.style.width = "794px";
+        page.style.background = "#f5f5f7";
+        page.style.zIndex = "-1";
+
+        page.innerHTML = `
+<style>
+@font-face {
+    font-family: "NotoSansBengaliGSA";
+    src: url("${fontUrl}") format("truetype");
+    font-weight: 400;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.gsa-pdf {
+    width: 794px;
+    min-height: 1123px;
+    padding: 30px;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    font-family:
+        "NotoSansBengaliGSA",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+.sheet {
+    position: relative;
+    min-height: 1063px;
+    padding: 34px 34px 30px;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow:
+        0 12px 40px rgba(0,0,0,.08);
+    overflow: hidden;
+}
+
+.sheet::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid rgba(0,0,0,.07);
+    border-radius: 24px;
+}
+
+.header {
+    position: relative;
+    display: grid;
+    grid-template-columns: 92px 1fr 120px;
+    align-items: center;
+    min-height: 148px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #d2d2d7;
+}
+
+.logo-wrap {
+    width: 78px;
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+}
+
+.brand {
+    text-align: center;
+}
+
+.brand-name {
+    margin: 0;
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: 2.4px;
+    color: #1d1d1f;
+}
+
+.brand-sub {
+    margin-top: 5px;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #86868b;
+    font-weight: 600;
+}
+
+.noc {
+    margin-top: 17px;
+    font-size: 39px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 8px;
+    color: #1d1d1f;
+}
+
+.noc-sub {
+    margin-top: 7px;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    color: #6e6e73;
+}
+
+.status {
+    justify-self: end;
+    align-self: start;
+    padding: 8px 13px;
+    border-radius: 999px;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+    border: 1px solid;
+}
+
+.status.approved {
+    color: #248a3d;
+    background: #f0f9f2;
+    border-color: #b7dfc0;
+}
+
+.status.rejected {
+    color: #c62828;
+    background: #fff4f4;
+    border-color: #f0bcbc;
+}
+
+.status.pending {
+    color: #0071e3;
+    background: #f0f7ff;
+    border-color: #b8d8f7;
+}
+
+.section {
+    margin-top: 25px;
+    break-inside: avoid;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 11px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+    color: #515154;
+}
+
+.section-mark {
+    width: 4px;
+    height: 17px;
+    border-radius: 4px;
+    background: #0071e3;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.field {
+    min-height: 73px;
+    padding: 13px 15px;
+    background: #fbfbfd;
+    border: 1px solid #e5e5ea;
+    border-radius: 14px;
+    break-inside: avoid;
+}
+
+.field.wide {
+    min-height: 76px;
+}
+
+.field-label {
+    margin-bottom: 9px;
+    font-size: 7.5px;
+    line-height: 1.3;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    color: #86868b;
+}
+
+.field-value {
+    font-size: 13px;
+    line-height: 1.65;
+    font-weight: 500;
+    color: #1d1d1f;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.long-field {
+    min-height: 100px;
+}
+
+.long-field .field-value {
+    line-height: 1.75;
+}
+
+.statement {
+    min-height: 125px;
+}
+
+.note {
+    min-height: 92px;
+}
+
+.authorization {
+    margin-top: 26px;
+    padding: 18px;
+    border: 1px solid #e5e5ea;
+    border-radius: 16px;
+    background: #fbfbfd;
+    break-inside: avoid;
+}
+
+.auth-title {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    color: #515154;
+    margin-bottom: 15px;
+}
+
+.auth-text {
+    font-size: 11px;
+    line-height: 1.7;
+    color: #3a3a3c;
+}
+
+.signature-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+    margin-top: 28px;
+}
+
+.signature {
+    padding-top: 23px;
+    border-top: 1px solid #8e8e93;
+    font-size: 8px;
+    color: #6e6e73;
+    letter-spacing: .8px;
+}
+
+.footer {
+    margin-top: 25px;
+    padding-top: 13px;
+    border-top: 1px solid #e5e5ea;
+    text-align: center;
+    font-size: 7.5px;
+    line-height: 1.5;
+    color: #86868b;
+}
+
+.page-break {
+    height: 1px;
+}
+
+.meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+@media print {
+    .gsa-pdf {
+        box-shadow: none;
+    }
+}
+</style>
+
+<div class="gsa-pdf">
+    <div class="sheet">
+
+        <div class="header">
+            <div class="logo-wrap">
+                <img
+                    class="logo"
+                    src="${logoUrl}"
+                    crossorigin="anonymous"
+                >
+            </div>
+
+            <div class="brand">
+                <div class="brand-name">
+                    GHOPKHALI SPORTS ARENA
+                </div>
+
+                <div class="brand-sub">
+                    OFFICIAL SPORTS ORGANIZATION
+                </div>
+
+                <div class="noc">
+                    NOC
+                </div>
+
+                <div class="noc-sub">
+                    NO OBJECTION CERTIFICATE
+                </div>
+            </div>
+
+            <div class="status ${statusClass}">
+                ${escHtml(status)}
+            </div>
+        </div>
+
+        ${section(
+            "APPLICATION DETAILS",
+            `
+            <div class="meta">
+                ${field(
+                    "APPLICATION NO",
+                    value("application_no") !== "—"
+                        ? value("application_no")
+                        : value("application_number")
+                )}
+
+                ${field(
+                    "SUBMITTED",
+                    submitted
+                )}
+            </div>
+            `
+        )}
+
+        ${section(
+            "APPLICANT INFORMATION",
+            `
+            <div class="grid">
+                ${field("PLAYER NAME", value("player_name"))}
+                ${field("FATHER / GUARDIAN", value("father_guardian"))}
+
+                ${field("APPLICANT TYPE", value("applicant_type"))}
+                ${field("SPORT", value("sport"))}
+
+                ${field(
+                    "JERSEY / PLAYER NUMBER",
+                    value("jersey_number")
+                )}
+
+                ${field(
+                    "GSA PLAYER ID",
+                    value("gsa_player_id")
+                )}
+
+                ${field(
+                    "APPLICANT EMAIL",
+                    value("email")
+                )}
+
+                ${field(
+                    "APPLICANT PHONE",
+                    value("phone")
+                )}
+            </div>
+            `
+        )}
+
+        ${section(
+            "NOC INFORMATION",
+            `
+            <div class="grid">
+                ${field(
+                    "DESTINATION ORGANIZATION",
+                    value("destination_organization"),
+                    true
+                )}
+
+                ${field(
+                    "TOURNAMENT / EVENT",
+                    value("tournament_event"),
+                    true
+                )}
+            </div>
+
+            <div style="height:10px"></div>
+
+            ${field(
+                "NOC REASON",
+                value("noc_reason"),
+                true
+            )}
+
+            <div style="height:10px"></div>
+
+            <div class="field statement">
+                <div class="field-label">
+                    APPLICANT STATEMENT
+                </div>
+
+                <div class="field-value">
+                    ${escHtml(value("applicant_statement"))}
+                </div>
+            </div>
+            `
+        )}
+
+        ${
+            official
+                ? `
+                ${section(
+                    "ADMINISTRATION",
+                    `
+                    <div class="grid">
+                        ${field(
+                            "STATUS",
+                            status
+                        )}
+
+                        ${field(
+                            "ADMIN NOTE",
+                            value("admin_note")
+                        )}
+                    </div>
+                    `
+                )}
+
+                <div class="authorization">
+                    <div class="auth-title">
+                        OFFICIAL AUTHORIZATION
+                    </div>
+
+                    <div class="auth-text">
+                        This document confirms that Ghopkhali
+                        Sports Arena has reviewed the application
+                        and issued this No Objection Certificate
+                        subject to the organization's official
+                        records and applicable rules.
+                    </div>
+
+                    <div class="signature-row">
+                        <div class="signature">
+                            AUTHORIZED SIGNATURE
+                        </div>
+
+                        <div class="signature">
+                            OFFICIAL SEAL
+                        </div>
+                    </div>
+                </div>
+                `
+                : ""
+        }
+
+        <div class="footer">
+            Ghopkhali Sports Arena
+            • ঘোপখালী, বেতমোর রাজপাড়া, মঠবাড়িয়া, পিরোজপুর
+            • Official NOC Document
+        </div>
+
+    </div>
+</div>
+`;
+
+        document.body.appendChild(page);
+
+        await new Promise((resolve) =>
+            requestAnimationFrame(() =>
+                requestAnimationFrame(resolve)
+            )
         );
 
-        try {
+        await document.fonts.ready;
 
-            const fontFace =
-                new FontFace(
-                    "NotoSansBengaliGSA",
-                    `url(${fontUrl})`
-                );
-
-            await fontFace.load();
-
-            document.fonts.add(
-                fontFace
+        const canvas =
+            await window.html2canvas(
+                page.querySelector(".sheet"),
+                {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: false,
+                    backgroundColor: "#f5f5f7",
+                    logging: false,
+                    imageTimeout: 15000
+                }
             );
 
-            await document.fonts.ready;
+        document.body.removeChild(page);
 
-            const logo =
-                pdfContainer.querySelector(
-                    ".gsa-pdf-logo"
-                );
+        const pdf =
+            new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4",
+                compress: true
+            });
 
-            if (logo) {
-                await new Promise(
-                    resolve => {
+        const pageWidth = 210;
+        const pageHeight = 297;
 
-                        if (logo.complete) {
-                            resolve();
-                            return;
-                        }
+        const imgWidth = pageWidth;
+        const imgHeight =
+            canvas.height *
+            imgWidth /
+            canvas.width;
 
-                        logo.onload =
-                            resolve;
+        let offset = 0;
+        let pageNo = 0;
 
-                        logo.onerror =
-                            resolve;
-                    }
-                );
+        while (offset < imgHeight) {
+            if (pageNo > 0) {
+                pdf.addPage();
             }
-
-            const canvas =
-                await window.html2canvas(
-                    pdfContainer.querySelector(
-                        ".gsa-pdf-page"
-                    ),
-                    {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: false,
-                        backgroundColor:
-                            "#ffffff",
-                        logging: false
-                    }
-                );
-
-            const pdf =
-                new jsPDF(
-                    {
-                        orientation: "portrait",
-                        unit: "mm",
-                        format: "a4",
-                        compress: true
-                    }
-                );
-
-            const pageWidth =
-                pdf.internal.pageSize.getWidth();
-
-            const pageHeight =
-                pdf.internal.pageSize.getHeight();
-
-            const margin =
-                0;
-
-            const imageWidth =
-                pageWidth - margin * 2;
-
-            const imageHeight =
-                canvas.height *
-                imageWidth /
-                canvas.width;
-
-            let remainingHeight =
-                imageHeight;
-
-            let position = 0;
 
             pdf.addImage(
                 canvas,
                 "PNG",
-                margin,
-                position,
-                imageWidth,
-                imageHeight,
+                0,
+                -offset,
+                imgWidth,
+                imgHeight,
                 undefined,
                 "FAST"
             );
 
-            remainingHeight -=
-                pageHeight;
-
-            while (
-                remainingHeight > 0
-            ) {
-
-                position =
-                    remainingHeight -
-                    imageHeight;
-
-                pdf.addPage();
-
-                pdf.addImage(
-                    canvas,
-                    "PNG",
-                    margin,
-                    position,
-                    imageWidth,
-                    imageHeight,
-                    undefined,
-                    "FAST"
-                );
-
-                remainingHeight -=
-                    pageHeight;
-            }
-
-            const safeName =
-                String(
-                    app.application_no ||
-                    app.player_name ||
-                    "NOC"
-                )
-                .replace(
-                    /[^a-z0-9_-]/gi,
-                    "_"
-                );
-
-            pdf.save(
-                official
-                    ? `GSA-Official-NOC-${safeName}.pdf`
-                    : `GSA-NOC-Application-${safeName}.pdf`
-            );
-
-        } catch (error) {
-
-            console.error(
-                "GSA Premium PDF error:",
-                error
-            );
-
-            alert(
-                error?.message ||
-                "Unable to generate PDF."
-            );
-
-        } finally {
-
-            pdfContainer.remove();
+            offset += pageHeight;
+            pageNo++;
         }
+
+        pdf.save(
+            official
+                ? `GSA-Official-NOC-${safeName}.pdf`
+                : `GSA-NOC-Application-${safeName}.pdf`
+        );
+
+    } catch (error) {
+        console.error(
+            "GSA Premium PDF error:",
+            error
+        );
+
+        alert(
+            error?.message ||
+            "Unable to generate NOC PDF."
+        );
     }
+}
 
     document.addEventListener(
         "click",
