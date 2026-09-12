@@ -692,6 +692,8 @@ button:disabled {
 <script>
 "use strict";
 
+const GSA_NOC_EMAIL_API = "https://script.google.com/macros/s/AKfycbxvnfRUzGUiXTkuf1yQKRFHxcg1EavG4oLXOg0maKyf4fBPfgbJpZFLMzK08cDHMhIv/exec";
+
 const SUPABASE_URL =
   "https://cmygmswzokyrmgdnuszq.supabase.co";
 
@@ -1262,6 +1264,43 @@ form.addEventListener(
 
       if (result.error) {
         throw result.error;
+      }
+
+      // Notify GSA Admin by email after successful submission.
+      // Email failure must NOT cancel a successful application.
+      try {
+        await fetch(GSA_NOC_EMAIL_API, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({
+            action: "new_noc_application",
+            application_no: data.application_no,
+            player_name: data.player_name,
+            father_name: data.father_name,
+            applicant_type: data.applicant_type,
+            sport_type: data.sport_type,
+            jersey_number: data.jersey_number,
+            gsa_player_id: data.gsa_player_id,
+            applicant_email: data.applicant_email,
+            applicant_phone: data.applicant_phone,
+            destination_organization: data.destination_organization,
+            tournament_or_event: data.tournament_or_event,
+            noc_reason: data.noc_reason,
+            applicant_statement: data.applicant_statement,
+            submitted_at: new Date().toLocaleString(
+              "en-GB",
+              { timeZone: "Asia/Dhaka" }
+            )
+          })
+        });
+      } catch (emailError) {
+        console.warn(
+          "Admin email notification failed:",
+          emailError
+        );
       }
 
       showStatus(
