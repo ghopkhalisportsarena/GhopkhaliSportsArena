@@ -807,11 +807,14 @@ async function downloadApplicationForm(data) {
 
         .pdf-page {
           width: 794px;
-          min-height: 1123px;
+          height: auto;
+          min-height: 0;
           padding: 46px;
+          padding-bottom: 60px;
           background: #ffffff;
           color: #1d1d1f;
           font-family: "NotoBengali", Arial, sans-serif;
+          overflow: visible;
         }
 
         .topbar {
@@ -1075,12 +1078,24 @@ async function downloadApplicationForm(data) {
 
     document.body.appendChild(wrapper);
 
+    const pdfElement =
+      document.getElementById("applicationPdf");
+
+    await document.fonts.ready;
+
     const canvas = await html2canvas(
-      document.getElementById("applicationPdf"),
+      pdfElement,
       {
         scale: 2,
         useCORS: true,
-        backgroundColor: "#ffffff"
+        allowTaint: false,
+        backgroundColor: "#ffffff",
+        width: 794,
+        height: pdfElement.scrollHeight,
+        windowWidth: 794,
+        windowHeight: pdfElement.scrollHeight,
+        scrollX: 0,
+        scrollY: 0
       }
     );
 
@@ -1097,17 +1112,75 @@ async function downloadApplicationForm(data) {
     const margin = 8;
 
     const usableWidth = pageWidth - margin * 2;
-    const imageHeight =
-      canvas.height * usableWidth / canvas.width;
+    const usableHeight = pageHeight - margin * 2;
 
-    pdf.addImage(
-      canvas.toDataURL("image/jpeg", 0.96),
-      "JPEG",
-      margin,
-      margin,
-      usableWidth,
-      imageHeight
-    );
+    const pageCanvasHeight =
+      Math.floor(
+        canvas.width *
+        usableHeight /
+        usableWidth
+      );
+
+    let sourceY = 0;
+    let pageNumber = 0;
+
+    while (sourceY < canvas.height) {
+      const sliceHeight =
+        Math.min(
+          pageCanvasHeight,
+          canvas.height - sourceY
+        );
+
+      const pageCanvas =
+        document.createElement("canvas");
+
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = sliceHeight;
+
+      const pageContext =
+        pageCanvas.getContext("2d");
+
+      pageContext.fillStyle = "#ffffff";
+      pageContext.fillRect(
+        0,
+        0,
+        pageCanvas.width,
+        pageCanvas.height
+      );
+
+      pageContext.drawImage(
+        canvas,
+        0,
+        sourceY,
+        canvas.width,
+        sliceHeight,
+        0,
+        0,
+        canvas.width,
+        sliceHeight
+      );
+
+      if (pageNumber > 0) {
+        pdf.addPage();
+      }
+
+      const sliceHeightMm =
+        sliceHeight *
+        usableWidth /
+        canvas.width;
+
+      pdf.addImage(
+        pageCanvas.toDataURL("image/jpeg", 0.96),
+        "JPEG",
+        margin,
+        margin,
+        usableWidth,
+        sliceHeightMm
+      );
+
+      sourceY += sliceHeight;
+      pageNumber++;
+    }
 
     pdf.save(
       "GSA-NOC-Application-" +
