@@ -815,69 +815,81 @@
     }
 
     async function downloadPDF(app, official = false) {
-    if (!app) return;
+        if (!app) return;
 
-    try {
-        if (!window.jspdf || !window.html2canvas) {
-            throw new Error("PDF library is not available.");
-        }
+        try {
+            if (!window.jspdf || !window.html2canvas) {
+                throw new Error(
+                    "PDF library is not available."
+                );
+            }
 
-        const { jsPDF } = window.jspdf;
+            const { jsPDF } = window.jspdf;
 
-        const fontUrl =
-            "/admin/fonts/NotoSansBengali-Regular.ttf";
+            const fontUrl =
+                "/admin/fonts/NotoSansBengali-Regular.ttf";
 
-        const logoUrl = "/gsa.png";
+            const logoUrl = "/gsa.png";
 
-        const escHtml = (value) =>
-            String(value ?? "—")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+            const escHtml = (value) =>
+                String(value ?? "—")
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
 
-        const value = (key) =>
-            app[key] === null ||
-            app[key] === undefined ||
-            String(app[key]).trim() === ""
-                ? "—"
-                : String(app[key]);
+            const value = (...keys) => {
+                for (const key of keys) {
+                    const v = app[key];
 
-        const safeName =
-            (value("player_name") === "—"
-                ? "Applicant"
-                : value("player_name"))
-                .replace(/[^a-zA-Z0-9-_]+/g, "-")
-                .replace(/^-+|-+$/g, "") ||
-            "Applicant";
+                    if (
+                        v !== null &&
+                        v !== undefined &&
+                        String(v).trim() !== ""
+                    ) {
+                        return String(v);
+                    }
+                }
 
-        const status =
-            String(app.status || "pending")
-                .toUpperCase();
+                return "—";
+            };
 
-        const statusClass =
-            status === "APPROVED"
-                ? "approved"
-                : status === "REJECTED"
-                    ? "rejected"
-                    : "pending";
+            const safeName =
+                value("player_name")
+                    .replace(/[^a-zA-Z0-9-_]+/g, "-")
+                    .replace(/^-+|-+$/g, "") ||
+                "Applicant";
 
-        const submitted = app.created_at
-            ? new Date(app.created_at)
-                .toLocaleString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true
-                })
-            : "—";
+            const status =
+                String(
+                    app.status || "pending"
+                ).toUpperCase();
 
-        if (!document.fonts.check(
-            '16px "NotoSansBengaliGSA"'
-        )) {
+            const statusClass =
+                status === "APPROVED"
+                    ? "approved"
+                    : status === "REJECTED"
+                        ? "rejected"
+                        : "pending";
+
+            const submitted =
+                app.created_at
+                    ? new Date(
+                        app.created_at
+                    ).toLocaleString(
+                        "en-GB",
+                        {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true
+                        }
+                    )
+                    : "—";
+
             try {
                 const face =
                     new FontFace(
@@ -893,50 +905,58 @@
                     fontError
                 );
             }
-        }
 
-        const waitImage = (src) =>
-            new Promise((resolve) => {
+            await new Promise((resolve) => {
                 const img = new Image();
+
                 img.onload = resolve;
                 img.onerror = resolve;
-                img.src = src;
+
+                img.src = logoUrl;
             });
 
-        await waitImage(logoUrl);
-
-        const field = (label, val, wide = false) => `
-            <div class="field ${wide ? "wide" : ""}">
-                <div class="field-label">
-                    ${escHtml(label)}
+            const field = (
+                label,
+                val,
+                extra = ""
+            ) => `
+                <div class="field ${extra}">
+                    <div class="field-label">
+                        ${escHtml(label)}
+                    </div>
+                    <div class="field-value">
+                        ${escHtml(val)}
+                    </div>
                 </div>
-                <div class="field-value">
-                    ${escHtml(val)}
-                </div>
-            </div>
-        `;
+            `;
 
-        const section = (title, body) => `
-            <section class="section">
-                <div class="section-title">
-                    <span class="section-mark"></span>
-                    <span>${title}</span>
-                </div>
-                ${body}
-            </section>
-        `;
+            const section = (
+                title,
+                body
+            ) => `
+                <section class="section">
+                    <div class="section-title">
+                        <span class="section-mark"></span>
+                        <span>${title}</span>
+                    </div>
+                    ${body}
+                </section>
+            `;
 
-        const page = document.createElement("div");
+            const page =
+                document.createElement("div");
 
-        page.style.position = "fixed";
-        page.style.left = "-100000px";
-        page.style.top = "0";
-        page.style.width = "794px";
-        page.style.background = "#f5f5f7";
-        page.style.zIndex = "-1";
+            page.style.position = "fixed";
+            page.style.left = "-100000px";
+            page.style.top = "0";
+            page.style.width = "794px";
+            page.style.height = "1123px";
+            page.style.background = "#f5f5f7";
+            page.style.zIndex = "-1";
 
-        page.innerHTML = `
+            page.innerHTML = `
 <style>
+
 @font-face {
     font-family: "NotoSansBengaliGSA";
     src: url("${fontUrl}") format("truetype");
@@ -949,9 +969,15 @@
 
 .gsa-pdf {
     width: 794px;
-    min-height: 1123px;
-    padding: 30px;
-    background: #f5f5f7;
+    height: 1123px;
+    padding: 24px;
+    background:
+        linear-gradient(
+            135deg,
+            #f5f5f7 0%,
+            #ffffff 48%,
+            #f5f5f7 100%
+        );
     color: #1d1d1f;
     font-family:
         "NotoSansBengaliGSA",
@@ -964,45 +990,37 @@
 
 .sheet {
     position: relative;
-    min-height: 1063px;
-    padding: 34px 34px 30px;
+    width: 746px;
+    height: 1075px;
+    padding: 25px 27px 20px;
     background: #ffffff;
-    border-radius: 24px;
+    border: 1px solid #e5e5ea;
+    border-radius: 22px;
     box-shadow:
-        0 12px 40px rgba(0,0,0,.08);
+        0 8px 30px rgba(0,0,0,.07);
     overflow: hidden;
 }
 
-.sheet::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    border: 1px solid rgba(0,0,0,.07);
-    border-radius: 24px;
-}
-
 .header {
-    position: relative;
     display: grid;
-    grid-template-columns: 92px 1fr 120px;
+    grid-template-columns: 72px 1fr auto;
     align-items: center;
-    min-height: 148px;
-    padding-bottom: 24px;
+    min-height: 96px;
+    padding-bottom: 13px;
     border-bottom: 1px solid #d2d2d7;
 }
 
 .logo-wrap {
-    width: 78px;
-    height: 78px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .logo {
-    width: 72px;
-    height: 72px;
+    width: 58px;
+    height: 58px;
     object-fit: contain;
 }
 
@@ -1011,44 +1029,45 @@
 }
 
 .brand-name {
-    margin: 0;
-    font-size: 25px;
-    font-weight: 700;
-    letter-spacing: 2.4px;
+    font-family: Arial, sans-serif;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 2px;
     color: #1d1d1f;
 }
 
 .brand-sub {
-    margin-top: 5px;
-    font-size: 9px;
-    letter-spacing: 3px;
+    margin-top: 3px;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    letter-spacing: 2.5px;
     color: #86868b;
-    font-weight: 600;
 }
 
 .noc {
-    margin-top: 17px;
-    font-size: 39px;
+    margin-top: 7px;
+    font-family: Arial, sans-serif;
+    font-size: 25px;
     line-height: 1;
-    font-weight: 800;
-    letter-spacing: 8px;
-    color: #1d1d1f;
+    font-weight: 900;
+    letter-spacing: 5px;
+    color: #0071e3;
 }
 
 .noc-sub {
-    margin-top: 7px;
-    font-size: 9px;
-    letter-spacing: 2.5px;
+    margin-top: 3px;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    letter-spacing: 1.8px;
     color: #6e6e73;
 }
 
 .status {
-    justify-self: end;
-    align-self: start;
-    padding: 8px 13px;
+    padding: 6px 11px;
     border-radius: 999px;
-    font-size: 8px;
-    letter-spacing: 1.5px;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    letter-spacing: 1px;
     font-weight: 800;
     border: 1px solid;
 }
@@ -1072,150 +1091,162 @@
 }
 
 .section {
-    margin-top: 25px;
-    break-inside: avoid;
+    margin-top: 11px;
 }
 
 .section-title {
     display: flex;
     align-items: center;
-    gap: 9px;
-    margin-bottom: 11px;
-    font-size: 10px;
+    gap: 6px;
+    margin-bottom: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
     font-weight: 800;
-    letter-spacing: 1.6px;
+    letter-spacing: 1.2px;
     color: #515154;
 }
 
 .section-mark {
-    width: 4px;
-    height: 17px;
-    border-radius: 4px;
+    width: 3px;
+    height: 12px;
+    border-radius: 3px;
     background: #0071e3;
 }
 
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 6px;
 }
 
 .field {
-    min-height: 73px;
-    padding: 13px 15px;
+    min-height: 48px;
+    padding: 7px 10px;
     background: #fbfbfd;
     border: 1px solid #e5e5ea;
-    border-radius: 14px;
-    break-inside: avoid;
+    border-radius: 9px;
+    overflow: hidden;
 }
 
-.field.wide {
-    min-height: 76px;
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.field.long {
+    min-height: 60px;
+}
+
+.field.note {
+    min-height: 55px;
 }
 
 .field-label {
-    margin-bottom: 9px;
-    font-size: 7.5px;
-    line-height: 1.3;
+    margin-bottom: 3px;
+    font-family: Arial, sans-serif;
+    font-size: 5.8px;
+    line-height: 1.2;
     font-weight: 800;
-    letter-spacing: 1.1px;
+    letter-spacing: .8px;
     color: #86868b;
 }
 
 .field-value {
-    font-size: 13px;
-    line-height: 1.65;
+    font-size: 9.5px;
+    line-height: 1.35;
     font-weight: 500;
     color: #1d1d1f;
     overflow-wrap: anywhere;
     word-break: break-word;
 }
 
-.long-field {
-    min-height: 100px;
+.application-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 7px 10px;
+    border-radius: 9px;
+    background: #f0f7ff;
+    border: 1px solid #d5e9ff;
 }
 
-.long-field .field-value {
-    line-height: 1.75;
+.application-strip-label {
+    font-family: Arial, sans-serif;
+    font-size: 6px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #0071e3;
 }
 
-.statement {
-    min-height: 125px;
-}
-
-.note {
-    min-height: 92px;
+.application-strip-value {
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+    color: #1d1d1f;
 }
 
 .authorization {
-    margin-top: 26px;
-    padding: 18px;
+    margin-top: 10px;
+    padding: 9px 11px;
     border: 1px solid #e5e5ea;
-    border-radius: 16px;
+    border-radius: 10px;
     background: #fbfbfd;
-    break-inside: avoid;
 }
 
 .auth-title {
-    font-size: 9px;
+    font-family: Arial, sans-serif;
+    font-size: 6.5px;
     font-weight: 800;
-    letter-spacing: 1.4px;
+    letter-spacing: 1px;
     color: #515154;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .auth-text {
-    font-size: 11px;
-    line-height: 1.7;
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    line-height: 1.35;
     color: #3a3a3c;
 }
 
 .signature-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 35px;
-    margin-top: 28px;
+    gap: 20px;
+    margin-top: 13px;
 }
 
 .signature {
-    padding-top: 23px;
+    padding-top: 8px;
     border-top: 1px solid #8e8e93;
-    font-size: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 5.5px;
     color: #6e6e73;
-    letter-spacing: .8px;
+    letter-spacing: .7px;
 }
 
 .footer {
-    margin-top: 25px;
-    padding-top: 13px;
+    position: absolute;
+    left: 27px;
+    right: 27px;
+    bottom: 13px;
+    padding-top: 7px;
     border-top: 1px solid #e5e5ea;
     text-align: center;
-    font-size: 7.5px;
-    line-height: 1.5;
+    font-family: Arial, sans-serif;
+    font-size: 5.8px;
+    line-height: 1.35;
     color: #86868b;
 }
 
-.page-break {
-    height: 1px;
-}
-
-.meta {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-@media print {
-    .gsa-pdf {
-        box-shadow: none;
-    }
-}
 </style>
 
 <div class="gsa-pdf">
+
     <div class="sheet">
 
         <div class="header">
+
             <div class="logo-wrap">
                 <img
                     class="logo"
@@ -1225,6 +1256,7 @@
             </div>
 
             <div class="brand">
+
                 <div class="brand-name">
                     GHOPKHALI SPORTS ARENA
                 </div>
@@ -1240,41 +1272,60 @@
                 <div class="noc-sub">
                     NO OBJECTION CERTIFICATE
                 </div>
+
             </div>
 
             <div class="status ${statusClass}">
                 ${escHtml(status)}
             </div>
+
         </div>
 
-        ${section(
-            "APPLICATION DETAILS",
-            `
-            <div class="meta">
-                ${field(
-                    "APPLICATION NO",
-                    value("application_no") !== "—"
-                        ? value("application_no")
-                        : value("application_number")
-                )}
+        <div class="application-strip">
+            <span class="application-strip-label">
+                APPLICATION NO
+            </span>
 
-                ${field(
-                    "SUBMITTED",
-                    submitted
+            <span class="application-strip-value">
+                ${escHtml(
+                    value(
+                        "application_no",
+                        "application_number"
+                    )
                 )}
-            </div>
-            `
-        )}
+            </span>
+        </div>
 
         ${section(
             "APPLICANT INFORMATION",
             `
             <div class="grid">
-                ${field("PLAYER NAME", value("player_name"))}
-                ${field("FATHER / GUARDIAN", value("father_guardian"))}
 
-                ${field("APPLICANT TYPE", value("applicant_type"))}
-                ${field("SPORT", value("sport"))}
+                ${field(
+                    "PLAYER NAME",
+                    value("player_name")
+                )}
+
+                ${field(
+                    "FATHER / GUARDIAN NAME",
+                    value(
+                        "father_name",
+                        "father_guardian"
+                    )
+                )}
+
+                ${field(
+                    "APPLICANT TYPE",
+                    value("applicant_type")
+                )}
+
+                ${field(
+                    "SPORT",
+                    value(
+                        "sport_type",
+                        "sport"
+                    )
+                )}
 
                 ${field(
                     "JERSEY / PLAYER NUMBER",
@@ -1286,15 +1337,31 @@
                     value("gsa_player_id")
                 )}
 
+            </div>
+            `
+        )}
+
+        ${section(
+            "CONTACT INFORMATION",
+            `
+            <div class="grid">
+
                 ${field(
-                    "APPLICANT EMAIL",
-                    value("email")
+                    "EMAIL",
+                    value(
+                        "applicant_email",
+                        "email"
+                    )
                 )}
 
                 ${field(
-                    "APPLICANT PHONE",
-                    value("phone")
+                    "MOBILE NUMBER",
+                    value(
+                        "applicant_phone",
+                        "phone"
+                    )
                 )}
+
             </div>
             `
         )}
@@ -1303,37 +1370,60 @@
             "NOC INFORMATION",
             `
             <div class="grid">
+
                 ${field(
                     "DESTINATION ORGANIZATION",
-                    value("destination_organization"),
-                    true
+                    value(
+                        "destination_organization"
+                    )
                 )}
 
                 ${field(
                     "TOURNAMENT / EVENT",
-                    value("tournament_event"),
-                    true
+                    value(
+                        "tournament_or_event",
+                        "tournament_event"
+                    )
                 )}
+
+                ${field(
+                    "NOC REASON",
+                    value("noc_reason"),
+                    "full long"
+                )}
+
+                ${field(
+                    "APPLICANT STATEMENT",
+                    value("applicant_statement"),
+                    "full long"
+                )}
+
             </div>
+            `
+        )}
 
-            <div style="height:10px"></div>
+        ${section(
+            "ADMINISTRATION",
+            `
+            <div class="grid">
 
-            ${field(
-                "NOC REASON",
-                value("noc_reason"),
-                true
-            )}
+                ${field(
+                    "STATUS",
+                    status
+                )}
 
-            <div style="height:10px"></div>
+                ${field(
+                    "ADMIN NOTE",
+                    value("admin_note"),
+                    "note"
+                )}
 
-            <div class="field statement">
-                <div class="field-label">
-                    APPLICANT STATEMENT
-                </div>
+                ${field(
+                    "SUBMITTED",
+                    submitted,
+                    "full"
+                )}
 
-                <div class="field-value">
-                    ${escHtml(value("applicant_statement"))}
-                </div>
             </div>
             `
         )}
@@ -1341,37 +1431,23 @@
         ${
             official
                 ? `
-                ${section(
-                    "ADMINISTRATION",
-                    `
-                    <div class="grid">
-                        ${field(
-                            "STATUS",
-                            status
-                        )}
-
-                        ${field(
-                            "ADMIN NOTE",
-                            value("admin_note")
-                        )}
-                    </div>
-                    `
-                )}
-
                 <div class="authorization">
+
                     <div class="auth-title">
                         OFFICIAL AUTHORIZATION
                     </div>
 
                     <div class="auth-text">
-                        This document confirms that Ghopkhali
-                        Sports Arena has reviewed the application
-                        and issued this No Objection Certificate
-                        subject to the organization's official
+                        This document confirms that
+                        Ghopkhali Sports Arena has reviewed
+                        the application and issued this
+                        No Objection Certificate subject
+                        to the organization's official
                         records and applicable rules.
                     </div>
 
                     <div class="signature-row">
+
                         <div class="signature">
                             AUTHORIZED SIGNATURE
                         </div>
@@ -1379,105 +1455,102 @@
                         <div class="signature">
                             OFFICIAL SEAL
                         </div>
+
                     </div>
+
                 </div>
                 `
                 : ""
         }
 
         <div class="footer">
-            Ghopkhali Sports Arena
+            GHOPKHALI SPORTS ARENA
             • ঘোপখালী, বেতমোর রাজপাড়া, মঠবাড়িয়া, পিরোজপুর
-            • Official NOC Document
+            • ${official
+                ? "OFFICIAL NOC DOCUMENT"
+                : "NOC APPLICATION RECORD"}
         </div>
 
     </div>
+
 </div>
 `;
 
-        document.body.appendChild(page);
+            document.body.appendChild(page);
 
-        await new Promise((resolve) =>
-            requestAnimationFrame(() =>
-                requestAnimationFrame(resolve)
-            )
-        );
-
-        await document.fonts.ready;
-
-        const canvas =
-            await window.html2canvas(
-                page.querySelector(".sheet"),
-                {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: false,
-                    backgroundColor: "#f5f5f7",
-                    logging: false,
-                    imageTimeout: 15000
-                }
+            await new Promise((resolve) =>
+                requestAnimationFrame(() =>
+                    requestAnimationFrame(resolve)
+                )
             );
 
-        document.body.removeChild(page);
+            await document.fonts.ready;
 
-        const pdf =
-            new jsPDF({
-                orientation: "portrait",
-                unit: "mm",
-                format: "a4",
-                compress: true
-            });
+            const target =
+                page.querySelector(".sheet");
 
-        const pageWidth = 210;
-        const pageHeight = 297;
+            const canvas =
+                await window.html2canvas(
+                    target,
+                    {
+                        scale: 3,
+                        width: 746,
+                        height: 1075,
+                        useCORS: true,
+                        allowTaint: false,
+                        backgroundColor: "#ffffff",
+                        logging: false,
+                        imageTimeout: 15000,
+                        scrollX: 0,
+                        scrollY: 0
+                    }
+                );
 
-        const imgWidth = pageWidth;
-        const imgHeight =
-            canvas.height *
-            imgWidth /
-            canvas.width;
+            document.body.removeChild(page);
 
-        let offset = 0;
-        let pageNo = 0;
+            const pdf =
+                new jsPDF({
+                    orientation: "portrait",
+                    unit: "mm",
+                    format: "a4",
+                    compress: true
+                });
 
-        while (offset < imgHeight) {
-            if (pageNo > 0) {
-                pdf.addPage();
-            }
+            const pageWidth = 210;
+            const pageHeight = 297;
 
             pdf.addImage(
-                canvas,
+                canvas.toDataURL(
+                    "image/png"
+                ),
                 "PNG",
                 0,
-                -offset,
-                imgWidth,
-                imgHeight,
+                0,
+                pageWidth,
+                pageHeight,
                 undefined,
-                "FAST"
+                "SLOW"
             );
 
-            offset += pageHeight;
-            pageNo++;
+            pdf.save(
+                official
+                    ? `GSA-Official-NOC-${safeName}.pdf`
+                    : `GSA-NOC-Application-${safeName}.pdf`
+            );
+
+        } catch (error) {
+
+            console.error(
+                "GSA Premium PDF error:",
+                error
+            );
+
+            alert(
+                error?.message ||
+                "Unable to generate NOC PDF."
+            );
         }
-
-        pdf.save(
-            official
-                ? `GSA-Official-NOC-${safeName}.pdf`
-                : `GSA-NOC-Application-${safeName}.pdf`
-        );
-
-    } catch (error) {
-        console.error(
-            "GSA Premium PDF error:",
-            error
-        );
-
-        alert(
-            error?.message ||
-            "Unable to generate NOC PDF."
-        );
     }
-}
 
     document.addEventListener(
         "click",
